@@ -26,6 +26,3 @@ jobs:
         with: { name: savdo-pos-aab, path: android/app/build/outputs/bundle/release/*.aab }
       - uses: actions/upload-artifact@v4
         with: { name: savdo-pos-apk, path: android/app/build/outputs/apk/release/*.apk }
-EOFgit add .github/workflows/build-capacitor-android.yml
-git commit -m "fix: add setup-node step to CI"
-git push
