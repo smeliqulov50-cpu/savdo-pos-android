@@ -1,9 +1,11 @@
 name: Build Capacitor Android app
+
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths: ["android/**"]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,6 +13,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: "17" }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
       - run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/android.keystore
       - run: npm ci
       - run: npx cap sync android
@@ -21,3 +26,6 @@ jobs:
         with: { name: savdo-pos-aab, path: android/app/build/outputs/bundle/release/*.aab }
       - uses: actions/upload-artifact@v4
         with: { name: savdo-pos-apk, path: android/app/build/outputs/apk/release/*.apk }
+EOFgit add .github/workflows/build-capacitor-android.yml
+git commit -m "fix: add setup-node step to CI"
+git push
