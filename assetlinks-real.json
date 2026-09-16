@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "savdo.pos.smm",
+        "sha256_cert_fingerprints": ["9A:A7:6B:7B:13:61:F2:AF:ED:2B:3A:3C:AB:E4:4E:D5:42:D2:8A:4A:72:1C:DF:1F:A4:C2:8F:15:75:95:FC:85"]
+      }
+    }]

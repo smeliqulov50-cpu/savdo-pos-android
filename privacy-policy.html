@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maxfiylik siyosati — Savdo Pos</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EAF3FC; --surface:#F3F9FE;
+    --ink:#16283F; --ink-soft:#51677E;
+    --accent:#2F6FED; --accent-dark:#1F4FB8;
+    --border:#C9DCF2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    font-family:'Manrope',sans-serif;
+    background:linear-gradient(180deg, #EAF3FC 0%, #F2E9FB 45%, #EAF3FC 100%);
+    color:var(--ink);
+    margin:0;
+    padding:0;
+    line-height:1.7;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 60px;}
+  .brand{font-size:24px;font-weight:800;color:var(--accent-dark);margin-bottom:4px;}
+  .brand span{color:var(--accent);}
+  .updated{color:var(--ink-soft);font-size:13px;margin-bottom:32px;}
+  .card{background:var(--surface);border-radius:18px;padding:24px 22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(31,79,184,0.07);}
+  h1{font-size:26px;margin:0 0 8px;}
+  h2{font-size:18px;color:var(--accent-dark);margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+  p{margin:0 0 12px;font-size:15px;}
+  ul{margin:0 0 12px;padding-left:22px;}
+  li{margin-bottom:6px;font-size:15px;}
+  .contact-box{background:var(--accent);color:#fff;border-radius:18px;padding:22px;text-align:center;}
+  .contact-box a{color:#fff;font-weight:700;}
+  a{color:var(--accent-dark);}
+  .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--accent-dark);font-weight:700;font-size:14px;text-decoration:none;margin-bottom:18px;}
+  footer{text-align:center;color:var(--ink-soft);font-size:13px;margin-top:24px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="index.html" class="back-link">&larr; Ilovaga qaytish</a>
+  <div class="brand">Savdo Pos<span>.</span></div>
+  <h1>Maxfiylik siyosati</h1>
+  <div class="updated">Oxirgi yangilanish: 2026-yil sentyabr</div>
+
+  <div class="card">
+    <h2>1. Umumiy ma'lumot</h2>
+    <p>Savdo Pos — do'kon, kafe va boshqa savdo nuqtalari uchun mo'ljallangan kassa (POS) boshqaruv ilovasi. Ushbu hujjat ilovadan foydalanganda qanday ma'lumotlar yig'ilishi, saqlanishi va ishlatilishini tushuntiradi.</p>
+    <p>Ilovadan foydalanish orqali siz ushbu siyosat shartlariga rozilik bildirasiz.</p>
+  </div>
+
+  <div class="card">
+    <h2>2. Kim qanday ma'lumot kiritadi</h2>
+    <p><strong>Biznes egasi (siz)</strong> ilovaga quyidagi ma'lumotlarni kiritadi:</p>
+    <ul>
+      <li>Biznes ma'lumotlari: nomi, manzili, telefon raqami, logotipi</li>
+      <li>Mahsulotlar: nomi, narxi, zaxirasi, rasmi, yetkazib beruvchi ma'lumoti</li>
+      <li>Mijozlar: ismi, telefon raqami, manzili, qarz tarixi (bularni kiritish — sizning, biznes egasining, tanlovingiz va mas'uliyatingiz)</li>
+      <li>Xodimlar: ismi, PIN-kodi, lavozimi va ruxsatlari</li>
+      <li>Savdo va moliyaviy yozuvlar: har bir sotuv, to'lov turi, kvitansiya raqami</li>
+    </ul>
+    <p><strong>Ilovaning o'zi</strong> avtomatik yig'adigan ma'lumotlar:</p>
+    <ul>
+      <li>Kirish hisobingiz email manzili (Firebase orqali autentifikatsiya uchun)</li>
+      <li>"Agent / Sotuvchi" lavozimidagi xodimlarning joylashuvi — <em>faqat ular ilovadan foydalanayotganda va brauzer ruxsati berilganda</em>; bu ma'lumot doimiy saqlanmaydi, faqat "hozirgi joylashuv" sifatida yuritiladi va xodim tizimdan chiqishi bilan o'chiriladi</li>
+      <li>Texnik ma'lumotlar (qurilma turi, ilova versiyasi) — xatoliklarni aniqlash uchun</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>3. Ma'lumotlar qanday saqlanadi</h2>
+    <p>Barcha ma'lumotlar Google'ning Firebase (Firestore) bulutli infratuzilmasida saqlanadi — bu xalqaro standartlarga javob beradigan, shifrlangan va xavfsiz platforma. Har bir biznesning ma'lumoti boshqa bizneslardan alohida, ajratilgan holda saqlanadi va faqat o'sha biznes hisobi orqali kirish mumkin.</p>
+    <p>Ma'lumotlar qurilmangizda ham vaqtinchalik (lokal) saqlanadi — bu internet vaqtincha uzilganda ilova ishlashda davom etishi uchun kerak.</p>
+  </div>
+
+  <div class="card">
+    <h2>4. Ma'lumotlar kimlar bilan bo'lishiladi</h2>
+    <p>Biz sizning yoki sizning mijozlaringizning ma'lumotlarini <strong>hech qanday uchinchi tomonga sotmaymiz yoki reklama maqsadida bermaymiz</strong>. Ma'lumotlar faqat quyidagi holatlarda ko'rinishi mumkin:</p>
+    <ul>
+      <li>Ilova infratuzilmasini ta'minlovchi xizmatlar (Firebase/Google Cloud) — texnik xizmat ko'rsatish uchun</li>
+      <li>Siz yordam so'rab murojaat qilganingizda, ilova ichidagi qo'llab-quvvatlash xizmati orqali</li>
+      <li>Qonun talab qilgan hollarda, tegishli davlat organlariga</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>5. Mijozlar ma'lumoti — kim uchun javobgar?</h2>
+    <p>Savdo Pos — bu sizning ishingizni osonlashtiruvchi <strong>vosita</strong> (asbob), xuddi daftar yoki kalkulyator kabi. Mijozlaringiz haqidagi ma'lumotlarni (ism, telefon, manzil, qarz tarixi) kiritish, saqlash va ulardan foydalanish qarori — <strong>to'liq va yagona sizning, biznes egasining, ixtiyoringiz va javobgarligingizdadir</strong>.</p>
+    <p>Aniqlik uchun:</p>
+    <ul>
+      <li><strong>Siz — "ma'lumot egasi" (data controller)</strong>: mijozlaringizning ma'lumotini nima uchun va qanday yig'ishga qaror qiluvchi tomon — bu siz.</li>
+      <li><strong>Savdo Pos — faqat "texnik xizmat ko'rsatuvchi"</strong>: biz sizga shu ma'lumotni saqlash va boshqarish uchun vosita beramiz, xolos.</li>
+      <li>Mijozlaringizning shaxsiy ma'lumotlarini yig'ishda ularning roziligini olish, amaldagi qonunchilikka (shu jumladan shaxsiy ma'lumotlar to'g'risidagi qonunlarga) rioya qilish — <strong>sizning mas'uliyatingiz</strong>.</li>
+      <li>Agar mijozingiz o'z ma'lumotini o'chirishni so'rasa, buni bajarish (Mijoz sahifasi → O'chirish) — <strong>sizning vazifangiz</strong>.</li>
+      <li>Savdo Pos va uning jamoasi, ilova orqali kiritilgan mijoz ma'lumotlaridan noto'g'ri foydalanish, ularni noqonuniy yig'ish yoki mijozlar bilan kelib chiqishi mumkin bo'lgan nizolar uchun <strong>hech qanday javobgarlikni o'z zimmasiga olmaydi</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>6. Javobgarlik cheklovi</h2>
+    <p>Savdo Pos xizmati "qanday bo'lsa shundayligicha" taqdim etiladi. Quyidagilar uchun Savdo Pos javobgar emas:</p>
+    <ul>
+      <li>Siz kiritgan ma'lumotlarning to'g'riligi, to'liqligi yoki qonuniyligi</li>
+      <li>Uchinchi tomon xizmatlaridagi (Firebase, Netlify, internet provayder) uzilishlar natijasida yuzaga kelgan noqulayliklar</li>
+      <li>Ma'lumotlarni zaxira nusxasini olmaslik oqibatida yuzaga kelishi mumkin bo'lgan yo'qotishlar — shuning uchun muntazam zaxira nusxa olish tavsiya etiladi (Sozlamalar → Zaxira nusxa)</li>
+      <li>Sizning xodimlaringiz yoki hamkorlaringiz tomonidan ilovadan noto'g'ri yoki noqonuniy foydalanish</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>7. Sizning huquqlaringiz</h2>
+    <ul>
+      <li><strong>Yuklab olish:</strong> istalgan vaqtda barcha ma'lumotlaringizni (Sozlamalar → Zaxira nusxa) yuklab olishingiz mumkin</li>
+      <li><strong>O'chirish:</strong> mijoz yozuvini (qarzi bo'lmasa) istalgan vaqtda o'chirishingiz mumkin</li>
+      <li><strong>Hisobni yopish:</strong> agar butun biznes hisobingizni yopmoqchi bo'lsangiz, qo'llab-quvvatlash xizmati orqali murojaat qiling</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>8. Xavfsizlik</h2>
+    <p>Kirish parolingiz hech qachon oddiy matn shaklida saqlanmaydi — buni hatto biz ham ko'ra olmaymiz. Har bir biznesning ma'lumoti autentifikatsiya orqali himoyalangan va faqat shu hisobning egasi kira oladi.</p>
+  </div>
+
+  <div class="card">
+    <h2>9. Bolalar maxfiyligi</h2>
+    <p>Savdo Pos katta yoshdagi tadbirkorlar uchun mo'ljallangan biznes vositasi bo'lib, 18 yoshgacha bo'lgan shaxslardan ataylab ma'lumot yig'maydi.</p>
+  </div>
+
+  <div class="card">
+    <h2>10. Ushbu siyosatga o'zgartirishlar</h2>
+    <p>Ilova rivojlanishi bilan ushbu maxfiylik siyosati vaqti-vaqti bilan yangilanishi mumkin. Muhim o'zgarishlar haqida ilova ichida xabar beramiz.</p>
+  </div>
+
+  <div class="contact-box">
+    <p style="margin:0 0 8px;font-weight:700;">Savollaringiz bormi?</p>
+    <p style="margin:0;">Ilova ichidagi <strong>Sozlamalar → Yordam</strong> bo'limi orqali murojaat qiling.</p>
+  </div>
+
+  <footer>© 2026 Savdo Pos. Barcha huquqlar himoyalangan. · <a href="terms-of-service.html">Foydalanish shartlari</a></footer>
+</div>
+</body>
+</html>
