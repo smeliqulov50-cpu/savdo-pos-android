@@ -15,7 +15,7 @@ jobs:
         with: { distribution: temurin, java-version: "17" }
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
       - run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/android.keystore
       - run: npm ci
       - run: npx cap sync android
