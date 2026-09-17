@@ -12357,6 +12357,12 @@ function waitForFirebaseLib(callback, attemptsLeft){
         // printer would happily reconnect a moment later. Only fires if
         // the first attempt didn't already connect it.
         setTimeout(()=>{ if(!getBtCharacteristic('main')) autoReconnectBluetooth(); }, 4000);
+		if(isNativeApp() && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App){
+			window.Capacitor.Plugins.App.addListener('backButton', ()=>{
+				if(state.view !== 'sale'){ state.view='sale'; state.settingsCategory=null; state.reportsCategory=null; renderAll(); }
+				else { window.Capacitor.Plugins.App.exitApp(); }
+			});
+		}
         await retryPendingSync();
         renderAll();
         if(syncRetryTimer) clearInterval(syncRetryTimer);
