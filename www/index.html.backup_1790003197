@@ -1313,7 +1313,6 @@ function escapeHtml(str){
 
 let cachedDeviceId = null;
 let cachedReceiptCounter = null;
-let isCheckoutInProgress = false;
 async function getDeviceId(){
   if(cachedDeviceId) return cachedDeviceId;
   let id = await storGet(STORAGE_KEYS.deviceId);
@@ -5385,9 +5384,7 @@ function openCheckoutModal(){
 }
 
 async function doCheckout(paymentType, getSelectedCustomerId, extras){
- if(isCheckoutInProgress) return;
-  isCheckoutInProgress = true;
-  try{
+ try{
   extras = extras || {serviceChargePercent:0, deliveryFee:0};
   // Enforced again here, not just hidden in the UI — someone without the
   // "chegirma berish" permission must never be able to apply a discount
@@ -5693,9 +5690,6 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
    const errEl = document.getElementById('checkout-error');
    if(errEl) errEl.textContent = tr('checkoutUnexpectedError') + ': ' + (e && e.message ? e.message : e);
  }
-  } finally {
-    isCheckoutInProgress = false;
-  }
 }
 
 function openPostSaleModal(sale, custDebtAfter){
