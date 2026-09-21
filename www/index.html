@@ -1530,16 +1530,7 @@ async function loadAll(){
   // Remember whether this device already had its own saved settings. This
   // is used later (loadCloudData) to decide whether the cloud copy is
   // allowed to overwrite settings at all — see the note there for why.
-  state._hasLocalSettings = !!settings; (function(){
-  var box = document.getElementById('debugBox');
-  if(!box){
-    box = document.createElement('div');
-    box.id = 'debugBox';
-    box.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999999;background:red;color:white;font-size:11px;padding:6px;max-height:40vh;overflow:auto;white-space:pre-wrap;';
-    document.body.appendChild(box);
-  }
-  box.textContent += 'loadAll settings=' + JSON.stringify(settings) + ' _hasLocalSettings=' + state._hasLocalSettings + String.fromCharCode(10);
-})();
+  state._hasLocalSettings = !!settings;
   state.staff = staff || [];
   state.shifts = shifts || [];
   state.currentShift = curShift || null;
