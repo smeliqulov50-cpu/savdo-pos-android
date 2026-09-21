@@ -837,6 +837,7 @@ const T = {
   cannotEditEmptyReceipt:{uz:"Chekda kamida bitta mahsulot bo'lishi kerak",ru:"В чеке должен остаться хотя бы один товар",en:"The receipt must keep at least one item",kk:"Чекте кемінде бір тауар болуы керек",ky:"Чекте кеминде бир товар болушу керек",tg:"Дар чек бояд ҳадди ақал як мол бошад"},
   permEditReceipt:{uz:"Chop etilgan cheklarni tahrirlash",ru:"Редактировать напечатанные чеки",en:"Edit printed receipts",kk:"Басып шығарылған чектерді өңдеу",ky:"Басылып чыгарылган чектерди оңдоо",tg:"Таҳрири чекҳои чопшуда"},
   permMyDebts:{uz:"\"Mening qarzlarim\" bo'limini ko'rish",ru:"Видеть раздел \"Мои долги\"",en:"View the \"My debts\" section",kk:"\"Менің қарыздарым\" бөлімін көру",ky:"\"Менин карыздарым\" бөлүмүн көрүү",tg:"Дидани бахши \"Қарзҳои ман\""},
+  permExpense:{uz:"Xarajat qo'shish",ru:"Добавлять расход",en:"Add expenses",kk:"Шығыс қосу",ky:"Чыгым кошуу",tg:"Иловаи хароҷот"},
   noPermEditReceipt:{uz:"Chekni tahrirlash uchun ruxsatingiz yo'q. Biznes egasidan so'rang.",ru:"У вас нет прав на редактирование чека. Обратитесь к владельцу.",en:"You don't have permission to edit receipts. Ask the owner.",kk:"Чекті өңдеуге рұқсатыңыз жоқ. Бизнес иесінен сұраңыз.",ky:"Чекти оңдоого уруксатыңыз жок. Бизнес ээсинен сураңыз.",tg:"Шумо барои таҳрири чек иҷозат надоред. Аз соҳиби бизнес пурсед."},
   notEnoughStockToAdd:{uz:"Omborda yetarli mahsulot yo'q",ru:"Недостаточно товара на складе",en:"Not enough stock available",kk:"Қоймада жеткілікті тауар жоқ",ky:"Кампада жетиштүү товар жок",tg:"Дар анбор моли кофӣ нест"},
   searchProductToAdd:{uz:"Mahsulot qidirish...",ru:"Поиск товара...",en:"Search for a product...",kk:"Тауар іздеу...",ky:"Товар издөө...",tg:"Ҷустуҷӯи мол..."},
@@ -1281,7 +1282,7 @@ function visibleExpenses(){
 // as refunds and the cross-branch cash view, so this stays admin-only
 // rather than folded into the general 'reports' permission a cashier
 // might hold for entirely unrelated reasons (checking top products, etc).
-function canManageExpenses(){ return isAdmin(); }
+function canManageExpenses(){ return isAdmin() || hasPerm('expense'); }
 const EXPENSE_CATEGORIES = ['rent','utilities','salary','transport','advertising','other'];
 function expenseCategoryLabel(cat){
   const map = {rent:'expenseCatRent', utilities:'expenseCatUtilities', salary:'expenseCatSalary', transport:'expenseCatTransport', advertising:'expenseCatAdvertising', other:'expenseCatOther'};
@@ -3736,7 +3737,7 @@ function renderNav(){
     {id:'sale', icon:ICONS.sale, label:tr('navSale'), show:true},
     {id:'products', icon:ICONS.products, label:tr('navProducts'), show:hasPerm('products')},
     {id:'customers', icon:ICONS.customers, label:tr('navCustomers'), show:hasPerm('customers')},
-    {id:'reports', icon:ICONS.reports, label:tr('navReports'), show:hasPerm('reports')}
+    {id:'reports', icon:ICONS.reports, label:tr('navReports'), show:(hasPerm('reports') || hasPerm('expense'))}
   ].filter(i=>i.show);
   const el = document.getElementById('bottom-nav');
   el.innerHTML = items.map(it=>`<button class="nav-item ${state.view===it.id?'active':''}" data-view="${it.id}">${it.icon}<span>${it.label}</span></button>`).join('');
@@ -12103,7 +12104,7 @@ function openStaffForm(staffId){
     showToast(tr('onlyAdminCanEditAdmin'));
     return;
   }
-  const perms = editing && editing.permissions ? editing.permissions : {customers:false, reports:false, products:false, settings:false, staffManage:false, editReceipt:false};
+  const perms = editing && editing.permissions ? editing.permissions : {customers:false, reports:false, products:false, settings:false, staffManage:false, editReceipt:false, expense:false};
   const canGrantAdmin = isAdmin();
   const jobPresets = {
     cashier: {customers:false, reports:false, products:false, creditLimit:false, refund:false, discount:false, sellOnCredit:true, editReceipt:false, myDebts:false},
@@ -12165,6 +12166,7 @@ function openStaffForm(staffId){
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-discount" ${perms.discount?'checked':''}><span>${tr('permDiscount')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-creditsell" ${perms.sellOnCredit!==false?'checked':''}><span>${tr('permSellOnCredit')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-editreceipt" ${perms.editReceipt?'checked':''}><span>${tr('permEditReceipt')}</span></div>
+      <div class="checkbox-row"><input type="checkbox" id="sf-perm-expense" ${perms.expense?'checked':''}><span>${tr('permExpense')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-mydebts" ${perms.myDebts?'checked':''}><span>${tr('permMyDebts')}</span></div>
       ${canGrantAdmin ? `
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-settings" ${perms.settings?'checked':''}><span>${tr('settingsPerm')}</span></div>
@@ -12194,6 +12196,7 @@ function openStaffForm(staffId){
     document.getElementById('sf-perm-creditsell').checked = preset.sellOnCredit;
     document.getElementById('sf-perm-editreceipt').checked = preset.editReceipt;
     document.getElementById('sf-perm-mydebts').checked = preset.myDebts;
+    document.getElementById('sf-perm-expense').checked = preset.expense;
   });
   document.getElementById('sf-save-btn').addEventListener('click', async (e)=>{
     const btn = e.currentTarget;
@@ -12237,6 +12240,7 @@ function openStaffForm(staffId){
       sellOnCredit: document.getElementById('sf-perm-creditsell').checked,
       editReceipt: document.getElementById('sf-perm-editreceipt').checked,
       myDebts: document.getElementById('sf-perm-mydebts').checked,
+      expense: document.getElementById('sf-perm-expense').checked,
       settings: settingsEl ? settingsEl.checked : (perms.settings||false),
       staffManage: staffManageEl ? staffManageEl.checked : (perms.staffManage||false)
     };
@@ -12399,7 +12403,7 @@ function renderAll(){
   if(state.view==='settings' && !isAdmin() && !hasPerm('settings') && !hasPerm('staffManage')) state.view='sale';
   if(state.view==='products' && !hasPerm('products')) state.view='sale';
   if(state.view==='customers' && !hasPerm('customers')) state.view='sale';
-  if(state.view==='reports' && !hasPerm('reports')) state.view='sale';
+  if(state.view==='reports' && !hasPerm('reports') && !hasPerm('expense')) state.view='sale';
   if(state.view==='receipts' && !hasPerm('reports')) state.view='sale';
   if(state.view==='superadmin' && !isSuperAdmin()) state.view='sale';
   renderHeader();
