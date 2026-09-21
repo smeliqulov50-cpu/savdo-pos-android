@@ -186,6 +186,8 @@
   .list-item::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;background:var(--gradient-brand);opacity:.55;}
   .list-item:active{transform:scale(0.985);box-shadow:0 1px 4px rgba(31,79,184,0.06);}
   .list-item .info{flex:1;min-width:0;}
+		.modal-sheet .list-item{flex-wrap:wrap;}
+		.modal-sheet .info{flex:1 1 100px;min-width:100px;}
   .list-item .info .name{font-weight:700;font-size:14px;}
   .list-item .info .meta{font-size:12px;color:var(--ink-soft);margin-top:2px;}
   .badge{padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
@@ -283,7 +285,7 @@
     .table-grid{grid-template-columns:repeat(6,1fr);}
     .stat-grid{grid-template-columns:repeat(4,1fr);}
     main{padding:20px 32px 100px;}
-    header{padding:18px 32px 14px;}
+    header{padding:calc(18px + env(safe-area-inset-top)) 32px 14px;}
     .modal-sheet{max-width:600px;border-radius:18px;margin-bottom:5vh;}
     .modal-overlay:not(.center){align-items:center;}
     .login-screen > *{max-width:520px;}
