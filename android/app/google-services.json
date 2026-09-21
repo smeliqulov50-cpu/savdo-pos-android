@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "111665947161",
+    "project_id": "sardor-pos",
+    "storage_bucket": "sardor-pos.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111665947161:android:9d64599dec7619c6364088",
+        "android_client_info": {
+          "package_name": "savdo.pos.smm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111665947161-iqib38nn57bcdk4flr4c4hob6joh2lou.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_LVGxXuNU9lJnJ6q10ZP90DZuWFhwieA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111665947161-iqib38nn57bcdk4flr4c4hob6joh2lou.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
