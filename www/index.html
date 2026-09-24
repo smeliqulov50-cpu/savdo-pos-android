@@ -481,6 +481,13 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  lbTitle:{uz:"Etiketka chop etish",ru:"Печать ценников",en:"Print labels",kk:"Баға жапсырмасын басу",ky:"Баа этикеткасын басуу",tg:"Чопи нархнома"},
+  lbHint:{uz:"58 mm chek printeriga: nomi, narxi va shtrix-kod (bo'lsa). Mahsulotni bosib tanlang, nusxa sonini belgilang.",ru:"На чековый принтер 58 мм: название, цена и штрих-код (если есть). Выберите товары и укажите количество копий.",en:"For 58 mm receipt printers: name, price and barcode (if any). Tap products to select and set copies.",kk:"58 мм чек принтеріне: атауы, бағасы және штрих-код (болса).",ky:"58 мм чек принтерине: аталышы, баасы жана штрих-код (болсо).",tg:"Ба принтери чеки 58 мм: ном, нарх ва штрих-код (агар бошад)."},
+  lbCopies:{uz:"nusxa",ru:"копий",en:"copies",kk:"дана",ky:"нуска",tg:"нусха"},
+  lbPrint:{uz:"Chop etish ({n})",ru:"Печать ({n})",en:"Print ({n})",kk:"Басу ({n})",ky:"Басуу ({n})",tg:"Чоп ({n})"},
+  lbNone:{uz:"Hech narsa tanlanmagan",ru:"Ничего не выбрано",en:"Nothing selected",kk:"Ештеңе таңдалмаған",ky:"Эч нерсе тандалган жок",tg:"Ҳеҷ чиз интихоб нашудааст"},
+  lbDone:{uz:"Etiketkalar chop etildi",ru:"Ценники напечатаны",en:"Labels printed",kk:"Жапсырмалар басылды",ky:"Этикеткалар басылды",tg:"Нархномаҳо чоп шуданд"},
+  lbShowStock:{uz:"Chop etishda qoldiqni ham yozish",ru:"Печатать также остаток",en:"Also print stock",kk:"Қалдықты да басу",ky:"Калдыкты да басуу",tg:"Бақияро низ чоп кардан"},
   quotaExceededHint:{uz:"Bulut (Firebase) kunlik limiti tugagan. Ma'lumotlar telefonda saqlanmoqda; limit har kuni Toshkent vaqti bilan taxminan 12:00 da yangilanadi va yuborish o'zi davom etadi.",ru:"Дневной лимит облака (Firebase) исчерпан. Данные сохраняются на телефоне; лимит обновляется ежедневно около 12:00 по Ташкенту, отправка продолжится автоматически.",en:"Daily cloud (Firebase) quota exhausted. Data is kept on the phone; the quota resets daily around 12:00 Tashkent time and syncing resumes automatically.",kk:"Бұлттың (Firebase) күндік лимиті таусылды. Деректер телефонда сақталады; лимит күн сайын Ташкент уақытымен 12:00 шамасында жаңарады.",ky:"Булуттун (Firebase) күндүк лимити түгөндү. Маалыматтар телефондо сакталат; лимит күн сайын Ташкент убактысы менен 12:00 чамасында жаңырат.",tg:"Лимити рӯзонаи абр (Firebase) тамом шуд. Маълумот дар телефон нигоҳ дошта мешавад; лимит ҳар рӯз тақрибан 12:00 бо вақти Тошканд нав мешавад."},
   puTitle:{uz:"Kirim (nakladnoy)",ru:"Приход (накладная)",en:"Receiving (invoice)",kk:"Кіріс (жүкқұжат)",ky:"Кирим (накладной)",tg:"Воридот (борхат)"},
   puSupplier:{uz:"Yetkazib beruvchi",ru:"Поставщик",en:"Supplier",kk:"Жеткізуші",ky:"Жеткирүүчү",tg:"Таъминкунанда"},
@@ -7680,6 +7687,7 @@ function renderProducts(){
       <button class="btn btn-accent" style="flex:1;" id="add-product-btn">${ICONS.plus} ${tr('addProduct')}</button>
       <button class="btn btn-outline" id="export-products-btn">${tr('exportProductsPdf')}</button>
       <button class="btn btn-outline" id="import-export-btn" style="width:auto;white-space:nowrap;">${tr('ieTitle')}</button>
+      <button class="btn btn-outline" id="labels-btn" style="width:auto;white-space:nowrap;" title="${tr('lbTitle')}">${ICONS.barcode}</button>
     </div>
     ${isAdmin() || hasPerm('products') ? `<div class="btn-row" style="margin-bottom:12px;"><button class="btn btn-outline" style="flex:1;" id="purchase-btn">${tr('puTitle')}</button><button class="btn btn-outline" style="flex:1;" id="stocktake-btn">${tr('stTitle')}</button></div>` : ''}
     <div class="search-bar" style="margin-bottom:10px;">${ICONS.search}<input type="text" id="product-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.productSearch||'')}"></div>
@@ -7690,6 +7698,7 @@ function renderProducts(){
   document.getElementById('add-product-btn').addEventListener('click', ()=>openProductForm(null));
   document.getElementById('export-products-btn').addEventListener('click', exportProductsPdf);
   document.getElementById('import-export-btn').addEventListener('click', openImportExportModal);
+  document.getElementById('labels-btn').addEventListener('click', openLabelsModal);
   const puBtn = document.getElementById('purchase-btn');
   if(puBtn) puBtn.addEventListener('click', ()=>{ state.view = 'purchase'; renderAll(); });
   const stBtn = document.getElementById('stocktake-btn');
@@ -8999,6 +9008,115 @@ function openImportExportModal(){
       closeModal(); showToast(tr('ieDone')+': +'+r.added+' / '+r.updated); renderAll();
     });
   });
+}
+const CODE128_PATTERNS = ['212222','222122','222221','121223','121322','131222','122213','122312','132212','221213','221312','231212','112232','122132','122231','113222','123122','123221','223211','221132','221231','213212','223112','312131','311222','321122','321221','312212','322112','322211','212123','212321','232121','111323','131123','131321','112313','132113','132311','211313','231113','231311','112133','112331','132131','113123','113321','133121','313121','211331','231131','213113','213311','213131','311123','311321','331121','312113','312311','332111','314111','221411','431111','111224','111422','121124','121421','141122','141221','112214','112412','122114','122411','142112','142211','241211','221114','413111','241112','134111','111242','121142','121241','114212','124112','124211','411212','421112','421211','212141','214121','412121','111143','111341','131141','114113','114311','411113','411311','113141','114131','311141','411131','211412','211214','211232','2331112'];
+function code128Modules(text){
+  text = String(text||'');
+  if(!text) return null;
+  const digitsOnly = /^\d+$/.test(text) && text.length % 2 === 0;
+  const codes = [];
+  if(digitsOnly){ codes.push(105); for(let i=0;i<text.length;i+=2) codes.push(parseInt(text.substr(i,2),10)); }
+  else { codes.push(104); for(const ch of text){ const c = ch.charCodeAt(0); if(c < 32 || c > 126) return null; codes.push(c - 32); } }
+  let sum = codes[0]; for(let i=1;i<codes.length;i++) sum += codes[i]*i;
+  codes.push(sum % 103); codes.push(106);
+  return codes.map(c=>CODE128_PATTERNS[c]).join('');
+}
+function drawCode128(ctx, text, x, y, width, height){
+  const pattern = code128Modules(text);
+  if(!pattern) return false;
+  let modules = 0; for(const w of pattern) modules += parseInt(w,10);
+  const quiet = 10;
+  const mod = Math.max(1, Math.floor((width - quiet*2) / modules));
+  const total = modules*mod; let cx = x + Math.floor((width - total)/2);
+  ctx.fillStyle = '#000';
+  let bar = true;
+  for(const w of pattern){ const ww = parseInt(w,10)*mod; if(bar) ctx.fillRect(cx, y, ww, height); cx += ww; bar = !bar; }
+  return true;
+}
+function wrapCanvasText(ctx, text, maxWidth, maxLines){
+  const words = String(text||'').split(/\s+/); const lines = []; let cur = '';
+  words.forEach(w=>{ const t = cur ? cur+' '+w : w; if(ctx.measureText(t).width <= maxWidth || !cur) cur = t; else { lines.push(cur); cur = w; } });
+  if(cur) lines.push(cur);
+  if(lines.length > maxLines){ lines.length = maxLines; let last = lines[maxLines-1]; while(ctx.measureText(last+'…').width > maxWidth && last.length > 1) last = last.slice(0,-1); lines[maxLines-1] = last+'…'; }
+  return lines;
+}
+function buildLabelCanvas(p, opts){
+  opts = opts || {};
+  const W = printerDotsWidth();
+  const c = document.createElement('canvas'); c.width = W;
+  const ctx = c.getContext('2d');
+  ctx.font = 'bold 28px Arial, sans-serif';
+  const nameLines = wrapCanvasText(ctx, p.name, W-20, 2);
+  const hasBarcode = !!(p.barcode && code128Modules(p.barcode));
+  const H = 16 + nameLines.length*34 + 52 + (opts.showStock ? 24 : 0) + (hasBarcode ? 100 : 0) + 12;
+  c.height = H;
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle = '#000'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  let y = 10;
+  ctx.font = 'bold 28px Arial, sans-serif';
+  nameLines.forEach(l=>{ ctx.fillText(l, W/2, y); y += 34; });
+  ctx.font = 'bold 42px Arial, sans-serif';
+  ctx.fillText(fmt(p.price||0), W/2, y+4); y += 52;
+  if(opts.showStock){ ctx.font = '20px Arial, sans-serif'; ctx.fillText(`${tr('stock')}: ${productTotalStock(p)}`, W/2, y); y += 24; }
+  if(hasBarcode){ drawCode128(ctx, p.barcode, 10, y+6, W-20, 64); ctx.font = '20px Arial, sans-serif'; ctx.fillText(String(p.barcode), W/2, y+76); y += 100; }
+  return c;
+}
+let labelSelection = {};
+function openLabelsModal(){
+  const products = visibleProducts().slice().sort((a,b)=>a.name.localeCompare(b.name));
+  openModal(`<div class="modal-title">${tr('lbTitle')}</div>
+    <p class="subtle" style="margin:0 0 8px;font-size:12px;">${tr('lbHint')}</p>
+    <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="lb-search" placeholder="${tr('search')}"></div>
+    <div id="lb-list" style="max-height:45vh;overflow:auto;"></div>
+    <div class="checkbox-row" style="margin-top:8px;"><input type="checkbox" id="lb-stock"><span>${tr('lbShowStock')}</span></div>
+    <div id="lb-preview" style="text-align:center;margin:8px 0;"></div>
+    <button class="btn btn-primary btn-block" id="lb-print" style="margin-top:6px;"></button>`);
+  const countSel = ()=>Object.values(labelSelection).reduce((a,n)=>a+n,0);
+  const updateBtn = ()=>{ document.getElementById('lb-print').textContent = tr('lbPrint').replace('{n}', countSel()); };
+  const preview = ()=>{ const id = Object.keys(labelSelection)[0]; const box = document.getElementById('lb-preview'); if(!id){ box.innerHTML=''; return; } const p = products.find(x=>x.id===id); if(!p) return; const cv = buildLabelCanvas(p, {showStock: document.getElementById('lb-stock').checked}); box.innerHTML = `<img src="${cv.toDataURL('image/png')}" style="width:60%;max-width:230px;border:1px solid var(--line);border-radius:6px;">`; };
+  const renderList = ()=>{
+    const q = (document.getElementById('lb-search').value||'').toLowerCase();
+    const list = products.filter(p=>!q || p.name.toLowerCase().includes(q) || (p.barcode||'').includes(q)).slice(0, 80);
+    document.getElementById('lb-list').innerHTML = list.map(p=>{ const n = labelSelection[p.id]||0; return `
+      <div class="list-item" style="padding:8px 10px 8px 14px;gap:8px;${n?'border-color:var(--accent);':''}" data-lb-row="${p.id}">
+        <div class="info" style="min-width:0;cursor:pointer;" data-lb-toggle="${p.id}"><div class="name" style="font-size:13.5px;">${escapeHtml(p.name)}</div><div class="meta">${fmt(p.price||0)}${p.barcode?' &middot; '+escapeHtml(p.barcode):''}</div></div>
+        <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;"><button class="icon-btn" data-lb-minus="${p.id}" style="width:30px;height:30px;">−</button><span style="min-width:20px;text-align:center;font-weight:800;">${n}</span><button class="icon-btn" data-lb-plus="${p.id}" style="width:30px;height:30px;">+</button></div>
+      </div>`; }).join('') || `<div class="empty-state">${tr('noData')}</div>`;
+    const setN = (id, n)=>{ if(n<=0) delete labelSelection[id]; else labelSelection[id] = Math.min(99, n); renderList(); updateBtn(); preview(); };
+    document.querySelectorAll('[data-lb-toggle]').forEach(el=>el.addEventListener('click', ()=>setN(el.dataset.lbToggle, labelSelection[el.dataset.lbToggle] ? 0 : 1)));
+    document.querySelectorAll('[data-lb-plus]').forEach(el=>el.addEventListener('click', ()=>setN(el.dataset.lbPlus, (labelSelection[el.dataset.lbPlus]||0)+1)));
+    document.querySelectorAll('[data-lb-minus]').forEach(el=>el.addEventListener('click', ()=>setN(el.dataset.lbMinus, (labelSelection[el.dataset.lbMinus]||0)-1)));
+  };
+  document.getElementById('lb-search').addEventListener('input', renderList);
+  document.getElementById('lb-stock').addEventListener('change', preview);
+  document.getElementById('lb-print').addEventListener('click', ()=>printLabels(products));
+  renderList(); updateBtn(); preview();
+}
+async function printLabels(products){
+  const jobs = [];
+  Object.keys(labelSelection).forEach(id=>{ const p = products.find(x=>x.id===id); if(p) for(let i=0;i<labelSelection[id];i++) jobs.push(p); });
+  if(!jobs.length){ showToast(tr('lbNone')); return; }
+  const showStock = !!document.getElementById('lb-stock').checked;
+  if(state.settings.printerMode === 'bluetooth'){
+    if(!state.btCharacteristic){ await connectBluetoothPrinter(); }
+    if(!state.btCharacteristic){ showToast(tr('printerNotConnected')); return; }
+    try{
+      for(const p of jobs){
+        const cv = buildLabelCanvas(p, {showStock});
+        await sendRawBytes(new Uint8Array([0x1B,0x61,0x01]));
+        await sendImageRaster(cv.toDataURL('image/png'), null, 100);
+        const feed = state.settings.printerFeedLines != null ? state.settings.printerFeedLines : 3;
+        await sendRawBytes(new Uint8Array([0x1B,0x64, Math.max(1, Math.min(8, feed))]));
+        if(state.settings.printerAutoCut !== false) await sendRawBytes(new Uint8Array([0x1D,0x56, state.settings.printerCutType==='full' ? 0x00 : 0x01]));
+      }
+      showToast(tr('lbDone')); labelSelection = {}; closeModal();
+    }catch(e){ showToast(tr('bluetoothConnectFailed')); }
+    return;
+  }
+  const html = jobs.map(p=>`<div style="width:58mm;padding:2mm 0;page-break-after:always;text-align:center;"><img src="${buildLabelCanvas(p, {showStock}).toDataURL('image/png')}" style="width:54mm;"></div>`).join('');
+  document.getElementById('print-receipt').innerHTML = html;
+  window.print();
+  labelSelection = {}; closeModal();
 }
 async function exportProductsPdf(){
   if(typeof window.jspdf === 'undefined'){ showToast(tr('pdfLibFailed')); return; }
