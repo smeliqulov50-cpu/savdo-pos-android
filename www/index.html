@@ -464,7 +464,7 @@ const STORAGE_KEYS = {
   deviceId:'sardor_device_id_v1', receiptCounter:'sardor_receipt_counter_v1', visits:'sardor_visits_v1',
   creditors:'sardor_creditors_v1', creditorLedger:'sardor_creditor_ledger_v1', kitchenStations:'sardor_kitchen_stations_v1',
   saleMode:'sardor_sale_mode_v1', expenses:'sardor_expenses_v1', deviceHasNoPrinter:'sardor_device_no_printer_v1',
-  reservations:'sardor_reservations_v1',
+  reservations:'sardor_reservations_v1', heldCarts:'sardor_held_carts_v1',
   businessId:'sardor_business_id_v1'
 };
 
@@ -481,6 +481,16 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  holdCart:{uz:"Kutish",ru:"Отложить",en:"Hold",kk:"Кейінге",ky:"Кийинге",tg:"Мавқуф"},
+  holdCartTitle:{uz:"Savatni kutishga qo'yish",ru:"Отложить корзину",en:"Hold this cart",kk:"Себетті кейінге қалдыру",ky:"Себетти кийинге калтыруу",tg:"Сабадро мавқуф гузоштан"},
+  holdCartName:{uz:"Nomi (mijoz ismi yoki belgi)",ru:"Название (имя клиента или метка)",en:"Name (customer or label)",kk:"Атауы (клиент аты немесе белгі)",ky:"Аталышы (кардар аты же белги)",tg:"Ном (номи мизоҷ ё нишона)"},
+  holdCartDefault:{uz:"Savat",ru:"Корзина",en:"Cart",kk:"Себет",ky:"Себет",tg:"Сабад"},
+  holdCartSaved:{uz:"Savat kutishga qo'yildi",ru:"Корзина отложена",en:"Cart held",kk:"Себет кейінге қалдырылды",ky:"Себет кийинге калтырылды",tg:"Сабад мавқуф гузошта шуд"},
+  heldCarts:{uz:"Kutilayotgan savatlar",ru:"Отложенные корзины",en:"Held carts",kk:"Кейінге қалдырылған себеттер",ky:"Кийинге калтырылган себеттер",tg:"Сабадҳои мавқуф"},
+  heldCartResume:{uz:"Ochish",ru:"Открыть",en:"Open",kk:"Ашу",ky:"Ачуу",tg:"Кушодан"},
+  heldCartResumed:{uz:"Savat ochildi",ru:"Корзина открыта",en:"Cart opened",kk:"Себет ашылды",ky:"Себет ачылды",tg:"Сабад кушода шуд"},
+  heldCartDeleteConfirm:{uz:"Bu kutilayotgan savat o'chirilsinmi?",ru:"Удалить отложенную корзину?",en:"Delete this held cart?",kk:"Бұл себет өшірілсін бе?",ky:"Бул себет өчүрүлсүнбү?",tg:"Ин сабад нест карда шавад?"},
+  heldCartCurrentAutoHeld:{uz:"Hozirgi savat ham kutishga qo'yildi",ru:"Текущая корзина тоже отложена",en:"Current cart was held too",kk:"Ағымдағы себет те кейінге қалдырылды",ky:"Учурдагы себет да кийинге калтырылды",tg:"Сабади ҷорӣ низ мавқуф гузошта шуд"},
   coCustomer:{uz:"Mijoz",ru:"Клиент",en:"Customer",kk:"Клиент",ky:"Кардар",tg:"Муштарӣ"},
   coChoose:{uz:"tanlash",ru:"выбрать",en:"choose",kk:"таңдау",ky:"тандоо",tg:"интихоб"},
   coExtras:{uz:"Chegirma · xizmat haqi · yetkazib berish",ru:"Скидка · сервис · доставка",en:"Discount · service · delivery",kk:"Жеңілдік · сервис · жеткізу",ky:"Арзандатуу · сервис · жеткирүү",tg:"Тахфиф · хизмат · расонидан"},
@@ -1559,6 +1569,7 @@ async function loadAll(){
   state.tables = tables || [];
   state.setupDone = !!setupDone;
   state.cart = cart || [];
+  state.heldCarts = (await storGet(STORAGE_KEYS.heldCarts)) || [];
   state.visits = visits || [];
   state.creditors = creditors || [];
   state.creditorLedger = creditorLedger || [];
@@ -3882,6 +3893,7 @@ function renderSale(){
     <div class="search-bar">${ICONS.search}<input type="text" id="search-input" placeholder="${tr('search')}" value="${escapeHtml(state.search)}">
       <button id="open-scan-btn" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:var(--ink);color:#fff;border:none;border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">${ICONS.barcode}</button>
     </div>
+    ${(!state.settings.restaurantMode && visibleHeldCarts().length) ? `<div class="fav-row" style="margin-bottom:10px;"><button class="fav-chip" id="held-carts-btn" style="background:var(--warm-bg,#fff4e5);border-color:var(--warm,#f0a04b);color:var(--ink);"><svg width='14' height='14' viewBox='0 0 24 24' fill='currentColor'><rect x='6' y='4' width='4' height='16' rx='1'/><rect x='14' y='4' width='4' height='16' rx='1'/></svg> ${tr('heldCarts')} &middot; ${visibleHeldCarts().length}</button></div>` : ''}
     ${categories.length ? `
     <div class="fav-row" id="category-row">
       <button class="fav-chip ${!state.activeCategory?'fav-chip-active':''}" data-cat="">${tr('allCategories')}</button>
@@ -3902,6 +3914,8 @@ function renderSale(){
     renderSale();
   });
   document.getElementById('search-input').addEventListener('input', (e)=>{ state.search=e.target.value; renderProductGrid(); });
+  const heldBtn = document.getElementById('held-carts-btn');
+  if(heldBtn) heldBtn.addEventListener('click', openHeldCartsModal);
   document.getElementById('open-scan-btn').addEventListener('click', ()=>{
     openBarcodeScanner((code)=>{
       const product = visibleProducts().find(p=>p.barcode && p.barcode===code);
@@ -4578,10 +4592,13 @@ function renderCartBar(){
     <div style="display:flex;gap:8px;">
       ${inTableMode ? `<button id="quick-save-order-btn" style="background:rgba(255,255,255,0.16);">${tr('saveOrder')}</button>` : ''}
       ${inTableMode ? `<button id="quick-save-logout-btn" title="${tr('saveAndLogoutBtn')}" style="background:rgba(255,255,255,0.16);">🚪</button>` : ''}
+      ${!state.settings.restaurantMode ? `<button id="hold-cart-btn" title="${tr('holdCartTitle')}" style="background:rgba(255,255,255,0.16);"><svg width='14' height='14' viewBox='0 0 24 24' fill='currentColor'><rect x='6' y='4' width='4' height='16' rx='1'/><rect x='14' y='4' width='4' height='16' rx='1'/></svg> ${tr('holdCart')}</button>` : ''}
       <button id="open-cart-btn">${tr('cart')}</button>
     </div>
   </div>`;
   document.getElementById('open-cart-btn').addEventListener('click', openCartModal);
+  const holdBtn = document.getElementById('hold-cart-btn');
+  if(holdBtn) holdBtn.addEventListener('click', holdCurrentCart);
   const quickSaveBtn = document.getElementById('quick-save-order-btn');
   if(quickSaveBtn) quickSaveBtn.addEventListener('click', saveCurrentTableOrder);
   const quickSaveLogoutBtn = document.getElementById('quick-save-logout-btn');
@@ -4709,6 +4726,72 @@ function cartTotal(){
 }
 
 function openCartModal(){ renderCartModalContent(); }
+
+function saveHeldCarts(){ storSet(STORAGE_KEYS.heldCarts, state.heldCarts||[]); }
+function visibleHeldCarts(){ return (state.heldCarts||[]).filter(h=>effectiveBranchId(h.branchId)===effectiveBranchId(state.currentBranchId)); }
+function pushHeldCart(name){
+  const cart = activeCart();
+  const entry = {id:uid(), name, items: JSON.parse(JSON.stringify(cart)), total: cartTotal(), qty: cart.reduce((a,c)=>a+c.qty,0), createdAt:new Date().toISOString(), staffName: state.currentStaff?state.currentStaff.name:'', branchId: state.currentBranchId, saleMode: state.saleMode};
+  state.heldCarts = state.heldCarts||[]; state.heldCarts.push(entry);
+  saveHeldCarts();
+  state.cart = []; saveCart();
+  return entry;
+}
+function holdCurrentCart(){
+  if(!activeCart().length) return;
+  openModal(`<div class="modal-title">${tr('holdCartTitle')}</div>
+    <div class="field"><label class="field-label">${tr('holdCartName')}</label><input type="text" id="hold-cart-name" placeholder="${tr('holdCartDefault')} ${visibleHeldCarts().length+1}"></div>
+    <button class="btn btn-primary btn-block" id="hold-cart-save">${tr('holdCart')}</button>`);
+  const inp = document.getElementById('hold-cart-name');
+  setTimeout(()=>inp.focus(), 50);
+  const doHold = ()=>{
+    const name = inp.value.trim() || (tr('holdCartDefault')+' '+(visibleHeldCarts().length+1));
+    pushHeldCart(name);
+    closeModal(); showToast(tr('holdCartSaved')); renderAll();
+  };
+  document.getElementById('hold-cart-save').addEventListener('click', doHold);
+  inp.addEventListener('keydown', (e)=>{ if(e.key==='Enter') doHold(); });
+}
+function openHeldCartsModal(){
+  const list = visibleHeldCarts();
+  openModal(`<div class="modal-title">${tr('heldCarts')}</div>
+    <div id="held-carts-list">${list.length ? list.map(h=>`
+      <div class="card" style="padding:12px 14px;margin-bottom:10px;">
+        <div class="row" style="align-items:flex-start;gap:10px;">
+          <div style="flex:1;min-width:0;"><div style="font-weight:800;">${escapeHtml(h.name)}</div>
+            <div class="subtle" style="font-size:12px;">${h.qty} ${tr('itemsWord')} &middot; ${new Date(h.createdAt).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}${h.staffName?(' &middot; '+escapeHtml(h.staffName)):''}</div>
+            <div class="subtle" style="font-size:12px;margin-top:2px;">${h.items.map(it=>{ const p=state.products.find(x=>x.id===it.productId); const v=p?getVariant(p,it.variantId):null; return escapeHtml((p?p.name:'?')+(v?' '+v.name:''))+' x'+it.qty; }).join(', ')}</div></div>
+          <strong style="white-space:nowrap;">${fmt(h.total)}</strong>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn btn-primary btn-sm" style="flex:1;" data-held-resume="${h.id}">${tr('heldCartResume')}</button>
+          <button class="btn btn-outline btn-sm" style="width:auto;color:var(--danger);border-color:var(--danger);" data-held-delete="${h.id}">${ICONS.trash}</button>
+        </div>
+      </div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>`);
+  document.querySelectorAll('[data-held-resume]').forEach(b=>b.addEventListener('click', ()=>resumeHeldCart(b.dataset.heldResume)));
+  document.querySelectorAll('[data-held-delete]').forEach(b=>b.addEventListener('click', ()=>{
+    confirmDialog(tr('heldCartDeleteConfirm'), ()=>{
+      state.heldCarts = (state.heldCarts||[]).filter(h=>h.id!==b.dataset.heldDelete);
+      saveHeldCarts(); renderAll();
+      if(visibleHeldCarts().length) openHeldCartsModal();
+    });
+  }));
+}
+function resumeHeldCart(id){
+  const h = (state.heldCarts||[]).find(x=>x.id===id);
+  if(!h) return;
+  let autoHeld = false;
+  if(activeCart().length){ pushHeldCart(tr('holdCartDefault')+' '+(visibleHeldCarts().length+1)); autoHeld = true; }
+  state.heldCarts = (state.heldCarts||[]).filter(x=>x.id!==id);
+  saveHeldCarts();
+  state.cart = h.items;
+  if(h.saleMode && state.saleMode!==h.saleMode){ state.saleMode = h.saleMode; storSet(STORAGE_KEYS.saleMode, state.saleMode); }
+  saveCart();
+  closeModal();
+  showToast(autoHeld ? tr('heldCartCurrentAutoHeld') : tr('heldCartResumed'));
+  state.view = 'sale';
+  renderAll();
+}
 
 // Marks some quantity of a table's items as "for takeaway" — for a
 // customer who's staying at the table but also wants something packaged
