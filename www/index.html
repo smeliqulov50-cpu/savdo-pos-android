@@ -481,6 +481,16 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  stTitle:{uz:"Inventarizatsiya",ru:"Инвентаризация",en:"Stock count",kk:"Түгендеу",ky:"Инвентаризация",tg:"Баррасии анбор"},
+  stHint:{uz:"Har bir mahsulotning haqiqiy sonini kiriting. Bo'sh qoldirilganlar o'zgarmaydi. Tasdiqlaganda farqlar omborga yoziladi va jurnalda \"Inventarizatsiya\" bo'lib qoladi.",ru:"Введите фактическое количество каждого товара. Пустые не изменяются. При подтверждении разницы записываются на склад и в журнал как «Инвентаризация».",en:"Enter the real count for each product. Blank ones stay unchanged. On confirm, differences are applied and logged as \"Stock count\".",kk:"Әр тауардың нақты санын енгізіңіз. Бос қалғандары өзгермейді.",ky:"Ар бир товардын чыныгы санын киргизиңиз. Бош калгандар өзгөрбөйт.",tg:"Шумораи воқеии ҳар маҳсулотро ворид кунед. Холиҳо тағйир намеёбанд."},
+  stCounted:{uz:"Sanaldi",ru:"Посчитано",en:"Counted",kk:"Саналды",ky:"Саналды",tg:"Ҳисоб шуд"},
+  stOnlyDiff:{uz:"Faqat farqlilar",ru:"Только с разницей",en:"Only differences",kk:"Тек айырмасы барлар",ky:"Айырмасы барлар гана",tg:"Танҳо фарқдорҳо"},
+  stSummary:{uz:"{c} ta sanaldi · farq: {d}",ru:"Посчитано: {c} · разница: {d}",en:"{c} counted · differences: {d}",kk:"{c} саналды · айырма: {d}",ky:"{c} саналды · айырма: {d}",tg:"{c} ҳисоб шуд · фарқ: {d}"},
+  stApply:{uz:"Farqlarni tasdiqlash",ru:"Подтвердить разницы",en:"Confirm differences",kk:"Айырмаларды растау",ky:"Айырмаларды ырастоо",tg:"Тасдиқи фарқҳо"},
+  stApplied:{uz:"Inventarizatsiya yakunlandi",ru:"Инвентаризация завершена",en:"Stock count applied",kk:"Түгендеу аяқталды",ky:"Инвентаризация аяктады",tg:"Баррасӣ анҷом ёфт"},
+  stClear:{uz:"Tozalash",ru:"Очистить",en:"Clear",kk:"Тазалау",ky:"Тазалоо",tg:"Тоза кардан"},
+  stConfirmQ:{uz:"{n} ta mahsulot qoldig'i sanoq bo'yicha o'zgartirilsinmi?",ru:"Изменить остаток {n} товаров по результатам подсчёта?",en:"Update stock of {n} products from the count?",kk:"{n} тауардың қалдығы санақ бойынша өзгертілсін бе?",ky:"{n} товардын калдыгы санак боюнча өзгөртүлсүнбү?",tg:"Бақияи {n} маҳсулот аз рӯи ҳисоб тағйир дода шавад?"},
+  smCount:{uz:"Inventarizatsiya",ru:"Инвентаризация",en:"Stock count",kk:"Түгендеу",ky:"Инвентаризация",tg:"Баррасии анбор"},
   ieTitle:{uz:"Excel / CSV",ru:"Excel / CSV",en:"Excel / CSV",kk:"Excel / CSV",ky:"Excel / CSV",tg:"Excel / CSV"},
   ieExport:{uz:"Mahsulotlarni eksport (CSV)",ru:"Экспорт товаров (CSV)",en:"Export products (CSV)",kk:"Тауарларды экспорттау (CSV)",ky:"Товарларды экспорттоо (CSV)",tg:"Содироти маҳсулот (CSV)"},
   ieTemplate:{uz:"Bo'sh shablon (CSV)",ru:"Пустой шаблон (CSV)",en:"Blank template (CSV)",kk:"Бос үлгі (CSV)",ky:"Бош үлгү (CSV)",tg:"Қолиби холӣ (CSV)"},
@@ -7636,6 +7646,7 @@ function renderProducts(){
       <button class="btn btn-outline" id="export-products-btn">${tr('exportProductsPdf')}</button>
       <button class="btn btn-outline" id="import-export-btn" style="width:auto;white-space:nowrap;">${tr('ieTitle')}</button>
     </div>
+    ${isAdmin() || hasPerm('products') ? `<button class="btn btn-outline btn-block" id="stocktake-btn" style="margin-bottom:12px;">${tr('stTitle')}</button>` : ''}
     <div class="search-bar" style="margin-bottom:10px;">${ICONS.search}<input type="text" id="product-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.productSearch||'')}"></div>
     <div class="fav-row" id="product-filter-row">${productFilterChipsHtml()}</div>
     <div id="product-list"></div>
@@ -7644,6 +7655,8 @@ function renderProducts(){
   document.getElementById('add-product-btn').addEventListener('click', ()=>openProductForm(null));
   document.getElementById('export-products-btn').addEventListener('click', exportProductsPdf);
   document.getElementById('import-export-btn').addEventListener('click', openImportExportModal);
+  const stBtn = document.getElementById('stocktake-btn');
+  if(stBtn) stBtn.addEventListener('click', ()=>{ state.view = 'stocktake'; renderAll(); });
   document.getElementById('product-search-input').addEventListener('input', (e)=>{
     state.productSearch = e.target.value;
     renderProductListItems();
@@ -10793,8 +10806,8 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='stockmoves'){
-    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial')}[r] || r);
-    const reasonColor = (r)=>({sale:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)'}[r] || 'var(--ink)');
+    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount')}[r] || r);
+    const reasonColor = (r)=>({sale:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)', count:'var(--warm)'}[r] || 'var(--ink)');
     container.innerHTML = `
       ${reportsBackHeader(tr('stockMovesReport'))}
       <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('smHint')}</p>
@@ -10904,6 +10917,73 @@ function renderReportsCategory(container, cat){
 }
 
 /* ---------- SUPER ADMIN ---------- */
+let stocktakeDraft = {};
+let stocktakeOnlyDiff = false;
+function stocktakeRows(){
+  const rows = [];
+  visibleProducts().forEach(p=>{
+    if(p.variants && p.variants.length) p.variants.forEach(v=>rows.push({p, v, key:p.id+'::'+v.id, name:p.name+' '+v.name, stock:v.stock||0}));
+    else rows.push({p, v:null, key:p.id+'::', name:p.name, stock:p.stock||0});
+  });
+  return rows.sort((a,b)=>a.name.localeCompare(b.name));
+}
+function renderStocktake(){
+  const container = document.getElementById('view-container');
+  container.innerHTML = `
+    <div class="back-row"><button id="st-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('stTitle')}</span></div>
+    <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('stHint')}</p>
+    <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="st-search" placeholder="${tr('search')}" value="${escapeHtml(state.stSearch||'')}"></div>
+    <div class="fav-row" style="margin-bottom:8px;"><button class="fav-chip ${stocktakeOnlyDiff?'fav-chip-active':''}" id="st-onlydiff">${tr('stOnlyDiff')}</button><button class="fav-chip" id="st-clear">${tr('stClear')}</button></div>
+    <div id="st-list"></div>
+    <div style="position:sticky;bottom:calc(64px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:10px;box-shadow:0 -4px 16px rgba(22,35,59,0.08);">
+      <div class="subtle" id="st-summary" style="font-size:12.5px;font-weight:700;margin-bottom:8px;"></div>
+      <button class="btn btn-primary btn-block" id="st-apply">${tr('stApply')}</button>
+    </div>`;
+  document.getElementById('st-back-btn').addEventListener('click', ()=>{ state.view='products'; renderAll(); });
+  document.getElementById('st-search').addEventListener('input', (e)=>{ state.stSearch = e.target.value; renderStocktakeList(); });
+  document.getElementById('st-onlydiff').addEventListener('click', ()=>{ stocktakeOnlyDiff = !stocktakeOnlyDiff; renderStocktake(); });
+  document.getElementById('st-clear').addEventListener('click', ()=>{ stocktakeDraft = {}; renderStocktake(); });
+  document.getElementById('st-apply').addEventListener('click', applyStocktake);
+  renderStocktakeList();
+}
+function stocktakeDiffs(){
+  return stocktakeRows().filter(r=>stocktakeDraft[r.key]!==undefined && stocktakeDraft[r.key]!==r.stock).map(r=>({...r, counted: stocktakeDraft[r.key], diff: stocktakeDraft[r.key]-r.stock}));
+}
+function renderStocktakeList(){
+  const listEl = document.getElementById('st-list'); if(!listEl) return;
+  const q = (state.stSearch||'').toLowerCase();
+  let rows = stocktakeRows().filter(r=>!q || r.name.toLowerCase().includes(q));
+  if(stocktakeOnlyDiff) rows = rows.filter(r=>stocktakeDraft[r.key]!==undefined && stocktakeDraft[r.key]!==r.stock);
+  listEl.innerHTML = rows.length ? rows.slice(0, 400).map(r=>{
+    const c = stocktakeDraft[r.key]; const has = c!==undefined; const diff = has ? c - r.stock : 0;
+    return `<div class="list-item" style="padding:10px 12px 10px 16px;gap:8px;">
+      <div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">${escapeHtml(r.name)}</div><div class="meta">${tr('stock')}: ${r.stock}${has ? ` &rarr; <b style="color:${diff===0?'var(--teal)':(diff<0?'var(--danger)':'var(--warm)')};">${c}</b> (${diff>0?'+':''}${diff})` : ''}</div></div>
+      <input type="number" inputmode="decimal" data-st="${r.key}" value="${has?c:''}" placeholder="${tr('stCounted')}" style="width:88px;text-align:center;padding:8px 6px;font-weight:700;">
+    </div>`; }).join('') : `<div class="empty-state">${tr('noData')}</div>`;
+  listEl.querySelectorAll('[data-st]').forEach(inp=>{
+    inp.addEventListener('input', ()=>{ const v = parseFloat(String(inp.value).replace(',','.')); if(isNaN(v)) delete stocktakeDraft[inp.dataset.st]; else stocktakeDraft[inp.dataset.st] = v; updateStocktakeSummary(); const meta = inp.parentElement.querySelector('.meta'); const r = stocktakeRows().find(x=>x.key===inp.dataset.st); if(meta && r){ const c = stocktakeDraft[r.key]; const d = c===undefined?0:c-r.stock; meta.innerHTML = `${tr('stock')}: ${r.stock}${c!==undefined ? ` &rarr; <b style="color:${d===0?'var(--teal)':(d<0?'var(--danger)':'var(--warm)')};">${c}</b> (${d>0?'+':''}${d})` : ''}`; } });
+    inp.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ const all=[...listEl.querySelectorAll('[data-st]')]; const i=all.indexOf(inp); if(all[i+1]) all[i+1].focus(); else inp.blur(); } });
+  });
+  updateStocktakeSummary();
+}
+function updateStocktakeSummary(){
+  const el = document.getElementById('st-summary'); if(!el) return;
+  const counted = Object.keys(stocktakeDraft).length; const diffs = stocktakeDiffs();
+  const plus = diffs.filter(d=>d.diff>0).reduce((a,d)=>a+d.diff,0), minus = diffs.filter(d=>d.diff<0).reduce((a,d)=>a+d.diff,0);
+  el.textContent = tr('stSummary').replace('{c}', counted).replace('{d}', `${diffs.length} (+${plus} / ${minus})`);
+  const btn = document.getElementById('st-apply'); if(btn) btn.disabled = diffs.length===0;
+}
+function applyStocktake(){
+  const diffs = stocktakeDiffs();
+  if(!diffs.length) return;
+  confirmDialog(tr('stConfirmQ').replace('{n}', diffs.length), ()=>{
+    diffs.forEach(d=>stockChange(d.p, d.v, d.diff, 'count', null));
+    saveProducts();
+    stocktakeDraft = {}; stocktakeOnlyDiff = false;
+    showToast(tr('stApplied'));
+    state.view = 'products'; renderAll();
+  }, tr('stApply'));
+}
 function renderSuperAdmin(){
   const container = document.getElementById('view-container');
   container.innerHTML = `
@@ -13171,6 +13251,7 @@ function renderAll(){
   if(state.view==='customers' && !hasPerm('customers')) state.view='sale';
   if(state.view==='reports' && !hasPerm('reports') && !hasPerm('expense')) state.view='sale';
   if(state.view==='superadmin' && !isSuperAdmin()) state.view='sale';
+  if(state.view==='stocktake' && !(isAdmin() || hasPerm('products'))) state.view='products';
   renderHeader();
   renderNav();
   const container = document.getElementById('view-container');
@@ -13197,6 +13278,7 @@ function renderAll(){
     else renderSettings();
   }
   else if(state.view==='superadmin') renderSuperAdmin();
+  else if(state.view==='stocktake') renderStocktake();
   if(warningHtml) container.insertAdjacentHTML('afterbegin', warningHtml);
   const syncBannerHtml = pendingSyncBannerHtml();
   if(syncBannerHtml){
