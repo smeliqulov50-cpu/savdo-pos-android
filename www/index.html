@@ -481,6 +481,9 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  receiptLanguageLabel:{uz:"Chek tili",ru:"Язык чека",en:"Receipt language",kk:"Чек тілі",ky:"Чек тили",tg:"Забони чек"},
+  receiptLanguageHint:{uz:"Xodim ilovani qaysi tilda ishlatmasin, chek doim shu tilda chiqadi.",ru:"На каком бы языке сотрудник ни пользовался приложением, чек всегда печатается на этом языке.",en:"Receipts always print in this language, whatever app language the cashier uses.",kk:"Қызметкер қосымшаны қай тілде қолданса да, чек әрқашан осы тілде шығады.",ky:"Кызматкер колдонмону кайсы тилде колдонбосун, чек дайыма ушул тилде чыгат.",tg:"Корманд барномаро бо ҳар забоне истифода барад, чек ҳамеша бо ин забон чоп мешавад."},
+  receiptLanguageSameAsApp:{uz:"Ilova tili bilan bir xil",ru:"Как язык приложения",en:"Same as app language",kk:"Қосымша тілімен бірдей",ky:"Колдонмо тили менен бирдей",tg:"Мисли забони барнома"},
   cancel:{uz:"Bekor qilish",ru:"Отмена",en:"Cancel",kk:"Бас тарту",ky:"Жокко чыгаруу",tg:"Бекор кардан"},
   delete:{uz:"O'chirish",ru:"Удалить",en:"Delete",kk:"Жою",ky:"Өчүрүү",tg:"Нест кардан"},
   confirmDeleteProduct:{uz:"Bu mahsulot o'chirilsinmi?",ru:"Удалить этот товар?",en:"Delete this product?",kk:"Бұл тауар жойылсын ба?",ky:"Бул товар өчүрүлсүнбү?",tg:"Ин мол нест карда шавад?"},
@@ -1295,6 +1298,10 @@ function expenseCategoryColor(cat){
 }
 
 function tr(key){ return (T[key] && (T[key][state.lang] || T[key].uz)) || key; }
+// Receipts are printed in the language the business owner chose (Settings > Receipt design), regardless of the cashier's app language.
+function receiptLang(){ return (state.settings && state.settings.receiptLanguage) || state.lang; }
+function withReceiptLang(fn){ const prev = state.lang; state.lang = receiptLang(); try{ return fn(); } finally{ state.lang = prev; } }
+function trR(key){ const l = receiptLang(); return (T[key] && (T[key][l] || T[key].uz)) || key; }
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 // Escapes user-entered text (product/customer/staff names, notes, phone
 // numbers, addresses, etc.) before it's inserted into an HTML template
@@ -1919,7 +1926,7 @@ function productsCol(){ return businessDocRef().collection('products'); }
 function customersCol(){ return businessDocRef().collection('customers'); }
 
 function defaultSettingsObj(){
-  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
+  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
 }
 
 const APP_VERSION = 110;
@@ -5952,9 +5959,9 @@ function receiptImageBlob(sale, customer){
     ctx.textAlign = 'left'; ctx.font = '13px Arial'; ctx.fillStyle = '#51677E';
     ctx.fillText(new Date(sale.date).toLocaleString(), padding, cy); cy += smallLineH;
     if(sale.tableName){ ctx.fillText(tableWord()+': '+sale.tableName, padding, cy); cy += smallLineH; }
-    if(sale.orderType){ ctx.fillText(sale.orderType==='dine_in'?tr('orderTypeDineIn'):tr('orderTypeTakeaway'), padding, cy); cy += smallLineH; }
-    if(sale.cashierName){ ctx.fillText(tr('cashier')+': '+sale.cashierName, padding, cy); cy += smallLineH; }
-    if(customer){ ctx.fillText(tr('customerName')+': '+customer.name, padding, cy); cy += smallLineH; }
+    if(sale.orderType){ ctx.fillText(sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway'), padding, cy); cy += smallLineH; }
+    if(sale.cashierName){ ctx.fillText(trR('cashier')+': '+sale.cashierName, padding, cy); cy += smallLineH; }
+    if(customer){ ctx.fillText(trR('customerName')+': '+customer.name, padding, cy); cy += smallLineH; }
     cy += 4; sepLine(cy); cy += 22;
 
     sale.items.forEach((it,idx)=>{
@@ -5983,24 +5990,24 @@ function receiptImageBlob(sale, customer){
     cy += 4; sepLine(cy); cy += 22;
 
     if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed){
-      rowText(tr('subtotal'), fmt(sale.subtotal||sale.total), cy, '13px Arial', '#51677E'); cy += smallLineH;
-      if(sale.discountAmount){ rowText(tr('discountLabel')+' ('+(sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue))+')', '-'+fmt(sale.discountAmount), cy, '13px Arial', '#51677E'); cy += smallLineH; }
-      if(sale.bonusUsed){ rowText(tr('bonusUsedLabel'), '-'+fmt(sale.bonusUsed), cy, '13px Arial', '#51677E'); cy += smallLineH; }
-      if(sale.serviceChargeAmount){ rowText(tr('serviceCharge')+' ('+sale.serviceChargePercent+'%)', fmt(sale.serviceChargeAmount), cy, '13px Arial', '#51677E'); cy += smallLineH; }
-      if(sale.deliveryFee){ rowText(tr('deliveryFee'), fmt(sale.deliveryFee), cy, '13px Arial', '#51677E'); cy += smallLineH; }
+      rowText(trR('subtotal'), fmt(sale.subtotal||sale.total), cy, '13px Arial', '#51677E'); cy += smallLineH;
+      if(sale.discountAmount){ rowText(trR('discountLabel')+' ('+(sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue))+')', '-'+fmt(sale.discountAmount), cy, '13px Arial', '#51677E'); cy += smallLineH; }
+      if(sale.bonusUsed){ rowText(trR('bonusUsedLabel'), '-'+fmt(sale.bonusUsed), cy, '13px Arial', '#51677E'); cy += smallLineH; }
+      if(sale.serviceChargeAmount){ rowText(trR('serviceCharge')+' ('+sale.serviceChargePercent+'%)', fmt(sale.serviceChargeAmount), cy, '13px Arial', '#51677E'); cy += smallLineH; }
+      if(sale.deliveryFee){ rowText(trR('deliveryFee'), fmt(sale.deliveryFee), cy, '13px Arial', '#51677E'); cy += smallLineH; }
       cy += 8;
     }
 
     ctx.fillStyle = '#EBE5FE';
     canvasRoundRectPath(ctx, padding-10, cy-22, canvas.width-(padding-10)*2, 34, 9);
     ctx.fill();
-    rowText(tr('total'), fmt(sale.total), cy, 'bold 17px Arial', '#16283F', '#1F4FB8');
+    rowText(trR('total'), fmt(sale.total), cy, 'bold 17px Arial', '#16283F', '#1F4FB8');
     cy += 30;
     ctx.textAlign = 'left'; ctx.font = '13px Arial'; ctx.fillStyle = '#51677E';
-    ctx.fillText(`${tr('paymentType')}: ${paymentTypeDisplayText(sale)}`, padding, cy); cy += smallLineH;
+    ctx.fillText(`${trR('paymentType')}: ${paymentTypeDisplayText(sale)}`, padding, cy); cy += smallLineH;
 
     if(s.receiptFooter){ cy += 10; centerText(s.receiptFooter, cy, '13px Arial', '#51677E'); cy += smallLineH; }
-    if(s.showSardorBranding!==false){ cy += 14; centerText(tr('sardorBrandingLine'), cy, '11px Arial', '#93A7BC'); }
+    if(s.showSardorBranding!==false){ cy += 14; centerText(trR('sardorBrandingLine'), cy, '11px Arial', '#93A7BC'); }
 
     canvas.toBlob((blob)=>resolve(blob), 'image/png');
   });
@@ -6196,9 +6203,9 @@ async function shareReceipt(sale, customer, custDebtAfter){
   // Attempt 4: copy to clipboard
   try{
     await navigator.clipboard.writeText(text);
-    showToast(tr('shareNotSupported'));
+    showToast(trR('shareNotSupported'));
   }catch(e){
-    showToast(tr('shareNotSupported'));
+    showToast(trR('shareNotSupported'));
   }
 }
 
@@ -6303,7 +6310,8 @@ function buildItemReceiptLines(nameQtyText, priceStr, width){
   return lines;
 }
 
-function buildReceiptText(sale, customer, skipBusinessName, widthOverride){
+function buildReceiptText(...a){ return withReceiptLang(()=>buildReceiptTextInner(...a)); }
+function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   const s = state.settings;
   const width = widthOverride || s.printerCharsPerLine || 32;
   // '=' instead of '-': on cheap/low-resolution thermal printers, a row of
@@ -6319,10 +6327,10 @@ function buildReceiptText(sale, customer, skipBusinessName, widthOverride){
   if(s.businessPhone) lines.push(s.businessPhone);
   lines.push(sep);
   lines.push(new Date(sale.date).toLocaleString());
-  if(sale.receiptNumber) lines.push(tr('receiptNumberLabel')+': '+sale.receiptNumber);
+  if(sale.receiptNumber) lines.push(trR('receiptNumberLabel')+': '+sale.receiptNumber);
   if(sale.tableName) lines.push(tableWord()+': '+sale.tableName);
-  if(sale.cashierName) lines.push(tr('cashier')+': '+sale.cashierName);
-  if(customer) lines.push(tr('customerName')+': '+customer.name);
+  if(sale.cashierName) lines.push(trR('cashier')+': '+sale.cashierName);
+  if(customer) lines.push(trR('customerName')+': '+customer.name);
   lines.push(sep);
   sale.items.forEach(it=>{
     const amount = fmt(it.price*it.qty);
@@ -6331,16 +6339,16 @@ function buildReceiptText(sale, customer, skipBusinessName, widthOverride){
   });
   lines.push(sep);
   if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed){
-    lines.push(padLine(tr('subtotal'), fmt(sale.subtotal||sale.total), width));
-    if(sale.discountAmount) lines.push(padLine(tr('discountLabel')+' ('+(sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue))+')', '-'+fmt(sale.discountAmount), width));
-    if(sale.bonusUsed) lines.push(padLine(tr('bonusUsedLabel'), '-'+fmt(sale.bonusUsed), width));
-    if(sale.serviceChargeAmount) lines.push(padLine(tr('serviceCharge')+' ('+sale.serviceChargePercent+'%)', fmt(sale.serviceChargeAmount), width));
-    if(sale.deliveryFee) lines.push(padLine(tr('deliveryFee'), fmt(sale.deliveryFee), width));
+    lines.push(padLine(trR('subtotal'), fmt(sale.subtotal||sale.total), width));
+    if(sale.discountAmount) lines.push(padLine(trR('discountLabel')+' ('+(sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue))+')', '-'+fmt(sale.discountAmount), width));
+    if(sale.bonusUsed) lines.push(padLine(trR('bonusUsedLabel'), '-'+fmt(sale.bonusUsed), width));
+    if(sale.serviceChargeAmount) lines.push(padLine(trR('serviceCharge')+' ('+sale.serviceChargePercent+'%)', fmt(sale.serviceChargeAmount), width));
+    if(sale.deliveryFee) lines.push(padLine(trR('deliveryFee'), fmt(sale.deliveryFee), width));
   }
-  lines.push(padLine(tr('total'), fmt(sale.total), width));
-  lines.push(`${tr('paymentType')}: ${paymentTypeDisplayText(sale)}`);
+  lines.push(padLine(trR('total'), fmt(sale.total), width));
+  lines.push(`${trR('paymentType')}: ${paymentTypeDisplayText(sale)}`);
   if(s.receiptFooter){ lines.push(sep); lines.push(centerLine(s.receiptFooter, width)); }
-  if(s.showSardorBranding!==false){ lines.push(''); lines.push(centerLine(tr('sardorBrandingLine'), width)); }
+  if(s.showSardorBranding!==false){ lines.push(''); lines.push(centerLine(trR('sardorBrandingLine'), width)); }
   return lines.join('\n');
 }
 // Decides which kitchen printer a product's items should route to.
@@ -6372,7 +6380,8 @@ function anyKitchenPrinterConfigured(){
   return !!getBtCharacteristic('kitchen');
 }
 
-function buildKitchenTicketText(items, tableName, cashierName, stationName){
+function buildKitchenTicketText(...a){ return withReceiptLang(()=>buildKitchenTicketTextInner(...a)); }
+function buildKitchenTicketTextInner(items, tableName, cashierName, stationName){
   // sendKitchenTicket prints this whole ticket at 2x width+height
   // (ESC/POS "double size" mode, for readability from across the kitchen).
   // That means each character now takes up TWICE the physical space, so
@@ -6384,7 +6393,7 @@ function buildKitchenTicketText(items, tableName, cashierName, stationName){
   const width = Math.max(8, Math.floor((state.settings.printerCharsPerLine || 32) / 2));
   const sep = '='.repeat(width);
   const lines = [];
-  lines.push(centerLine(tr('kitchenTicketTitle'), width));
+  lines.push(centerLine(trR('kitchenTicketTitle'), width));
   if(stationName) lines.push(centerLine(stationName, width));
   lines.push(sep);
   // A kitchen ticket only ever prints in restaurant mode, so no table name
@@ -6397,9 +6406,9 @@ function buildKitchenTicketText(items, tableName, cashierName, stationName){
   // character but the printer's alignment for everything printed after
   // it in the same job. ASCII-only markers (***) give the same visual
   // emphasis without that risk.
-  lines.push(tableName ? `${tableWord()}: ${tableName}` : centerLine(`*** ${tr('orderTypeTakeaway').toUpperCase()} ***`, width));
+  lines.push(tableName ? `${tableWord()}: ${tableName}` : centerLine(`*** ${trR('orderTypeTakeaway').toUpperCase()} ***`, width));
   lines.push(new Date().toLocaleTimeString());
-  if(cashierName) lines.push(`${tr('cashier')}: ${cashierName}`);
+  if(cashierName) lines.push(`${trR('cashier')}: ${cashierName}`);
   lines.push(sep);
   items.forEach(it=>{
     const safeName = it.name.replace(/—/g, '-');
@@ -6416,7 +6425,8 @@ function buildKitchenTicketText(items, tableName, cashierName, stationName){
 // and Unicode is completely safe (no single-byte printer codepage to
 // corrupt), so the emoji/ASCII-marker workaround needed for the
 // Bluetooth path doesn't apply here.
-function buildKitchenTicketHtml(items, tableName, cashierName, stationName){
+function buildKitchenTicketHtml(...a){ return withReceiptLang(()=>buildKitchenTicketHtmlInner(...a)); }
+function buildKitchenTicketHtmlInner(items, tableName, cashierName, stationName){
   const rows = items.map(it=>`
     <tr>
       <td style="padding:6px 8px 6px 0;font-size:22px;font-weight:900;white-space:nowrap;vertical-align:top;">${it.qty}x</td>
@@ -6424,16 +6434,16 @@ function buildKitchenTicketHtml(items, tableName, cashierName, stationName){
     </tr>`).join('');
   const takeawayOrTable = tableName
     ? `${escapeHtml(tableWord())}: ${escapeHtml(tableName)}`
-    : `*** ${escapeHtml(tr('orderTypeTakeaway').toUpperCase())} ***`;
+    : `*** ${escapeHtml(trR('orderTypeTakeaway').toUpperCase())} ***`;
   const hr = `border:none;border-top:3px dashed #000;margin:10px 0;`;
   return `
     <div style="font-family:Arial,Helvetica,sans-serif;text-align:center;color:#000;">
-      <div style="font-size:28px;font-weight:900;">${escapeHtml(tr('kitchenTicketTitle'))}</div>
+      <div style="font-size:28px;font-weight:900;">${escapeHtml(trR('kitchenTicketTitle'))}</div>
       ${stationName ? `<div style="font-size:22px;font-weight:700;margin-top:2px;">${escapeHtml(stationName)}</div>` : ''}
       <hr style="${hr}">
       <div style="font-size:20px;font-weight:800;">${takeawayOrTable}</div>
       <div style="font-size:14px;margin-top:4px;">${new Date().toLocaleTimeString()}</div>
-      ${cashierName ? `<div style="font-size:14px;">${escapeHtml(tr('cashier'))}: ${escapeHtml(cashierName)}</div>` : ''}
+      ${cashierName ? `<div style="font-size:14px;">${escapeHtml(trR('cashier'))}: ${escapeHtml(cashierName)}</div>` : ''}
       <hr style="${hr}">
       <table style="width:100%;border-collapse:collapse;text-align:left;">${rows}</table>
       <hr style="${hr}">
@@ -6583,7 +6593,8 @@ function paymentTypeDisplayText(sale){
   return paymentTypeLabel(sale.paymentType);
 }
 
-function buildReceiptHtml(sale, customer){
+function buildReceiptHtml(...a){ return withReceiptLang(()=>buildReceiptHtmlInner(...a)); }
+function buildReceiptHtmlInner(sale, customer){
   const s = state.settings;
   const align = s.receiptAlign === 'left' ? 'left' : 'center';
   const bizWeight = s.receiptBusinessBold!==false ? 'bold' : 'normal';
@@ -6606,28 +6617,28 @@ function buildReceiptHtml(sale, customer){
     </div>
     <hr style="${hrStyle}">
     <div>${new Date(sale.date).toLocaleString()}</div>
-    ${sale.receiptNumber?`<div>${tr('receiptNumberLabel')}: ${escapeHtml(String(sale.receiptNumber))}</div>`:''}
+    ${sale.receiptNumber?`<div>${trR('receiptNumberLabel')}: ${escapeHtml(String(sale.receiptNumber))}</div>`:''}
     ${sale.tableName?`<div>${tableWord()}: ${escapeHtml(sale.tableName)}</div>`:''}
-    ${sale.orderType?`<div>${sale.orderType==='dine_in'?tr('orderTypeDineIn'):tr('orderTypeTakeaway')}</div>`:''}
-    ${sale.cashierName?`<div>${tr('cashier')}: ${escapeHtml(sale.cashierName)}</div>`:''}
-    ${customer?`<div>${tr('customerName')}: ${escapeHtml(customer.name)}</div>`:''}
+    ${sale.orderType?`<div>${sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway')}</div>`:''}
+    ${sale.cashierName?`<div>${trR('cashier')}: ${escapeHtml(sale.cashierName)}</div>`:''}
+    ${customer?`<div>${trR('customerName')}: ${escapeHtml(customer.name)}</div>`:''}
     <hr style="${hrStyle}">
     <table style="width:100%;border-collapse:collapse;">${rows}</table>
     <hr style="${hrStyle}">
     ${(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed) ? `
       <table style="width:100%;">
-        <tr><td>${tr('subtotal')}</td><td style="text-align:right;">${fmt(sale.subtotal||sale.total)}</td></tr>
-        ${sale.discountAmount ? `<tr><td>${tr('discountLabel')} (${sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue)})</td><td style="text-align:right;">-${fmt(sale.discountAmount)}</td></tr>` : ''}
-        ${sale.bonusUsed ? `<tr><td>${tr('bonusUsedLabel')}</td><td style="text-align:right;">-${fmt(sale.bonusUsed)}</td></tr>` : ''}
-        ${sale.serviceChargeAmount ? `<tr><td>${tr('serviceCharge')} (${sale.serviceChargePercent}%)</td><td style="text-align:right;">${fmt(sale.serviceChargeAmount)}</td></tr>` : ''}
-        ${sale.deliveryFee ? `<tr><td>${tr('deliveryFee')}</td><td style="text-align:right;">${fmt(sale.deliveryFee)}</td></tr>` : ''}
+        <tr><td>${trR('subtotal')}</td><td style="text-align:right;">${fmt(sale.subtotal||sale.total)}</td></tr>
+        ${sale.discountAmount ? `<tr><td>${trR('discountLabel')} (${sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue)})</td><td style="text-align:right;">-${fmt(sale.discountAmount)}</td></tr>` : ''}
+        ${sale.bonusUsed ? `<tr><td>${trR('bonusUsedLabel')}</td><td style="text-align:right;">-${fmt(sale.bonusUsed)}</td></tr>` : ''}
+        ${sale.serviceChargeAmount ? `<tr><td>${trR('serviceCharge')} (${sale.serviceChargePercent}%)</td><td style="text-align:right;">${fmt(sale.serviceChargeAmount)}</td></tr>` : ''}
+        ${sale.deliveryFee ? `<tr><td>${trR('deliveryFee')}</td><td style="text-align:right;">${fmt(sale.deliveryFee)}</td></tr>` : ''}
       </table>
       <hr style="${hrStyle}">
     ` : ''}
-    <table style="width:100%;font-weight:bold;background:#EBE5FE;border-radius:6px;"><tr><td style="padding:6px 8px;">${tr('total')}</td><td style="text-align:right;padding:6px 8px;color:#1F4FB8;font-size:1.15em;">${fmt(sale.total)}</td></tr></table>
-    <div style="margin-top:4px;">${tr('paymentType')}: ${paymentTypeDisplayText(sale)}</div>
+    <table style="width:100%;font-weight:bold;background:#EBE5FE;border-radius:6px;"><tr><td style="padding:6px 8px;">${trR('total')}</td><td style="text-align:right;padding:6px 8px;color:#1F4FB8;font-size:1.15em;">${fmt(sale.total)}</td></tr></table>
+    <div style="margin-top:4px;">${trR('paymentType')}: ${paymentTypeDisplayText(sale)}</div>
     ${s.receiptFooter?`<hr style="${hrStyle}"><div style="text-align:${align};">${escapeHtml(s.receiptFooter)}</div>`:''}
-    ${s.showSardorBranding!==false ? `<div style="text-align:center;margin-top:10px;font-size:10px;color:#999;">${tr('sardorBrandingLine')}</div>` : ''}
+    ${s.showSardorBranding!==false ? `<div style="text-align:center;margin-top:10px;font-size:10px;color:#999;">${trR('sardorBrandingLine')}</div>` : ''}
     </div>
   `;
 }
@@ -7202,7 +7213,7 @@ async function sendReceiptToBluetoothPrinter(sale, customer){
     await sendRawBytes(new Uint8Array([0x1D,0x21,bodySizeByte]));
     await sendRawBytes(new Uint8Array([0x1B,0x45,bodyBoldByte]));
     const text = buildReceiptText(sale, customer, true, bodyWidth);
-    const totalLabel = tr('total');
+    const totalLabel = trR('total');
       const textLines = text.split('\n');
       const totalIdx = textLines.findIndex(l=>l.startsWith(totalLabel));
       if(totalIdx>=0){
@@ -11600,8 +11611,11 @@ function renderSettingsPrinter(container){
       const val = parseInt(customChars.value,10);
       if(!isNaN(val) && val>10 && val<80) state.settings.printerCharsPerLine = val;
     }
+    const lineSpacingEl = document.getElementById('s-line-spacing');
+    if(lineSpacingEl) state.settings.printerLineSpacing = parseInt(lineSpacingEl.value,10) || 65;
     await saveSettings();
     showToast(tr('savedSuccess'));
+    state.settingsCategory = null; renderAll();
   });
 }
 
@@ -11609,6 +11623,16 @@ function renderSettingsPrinter(container){
 function renderSettingsReceipt(container){
   container.innerHTML = `
     ${settingsBackHeader(tr('receiptDesign'))}
+    <div class="card">
+      <div class="field">
+        <label class="field-label">${tr('receiptLanguageLabel')}</label>
+        <select id="s-receipt-language">
+          <option value="" ${!state.settings.receiptLanguage?'selected':''}>${tr('receiptLanguageSameAsApp')}</option>
+          ${availableLanguages().map(l=>`<option value="${l.code}" ${state.settings.receiptLanguage===l.code?'selected':''}>${l.label}</option>`).join('')}
+        </select>
+        <p class="subtle" style="margin:4px 0 0;">${tr('receiptLanguageHint')}</p>
+      </div>
+    </div>
     <div class="card">
       <div class="field">
         <label class="field-label">${tr('receiptAlign')}</label>
@@ -11708,8 +11732,11 @@ function renderSettingsReceipt(container){
     // from before so a stale oversized image can never block a save again.
     state.settings.receiptLogo = null;
     state.settings.footerImage = null;
+    const rl = document.getElementById('s-receipt-language');
+    if(rl) state.settings.receiptLanguage = rl.value || '';
     await saveSettings();
     showToast(tr('savedSuccess'));
+    state.settingsCategory = null; renderAll();
   });
   document.getElementById('receipt-preview-btn').addEventListener('click', ()=>{
     const sampleSale = {
