@@ -3,3 +3,6 @@
 www/*.zaxira
 www/*.bak*
 www/*.backup*
+*.apk
+*.zip
+backups/
