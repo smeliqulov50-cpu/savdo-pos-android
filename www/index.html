@@ -481,6 +481,12 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  riSection:{uz:"Chekdagi rasmlar",ru:"Изображения на чеке",en:"Receipt images",kk:"Чектегі суреттер",ky:"Чектеги сүрөттөр",tg:"Тасвирҳо дар чек"},
+  riHint:{uz:"Rasm avtomatik oq-qora va printer kengligiga moslanadi (58 mm = 384 nuqta, 80 mm = 576 nuqta). Aniq, kontrastli logotip yaxshi chiqadi; rangli foto yomon chiqadi.",ru:"Изображение автоматически переводится в чёрно-белое и подгоняется под ширину принтера (58 мм = 384 точки, 80 мм = 576). Чёткий контрастный логотип печатается хорошо, цветное фото — плохо.",en:"The image is converted to black & white and fitted to the printer width (58 mm = 384 dots, 80 mm = 576). Clear, high-contrast logos print well; colour photos do not.",kk:"Сурет автоматты түрде ақ-қараға айналып, принтер еніне бейімделеді.",ky:"Сүрөт автоматтык түрдө ак-карага айланып, принтер кеңдигине ылайыкташат.",tg:"Тасвир ба таври худкор сиёҳу сафед шуда, ба паҳнои принтер мувофиқ мешавад."},
+  riChoose:{uz:"Rasm tanlash",ru:"Выбрать изображение",en:"Choose image",kk:"Сурет таңдау",ky:"Сүрөт тандоо",tg:"Интихоби тасвир"},
+  riRemove:{uz:"Olib tashlash",ru:"Убрать",en:"Remove",kk:"Алып тастау",ky:"Алып салуу",tg:"Хориҷ кардан"},
+  riSize:{uz:"Kenglik",ru:"Ширина",en:"Width",kk:"Ені",ky:"Кеңдиги",tg:"Паҳно"},
+  riTooLarge:{uz:"Rasm juda katta yoki o'qib bo'lmadi",ru:"Изображение слишком большое или не читается",en:"Image too large or unreadable",kk:"Сурет тым үлкен немесе оқылмайды",ky:"Сүрөт өтө чоң же окулбайт",tg:"Тасвир хеле калон ё хонда намешавад"},
   psAdvanced:{uz:"Qo'shimcha: kesish, tortma, relay, qatorlar",ru:"Дополнительно: отрез, ящик, relay, строки",en:"Advanced: cut, drawer, relay, lines",kk:"Қосымша: кесу, жәшік, relay, жолдар",ky:"Кошумча: кесүү, тартма, relay, саптар",tg:"Иловагӣ: буриш, қуттӣ, relay, сатрҳо"},
   psTapToOpen:{uz:"ochish uchun bosing",ru:"нажмите, чтобы открыть",en:"tap to open",kk:"ашу үшін басыңыз",ky:"ачуу үчүн басыңыз",tg:"барои кушодан пахш кунед"},
   psBoldOn:{uz:"qalin",ru:"жирный",en:"bold",kk:"қалың",ky:"калың",tg:"ғафс"},
@@ -3866,6 +3872,101 @@ function renderNav(){
 }
 
 /* ---------- IMAGE HELPERS ---------- */
+function receiptImageFieldHtml(key, label, scaleKey){
+  const val = state.settings[key];
+  const scale = state.settings[scaleKey] || 100;
+  return `<div class="card" style="padding:12px 14px;margin-bottom:10px;">
+    <div style="font-weight:700;margin-bottom:8px;">${label}</div>
+    <div style="display:flex;gap:12px;align-items:center;">
+      <div style="width:96px;height:64px;border:1px dashed var(--line);border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">${val ? `<img src="${val}" style="max-width:100%;max-height:100%;">` : `<span class="subtle" style="font-size:11px;">&mdash;</span>`}</div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+        <label class="btn btn-outline btn-sm" style="text-align:center;cursor:pointer;">${tr('riChoose')}<input type="file" accept="image/*" data-ri-file="${key}" style="display:none;"></label>
+        ${val ? `<button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger);" data-ri-remove="${key}">${tr('riRemove')}</button>` : ''}
+      </div>
+    </div>
+    <div class="field" style="margin:10px 0 0;"><label class="field-label">${tr('riSize')}</label>
+      <select data-ri-scale="${scaleKey}">${[40,50,60,75,100].map(p=>`<option value="${p}" ${scale===p?'selected':''}>${p}%</option>`).join('')}</select>
+    </div>
+  </div>`;
+}
+function bindReceiptImageFields(container){
+  container.querySelectorAll('[data-ri-file]').forEach(inp=>inp.addEventListener('change', ()=>{
+    const f = inp.files && inp.files[0]; if(!f) return;
+    prepareReceiptImage(f, (dataUrl)=>{ state.settings[inp.dataset.riFile] = dataUrl; saveSettings(); renderSettingsReceipt(container); }, ()=>showToast(tr('riTooLarge')));
+  }));
+  container.querySelectorAll('[data-ri-remove]').forEach(b=>b.addEventListener('click', ()=>{ state.settings[b.dataset.riRemove] = null; saveSettings(); renderSettingsReceipt(container); }));
+  container.querySelectorAll('[data-ri-scale]').forEach(sel=>sel.addEventListener('change', ()=>{ state.settings[sel.dataset.riScale] = parseInt(sel.value,10)||100; saveSettings(); }));
+}
+function prepareReceiptImage(file, cb, onError){
+  const reader = new FileReader();
+  reader.onerror = ()=>onError && onError();
+  reader.onload = (e)=>{
+    const img = new Image();
+    img.onerror = ()=>onError && onError();
+    img.onload = ()=>{
+      try{
+        const tryWidth = (maxW)=>{
+          const scale = Math.min(1, maxW / img.width);
+          const w = Math.max(8, Math.round(img.width*scale/8)*8), h = Math.max(1, Math.round(img.height*scale));
+          const c = document.createElement('canvas'); c.width = w; c.height = h;
+          const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h); ctx.drawImage(img, 0, 0, w, h);
+          const d = ctx.getImageData(0,0,w,h); const px = d.data; const g = new Float32Array(w*h);
+          for(let i=0;i<w*h;i++){ const a = px[i*4+3]/255; g[i] = 255 - a*(255 - (0.299*px[i*4] + 0.587*px[i*4+1] + 0.114*px[i*4+2])); }
+          for(let y=0;y<h;y++) for(let x=0;x<w;x++){
+            const i = y*w+x; const old = g[i]; const nv = old < 128 ? 0 : 255; const err = old - nv; g[i] = nv;
+            if(x+1<w) g[i+1] += err*7/16;
+            if(y+1<h){ if(x>0) g[i+w-1] += err*3/16; g[i+w] += err*5/16; if(x+1<w) g[i+w+1] += err*1/16; }
+          }
+          for(let i=0;i<w*h;i++){ const v = g[i] < 128 ? 0 : 255; px[i*4]=v; px[i*4+1]=v; px[i*4+2]=v; px[i*4+3]=255; }
+          ctx.putImageData(d,0,0);
+          return c.toDataURL('image/png');
+        };
+        let out = tryWidth(384);
+        if(out.length > 90000) out = tryWidth(256);
+        if(out.length > 90000){ onError && onError(); return; }
+        cb(out);
+      }catch(err){ onError && onError(); }
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function printerDotsWidth(){ const cpl = state.settings.printerCharsPerLine || 32; return cpl <= 32 ? 384 : 576; }
+function loadImageEl(src){ return new Promise((res, rej)=>{ const im = new Image(); im.onload = ()=>res(im); im.onerror = rej; im.src = src; }); }
+async function sendImageRaster(dataUrl, slot, scalePercent){
+  if(!dataUrl) return;
+  const img = await loadImageEl(dataUrl);
+  const maxDots = printerDotsWidth();
+  let w = Math.min(img.width, Math.round(maxDots * (Math.min(100, Math.max(20, scalePercent||100))/100)));
+  w = Math.max(8, Math.floor(w/8)*8);
+  const h = Math.max(1, Math.round(img.height * w / img.width));
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h); ctx.drawImage(img, 0, 0, w, h);
+  const px = ctx.getImageData(0,0,w,h).data;
+  const bytesPerRow = w/8;
+  const padBytes = Math.max(0, Math.floor((maxDots - w)/16));
+  const rowBytes = bytesPerRow + padBytes;
+  for(let y0=0; y0<h; y0+=200){
+    const rows = Math.min(200, h-y0);
+    const out = new Uint8Array(8 + rowBytes*rows);
+    out.set([0x1D,0x76,0x30,0x00, rowBytes & 0xFF, (rowBytes>>8)&0xFF, rows & 0xFF, (rows>>8)&0xFF], 0);
+    let o = 8;
+    for(let y=y0; y<y0+rows; y++){
+      for(let p=0;p<padBytes;p++) out[o++] = 0;
+      for(let bx=0; bx<bytesPerRow; bx++){
+        let b = 0;
+        for(let bit=0; bit<8; bit++){
+          const x = bx*8+bit; const i = (y*w+x)*4;
+          const lum = 0.299*px[i] + 0.587*px[i+1] + 0.114*px[i+2];
+          if(lum < 128) b |= (0x80 >> bit);
+        }
+        out[o++] = b;
+      }
+    }
+    await sendRawBytes(out, slot);
+  }
+  await sendRawBytes(new TextEncoder().encode('\n'), slot);
+}
 function readAndResizeImage(file, callback, onError, maxWidth, format){
   const reader = new FileReader();
   reader.onerror = ()=>{ if(onError) onError(); };
@@ -6858,6 +6959,7 @@ function buildReceiptHtmlInner(sale, customer){
   const hrStyle = `border:none;border-top:1.5px dashed #7C5CFC;opacity:0.5;margin:8px 0;`;
   return `
     <div style="font-size:${bodyFontSize};font-weight:${bodyFontWeight};">
+    ${s.receiptLogo ? `<div style="text-align:center;margin-bottom:6px;"><img src="${s.receiptLogo}" style="width:${s.logoScalePercent||100}%;max-width:100%;"></div>` : ''}
     <div style="${s.receiptBusinessBorder?`border:2px solid #7C5CFC;border-radius:8px;padding:8px 10px;margin-bottom:4px;`:'padding-bottom:6px;border-bottom:2px solid #7C5CFC;'}">
     <div style="${bizNameStyle}">${escapeHtml(bizNameText)}</div>
     ${(s.receiptExtraLine && s.receiptExtraLine.trim() !== (s.businessAddress||'').trim()) ? `<div style="text-align:${align};font-weight:${bizWeight};font-size:${bizSize};font-family:${bizFontFamily};">${escapeHtml(s.receiptExtraLine)}</div>` : ''}
@@ -6888,6 +6990,7 @@ function buildReceiptHtmlInner(sale, customer){
     <div style="margin-top:4px;">${trR('paymentType')}: ${paymentTypeDisplayText(sale)}</div>
     ${sale.cashTendered > 0 ? `<div style="margin-top:2px;">${trR('cashTenderedLabel')}: ${fmt(sale.cashTendered)} &nbsp;·&nbsp; ${trR('changeDueLabel')}: ${fmt(sale.changeDue||0)}</div>` : ''}
     ${s.receiptFooter?`<hr style="${hrStyle}"><div style="text-align:${align};">${escapeHtml(s.receiptFooter)}</div>`:''}
+    ${s.footerImage ? `<div style="text-align:center;margin-top:8px;"><img src="${s.footerImage}" style="width:${s.footerImageScalePercent||100}%;max-width:100%;"></div>` : ''}
     ${s.showSardorBranding!==false ? `<div style="text-align:center;margin-top:10px;font-size:10px;color:#999;">${trR('sardorBrandingLine')}</div>` : ''}
     </div>
   `;
@@ -7429,6 +7532,7 @@ async function sendReceiptToBluetoothPrinter(sale, customer){
 
   try{
     await sendRawBytes(new Uint8Array([0x1B,0x61,0x01]));
+    if(state.settings.receiptLogo){ try{ await sendImageRaster(state.settings.receiptLogo, null, state.settings.logoScalePercent||100); }catch(e){} }
     if(state.settings.receiptBusinessBorder){
       const width = state.settings.printerCharsPerLine || 32;
       await sendRawBytes(new TextEncoder().encode('='.repeat(width) + '\n'));
@@ -7482,6 +7586,8 @@ async function sendReceiptToBluetoothPrinter(sale, customer){
     await sendRawBytes(new Uint8Array([0x1B,0x45,0x00]));
     textOk = true;
   }catch(e){ return false; }
+
+  if(state.settings.footerImage){ try{ await sendRawBytes(new Uint8Array([0x1B,0x61,0x01])); await sendImageRaster(state.settings.footerImage, null, state.settings.footerImageScalePercent||100); }catch(e){} }
 
   try{
     const feedLines = state.settings.printerFeedLines != null ? state.settings.printerFeedLines : 5;
@@ -12041,6 +12147,10 @@ function renderSettingsReceipt(container){
 
       <div class="checkbox-row" style="margin-top:16px;"><input type="checkbox" id="s-auto-print" ${state.settings.autoPrintReceipt?'checked':''}><span>${tr('autoPrintToggle')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="s-sardor-branding" ${state.settings.showSardorBranding?'checked':''}><span>${tr('sardorBrandingToggle')}</span></div>
+      <h3 class="sub-title" style="margin-top:14px;">${tr('riSection')}</h3>
+      <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('riHint')}</p>
+      ${receiptImageFieldHtml('receiptLogo', tr('receiptLogo'), 'logoScalePercent')}
+      ${receiptImageFieldHtml('footerImage', tr('footerImage'), 'footerImageScalePercent')}
       <button class="btn btn-primary btn-block" style="margin-top:12px;" id="save-receipt-design-btn">${tr('saveAndBack')}</button>
       <button class="btn btn-outline btn-block" id="receipt-preview-btn">${tr('receiptPreview')}</button>
     </div>
@@ -12101,6 +12211,7 @@ function renderSettingsReceipt(container){
     saveSettings();
   });
   bindAutosaveStatus();
+  bindReceiptImageFields(container);
   const rlSel = document.getElementById('s-receipt-language');
   if(rlSel) rlSel.addEventListener('change', ()=>{ state.settings.receiptLanguage = rlSel.value || ''; saveSettings(); });
   document.getElementById('save-receipt-design-btn').addEventListener('click', async ()=>{
@@ -12115,8 +12226,6 @@ function renderSettingsReceipt(container){
     // Images have been removed as a receipt feature (they repeatedly broke
     // both cloud sync and thermal printing) — clear out anything left over
     // from before so a stale oversized image can never block a save again.
-    state.settings.receiptLogo = null;
-    state.settings.footerImage = null;
     const rl = document.getElementById('s-receipt-language');
     if(rl) state.settings.receiptLanguage = rl.value || '';
     await saveSettings();
