@@ -481,6 +481,11 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  exitKeepShift:{uz:"Smenani yopmasdan chiqish",ru:"Выйти, не закрывая смену",en:"Exit without closing shift",kk:"Ауысымды жаппай шығу",ky:"Сменаны жаппай чыгуу",tg:"Баромадан бе пӯшидани смена"},
+  exitKeepShiftHint:{uz:"Smena ochiq qoladi, qaytib kirganingizda davom etasiz.",ru:"Смена останется открытой, продолжите после входа.",en:"The shift stays open; continue when you log back in.",kk:"Ауысым ашық қалады, қайта кіргенде жалғастырасыз.",ky:"Смена ачык калат, кайра киргенде улантасыз.",tg:"Смена кушода мемонад, баъди ворид шудан идома медиҳед."},
+  pfAll:{uz:"Barchasi",ru:"Все",en:"All",kk:"Барлығы",ky:"Баары",tg:"Ҳама"},
+  pfLow:{uz:"Kam qolgan",ru:"Мало осталось",en:"Low stock",kk:"Аз қалды",ky:"Аз калды",tg:"Кам монд"},
+  pfOut:{uz:"Tugagan",ru:"Закончились",en:"Out of stock",kk:"Таусылды",ky:"Түгөндү",tg:"Тамом шуд"},
   receiptLanguageLabel:{uz:"Chek tili",ru:"Язык чека",en:"Receipt language",kk:"Чек тілі",ky:"Чек тили",tg:"Забони чек"},
   receiptLanguageHint:{uz:"Xodim ilovani qaysi tilda ishlatmasin, chek doim shu tilda chiqadi.",ru:"На каком бы языке сотрудник ни пользовался приложением, чек всегда печатается на этом языке.",en:"Receipts always print in this language, whatever app language the cashier uses.",kk:"Қызметкер қосымшаны қай тілде қолданса да, чек әрқашан осы тілде шығады.",ky:"Кызматкер колдонмону кайсы тилде колдонбосун, чек дайыма ушул тилде чыгат.",tg:"Корманд барномаро бо ҳар забоне истифода барад, чек ҳамеша бо ин забон чоп мешавад."},
   receiptLanguageSameAsApp:{uz:"Ilova tili bilan bir xil",ru:"Как язык приложения",en:"Same as app language",kk:"Қосымша тілімен бірдей",ky:"Колдонмо тили менен бирдей",tg:"Мисли забони барнома"},
@@ -1782,11 +1787,12 @@ function openModal(html, opts){
 function closeModal(){ document.getElementById('modal-root').innerHTML=''; }
 initBackButtonHandling();
 
-function confirmDialog(message, onYes){
+function confirmDialog(message, onYes, yesLabel){
+  if(!yesLabel && message === tr('refundConfirm')) yesLabel = tr('refundSale');
   openModal(`<p style="font-size:14px;margin:0 0 16px;">${message}</p>
     <div class="btn-row">
       <button class="btn btn-outline" onclick="closeModal()">${tr('cancel')}</button>
-      <button class="btn btn-danger" id="confirm-yes-btn">${tr('yes')}</button>
+      <button class="btn btn-danger" id="confirm-yes-btn">${yesLabel || tr('yes')}</button>
     </div>`, {center:true});
   document.getElementById('confirm-yes-btn').addEventListener('click', ()=>{ closeModal(); onYes(); });
 }
@@ -3684,8 +3690,17 @@ function openEndShiftModal(){
     </div>
     <div id="diff-display" class="subtle" style="margin-bottom:12px;"></div>
     <button class="btn btn-danger btn-block" id="close-shift-btn">${tr('closeShiftConfirm')}</button>
+    <button class="btn btn-outline btn-block" id="exit-keep-shift-btn" style="margin-top:8px;">${tr('exitKeepShift')}</button>
+    <p class="subtle" style="margin:6px 0 0;font-size:11px;text-align:center;">${tr('exitKeepShiftHint')}</p>
   `);
   attachMoneyInputsById('actual-cash-input');
+  document.getElementById('exit-keep-shift-btn').addEventListener('click', ()=>{
+    stopAgentLocationTracking();
+    state.currentStaff = null;
+    state.view = 'sale';
+    closeModal();
+    renderAll();
+  });
   function updateDiff(){
     const actual = parseMoneyInput(document.getElementById('actual-cash-input').value) || 0;
     const diff = actual - expected;
@@ -7311,7 +7326,8 @@ function renderProducts(){
       <button class="btn btn-accent" style="flex:1;" id="add-product-btn">${ICONS.plus} ${tr('addProduct')}</button>
       <button class="btn btn-outline" id="export-products-btn">${tr('exportProductsPdf')}</button>
     </div>
-    <div class="search-bar" style="margin-bottom:14px;">${ICONS.search}<input type="text" id="product-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.productSearch||'')}"></div>
+    <div class="search-bar" style="margin-bottom:10px;">${ICONS.search}<input type="text" id="product-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.productSearch||'')}"></div>
+    <div class="fav-row" id="product-filter-row">${productFilterChipsHtml()}</div>
     <div id="product-list"></div>
   `;
   renderProductListItems();
@@ -7321,13 +7337,41 @@ function renderProducts(){
     state.productSearch = e.target.value;
     renderProductListItems();
   });
+  bindProductFilterChips();
+}
+function productTotalStock(p){ return (p.variants && p.variants.length) ? p.variants.reduce((a,v)=>a+(v.stock||0),0) : (p.stock||0); }
+function productFilterChipsHtml(){
+  const thr = state.settings.lowStockThreshold||5;
+  const all = state.products.length;
+  const low = state.products.filter(p=>{ const st=productTotalStock(p); return st>0 && st<=thr; }).length;
+  const out = state.products.filter(p=>productTotalStock(p)<=0).length;
+  const f = state.productFilter||'all';
+  return [['all',tr('pfAll'),all],['low',tr('pfLow'),low],['out',tr('pfOut'),out]].map(([id,label,n])=>
+    `<button class="fav-chip ${f===id?'fav-chip-active':''}" data-pf="${id}">${label} · ${n}</button>`).join('');
+}
+function bindProductFilterChips(){
+  const row = document.getElementById('product-filter-row');
+  if(!row) return;
+  row.querySelectorAll('[data-pf]').forEach(b=>b.addEventListener('click', ()=>{
+    state.productFilter = b.dataset.pf;
+    row.innerHTML = productFilterChipsHtml();
+    bindProductFilterChips();
+    renderProductListItems();
+  }));
 }
 
 function renderProductListItems(){
   const listEl = document.getElementById('product-list');
   if(!listEl) return;
   const q = (state.productSearch||'').toLowerCase();
-  const filtered = state.products.filter(p=>p.name.toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name));
+  const thr = state.settings.lowStockThreshold||5;
+  const f = state.productFilter||'all';
+  const filtered = state.products.filter(p=>p.name.toLowerCase().includes(q)).filter(p=>{
+    const st = productTotalStock(p);
+    if(f==='low') return st>0 && st<=thr;
+    if(f==='out') return st<=0;
+    return true;
+  }).sort((a,b)=>a.name.localeCompare(b.name));
   listEl.innerHTML = filtered.length ? filtered.map(p=>{
     const hasVariants = p.variants && p.variants.length;
     const totalStock = hasVariants ? p.variants.reduce((s,v)=>s+v.stock,0) : p.stock;

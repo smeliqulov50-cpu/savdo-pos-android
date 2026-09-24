@@ -6,3 +6,4 @@ www/*.backup*
 *.apk
 *.zip
 backups/
+fix*.py
