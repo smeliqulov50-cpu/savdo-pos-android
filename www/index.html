@@ -464,7 +464,7 @@ const STORAGE_KEYS = {
   deviceId:'sardor_device_id_v1', receiptCounter:'sardor_receipt_counter_v1', visits:'sardor_visits_v1',
   creditors:'sardor_creditors_v1', creditorLedger:'sardor_creditor_ledger_v1', kitchenStations:'sardor_kitchen_stations_v1',
   saleMode:'sardor_sale_mode_v1', expenses:'sardor_expenses_v1', deviceHasNoPrinter:'sardor_device_no_printer_v1',
-  reservations:'sardor_reservations_v1', subCloudCheck:'sardor_sub_cloud_check_v1', stockMoves:'sardor_stock_moves_v1', heldCarts:'sardor_held_carts_v1',
+  reservations:'sardor_reservations_v1', purchases:'sardor_purchases_v1', subCloudCheck:'sardor_sub_cloud_check_v1', stockMoves:'sardor_stock_moves_v1', heldCarts:'sardor_held_carts_v1',
   businessId:'sardor_business_id_v1'
 };
 
@@ -481,6 +481,20 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  puTitle:{uz:"Kirim (nakladnoy)",ru:"Приход (накладная)",en:"Receiving (invoice)",kk:"Кіріс (жүкқұжат)",ky:"Кирим (накладной)",tg:"Воридот (борхат)"},
+  puSupplier:{uz:"Yetkazib beruvchi",ru:"Поставщик",en:"Supplier",kk:"Жеткізуші",ky:"Жеткирүүчү",tg:"Таъминкунанда"},
+  puNote:{uz:"Izoh / hujjat raqami",ru:"Примечание / номер документа",en:"Note / document no.",kk:"Ескерту / құжат нөмірі",ky:"Эскертүү / документ номери",tg:"Эзоҳ / рақами ҳуҷҷат"},
+  puAddItem:{uz:"+ Mahsulot qo'shish",ru:"+ Добавить товар",en:"+ Add product",kk:"+ Тауар қосу",ky:"+ Товар кошуу",tg:"+ Иловаи маҳсулот"},
+  puQty:{uz:"Miqdor",ru:"Кол-во",en:"Qty",kk:"Саны",ky:"Саны",tg:"Миқдор"},
+  puCost:{uz:"Tannarx (dona)",ru:"Закуп. цена (шт)",en:"Unit cost",kk:"Өзіндік құн (дана)",ky:"Өздүк нарк (даана)",tg:"Арзиш (дона)"},
+  puTotal:{uz:"Jami kirim",ru:"Итого приход",en:"Total received",kk:"Барлығы кіріс",ky:"Бардыгы кирим",tg:"Ҳамагӣ воридот"},
+  puUpdateCost:{uz:"Mahsulot tannarxini yangi narxga yangilash",ru:"Обновить себестоимость товара до новой цены",en:"Update product cost price to the new cost",kk:"Тауардың өзіндік құнын жаңа бағаға жаңарту",ky:"Товардын өздүк наркын жаңы баага жаңылоо",tg:"Навсозии арзиши маҳсулот"},
+  puApply:{uz:"Kirimni qabul qilish",ru:"Принять приход",en:"Receive stock",kk:"Кірісті қабылдау",ky:"Киримди кабыл алуу",tg:"Қабули воридот"},
+  puApplied:{uz:"Kirim qabul qilindi",ru:"Приход принят",en:"Stock received",kk:"Кіріс қабылданды",ky:"Кирим кабыл алынды",tg:"Воридот қабул шуд"},
+  puEmpty:{uz:"Kamida bitta mahsulot qo'shing",ru:"Добавьте хотя бы один товар",en:"Add at least one product",kk:"Кем дегенде бір тауар қосыңыз",ky:"Жок дегенде бир товар кошуңуз",tg:"Ҳадди ақал як маҳсулот илова кунед"},
+  puHistory:{uz:"Oxirgi kirimlar",ru:"Последние приходы",en:"Recent receipts",kk:"Соңғы кірістер",ky:"Акыркы киримдер",tg:"Воридоти охирин"},
+  puPick:{uz:"Mahsulotni tanlang",ru:"Выберите товар",en:"Pick a product",kk:"Тауарды таңдаңыз",ky:"Товарды тандаңыз",tg:"Маҳсулотро интихоб кунед"},
+  puItemsCount:{uz:"{n} ta mahsulot",ru:"{n} товаров",en:"{n} items",kk:"{n} тауар",ky:"{n} товар",tg:"{n} маҳсулот"},
   stTitle:{uz:"Inventarizatsiya",ru:"Инвентаризация",en:"Stock count",kk:"Түгендеу",ky:"Инвентаризация",tg:"Баррасии анбор"},
   stHint:{uz:"Har bir mahsulotning haqiqiy sonini kiriting. Bo'sh qoldirilganlar o'zgarmaydi. Tasdiqlaganda farqlar omborga yoziladi va jurnalda \"Inventarizatsiya\" bo'lib qoladi.",ru:"Введите фактическое количество каждого товара. Пустые не изменяются. При подтверждении разницы записываются на склад и в журнал как «Инвентаризация».",en:"Enter the real count for each product. Blank ones stay unchanged. On confirm, differences are applied and logged as \"Stock count\".",kk:"Әр тауардың нақты санын енгізіңіз. Бос қалғандары өзгермейді.",ky:"Ар бир товардын чыныгы санын киргизиңиз. Бош калгандар өзгөрбөйт.",tg:"Шумораи воқеии ҳар маҳсулотро ворид кунед. Холиҳо тағйир намеёбанд."},
   stCounted:{uz:"Sanaldi",ru:"Посчитано",en:"Counted",kk:"Саналды",ky:"Саналды",tg:"Ҳисоб шуд"},
@@ -1623,6 +1637,7 @@ async function loadAll(){
   state.tables = tables || [];
   state.setupDone = !!setupDone;
   state.cart = cart || [];
+  state.purchases = (await storGet(STORAGE_KEYS.purchases)) || [];
   state.subCloudCheck = (await storGet(STORAGE_KEYS.subCloudCheck)) || 0;
   state.stockMoves = (await storGet(STORAGE_KEYS.stockMoves)) || [];
   state.heldCarts = (await storGet(STORAGE_KEYS.heldCarts)) || [];
@@ -7646,7 +7661,7 @@ function renderProducts(){
       <button class="btn btn-outline" id="export-products-btn">${tr('exportProductsPdf')}</button>
       <button class="btn btn-outline" id="import-export-btn" style="width:auto;white-space:nowrap;">${tr('ieTitle')}</button>
     </div>
-    ${isAdmin() || hasPerm('products') ? `<button class="btn btn-outline btn-block" id="stocktake-btn" style="margin-bottom:12px;">${tr('stTitle')}</button>` : ''}
+    ${isAdmin() || hasPerm('products') ? `<div class="btn-row" style="margin-bottom:12px;"><button class="btn btn-outline" style="flex:1;" id="purchase-btn">${tr('puTitle')}</button><button class="btn btn-outline" style="flex:1;" id="stocktake-btn">${tr('stTitle')}</button></div>` : ''}
     <div class="search-bar" style="margin-bottom:10px;">${ICONS.search}<input type="text" id="product-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.productSearch||'')}"></div>
     <div class="fav-row" id="product-filter-row">${productFilterChipsHtml()}</div>
     <div id="product-list"></div>
@@ -7655,6 +7670,8 @@ function renderProducts(){
   document.getElementById('add-product-btn').addEventListener('click', ()=>openProductForm(null));
   document.getElementById('export-products-btn').addEventListener('click', exportProductsPdf);
   document.getElementById('import-export-btn').addEventListener('click', openImportExportModal);
+  const puBtn = document.getElementById('purchase-btn');
+  if(puBtn) puBtn.addEventListener('click', ()=>{ state.view = 'purchase'; renderAll(); });
   const stBtn = document.getElementById('stocktake-btn');
   if(stBtn) stBtn.addEventListener('click', ()=>{ state.view = 'stocktake'; renderAll(); });
   document.getElementById('product-search-input').addEventListener('input', (e)=>{
@@ -10917,6 +10934,87 @@ function renderReportsCategory(container, cat){
 }
 
 /* ---------- SUPER ADMIN ---------- */
+let purchaseDraft = {supplier:'', note:'', items:[], updateCost:true};
+function savePurchases(){ storSet(STORAGE_KEYS.purchases, (state.purchases||[]).slice(-500)); }
+function purchaseTotal(){ return purchaseDraft.items.reduce((a,it)=>a + (parseFloat(it.qty)||0)*(parseFloat(it.cost)||0), 0); }
+function renderPurchase(){
+  const container = document.getElementById('view-container');
+  const suppliers = [...new Set(visibleProducts().map(p=>p.supplierName).filter(Boolean).concat((state.creditors||[]).map(c=>c.name).filter(Boolean)))];
+  const recent = (state.purchases||[]).filter(x=>effectiveBranchId(x.branchId)===effectiveBranchId(state.currentBranchId)).slice().reverse().slice(0, 30);
+  container.innerHTML = `
+    <div class="back-row"><button id="pu-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('puTitle')}</span></div>
+    <div class="card" style="padding:12px 14px;margin-bottom:10px;">
+      <div class="field"><label class="field-label">${tr('puSupplier')}</label><input type="text" id="pu-supplier" list="pu-supplier-list" value="${escapeHtml(purchaseDraft.supplier)}"><datalist id="pu-supplier-list">${suppliers.map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
+      <div class="field"><label class="field-label">${tr('puNote')}</label><input type="text" id="pu-note" value="${escapeHtml(purchaseDraft.note)}"></div>
+    </div>
+    <div id="pu-items">${purchaseDraft.items.length ? purchaseDraft.items.map((it,i)=>`
+      <div class="card" style="padding:10px 12px;margin-bottom:8px;">
+        <div class="row" style="gap:8px;align-items:center;"><div style="flex:1;min-width:0;font-weight:800;">${escapeHtml(it.name)}</div><button class="icon-btn" data-pu-del="${i}" style="color:var(--danger);">${ICONS.trash}</button></div>
+        <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;margin-top:8px;align-items:end;">
+          <div><label class="field-label">${tr('puQty')}</label><input type="number" inputmode="decimal" data-pu-qty="${i}" value="${it.qty}" style="text-align:center;"></div>
+          <div><label class="field-label">${tr('puCost')}</label><input type="text" inputmode="numeric" data-money data-pu-cost="${i}" value="${formatMoneyInputValue(it.cost)}"></div>
+          <div class="subtle" style="text-align:right;font-weight:800;padding-bottom:10px;" data-pu-line="${i}">${fmt((parseFloat(it.qty)||0)*(parseFloat(it.cost)||0))}</div>
+        </div>
+      </div>`).join('') : `<div class="empty-state">${tr('puEmpty')}</div>`}</div>
+    <button class="btn btn-outline btn-block" id="pu-add" style="margin-bottom:10px;">${tr('puAddItem')}</button>
+    <div class="checkbox-row"><input type="checkbox" id="pu-update-cost" ${purchaseDraft.updateCost?'checked':''}><span>${tr('puUpdateCost')}</span></div>
+    <div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin:8px 0 12px;"><strong>${tr('puTotal')}</strong><strong id="pu-total">${fmt(purchaseTotal())}</strong></div>
+    <button class="btn btn-primary btn-block" id="pu-apply" ${purchaseDraft.items.length?'':'disabled'}>${tr('puApply')}</button>
+    ${recent.length ? `<h3 class="sub-title" style="margin-top:18px;">${tr('puHistory')}</h3>${recent.map(x=>`
+      <div class="card" style="padding:10px 12px;margin-bottom:8px;">
+        <div class="row"><div style="min-width:0;"><div style="font-weight:800;">${escapeHtml(x.supplier||'—')}</div><div class="subtle" style="font-size:11.5px;">${new Date(x.date).toLocaleString()} &middot; ${tr('puItemsCount').replace('{n}', x.items.length)}${x.staffName?(' &middot; '+escapeHtml(x.staffName)):''}${x.note?(' &middot; '+escapeHtml(x.note)):''}</div></div><strong style="white-space:nowrap;">${fmt(x.total)}</strong></div>
+        <div class="subtle" style="font-size:12px;margin-top:4px;">${x.items.map(it=>escapeHtml(it.name)+' ×'+it.qty).join(', ')}</div>
+      </div>`).join('')}` : ''}`;
+  document.getElementById('pu-back-btn').addEventListener('click', ()=>{ state.view='products'; renderAll(); });
+  document.getElementById('pu-supplier').addEventListener('input', (e)=>{ purchaseDraft.supplier = e.target.value; });
+  document.getElementById('pu-note').addEventListener('input', (e)=>{ purchaseDraft.note = e.target.value; });
+  document.getElementById('pu-update-cost').addEventListener('change', (e)=>{ purchaseDraft.updateCost = e.target.checked; });
+  document.getElementById('pu-add').addEventListener('click', openPurchasePicker);
+  document.getElementById('pu-apply').addEventListener('click', applyPurchase);
+  container.querySelectorAll('[data-pu-del]').forEach(b=>b.addEventListener('click', ()=>{ purchaseDraft.items.splice(parseInt(b.dataset.puDel,10),1); renderPurchase(); }));
+  const refreshLine = (i)=>{ const it = purchaseDraft.items[i]; const el = container.querySelector(`[data-pu-line="${i}"]`); if(el) el.textContent = fmt((parseFloat(it.qty)||0)*(parseFloat(it.cost)||0)); document.getElementById('pu-total').textContent = fmt(purchaseTotal()); };
+  container.querySelectorAll('[data-pu-qty]').forEach(inp=>inp.addEventListener('input', ()=>{ purchaseDraft.items[inp.dataset.puQty].qty = parseFloat(String(inp.value).replace(',','.'))||0; refreshLine(parseInt(inp.dataset.puQty,10)); }));
+  container.querySelectorAll('[data-pu-cost]').forEach(inp=>{ attachMoneyInputFormatting(inp); inp.addEventListener('input', ()=>{ const v = parseMoneyInput(inp.value); purchaseDraft.items[inp.dataset.puCost].cost = isNaN(v)?0:v; refreshLine(parseInt(inp.dataset.puCost,10)); }); });
+}
+function openPurchasePicker(){
+  openModal(`<div class="modal-title">${tr('puPick')}</div>
+    <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="pu-pick-search" placeholder="${tr('search')}"></div>
+    <div id="pu-pick-list" style="max-height:55vh;overflow:auto;"></div>`);
+  const rows = stocktakeRows();
+  const renderList = ()=>{
+    const q = (document.getElementById('pu-pick-search').value||'').toLowerCase();
+    const list = rows.filter(r=>!q || r.name.toLowerCase().includes(q) || (r.p.barcode||'').includes(q)).slice(0, 60);
+    document.getElementById('pu-pick-list').innerHTML = list.map(r=>`<div class="list-item" style="cursor:pointer;padding:10px 12px 10px 16px;" data-pu-pick="${r.key}"><div class="info"><div class="name">${escapeHtml(r.name)}</div><div class="meta">${tr('stock')}: ${r.stock} &middot; ${tr('puCost')}: ${fmt((r.v&&r.v.cost)||r.p.costPrice||0)}</div></div></div>`).join('') || `<div class="empty-state">${tr('noData')}</div>`;
+    document.querySelectorAll('[data-pu-pick]').forEach(el=>el.addEventListener('click', ()=>{
+      const r = rows.find(x=>x.key===el.dataset.puPick); if(!r) return;
+      const existing = purchaseDraft.items.find(it=>it.productId===r.p.id && (it.variantId||'')===(r.v?r.v.id:''));
+      if(existing) existing.qty = (parseFloat(existing.qty)||0) + 1;
+      else purchaseDraft.items.push({productId:r.p.id, variantId: r.v?r.v.id:null, name:r.name, qty:1, cost:(r.v&&r.v.cost)||r.p.costPrice||0});
+      closeModal(); renderPurchase();
+      setTimeout(()=>{ const q = document.querySelector(`[data-pu-qty="${purchaseDraft.items.length-1}"]`); if(q && !existing){ q.focus(); q.select(); } }, 80);
+    }));
+  };
+  document.getElementById('pu-pick-search').addEventListener('input', renderList);
+  renderList();
+  setTimeout(()=>document.getElementById('pu-pick-search').focus(), 60);
+}
+function applyPurchase(){
+  const items = purchaseDraft.items.filter(it=>(parseFloat(it.qty)||0) > 0);
+  if(!items.length){ showToast(tr('puEmpty')); return; }
+  const doc = {id:uid(), date:new Date().toISOString(), supplier: purchaseDraft.supplier.trim(), note: purchaseDraft.note.trim(), items: items.map(it=>({productId:it.productId, variantId:it.variantId, name:it.name, qty:parseFloat(it.qty)||0, cost:parseFloat(it.cost)||0})), total: purchaseTotal(), staffName: state.currentStaff?state.currentStaff.name:'', branchId: state.currentBranchId};
+  doc.items.forEach(it=>{
+    const p = state.products.find(x=>x.id===it.productId); if(!p) return;
+    const v = it.variantId ? getVariant(p, it.variantId) : null;
+    stockChange(p, v, it.qty, 'receive', doc.id);
+    if(purchaseDraft.updateCost && it.cost > 0){ if(v) v.cost = it.cost; else p.costPrice = it.cost; }
+    if(doc.supplier && !p.supplierName) p.supplierName = doc.supplier;
+  });
+  saveProducts();
+  state.purchases = (state.purchases||[]); state.purchases.push(doc); savePurchases();
+  purchaseDraft = {supplier:'', note:'', items:[], updateCost:true};
+  showToast(tr('puApplied')+': '+fmt(doc.total));
+  renderPurchase();
+}
 let stocktakeDraft = {};
 let stocktakeOnlyDiff = false;
 function stocktakeRows(){
@@ -13252,6 +13350,7 @@ function renderAll(){
   if(state.view==='reports' && !hasPerm('reports') && !hasPerm('expense')) state.view='sale';
   if(state.view==='superadmin' && !isSuperAdmin()) state.view='sale';
   if(state.view==='stocktake' && !(isAdmin() || hasPerm('products'))) state.view='products';
+  if(state.view==='purchase' && !(isAdmin() || hasPerm('products'))) state.view='products';
   renderHeader();
   renderNav();
   const container = document.getElementById('view-container');
@@ -13279,6 +13378,7 @@ function renderAll(){
   }
   else if(state.view==='superadmin') renderSuperAdmin();
   else if(state.view==='stocktake') renderStocktake();
+  else if(state.view==='purchase') renderPurchase();
   if(warningHtml) container.insertAdjacentHTML('afterbegin', warningHtml);
   const syncBannerHtml = pendingSyncBannerHtml();
   if(syncBannerHtml){
