@@ -464,7 +464,7 @@ const STORAGE_KEYS = {
   deviceId:'sardor_device_id_v1', receiptCounter:'sardor_receipt_counter_v1', visits:'sardor_visits_v1',
   creditors:'sardor_creditors_v1', creditorLedger:'sardor_creditor_ledger_v1', kitchenStations:'sardor_kitchen_stations_v1',
   saleMode:'sardor_sale_mode_v1', expenses:'sardor_expenses_v1', deviceHasNoPrinter:'sardor_device_no_printer_v1',
-  reservations:'sardor_reservations_v1', heldCarts:'sardor_held_carts_v1',
+  reservations:'sardor_reservations_v1', stockMoves:'sardor_stock_moves_v1', heldCarts:'sardor_held_carts_v1',
   businessId:'sardor_business_id_v1'
 };
 
@@ -481,6 +481,15 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  stockMovesReport:{uz:"Ombor harakatlari",ru:"Движение товаров",en:"Stock movements",kk:"Қойма қозғалысы",ky:"Кампа кыймылы",tg:"Ҳаракати анбор"},
+  smSale:{uz:"Sotuv",ru:"Продажа",en:"Sale",kk:"Сату",ky:"Сатуу",tg:"Фурӯш"},
+  smRefund:{uz:"Qaytarish",ru:"Возврат",en:"Refund",kk:"Қайтару",ky:"Кайтаруу",tg:"Баргардонӣ"},
+  smDelete:{uz:"Chek o'chirildi",ru:"Чек удалён",en:"Receipt deleted",kk:"Чек өшірілді",ky:"Чек өчүрүлдү",tg:"Чек нест шуд"},
+  smEdit:{uz:"Chek tahrirlandi",ru:"Чек изменён",en:"Receipt edited",kk:"Чек өзгертілді",ky:"Чек өзгөртүлдү",tg:"Чек тағйир ёфт"},
+  smReceive:{uz:"Kirim",ru:"Приход",en:"Received",kk:"Кіріс",ky:"Кирим",tg:"Воридот"},
+  smAdjust:{uz:"Tuzatish",ru:"Корректировка",en:"Adjustment",kk:"Түзету",ky:"Оңдоо",tg:"Ислоҳ"},
+  smInitial:{uz:"Boshlang'ich qoldiq",ru:"Начальный остаток",en:"Opening stock",kk:"Бастапқы қалдық",ky:"Баштапкы калдык",tg:"Бақияи аввала"},
+  smHint:{uz:"Har bir qoldiq o'zgarishi: qachon, kim, nima sababdan. Shu qurilmadagi so'nggi 3000 ta harakat saqlanadi.",ru:"Каждое изменение остатка: когда, кто, почему. Хранятся последние 3000 движений на этом устройстве.",en:"Every stock change: when, who, why. The last 3000 movements on this device are kept.",kk:"Әр қалдық өзгерісі: қашан, кім, неге. Осы құрылғыдағы соңғы 3000 қозғалыс сақталады.",ky:"Ар бир калдык өзгөрүшү: качан, ким, эмне үчүн. Бул түзмөктөгү акыркы 3000 кыймыл сакталат.",tg:"Ҳар тағйири бақия: кай, кӣ, чаро. 3000 ҳаракати охирин дар ин дастгоҳ нигоҳ дошта мешавад."},
   holdCart:{uz:"Kutish",ru:"Отложить",en:"Hold",kk:"Кейінге",ky:"Кийинге",tg:"Мавқуф"},
   holdCartTitle:{uz:"Savatni kutishga qo'yish",ru:"Отложить корзину",en:"Hold this cart",kk:"Себетті кейінге қалдыру",ky:"Себетти кийинге калтыруу",tg:"Сабадро мавқуф гузоштан"},
   holdCartName:{uz:"Nomi (mijoz ismi yoki belgi)",ru:"Название (имя клиента или метка)",en:"Name (customer or label)",kk:"Атауы (клиент аты немесе белгі)",ky:"Аталышы (кардар аты же белги)",tg:"Ном (номи мизоҷ ё нишона)"},
@@ -1569,6 +1578,7 @@ async function loadAll(){
   state.tables = tables || [];
   state.setupDone = !!setupDone;
   state.cart = cart || [];
+  state.stockMoves = (await storGet(STORAGE_KEYS.stockMoves)) || [];
   state.heldCarts = (await storGet(STORAGE_KEYS.heldCarts)) || [];
   state.visits = visits || [];
   state.creditors = creditors || [];
@@ -4666,6 +4676,32 @@ function recomputeStockFromBatches(p){
   const dated = p.batches.filter(b=>b.expiryDate).sort((a,b)=>new Date(a.expiryDate)-new Date(b.expiryDate));
   p.expiryDate = dated.length ? dated[0].expiryDate : '';
 }
+let __pendingSaleMoves = [];
+function stockMoveName(p, v){ return (p ? p.name : '?') + (v ? ' ' + v.name : ''); }
+function logStockMove(p, v, delta, before, after, reason, refId){
+  if(!delta) return;
+  const entry = {id:uid(), date:new Date().toISOString(), productId:p?p.id:null, variantId:v?v.id:null, name:stockMoveName(p,v), delta, before, after, reason, refId:refId||null, staffName: state.currentStaff?state.currentStaff.name:'', branchId: state.currentBranchId};
+  state.stockMoves = state.stockMoves || [];
+  state.stockMoves.push(entry);
+  if(state.stockMoves.length > 3000) state.stockMoves = state.stockMoves.slice(-3000);
+  storSet(STORAGE_KEYS.stockMoves, state.stockMoves);
+  if(reason==='sale' && !refId) __pendingSaleMoves.push(entry);
+  return entry;
+}
+function stockChange(p, v, delta, reason, refId){
+  if(!p || !delta) return;
+  const before = v ? (v.stock||0) : (p.stock||0);
+  if(v){ v.stock = (v.stock||0) + delta; }
+  else if(delta < 0){ deductProductStock(p, -delta); }
+  else { restoreProductStock(p, delta); }
+  const after = v ? (v.stock||0) : (p.stock||0);
+  logStockMove(p, v, delta, before, after, reason, refId);
+}
+function tagPendingStockMoves(saleId){
+  __pendingSaleMoves.forEach(e=>{ e.refId = saleId; });
+  __pendingSaleMoves = [];
+  if(state.stockMoves) storSet(STORAGE_KEYS.stockMoves, state.stockMoves);
+}
 function deductProductStock(p, qty){
   if(!p.batches || !p.batches.length){ p.stock -= qty; return; }
   // Oldest expiry first; batches with no expiry date set are treated as
@@ -5801,7 +5837,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     const p=state.products.find(pr=>pr.id===it.productId);
     const v = getVariant(p, it.variantId);
     const unitsToDeduct = it.saleMode==='box' ? it.qty * (it.unitsPerBox||1) : it.qty;
-    if(v) v.stock -= unitsToDeduct; else deductProductStock(p, unitsToDeduct);
+    stockChange(p, v, -unitsToDeduct, 'sale', null);
   });
 
   const tbl = state.settings.restaurantMode ? activeTable() : null;
@@ -5866,6 +5902,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     changeDue: (extras.cashTendered && extras.cashTendered > total) ? extras.cashTendered - total : 0
   };
   state.sales.push(sale);
+  tagPendingStockMoves(sale.id);
 
   let custDebtAfter = 0;
   if(creditAmount > 0){
@@ -7804,8 +7841,16 @@ function openProductForm(productId, draft){
     if(variants.length===0 && stock < 0){ errEl.textContent = tr('fillFields'); return; }
     const data = {name, price: price||0, stock: stock||0, unit, category, image:currentImage, barcode, costPrice, supplierName, supplierPhone, expiryDate: finalExpiryDate, showInCatalog, quickAccess, kitchenPrint, kitchenStationId, wholesalePrice, unitsPerBox, boxPrice, boxLabel, variants};
     if(batches) data.batches = batches;
-    if(editing) Object.assign(editing, data);
-    else state.products.push({id:uid(), branchId: state.currentBranchId, ...data});
+    const __prevStock = editing ? productTotalStock(editing) : 0;
+    const __addQtyEl = document.getElementById('pf-add-stock');
+    const __addQty = __addQtyEl ? (parseFloat(__addQtyEl.value)||0) : 0;
+    let __target;
+    if(editing){ Object.assign(editing, data); __target = editing; }
+    else { __target = {id:uid(), branchId: state.currentBranchId, ...data}; state.products.push(__target); }
+    const __newStock = productTotalStock(__target);
+    if(__newStock !== __prevStock){
+      logStockMove(__target, null, __newStock - __prevStock, __prevStock, __newStock, !editing ? 'initial' : (__addQty > 0 && (__newStock - __prevStock) === __addQty ? 'receive' : 'adjust'), null);
+    }
     saveProducts(); closeModal(); renderAll();
   });
 }
@@ -9069,13 +9114,13 @@ function refundSale(saleId, afterDone){
   if(!canRefund()){ showToast(tr('noPermRefund')); return; }
   if(!isWithinRefundWindow(sale)){ showToast(tr('refundWindowExpired')); return; }
   confirmDialog(tr('refundConfirm'), ()=>{
-    // 1. Return stock
+    const __reason = 'refund';
     sale.items.forEach(it=>{
       const p = state.products.find(pr=>pr.id===it.productId);
       if(!p) return;
       const v = getVariant(p, it.variantId);
       const unitsToRestore = it.saleMode==='box' ? it.qty * (it.unitsPerBox||1) : it.qty;
-      if(v) v.stock += unitsToRestore; else restoreProductStock(p, unitsToRestore);
+      stockChange(p, v, +unitsToRestore, __reason, sale.id);
     });
     // 2. If credit was involved, reduce the customer's debt by exactly
     // that portion — checking only sale.paymentType==='credit' misses
@@ -9154,12 +9199,13 @@ function deleteSaleRecord(saleId, afterDone){
   if(!sale) return;
   if(!canDeleteSale()){ showToast(tr('noPermDeleteSale')); return; }
   confirmDialog(tr('deleteSaleConfirm'), ()=>{
+    const __reason = 'delete';
     sale.items.forEach(it=>{
       const p = state.products.find(pr=>pr.id===it.productId);
       if(!p) return;
       const v = getVariant(p, it.variantId);
       const unitsToRestore = it.saleMode==='box' ? it.qty * (it.unitsPerBox||1) : it.qty;
-      if(v) v.stock += unitsToRestore; else restoreProductStock(p, unitsToRestore);
+      stockChange(p, v, +unitsToRestore, __reason, sale.id);
     });
     state.sales = state.sales.filter(s=>s.id!==saleId);
     saveProducts(); saveSales();
@@ -9347,7 +9393,7 @@ function saveEditedReceipt(){
     if(!p) return;
     const v = getVariant(p, it.variantId);
     const units = computeReceiptEditRestoreUnits(it);
-    if(v) v.stock += units; else restoreProductStock(p, units);
+    stockChange(p, v, +units, 'edit', d.saleId);
   });
   // 2. Adjust stock for kept/changed original lines and deduct for new lines
   d.items.forEach(it=>{
@@ -9355,9 +9401,7 @@ function saveEditedReceipt(){
     if(!p) return;
     const v = getVariant(p, it.variantId);
     const unitsDelta = computeReceiptEditStockUnitsDelta(it);
-    if(v){ v.stock -= unitsDelta; }
-    else if(unitsDelta >= 0){ deductProductStock(p, unitsDelta); }
-    else { restoreProductStock(p, -unitsDelta); }
+    stockChange(p, v, -unitsDelta, 'edit', d.saleId);
   });
 
   // 3. Recompute totals
@@ -9765,7 +9809,8 @@ function reportsMenuItems(){
     {id:'products', label:tr('topProducts')},
     {id:'customers', label:tr('topCustomersSection')},
     {id:'staff', label:tr('staffReportSection')},
-    {id:'inventory', label:tr('inventoryReport')}
+    {id:'inventory', label:tr('inventoryReport')},
+    {id:'stockmoves', label:tr('stockMovesReport')}
   ];
   // Deliberately admin-only, not gated by the general 'reports' permission
   // a cashier might also hold for legitimate reasons (checking top
@@ -10395,6 +10440,40 @@ function renderReportsCategory(container, cat){
     return;
   }
 
+  if(cat==='stockmoves'){
+    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial')}[r] || r);
+    const reasonColor = (r)=>({sale:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)'}[r] || 'var(--ink)');
+    container.innerHTML = `
+      ${reportsBackHeader(tr('stockMovesReport'))}
+      <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('smHint')}</p>
+      <div class="search-bar" style="margin-bottom:10px;">${ICONS.search}<input type="text" id="sm-search" placeholder="${tr('search')}"></div>
+      <div id="sm-list"></div>`;
+    bindReportsBack();
+    const renderList = ()=>{
+      const q = (document.getElementById('sm-search').value||'').toLowerCase();
+      const rows = (state.stockMoves||[]).filter(m=>effectiveBranchId(m.branchId)===effectiveBranchId(state.currentBranchId)).filter(m=>!q || (m.name||'').toLowerCase().includes(q)).slice().reverse().slice(0, 300);
+      const byDay = {};
+      rows.forEach(m=>{ const d = new Date(m.date).toLocaleDateString(); (byDay[d] = byDay[d]||[]).push(m); });
+      document.getElementById('sm-list').innerHTML = rows.length ? Object.keys(byDay).map(day=>`
+        <div class="subtle" style="font-weight:700;margin:12px 0 6px;">${day}</div>
+        ${byDay[day].map(m=>{ const sale = m.refId ? state.sales.find(x=>x.id===m.refId) : null; return `
+        <div class="card" style="padding:10px 12px;margin-bottom:8px;">
+          <div class="row" style="gap:10px;align-items:flex-start;">
+            <div style="flex:1;min-width:0;">
+              <div style="font-weight:800;">${escapeHtml(m.name||'')}</div>
+              <div class="subtle" style="font-size:11.5px;">${new Date(m.date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} &middot; <span style="color:${reasonColor(m.reason)};font-weight:700;">${reasonLabel(m.reason)}</span>${sale && sale.receiptNumber ? ' &middot; №'+escapeHtml(String(sale.receiptNumber)) : ''}${m.staffName ? ' &middot; '+escapeHtml(m.staffName) : ''}</div>
+            </div>
+            <div style="text-align:right;white-space:nowrap;">
+              <div style="font-weight:800;font-size:15px;color:${m.delta<0?'var(--danger)':'var(--teal)'};">${m.delta>0?'+':''}${m.delta}</div>
+              <div class="subtle" style="font-size:11px;">${m.before} &rarr; ${m.after}</div>
+            </div>
+          </div>
+        </div>`; }).join('')}`).join('') : `<div class="empty-state">${tr('noData')}</div>`;
+    };
+    document.getElementById('sm-search').addEventListener('input', renderList);
+    renderList();
+    return;
+  }
   if(cat==='inventory'){
     const now = new Date();
     function expiryInfo(expiryDate){
