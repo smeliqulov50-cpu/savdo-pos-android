@@ -481,6 +481,20 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  ieTitle:{uz:"Excel / CSV",ru:"Excel / CSV",en:"Excel / CSV",kk:"Excel / CSV",ky:"Excel / CSV",tg:"Excel / CSV"},
+  ieExport:{uz:"Mahsulotlarni eksport (CSV)",ru:"Экспорт товаров (CSV)",en:"Export products (CSV)",kk:"Тауарларды экспорттау (CSV)",ky:"Товарларды экспорттоо (CSV)",tg:"Содироти маҳсулот (CSV)"},
+  ieTemplate:{uz:"Bo'sh shablon (CSV)",ru:"Пустой шаблон (CSV)",en:"Blank template (CSV)",kk:"Бос үлгі (CSV)",ky:"Бош үлгү (CSV)",tg:"Қолиби холӣ (CSV)"},
+  ieImport:{uz:"Import (CSV yoki Excel .xlsx)",ru:"Импорт (CSV или Excel .xlsx)",en:"Import (CSV or Excel .xlsx)",kk:"Импорт (CSV немесе Excel .xlsx)",ky:"Импорт (CSV же Excel .xlsx)",tg:"Воридот (CSV ё Excel .xlsx)"},
+  ieHint:{uz:"Ustunlar: Nomi, Narxi, Tannarx, Qoldiq, Kategoriya, Shtrix-kod, Birlik, Ulgurji narx, Yetkazib beruvchi. Shtrix-kod yoki nom bo'yicha mavjud mahsulot topilsa — yangilanadi, topilmasa — yangi qo'shiladi. Variantli mahsulotlar qoldig'iga tegilmaydi.",ru:"Столбцы: Название, Цена, Себестоимость, Остаток, Категория, Штрих-код, Единица, Опт. цена, Поставщик. Если товар найден по штрих-коду или названию — обновляется, иначе добавляется.",en:"Columns: Name, Price, Cost, Stock, Category, Barcode, Unit, Wholesale price, Supplier. Existing products (matched by barcode or name) are updated, others are added.",kk:"Бағандар: Атауы, Бағасы, Өзіндік құны, Қалдық, Санат, Штрих-код, Бірлік, Көтерме баға, Жеткізуші.",ky:"Тилкелер: Аталышы, Баасы, Өздүк наркы, Калдык, Категория, Штрих-код, Бирдик, Дүң баасы, Жеткирүүчү.",tg:"Сутунҳо: Ном, Нарх, Арзиш, Бақия, Категория, Штрих-код, Воҳид, Нархи яклухт, Таъминкунанда."},
+  ieStockMode:{uz:"Qoldiq ustuni bilan nima qilinsin?",ru:"Что делать со столбцом «Остаток»?",en:"What to do with the Stock column?",kk:"Қалдық бағанымен не істеу керек?",ky:"Калдык тилкеси менен эмне кылуу керек?",tg:"Бо сутуни «Бақия» чӣ кор кунем?"},
+  ieStockAdd:{uz:"Qoldiqqa qo'shish (kirim)",ru:"Прибавить к остатку (приход)",en:"Add to stock (receive)",kk:"Қалдыққа қосу (кіріс)",ky:"Калдыкка кошуу (кирим)",tg:"Ба бақия илова (воридот)"},
+  ieStockSet:{uz:"Qoldiqni almashtirish (sanoq)",ru:"Заменить остаток (пересчёт)",en:"Replace stock (count)",kk:"Қалдықты ауыстыру (санақ)",ky:"Калдыкты алмаштыруу (санак)",tg:"Иваз кардани бақия (ҳисоб)"},
+  ieStockKeep:{uz:"Qoldiqqa tegmaslik",ru:"Не трогать остаток",en:"Leave stock unchanged",kk:"Қалдыққа тимеу",ky:"Калдыкка тийбөө",tg:"Бақияро тағйир надодан"},
+  iePreview:{uz:"Yangi: {n} · Yangilanadi: {u} · O'tkazib yuboriladi: {k}",ru:"Новых: {n} · Обновится: {u} · Пропущено: {k}",en:"New: {n} · Updated: {u} · Skipped: {k}",kk:"Жаңа: {n} · Жаңартылады: {u} · Өткізілді: {k}",ky:"Жаңы: {n} · Жаңыланат: {u} · Өткөрүлдү: {k}",tg:"Нав: {n} · Навсозӣ: {u} · Гузаронида шуд: {k}"},
+  ieApply:{uz:"Importni tasdiqlash",ru:"Подтвердить импорт",en:"Confirm import",kk:"Импортты растау",ky:"Импортту ырастоо",tg:"Тасдиқи воридот"},
+  ieDone:{uz:"Import bajarildi",ru:"Импорт выполнен",en:"Import complete",kk:"Импорт орындалды",ky:"Импорт аткарылды",tg:"Воридот иҷро шуд"},
+  ieNoRows:{uz:"Faylda mahsulot topilmadi (nom va narx ustunlari kerak)",ru:"В файле нет товаров (нужны столбцы название и цена)",en:"No products found in file (name and price columns required)",kk:"Файлда тауар табылмады",ky:"Файлда товар табылган жок",tg:"Дар файл маҳсулот ёфт нашуд"},
+  ieXlsxFailed:{uz:"Excel kutubxonasi yuklanmadi (internet kerak). CSV formatida saqlab, qayta urinib ko'ring.",ru:"Библиотека Excel не загрузилась (нужен интернет). Сохраните как CSV и попробуйте снова.",en:"Excel library failed to load (internet needed). Save as CSV and try again.",kk:"Excel кітапханасы жүктелмеді. CSV ретінде сақтап көріңіз.",ky:"Excel китепканасы жүктөлгөн жок. CSV катары сактап көрүңүз.",tg:"Китобхонаи Excel бор нашуд. Ҳамчун CSV захира кунед."},
   subGraceToast:{uz:"Obuna muddati tugagan, lekin internet yo'q — ilova yana {days} kun offline ishlaydi. Internet kelganda obuna tekshiriladi.",ru:"Подписка истекла, но интернета нет — приложение будет работать офлайн ещё {days} дн. При появлении интернета подписка будет проверена.",en:"Subscription expired but no internet — the app keeps working offline for {days} more day(s). It will be verified once online.",kk:"Жазылым мерзімі өтті, бірақ интернет жоқ — қосымша тағы {days} күн офлайн жұмыс істейді.",ky:"Жазылуу мөөнөтү бүттү, бирок интернет жок — колдонмо дагы {days} күн офлайн иштейт.",tg:"Мӯҳлати обуна тамом шуд, вале интернет нест — барнома боз {days} рӯз офлайн кор мекунад."},
   riSection:{uz:"Chekdagi rasmlar",ru:"Изображения на чеке",en:"Receipt images",kk:"Чектегі суреттер",ky:"Чектеги сүрөттөр",tg:"Тасвирҳо дар чек"},
   riHint:{uz:"Rasm avtomatik oq-qora va printer kengligiga moslanadi (58 mm = 384 nuqta, 80 mm = 576 nuqta). Aniq, kontrastli logotip yaxshi chiqadi; rangli foto yomon chiqadi.",ru:"Изображение автоматически переводится в чёрно-белое и подгоняется под ширину принтера (58 мм = 384 точки, 80 мм = 576). Чёткий контрастный логотип печатается хорошо, цветное фото — плохо.",en:"The image is converted to black & white and fitted to the printer width (58 mm = 384 dots, 80 mm = 576). Clear, high-contrast logos print well; colour photos do not.",kk:"Сурет автоматты түрде ақ-қараға айналып, принтер еніне бейімделеді.",ky:"Сүрөт автоматтык түрдө ак-карага айланып, принтер кеңдигине ылайыкташат.",tg:"Тасвир ба таври худкор сиёҳу сафед шуда, ба паҳнои принтер мувофиқ мешавад."},
@@ -7620,6 +7634,7 @@ function renderProducts(){
     <div class="btn-row" style="margin-bottom:14px;">
       <button class="btn btn-accent" style="flex:1;" id="add-product-btn">${ICONS.plus} ${tr('addProduct')}</button>
       <button class="btn btn-outline" id="export-products-btn">${tr('exportProductsPdf')}</button>
+      <button class="btn btn-outline" id="import-export-btn" style="width:auto;white-space:nowrap;">${tr('ieTitle')}</button>
     </div>
     <div class="search-bar" style="margin-bottom:10px;">${ICONS.search}<input type="text" id="product-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.productSearch||'')}"></div>
     <div class="fav-row" id="product-filter-row">${productFilterChipsHtml()}</div>
@@ -7628,6 +7643,7 @@ function renderProducts(){
   renderProductListItems();
   document.getElementById('add-product-btn').addEventListener('click', ()=>openProductForm(null));
   document.getElementById('export-products-btn').addEventListener('click', exportProductsPdf);
+  document.getElementById('import-export-btn').addEventListener('click', openImportExportModal);
   document.getElementById('product-search-input').addEventListener('input', (e)=>{
     state.productSearch = e.target.value;
     renderProductListItems();
@@ -8785,6 +8801,155 @@ function renderDebtExportOverlay(todayKey){
   });
 }
 
+const IE_COLS = [
+  {key:'name',      uz:'Nomi',             aliases:['nomi','name','название','товар','наименование','atауы','аталышы','ном','mahsulot']},
+  {key:'price',     uz:'Narxi',            aliases:['narxi','narx','price','цена','бағасы','баасы','нарх']},
+  {key:'costPrice', uz:'Tannarx',          aliases:['tannarx','tannarxi','cost','costprice','себестоимость','закуп','өзіндік','өздүк','арзиш']},
+  {key:'stock',     uz:'Qoldiq',           aliases:['qoldiq','stock','miqdor','остаток','кол-во','количество','қалдық','калдык','бақия','qty']},
+  {key:'category',  uz:'Kategoriya',       aliases:['kategoriya','turkum','category','категория','санат']},
+  {key:'barcode',   uz:'Shtrix-kod',       aliases:['shtrix-kod','shtrixkod','shtrix','barcode','штрих-код','штрихкод','штрих','ean','код']},
+  {key:'unit',      uz:'Birlik',           aliases:["birlik","o'lchov","unit","единица","ед","бірлік","бирдик","воҳид"]},
+  {key:'wholesalePrice', uz:'Ulgurji narx', aliases:['ulgurji narx','ulgurji','wholesale','wholesaleprice','опт','оптовая','көтерме','дүң','яклухт']},
+  {key:'supplierName', uz:'Yetkazib beruvchi', aliases:['yetkazib beruvchi','supplier','поставщик','жеткізуші','жеткирүүчү','таъминкунанда']}
+];
+function ieNormHeader(h){ return String(h||'').toLowerCase().replace(/[\s_"']+/g,'').replace(/[:.]/g,''); }
+function ieDetectColumns(headerRow){
+  const map = {};
+  headerRow.forEach((h, idx)=>{
+    const n = ieNormHeader(h);
+    IE_COLS.forEach(c=>{ if(map[c.key]===undefined && c.aliases.some(a=>n===ieNormHeader(a) || n.startsWith(ieNormHeader(a)))) map[c.key] = idx; });
+  });
+  return map;
+}
+function ieParseNumber(v){ if(v===null||v===undefined) return NaN; const t = String(v).replace(/\s|\u00a0/g,'').replace(',', '.'); const n = parseFloat(t); return isNaN(n) ? NaN : n; }
+function ieParseCsv(text){
+  text = String(text||'').replace(/^\ufeff/, '');
+  const first = text.split(/\r?\n/)[0] || '';
+  const counts = {';':(first.match(/;/g)||[]).length, ',':(first.match(/,/g)||[]).length, '\t':(first.match(/\t/g)||[]).length};
+  const delim = Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0] || ';';
+  const rows = []; let row = [], cell = '', q = false;
+  for(let i=0;i<text.length;i++){
+    const ch = text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){ cell+='"'; i++; } else q=false; } else cell+=ch; }
+    else if(ch==='"') q = true;
+    else if(ch===delim){ row.push(cell); cell=''; }
+    else if(ch==='\n' || ch==='\r'){ if(ch==='\r' && text[i+1]==='\n') i++; row.push(cell); rows.push(row); row=[]; cell=''; }
+    else cell+=ch;
+  }
+  if(cell!=='' || row.length){ row.push(cell); rows.push(row); }
+  return rows.filter(r=>r.some(c=>String(c).trim()!==''));
+}
+function ieUnitFromText(v){ const t = String(v||'').toLowerCase(); if(/kg|кг/.test(t)) return 'kg'; if(/litr|liter|л/.test(t)) return 'litr'; if(/paket|pack|пак/.test(t)) return 'paket'; return 'dona'; }
+function ieBuildPlan(rows){
+  if(!rows.length) return {items:[], skipped:0};
+  let map = ieDetectColumns(rows[0]);
+  let body = rows.slice(1);
+  if(map.name===undefined || map.price===undefined){ map = {name:0, price:1, costPrice:2, stock:3, category:4, barcode:5, unit:6, wholesalePrice:7, supplierName:8}; body = rows.filter(r=>!isNaN(ieParseNumber(r[1]))); }
+  const items = []; let skipped = 0;
+  body.forEach(r=>{
+    const get = (k)=> map[k]===undefined ? undefined : r[map[k]];
+    const name = String(get('name')||'').trim(); const price = ieParseNumber(get('price'));
+    if(!name || isNaN(price)){ skipped++; return; }
+    const barcode = String(get('barcode')||'').trim();
+    const existing = state.products.find(p=>effectiveBranchId(p.branchId)===effectiveBranchId(state.currentBranchId) && ((barcode && p.barcode===barcode) || p.name.trim().toLowerCase()===name.toLowerCase()));
+    const cost = ieParseNumber(get('costPrice')); const stock = ieParseNumber(get('stock')); const wh = ieParseNumber(get('wholesalePrice'));
+    items.push({name, price, costPrice: isNaN(cost)?undefined:cost, stock: isNaN(stock)?undefined:stock, category: get('category')!==undefined ? String(get('category')||'').trim() : undefined, barcode: barcode||undefined, unit: get('unit')!==undefined ? ieUnitFromText(get('unit')) : undefined, wholesalePrice: isNaN(wh)?undefined:wh, supplierName: get('supplierName')!==undefined ? String(get('supplierName')||'').trim() : undefined, existing});
+  });
+  return {items, skipped};
+}
+function ieApplyPlan(plan, stockMode){
+  let added = 0, updated = 0;
+  plan.items.forEach(it=>{
+    if(it.existing){
+      const p = it.existing;
+      p.price = it.price;
+      if(it.costPrice!==undefined) p.costPrice = it.costPrice;
+      if(it.category!==undefined && it.category!=='') p.category = it.category;
+      if(it.barcode) p.barcode = it.barcode;
+      if(it.unit!==undefined) p.unit = it.unit;
+      if(it.wholesalePrice!==undefined) p.wholesalePrice = it.wholesalePrice;
+      if(it.supplierName!==undefined && it.supplierName!=='') p.supplierName = it.supplierName;
+      const hasVariants = p.variants && p.variants.length;
+      if(!hasVariants && it.stock!==undefined && stockMode!=='keep'){
+        if(stockMode==='add' && it.stock!==0) stockChange(p, null, it.stock, 'receive', null);
+        else if(stockMode==='set' && it.stock!==(p.stock||0)) stockChange(p, null, it.stock-(p.stock||0), 'adjust', null);
+      }
+      updated++;
+    } else {
+      const np = {id:uid(), branchId: state.currentBranchId, name: it.name, price: it.price, costPrice: it.costPrice||0, stock: 0, unit: it.unit||'dona', category: it.category||'', barcode: it.barcode||'', wholesalePrice: it.wholesalePrice||0, supplierName: it.supplierName||'', variants: []};
+      state.products.push(np);
+      const st = (stockMode==='keep' || it.stock===undefined) ? 0 : it.stock;
+      if(st){ np.stock = st; logStockMove(np, null, st, 0, st, 'initial', null); }
+      added++;
+    }
+  });
+  saveProducts();
+  return {added, updated};
+}
+function ieCsvEscape(v){ const t = String(v===undefined||v===null?'':v); return /[;"\n\r]/.test(t) ? '"'+t.replace(/"/g,'""')+'"' : t; }
+function ieBuildCsv(products){
+  const head = IE_COLS.map(c=>c.uz).join(';');
+  const lines = products.map(p=>[p.name, p.price||0, p.costPrice||0, productTotalStock(p), p.category||'', p.barcode||'', p.unit||'dona', p.wholesalePrice||0, p.supplierName||''].map(ieCsvEscape).join(';'));
+  return '\ufeff' + [head].concat(lines).join('\r\n');
+}
+async function ieShareText(text, fileName){
+  const blob = new Blob([text], {type:'text/csv;charset=utf-8'});
+  if(isNativeApp() && await shareFileNative(blob, fileName, fileName, '')) return;
+  const file = new File([blob], fileName, {type:'text/csv'});
+  if(navigator.canShare && navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file], title:fileName}); return; }catch(e){} }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fileName; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+}
+function ieLoadXlsxLib(){
+  return new Promise((res, rej)=>{
+    if(window.XLSX) return res(window.XLSX);
+    const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    sc.onload = ()=>res(window.XLSX); sc.onerror = ()=>rej(new Error('xlsx'));
+    document.head.appendChild(sc);
+  });
+}
+async function ieReadFileRows(file){
+  const name = (file.name||'').toLowerCase();
+  if(/\.xlsx?$/.test(name)){
+    const XLSX = await ieLoadXlsxLib();
+    const buf = await file.arrayBuffer();
+    const wb = XLSX.read(buf, {type:'array'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    return XLSX.utils.sheet_to_json(ws, {header:1, raw:false, defval:''}).filter(r=>r.some(c=>String(c).trim()!==''));
+  }
+  const buf = await file.arrayBuffer();
+  let text; try{ text = new TextDecoder('utf-8', {fatal:true}).decode(buf); }catch(e){ text = new TextDecoder('windows-1251').decode(buf); }
+  return ieParseCsv(text);
+}
+function openImportExportModal(){
+  openModal(`<div class="modal-title">${tr('ieTitle')}</div>
+    <p class="subtle" style="margin:0 0 12px;font-size:12px;">${tr('ieHint')}</p>
+    <button class="btn btn-outline btn-block" id="ie-export-btn" style="margin-bottom:8px;">${tr('ieExport')}</button>
+    <button class="btn btn-outline btn-block" id="ie-template-btn" style="margin-bottom:8px;">${tr('ieTemplate')}</button>
+    <div class="field" style="margin-top:6px;"><label class="field-label">${tr('ieStockMode')}</label>
+      <select id="ie-stock-mode"><option value="add">${tr('ieStockAdd')}</option><option value="set">${tr('ieStockSet')}</option><option value="keep">${tr('ieStockKeep')}</option></select></div>
+    <label class="btn btn-primary btn-block" style="text-align:center;cursor:pointer;">${tr('ieImport')}<input type="file" id="ie-file" accept=".csv,.txt,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none;"></label>
+    <div id="ie-preview" style="margin-top:12px;"></div>`);
+  document.getElementById('ie-export-btn').addEventListener('click', ()=>ieShareText(ieBuildCsv(visibleProducts()), 'mahsulotlar_'+new Date().toISOString().slice(0,10)+'.csv'));
+  document.getElementById('ie-template-btn').addEventListener('click', ()=>ieShareText(ieBuildCsv([{name:'Coca-Cola 1L', price:12000, costPrice:9000, stock:24, category:'Ichimliklar', barcode:'5449000000996', unit:'dona', wholesalePrice:11000, supplierName:''}]), 'shablon.csv'));
+  document.getElementById('ie-file').addEventListener('change', async (e)=>{
+    const f = e.target.files && e.target.files[0]; if(!f) return;
+    let rows;
+    try{ rows = await ieReadFileRows(f); }catch(err){ showToast(tr('ieXlsxFailed')); return; }
+    const plan = ieBuildPlan(rows);
+    const box = document.getElementById('ie-preview');
+    if(!plan.items.length){ box.innerHTML = `<p class="error-text">${tr('ieNoRows')}</p>`; return; }
+    const news = plan.items.filter(i=>!i.existing).length, ups = plan.items.length - news;
+    box.innerHTML = `<div class="card" style="padding:10px 12px;">
+      <div style="font-weight:800;margin-bottom:6px;">${tr('iePreview').replace('{n}',news).replace('{u}',ups).replace('{k}',plan.skipped)}</div>
+      <div class="subtle" style="font-size:12px;max-height:160px;overflow:auto;">${plan.items.slice(0,30).map(i=>`${i.existing?'&#8635;':'+'} ${escapeHtml(i.name)} — ${fmt(i.price)}${i.stock!==undefined?(' · '+i.stock):''}`).join('<br>')}${plan.items.length>30?'<br>…':''}</div>
+      <button class="btn btn-primary btn-block" id="ie-apply-btn" style="margin-top:10px;">${tr('ieApply')}</button></div>`;
+    document.getElementById('ie-apply-btn').addEventListener('click', ()=>{
+      const mode = document.getElementById('ie-stock-mode').value;
+      const r = ieApplyPlan(plan, mode);
+      closeModal(); showToast(tr('ieDone')+': +'+r.added+' / '+r.updated); renderAll();
+    });
+  });
+}
 async function exportProductsPdf(){
   if(typeof window.jspdf === 'undefined'){ showToast(tr('pdfLibFailed')); return; }
   const { jsPDF } = window.jspdf;
