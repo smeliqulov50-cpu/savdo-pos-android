@@ -481,6 +481,7 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  quotaExceededHint:{uz:"Bulut (Firebase) kunlik limiti tugagan. Ma'lumotlar telefonda saqlanmoqda; limit har kuni Toshkent vaqti bilan taxminan 12:00 da yangilanadi va yuborish o'zi davom etadi.",ru:"Дневной лимит облака (Firebase) исчерпан. Данные сохраняются на телефоне; лимит обновляется ежедневно около 12:00 по Ташкенту, отправка продолжится автоматически.",en:"Daily cloud (Firebase) quota exhausted. Data is kept on the phone; the quota resets daily around 12:00 Tashkent time and syncing resumes automatically.",kk:"Бұлттың (Firebase) күндік лимиті таусылды. Деректер телефонда сақталады; лимит күн сайын Ташкент уақытымен 12:00 шамасында жаңарады.",ky:"Булуттун (Firebase) күндүк лимити түгөндү. Маалыматтар телефондо сакталат; лимит күн сайын Ташкент убактысы менен 12:00 чамасында жаңырат.",tg:"Лимити рӯзонаи абр (Firebase) тамом шуд. Маълумот дар телефон нигоҳ дошта мешавад; лимит ҳар рӯз тақрибан 12:00 бо вақти Тошканд нав мешавад."},
   puTitle:{uz:"Kirim (nakladnoy)",ru:"Приход (накладная)",en:"Receiving (invoice)",kk:"Кіріс (жүкқұжат)",ky:"Кирим (накладной)",tg:"Воридот (борхат)"},
   puSupplier:{uz:"Yetkazib beruvchi",ru:"Поставщик",en:"Supplier",kk:"Жеткізуші",ky:"Жеткирүүчү",tg:"Таъминкунанда"},
   puNote:{uz:"Izoh / hujjat raqami",ru:"Примечание / номер документа",en:"Note / document no.",kk:"Ескерту / құжат нөмірі",ky:"Эскертүү / документ номери",tg:"Эзоҳ / рақами ҳуҷҷат"},
@@ -1631,6 +1632,7 @@ async function loadAll(){
   // is used later (loadCloudData) to decide whether the cloud copy is
   // allowed to overwrite settings at all — see the note there for why.
   state._hasLocalSettings = !!settings;
+  if(!settings) restoreDeviceLocalSettings();
   state.staff = staff || [];
   state.shifts = shifts || [];
   state.currentShift = curShift || null;
@@ -1756,6 +1758,7 @@ async function saveSettings(){
   // ignored until this save actually finishes.
   if(fbUser && fbDb) queuePendingSync('settings','settings');
   await storSet(STORAGE_KEYS.settings, state.settings);
+  backupDeviceLocalSettings();
   syncSettingsDoc();
   try{ document.dispatchEvent(new CustomEvent('settings-saved')); }catch(e){}
 }
@@ -2195,6 +2198,11 @@ function planLabelFor(planKey){
 const SUPER_ADMIN_UID = 'M0CZxwtteTMxbs6nyeR5kVrJ68X2';
 function isSuperAdmin(){ return !!(fbUser && fbUser.uid === SUPER_ADMIN_UID); }
 
+function cloudHistoryCutoffIso(){
+  const d = historyWindowDays();
+  const days = d ? Math.max(31, d) : 365;
+  return new Date(Date.now() - days*86400000).toISOString();
+}
 function historyWindowDays(){
   if(isSuperAdmin()) return null;
   const plan = state.settings.subscriptionPlan;
@@ -2307,9 +2315,10 @@ function stopLiveListeners(){
 // For a plain array-of-documents collection (tables, sales, ledger,
 // visits, creditors, creditorLedger, kitchenStations) where each item
 // syncs individually and tracks its OWN pending-sync entry by id.
-function watchArrayCollection(colRef, stateKey, pendingKind){
+function watchArrayCollection(colRef, stateKey, pendingKind, keepOlderThan){
   const unsub = colRef.onSnapshot(snap=>{
-    const cloudItems = snap.docs.map(d=>d.data());
+    let cloudItems = snap.docs.map(d=>d.data());
+    if(keepOlderThan){ const ids = new Set(cloudItems.map(i=>i && i.id)); const older = (state[stateKey]||[]).filter(x=>x && x.date && x.date < keepOlderThan && !ids.has(x.id)); cloudItems = older.concat(cloudItems); }
     const pendingIds = new Set(pendingSyncQueue.filter(q=>q.kind===pendingKind).map(q=>q.id));
     if(!pendingIds.size){
       // Common case, nothing of ours is mid-upload — the cloud's list is
@@ -2452,14 +2461,14 @@ function startLiveListeners(){
   watchProductsOrCustomers(productsCol(), 'products', 'products', m=>{ lastSyncedProductsMap = m; });
   watchProductsOrCustomers(customersCol(), 'customers', 'customers', m=>{ lastSyncedCustomersMap = m; });
   watchArrayCollection(tablesCol(), 'tables', 'table');
-  watchArrayCollection(salesCol(), 'sales', 'sale');
+  watchArrayCollection(salesCol().where('date','>=',cloudHistoryCutoffIso()), 'sales', 'sale', cloudHistoryCutoffIso());
   watchArrayCollection(expensesCol(), 'expenses', 'expense');
   watchArrayCollection(reservationsCol(), 'reservations', 'reservation');
   watchForNewRefunds(salesCol());
   if(state.settings.printerMode==='bluetooth' && state.settings.autoPrintRelay){
     watchForPrintRelay(salesCol());
   }
-  watchArrayCollection(ledgerCol(), 'ledger', 'ledger');
+  watchArrayCollection(ledgerCol().where('date','>=',cloudHistoryCutoffIso()), 'ledger', 'ledger', cloudHistoryCutoffIso());
   watchArrayCollection(visitsCol(), 'visits', 'visit');
   watchArrayCollection(creditorsCol(), 'creditors', 'creditor');
   watchArrayCollection(creditorLedgerCol(), 'creditorLedger', 'creditorLedger');
@@ -2623,7 +2632,8 @@ let pendingSyncLastErrors = {};
 function pendingSyncBannerHtml(){
   if(!pendingSyncQueue.length) return '';
   const errKeys = Object.keys(pendingSyncLastErrors||{});
-  const debugHtml = errKeys.length ? `<p class="subtle" style="margin:8px 0 0;font-size:10px;word-break:break-word;opacity:.8;">${errKeys.map(k=>escapeHtml(k+': '+pendingSyncLastErrors[k])).join('<br>')}</p>` : '';
+  const isQuota = errKeys.some(k=>/quota|resource-exhausted/i.test(String(pendingSyncLastErrors[k]||'')));
+  const debugHtml = isQuota ? `<p class="subtle" style="margin:8px 0 0;font-size:11.5px;word-break:break-word;">${tr('quotaExceededHint')}</p>` : (errKeys.length ? `<p class="subtle" style="margin:8px 0 0;font-size:10px;word-break:break-word;opacity:.8;">${errKeys.map(k=>escapeHtml(k+': '+pendingSyncLastErrors[k])).join('<br>')}</p>` : '');
   return `<div class="card" style="border:2px solid var(--danger);background:var(--danger-bg);margin-bottom:10px;">
     <div class="row"><span style="color:var(--danger);font-weight:700;font-size:13px;">☁️ ${tr('pendingSyncWarning').replace('{count}', pendingSyncQueue.length)}</span></div>
     <button class="btn btn-outline btn-sm btn-block" id="retry-sync-now-btn" style="margin-top:8px;">${tr('retrySyncNow')}</button>
@@ -3034,6 +3044,9 @@ function deleteKitchenStationDoc(id){
 // Printer-related settings belong to THIS device (each device has its own printer), so they never travel through the cloud in either direction.
 const DEVICE_LOCAL_SETTING_KEYS = ['printerMode','printerCharsPerLine','printerModelLabel','printerBold','printerFeedLines','printerLineSpacing','printerAutoCut','printerCutType','openDrawerOnCash','autoPrintRelay','printerWidthMultiplier','printerHeightMultiplier','receiptHeaderWidthMultiplier','receiptHeaderHeightMultiplier','priceSameLine'];
 function stripDeviceLocalSettings(obj){ DEVICE_LOCAL_SETTING_KEYS.forEach(k=>{ delete obj[k]; }); return obj; }
+const DEVICE_LOCAL_LS_KEY = 'sardor_printer_local_v1';
+function backupDeviceLocalSettings(){ try{ const o = {}; DEVICE_LOCAL_SETTING_KEYS.forEach(k=>{ if(state.settings && state.settings[k]!==undefined) o[k] = state.settings[k]; }); localStorage.setItem(DEVICE_LOCAL_LS_KEY, JSON.stringify(o)); }catch(e){} }
+function restoreDeviceLocalSettings(){ try{ const o = JSON.parse(localStorage.getItem(DEVICE_LOCAL_LS_KEY)||'null'); if(!o) return false; DEVICE_LOCAL_SETTING_KEYS.forEach(k=>{ if(o[k]!==undefined) state.settings[k] = o[k]; }); return true; }catch(e){ return false; } }
 function extractSettingsFromDoc(bizData){
   // Some accounts have settings nested under a "settings" key (very old
   // format, from before the schema-v2 migration), others have the fields
@@ -3166,6 +3179,7 @@ async function loadCloudData(){
       state.customers = []; state.staff = []; state.shifts = [];
       state.sales = []; state.ledger = []; state.tables = [];
       state.settings = defaultSettingsObj();
+      restoreDeviceLocalSettings();
       state.settings.subscriptionPlan = 'trial';
       state.settings.subscriptionExpiresAt = new Date(Date.now() + TRIAL_DAYS*86400000).toISOString();
       // Firestore security rules can't parse an ISO string as a date to
@@ -3193,6 +3207,7 @@ async function loadCloudData(){
         const cloudSettings = extractSettingsFromDoc(bizData);
         if(!state._hasLocalSettings){
           state.settings = Object.assign(defaultSettingsObj(), cloudSettings);
+          restoreDeviceLocalSettings();
         } else {
           const subscriptionPatch = {};
           // Only patch these if the cloud doc actually has them — assigning
@@ -3215,12 +3230,13 @@ async function loadCloudData(){
         state.shifts = mergeById(catalog.shifts, bizData.shifts);
         if((bizData.staff||[]).length || (bizData.shifts||[]).length) hadLeftoverLegacyFields = true;
         const [tablesSnap, salesSnap, ledgerSnap, visitsSnap, creditorsSnap, creditorLedgerSnap, kitchenStationsSnap, productsSnap, customersSnap] = await Promise.all([
-          tablesCol().get(), salesCol().get(), ledgerCol().get(), visitsCol().get(), creditorsCol().get(), creditorLedgerCol().get(), kitchenStationsCol().get(),
+          tablesCol().get(), salesCol().where('date','>=',cloudHistoryCutoffIso()).get(), ledgerCol().where('date','>=',cloudHistoryCutoffIso()).get(), visitsCol().get(), creditorsCol().get(), creditorLedgerCol().get(), kitchenStationsCol().get(),
           productsCol().get(), customersCol().get()
         ]);
         state.tables = mergeById(tablesSnap.docs.map(d=>d.data()), bizData.tables);
-        state.sales = mergeById(salesSnap.docs.map(d=>d.data()), bizData.sales);
-        state.ledger = mergeById(ledgerSnap.docs.map(d=>d.data()), bizData.ledger);
+        { const cut = cloudHistoryCutoffIso(); const olderSales = (state.sales||[]).filter(x=>x && x.date && x.date < cut); const olderLedger = (state.ledger||[]).filter(x=>x && x.date && x.date < cut);
+        state.sales = mergeById(olderSales.concat(salesSnap.docs.map(d=>d.data())), bizData.sales);
+        state.ledger = mergeById(olderLedger.concat(ledgerSnap.docs.map(d=>d.data())), bizData.ledger); }
         state.visits = visitsSnap.docs.map(d=>d.data());
         state.creditors = creditorsSnap.docs.map(d=>d.data());
         state.creditorLedger = creditorLedgerSnap.docs.map(d=>d.data());
@@ -3256,15 +3272,18 @@ async function loadCloudData(){
         const customersNeedMigration = (catalog.customers||[]).length > 0;
         if((bizData.products||[]).length || (bizData.customers||[]).length) hadLeftoverLegacyFields = true;
         if((bizData.tables||[]).length || (bizData.sales||[]).length || (bizData.ledger||[]).length) hadLeftoverLegacyFields = true;
-        if(hadLeftoverLegacyFields || productsNeedMigration || customersNeedMigration){
-          // Consolidate everything into the canonical per-document storage right
-          // away, and strip the old leftover arrays off the main business doc.
+        const migKey = 'sardor_legacy_migration_day';
+        let migToday = ''; try{ migToday = localStorage.getItem(migKey) || ''; }catch(e){}
+        if((hadLeftoverLegacyFields || productsNeedMigration || customersNeedMigration) && migToday !== new Date().toDateString()){
+          try{ localStorage.setItem(migKey, new Date().toDateString()); }catch(e){}
+          const have = (snap)=>new Set(snap.docs.map(d=>d.id));
+          const missing = (arr, snap)=>{ const h = have(snap); return (arr||[]).filter(x=>x && x.id && !h.has(x.id)); };
           await catalogDocRef().set(sanitizeForFirestore({staff:state.staff, shifts:state.shifts, products:null, customers:null, updatedAt:new Date().toISOString()}), {merge:true});
-          await Promise.all(state.tables.map(t=>tablesCol().doc(t.id).set(sanitizeForFirestore(t))));
-          await Promise.all(state.sales.map(s=>salesCol().doc(s.id).set(sanitizeForFirestore(s))));
-          await Promise.all(state.ledger.map(l=>ledgerCol().doc(l.id).set(sanitizeForFirestore(l))));
-          await Promise.all(state.products.map(p=>productsCol().doc(p.id).set(sanitizeForFirestore(p))));
-          await Promise.all(state.customers.map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(c))));
+          await Promise.all(missing(state.tables, tablesSnap).map(t=>tablesCol().doc(t.id).set(sanitizeForFirestore(t))));
+          await Promise.all(missing(state.sales, salesSnap).map(s=>salesCol().doc(s.id).set(sanitizeForFirestore(s))));
+          await Promise.all(missing(state.ledger, ledgerSnap).map(l=>ledgerCol().doc(l.id).set(sanitizeForFirestore(l))));
+          await Promise.all(missing(state.products, productsSnap).map(p=>productsCol().doc(p.id).set(sanitizeForFirestore(p))));
+          await Promise.all(missing(state.customers, customersSnap).map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(c))));
           const cleared = {products:null, customers:null, staff:null, shifts:null, sales:null, ledger:null, tables:null};
           await businessDocRef().set(sanitizeForFirestore(Object.assign({}, state.settings, {schemaVersion:2}, cleared)), {merge:true});
         }
@@ -3292,6 +3311,7 @@ async function loadCloudData(){
     // state.products against itself and concluding nothing changed.
     lastSyncedProductsMap = snapshotArrayMap(cloudConfirmedProducts !== null ? cloudConfirmedProducts : state.products);
     lastSyncedCustomersMap = snapshotArrayMap(cloudConfirmedCustomers !== null ? cloudConfirmedCustomers : state.customers);
+    if(!state._hasLocalSettings) restoreDeviceLocalSettings();
     fbCloudReady = true;
     persistAllLocal();
   }catch(e){
