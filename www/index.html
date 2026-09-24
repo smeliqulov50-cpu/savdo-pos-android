@@ -464,7 +464,7 @@ const STORAGE_KEYS = {
   deviceId:'sardor_device_id_v1', receiptCounter:'sardor_receipt_counter_v1', visits:'sardor_visits_v1',
   creditors:'sardor_creditors_v1', creditorLedger:'sardor_creditor_ledger_v1', kitchenStations:'sardor_kitchen_stations_v1',
   saleMode:'sardor_sale_mode_v1', expenses:'sardor_expenses_v1', deviceHasNoPrinter:'sardor_device_no_printer_v1',
-  reservations:'sardor_reservations_v1', stockMoves:'sardor_stock_moves_v1', heldCarts:'sardor_held_carts_v1',
+  reservations:'sardor_reservations_v1', subCloudCheck:'sardor_sub_cloud_check_v1', stockMoves:'sardor_stock_moves_v1', heldCarts:'sardor_held_carts_v1',
   businessId:'sardor_business_id_v1'
 };
 
@@ -481,6 +481,7 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  subGraceToast:{uz:"Obuna muddati tugagan, lekin internet yo'q — ilova yana {days} kun offline ishlaydi. Internet kelganda obuna tekshiriladi.",ru:"Подписка истекла, но интернета нет — приложение будет работать офлайн ещё {days} дн. При появлении интернета подписка будет проверена.",en:"Subscription expired but no internet — the app keeps working offline for {days} more day(s). It will be verified once online.",kk:"Жазылым мерзімі өтті, бірақ интернет жоқ — қосымша тағы {days} күн офлайн жұмыс істейді.",ky:"Жазылуу мөөнөтү бүттү, бирок интернет жок — колдонмо дагы {days} күн офлайн иштейт.",tg:"Мӯҳлати обуна тамом шуд, вале интернет нест — барнома боз {days} рӯз офлайн кор мекунад."},
   riSection:{uz:"Chekdagi rasmlar",ru:"Изображения на чеке",en:"Receipt images",kk:"Чектегі суреттер",ky:"Чектеги сүрөттөр",tg:"Тасвирҳо дар чек"},
   riHint:{uz:"Rasm avtomatik oq-qora va printer kengligiga moslanadi (58 mm = 384 nuqta, 80 mm = 576 nuqta). Aniq, kontrastli logotip yaxshi chiqadi; rangli foto yomon chiqadi.",ru:"Изображение автоматически переводится в чёрно-белое и подгоняется под ширину принтера (58 мм = 384 точки, 80 мм = 576). Чёткий контрастный логотип печатается хорошо, цветное фото — плохо.",en:"The image is converted to black & white and fitted to the printer width (58 mm = 384 dots, 80 mm = 576). Clear, high-contrast logos print well; colour photos do not.",kk:"Сурет автоматты түрде ақ-қараға айналып, принтер еніне бейімделеді.",ky:"Сүрөт автоматтык түрдө ак-карага айланып, принтер кеңдигине ылайыкташат.",tg:"Тасвир ба таври худкор сиёҳу сафед шуда, ба паҳнои принтер мувофиқ мешавад."},
   riChoose:{uz:"Rasm tanlash",ru:"Выбрать изображение",en:"Choose image",kk:"Сурет таңдау",ky:"Сүрөт тандоо",tg:"Интихоби тасвир"},
@@ -1598,6 +1599,7 @@ async function loadAll(){
   state.tables = tables || [];
   state.setupDone = !!setupDone;
   state.cart = cart || [];
+  state.subCloudCheck = (await storGet(STORAGE_KEYS.subCloudCheck)) || 0;
   state.stockMoves = (await storGet(STORAGE_KEYS.stockMoves)) || [];
   state.heldCarts = (await storGet(STORAGE_KEYS.heldCarts)) || [];
   state.visits = visits || [];
@@ -2164,9 +2166,20 @@ function historyWindowDays(){
   return null;
 }
 
+const SUBSCRIPTION_OFFLINE_GRACE_DAYS = 7;
+function subscriptionGraceDaysLeft(){
+  const exp = state.settings.subscriptionExpiresAt ? new Date(state.settings.subscriptionExpiresAt).getTime() : 0;
+  if(!exp) return 0;
+  const now = Date.now();
+  if(now <= exp) return 0;
+  if(state.subCloudCheck && state.subCloudCheck >= exp) return 0;
+  const graceEnd = exp + SUBSCRIPTION_OFFLINE_GRACE_DAYS*86400000;
+  return now < graceEnd ? Math.ceil((graceEnd - now)/86400000) : 0;
+}
 function isSubscriptionActive(){
   if(!state.settings.subscriptionExpiresAt) return true; // legacy/grandfathered businesses
-  return new Date(state.settings.subscriptionExpiresAt) > new Date();
+  if(new Date(state.settings.subscriptionExpiresAt) > new Date()) return true;
+  return subscriptionGraceDaysLeft() > 0;
 }
 
 /* ---------- Per-document cloud sync (avoids 1MB limit & multi-device overwrite conflicts) ---------- */
@@ -2438,6 +2451,7 @@ function startLiveListeners(){
   // write actually succeeds.
   const bizUnsub = businessDocRef().onSnapshot(snap=>{
     if(!snap.exists) return;
+    if(!(snap.metadata && snap.metadata.fromCache)){ state.subCloudCheck = Date.now(); storSet(STORAGE_KEYS.subCloudCheck, state.subCloudCheck); }
     const data = snap.data() || {};
     const settingsPending = pendingSyncQueue.some(q=>q.kind==='settings' && q.id==='settings');
     // The pendingSyncQueue flag alone isn't a complete guard: Firestore's
@@ -8536,6 +8550,8 @@ function renderCreditorExportOverlay(todayKey){
 function checkSubscription(){
   const root = document.getElementById('subscription-root');
   if(!root) return true;
+  const graceLeft = subscriptionGraceDaysLeft();
+  if(graceLeft > 0 && !checkSubscription.__graceToastShown){ checkSubscription.__graceToastShown = true; setTimeout(()=>showToast(tr('subGraceToast').replace('{days}', graceLeft)), 800); }
   if(isSuperAdmin()){ root.innerHTML=''; return true; }
   if(isSubscriptionActive()){ root.innerHTML=''; return true; }
   // A user with no active subscription must still be able to reach the
