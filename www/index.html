@@ -481,6 +481,9 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  saveAndBack:{uz:"Saqlash va qaytish",ru:"Сохранить и вернуться",en:"Save and go back",kk:"Сақтап, қайту",ky:"Сактап, кайтуу",tg:"Захира ва бозгашт"},
+  autosaveInfo:{uz:"Har bir o'zgarish darhol saqlanadi",ru:"Каждое изменение сохраняется сразу",en:"Every change is saved instantly",kk:"Әр өзгеріс бірден сақталады",ky:"Ар бир өзгөрүү дароо сакталат",tg:"Ҳар тағйирот фавран захира мешавад"},
+  autosavedAt:{uz:"Saqlandi",ru:"Сохранено",en:"Saved",kk:"Сақталды",ky:"Сакталды",tg:"Захира шуд"},
   productProfitReport:{uz:"Mahsulot bo'yicha foyda",ru:"Прибыль по товарам",en:"Profit by product",kk:"Тауар бойынша пайда",ky:"Товар боюнча пайда",tg:"Фоида аз рӯи маҳсулот"},
   ppPeriodDay:{uz:"Bugun",ru:"Сегодня",en:"Today",kk:"Бүгін",ky:"Бүгүн",tg:"Имрӯз"},
   ppPeriodMonth:{uz:"Shu oy",ru:"Этот месяц",en:"This month",kk:"Осы ай",ky:"Ушул ай",tg:"Ин моҳ"},
@@ -1704,6 +1707,15 @@ async function saveSettings(){
   if(fbUser && fbDb) queuePendingSync('settings','settings');
   await storSet(STORAGE_KEYS.settings, state.settings);
   syncSettingsDoc();
+  try{ document.dispatchEvent(new CustomEvent('settings-saved')); }catch(e){}
+}
+function autosaveStatusHtml(){ return `<div id="settings-autosave-status" class="subtle" style="font-size:11.5px;margin:-6px 0 12px;display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--teal);display:inline-block;"></span><span id="settings-autosave-text">${tr('autosaveInfo')}</span></div>`; }
+function bindAutosaveStatus(){
+  const el = document.getElementById('settings-autosave-text');
+  if(!el) return;
+  if(bindAutosaveStatus.__handler) document.removeEventListener('settings-saved', bindAutosaveStatus.__handler);
+  bindAutosaveStatus.__handler = ()=>{ const t = document.getElementById('settings-autosave-text'); if(!t) return; t.textContent = tr('autosavedAt') + ' \u2713 ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); t.style.color = 'var(--teal)'; t.style.fontWeight = '700'; };
+  document.addEventListener('settings-saved', bindAutosaveStatus.__handler);
 }
 function saveSettingsLocalOnly(){ storSet(STORAGE_KEYS.settings, state.settings); }
 async function saveStaff(){ await storSet(STORAGE_KEYS.staff, state.staff); syncStaffDoc(); }
@@ -11604,6 +11616,7 @@ function renderSettingsPrinter(container){
   const curHeaderMult = getHeaderSizeMultipliers();
   container.innerHTML = `
     ${settingsBackHeader(tr('printerSettings'))}
+    ${autosaveStatusHtml()}
     <div class="card">
       <div class="toggle-group">
         <div class="toggle-opt ${state.settings.printerMode==='browser'?'active':''}" data-pm="browser">${tr('printerBrowser')}</div>
@@ -11733,7 +11746,7 @@ function renderSettingsPrinter(container){
         </div>
       </div>
     </div>
-    <button class="btn btn-primary btn-block" id="save-printer-settings-btn" style="margin-top:4px;">${tr('save')}</button>
+    <button class="btn btn-primary btn-block" id="save-printer-settings-btn" style="margin-top:4px;">${tr('saveAndBack')}</button>
   `;
   bindSettingsBack(container);
   const iosNoteEl = document.getElementById('ios-note');
@@ -11952,6 +11965,7 @@ function renderSettingsPrinter(container){
       });
     });
   }
+  bindAutosaveStatus();
   const saveBtn = document.getElementById('save-printer-settings-btn');
   if(saveBtn) saveBtn.addEventListener('click', async ()=>{
     const autoCutCb = document.getElementById('s-auto-cut');
@@ -11979,6 +11993,7 @@ function renderSettingsPrinter(container){
 function renderSettingsReceipt(container){
   container.innerHTML = `
     ${settingsBackHeader(tr('receiptDesign'))}
+    ${autosaveStatusHtml()}
     <div class="card">
       <div class="field">
         <label class="field-label">${tr('receiptLanguageLabel')}</label>
@@ -12015,7 +12030,7 @@ function renderSettingsReceipt(container){
 
       <div class="checkbox-row" style="margin-top:16px;"><input type="checkbox" id="s-auto-print" ${state.settings.autoPrintReceipt?'checked':''}><span>${tr('autoPrintToggle')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="s-sardor-branding" ${state.settings.showSardorBranding?'checked':''}><span>${tr('sardorBrandingToggle')}</span></div>
-      <button class="btn btn-primary btn-block" style="margin-top:12px;" id="save-receipt-design-btn">${tr('save')}</button>
+      <button class="btn btn-primary btn-block" style="margin-top:12px;" id="save-receipt-design-btn">${tr('saveAndBack')}</button>
       <button class="btn btn-outline btn-block" id="receipt-preview-btn">${tr('receiptPreview')}</button>
     </div>
   `;
@@ -12074,6 +12089,9 @@ function renderSettingsReceipt(container){
     state.settings.showSardorBranding = e.target.checked;
     saveSettings();
   });
+  bindAutosaveStatus();
+  const rlSel = document.getElementById('s-receipt-language');
+  if(rlSel) rlSel.addEventListener('change', ()=>{ state.settings.receiptLanguage = rlSel.value || ''; saveSettings(); });
   document.getElementById('save-receipt-design-btn').addEventListener('click', async ()=>{
     state.settings.receiptExtraLine = document.getElementById('s-extra-line').value.trim();
     state.settings.receiptFooter = document.getElementById('s-footer').value.trim();
