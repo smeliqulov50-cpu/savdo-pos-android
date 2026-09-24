@@ -6673,6 +6673,16 @@ async function printReceipt(sale, customer){
 // caller that fetched a fresh copy — e.g. the relay listener below —
 // needs the state.sales entry updated explicitly too, so every OTHER
 // screen reading it also sees it as no longer pending).
+// Reprint requested on a device with no printer: hand the receipt to the relay device (autoPrintRelay) by marking it unprinted again.
+function requestRelayPrint(sale){
+  if(!fbUser || !fbDb){ showToast(tr('printerNotConnected')); return; }
+  sale.printed = false;
+  const inState = state.sales.find(s=>s.id===sale.id);
+  if(inState) inState.printed = false;
+  saveSales();
+  addSaleDoc(sale);
+  showToast(tr('willPrintOnOtherDevice'));
+}
 function markSalePrinted(sale){
   sale.printed = true;
   const inState = state.sales.find(s=>s.id===sale.id);
@@ -7677,6 +7687,7 @@ function renderReceiptsListItems(sales){
       if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){
         await connectBluetoothPrinter();
       }
+      if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){ requestRelayPrint(sale); return; }
       printReceipt(sale, cust);
     });
   });
@@ -9254,6 +9265,7 @@ function openCustomerDetail(customerId){
       if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){
         await connectBluetoothPrinter();
       }
+      if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){ requestRelayPrint(sale); return; }
       printReceipt(sale, cust);
     });
   });
