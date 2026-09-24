@@ -7,3 +7,4 @@ www/*.backup*
 *.zip
 backups/
 fix*.py
+fix*.py
