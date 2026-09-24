@@ -2606,7 +2606,7 @@ function syncShiftsDoc(){
 // and writing) means an older write loses on purpose instead of by luck.
 async function pushSettingsToCloud(){
   const ref = businessDocRef();
-  let payload = Object.assign({}, state.settings, {schemaVersion:2});
+  let payload = stripDeviceLocalSettings(Object.assign({}, state.settings, {schemaVersion:2}));
   // Permanently retire the legacy nested "settings" blob (see
   // extractSettingsFromDoc) the first time this device saves after the
   // fix above — merge:true would otherwise leave it sitting there
@@ -2908,6 +2908,9 @@ function deleteKitchenStationDoc(id){
   kitchenStationsCol().doc(id).delete().catch(()=>{});
 }
 
+// Printer-related settings belong to THIS device (each device has its own printer), so they never travel through the cloud in either direction.
+const DEVICE_LOCAL_SETTING_KEYS = ['printerMode','printerCharsPerLine','printerModelLabel','printerBold','printerFeedLines','printerLineSpacing','printerAutoCut','printerCutType','openDrawerOnCash','autoPrintRelay','printerWidthMultiplier','printerHeightMultiplier','receiptHeaderWidthMultiplier','receiptHeaderHeightMultiplier','priceSameLine'];
+function stripDeviceLocalSettings(obj){ DEVICE_LOCAL_SETTING_KEYS.forEach(k=>{ delete obj[k]; }); return obj; }
 function extractSettingsFromDoc(bizData){
   // Some accounts have settings nested under a "settings" key (very old
   // format, from before the schema-v2 migration), others have the fields
@@ -2929,7 +2932,7 @@ function extractSettingsFromDoc(bizData){
     if(bizData[key] !== undefined) flat[key] = bizData[key];
   });
   const nested = (bizData.settings && typeof bizData.settings === 'object') ? bizData.settings : {};
-  return Object.assign({}, nested, flat);
+  return stripDeviceLocalSettings(Object.assign({}, nested, flat));
 }
 // Self-heals a tab that's been sitting open in the background while the
 // SAME business was edited elsewhere (another tab, another device — a
