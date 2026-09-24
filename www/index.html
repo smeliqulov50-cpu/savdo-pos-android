@@ -500,6 +500,9 @@ const T = {
   total:{uz:"Jami",ru:"Итого",en:"Total",kk:"Барлығы",ky:"Баары",tg:"Ҳамагӣ"},
   checkout:{uz:"Sotish",ru:"Оформить",en:"Checkout",kk:"Сату",ky:"Сатуу",tg:"Фурӯш"},
   itemsWord:{uz:"mahsulot",ru:"товара",en:"items",kk:"тауар",ky:"товар",tg:"мол"},
+  cashTenderedLabel:{uz:"Mijoz berdi",ru:"Получено от клиента",en:"Cash received",kk:"Клиент берді",ky:"Кардар берди",tg:"Муштарӣ дод"},
+  changeDueLabel:{uz:"Qaytim",ru:"Сдача",en:"Change",kk:"Қайтарым",ky:"Кайтарым",tg:"Бақия"},
+  tenderExactLabel:{uz:"Aniq",ru:"Точно",en:"Exact",kk:"Дәл",ky:"Так",tg:"Дақиқ"},
   paymentType:{uz:"To'lov turi",ru:"Способ оплаты",en:"Payment type",kk:"Төлем түрі",ky:"Төлөм түрү",tg:"Тарзи пардохт"},
   cash:{uz:"Naqd",ru:"Наличные",en:"Cash",kk:"Қолма-қол",ky:"Накта",tg:"Нақд"},
   credit:{uz:"Nasiya",ru:"В долг",en:"On credit",kk:"Несиеге",ky:"Насыяга",tg:"Қарз"},
@@ -5024,6 +5027,7 @@ function openPriceEditModal(key){
 
 function openCheckoutModal(){
   let paymentType = 'cash';
+  let tenderedAmount = 0;
   let orderType = state.takeawayMode ? 'takeaway' : 'dine_in';
   let selectedCustomerId = '__none__';
   let scCustomMode = false;
@@ -5117,6 +5121,12 @@ function openCheckoutModal(){
       <div class="row" id="bonus-row" style="${bonusAmount()>0?'':'display:none;'}"><span class="subtle">${tr('bonusUsedLabel')}</span><span id="bonus-amount-display">-${fmt(bonusAmount())}</span></div>
       <div class="row"><span class="subtle">${tr('serviceCharge')}</span><span id="sc-amount-display">${fmt(serviceChargeAmount())}</span></div>
       <div class="row" style="border-top:1px solid var(--border);padding-top:12px;margin:6px 0 14px;"><strong>${tr('grandTotal')}</strong><strong id="grand-total-display">${fmt(grandTotal())}</strong></div>
+      <div id="cash-tender-block" style="${paymentType==='cash'?'':'display:none;'}margin:-6px 0 14px;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-soft);">
+        <label class="field-label">${tr('cashTenderedLabel')}</label>
+        <input type="text" inputmode="numeric" id="cf-tendered" placeholder="${fmt(grandTotal())}" value="${tenderedAmount?formatMoneyInputValue(tenderedAmount):''}">
+        <div id="tender-quick" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;"></div>
+        <div class="row" style="margin-top:10px;"><span class="subtle">${tr('changeDueLabel')}</span><strong id="change-due-display" style="font-size:18px;color:var(--teal);">${fmt(0)}</strong></div>
+      </div>
       <div id="split-summary-rows" style="${(splitOn && splitAmount>0)?'':'display:none;'}">
         <div class="row"><span class="subtle" id="split-primary-label">${paymentTypeLabel(paymentType)}</span><span id="split-primary-display">${fmt(Math.max(0, grandTotal()-splitAmount))}</span></div>
         <div class="row"><span class="subtle" id="split-method-label">${splitMethod?paymentTypeLabel(splitMethod):''}</span><strong style="${splitMethod==='credit'?'color:var(--danger);':''}" id="split-amount-display">${fmt(splitAmount)}</strong></div>
@@ -5306,6 +5316,7 @@ function openCheckoutModal(){
   bindBonusFieldEvents();
 
   function refreshTotals(){
+    updateChangeDue();
     document.getElementById('sc-amount-display').textContent = fmt(serviceChargeAmount());
     document.getElementById('grand-total-display').textContent = fmt(grandTotal());
     const discRow = document.getElementById('discount-row');
@@ -5333,6 +5344,43 @@ function openCheckoutModal(){
     }
   }
 
+  function tenderQuickAmounts(){
+    const total = grandTotal();
+    const notes = [1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000];
+    const out = [];
+    notes.forEach(n=>{ const v = Math.ceil(total / n) * n; if(v > total && !out.includes(v)) out.push(v); });
+    return out.slice(0, 4);
+  }
+  function updateChangeDue(){
+    const el = document.getElementById('change-due-display');
+    if(!el) return;
+    const total = grandTotal();
+    const change = tenderedAmount > total ? tenderedAmount - total : 0;
+    el.textContent = fmt(change);
+    el.style.color = (tenderedAmount > 0 && tenderedAmount < total) ? 'var(--danger)' : 'var(--teal)';
+  }
+  function bindTenderEvents(){
+    const input = document.getElementById('cf-tendered');
+    const quick = document.getElementById('tender-quick');
+    if(!input || !quick) return;
+    const render = ()=>{
+      quick.innerHTML = `<button type="button" class="btn btn-outline btn-sm" data-tender="exact" style="width:auto;">${tr('tenderExactLabel')}</button>` +
+        tenderQuickAmounts().map(v=>`<button type="button" class="btn btn-outline btn-sm" data-tender="${v}" style="width:auto;">${fmt(v)}</button>`).join('');
+      quick.querySelectorAll('[data-tender]').forEach(b=>b.addEventListener('click', ()=>{
+        tenderedAmount = b.dataset.tender==='exact' ? grandTotal() : parseInt(b.dataset.tender,10);
+        input.value = formatMoneyInputValue(tenderedAmount);
+        updateChangeDue();
+      }));
+    };
+    render();
+    input.addEventListener('input', ()=>{
+      const v = parseMoneyInput(input.value);
+      tenderedAmount = isNaN(v) ? 0 : v;
+      input.value = formatMoneyInputValue(input.value);
+      updateChangeDue();
+    });
+    updateChangeDue();
+  }
   function attachCheckoutHandlers(){
     const backBtn = document.getElementById('checkout-back-btn');
     if(backBtn) backBtn.addEventListener('click', openCartModal);
@@ -5351,9 +5399,12 @@ function openCheckoutModal(){
         el.classList.add('active');
         document.getElementById('credit-fields').innerHTML = creditFieldsHtml();
         bindCreditFieldEvents();
+        const tb = document.getElementById('cash-tender-block');
+        if(tb) tb.style.display = paymentType==='cash' ? '' : 'none';
         refreshTotals();
       });
     });
+    bindTenderEvents();
     document.querySelectorAll('#modal-root [data-ot]').forEach(el=>{
       el.addEventListener('click', ()=>{
         orderType = el.dataset.ot;
@@ -5381,7 +5432,8 @@ function openCheckoutModal(){
           orderType: showOrderType?orderType:null,
           splitAmount: splitOn ? splitAmount : 0,
           splitMethod: splitOn ? splitMethod : null,
-          bonusRedeemAmount: bonusAmount()
+          bonusRedeemAmount: bonusAmount(),
+          cashTendered: (paymentType==='cash' && !splitOn) ? tenderedAmount : 0
         });
       } finally {
         if(document.body.contains(btn)) btn.disabled = false;
@@ -5679,7 +5731,9 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     // let ANOTHER device (one that DOES have a printer connected) know a
     // sale from a device that couldn't print — an iPhone, most notably,
     // since iOS Safari has no Web Bluetooth at all — is still waiting.
-    printed: false
+    printed: false,
+    cashTendered: extras.cashTendered || 0,
+    changeDue: (extras.cashTendered && extras.cashTendered > total) ? extras.cashTendered - total : 0
   };
   state.sales.push(sale);
 
@@ -6348,6 +6402,10 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   }
   lines.push(padLine(trR('total'), fmt(sale.total), width));
   lines.push(`${trR('paymentType')}: ${paymentTypeDisplayText(sale)}`);
+  if(sale.cashTendered > 0){
+    lines.push(padLine(trR('cashTenderedLabel'), fmt(sale.cashTendered), width));
+    lines.push(padLine(trR('changeDueLabel'), fmt(sale.changeDue||0), width));
+  }
   if(s.receiptFooter){ lines.push(sep); lines.push(centerLine(s.receiptFooter, width)); }
   if(s.showSardorBranding!==false){ lines.push(''); lines.push(centerLine(trR('sardorBrandingLine'), width)); }
   return lines.join('\n');
@@ -6638,6 +6696,7 @@ function buildReceiptHtmlInner(sale, customer){
     ` : ''}
     <table style="width:100%;font-weight:bold;background:#EBE5FE;border-radius:6px;"><tr><td style="padding:6px 8px;">${trR('total')}</td><td style="text-align:right;padding:6px 8px;color:#1F4FB8;font-size:1.15em;">${fmt(sale.total)}</td></tr></table>
     <div style="margin-top:4px;">${trR('paymentType')}: ${paymentTypeDisplayText(sale)}</div>
+    ${sale.cashTendered > 0 ? `<div style="margin-top:2px;">${trR('cashTenderedLabel')}: ${fmt(sale.cashTendered)} &nbsp;·&nbsp; ${trR('changeDueLabel')}: ${fmt(sale.changeDue||0)}</div>` : ''}
     ${s.receiptFooter?`<hr style="${hrStyle}"><div style="text-align:${align};">${escapeHtml(s.receiptFooter)}</div>`:''}
     ${s.showSardorBranding!==false ? `<div style="text-align:center;margin-top:10px;font-size:10px;color:#999;">${trR('sardorBrandingLine')}</div>` : ''}
     </div>
@@ -12553,7 +12612,7 @@ function waitForFirebaseLib(callback, attemptsLeft){
 }
 
 /* ---------- Search "x" buttons + money keypad (00 / 000) ---------- */
-const MONEY_INPUT_IDS = new Set(['start-cash-input','actual-cash-input','pf-price','pf-cost','pf-wholesale-price','pf-box-price','pe-price','cf-split-amount','cf-discount-value','cf-delivery-fee-custom','cf-service-charge-custom','cf-bonus-amount','sf-salary','sf-plan-monthly','sf-plan-daily','s-credit-limit','ce-credit-limit','lf-amount','ef-amount','ct-amount']);
+const MONEY_INPUT_IDS = new Set(['start-cash-input','actual-cash-input','pf-price','pf-cost','pf-wholesale-price','pf-box-price','pe-price','cf-split-amount','cf-discount-value','cf-delivery-fee-custom','cf-service-charge-custom','cf-bonus-amount','sf-salary','sf-plan-monthly','sf-plan-daily','s-credit-limit','ce-credit-limit','lf-amount','ef-amount','ct-amount','cf-tendered']);
 function isMoneyInput(el){ return !!(el && el.tagName==='INPUT' && (MONEY_INPUT_IDS.has(el.id) || el.hasAttribute('data-money') || el.dataset.moneyFormatted)); }
 function isTouchDevice(){ return ('ontouchstart' in window) || (window.matchMedia && window.matchMedia('(pointer:coarse)').matches); }
 let mkEl = null, mkTarget = null;
