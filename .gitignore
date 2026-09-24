@@ -1,0 +1,5 @@
+*.apk
+*.zip
+www/*.zaxira
+www/*.bak*
+www/*.backup*

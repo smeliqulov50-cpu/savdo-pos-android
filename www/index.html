@@ -76,7 +76,7 @@
   body{background:var(--bg);font-family:var(--font-ui);color:var(--ink);-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;}
   input, textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default;}
   #app{max-width:480px;margin:0 auto;height:100vh;height:100dvh;background:linear-gradient(160deg, #EAF3FC 0%, #E4EDFC 30%, #F2E9FB 55%, #E6F6F4 80%, #EAF3FC 100%);display:flex;flex-direction:column;position:relative;overflow:hidden;}
-  header{padding:calc(14px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface);position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(31,79,184,0.06);border-bottom:2px solid transparent;border-image:var(--gradient-brand) 1;}
+  header{padding:max(34px, calc(14px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px)))) 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface);position:sticky;top:0;z-index:10;box-shadow:0 2px 10px rgba(31,79,184,0.06);border-bottom:2px solid transparent;border-image:var(--gradient-brand) 1;}
   .brand{font-family:var(--font-brand);font-weight:800;font-size:20px;color:var(--ink);white-space:nowrap;background:var(--gradient-brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.2px;}
   #branch-indicator-btn{border:none;background:none;padding:0;margin-top:-2px;font-size:11.5px;font-weight:700;color:var(--ink-soft);cursor:pointer;text-align:left;}
   .brand span{-webkit-text-fill-color:var(--violet);color:var(--violet);}
@@ -88,7 +88,7 @@
   .sale-mode-toggle{display:flex;background:var(--surface-soft);border-radius:10px;padding:2px;flex-shrink:0;}
   .sale-mode-toggle button{padding:6px 10px;border-radius:8px;font-size:11px;font-weight:800;color:var(--ink-soft);white-space:nowrap;}
   .sale-mode-toggle button.active{background:var(--gradient-brand);color:#fff;box-shadow:0 1px 4px rgba(124,92,252,0.35);}
-  main{flex:1;padding:14px 16px calc(90px + env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;}
+  main{flex:1;padding:14px 16px calc(90px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;}
   h2.section-title{font-size:15px;font-weight:700;margin:4px 0 12px;color:var(--ink);display:flex;align-items:center;gap:6px;}
   h2.section-title svg{color:var(--accent-dark);flex-shrink:0;}
   h3.sub-title{font-size:13px;font-weight:700;margin:18px 0 8px;color:var(--ink);}
@@ -153,13 +153,13 @@
   .back-row button{background:var(--surface-soft);border:none;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;}
   .back-row .t-title{font-weight:800;font-size:16px;}
 
-  .cart-bar{position:fixed;bottom:calc(64px + env(safe-area-inset-bottom));left:0;right:0;max-width:480px;margin:0 auto;background:linear-gradient(135deg, #16283F 0%, #2F3F6B 60%, #4B3F8F 100%);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;z-index:8;}
+  .cart-bar{position:fixed;bottom:calc(64px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));left:0;right:0;max-width:480px;margin:0 auto;background:linear-gradient(135deg, #16283F 0%, #2F3F6B 60%, #4B3F8F 100%);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-radius:14px 14px 0 0;z-index:8;}
   .cart-bar .left{display:flex;flex-direction:column;}
   .cart-bar .count{font-size:11px;opacity:.75;}
   .cart-bar .sum{font-weight:800;font-size:16px;}
   .cart-bar button{background:var(--gradient-warm);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:700;font-size:13px;}
 
-  nav.bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--surface);display:flex;z-index:9;box-shadow:0 -2px 10px rgba(31,79,184,0.06);padding-bottom:env(safe-area-inset-bottom);}
+  nav.bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--surface);display:flex;z-index:9;box-shadow:0 -2px 10px rgba(31,79,184,0.06);padding-bottom:calc(8px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));}
   .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px 8px;border:none;background:transparent;color:var(--ink-faint);transition:color .15s;}
   .nav-item.active{position:relative;}
   .nav-item.active::before{content:'';position:absolute;top:2px;width:28px;height:3px;border-radius:3px;background:var(--gradient-brand);}
@@ -205,7 +205,7 @@
 
   .modal-overlay{position:fixed;inset:0;background:rgba(22,35,59,0.45);display:flex;align-items:flex-end;justify-content:center;z-index:50;}
   .modal-overlay.center{align-items:center;padding:20px;}
-  .modal-sheet{background:var(--surface);width:100%;max-width:480px;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;box-shadow:0 -8px 30px rgba(22,40,63,0.18);}
+  .modal-sheet{background:var(--surface);width:100%;max-width:480px;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));max-height:88vh;overflow-y:auto;box-shadow:0 -8px 30px rgba(22,40,63,0.18);}
   .modal-overlay.center .modal-sheet{border-radius:16px;max-height:80vh;}
   .modal-title{font-weight:800;font-size:16px;margin:0 0 14px;}
   .modal-handle{width:36px;height:4px;background:var(--border);border-radius:3px;margin:0 auto 14px;}
@@ -250,7 +250,7 @@
   .pin-key{padding:14px;border-radius:50%;aspect-ratio:1;border:1.5px solid var(--border);background:var(--surface-soft);font-size:18px;font-weight:800;color:var(--ink);transition:transform .1s, box-shadow .1s;box-shadow:0 2px 6px rgba(31,79,184,0.12);}
   .pin-key:active{transform:scale(0.93);box-shadow:0 1px 2px rgba(31,79,184,0.15);background:var(--border);}
   .pin-key:active{transform:scale(0.92);background:var(--surface-soft);}
-  .login-screen{position:fixed;inset:0;background:var(--bg);z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding:24px 20px calc(24px + env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .login-screen{position:fixed;inset:0;background:var(--bg);z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding:24px 20px calc(24px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));overflow-y:auto;-webkit-overflow-scrolling:touch;}
   /* The backdrop above spans the FULL screen on purpose — on tablets much
      wider than a phone, constraining ITS width (the old approach: max-width
      + margin:auto on this same element) left a real gap of fully clickable,
@@ -285,7 +285,7 @@
     .table-grid{grid-template-columns:repeat(6,1fr);}
     .stat-grid{grid-template-columns:repeat(4,1fr);}
     main{padding:20px 32px 100px;}
-    header{padding:calc(18px + env(safe-area-inset-top)) 32px 14px;}
+    header{padding:max(38px, calc(18px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px)))) 32px 14px;}
     .modal-sheet{max-width:600px;border-radius:18px;margin-bottom:5vh;}
     .modal-overlay:not(.center){align-items:center;}
     .login-screen > *{max-width:520px;}
@@ -3546,12 +3546,54 @@ function logIn(person){
   document.getElementById('login-root').innerHTML = '';
   startAgentLocationTracking();
   if(!staffNeedsShiftTracking(person)){ renderAll(); return; }
+    if(state.currentShift && new Date(state.currentShift.startTime).toDateString() !== new Date().toDateString()){ autoCloseStaleShift(state.currentShift); }
   const myOpenShift = state.currentShift && state.currentShift.staffId === person.id ? state.currentShift : null;
   if(!myOpenShift){
     openStartShiftModal();
   } else {
     renderAll();
   }
+}
+
+function openCashBalanceModal(){
+  const shift = state.currentShift;
+  if(!shift){
+    openModal(`<div class="modal-title">Kassa balansi</div><div class="field"><span class="subtle">Hozircha ochiq smena yo'q</span></div>`);
+    return;
+  }
+  const shiftSales = state.sales.filter(s=> s.shiftId === shift.id && !s.refunded);
+  const cashTotal = sumSalesByMethod(shiftSales, 'cash');
+  const shiftCashExpenses = state.expenses.filter(x=>x.shiftId===shift.id && x.paidFrom!=='other');
+  const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
+  const expected = shift.startCash + cashTotal - cashExpensesTotal;
+  openModal(`
+    <div class="modal-title">Kassa balansi</div>
+    <div class="row" style="justify-content:space-between"><span class="subtle">Boshlang'ich kassa</span><strong>${fmt(shift.startCash)}</strong></div>
+    <div class="row" style="justify-content:space-between"><span class="subtle">Naqd sotuvlar</span><strong>+${fmt(cashTotal)}</strong></div>
+    <div class="row" style="justify-content:space-between"><span class="subtle">Naqd xarajatlar</span><strong style="color:var(--danger)">-${fmt(cashExpensesTotal)}</strong></div>
+    <hr/>
+    <div class="row" style="justify-content:space-between"><span class="subtle">Joriy kassa balansi</span><strong style="font-size:1.3em">${fmt(expected)}</strong></div>
+  `);
+}
+
+function autoCloseStaleShift(shift){
+  const shiftSales = state.sales.filter(s=> s.shiftId === shift.id && !s.refunded);
+  const shiftRefunds = state.sales.filter(s=> s.shiftId === shift.id && s.refunded);
+  const cashTotal = sumSalesByMethod(shiftSales, 'cash');
+  const cardTotal = sumSalesByMethod(shiftSales, 'card');
+  const creditTotal = sumSalesByMethod(shiftSales, 'credit');
+  const discountTotal = shiftSales.reduce((a,s)=>a+(s.discountAmount||0), 0);
+  const serviceChargeTotal = shiftSales.reduce((a,s)=>a+(s.serviceChargeAmount||0), 0);
+  const deliveryFeeTotal = shiftSales.reduce((a,s)=>a+(s.deliveryFee||0), 0);
+  const refundedTotal = shiftRefunds.reduce((a,s)=>a+s.total, 0);
+  const profitTotal = shiftSales.reduce((a,s)=>a+saleProfit(s), 0);
+  const shiftCashExpenses = state.expenses.filter(x=>x.shiftId===shift.id && x.paidFrom!=='other');
+  const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
+  const expected = shift.startCash + cashTotal - cashExpensesTotal;
+  state.shifts.push({...shift, endTime:new Date().toISOString(), endCash:expected, expectedCash:expected, cashTotal, cardTotal, creditTotal, discountTotal, serviceChargeTotal, deliveryFeeTotal, refundedTotal, cashExpensesTotal, profitTotal, salesCount: shiftSales.length, autoClosed:true});
+  saveShifts();
+  state.currentShift = {id:uid(), staffId:shift.staffId, staffName:shift.staffName, startTime:new Date().toISOString(), startCash:expected, branchId:shift.branchId};
+  saveCurrentShift();
 }
 
 function openStartShiftModal(){
@@ -3590,7 +3632,7 @@ function openEndShiftModal(){
   const serviceChargeTotal = shiftSales.reduce((a,s)=>a+(s.serviceChargeAmount||0), 0);
   const deliveryFeeTotal = shiftSales.reduce((a,s)=>a+(s.deliveryFee||0), 0);
   const refundedTotal = shiftRefunds.reduce((a,s)=>a+s.total, 0);
-  const profitTotal = shiftSales.reduce((a,s)=>a+s.items.reduce((sum,it)=>sum+saleItemProfit(it),0), 0);
+  const profitTotal = shiftSales.reduce((a,s)=>a+saleProfit(s), 0);
   // Cash that physically left the drawer during this shift for expenses
   // (a supply run, a same-day salary payment) — without this, "expected
   // cash" only ever accounted for money coming IN, so any such expense
@@ -3698,7 +3740,7 @@ function renderHeader(){
     ` : ''}
     ${state.currentStaff && state.currentStaff.jobTitle==='agent' ? `<button class="icon-round" id="my-plan-btn">${ICONS.target}</button>` : ''}
     ${state.currentStaff && state.currentStaff.jobTitle==='agent' ? `<button class="icon-round" id="my-route-btn">${ICONS.route}</button>` : ''}
-    ${isAdmin() || hasPerm('reports') ? `<button class="icon-round" id="receipts-btn">${ICONS.receiptIcon}</button>` : ''}
+    ${isAdmin() ? `<button class="icon-round" id="receipts-btn">${ICONS.receiptIcon}</button>` : ''}
     ${isAdmin() || hasPerm('settings') || hasPerm('staffManage') ? `<button class="icon-round" id="settings-btn">${ICONS.gear}</button>` : ''}
     ${state.currentStaff ? `<button class="icon-round" id="logout-btn">${ICONS.logout}</button>` : ''}
   `;
@@ -3737,11 +3779,13 @@ function renderNav(){
     {id:'sale', icon:ICONS.sale, label:tr('navSale'), show:true},
     {id:'products', icon:ICONS.products, label:tr('navProducts'), show:hasPerm('products')},
     {id:'customers', icon:ICONS.customers, label:tr('navCustomers'), show:hasPerm('customers')},
-    {id:'reports', icon:ICONS.reports, label:tr('navReports'), show:(hasPerm('reports') || hasPerm('expense'))}
+    {id:'reports', icon:ICONS.reports, label:tr('navReports'), show:hasPerm('reports')},
+    {id:'expense', icon:ICONS.creditCard, label:tr('addExpense'), show:!isAdmin()},
+    {id:'receipts', icon:ICONS.receiptIcon, label:tr('allReceiptsTitle'), show:!isAdmin()},
   ].filter(i=>i.show);
   const el = document.getElementById('bottom-nav');
   el.innerHTML = items.map(it=>`<button class="nav-item ${state.view===it.id?'active':''}" data-view="${it.id}">${it.icon}<span>${it.label}</span></button>`).join('');
-  el.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click', ()=>{ state.view=btn.dataset.view; if(btn.dataset.view==='reports') state.reportsCategory=null; renderAll(); }));
+  el.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click', ()=>{ if(btn.dataset.view==='expense'){ openExpenseForm(()=>renderAll()); return; } state.view=btn.dataset.view; if(btn.dataset.view==='reports') state.reportsCategory=null; renderAll(); }));
 }
 
 /* ---------- IMAGE HELPERS ---------- */
@@ -3848,6 +3892,11 @@ function renderSale(){
 function cartQtyForProduct(productId){
   return activeCart().filter(c=>c.productId===productId).reduce((s,c)=>s+c.qty,0);
 }
+function saleProfit(sale){
+  const itemsProfit = sale.items.reduce((sum,it)=> sum + saleItemProfit(it), 0);
+  return itemsProfit - (sale.discountAmount||0) - (sale.bonusUsed||0);
+}
+
 function saleItemProfit(it){
   const costForLine = it.saleMode==='box' ? (it.costPrice||0) * (it.unitsPerBox||1) : (it.costPrice||0);
   return (it.price - costForLine) * it.qty;
@@ -5693,7 +5742,6 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
  }catch(e){
    const errEl = document.getElementById('checkout-error');
    if(errEl) errEl.textContent = tr('checkoutUnexpectedError') + ': ' + (e && e.message ? e.message : e);
- }
   } finally {
     isCheckoutInProgress = false;
   }
@@ -7553,7 +7601,7 @@ function renderReceiptsList(){
   }
   renderWindowed();
   document.getElementById('receipts-back-btn').addEventListener('click', ()=>{
-    state.view = 'reports';
+    state.view = (isAdmin()||hasPerm('reports'))?'reports':'sale';
     state.reportsCategory = null;
     renderAll();
   });
@@ -9315,7 +9363,7 @@ function openCustomerEditForm(customerId){
 }
 
 function openExpenseForm(afterDone){
-  const staffWithSalary = state.staff.filter(s=>effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId));
+  const staffWithSalary = !isAdmin() ? [] : state.staff.filter(s=>effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId));
   openModal(`
     <div class="modal-title">${tr('addExpense')}</div>
     <div class="field"><label class="field-label">${tr('expenseCategory')}</label>
@@ -9601,7 +9649,7 @@ function renderReportsCategory(container, cat){
   const totalDeliveryFee = activeSales.reduce((a,s)=>a+(s.deliveryFee||0),0);
   const totalDebt = visibleCustomers().reduce((s,c)=>s+(c.debt||0),0);
   function profitOf(sales){
-    return sales.reduce((sum,s)=> sum + s.items.reduce((a,it)=> a + saleItemProfit(it), 0), 0);
+    return sales.reduce((sum,s)=> sum + saleProfit(s), 0);
   }
   const todayProfit = profitOf(todaySales);
   const totalProfit = profitOf(activeSales);
@@ -9912,7 +9960,7 @@ function renderReportsCategory(container, cat){
       const toD = new Date(toVal+'T23:59:59');
       const rangeSales = state.sales.filter(s=>{ const d=new Date(s.date); return !s.refunded && d>=fromD && d<=toD && effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId); });
       const rangeTotal = rangeSales.reduce((a,s)=>a+s.total,0);
-      const rangeProfit = rangeSales.reduce((sum,s)=> sum + s.items.reduce((a,it)=> a + saleItemProfit(it), 0), 0);
+      const rangeProfit = rangeSales.reduce((sum,s)=> sum + saleProfit(s), 0);
       const rangeCash = sumSalesByMethod(rangeSales, 'cash');
       const rangeCard = sumSalesByMethod(rangeSales, 'card');
       const rangeCredit = sumSalesByMethod(rangeSales, 'credit');
@@ -10053,7 +10101,7 @@ function renderReportsCategory(container, cat){
       if(!byStaff[key]) byStaff[key] = {total:0, count:0, profit:0};
       byStaff[key].total += s.total;
       byStaff[key].count += 1;
-      byStaff[key].profit += s.items.reduce((a,it)=> a + saleItemProfit(it), 0);
+      byStaff[key].profit += saleProfit(s);
     });
     const ranked = Object.entries(byStaff).map(([name,v])=>({name, ...v})).sort((a,b)=>b.total-a.total);
     const commissionPct = state.settings.staffCommissionPercent || 0;
@@ -12269,7 +12317,7 @@ function openStaffForm(staffId){
         // created — most likely no network — the whole save is refused
         // rather than silently falling back to the old, insecure
         // shared-session behavior for this one person.
-        errEl.textContent = tr('staffAuthCreateFailed');
+        console.error('Xodim yaratish xatosi:', err && err.code, err && err.message); errEl.textContent = tr('staffAuthCreateFailed') + ' ['+((err&&err.code)||(err&&err.message)||"noma'lum")+']';
         btn.disabled = false;
         return;
       }
@@ -12404,7 +12452,6 @@ function renderAll(){
   if(state.view==='products' && !hasPerm('products')) state.view='sale';
   if(state.view==='customers' && !hasPerm('customers')) state.view='sale';
   if(state.view==='reports' && !hasPerm('reports') && !hasPerm('expense')) state.view='sale';
-  if(state.view==='receipts' && !hasPerm('reports')) state.view='sale';
   if(state.view==='superadmin' && !isSuperAdmin()) state.view='sale';
   renderHeader();
   renderNav();
