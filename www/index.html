@@ -226,7 +226,7 @@
   .lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
   .lang-grid-opt{padding:14px 10px;border-radius:14px;border:1.5px solid var(--border);text-align:center;font-weight:700;font-size:14px;background:var(--surface-soft);color:var(--ink-soft);box-shadow:0 2px 6px rgba(31,79,184,0.06);cursor:pointer;}
   .lang-grid-opt.active{background:var(--gradient-brand);color:#fff;border-color:transparent;box-shadow:0 3px 10px rgba(124,92,252,0.32);}
-  .auth-lang-switch{position:absolute;top:16px;right:16px;z-index:5;text-align:right;width:auto;max-width:none;}
+  .auth-lang-switch{position:absolute;top:calc(12px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px)));right:16px;z-index:5;text-align:right;width:auto;max-width:none;}
   .auth-lang-current{padding:6px 12px;border-radius:16px;border:1.5px solid var(--border);background:var(--surface-soft);color:var(--ink-soft);font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
   .auth-lang-caret{font-size:10px;opacity:0.7;}
   .auth-lang-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(31,79,184,0.18);padding:6px;min-width:140px;}
@@ -250,7 +250,7 @@
   .pin-key{padding:14px;border-radius:50%;aspect-ratio:1;border:1.5px solid var(--border);background:var(--surface-soft);font-size:18px;font-weight:800;color:var(--ink);transition:transform .1s, box-shadow .1s;box-shadow:0 2px 6px rgba(31,79,184,0.12);}
   .pin-key:active{transform:scale(0.93);box-shadow:0 1px 2px rgba(31,79,184,0.15);background:var(--border);}
   .pin-key:active{transform:scale(0.92);background:var(--surface-soft);}
-  .login-screen{position:fixed;inset:0;background:var(--bg);z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding:24px 20px calc(24px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .login-screen{position:fixed;inset:0;background:var(--bg);z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding:calc(24px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px))) 20px calc(24px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));overflow-y:auto;-webkit-overflow-scrolling:touch;}
   /* The backdrop above spans the FULL screen on purpose — on tablets much
      wider than a phone, constraining ITS width (the old approach: max-width
      + margin:auto on this same element) left a real gap of fully clickable,
@@ -264,7 +264,7 @@
   .login-screen > *{width:100%;max-width:480px;}
   .login-screen .pin-pad{max-width:250px;margin-left:auto;margin-right:auto;width:100%;}
   @media (max-height: 640px){
-    .login-screen{justify-content:flex-start;padding-top:16px;}
+    .login-screen{justify-content:flex-start;padding-top:calc(16px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px)));}
     .login-screen .brand{font-size:20px !important;margin-bottom:2px !important;}
     .login-screen .pin-dots{margin:10px 0 !important;}
     .login-screen .pin-key{padding:12px;font-size:16px;}
@@ -289,7 +289,7 @@
     .modal-sheet{max-width:600px;border-radius:18px;margin-bottom:5vh;}
     .modal-overlay:not(.center){align-items:center;}
     .login-screen > *{max-width:520px;}
-    .login-screen{padding:48px 40px;}
+    .login-screen{padding:calc(40px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px))) 40px 48px;}
     .settings-menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
     .settings-menu-grid .list-item{margin-bottom:0;}
   }
@@ -6631,7 +6631,7 @@ function buildReceiptHtml(sale, customer){
 
 async function printReceipt(sale, customer){
   if(state.settings.printerMode === 'bluetooth'){
-    if(!state.btCharacteristic){ showToast(tr('printerNotConnected')); return; }
+    if(!state.btCharacteristic){ showToast(tr('willPrintOnOtherDevice')); return; }
     const ok = await sendReceiptToBluetoothPrinter(sale, customer);
     // Opening the drawer only makes sense here — Bluetooth mode has an
     // actual raw-byte connection to hardware that's presumably wired to
