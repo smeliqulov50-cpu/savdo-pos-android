@@ -481,6 +481,17 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  staffLimitTitle:{uz:"Xodimlar limiti",ru:"Лимит сотрудников",en:"Staff limit",kk:"Қызметкерлер лимиті",ky:"Кызматкерлер лимити",tg:"Лимити кормандон"},
+  staffLimitReached:{uz:"Tarifingizda {n} ta xodim qo'shish mumkin. Ko'proq xodim uchun tarifni yangilang — qo'llab-quvvatlashga yozing.",ru:"В вашем тарифе можно добавить {n} сотрудников. Для большего числа обновите тариф — напишите в поддержку.",en:"Your plan allows {n} staff members. Upgrade your plan to add more — contact support.",kk:"Тарифіңізде {n} қызметкер қосуға болады. Көбірек үшін тарифті жаңартыңыз.",ky:"Тарифиңизде {n} кызматкер кошууга болот. Көбүрөөк үчүн тарифти жаңылаңыз.",tg:"Дар тарифи шумо {n} корманд илова кардан мумкин аст. Барои бештар тарифро нав кунед."},
+  contactSupportBtn:{uz:"Qo'llab-quvvatlashga yozish",ru:"Написать в поддержку",en:"Contact support",kk:"Қолдау қызметіне жазу",ky:"Колдоо кызматына жазуу",tg:"Ба дастгирӣ навиштан"},
+  devicesSection:{uz:"Ulangan qurilmalar",ru:"Подключённые устройства",en:"Connected devices",kk:"Қосылған құрылғылар",ky:"Туташкан түзмөктөр",tg:"Дастгоҳҳои пайваст"},
+  devicesHint:{uz:"Shu biznesga kirgan qurilmalar. Yo'qolgan yoki ishlatilmaydigan qurilmani uzsangiz, undagi xodim sessiyasi yopiladi.",ru:"Устройства, вошедшие в этот бизнес. Отключите потерянное или неиспользуемое устройство — сессия сотрудника на нём закроется.",en:"Devices signed into this business. Disconnect a lost or unused device to end the staff session on it.",kk:"Осы бизнеске кірген құрылғылар.",ky:"Ушул бизнеске кирген түзмөктөр.",tg:"Дастгоҳҳое, ки ба ин тиҷорат ворид шудаанд."},
+  thisDevice:{uz:"bu qurilma",ru:"это устройство",en:"this device",kk:"осы құрылғы",ky:"бул түзмөк",tg:"ин дастгоҳ"},
+  disconnectDevice:{uz:"Uzish",ru:"Отключить",en:"Disconnect",kk:"Ажырату",ky:"Ажыратуу",tg:"Ҷудо кардан"},
+  deviceDisconnectedMsg:{uz:"Bu qurilma administrator tomonidan uzildi. Davom etish uchun qayta kiring.",ru:"Это устройство отключено администратором. Войдите снова, чтобы продолжить.",en:"This device was disconnected by the administrator. Sign in again to continue.",kk:"Бұл құрылғы әкімші тарапынан ажыратылды.",ky:"Бул түзмөк администратор тарабынан ажыратылды.",tg:"Ин дастгоҳ аз ҷониби маъмур ҷудо карда шуд."},
+  deviceLimitWarn:{uz:"Qurilmalar limiti: {n} / {max}. Ko'proq qurilma uchun tarifni yangilang yoki keraksizini uzing.",ru:"Лимит устройств: {n} / {max}. Для большего числа обновите тариф или отключите лишние.",en:"Device limit: {n} / {max}. Upgrade your plan or disconnect unused devices.",kk:"Құрылғы лимиті: {n} / {max}.",ky:"Түзмөк лимити: {n} / {max}.",tg:"Лимити дастгоҳ: {n} / {max}."},
+  lastSeen:{uz:"Oxirgi faollik",ru:"Последняя активность",en:"Last active",kk:"Соңғы белсенділік",ky:"Акыркы активдүүлүк",tg:"Фаъолияти охирин"},
+  saLimits:{uz:"Limitlar: xodim / qurilma",ru:"Лимиты: сотрудники / устройства",en:"Limits: staff / devices",kk:"Лимиттер",ky:"Лимиттер",tg:"Лимитҳо"},
   osPriceMode:{uz:"Sahifada ko'rsatiladigan narx",ru:"Какие цены показывать",en:"Prices to show",kk:"Көрсетілетін баға",ky:"Көрсөтүлүүчү баа",tg:"Нархи нишондода"},
   osPriceRetail:{uz:"Chakana (dona narxi)",ru:"Розница (за штуку)",en:"Retail (per unit)",kk:"Бөлшек (данасы)",ky:"Чекене (даанасы)",tg:"Чакана (дона)"},
   osPriceWholesale:{uz:"Ulgurji (dona narxi)",ru:"Опт (за штуку)",en:"Wholesale (per unit)",kk:"Көтерме (данасы)",ky:"Дүң (даанасы)",tg:"Яклухт (дона)"},
@@ -2070,7 +2081,7 @@ function productsCol(){ return businessDocRef().collection('products'); }
 function customersCol(){ return businessDocRef().collection('customers'); }
 
 function defaultSettingsObj(){
-  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
+  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', maxStaff:2, maxDevices:3, onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
 }
 
 const APP_VERSION = 110;
@@ -3356,6 +3367,7 @@ async function loadCloudData(){
     lastSyncedCustomersMap = snapshotArrayMap(cloudConfirmedCustomers !== null ? cloudConfirmedCustomers : state.customers);
     if(!state._hasLocalSettings) restoreDeviceLocalSettings();
     fbCloudReady = true;
+    registerThisDevice();
     persistAllLocal();
   }catch(e){
     fbCloudReady = false;
@@ -7209,6 +7221,64 @@ function btAllOptionalServices(){
  * native BLE connection. Running as a plain website/PWA (no Capacitor),
  * everything falls back to the original Web Bluetooth code unchanged —
  * nothing about the browser experience changes. */
+function deviceDisplayName(){
+  const ua = navigator.userAgent || '';
+  let m = ua.match(/Android[^;]*;\s*([^;)]+?)(?:\s+Build|\))/);
+  if(m && m[1] && !/wv|Mobile/.test(m[1])) return m[1].trim();
+  if(/iPhone/.test(ua)) return 'iPhone'; if(/iPad/.test(ua)) return 'iPad';
+  if(/Windows/.test(ua)) return 'Windows'; if(/Macintosh/.test(ua)) return 'Mac';
+  return /Android/.test(ua) ? 'Android' : 'Brauzer';
+}
+function devicesCol(){ return fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('devices'); }
+let __ownDeviceUnsub = null;
+async function registerThisDevice(){
+  if(!fbUser || !fbDb) return;
+  try{
+    const id = await getDeviceId();
+    const ref = devicesCol().doc(id);
+    const snap = await ref.get();
+    if(snap.exists && snap.data().revoked){ await handleDeviceRevoked(ref); return; }
+    await ref.set({id, name: deviceDisplayName(), lastSeen: new Date().toISOString(), staffName: state.currentStaff ? state.currentStaff.name : '', appVersion: APP_VERSION, platform: isNativeApp() ? 'android' : 'web', revoked: false}, {merge:true});
+    if(__ownDeviceUnsub) __ownDeviceUnsub();
+    __ownDeviceUnsub = ref.onSnapshot(d=>{ if(d.exists && d.data().revoked) handleDeviceRevoked(ref); }, ()=>{});
+    refreshDevicesList();
+  }catch(e){}
+}
+async function handleDeviceRevoked(ref){
+  try{ await ref.set({revoked:false, lastSeen:new Date().toISOString(), staffName:''}, {merge:true}); }catch(e){}
+  state.currentStaff = null; state.view = 'sale';
+  renderAll();
+  showToast(tr('deviceDisconnectedMsg'));
+}
+async function refreshDevicesList(){
+  if(!fbUser || !fbDb) return [];
+  try{
+    const snap = await devicesCol().get();
+    const cut = Date.now() - 30*86400000;
+    state.devices = snap.docs.map(d=>d.data()).filter(d=>!d.revoked && d.lastSeen && new Date(d.lastSeen).getTime() > cut).sort((a,b)=>String(b.lastSeen).localeCompare(String(a.lastSeen)));
+    const max = parseInt(state.settings.maxDevices,10) || 3;
+    state.__deviceLimitWarn = state.devices.length > max ? tr('deviceLimitWarn').replace('{n}', state.devices.length).replace('{max}', max) : '';
+    return state.devices;
+  }catch(e){ return state.devices || []; }
+}
+async function renderSettingsDevices(container){
+  container.innerHTML = `${settingsBackHeader(tr('devicesSection'))}<div class="card"><p class="subtle" style="margin:0;font-size:12px;">${tr('devicesHint')}</p></div><div id="devices-list"><div class="empty-state">…</div></div>`;
+  const list = await refreshDevicesList();
+  const mine = await getDeviceId();
+  const max = parseInt(state.settings.maxDevices,10) || 3;
+  const el = document.getElementById('devices-list'); if(!el) return;
+  el.innerHTML = `<div class="subtle" style="font-weight:700;margin:0 0 8px;">${list.length} / ${max}${state.__deviceLimitWarn ? ` &middot; <span style="color:var(--danger);">${state.__deviceLimitWarn}</span>` : ''}</div>` + (list.length ? list.map(d=>`
+    <div class="card" style="padding:12px 14px;margin-bottom:8px;">
+      <div class="row" style="gap:10px;">
+        <div style="min-width:0;"><div style="font-weight:800;">${escapeHtml(d.name||'?')} ${d.id===mine ? `<span class="badge badge-clear" style="font-size:11px;">${tr('thisDevice')}</span>` : ''}</div>
+          <div class="subtle" style="font-size:12px;">${tr('lastSeen')}: ${new Date(d.lastSeen).toLocaleString()}${d.staffName ? ' &middot; '+escapeHtml(d.staffName) : ''} &middot; v${d.appVersion||'?'}</div></div>
+        ${d.id!==mine && isAdmin() ? `<button class="btn btn-outline btn-sm btn-red" style="width:auto;" data-revoke-device="${d.id}">${tr('disconnectDevice')}</button>` : ''}
+      </div></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`);
+  el.querySelectorAll('[data-revoke-device]').forEach(b=>b.addEventListener('click', ()=>confirmDialog(tr('disconnectDevice')+'?', async ()=>{
+    try{ await devicesCol().doc(b.dataset.revokeDevice).set({revoked:true}, {merge:true}); }catch(e){}
+    renderSettingsDevices(container);
+  }, tr('disconnectDevice'))));
+}
 function isNativeApp(){
   return !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
 }
@@ -11319,6 +11389,12 @@ async function renderSuperAdminList(){
               <input type="date" id="exact-date-${id}" style="flex:1;" value="${expires ? expires.toISOString().slice(0,10) : ''}">
               <button class="btn btn-outline btn-sm" data-set-exact="${id}">${tr('save')}</button>
             </div>
+            <div style="display:flex;gap:6px;align-items:center;margin-top:8px;">
+              <span class="subtle" style="font-size:11px;white-space:nowrap;">${tr('saLimits')}</span>
+              <input type="number" min="1" id="limit-staff-${id}" value="${d.maxStaff||2}" style="width:64px;padding:6px;text-align:center;">
+              <input type="number" min="1" id="limit-dev-${id}" value="${d.maxDevices||3}" style="width:64px;padding:6px;text-align:center;">
+              <button class="btn btn-outline btn-sm" data-set-limits="${id}">${tr('save')}</button>
+            </div>
           </div>
           <div class="btn-row" style="margin-top:8px;">
             <button class="btn btn-accent btn-sm" style="flex:1;position:relative;" data-chat="${id}" data-chat-name="${d.businessName||id}">💬 ${tr('supportSection')}${unread?` <span style="background:#fff;color:var(--accent);border-radius:8px;padding:1px 6px;font-size:10px;margin-left:4px;">${tr('newMsgBadge')}</span>`:''}</button>
@@ -11331,6 +11407,15 @@ async function renderSuperAdminList(){
     }).join('');
     listEl.querySelectorAll('[data-view-errors]').forEach(btn=>{
       btn.addEventListener('click', ()=>openBusinessErrorsModal(btn.dataset.viewErrors, btn.dataset.viewErrorsName));
+    });
+    listEl.querySelectorAll('[data-set-limits]').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const bizId = btn.dataset.setLimits;
+        const ms = parseInt(document.getElementById('limit-staff-'+bizId).value,10) || 2;
+        const md = parseInt(document.getElementById('limit-dev-'+bizId).value,10) || 3;
+        await fbDb.collection('businesses').doc(bizId).set({maxStaff: ms, maxDevices: md, settingsUpdatedAt: new Date().toISOString()}, {merge:true});
+        showToast(tr('savedSuccess'));
+      });
     });
     listEl.querySelectorAll('[data-set-exact]').forEach(btn=>{
       btn.addEventListener('click', async ()=>{
@@ -11473,6 +11558,7 @@ function settingsMenuItems(){
     {id:'superadmin', icon:'★', color:'var(--gradient-brand)', label:tr('superAdminSection'), show:isSuperAdmin(), group:'admin'},
     {id:'language', icon:ICONS.translate, color:'var(--ink-soft)', label:tr('languageLabel'), show:true, group:'general'},
     {id:'account', icon:ICONS.building, color:'var(--accent)', label:tr('accountSection'), show:isAdmin(), group:'general'},
+    {id:'devices', icon:ICONS.phoneCall, color:'var(--teal)', label:tr('devicesSection'), show:isAdmin(), group:'general'},
     {id:'business', icon:ICONS.building, color:'var(--accent)', label:tr('menuBusiness'), show:true, group:'business'},
     {id:'branches', icon:ICONS.mapPin, color:'var(--violet)', label:tr('branchesSection'), show:isAdmin(), group:'business'},
     {id:'loyalty', icon:ICONS.percent, color:'var(--warm)', label:tr('loyaltySection'), show:isAdmin(), group:'business'},
@@ -11591,6 +11677,7 @@ function renderSettingsCategory(container, cat){
   if(cat==='backup') return renderSettingsBackup(container);
   if(cat==='support') return renderSettingsSupport(container);
   if(cat==='account') return renderSettingsAccount(container);
+  if(cat==='devices') return renderSettingsDevices(container);
   state.settingsCategory = null;
   renderSettingsMenu(container);
 }
@@ -13495,6 +13582,15 @@ function openStaffForm(staffId){
     // way to tell them apart, logging in whichever matches first.
     const pinTaken = state.staff.some(s => s.pin === pin && (!editing || s.id !== editing.id));
     if(pinTaken){ errEl.textContent = tr('pinAlreadyUsed'); return; }
+    if(!editing){
+      const limit = Math.max(1, parseInt(state.settings.maxStaff,10) || 2);
+      const countable = state.staff.filter((st, i)=>i>0 || st.role!=='admin').length;
+      if(countable >= limit){
+        errEl.innerHTML = `${tr('staffLimitReached').replace('{n}', limit)} <button type="button" class="btn btn-outline btn-sm" id="sf-contact-support" style="margin-top:8px;width:100%;">${tr('contactSupportBtn')}</button>`;
+        document.getElementById('sf-contact-support').addEventListener('click', ()=>{ closeModal(); state.view='settings'; state.settingsCategory='support'; renderAll(); });
+        return;
+      }
+    }
     const settingsEl = document.getElementById('sf-perm-settings');
     const staffManageEl = document.getElementById('sf-perm-staffmanage');
     const permissions = {
