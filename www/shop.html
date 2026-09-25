@@ -119,18 +119,18 @@ function render(){
   shop.products.forEach(p=>{
     if(cat && p.category !== cat) return;
     if(q && !p.name.toLowerCase().includes(q)) return;
-    if(p.variants && p.variants.length) p.variants.forEach(v=>rows.push({p, v, name: p.name+' '+v.name, price: v.price, inStock: v.inStock}));
-    else rows.push({p, v:null, name: p.name, price: p.price, inStock: p.inStock});
+    if(p.variants && p.variants.length) p.variants.forEach(v=>rows.push({p, v, name: p.name+' '+v.name, price: v.price, inStock: v.inStock, unitLabel:''}));
+    else rows.push({p, v:null, name: p.name, price: p.price, inStock: p.inStock, unitLabel: p.unitLabel||''});
   });
   $('empty').style.display = rows.length ? 'none' : 'block'; $('empty').textContent = rows.length ? '' : '—';
   $('grid').innerHTML = rows.map(r=>{ const k = lineKey(r.p, r.v); const n = cart[k] ? cart[k].qty : 0; return `
     <div class="card">
       <div class="thumb">${r.p.image ? `<img src="${r.p.image}" alt="">` : r.name.slice(0,1).toUpperCase()}</div>
       <div class="name">${esc(r.name)}</div>
-      <div class="price">${fmt(r.price)}</div>
+      <div class="price">${fmt(r.price)}${r.unitLabel ? `<span style="font-size:11px;color:var(--ink-faint);font-weight:600;"> / ${esc(r.unitLabel)}</span>` : ''}</div>
       ${r.inStock===false ? `<div class="out">${L.out}</div>` : `<div class="qty">${n ? `<button data-m="${k}">−</button><span>${n}</span><button data-p="${k}">+</button>` : `<button class="add" data-p="${k}">+ ${L.add}</button>`}</div>`}
     </div>`; }).join('');
-  $('grid').querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click', ()=>{ const r = rows.find(x=>lineKey(x.p,x.v)===b.dataset.p); cart[b.dataset.p] = {name:r.name, price:r.price, qty:(cart[b.dataset.p]?cart[b.dataset.p].qty:0)+1}; save(); render(); }));
+  $('grid').querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click', ()=>{ const r = rows.find(x=>lineKey(x.p,x.v)===b.dataset.p); cart[b.dataset.p] = {name:r.name + (r.unitLabel ? ' ('+r.unitLabel+')' : ''), price:r.price, qty:(cart[b.dataset.p]?cart[b.dataset.p].qty:0)+1}; save(); render(); }));
   $('grid').querySelectorAll('[data-m]').forEach(b=>b.addEventListener('click', ()=>{ const c = cart[b.dataset.m]; if(!c) return; c.qty--; if(c.qty<=0) delete cart[b.dataset.m]; save(); render(); }));
   renderBar();
 }

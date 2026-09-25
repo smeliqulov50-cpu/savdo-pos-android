@@ -481,6 +481,11 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  osPriceMode:{uz:"Sahifada ko'rsatiladigan narx",ru:"Какие цены показывать",en:"Prices to show",kk:"Көрсетілетін баға",ky:"Көрсөтүлүүчү баа",tg:"Нархи нишондода"},
+  osPriceRetail:{uz:"Chakana (dona narxi)",ru:"Розница (за штуку)",en:"Retail (per unit)",kk:"Бөлшек (данасы)",ky:"Чекене (даанасы)",tg:"Чакана (дона)"},
+  osPriceWholesale:{uz:"Ulgurji (dona narxi)",ru:"Опт (за штуку)",en:"Wholesale (per unit)",kk:"Көтерме (данасы)",ky:"Дүң (даанасы)",tg:"Яклухт (дона)"},
+  osPriceBox:{uz:"Ulgurji: blok narxi (bloksiz mahsulotda ulgurji dona narxi)",ru:"Опт: цена за упаковку (без упаковки — оптовая за штуку)",en:"Wholesale: box price (unit wholesale price if no box)",kk:"Көтерме: қорап бағасы",ky:"Дүң: куту баасы",tg:"Яклухт: нархи қуттӣ"},
+  osPriceHint:{uz:"Tanlangan narxi kiritilmagan mahsulotlar sahifada ko'rinmaydi.",ru:"Товары без выбранной цены на странице не показываются.",en:"Products without the selected price are hidden.",kk:"Таңдалған бағасы жоқ тауарлар көрсетілмейді.",ky:"Тандалган баасы жок товарлар көрсөтүлбөйт.",tg:"Маҳсулоти бе нархи интихобшуда нишон дода намешавад."},
   supportAutoReply:{uz:"Assalomu alaykum! Xabaringiz qabul qilindi — tez orada javob beramiz.",ru:"Здравствуйте! Ваше сообщение получено — скоро ответим.",en:"Hello! Your message has been received — we will reply shortly.",kk:"Сәлеметсіз бе! Хабарыңыз қабылданды — жақында жауап береміз.",ky:"Саламатсызбы! Билдирүүңүз кабыл алынды — жакында жооп беребиз.",tg:"Ассалому алайкум! Паёми шумо қабул шуд — ба зудӣ ҷавоб медиҳем."},
   syncPillPending:{uz:"{count} ta yozuv bulutga yuborilmoqda",ru:"{count} записей ожидают отправки",en:"{count} records waiting to sync",kk:"{count} жазба жіберілуде",ky:"{count} жазуу жөнөтүлүүдө",tg:"{count} сабт фиристода мешавад"},
   syncPillOffline:{uz:"Internet yo'q — ma'lumotlar telefonda saqlanmoqda",ru:"Нет интернета — данные сохраняются на телефоне",en:"Offline — data is kept on the phone",kk:"Интернет жоқ — деректер телефонда",ky:"Интернет жок — маалыматтар телефондо",tg:"Интернет нест — маълумот дар телефон"},
@@ -12895,11 +12900,24 @@ function validSlug(v){ return /^[a-z0-9](?:[a-z0-9-]{1,28})[a-z0-9]$/.test(v||''
 function publicShopsCol(){ return fbDb.collection('publicShops'); }
 function buildShopPayload(){
   const cfg = onlineShopCfg();
+  const mode = cfg.priceMode || 'retail';
+  const pick = (p)=>{
+    if(mode==='box'){
+      if(p.boxPrice > 0 && p.unitsPerBox > 0) return {price:p.boxPrice, unitLabel:(p.boxLabel||tr('boxDefaultLabel'))+' ('+p.unitsPerBox+' '+unitLabel(p.unit||'dona')+')', perBox:p.unitsPerBox};
+      if(p.wholesalePrice > 0) return {price:p.wholesalePrice, unitLabel:unitLabel(p.unit||'dona'), perBox:0};
+      return null;
+    }
+    if(mode==='wholesale') return p.wholesalePrice > 0 ? {price:p.wholesalePrice, unitLabel:unitLabel(p.unit||'dona'), perBox:0} : null;
+    return p.price > 0 ? {price:p.price, unitLabel:unitLabel(p.unit||'dona'), perBox:0} : null;
+  };
   const products = visibleProducts().filter(p=>cfg.showOut || productTotalStock(p) > 0 || (p.variants&&p.variants.length)).map(p=>{
     const img = (p.image && typeof p.image==='string' && p.image.length < 24000) ? p.image : null;
-    return {id:p.id, name:p.name, price:p.price||0, category:p.category||'', unit:p.unit||'dona', image:img, inStock: productTotalStock(p) > 0,
-      variants:(p.variants||[]).map(v=>({name:v.name, price:v.price||0, inStock:(v.stock||0)>0}))};
-  }).filter(p=>cfg.showOut || p.inStock || p.variants.some(v=>v.inStock));
+    const pr = pick(p);
+    const hasVariants = p.variants && p.variants.length;
+    if(!pr && !hasVariants) return null;
+    return {id:p.id, name:p.name, price:pr ? pr.price : 0, unitLabel: pr ? pr.unitLabel : '', perBox: pr ? pr.perBox : 0, category:p.category||'', unit:p.unit||'dona', image:img, inStock: productTotalStock(p) > 0,
+      variants:(p.variants||[]).map(v=>{ const vp = mode==='retail' ? (v.price||0) : (v.wholesalePrice||v.price||0); return {name:v.name, price:vp, inStock:(v.stock||0)>0}; })};
+  }).filter(Boolean).filter(p=>cfg.showOut || p.inStock || p.variants.some(v=>v.inStock));
   return {name: state.settings.businessName||'', address: state.settings.businessAddress||'', phone: state.settings.businessPhone||'', telegram: cfg.telegram||'', whatsapp: cfg.whatsapp||'', lang: cfg.lang || receiptLang(), currency: currencyLabel(), products};
 }
 async function claimShopSlug(slug){
@@ -12950,6 +12968,7 @@ function renderSettingsCatalog(container){
         <div class="field"><label class="field-label">${tr('osTelegram')}</label><input type="text" id="os-tg" value="${escapeHtml(cfg.telegram||'')}" autocapitalize="none" placeholder="@bunyodmarket"></div>
         <div class="field"><label class="field-label">${tr('osWhatsapp')}</label><input type="tel" id="os-wa" value="${escapeHtml(cfg.whatsapp||'')}" placeholder="+998901234567"></div>
         <div class="field"><label class="field-label">${tr('osLang')}</label><select id="os-lang"><option value="" ${!cfg.lang?'selected':''}>${tr('receiptLanguageSameAsApp')}</option><option value="uz" ${cfg.lang==='uz'?'selected':''}>O'zbekcha</option><option value="ru" ${cfg.lang==='ru'?'selected':''}>Русский</option></select></div>
+        <div class="field"><label class="field-label">${tr('osPriceMode')}</label><select id="os-price-mode"><option value="retail" ${(cfg.priceMode||'retail')==='retail'?'selected':''}>${tr('osPriceRetail')}</option><option value="wholesale" ${cfg.priceMode==='wholesale'?'selected':''}>${tr('osPriceWholesale')}</option><option value="box" ${cfg.priceMode==='box'?'selected':''}>${tr('osPriceBox')}</option></select><p class="subtle" style="margin:4px 0 0;font-size:11.5px;">${tr('osPriceHint')}</p></div>
         <div class="checkbox-row"><input type="checkbox" id="os-showout" ${cfg.showOut?'checked':''}><span>${tr('osShowOut')}</span></div>
         <div id="os-err" class="error-text" style="margin-top:8px;"></div>
         <button class="btn btn-primary btn-block" id="os-publish" style="margin-top:12px;">${tr('osPublish')}</button>
@@ -12983,7 +13002,7 @@ function renderSettingsCatalog(container){
     if(!validSlug(slug)){ err.textContent = tr('osBad'); return; }
     if(!tg && !wa){ err.textContent = tr('osOneNeeded'); return; }
     const prev = onlineShopCfg();
-    state.settings.onlineShop = Object.assign({}, prev, {enabled:true, slug, telegram:tg, whatsapp:wa, lang: document.getElementById('os-lang').value, showOut: document.getElementById('os-showout').checked});
+    state.settings.onlineShop = Object.assign({}, prev, {enabled:true, slug, telegram:tg, whatsapp:wa, lang: document.getElementById('os-lang').value, showOut: document.getElementById('os-showout').checked, priceMode: document.getElementById('os-price-mode').value});
     pubBtn.disabled = true;
     const ok = await publishOnlineShop(false);
     pubBtn.disabled = false;
