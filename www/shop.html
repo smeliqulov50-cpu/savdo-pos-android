@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Savdo Pos — onlayn buyurtma</title>
+<style>
+:root{--accent:#2f6fed;--accent-dark:#1f4fb8;--ink:#16233b;--ink-soft:#51677e;--ink-faint:#8a9bb0;--line:#e3e9f3;--bg:#f3f6fb;--surface:#fff;--teal:#0fa89a;--danger:#d64545;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Inter,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:110px}
+header{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px}
+header h1{margin:0;font-size:18px;font-weight:800}
+header .sub{font-size:12px;color:var(--ink-faint);margin-top:2px}
+.search{margin:10px 14px 0;position:relative}
+.search input{width:100%;padding:11px 36px 11px 14px;border:1px solid var(--line);border-radius:12px;font-size:15px;background:var(--surface)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 14px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-size:13px;font-weight:700;color:var(--ink-soft)}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px 14px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr);max-width:960px;margin:0 auto}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.thumb{height:96px;border-radius:10px;background:linear-gradient(135deg,#dfe8fb,#eef2fa);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px;color:var(--accent);overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.name{font-weight:700;font-size:13.5px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px}
+.price{font-weight:800;color:var(--accent-dark)}
+.out{color:var(--danger);font-size:12px;font-weight:700}
+.qty{display:flex;align-items:center;gap:6px;margin-top:auto}
+.qty button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:18px;font-weight:800;color:var(--accent)}
+.qty .add{flex:1;background:var(--accent);color:#fff;border-color:var(--accent);font-size:13px}
+.qty span{min-width:24px;text-align:center;font-weight:800}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));display:none;align-items:center;justify-content:space-between;gap:10px;z-index:6}
+.bar.on{display:flex}
+.bar b{font-size:18px}
+.bar .small{font-size:12px;opacity:.75}
+.bar button{background:#ff8b4b;color:#fff;border:none;border-radius:12px;padding:12px 18px;font-weight:800;font-size:15px}
+.sheet-bg{position:fixed;inset:0;background:rgba(10,20,40,.45);display:none;z-index:7}
+.sheet-bg.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-radius:20px 20px 0 0;padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow:auto;z-index:8;transform:translateY(100%);transition:transform .2s}
+.sheet.on{transform:none}
+.sheet h2{margin:0 0 10px;font-size:18px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px;gap:8px}
+.row .n{flex:1;min-width:0}
+.row .sub{font-size:12px;color:var(--ink-faint)}
+.tot{display:flex;justify-content:space-between;padding:12px 0;font-weight:800;font-size:18px}
+label{display:block;font-size:12px;font-weight:700;color:var(--ink-soft);margin:10px 0 4px}
+input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;font-size:15px;font-family:inherit;background:#fbfcfe}
+.send{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.send a,.send button{flex:1;min-width:140px;text-align:center;padding:13px;border-radius:12px;font-weight:800;font-size:15px;text-decoration:none;border:none;cursor:pointer}
+.tg{background:#229ed9;color:#fff}.wa{background:#25d366;color:#fff}.cp{background:var(--bg);color:var(--ink);border:1px solid var(--line)!important}
+.empty{padding:60px 20px;text-align:center;color:var(--ink-faint)}
+.footer{text-align:center;font-size:11px;color:var(--ink-faint);padding:20px}
+.footer a{color:var(--accent)}
+.err{color:var(--danger);font-size:13px;margin-top:6px;display:none}
+</style>
+</head>
+<body>
+<header><h1 id="shop-name">…</h1><div class="sub" id="shop-sub"></div></header>
+<div class="search"><input id="q" placeholder="Qidirish..."></div>
+<div class="chips" id="chips"></div>
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none"></div>
+<div class="footer">Savdo Pos orqali · <a href="https://savdo-pos.netlify.app/">savdo-pos.netlify.app</a></div>
+<div class="bar" id="bar"><div><div class="small" id="bar-count"></div><b id="bar-total"></b></div><button id="bar-btn">Buyurtma berish</button></div>
+<div class="sheet-bg" id="sheet-bg"></div>
+<div class="sheet" id="sheet">
+  <h2 id="sh-title">Buyurtma</h2>
+  <div id="sh-items"></div>
+  <div class="tot"><span id="sh-tot-l">Jami</span><span id="sh-total"></span></div>
+  <label id="l-name">Ismingiz</label><input id="f-name" autocomplete="name">
+  <label id="l-phone">Telefon</label><input id="f-phone" inputmode="tel" autocomplete="tel">
+  <label id="l-addr">Manzil / izoh</label><textarea id="f-addr" rows="2"></textarea>
+  <div class="err" id="f-err"></div>
+  <div class="send" id="send"></div>
+</div>
+<script>
+const T = {
+  uz:{search:'Qidirish...', all:'Barchasi', add:'Qo\'shish', out:'Tugagan', order:'Buyurtma berish', items:'ta mahsulot', total:'Jami', name:'Ismingiz', phone:'Telefon', addr:'Manzil / izoh', tg:'Telegram orqali yuborish', wa:'WhatsApp orqali yuborish', copy:'Matnni nusxalash', copied:'Nusxalandi', need:'Ism va telefonni kiriting', notfound:'Do\'kon topilmadi yoki hali nashr qilinmagan', orderT:'Buyurtma', tgHint:'Telegram ochilganda do\'kon chatini tanlang — matn tayyor bo\'ladi.'},
+  ru:{search:'Поиск...', all:'Все', add:'Добавить', out:'Нет в наличии', order:'Оформить заказ', items:'товаров', total:'Итого', name:'Ваше имя', phone:'Телефон', addr:'Адрес / комментарий', tg:'Отправить в Telegram', wa:'Отправить в WhatsApp', copy:'Скопировать текст', copied:'Скопировано', need:'Введите имя и телефон', notfound:'Магазин не найден или ещё не опубликован', orderT:'Заказ', tgHint:'В Telegram выберите чат магазина — текст уже готов.'}
+};
+let L = T.uz, shop = null, cart = {}, cat = '';
+const $ = (id)=>document.getElementById(id);
+const fmt = (n)=>Math.round(n||0).toLocaleString('ru-RU') + ' ' + ((shop && shop.currency) || "so'm");
+function slugFromUrl(){
+  const m = location.pathname.match(/\/s\/([a-z0-9-]+)/i); if(m) return m[1].toLowerCase();
+  const q = new URLSearchParams(location.search).get('s'); if(q) return q.toLowerCase();
+  const h = location.hash.replace('#','').replace(/^\//,''); return h ? h.toLowerCase() : '';
+}
+async function load(){
+  const slug = slugFromUrl();
+  if(!slug){ showEmpty(L.notfound); return; }
+  try{
+    const url = `https://firestore.googleapis.com/v1/projects/sardor-pos/databases/(default)/documents/publicShops/${encodeURIComponent(slug)}?key=AIzaSyC-bVU6F68d_kZJ6PforUphA2m7COtn2QY`;
+    const r = await fetch(url); if(!r.ok) throw new Error('nf');
+    const j = await r.json();
+    shop = JSON.parse(j.fields.payload.stringValue);
+  }catch(e){ showEmpty(L.notfound); return; }
+  L = T[shop.lang] || T.uz;
+  document.title = shop.name + ' — ' + L.orderT;
+  $('shop-name').textContent = shop.name;
+  $('shop-sub').textContent = [shop.address, shop.phone].filter(Boolean).join(' · ');
+  $('q').placeholder = L.search; $('bar-btn').textContent = L.order; $('sh-title').textContent = L.orderT; $('sh-tot-l').textContent = L.total;
+  $('l-name').textContent = L.name; $('l-phone').textContent = L.phone; $('l-addr').textContent = L.addr;
+  try{ cart = JSON.parse(localStorage.getItem('cart_'+slug)||'{}'); }catch(e){}
+  renderChips(); render();
+  $('q').addEventListener('input', render);
+}
+function showEmpty(t){ $('empty').style.display='block'; $('empty').textContent = t; $('shop-name').textContent = 'Savdo Pos'; }
+function cats(){ return [...new Set(shop.products.map(p=>p.category).filter(Boolean))]; }
+function renderChips(){
+  const c = cats(); if(!c.length){ $('chips').style.display='none'; return; }
+  $('chips').innerHTML = [''].concat(c).map(x=>`<button class="chip ${cat===x?'on':''}" data-c="${x}">${x||L.all}</button>`).join('');
+  $('chips').querySelectorAll('.chip').forEach(b=>b.addEventListener('click', ()=>{ cat = b.dataset.c; renderChips(); render(); }));
+}
+function lineKey(p, v){ return p.id + (v ? '::'+v.name : ''); }
+function render(){
+  const q = ($('q').value||'').toLowerCase();
+  const rows = [];
+  shop.products.forEach(p=>{
+    if(cat && p.category !== cat) return;
+    if(q && !p.name.toLowerCase().includes(q)) return;
+    if(p.variants && p.variants.length) p.variants.forEach(v=>rows.push({p, v, name: p.name+' '+v.name, price: v.price, inStock: v.inStock}));
+    else rows.push({p, v:null, name: p.name, price: p.price, inStock: p.inStock});
+  });
+  $('empty').style.display = rows.length ? 'none' : 'block'; $('empty').textContent = rows.length ? '' : '—';
+  $('grid').innerHTML = rows.map(r=>{ const k = lineKey(r.p, r.v); const n = cart[k] ? cart[k].qty : 0; return `
+    <div class="card">
+      <div class="thumb">${r.p.image ? `<img src="${r.p.image}" alt="">` : r.name.slice(0,1).toUpperCase()}</div>
+      <div class="name">${esc(r.name)}</div>
+      <div class="price">${fmt(r.price)}</div>
+      ${r.inStock===false ? `<div class="out">${L.out}</div>` : `<div class="qty">${n ? `<button data-m="${k}">−</button><span>${n}</span><button data-p="${k}">+</button>` : `<button class="add" data-p="${k}">+ ${L.add}</button>`}</div>`}
+    </div>`; }).join('');
+  $('grid').querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click', ()=>{ const r = rows.find(x=>lineKey(x.p,x.v)===b.dataset.p); cart[b.dataset.p] = {name:r.name, price:r.price, qty:(cart[b.dataset.p]?cart[b.dataset.p].qty:0)+1}; save(); render(); }));
+  $('grid').querySelectorAll('[data-m]').forEach(b=>b.addEventListener('click', ()=>{ const c = cart[b.dataset.m]; if(!c) return; c.qty--; if(c.qty<=0) delete cart[b.dataset.m]; save(); render(); }));
+  renderBar();
+}
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function totals(){ let n=0, t=0; Object.values(cart).forEach(c=>{ n+=c.qty; t+=c.qty*c.price; }); return {n,t}; }
+function save(){ try{ localStorage.setItem('cart_'+slugFromUrl(), JSON.stringify(cart)); }catch(e){} }
+function renderBar(){ const {n,t} = totals(); $('bar').classList.toggle('on', n>0); $('bar-count').textContent = n+' '+L.items; $('bar-total').textContent = fmt(t); }
+function orderText(){
+  const {t} = totals();
+  const lines = Object.values(cart).map((c,i)=>`${i+1}. ${c.name} × ${c.qty} — ${fmt(c.qty*c.price)}`);
+  return `🛒 ${L.orderT} — ${shop.name}\n${lines.join('\n')}\n${L.total}: ${fmt(t)}\n${L.name}: ${$('f-name').value.trim()}\n${L.phone}: ${$('f-phone').value.trim()}${$('f-addr').value.trim()?('\n'+L.addr+': '+$('f-addr').value.trim()):''}`;
+}
+function validate(){ if(!$('f-name').value.trim() || !$('f-phone').value.trim()){ $('f-err').textContent = L.need; $('f-err').style.display='block'; return false; } $('f-err').style.display='none'; return true; }
+function openSheet(){
+  const {t} = totals();
+  $('sh-items').innerHTML = Object.entries(cart).map(([k,c])=>`<div class="row"><div class="n">${esc(c.name)}<div class="sub">${c.qty} × ${fmt(c.price)}</div></div><b>${fmt(c.qty*c.price)}</b></div>`).join('');
+  $('sh-total').textContent = fmt(t);
+  const btns = [];
+  if(shop.telegram) btns.push(`<button class="tg" id="b-tg">${L.tg}</button>`);
+  if(shop.whatsapp) btns.push(`<button class="wa" id="b-wa">${L.wa}</button>`);
+  btns.push(`<button class="cp" id="b-cp">${L.copy}</button>`);
+  $('send').innerHTML = btns.join('') + (shop.telegram ? `<div style="flex-basis:100%;font-size:12px;color:var(--ink-faint);margin-top:4px;">${L.tgHint}</div>` : '');
+  if($('b-tg')) $('b-tg').addEventListener('click', ()=>{ if(!validate()) return; const txt = orderText(); const u = shop.telegram.replace(/^@/,'');
+    window.open(`https://t.me/share/url?url=${encodeURIComponent('https://t.me/'+u)}&text=${encodeURIComponent(txt)}`, '_blank'); });
+  if($('b-wa')) $('b-wa').addEventListener('click', ()=>{ if(!validate()) return; window.open(`https://wa.me/${String(shop.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent(orderText())}`, '_blank'); });
+  $('b-cp').addEventListener('click', async()=>{ if(!validate()) return; try{ await navigator.clipboard.writeText(orderText()); $('b-cp').textContent = L.copied; }catch(e){} });
+  $('sheet-bg').classList.add('on'); $('sheet').classList.add('on');
+}
+$('bar-btn').addEventListener('click', openSheet);
+$('sheet-bg').addEventListener('click', ()=>{ $('sheet-bg').classList.remove('on'); $('sheet').classList.remove('on'); });
+load();
+</script>
+</body>
+</html>

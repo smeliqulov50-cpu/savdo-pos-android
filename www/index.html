@@ -481,6 +481,27 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  osTitle:{uz:"Onlayn buyurtma",ru:"Онлайн-заказ",en:"Online ordering",kk:"Онлайн тапсырыс",ky:"Онлайн буюртма",tg:"Фармоиши онлайн"},
+  osIntro:{uz:"Mijozlaringiz havola orqali mahsulotlarni ko'rib, savat yig'adi va buyurtmani Telegram yoki WhatsApp'ingizga yuboradi. To'lov va yetkazish siz bilan kelishiladi.",ru:"Клиенты открывают ссылку, собирают корзину и отправляют заказ вам в Telegram или WhatsApp. Оплата и доставка — по договорённости.",en:"Customers open the link, build a cart and send the order to your Telegram or WhatsApp.",kk:"Клиенттер сілтеме арқылы себет жинап, тапсырысты Telegram немесе WhatsApp-қа жібереді.",ky:"Кардарлар шилтеме аркылуу себет чогултуп, буюртманы Telegram же WhatsApp'ка жөнөтөт.",tg:"Мизоҷон тавассути пайванд сабад ҷамъ карда, фармоишро ба Telegram ё WhatsApp мефиристанд."},
+  osEnabled:{uz:"Onlayn do'kon yoqilgan",ru:"Онлайн-магазин включён",en:"Online shop enabled",kk:"Онлайн дүкен қосулы",ky:"Онлайн дүкөн күйгүзүлгөн",tg:"Мағозаи онлайн фаъол"},
+  osSlug:{uz:"Havola nomi (faqat lotin harf, raqam, chiziqcha)",ru:"Имя ссылки (латиница, цифры, дефис)",en:"Link name (letters, digits, dash)",kk:"Сілтеме атауы",ky:"Шилтеме аты",tg:"Номи пайванд"},
+  osChecking:{uz:"tekshirilmoqda…",ru:"проверка…",en:"checking…",kk:"тексерілуде…",ky:"текшерилүүдө…",tg:"санҷида мешавад…"},
+  osFree:{uz:"✓ bo'sh",ru:"✓ свободно",en:"✓ available",kk:"✓ бос",ky:"✓ бош",tg:"✓ озод"},
+  osTaken:{uz:"✗ band, boshqasini tanlang",ru:"✗ занято, выберите другое",en:"✗ taken, choose another",kk:"✗ бос емес",ky:"✗ бош эмес",tg:"✗ банд"},
+  osBad:{uz:"3–30 belgi: a-z, 0-9, chiziqcha",ru:"3–30 символов: a-z, 0-9, дефис",en:"3–30 chars: a-z, 0-9, dash",kk:"3–30 таңба",ky:"3–30 белги",tg:"3–30 аломат"},
+  osTelegram:{uz:"Telegram foydalanuvchi nomi (@username)",ru:"Telegram username (@username)",en:"Telegram username (@username)",kk:"Telegram username",ky:"Telegram username",tg:"Telegram username"},
+  osWhatsapp:{uz:"WhatsApp raqami (+998…)",ru:"Номер WhatsApp (+998…)",en:"WhatsApp number (+998…)",kk:"WhatsApp нөмірі",ky:"WhatsApp номери",tg:"Рақами WhatsApp"},
+  osOneNeeded:{uz:"Kamida bittasini kiriting: Telegram yoki WhatsApp",ru:"Укажите хотя бы одно: Telegram или WhatsApp",en:"Enter at least one: Telegram or WhatsApp",kk:"Кем дегенде біреуін енгізіңіз",ky:"Жок дегенде бирин киргизиңиз",tg:"Ҳадди ақал якеро ворид кунед"},
+  osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
+  osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
+  osPublish:{uz:"Nashr qilish / yangilash",ru:"Опубликовать / обновить",en:"Publish / update",kk:"Жариялау / жаңарту",ky:"Жарыялоо / жаңылоо",tg:"Нашр / навсозӣ"},
+  osPublished:{uz:"Nashr qilindi: {n} ta mahsulot",ru:"Опубликовано: {n} товаров",en:"Published: {n} products",kk:"Жарияланды: {n} тауар",ky:"Жарыяланды: {n} товар",tg:"Нашр шуд: {n} маҳсулот"},
+  osLastPub:{uz:"Oxirgi nashr",ru:"Последняя публикация",en:"Last published",kk:"Соңғы жариялау",ky:"Акыркы жарыялоо",tg:"Нашри охирин"},
+  osAuto:{uz:"Mahsulot yoki narx o'zgarganda sahifa o'zi yangilanadi.",ru:"При изменении товаров или цен страница обновляется сама.",en:"The page updates itself when products or prices change.",kk:"Тауар немесе баға өзгергенде бет өзі жаңарады.",ky:"Товар же баа өзгөргөндө барак өзү жаңырат.",tg:"Ҳангоми тағйири маҳсулот саҳифа худ нав мешавад."},
+  osShare:{uz:"Havolani ulashish",ru:"Поделиться ссылкой",en:"Share link",kk:"Сілтемені бөлісу",ky:"Шилтемени бөлүшүү",tg:"Мубодилаи пайванд"},
+  osOpen:{uz:"Sahifani ochish",ru:"Открыть страницу",en:"Open page",kk:"Бетті ашу",ky:"Баракты ачуу",tg:"Кушодани саҳифа"},
+  osNeedOnline:{uz:"Nashr qilish uchun internet kerak",ru:"Для публикации нужен интернет",en:"Internet is required to publish",kk:"Жариялау үшін интернет қажет",ky:"Жарыялоо үчүн интернет керек",tg:"Барои нашр интернет лозим аст"},
+  osUnpublished:{uz:"Onlayn do'kon o'chirildi",ru:"Онлайн-магазин отключён",en:"Online shop disabled",kk:"Онлайн дүкен өшірілді",ky:"Онлайн дүкөн өчүрүлдү",tg:"Мағозаи онлайн хомӯш шуд"},
   lbTitle:{uz:"Etiketka chop etish",ru:"Печать ценников",en:"Print labels",kk:"Баға жапсырмасын басу",ky:"Баа этикеткасын басуу",tg:"Чопи нархнома"},
   lbHint:{uz:"58 mm chek printeriga: nomi, narxi va shtrix-kod (bo'lsa). Mahsulotni bosib tanlang, nusxa sonini belgilang.",ru:"На чековый принтер 58 мм: название, цена и штрих-код (если есть). Выберите товары и укажите количество копий.",en:"For 58 mm receipt printers: name, price and barcode (if any). Tap products to select and set copies.",kk:"58 мм чек принтеріне: атауы, бағасы және штрих-код (болса).",ky:"58 мм чек принтерине: аталышы, баасы жана штрих-код (болсо).",tg:"Ба принтери чеки 58 мм: ном, нарх ва штрих-код (агар бошад)."},
   lbCopies:{uz:"nusxa",ru:"копий",en:"copies",kk:"дана",ky:"нуска",tg:"нусха"},
@@ -1673,7 +1694,7 @@ async function loadAll(){
   if(!p) await storSet(STORAGE_KEYS.products, state.products);
 }
 
-function saveProducts(){ storSet(STORAGE_KEYS.products, state.products); syncProductsDoc(); }
+function saveProducts(){ storSet(STORAGE_KEYS.products, state.products); syncProductsDoc(); scheduleShopRepublish(); }
 function saveCustomers(){ storSet(STORAGE_KEYS.customers, state.customers); syncCustomersDoc(); }
 function saveSales(){ storSet(STORAGE_KEYS.sales, state.sales); }
 function saveExpenses(){ storSet(STORAGE_KEYS.expenses, state.expenses); }
@@ -2040,7 +2061,7 @@ function productsCol(){ return businessDocRef().collection('products'); }
 function customersCol(){ return businessDocRef().collection('customers'); }
 
 function defaultSettingsObj(){
-  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
+  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
 }
 
 const APP_VERSION = 110;
@@ -11451,7 +11472,7 @@ function settingsMenuItems(){
     {id:'credit', icon:ICONS.creditCard, color:'var(--danger)', label:tr('creditLimitSection'), show:true, group:'limits'},
     {id:'lowstock', icon:ICONS.boxWarning, color:'var(--warm)', label:tr('lowStockOnlyLabel'), show:true, group:'limits'},
     {id:'expiry', icon:ICONS.calendar, color:'var(--danger)', label:tr('expiryOnlyLabel'), show:true, group:'limits'},
-    {id:'catalog', icon:ICONS.globe, color:'var(--teal)', label:tr('onlineCatalog'), show:true, group:'other'},
+    {id:'catalog', icon:ICONS.globe, color:'var(--teal)', label:tr('osTitle'), show:true, group:'other'},
     {id:'backup', icon:ICONS.cloud, color:'var(--accent)', label:tr('backupSection'), show:true, group:'other'},
     {id:'support', icon:ICONS.chat, color:'var(--violet)', label:tr('supportSection'), show:true, group:'other'},
     {id:'website', icon:ICONS.globe, color:'var(--accent)', label:'Veb-sayt (savdo-pos.netlify.app)', show:true, group:'other'},
@@ -12857,7 +12878,115 @@ function renderSettingsExpiry(container){
 }
 
 /* --- Online catalog --- */
+const ONLINE_SHOP_BASE = 'https://savdo-pos.netlify.app/s/';
+function onlineShopCfg(){ return state.settings.onlineShop || {enabled:false, slug:'', telegram:'', whatsapp:'', showOut:false, lang:'', lastPublishedAt:null}; }
+function onlineShopUrl(slug){ return ONLINE_SHOP_BASE + slug; }
+function validSlug(v){ return /^[a-z0-9](?:[a-z0-9-]{1,28})[a-z0-9]$/.test(v||''); }
+function publicShopsCol(){ return fbDb.collection('publicShops'); }
+function buildShopPayload(){
+  const cfg = onlineShopCfg();
+  const products = visibleProducts().filter(p=>cfg.showOut || productTotalStock(p) > 0 || (p.variants&&p.variants.length)).map(p=>{
+    const img = (p.image && typeof p.image==='string' && p.image.length < 24000) ? p.image : null;
+    return {id:p.id, name:p.name, price:p.price||0, category:p.category||'', unit:p.unit||'dona', image:img, inStock: productTotalStock(p) > 0,
+      variants:(p.variants||[]).map(v=>({name:v.name, price:v.price||0, inStock:(v.stock||0)>0}))};
+  }).filter(p=>cfg.showOut || p.inStock || p.variants.some(v=>v.inStock));
+  return {name: state.settings.businessName||'', address: state.settings.businessAddress||'', phone: state.settings.businessPhone||'', telegram: cfg.telegram||'', whatsapp: cfg.whatsapp||'', lang: cfg.lang || receiptLang(), currency: currencyLabel(), products};
+}
+async function claimShopSlug(slug){
+  const ref = publicShopsCol().doc(slug);
+  const snap = await ref.get();
+  if(snap.exists && snap.data().ownerUid !== fbUser.uid) return false;
+  return true;
+}
+async function publishOnlineShop(silent){
+  const cfg = onlineShopCfg();
+  if(!cfg.enabled || !validSlug(cfg.slug)) return false;
+  if(!fbUser || !fbDb || !navigator.onLine){ if(!silent) showToast(tr('osNeedOnline')); return false; }
+  try{
+    const ok = await claimShopSlug(cfg.slug);
+    if(!ok){ if(!silent) showToast(tr('osTaken')); return false; }
+    const payload = buildShopPayload();
+    await publicShopsCol().doc(cfg.slug).set({ownerUid: fbUser.uid, businessId: state.businessId || fbUser.uid, slug: cfg.slug, payload: JSON.stringify(payload), updatedAt: new Date().toISOString()});
+    state.settings.onlineShop = Object.assign({}, cfg, {lastPublishedAt: new Date().toISOString()});
+    await saveSettings();
+    if(!silent) showToast(tr('osPublished').replace('{n}', payload.products.length));
+    return true;
+  }catch(e){ if(!silent) showToast(tr('osNeedOnline')); return false; }
+}
+async function unpublishOnlineShop(slug){
+  if(!fbUser || !fbDb || !slug) return;
+  try{ const ref = publicShopsCol().doc(slug); const snap = await ref.get(); if(snap.exists && snap.data().ownerUid === fbUser.uid) await ref.delete(); }catch(e){}
+}
+let __shopRepubTimer = null;
+function scheduleShopRepublish(){
+  const cfg = onlineShopCfg();
+  if(!cfg.enabled || !cfg.lastPublishedAt) return;
+  if(__shopRepubTimer) clearTimeout(__shopRepubTimer);
+  __shopRepubTimer = setTimeout(()=>{ __shopRepubTimer = null; publishOnlineShop(true); }, 8000);
+}
 function renderSettingsCatalog(container){
+  const cfg = onlineShopCfg();
+  const url = validSlug(cfg.slug) ? onlineShopUrl(cfg.slug) : '';
+  container.innerHTML = `
+    ${settingsBackHeader(tr('osTitle'))}
+    <div class="card">
+      <p class="subtle" style="margin:0 0 12px;font-size:12.5px;">${tr('osIntro')}</p>
+      <div class="checkbox-row"><input type="checkbox" id="os-enabled" ${cfg.enabled?'checked':''}><span style="font-weight:700;">${tr('osEnabled')}</span></div>
+      <div id="os-body" style="${cfg.enabled?'':'display:none;'}">
+        <div class="field" style="margin-top:12px;"><label class="field-label">${tr('osSlug')}</label>
+          <div style="display:flex;align-items:center;gap:6px;"><span class="subtle" style="font-size:12px;white-space:nowrap;">${ONLINE_SHOP_BASE.replace('https://','')}</span><input type="text" id="os-slug" value="${escapeHtml(cfg.slug||'')}" autocapitalize="none" autocomplete="off" spellcheck="false" placeholder="bunyodmarket"></div>
+          <div id="os-slug-status" class="subtle" style="font-size:12px;margin-top:4px;min-height:16px;"></div>
+        </div>
+        <div class="field"><label class="field-label">${tr('osTelegram')}</label><input type="text" id="os-tg" value="${escapeHtml(cfg.telegram||'')}" autocapitalize="none" placeholder="@bunyodmarket"></div>
+        <div class="field"><label class="field-label">${tr('osWhatsapp')}</label><input type="tel" id="os-wa" value="${escapeHtml(cfg.whatsapp||'')}" placeholder="+998901234567"></div>
+        <div class="field"><label class="field-label">${tr('osLang')}</label><select id="os-lang"><option value="" ${!cfg.lang?'selected':''}>${tr('receiptLanguageSameAsApp')}</option><option value="uz" ${cfg.lang==='uz'?'selected':''}>O'zbekcha</option><option value="ru" ${cfg.lang==='ru'?'selected':''}>Русский</option></select></div>
+        <div class="checkbox-row"><input type="checkbox" id="os-showout" ${cfg.showOut?'checked':''}><span>${tr('osShowOut')}</span></div>
+        <div id="os-err" class="error-text" style="margin-top:8px;"></div>
+        <button class="btn btn-primary btn-block" id="os-publish" style="margin-top:12px;">${tr('osPublish')}</button>
+        <p class="subtle" style="margin:8px 0 0;font-size:11.5px;">${tr('osAuto')}${cfg.lastPublishedAt ? ' '+tr('osLastPub')+': '+new Date(cfg.lastPublishedAt).toLocaleString() : ''}</p>
+      </div>
+    </div>
+    ${cfg.enabled && url && cfg.lastPublishedAt ? `<div class="card" style="text-align:center;">
+      <div style="font-weight:800;word-break:break-all;color:var(--accent-dark);margin-bottom:10px;">${escapeHtml(url)}</div>
+      <div class="btn-row"><button class="btn btn-outline" id="os-share" style="flex:1;">${tr('osShare')}</button><button class="btn btn-outline" id="os-open" style="flex:1;">${tr('osOpen')}</button></div>
+    </div>` : ''}`;
+  const enabledEl = document.getElementById('os-enabled');
+  enabledEl.addEventListener('change', async ()=>{
+    const cur = onlineShopCfg();
+    if(!enabledEl.checked){ state.settings.onlineShop = Object.assign({}, cur, {enabled:false, lastPublishedAt:null}); await saveSettings(); unpublishOnlineShop(cur.slug); showToast(tr('osUnpublished')); renderSettingsCatalog(container); return; }
+    state.settings.onlineShop = Object.assign({}, cur, {enabled:true}); await saveSettings(); renderSettingsCatalog(container);
+  });
+  const slugEl = document.getElementById('os-slug'); const statusEl = document.getElementById('os-slug-status');
+  let chkTimer = null;
+  if(slugEl) slugEl.addEventListener('input', ()=>{
+    slugEl.value = slugEl.value.toLowerCase().replace(/[^a-z0-9-]/g,'');
+    const v = slugEl.value;
+    if(!validSlug(v)){ statusEl.textContent = tr('osBad'); statusEl.style.color = 'var(--danger)'; return; }
+    statusEl.textContent = tr('osChecking'); statusEl.style.color = 'var(--ink-faint)';
+    if(chkTimer) clearTimeout(chkTimer);
+    chkTimer = setTimeout(async ()=>{ if(!fbUser||!fbDb){ statusEl.textContent=''; return; } try{ const ok = await claimShopSlug(v); statusEl.textContent = ok ? tr('osFree') : tr('osTaken'); statusEl.style.color = ok ? 'var(--teal)' : 'var(--danger)'; }catch(e){ statusEl.textContent=''; } }, 600);
+  });
+  const pubBtn = document.getElementById('os-publish');
+  if(pubBtn) pubBtn.addEventListener('click', async ()=>{
+    const err = document.getElementById('os-err'); err.textContent = '';
+    const slug = slugEl.value.trim(); const tg = document.getElementById('os-tg').value.trim().replace(/^@/,''); const wa = document.getElementById('os-wa').value.trim();
+    if(!validSlug(slug)){ err.textContent = tr('osBad'); return; }
+    if(!tg && !wa){ err.textContent = tr('osOneNeeded'); return; }
+    const prev = onlineShopCfg();
+    state.settings.onlineShop = Object.assign({}, prev, {enabled:true, slug, telegram:tg, whatsapp:wa, lang: document.getElementById('os-lang').value, showOut: document.getElementById('os-showout').checked});
+    pubBtn.disabled = true;
+    const ok = await publishOnlineShop(false);
+    pubBtn.disabled = false;
+    if(ok && prev.slug && prev.slug !== slug) unpublishOnlineShop(prev.slug);
+    if(!ok) state.settings.onlineShop = Object.assign({}, state.settings.onlineShop, {lastPublishedAt: prev.lastPublishedAt||null});
+    renderSettingsCatalog(container);
+  });
+  const shareBtn = document.getElementById('os-share');
+  if(shareBtn) shareBtn.addEventListener('click', ()=>shareTextNative(state.settings.businessName||'Savdo Pos', url));
+  const openBtn = document.getElementById('os-open');
+  if(openBtn) openBtn.addEventListener('click', ()=>openExternalUrl(url));
+}
+function renderSettingsCatalogLegacy(container){
   container.innerHTML = `
     ${settingsBackHeader(tr('onlineCatalog'))}
     <div class="card">
