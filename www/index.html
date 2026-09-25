@@ -481,6 +481,16 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  payrollReport:{uz:"Maosh hisobi",ru:"Расчёт зарплаты",en:"Payroll",kk:"Жалақы есебі",ky:"Айлык эсеби",tg:"Ҳисоби маош"},
+  prFixed:{uz:"Oylik maosh",ru:"Оклад",en:"Base salary",kk:"Жалақы",ky:"Айлык",tg:"Маоши моҳона"},
+  prCommission:{uz:"Savdodan foiz",ru:"Процент с продаж",en:"Sales commission",kk:"Сатудан пайыз",ky:"Сатуудан пайыз",tg:"Фоиз аз фурӯш"},
+  prAccrued:{uz:"Hisoblandi",ru:"Начислено",en:"Accrued",kk:"Есептелді",ky:"Эсептелди",tg:"Ҳисоб шуд"},
+  prPaid:{uz:"To'landi",ru:"Выплачено",en:"Paid",kk:"Төленді",ky:"Төлөндү",tg:"Пардохт шуд"},
+  prRemaining:{uz:"Qoldi",ru:"Остаток",en:"Remaining",kk:"Қалды",ky:"Калды",tg:"Боқӣ"},
+  prPay:{uz:"To'lash / avans",ru:"Выплатить / аванс",en:"Pay / advance",kk:"Төлеу / аванс",ky:"Төлөө / аванс",tg:"Пардохт / пешпардохт"},
+  prPayments:{uz:"To'lovlar",ru:"Выплаты",en:"Payments",kk:"Төлемдер",ky:"Төлөмдөр",tg:"Пардохтҳо"},
+  prTotals:{uz:"Jami: hisoblandi {a} · to'landi {p} · qoldi {r}",ru:"Итого: начислено {a} · выплачено {p} · остаток {r}",en:"Total: accrued {a} · paid {p} · remaining {r}",kk:"Барлығы: {a} · {p} · {r}",ky:"Бардыгы: {a} · {p} · {r}",tg:"Ҳамагӣ: {a} · {p} · {r}"},
+  prHint:{uz:"Hisoblandi = xodim kartasidagi oylik maosh + shu oydagi sotuvlaridan foiz (Xodimlar hisobotidagi foiz). To'lovlar \"Oylik maosh\" xarajati sifatida yoziladi va foyda-zararga tushadi.",ru:"Начислено = оклад из карточки сотрудника + процент с его продаж за месяц. Выплаты записываются как расход «Зарплата» и попадают в отчёт о прибыли.",en:"Accrued = base salary from the staff card + commission on the month's sales. Payments are recorded as a Salary expense and flow into P&L.",kk:"Есептелді = жалақы + сатудан пайыз. Төлемдер шығыс ретінде жазылады.",ky:"Эсептелди = айлык + сатуудан пайыз. Төлөмдөр чыгым катары жазылат.",tg:"Ҳисоб шуд = маош + фоиз. Пардохтҳо ҳамчун хароҷот сабт мешаванд."},
   pnlReport:{uz:"Foyda-zarar (oylik)",ru:"Прибыль и убытки (за месяц)",en:"Profit & loss (monthly)",kk:"Пайда мен шығын (айлық)",ky:"Пайда жана чыгым (айлык)",tg:"Фоида ва зарар (моҳона)"},
   pnlRevenue:{uz:"Savdo (sotuvlar)",ru:"Выручка (продажи)",en:"Revenue (sales)",kk:"Түсім (сатулар)",ky:"Түшүм (сатуулар)",tg:"Даромад (фурӯшҳо)"},
   pnlRefunds:{uz:"Qaytarishlar",ru:"Возвраты",en:"Refunds",kk:"Қайтарулар",ky:"Кайтаруулар",tg:"Баргардонӣ"},
@@ -10338,7 +10348,8 @@ function openExpenseForm(afterDone){
     // drawer for a supply run or a same-day salary payment is exactly
     // the kind of thing that used to show up as an unexplained shortfall
     // at close-out, when it was never actually a discrepancy at all.
-    const expense = {id:uid(), date:iso, category, amount, note, branchId: state.currentBranchId, staffId: state.currentStaff?state.currentStaff.id:null, staffName: state.currentStaff?state.currentStaff.name:'', paidFrom, shiftId: state.currentShift ? state.currentShift.id : null};
+    const salaryStaffId = (category==='salary' && document.getElementById('ef-staff') && document.getElementById('ef-staff').value) ? document.getElementById('ef-staff').value : null;
+    const expense = {id:uid(), date:iso, category, amount, note, salaryStaffId, branchId: state.currentBranchId, staffId: state.currentStaff?state.currentStaff.id:null, staffName: state.currentStaff?state.currentStaff.name:'', paidFrom, shiftId: state.currentShift ? state.currentShift.id : null};
     state.expenses.push(expense);
     saveExpenses();
     addExpenseDoc(expense);
@@ -10427,6 +10438,7 @@ function reportsMenuItems(){
   if(state.currentStaff && state.currentStaff.role==='admin'){
     items.push({id:'refunds', label:tr('refundsReportSection')});
     items.push({id:'expenses', label:tr('expensesSection')});
+    items.push({id:'payroll', label:tr('payrollReport')});
     // Same admin-only reasoning as refunds above — seeing every branch's
     // cash side by side is specifically an owner-oversight view, and
     // only makes sense once there's more than one branch to compare.
@@ -10958,6 +10970,54 @@ function renderReportsCategory(container, cat){
     return;
   }
 
+  if(cat==='payroll'){
+    if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
+    if(!state.payrollMonth){ const n = new Date(); state.payrollMonth = n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); }
+    const [py, pm] = state.payrollMonth.split('-').map(Number);
+    const mk = (d)=>{ const x = new Date(d); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0'); };
+    const pct = state.settings.staffCommissionPercent || 0;
+    const monthSales = state.sales.filter(s=>!s.refunded && mk(s.date)===state.payrollMonth);
+    const monthSalaryExp = state.expenses.filter(e=>e.category==='salary' && mk(e.date)===state.payrollMonth);
+    const rows = state.staff.map(st=>{
+      const sales = monthSales.filter(s=>s.cashierId===st.id || (!s.cashierId && s.cashierName===st.name)).reduce((a,s)=>a+(s.total||0),0);
+      const fixed = parseFloat(st.salary)||0;
+      const commission = sales*pct/100;
+      const pays = monthSalaryExp.filter(e=>e.salaryStaffId===st.id || (!e.salaryStaffId && e.note && e.note.trim().toLowerCase()===st.name.trim().toLowerCase()));
+      const paid = pays.reduce((a,e)=>a+(e.amount||0),0);
+      return {st, sales, fixed, commission, accrued: fixed+commission, paid, remaining: fixed+commission-paid, pays};
+    }).filter(r=>r.accrued>0 || r.paid>0);
+    const tot = rows.reduce((a,r)=>({a:a.a+r.accrued, p:a.p+r.paid, r:a.r+r.remaining}), {a:0,p:0,r:0});
+    const monthName = new Date(py, pm-1, 1).toLocaleDateString(undefined, {month:'long', year:'numeric'});
+    container.innerHTML = `
+      ${reportsBackHeader(tr('payrollReport'))}
+      <div class="row" style="margin-bottom:12px;"><button class="icon-btn" id="pr-prev">&lsaquo;</button><strong style="text-transform:capitalize;">${monthName}</strong><button class="icon-btn" id="pr-next">&rsaquo;</button></div>
+      <div class="card" style="padding:10px 14px;margin-bottom:12px;font-weight:700;font-size:13px;">${tr('prTotals').replace('{a}', fmt(tot.a)).replace('{p}', fmt(tot.p)).replace('{r}', fmt(tot.r))}</div>
+      ${rows.length ? rows.map(r=>`
+      <div class="card" style="padding:12px 14px;margin-bottom:10px;">
+        <div class="row"><strong>${escapeHtml(r.st.name)}</strong><span class="badge badge-clear" style="color:${r.remaining>0?'var(--danger)':'var(--teal)'};">${tr('prRemaining')}: ${fmt(r.remaining)}</span></div>
+        <div class="row" style="font-size:13px;"><span class="subtle">${tr('prFixed')}</span><span>${fmt(r.fixed)}</span></div>
+        ${pct>0 ? `<div class="row" style="font-size:13px;"><span class="subtle">${tr('prCommission')} (${pct}% × ${fmt(r.sales)})</span><span>${fmt(r.commission)}</span></div>` : ''}
+        <div class="row" style="font-size:13px;font-weight:700;"><span>${tr('prAccrued')}</span><span>${fmt(r.accrued)}</span></div>
+        <div class="row" style="font-size:13px;"><span class="subtle">${tr('prPaid')}</span><span style="color:var(--teal);">${fmt(r.paid)}</span></div>
+        ${r.pays.length ? `<div class="subtle" style="font-size:11.5px;margin-top:4px;">${tr('prPayments')}: ${r.pays.map(p=>new Date(p.date).toLocaleDateString()+' — '+fmt(p.amount)).join(' · ')}</div>` : ''}
+        <button class="btn btn-outline btn-sm btn-block" style="margin-top:8px;" data-pr-pay="${r.st.id}">${tr('prPay')}</button>
+      </div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`}
+      <p class="subtle" style="margin:12px 0 0;font-size:11.5px;">${tr('prHint')}</p>`;
+    bindReportsBack();
+    const shift = (n)=>{ const d = new Date(py, pm-1+n, 1); state.payrollMonth = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); renderReports(); };
+    document.getElementById('pr-prev').addEventListener('click', ()=>shift(-1));
+    document.getElementById('pr-next').addEventListener('click', ()=>shift(1));
+    container.querySelectorAll('[data-pr-pay]').forEach(b=>b.addEventListener('click', ()=>{
+      const sid = b.dataset.prPay; const r = rows.find(x=>x.st.id===sid);
+      openExpenseForm(()=>renderReports());
+      setTimeout(()=>{
+        const cat = document.getElementById('ef-category'); if(cat){ cat.value = 'salary'; cat.dispatchEvent(new Event('change')); }
+        const sel = document.getElementById('ef-staff'); if(sel){ sel.value = sid; sel.dispatchEvent(new Event('change')); }
+        const amt = document.getElementById('ef-amount'); if(amt && r && r.remaining > 0) amt.value = formatMoneyInputValue(r.remaining);
+      }, 60);
+    }));
+    return;
+  }
   if(cat==='pnl'){
     if(!state.pnlMonth){ const n = new Date(); state.pnlMonth = n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); }
     const [py, pm] = state.pnlMonth.split('-').map(Number);
