@@ -481,6 +481,19 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  pnlReport:{uz:"Foyda-zarar (oylik)",ru:"Прибыль и убытки (за месяц)",en:"Profit & loss (monthly)",kk:"Пайда мен шығын (айлық)",ky:"Пайда жана чыгым (айлык)",tg:"Фоида ва зарар (моҳона)"},
+  pnlRevenue:{uz:"Savdo (sotuvlar)",ru:"Выручка (продажи)",en:"Revenue (sales)",kk:"Түсім (сатулар)",ky:"Түшүм (сатуулар)",tg:"Даромад (фурӯшҳо)"},
+  pnlRefunds:{uz:"Qaytarishlar",ru:"Возвраты",en:"Refunds",kk:"Қайтарулар",ky:"Кайтаруулар",tg:"Баргардонӣ"},
+  pnlCogs:{uz:"Sotilgan mahsulot tannarxi",ru:"Себестоимость проданного",en:"Cost of goods sold",kk:"Сатылған тауар өзіндік құны",ky:"Сатылган товардын өздүк наркы",tg:"Арзиши моли фурӯхташуда"},
+  pnlDiscounts:{uz:"Chegirma va keshbek",ru:"Скидки и кешбэк",en:"Discounts & cashback",kk:"Жеңілдік және кешбэк",ky:"Арзандатуу жана кешбэк",tg:"Тахфиф ва кешбэк"},
+  pnlGross:{uz:"Yalpi foyda",ru:"Валовая прибыль",en:"Gross profit",kk:"Жалпы пайда",ky:"Жалпы пайда",tg:"Фоидаи умумӣ"},
+  pnlOpex:{uz:"Xarajatlar",ru:"Расходы",en:"Expenses",kk:"Шығыстар",ky:"Чыгымдар",tg:"Хароҷот"},
+  pnlNet:{uz:"SOF FOYDA",ru:"ЧИСТАЯ ПРИБЫЛЬ",en:"NET PROFIT",kk:"ТАЗА ПАЙДА",ky:"ТАЗА ПАЙДА",tg:"ФОИДАИ СОФ"},
+  pnlMargin:{uz:"Sof marja",ru:"Чистая маржа",en:"Net margin",kk:"Таза маржа",ky:"Таза маржа",tg:"Маржаи соф"},
+  pnlPurchasesInfo:{uz:"Tovar xaridi (omborga, hisobga olinmaydi)",ru:"Закупка товара (на склад, не вычитается)",en:"Goods purchased (to stock, not deducted)",kk:"Тауар сатып алу (қоймаға, шегерілмейді)",ky:"Товар сатып алуу (кампага, кемитилбейт)",tg:"Хариди мол (ба анбор, тарҳ намешавад)"},
+  pnlVsPrev:{uz:"o'tgan oyga nisbatan",ru:"к прошлому месяцу",en:"vs previous month",kk:"өткен айға қарағанда",ky:"өткөн айга салыштырмалуу",tg:"нисбат ба моҳи гузашта"},
+  pnlHint:{uz:"Sotilgan mahsulot tannarxi — sotuv paytidagi tannarx. Tovar xaridi omborga kiradi, shuning uchun foydadan ayirilmaydi (u sotilganda tannarx sifatida hisoblanadi). Maosh va boshqa xarajatlar \"Xarajatlar\" ichida.",ru:"Себестоимость — на момент продажи. Закупка товара идёт на склад и не вычитается (учитывается при продаже как себестоимость). Зарплаты и прочие расходы — в «Расходах».",en:"COGS is the cost at time of sale. Goods purchases go to stock and are not deducted (they become COGS when sold). Salaries and other costs are in Expenses.",kk:"Өзіндік құн — сату кезіндегі. Тауар сатып алу қоймаға түседі, шегерілмейді.",ky:"Өздүк нарк — сатуу учурундагы. Товар сатып алуу кампага түшөт, кемитилбейт.",tg:"Арзиш — дар вақти фурӯш. Хариди мол ба анбор меравад, тарҳ намешавад."},
+  pnlLast6:{uz:"So'nggi 6 oy sof foydasi",ru:"Чистая прибыль за 6 месяцев",en:"Net profit, last 6 months",kk:"Соңғы 6 айдың таза пайдасы",ky:"Акыркы 6 айдын таза пайдасы",tg:"Фоидаи софи 6 моҳи охир"},
   puPayment:{uz:"To'lov",ru:"Оплата",en:"Payment",kk:"Төлем",ky:"Төлөм",tg:"Пардохт"},
   puPayCash:{uz:"Naqd (kassadan)",ru:"Наличные (из кассы)",en:"Cash (from register)",kk:"Қолма-қол (кассадан)",ky:"Накталай (кассадан)",tg:"Нақд (аз касса)"},
   puPayBank:{uz:"Karta / bank",ru:"Карта / банк",en:"Card / bank",kk:"Карта / банк",ky:"Карта / банк",tg:"Корт / бонк"},
@@ -10396,6 +10409,7 @@ function reportsMenuItems(){
     {id:'receipts', label:tr('allReceiptsTitle')},
     {id:'today', label:tr('todaySales')},
     {id:'total', label:tr('totalSales')},
+    {id:'pnl', label:tr('pnlReport')},
     {id:'range', label:tr('dateRangeSection')},
     {id:'daily', label:tr('dailyBreakdown')},
     {id:'products', label:tr('topProducts')},
@@ -10944,6 +10958,58 @@ function renderReportsCategory(container, cat){
     return;
   }
 
+  if(cat==='pnl'){
+    if(!state.pnlMonth){ const n = new Date(); state.pnlMonth = n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); }
+    const [py, pm] = state.pnlMonth.split('-').map(Number);
+    const monthKeyOf = (d)=>{ const x = new Date(d); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0'); };
+    const calc = (key)=>{
+      const sales = state.sales.filter(s=>effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId) && monthKeyOf(s.date)===key);
+      const ok = sales.filter(s=>!s.refunded), ref = sales.filter(s=>s.refunded);
+      const revenue = ok.reduce((a,s)=>a+(s.total||0),0);
+      const refunds = ref.reduce((a,s)=>a+(s.total||0),0);
+      const cogs = ok.reduce((a,s)=>a+s.items.reduce((x,it)=>x+((it.saleMode==='box' ? (it.costPrice||0)*(it.unitsPerBox||1) : (it.costPrice||0))*it.qty),0),0);
+      const discounts = ok.reduce((a,s)=>a+(s.discountAmount||0)+(s.bonusUsed||0),0);
+      const exps = visibleExpenses().filter(e=>monthKeyOf(e.date)===key);
+      const purchases = exps.filter(e=>e.category==='purchase').reduce((a,e)=>a+(e.amount||0),0);
+      const byCat = {}; exps.filter(e=>e.category!=='purchase').forEach(e=>{ byCat[e.category||'other'] = (byCat[e.category||'other']||0)+(e.amount||0); });
+      const opex = Object.values(byCat).reduce((a,b)=>a+b,0);
+      const gross = ok.reduce((a,s)=>a+saleProfit(s),0);
+      return {revenue, refunds, cogs, discounts, gross, byCat, opex, purchases, net: gross - opex, count: ok.length};
+    };
+    const cur = calc(state.pnlMonth);
+    const prevD = new Date(py, pm-2, 1); const prevKey = prevD.getFullYear()+'-'+String(prevD.getMonth()+1).padStart(2,'0');
+    const prev = calc(prevKey);
+    const delta = prev.net !== 0 ? Math.round((cur.net - prev.net)/Math.abs(prev.net)*100) : null;
+    const last6 = []; for(let i=5;i>=0;i--){ const d = new Date(py, pm-1-i, 1); const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); last6.push({label: d.toLocaleDateString(undefined, {month:'short'}), value: Math.round(calc(k).net)}); }
+    const monthName = new Date(py, pm-1, 1).toLocaleDateString(undefined, {month:'long', year:'numeric'});
+    const row = (l, v, opts)=>`<div class="row" style="padding:7px 0;border-bottom:1px solid var(--line);${opts&&opts.bold?'font-weight:800;':''}"><span ${opts&&opts.sub?'class="subtle" style="padding-left:12px;"':''}>${l}</span><span style="${opts&&opts.color?('color:'+opts.color+';'):''}${opts&&opts.bold?'font-weight:800;':''}">${opts&&opts.neg?'−':''}${fmt(Math.abs(v))}</span></div>`;
+    container.innerHTML = `
+      ${reportsBackHeader(tr('pnlReport'))}
+      <div class="row" style="margin-bottom:12px;"><button class="icon-btn" id="pnl-prev">&lsaquo;</button><strong style="text-transform:capitalize;">${monthName}</strong><button class="icon-btn" id="pnl-next">&rsaquo;</button></div>
+      <div class="card" style="padding:14px 16px;text-align:center;margin-bottom:12px;">
+        <div class="subtle" style="font-size:12px;">${tr('pnlNet')}</div>
+        <div style="font-size:30px;font-weight:800;color:${cur.net>=0?'var(--teal)':'var(--danger)'};">${fmt(cur.net)}</div>
+        <div class="subtle" style="font-size:12px;">${tr('pnlMargin')}: ${cur.revenue>0?Math.round(cur.net/cur.revenue*100):0}%${delta!==null?` &middot; <span style="color:${delta>=0?'var(--teal)':'var(--danger)'};font-weight:700;">${delta>=0?'+':''}${delta}%</span> ${tr('pnlVsPrev')}`:''}</div>
+      </div>
+      <div class="card" style="padding:6px 14px 10px;margin-bottom:12px;">
+        ${row(tr('pnlRevenue')+` (${cur.count})`, cur.revenue)}
+        ${cur.refunds ? row(tr('pnlRefunds'), cur.refunds, {sub:true, neg:true}) : ''}
+        ${row(tr('pnlCogs'), cur.cogs, {sub:true, neg:true})}
+        ${cur.discounts ? row(tr('pnlDiscounts'), cur.discounts, {sub:true, neg:true}) : ''}
+        ${row(tr('pnlGross'), cur.gross, {bold:true})}
+        ${Object.keys(cur.byCat).sort((a,b)=>cur.byCat[b]-cur.byCat[a]).map(c=>row(expenseCategoryLabel(c), cur.byCat[c], {sub:true, neg:true})).join('')}
+        ${row(tr('pnlOpex'), cur.opex, {neg:true})}
+        ${row(tr('pnlNet'), cur.net, {bold:true, color: cur.net>=0?'var(--teal)':'var(--danger)'})}
+        ${cur.purchases ? `<div class="subtle" style="font-size:11.5px;margin-top:8px;">${tr('pnlPurchasesInfo')}: ${fmt(cur.purchases)}</div>` : ''}
+      </div>
+      ${last6.some(x=>x.value) ? `<h3 class="sub-title">${tr('pnlLast6')}</h3><div class="card" style="padding:14px 12px;overflow-x:auto;">${buildBarChartSvg(last6.map(x=>({label:x.label, value:Math.max(0,x.value)})))}</div>` : ''}
+      <p class="subtle" style="margin:12px 0 0;font-size:11.5px;">${tr('pnlHint')}</p>`;
+    bindReportsBack();
+    const shift = (n)=>{ const d = new Date(py, pm-1+n, 1); state.pnlMonth = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); renderReports(); };
+    document.getElementById('pnl-prev').addEventListener('click', ()=>shift(-1));
+    document.getElementById('pnl-next').addEventListener('click', ()=>shift(1));
+    return;
+  }
   if(cat==='productprofit'){
     if(!state.productProfitPeriod) state.productProfitPeriod = 'month';
     const nowP = new Date();
