@@ -481,6 +481,14 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  puPayment:{uz:"To'lov",ru:"Оплата",en:"Payment",kk:"Төлем",ky:"Төлөм",tg:"Пардохт"},
+  puPayCash:{uz:"Naqd (kassadan)",ru:"Наличные (из кассы)",en:"Cash (from register)",kk:"Қолма-қол (кассадан)",ky:"Накталай (кассадан)",tg:"Нақд (аз касса)"},
+  puPayBank:{uz:"Karta / bank",ru:"Карта / банк",en:"Card / bank",kk:"Карта / банк",ky:"Карта / банк",tg:"Корт / бонк"},
+  puPayCredit:{uz:"Nasiya (yetkazib beruvchiga qarz)",ru:"В долг (задолженность поставщику)",en:"On credit (payable to supplier)",kk:"Несиеге (жеткізушіге қарыз)",ky:"Насыяга (жеткирүүчүгө карыз)",tg:"Насия (қарз ба таъминкунанда)"},
+  puPayHint:{uz:"Naqd/karta — xarajat sifatida yoziladi (kassa balansi va foyda-zarar to'g'ri chiqadi). Nasiya — \"Mening qarzlarim\"da yetkazib beruvchi qarzi paydo bo'ladi.",ru:"Наличные/карта записываются как расход (касса и прибыль сходятся). В долг — появляется задолженность поставщику в «Мои долги».",en:"Cash/card is recorded as an expense (cash balance and P&L stay correct). On credit — a supplier payable appears in \"My debts\".",kk:"Қолма-қол/карта шығыс ретінде жазылады. Несиеге — жеткізушіге қарыз пайда болады.",ky:"Накталай/карта чыгым катары жазылат. Насыяга — жеткирүүчүгө карыз пайда болот.",tg:"Нақд/корт ҳамчун хароҷот сабт мешавад. Насия — қарз ба таъминкунанда пайдо мешавад."},
+  puSupplierRequired:{uz:"Nasiya uchun yetkazib beruvchi nomini kiriting",ru:"Для долга укажите поставщика",en:"Enter the supplier name for credit",kk:"Несие үшін жеткізушіні көрсетіңіз",ky:"Насыя үчүн жеткирүүчүнү көрсөтүңүз",tg:"Барои насия таъминкунандаро нависед"},
+  expenseCatPurchase:{uz:"Tovar xaridi",ru:"Закупка товара",en:"Goods purchase",kk:"Тауар сатып алу",ky:"Товар сатып алуу",tg:"Хариди мол"},
+  puCreditNote:{uz:"Kirim: {n} ta mahsulot",ru:"Приход: {n} товаров",en:"Receiving: {n} items",kk:"Кіріс: {n} тауар",ky:"Кирим: {n} товар",tg:"Воридот: {n} маҳсулот"},
   staffLimitTitle:{uz:"Xodimlar limiti",ru:"Лимит сотрудников",en:"Staff limit",kk:"Қызметкерлер лимиті",ky:"Кызматкерлер лимити",tg:"Лимити кормандон"},
   staffLimitReached:{uz:"Tarifingizda {n} ta xodim qo'shish mumkin. Ko'proq xodim uchun tarifni yangilang — qo'llab-quvvatlashga yozing.",ru:"В вашем тарифе можно добавить {n} сотрудников. Для большего числа обновите тариф — напишите в поддержку.",en:"Your plan allows {n} staff members. Upgrade your plan to add more — contact support.",kk:"Тарифіңізде {n} қызметкер қосуға болады. Көбірек үшін тарифті жаңартыңыз.",ky:"Тарифиңизде {n} кызматкер кошууга болот. Көбүрөөк үчүн тарифти жаңылаңыз.",tg:"Дар тарифи шумо {n} корманд илова кардан мумкин аст. Барои бештар тарифро нав кунед."},
   contactSupportBtn:{uz:"Qo'llab-quvvatlashga yozish",ru:"Написать в поддержку",en:"Contact support",kk:"Қолдау қызметіне жазу",ky:"Колдоо кызматына жазуу",tg:"Ба дастгирӣ навиштан"},
@@ -1427,7 +1435,7 @@ function visibleExpenses(){
 function canManageExpenses(){ return isAdmin() || hasPerm('expense'); }
 const EXPENSE_CATEGORIES = ['rent','utilities','salary','transport','advertising','other'];
 function expenseCategoryLabel(cat){
-  const map = {rent:'expenseCatRent', utilities:'expenseCatUtilities', salary:'expenseCatSalary', transport:'expenseCatTransport', advertising:'expenseCatAdvertising', other:'expenseCatOther'};
+  const map = {rent:'expenseCatRent', utilities:'expenseCatUtilities', salary:'expenseCatSalary', transport:'expenseCatTransport', advertising:'expenseCatAdvertising', purchase:'expenseCatPurchase', other:'expenseCatOther'};
   return tr(map[cat] || 'expenseCatOther');
 }
 function expenseCategoryColor(cat){
@@ -11178,7 +11186,7 @@ function renderReportsCategory(container, cat){
 }
 
 /* ---------- SUPER ADMIN ---------- */
-let purchaseDraft = {supplier:'', note:'', items:[], updateCost:true};
+let purchaseDraft = {supplier:'', note:'', items:[], updateCost:true, payMode:'cash'};
 function savePurchases(){ storSet(STORAGE_KEYS.purchases, (state.purchases||[]).slice(-500)); }
 function purchaseTotal(){ return purchaseDraft.items.reduce((a,it)=>a + (parseFloat(it.qty)||0)*(parseFloat(it.cost)||0), 0); }
 function renderPurchase(){
@@ -11201,6 +11209,9 @@ function renderPurchase(){
         </div>
       </div>`).join('') : `<div class="empty-state">${tr('puEmpty')}</div>`}</div>
     <button class="btn btn-outline btn-block" id="pu-add" style="margin-bottom:10px;">${tr('puAddItem')}</button>
+    <div class="field"><label class="field-label">${tr('puPayment')}</label>
+      <div class="toggle-group" id="pu-pay-mode">${[['cash',tr('puPayCash')],['bank',tr('puPayBank')],['credit',tr('puPayCredit')]].map(([id,l])=>`<div class="toggle-opt ${(purchaseDraft.payMode||'cash')===id?'active':''}" data-pu-pay="${id}">${l}</div>`).join('')}</div>
+      <p class="subtle" style="margin:6px 0 0;font-size:11.5px;">${tr('puPayHint')}</p></div>
     <div class="checkbox-row"><input type="checkbox" id="pu-update-cost" ${purchaseDraft.updateCost?'checked':''}><span>${tr('puUpdateCost')}</span></div>
     <div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin:8px 0 12px;"><strong>${tr('puTotal')}</strong><strong id="pu-total">${fmt(purchaseTotal())}</strong></div>
     <button class="btn btn-primary btn-block" id="pu-apply" ${purchaseDraft.items.length?'':'disabled'}>${tr('puApply')}</button>
@@ -11213,6 +11224,7 @@ function renderPurchase(){
   document.getElementById('pu-supplier').addEventListener('input', (e)=>{ purchaseDraft.supplier = e.target.value; });
   document.getElementById('pu-note').addEventListener('input', (e)=>{ purchaseDraft.note = e.target.value; });
   document.getElementById('pu-update-cost').addEventListener('change', (e)=>{ purchaseDraft.updateCost = e.target.checked; });
+  container.querySelectorAll('[data-pu-pay]').forEach(el=>el.addEventListener('click', ()=>{ purchaseDraft.payMode = el.dataset.puPay; container.querySelectorAll('[data-pu-pay]').forEach(x=>x.classList.toggle('active', x===el)); }));
   document.getElementById('pu-add').addEventListener('click', openPurchasePicker);
   document.getElementById('pu-apply').addEventListener('click', applyPurchase);
   container.querySelectorAll('[data-pu-del]').forEach(b=>b.addEventListener('click', ()=>{ purchaseDraft.items.splice(parseInt(b.dataset.puDel,10),1); renderPurchase(); }));
@@ -11245,7 +11257,22 @@ function openPurchasePicker(){
 function applyPurchase(){
   const items = purchaseDraft.items.filter(it=>(parseFloat(it.qty)||0) > 0);
   if(!items.length){ showToast(tr('puEmpty')); return; }
-  const doc = {id:uid(), date:new Date().toISOString(), supplier: purchaseDraft.supplier.trim(), note: purchaseDraft.note.trim(), items: items.map(it=>({productId:it.productId, variantId:it.variantId, name:it.name, qty:parseFloat(it.qty)||0, cost:parseFloat(it.cost)||0})), total: purchaseTotal(), staffName: state.currentStaff?state.currentStaff.name:'', branchId: state.currentBranchId};
+  const payMode = purchaseDraft.payMode || 'cash';
+  if(payMode==='credit' && !purchaseDraft.supplier.trim()){ showToast(tr('puSupplierRequired')); return; }
+  const doc = {id:uid(), date:new Date().toISOString(), supplier: purchaseDraft.supplier.trim(), note: purchaseDraft.note.trim(), payMode, items: items.map(it=>({productId:it.productId, variantId:it.variantId, name:it.name, qty:parseFloat(it.qty)||0, cost:parseFloat(it.cost)||0})), total: purchaseTotal(), staffName: state.currentStaff?state.currentStaff.name:'', branchId: state.currentBranchId};
+  if(doc.total > 0){
+    if(payMode==='credit'){
+      let cr = state.creditors.find(c=>(c.name||'').trim().toLowerCase()===doc.supplier.toLowerCase());
+      if(!cr){ cr = {id:uid(), name:doc.supplier, phone:'', note:'', debt:0, createdAt:new Date().toISOString()}; state.creditors.push(cr); }
+      const entry = {id:uid(), creditorId:cr.id, type:'debt', amount:doc.total, note:tr('puCreditNote').replace('{n}', items.length)+(doc.note?(' · '+doc.note):''), date:doc.date, staffName: state.currentStaff?state.currentStaff.name:'', purchaseId: doc.id};
+      state.creditorLedger.push(entry);
+      cr.debt = applyCreditorTransaction(cr.debt, 'debt', doc.total);
+      saveCreditors(); saveCreditorLedger(); addCreditorDoc(cr); addCreditorLedgerDoc(entry);
+    } else {
+      const expense = {id:uid(), date:doc.date, category:'purchase', amount:doc.total, note:(doc.supplier?doc.supplier+' · ':'')+tr('puCreditNote').replace('{n}', items.length)+(doc.note?(' · '+doc.note):''), branchId: state.currentBranchId, staffId: state.currentStaff?state.currentStaff.id:null, staffName: state.currentStaff?state.currentStaff.name:'', paidFrom: payMode==='cash' ? 'cash' : 'other', shiftId: state.currentShift ? state.currentShift.id : null, purchaseId: doc.id};
+      state.expenses.push(expense); saveExpenses(); addExpenseDoc(expense);
+    }
+  }
   doc.items.forEach(it=>{
     const p = state.products.find(x=>x.id===it.productId); if(!p) return;
     const v = it.variantId ? getVariant(p, it.variantId) : null;
@@ -11255,7 +11282,7 @@ function applyPurchase(){
   });
   saveProducts();
   state.purchases = (state.purchases||[]); state.purchases.push(doc); savePurchases();
-  purchaseDraft = {supplier:'', note:'', items:[], updateCost:true};
+  purchaseDraft = {supplier:'', note:'', items:[], updateCost:true, payMode:'cash'};
   showToast(tr('puApplied')+': '+fmt(doc.total));
   renderPurchase();
 }
