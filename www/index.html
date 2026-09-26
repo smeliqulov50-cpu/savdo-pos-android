@@ -12493,7 +12493,7 @@ function bindKitchenPrinterSectionEvents(){
 }
 
 /* --- Printer --- */
-let __psOpen = {};
+let __psOpen = {adv:true, font:true, header:false};
 function renderSettingsPrinter(container){
   const curMult = getPrinterSizeMultipliers();
   const curHeaderMult = getHeaderSizeMultipliers();
@@ -12525,6 +12525,7 @@ function renderSettingsPrinter(container){
         </div>
         <button class="btn btn-accent" style="margin-top:8px;" id="bt-test-btn">${tr('testPrint')}</button>
         <button class="btn btn-outline" style="margin-top:8px;" id="bt-drawer-btn">${tr('openCashDrawer')}</button>
+        <div class="checkbox-row"><input type="checkbox" id="s-auto-print-printer" ${state.settings.autoPrintReceipt?'checked':''}><span>${tr('autoPrintToggle')}</span></div>
         <details class="set-section inner" data-sec="adv" ${__psOpen.adv?'open':''}><summary><span>${tr('psAdvanced')}<span class="ss-sub">${tr('psTapToOpen')}</span></span><span class="ss-chev">&#9662;</span></summary><div class="set-inner">
         <div class="checkbox-row"><input type="checkbox" id="s-auto-cut" ${state.settings.printerAutoCut!==false?'checked':''}><span>${tr('autoCutLabel')}</span></div>
         <div class="field" id="cut-type-field" style="${state.settings.printerAutoCut===false?'display:none;':''}">
@@ -12856,6 +12857,7 @@ function renderSettingsPrinter(container){
   }
   bindAutosaveStatus();
   container.querySelectorAll('details.set-section').forEach(d=>d.addEventListener('toggle', ()=>{ __psOpen[d.dataset.sec] = d.open; }));
+  const apEl = document.getElementById('s-auto-print-printer'); if(apEl) apEl.addEventListener('change', ()=>{ state.settings.autoPrintReceipt = apEl.checked; saveSettings(); });
   const saveBtn = document.getElementById('save-printer-settings-btn');
   if(saveBtn) saveBtn.addEventListener('click', async ()=>{
     const autoCutCb = document.getElementById('s-auto-cut');
