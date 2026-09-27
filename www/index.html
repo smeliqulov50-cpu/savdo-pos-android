@@ -464,7 +464,7 @@ const STORAGE_KEYS = {
   deviceId:'sardor_device_id_v1', receiptCounter:'sardor_receipt_counter_v1', visits:'sardor_visits_v1',
   creditors:'sardor_creditors_v1', creditorLedger:'sardor_creditor_ledger_v1', kitchenStations:'sardor_kitchen_stations_v1',
   saleMode:'sardor_sale_mode_v1', expenses:'sardor_expenses_v1', deviceHasNoPrinter:'sardor_device_no_printer_v1',
-  reservations:'sardor_reservations_v1', purchases:'sardor_purchases_v1', subCloudCheck:'sardor_sub_cloud_check_v1', stockMoves:'sardor_stock_moves_v1', heldCarts:'sardor_held_carts_v1',
+  reservations:'sardor_reservations_v1', audit:'sardor_audit_v1', purchases:'sardor_purchases_v1', subCloudCheck:'sardor_sub_cloud_check_v1', stockMoves:'sardor_stock_moves_v1', heldCarts:'sardor_held_carts_v1',
   businessId:'sardor_business_id_v1'
 };
 
@@ -481,6 +481,36 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  auditReport:{uz:"Audit jurnali",ru:"Журнал действий",en:"Audit log",kk:"Аудит журналы",ky:"Аудит журналы",tg:"Журнали аудит"},
+  auditHint:{uz:"Kim, qachon, nima qildi: narx o'zgarishi, o'chirish, qaytarish, chek tahriri, xarajat, xodim, kirish. Bulutda saqlanadi, o'chirib bo'lmaydi.",ru:"Кто, когда, что сделал: изменение цены, удаления, возвраты, правка чека, расходы, сотрудники, вход. Хранится в облаке, не удаляется.",en:"Who did what and when: price changes, deletions, refunds, receipt edits, expenses, staff, logins. Stored in the cloud, cannot be deleted.",kk:"Кім, қашан, не істеді. Бұлтта сақталады.",ky:"Ким, качан, эмне кылды. Булутта сакталат.",tg:"Кӣ, кай, чӣ кард. Дар абр нигоҳ дошта мешавад."},
+  auPriceChange:{uz:"Narx o'zgardi",ru:"Изменение цены",en:"Price changed",kk:"Баға өзгерді",ky:"Баа өзгөрдү",tg:"Нарх тағйир ёфт"},
+  auProductDelete:{uz:"Mahsulot o'chirildi",ru:"Товар удалён",en:"Product deleted",kk:"Тауар өшірілді",ky:"Товар өчүрүлдү",tg:"Маҳсулот нест шуд"},
+  auSaleDelete:{uz:"Chek o'chirildi",ru:"Чек удалён",en:"Receipt deleted",kk:"Чек өшірілді",ky:"Чек өчүрүлдү",tg:"Чек нест шуд"},
+  auSaleRefund:{uz:"Savdo qaytarildi",ru:"Возврат продажи",en:"Sale refunded",kk:"Сату қайтарылды",ky:"Сатуу кайтарылды",tg:"Фурӯш баргардонда шуд"},
+  auSaleEdit:{uz:"Chek tahrirlandi",ru:"Чек изменён",en:"Receipt edited",kk:"Чек өзгертілді",ky:"Чек өзгөртүлдү",tg:"Чек таҳрир шуд"},
+  auExpenseDelete:{uz:"Xarajat o'chirildi",ru:"Расход удалён",en:"Expense deleted",kk:"Шығыс өшірілді",ky:"Чыгым өчүрүлдү",tg:"Хароҷот нест шуд"},
+  auStaffDelete:{uz:"Xodim o'chirildi",ru:"Сотрудник удалён",en:"Staff deleted",kk:"Қызметкер өшірілді",ky:"Кызматкер өчүрүлдү",tg:"Корманд нест шуд"},
+  auLogin:{uz:"Kirish (PIN)",ru:"Вход (PIN)",en:"Login (PIN)",kk:"Кіру (PIN)",ky:"Кирүү (PIN)",tg:"Воруд (PIN)"},
+  auStockCount:{uz:"Inventarizatsiya",ru:"Инвентаризация",en:"Stock count",kk:"Түгендеу",ky:"Инвентаризация",tg:"Баррасии анбор"},
+  invTitle:{uz:"HISOB-FAKTURA",ru:"СЧЁТ-ФАКТУРА",en:"INVOICE",kk:"ШОТ-ФАКТУРА",ky:"ЭСЕП-ФАКТУРА",tg:"ҲИСОБНОМА-ФАКТУРА"},
+  invBtn:{uz:"Hisob-faktura (A4 PDF)",ru:"Счёт-фактура (A4 PDF)",en:"Invoice (A4 PDF)",kk:"Шот-фактура (A4 PDF)",ky:"Эсеп-фактура (A4 PDF)",tg:"Ҳисобнома (A4 PDF)"},
+  invSeller:{uz:"Yetkazib beruvchi",ru:"Поставщик",en:"Seller",kk:"Жеткізуші",ky:"Жеткирүүчү",tg:"Таъминкунанда"},
+  invBuyer:{uz:"Xaridor",ru:"Покупатель",en:"Buyer",kk:"Сатып алушы",ky:"Сатып алуучу",tg:"Харидор"},
+  invNo:{uz:"№",ru:"№",en:"No.",kk:"№",ky:"№",tg:"№"},
+  invDate:{uz:"Sana",ru:"Дата",en:"Date",kk:"Күні",ky:"Күнү",tg:"Сана"},
+  invItem:{uz:"Mahsulot",ru:"Наименование",en:"Item",kk:"Атауы",ky:"Аталышы",tg:"Ном"},
+  invUnit:{uz:"Birlik",ru:"Ед.",en:"Unit",kk:"Бірл.",ky:"Бирд.",tg:"Воҳ."},
+  invQty:{uz:"Miqdor",ru:"Кол-во",en:"Qty",kk:"Саны",ky:"Саны",tg:"Миқдор"},
+  invPrice:{uz:"Narx",ru:"Цена",en:"Price",kk:"Бағасы",ky:"Баасы",tg:"Нарх"},
+  invSum:{uz:"Summa",ru:"Сумма",en:"Amount",kk:"Сомасы",ky:"Суммасы",tg:"Маблағ"},
+  invTotal:{uz:"JAMI TO'LOVGA",ru:"ИТОГО К ОПЛАТЕ",en:"TOTAL DUE",kk:"ТӨЛЕУГЕ БАРЛЫҒЫ",ky:"ТӨЛӨӨГӨ БААРЫ",tg:"ҲАМАГӢ БА ПАРДОХТ"},
+  invSign:{uz:"Berdi (imzo)",ru:"Отпустил (подпись)",en:"Issued by (signature)",kk:"Берді (қолы)",ky:"Берди (колу)",tg:"Дод (имзо)"},
+  invSign2:{uz:"Qabul qildi (imzo)",ru:"Получил (подпись)",en:"Received by (signature)",kk:"Қабылдады (қолы)",ky:"Кабыл алды (колу)",tg:"Қабул кард (имзо)"},
+  invStamp:{uz:"M.O'.",ru:"М.П.",en:"Stamp",kk:"М.О.",ky:"М.О.",tg:"Ҷ.М."},
+  invInn:{uz:"STIR (INN)",ru:"ИНН",en:"Tax ID",kk:"СТН",ky:"ИНН",tg:"РМА"},
+  invBank:{uz:"Bank rekvizitlari (bank, h/r, MFO)",ru:"Банковские реквизиты (банк, р/с, МФО)",en:"Bank details",kk:"Банк деректемелері",ky:"Банк реквизиттери",tg:"Реквизитҳои бонк"},
+  invDirector:{uz:"Rahbar (F.I.Sh.)",ru:"Руководитель (Ф.И.О.)",en:"Director (full name)",kk:"Басшы (Т.А.Ә.)",ky:"Жетекчи (А.Ж.А.)",tg:"Роҳбар (Н.Н.П.)"},
+  invLegalHint:{uz:"Yuridik shaxslarga A4 hisob-faktura chiqarish uchun. Bo'sh qoldirsangiz hujjatda ko'rinmaydi.",ru:"Для счёта-фактуры A4 юридическим лицам. Пустые поля в документе не показываются.",en:"For A4 invoices to legal entities. Empty fields are not printed.",kk:"Заңды тұлғаларға A4 шот-фактура үшін.",ky:"Юридикалык жактарга A4 эсеп-фактура үчүн.",tg:"Барои ҳисобномаи A4 ба шахсони ҳуқуқӣ."},
   payrollReport:{uz:"Maosh hisobi",ru:"Расчёт зарплаты",en:"Payroll",kk:"Жалақы есебі",ky:"Айлык эсеби",tg:"Ҳисоби маош"},
   prFixed:{uz:"Oylik maosh",ru:"Оклад",en:"Base salary",kk:"Жалақы",ky:"Айлык",tg:"Маоши моҳона"},
   prCommission:{uz:"Savdodan foiz",ru:"Процент с продаж",en:"Sales commission",kk:"Сатудан пайыз",ky:"Сатуудан пайыз",tg:"Фоиз аз фурӯш"},
@@ -1718,6 +1748,7 @@ async function loadAll(){
   state.tables = tables || [];
   state.setupDone = !!setupDone;
   state.cart = cart || [];
+  state.audit = (await storGet(STORAGE_KEYS.audit)) || [];
   state.purchases = (await storGet(STORAGE_KEYS.purchases)) || [];
   state.subCloudCheck = (await storGet(STORAGE_KEYS.subCloudCheck)) || 0;
   state.stockMoves = (await storGet(STORAGE_KEYS.stockMoves)) || [];
@@ -2112,7 +2143,7 @@ function productsCol(){ return businessDocRef().collection('products'); }
 function customersCol(){ return businessDocRef().collection('customers'); }
 
 function defaultSettingsObj(){
-  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', maxStaff:2, maxDevices:3, onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
+  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', businessInn:'', businessBank:'', businessDirector:'', maxStaff:2, maxDevices:3, onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
 }
 
 const APP_VERSION = 110;
@@ -2541,11 +2572,11 @@ function startLiveListeners(){
   watchProductsOrCustomers(customersCol(), 'customers', 'customers', m=>{ lastSyncedCustomersMap = m; });
   watchArrayCollection(tablesCol(), 'tables', 'table');
   watchArrayCollection(salesCol().where('date','>=',cloudHistoryCutoffIso()), 'sales', 'sale', cloudHistoryCutoffIso());
-  watchArrayCollection(expensesCol(), 'expenses', 'expense');
+  watchArrayCollection(expensesCol().where('date','>=',cloudHistoryCutoffIso()), 'expenses', 'expense', cloudHistoryCutoffIso());
   watchArrayCollection(reservationsCol(), 'reservations', 'reservation');
-  watchForNewRefunds(salesCol());
+  watchForNewRefunds(salesCol().where('refundedAt','>=', new Date().toISOString()));
   if(state.settings.printerMode==='bluetooth' && state.settings.autoPrintRelay){
-    watchForPrintRelay(salesCol());
+    watchForPrintRelay(salesCol().where('printed','==',false));
   }
   watchArrayCollection(ledgerCol().where('date','>=',cloudHistoryCutoffIso()), 'ledger', 'ledger', cloudHistoryCutoffIso());
   watchArrayCollection(visitsCol(), 'visits', 'visit');
@@ -3767,6 +3798,7 @@ function staffNeedsShiftTracking(staff){
 
 function logIn(person){
   state.currentStaff = person;
+  auditLog('login', person && person.name ? person.name : '', {staffId: person && person.id});
   // Regular staff always operate in whichever single branch they're
   // assigned to. The owner isn't tied to one — they keep whatever branch
   // they had last selected (via the branch switcher), defaulting to the
@@ -4971,6 +5003,26 @@ function logStockMove(p, v, delta, before, after, reason, refId){
   if(reason==='sale' && !refId) __pendingSaleMoves.push(entry);
   return entry;
 }
+function auditLog(action, detail, meta){
+  try{
+    const entry = {id: uid(), action, detail: String(detail||'').slice(0, 300), date: new Date().toISOString(), staffId: state.currentStaff ? state.currentStaff.id : null, staffName: state.currentStaff ? state.currentStaff.name : '', branchId: state.currentBranchId || null, meta: meta || null};
+    state.audit = state.audit || []; state.audit.push(entry);
+    if(state.audit.length > 1000) state.audit = state.audit.slice(-1000);
+    storSet(STORAGE_KEYS.audit, state.audit);
+    if(fbUser && fbDb){ try{ fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('audit').doc(entry.id).set(sanitizeForFirestore(entry)).catch(()=>{}); }catch(e){} }
+  }catch(e){}
+}
+async function loadCloudAudit(limit){
+  if(!fbUser || !fbDb) return state.audit || [];
+  try{
+    const snap = await fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('audit').orderBy('date','desc').limit(limit||300).get();
+    const cloud = snap.docs.map(d=>d.data());
+    const ids = new Set(cloud.map(x=>x.id));
+    const merged = cloud.concat((state.audit||[]).filter(x=>!ids.has(x.id)));
+    merged.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+    return merged.slice(0, limit||300);
+  }catch(e){ return (state.audit||[]).slice().reverse(); }
+}
 function stockChange(p, v, delta, reason, refId){
   if(!p || !delta) return;
   const before = v ? (v.stock||0) : (p.stock||0);
@@ -5045,6 +5097,74 @@ function cartTotal(){
 }
 
 function openCartModal(){ renderCartModalContent(); }
+document.addEventListener('click', (e)=>{
+  const b = e.target.closest && e.target.closest('[data-invoice]');
+  if(!b) return;
+  e.stopPropagation();
+  const sale = state.sales.find(x=>x.id===b.dataset.invoice);
+  if(sale) buildInvoicePdf(sale);
+});
+function invoiceLines(sale){
+  return sale.items.map(it=>{ const p = state.products.find(x=>x.id===it.productId); return {name: it.name, unit: p ? unitLabel(p.unit) : '', qty: it.qty, price: it.price||0, sum: (it.price||0)*it.qty}; });
+}
+async function buildInvoicePdf(sale){
+  if(typeof window.jspdf === 'undefined'){ showToast(tr('pdfLibFailed')); return; }
+  const { jsPDF } = window.jspdf;
+  const st = state.settings;
+  const cust = sale.customerId ? state.customers.find(c=>c.id===sale.customerId) : null;
+  const lines = invoiceLines(sale);
+  const W = 1240, H = 1754, M = 80;
+  const pages = [];
+  const perPage = 28;
+  for(let i=0;i<Math.max(1, Math.ceil(lines.length/perPage)); i++) pages.push(lines.slice(i*perPage, (i+1)*perPage));
+  const doc = new jsPDF({unit:'pt', format:'a4'});
+  const pageW = doc.internal.pageSize.getWidth(), pageH = doc.internal.pageSize.getHeight();
+  const number = sale.receiptNumber || sale.id.slice(0,8).toUpperCase();
+  pages.forEach((chunk, pi)=>{
+    const c = document.createElement('canvas'); c.width = W; c.height = H;
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,W,H); ctx.fillStyle = '#000'; ctx.textBaseline = 'top';
+    const txt = (t, x, y, size, bold, align)=>{ ctx.font = (bold?'bold ':'')+size+'px Arial, sans-serif'; ctx.textAlign = align||'left'; ctx.fillText(String(t), x, y); };
+    let y = M;
+    if(pi===0){
+      txt(st.businessName||'', M, y, 34, true); y += 42;
+      [st.businessAddress, st.businessPhone, st.businessInn ? (trR('invInn')+': '+st.businessInn) : '', st.businessBank].filter(Boolean).forEach(l=>{ txt(l, M, y, 20); y += 26; });
+      y += 10;
+      txt(trR('invTitle')+' '+trR('invNo')+' '+number, W/2, y, 34, true, 'center'); y += 44;
+      txt(trR('invDate')+': '+new Date(sale.date).toLocaleString(), W/2, y, 20, false, 'center'); y += 40;
+      ctx.font = 'bold 20px Arial, sans-serif'; ctx.textAlign = 'left';
+      txt(trR('invSeller')+': ', M, y, 20, true); txt((st.businessName||'')+(st.businessDirector?(' — '+st.businessDirector):''), M+220, y, 20); y += 28;
+      txt(trR('invBuyer')+': ', M, y, 20, true); txt(cust ? (cust.name+(cust.phone?(' — '+cust.phone):'')) : trR('noCustomerLinked'), M+220, y, 20); y += 40;
+    } else { txt(trR('invTitle')+' '+trR('invNo')+' '+number+' — '+(pi+1), M, y, 22, true); y += 40; }
+    const cols = [M, M+60, M+580, M+680, M+780, M+930, W-M];
+    ctx.fillStyle = '#e8eef9'; ctx.fillRect(M, y, W-2*M, 40); ctx.fillStyle = '#000';
+    txt('#', cols[0]+10, y+10, 18, true); txt(trR('invItem'), cols[1]+10, y+10, 18, true); txt(trR('invUnit'), cols[2]+10, y+10, 18, true); txt(trR('invQty'), cols[4]-10, y+10, 18, true, 'right'); txt(trR('invPrice'), cols[5]-10, y+10, 18, true, 'right'); txt(trR('invSum'), cols[6]-10, y+10, 18, true, 'right');
+    y += 40; ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+    chunk.forEach((l, i)=>{
+      const idx = pi*perPage + i + 1;
+      ctx.beginPath(); ctx.moveTo(M, y+36); ctx.lineTo(W-M, y+36); ctx.stroke();
+      txt(idx, cols[0]+10, y+8, 18); ctx.font = '18px Arial, sans-serif'; ctx.textAlign='left';
+      let nm = l.name; while(ctx.measureText(nm).width > 500 && nm.length > 3) nm = nm.slice(0,-1); if(nm !== l.name) nm += '…';
+      txt(nm, cols[1]+10, y+8, 18); txt(l.unit, cols[2]+10, y+8, 18); txt(l.qty, cols[4]-10, y+8, 18, false, 'right'); txt(fmt(l.price), cols[5]-10, y+8, 18, false, 'right'); txt(fmt(l.sum), cols[6]-10, y+8, 18, false, 'right');
+      y += 36;
+    });
+    if(pi === pages.length-1){
+      y += 16;
+      const rows = [];
+      if(sale.discountAmount) rows.push([trR('discountLabel'), '-'+fmt(sale.discountAmount)]);
+      if(sale.serviceChargeAmount) rows.push([trR('serviceCharge'), fmt(sale.serviceChargeAmount)]);
+      if(sale.deliveryFee) rows.push([trR('deliveryFee'), fmt(sale.deliveryFee)]);
+      rows.forEach(r=>{ txt(r[0], W-M-320, y, 20, false, 'right'); txt(r[1], W-M-10, y, 20, false, 'right'); y += 28; });
+      ctx.fillStyle = '#e8eef9'; ctx.fillRect(W-M-560, y, 560, 46); ctx.fillStyle = '#000';
+      txt(trR('invTotal')+':', W-M-330, y+10, 24, true, 'right'); txt(fmt(sale.total), W-M-10, y+10, 26, true, 'right'); y += 70;
+      txt(trR('paymentType')+': '+paymentTypeDisplayText(sale), M, y, 18); y += 60;
+      txt(trR('invSign')+': ____________________', M, y, 20); txt(trR('invSign2')+': ____________________', W/2+40, y, 20); y += 60;
+      txt(trR('invStamp'), M, y, 20);
+    }
+    if(pi>0) doc.addPage();
+    doc.addImage(c.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pageW, pageH);
+  });
+  await sharePdfBlob(doc, 'hisob-faktura-'+number+'.pdf', trR('invTitle')+' '+number);
+}
 
 function saveHeldCarts(){ storSet(STORAGE_KEYS.heldCarts, state.heldCarts||[]); }
 function visibleHeldCarts(){ return (state.heldCarts||[]).filter(h=>effectiveBranchId(h.branchId)===effectiveBranchId(state.currentBranchId)); }
@@ -7255,7 +7375,8 @@ function btAllOptionalServices(){
 function deviceDisplayName(){
   const ua = navigator.userAgent || '';
   let m = ua.match(/Android[^;]*;\s*([^;)]+?)(?:\s+Build|\))/);
-  if(m && m[1] && !/wv|Mobile/.test(m[1])) return m[1].trim();
+  if(m && m[1] && !/wv|Mobile/.test(m[1]) && m[1].trim().length > 1) return m[1].trim();
+  if(/Android/.test(ua) && !isNativeApp()) return 'Android (brauzer)';
   if(/iPhone/.test(ua)) return 'iPhone'; if(/iPad/.test(ua)) return 'iPad';
   if(/Windows/.test(ua)) return 'Windows'; if(/Macintosh/.test(ua)) return 'Mac';
   return /Android/.test(ua) ? 'Android' : 'Brauzer';
@@ -7294,6 +7415,7 @@ async function refreshDevicesList(){
 }
 async function renderSettingsDevices(container){
   container.innerHTML = `${settingsBackHeader(tr('devicesSection'))}<div class="card"><p class="subtle" style="margin:0;font-size:12px;">${tr('devicesHint')}</p></div><div id="devices-list"><div class="empty-state">…</div></div>`;
+  bindSettingsBack(container);
   const list = await refreshDevicesList();
   const mine = await getDeviceId();
   const max = parseInt(state.settings.maxDevices,10) || 3;
@@ -7896,7 +8018,7 @@ function renderProductListItems(){
   }).join('') : `<div class="empty-state">${tr('noData')}</div>`;
   listEl.querySelectorAll('[data-act="edit"]').forEach(btn=>btn.addEventListener('click', ()=>openProductForm(btn.dataset.id)));
   listEl.querySelectorAll('[data-act="del"]').forEach(btn=>btn.addEventListener('click', ()=>{
-    confirmDialog(tr('confirmDeleteProduct'), ()=>{ state.products = state.products.filter(p=>p.id!==btn.dataset.id); saveProducts(); renderProductListItems(); });
+    confirmDialog(tr('confirmDeleteProduct'), ()=>{ const __dp = state.products.find(p=>p.id===btn.dataset.id); if(__dp) auditLog('productDelete', `${__dp.name} (${tr('stock')}: ${productTotalStock(__dp)})`, {productId: __dp.id}); state.products = state.products.filter(p=>p.id!==btn.dataset.id); saveProducts(); renderProductListItems(); });
   }));
 }
 
@@ -8200,7 +8322,7 @@ function openProductForm(productId, draft){
     const __addQtyEl = document.getElementById('pf-add-stock');
     const __addQty = __addQtyEl ? (parseFloat(__addQtyEl.value)||0) : 0;
     let __target;
-    if(editing){ Object.assign(editing, data); __target = editing; }
+    if(editing){ const __oldP = editing.price, __oldC = editing.costPrice; Object.assign(editing, data); __target = editing; if(__oldP !== editing.price || __oldC !== editing.costPrice) auditLog('priceChange', `${editing.name}: ${fmt(__oldP||0)} → ${fmt(editing.price||0)}${__oldC !== editing.costPrice ? ` (${tr('costPrice')}: ${fmt(__oldC||0)} → ${fmt(editing.costPrice||0)})` : ''}`, {productId: editing.id}); }
     else { __target = {id:uid(), branchId: state.currentBranchId, ...data}; state.products.push(__target); }
     const __newStock = productTotalStock(__target);
     if(__newStock !== __prevStock){
@@ -8292,6 +8414,7 @@ function renderReceiptsListItems(sales){
         </div>
         <button class="icon-btn" data-share-sale="${s.id}" title="${tr('shareReceipt')}">${ICONS.share}</button>
         <button class="icon-btn" data-reprint="${s.id}" title="${tr('printReceipt')}">${ICONS.reports}</button>
+        <button class="icon-btn" data-invoice="${s.id}" title="${tr('invBtn')}">${ICONS.building}</button>
         ${!s.refunded && canEditReceipt() ? `<button class="icon-btn" data-edit-receipt="${s.id}" title="${tr('editReceipt')}">${ICONS.edit}</button>` : ''}
       </div>
       <div id="receipt-items-${s.id}" style="display:none;margin-top:12px;padding:10px 12px;background:var(--surface-soft);border-radius:12px;">
@@ -9786,6 +9909,7 @@ function refundSale(saleId, afterDone){
     }
     // 3. Mark the sale as refunded (keep history, never delete)
     sale.refunded = true;
+    auditLog('saleRefund', `№ ${sale.receiptNumber||sale.id} — ${fmt(sale.total)}`, {saleId: sale.id});
     sale.refundedAt = new Date().toISOString();
     sale.refundedBy = state.currentStaff ? state.currentStaff.name : '';
     saveProducts(); saveSales(); addSaleDoc(sale);
@@ -9822,6 +9946,7 @@ function deleteSaleRecord(saleId, afterDone){
       const unitsToRestore = it.saleMode==='box' ? it.qty * (it.unitsPerBox||1) : it.qty;
       stockChange(p, v, +unitsToRestore, __reason, sale.id);
     });
+    { const __ds = state.sales.find(s=>s.id===saleId); if(__ds) auditLog('saleDelete', `№ ${__ds.receiptNumber||saleId} — ${fmt(__ds.total)}`, {saleId}); }
     state.sales = state.sales.filter(s=>s.id!==saleId);
     saveProducts(); saveSales();
     deleteSaleDoc(saleId);
@@ -10077,6 +10202,7 @@ function saveEditedReceipt(){
   sale.edited = true;
   sale.editedAt = new Date().toISOString();
   sale.editedBy = state.currentStaff ? state.currentStaff.name : '';
+  auditLog('saleEdit', `№ ${sale.receiptNumber||sale.id}: ${fmt(oldTotal)} → ${fmt(newTotal)}`, {saleId: sale.id});
 
   saveProducts(); saveSales(); addSaleDoc(sale);
   showToast(tr('receiptEditSaved'));
@@ -10127,6 +10253,8 @@ function openCustomerDetail(customerId){
           </div>
           <button class="icon-btn" data-share-sale="${s.id}" title="${tr('shareReceipt')}">${ICONS.share}</button>
           <button class="icon-btn" data-reprint="${s.id}" title="${tr('printReceipt')}">${ICONS.reports}</button>
+          <button class="icon-btn" data-invoice="${s.id}" title="${tr('invBtn')}">${ICONS.building}</button>
+        <button class="icon-btn" data-invoice="${s.id}" title="${tr('invBtn')}">${ICONS.building}</button>
           ${!s.refunded && canEditReceipt() ? `<button class="icon-btn" data-edit-receipt="${s.id}" title="${tr('editReceipt')}">${ICONS.edit}</button>` : ''}
         </div>
         <div id="purchase-items-${s.id}" style="display:none;margin-top:12px;padding:10px 12px;background:var(--surface-soft);border-radius:12px;">
@@ -10439,6 +10567,7 @@ function reportsMenuItems(){
     items.push({id:'refunds', label:tr('refundsReportSection')});
     items.push({id:'expenses', label:tr('expensesSection')});
     items.push({id:'payroll', label:tr('payrollReport')});
+    items.push({id:'audit', label:tr('auditReport')});
     // Same admin-only reasoning as refunds above — seeing every branch's
     // cash side by side is specifically an owner-oversight view, and
     // only makes sense once there's more than one branch to compare.
@@ -10688,6 +10817,7 @@ function renderReportsCategory(container, cat){
       btn.addEventListener('click', ()=>{
         if(!confirm(tr('deleteExpenseConfirm'))) return;
         const id = btn.dataset.delExpense;
+        { const __de = state.expenses.find(x=>x.id===id); if(__de) auditLog('expenseDelete', `${expenseCategoryLabel(__de.category)} — ${fmt(__de.amount)}${__de.note?(' · '+__de.note):''}`, {expenseId: id}); }
         state.expenses = state.expenses.filter(x=>x.id!==id);
         saveExpenses();
         deleteExpenseDoc(id);
@@ -10970,6 +11100,28 @@ function renderReportsCategory(container, cat){
     return;
   }
 
+  if(cat==='audit'){
+    if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
+    const labels = {priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount'};
+    const colors = {priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)'};
+    container.innerHTML = `${reportsBackHeader(tr('auditReport'))}<p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('auditHint')}</p>
+      <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
+      <div id="audit-list"><div class="empty-state">…</div></div>`;
+    bindReportsBack();
+    loadCloudAudit(300).then(list=>{
+      const el = document.getElementById('audit-list'); if(!el) return;
+      const draw = ()=>{
+        const q = (document.getElementById('audit-search').value||'').toLowerCase();
+        const rows = list.filter(a=>!q || (a.detail||'').toLowerCase().includes(q) || (a.staffName||'').toLowerCase().includes(q) || tr(labels[a.action]||'').toLowerCase().includes(q));
+        el.innerHTML = rows.length ? rows.map(a=>`<div class="card" style="padding:10px 12px;margin-bottom:6px;border-left:4px solid ${colors[a.action]||'var(--line)'};">
+          <div class="row" style="font-size:12px;"><strong style="color:${colors[a.action]||'var(--ink)'};">${tr(labels[a.action]||a.action)}</strong><span class="subtle">${new Date(a.date).toLocaleString()}</span></div>
+          <div style="font-size:13px;margin-top:2px;">${escapeHtml(a.detail||'')}</div>
+          <div class="subtle" style="font-size:11.5px;">${escapeHtml(a.staffName||'—')}</div></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`;
+      };
+      document.getElementById('audit-search').addEventListener('input', draw); draw();
+    });
+    return;
+  }
   if(cat==='payroll'){
     if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
     if(!state.payrollMonth){ const n = new Date(); state.payrollMonth = n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); }
@@ -11473,6 +11625,7 @@ function applyStocktake(){
   if(!diffs.length) return;
   confirmDialog(tr('stConfirmQ').replace('{n}', diffs.length), ()=>{
     diffs.forEach(d=>stockChange(d.p, d.v, d.diff, 'count', null));
+    auditLog('stockCount', diffs.map(d=>`${d.name}: ${d.stock} → ${d.counted}`).join('; '), {count: diffs.length});
     saveProducts();
     stocktakeDraft = {}; stocktakeOnlyDiff = false;
     showToast(tr('stApplied'));
@@ -12142,6 +12295,10 @@ function renderSettingsBusiness(container){
       <div class="field"><label class="field-label">${tr('businessName')}</label><input type="text" id="s-name" value="${escapeHtml(state.settings.businessName||'')}"></div>
       <div class="field"><label class="field-label">${tr('businessAddress')}</label><input type="text" id="s-address" value="${escapeHtml(state.settings.businessAddress||'')}"></div>
       <div class="field"><label class="field-label">${tr('businessPhone')}</label><input type="text" id="s-phone" value="${escapeHtml(state.settings.businessPhone||'')}"></div>
+      <p class="subtle" style="margin:4px 0 8px;font-size:11.5px;">${tr('invLegalHint')}</p>
+      <div class="field"><label class="field-label">${tr('invInn')}</label><input type="text" id="s-inn" inputmode="numeric" value="${escapeHtml(state.settings.businessInn||'')}"></div>
+      <div class="field"><label class="field-label">${tr('invBank')}</label><input type="text" id="s-bank" value="${escapeHtml(state.settings.businessBank||'')}"></div>
+      <div class="field"><label class="field-label">${tr('invDirector')}</label><input type="text" id="s-director" value="${escapeHtml(state.settings.businessDirector||'')}"></div>
       <div class="field">
         <label class="field-label">${tr('ownerPhoneSettingsLabel')}</label>
         <input type="tel" inputmode="tel" id="s-owner-phone" value="${escapeHtml(state.settings.ownerPhone||'')}">
@@ -12294,6 +12451,9 @@ function renderSettingsBusiness(container){
       businessName: document.getElementById('s-name').value.trim(),
       businessAddress: document.getElementById('s-address').value.trim(),
       businessPhone: document.getElementById('s-phone').value.trim(),
+      businessInn: (document.getElementById('s-inn')||{value:''}).value.trim(),
+      businessBank: (document.getElementById('s-bank')||{value:''}).value.trim(),
+      businessDirector: (document.getElementById('s-director')||{value:''}).value.trim(),
       ownerPhone: document.getElementById('s-owner-phone').value.trim(),
       currency: document.getElementById('s-currency').value
     });
@@ -12353,7 +12513,7 @@ function renderSettingsStaff(container){
       showToast(tr('cannotDeleteSelf'));
       return;
     }
-    confirmDialog(tr('confirmDeleteStaff'), ()=>{ state.staff = state.staff.filter(s=>s.id!==btn.dataset.id); saveStaff(); renderSettingsStaff(container); });
+    confirmDialog(tr('confirmDeleteStaff'), ()=>{ const __st = state.staff.find(s=>s.id===btn.dataset.id); if(__st) auditLog('staffDelete', __st.name, {staffId: __st.id}); state.staff = state.staff.filter(s=>s.id!==btn.dataset.id); saveStaff(); renderSettingsStaff(container); });
   }));
 }
 
@@ -13221,6 +13381,7 @@ function renderSettingsCatalog(container){
       <div style="font-weight:800;word-break:break-all;color:var(--accent-dark);margin-bottom:10px;">${escapeHtml(url)}</div>
       <div class="btn-row"><button class="btn btn-outline" id="os-share" style="flex:1;">${tr('osShare')}</button><button class="btn btn-outline" id="os-open" style="flex:1;">${tr('osOpen')}</button></div>
     </div>` : ''}`;
+  bindSettingsBack(container);
   const enabledEl = document.getElementById('os-enabled');
   enabledEl.addEventListener('change', async ()=>{
     const cur = onlineShopCfg();
