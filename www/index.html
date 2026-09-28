@@ -2432,7 +2432,10 @@ function stopLiveListeners(){
 // For a plain array-of-documents collection (tables, sales, ledger,
 // visits, creditors, creditorLedger, kitchenStations) where each item
 // syncs individually and tracks its OWN pending-sync entry by id.
+window.addEventListener('online', ()=>{ setTimeout(async ()=>{ try{ await retryPendingSync(); renderAll(); }catch(e){} }, 1500); });
+window.addEventListener('offline', ()=>{ try{ renderAll(); }catch(e){} });
 function isOwnEchoSnapshot(snap){
+  try{ if(snap && snap.metadata && snap.metadata.fromCache) return true; }catch(e){}
   try{ const ch = snap.docChanges ? snap.docChanges() : []; return ch.length > 0 && ch.every(c=>c.doc && c.doc.metadata && c.doc.metadata.hasPendingWrites); }catch(e){ return false; }
 }
 const __storSoonTimers = {};
@@ -2678,8 +2681,15 @@ function sanitizeForFirestore(value){
   return out;
 }
 
+let __retryRunning = false;
 async function retryPendingSync(){
+  if(__retryRunning) return;
   if(!fbUser || !fbDb || !pendingSyncQueue.length) return;
+  if(typeof navigator !== 'undefined' && navigator.onLine === false) return;
+  __retryRunning = true;
+  try{ await __retryPendingSyncInner(); } finally { __retryRunning = false; }
+}
+async function __retryPendingSyncInner(){
   for(const item of pendingSyncQueue.slice()){
     try{
       if(item.kind==='catalog'){
@@ -2738,6 +2748,14 @@ async function retryPendingSync(){
         const cl = state.creditorLedger.find(x=>x.id===item.id);
         if(!cl){ clearPendingSync(item.kind, item.id); continue; }
         await creditorLedgerCol().doc(cl.id).set(sanitizeForFirestore(cl));
+      } else if(item.kind==='expense'){
+        const ex = state.expenses.find(x=>x.id===item.id);
+        if(!ex){ clearPendingSync(item.kind, item.id); continue; }
+        await expensesCol().doc(ex.id).set(sanitizeForFirestore(ex));
+      } else if(item.kind==='reservation'){
+        const rv = (state.reservations||[]).find(x=>x.id===item.id);
+        if(!rv){ clearPendingSync(item.kind, item.id); continue; }
+        await reservationsCol().doc(rv.id).set(sanitizeForFirestore(rv));
       } else if(item.kind==='kitchenStation'){
         const ks = state.kitchenStations.find(x=>x.id===item.id);
         if(!ks){ clearPendingSync(item.kind, item.id); continue; }
@@ -2758,6 +2776,8 @@ async function retryPendingSync(){
 let pendingSyncLastErrors = {};
 function pendingSyncBannerHtml(){
   if(!pendingSyncQueue.length) return '';
+  const __offline = (typeof navigator !== 'undefined' && navigator.onLine === false);
+  if(!__offline && !pendingSyncQueue.some(q=>!q.queuedAt || (Date.now() - new Date(q.queuedAt).getTime()) > 20000)) return '';
   const errKeys = Object.keys(pendingSyncLastErrors||{});
   const isQuota = errKeys.some(k=>/quota|resource-exhausted/i.test(String(pendingSyncLastErrors[k]||'')));
   const debugHtml = isQuota ? `<p class="subtle" style="margin:8px 0 0;font-size:11.5px;word-break:break-word;">${tr('quotaExceededHint')}</p>` : (errKeys.length ? `<p class="subtle" style="margin:8px 0 0;font-size:10px;word-break:break-word;opacity:.8;">${errKeys.map(k=>escapeHtml(k+': '+pendingSyncLastErrors[k])).join('<br>')}</p>` : '');
@@ -2818,6 +2838,7 @@ let lastSyncedProductsMap = {};
 let lastSyncedCustomersMap = {};
 let productsSyncTimer = null;
 function syncProductsDoc(){
+  queuePendingSync('catalog', 'products');
   if(!fbUser || !fbDb) return;
   if(productsSyncTimer) clearTimeout(productsSyncTimer);
   productsSyncTimer = setTimeout(async ()=>{
@@ -2829,6 +2850,7 @@ function syncProductsDoc(){
 }
 let customersSyncTimer = null;
 function syncCustomersDoc(){
+  queuePendingSync('catalog', 'customers');
   if(!fbUser || !fbDb) return;
   if(customersSyncTimer) clearTimeout(customersSyncTimer);
   customersSyncTimer = setTimeout(async ()=>{
@@ -2840,6 +2862,7 @@ function syncCustomersDoc(){
 }
 let staffSyncTimer = null;
 function syncStaffDoc(){
+  queuePendingSync('catalog', 'staff');
   if(!fbUser || !fbDb) return;
   if(staffSyncTimer) clearTimeout(staffSyncTimer);
   staffSyncTimer = setTimeout(async ()=>{
@@ -2851,6 +2874,7 @@ function syncStaffDoc(){
 }
 let shiftsSyncTimer = null;
 function syncShiftsDoc(){
+  queuePendingSync('catalog', 'shifts');
   if(!fbUser || !fbDb) return;
   if(shiftsSyncTimer) clearTimeout(shiftsSyncTimer);
   shiftsSyncTimer = setTimeout(async ()=>{
@@ -2960,6 +2984,7 @@ function syncSettingsDoc(){
 function syncTableDoc(table){
   if(!fbUser || !fbDb || !table) return;
   try{
+    queuePendingSync('table', table.id);
     tablesCol().doc(table.id).set(sanitizeForFirestore(table))
       .then(()=>clearPendingSync('table', table.id))
       .catch(()=>queuePendingSync('table', table.id));
@@ -3073,6 +3098,7 @@ function deleteTableDoc(id){
 function addSaleDoc(sale){
   if(!fbUser || !fbDb || !sale) return;
   try{
+    queuePendingSync('sale', sale.id);
     salesCol().doc(sale.id).set(sanitizeForFirestore(sale))
       .then(()=>clearPendingSync('sale', sale.id))
       .catch(()=>queuePendingSync('sale', sale.id));
@@ -3090,6 +3116,7 @@ function deleteSaleDoc(saleId){
 function addExpenseDoc(expense){
   if(!fbUser || !fbDb || !expense) return;
   try{
+    queuePendingSync('expense', expense.id);
     expensesCol().doc(expense.id).set(sanitizeForFirestore(expense))
       .then(()=>clearPendingSync('expense', expense.id))
       .catch(()=>queuePendingSync('expense', expense.id));
@@ -3104,6 +3131,7 @@ function deleteExpenseDoc(expenseId){
 function addReservationDoc(reservation){
   if(!fbUser || !fbDb || !reservation) return;
   try{
+    queuePendingSync('reservation', reservation.id);
     reservationsCol().doc(reservation.id).set(sanitizeForFirestore(reservation))
       .then(()=>clearPendingSync('reservation', reservation.id))
       .catch(()=>queuePendingSync('reservation', reservation.id));
@@ -3114,6 +3142,7 @@ function addReservationDoc(reservation){
 function addLedgerDoc(entry){
   if(!fbUser || !fbDb || !entry) return;
   try{
+    queuePendingSync('ledger', entry.id);
     ledgerCol().doc(entry.id).set(sanitizeForFirestore(entry))
       .then(()=>clearPendingSync('ledger', entry.id))
       .catch(()=>queuePendingSync('ledger', entry.id));
@@ -3124,6 +3153,7 @@ function addLedgerDoc(entry){
 function addVisitDoc(visit){
   if(!fbUser || !fbDb || !visit) return;
   try{
+    queuePendingSync('visit', visit.id);
     visitsCol().doc(visit.id).set(sanitizeForFirestore(visit))
       .then(()=>clearPendingSync('visit', visit.id))
       .catch(()=>queuePendingSync('visit', visit.id));
@@ -3138,6 +3168,7 @@ function deleteVisitDoc(id){
 function addCreditorDoc(creditor){
   if(!fbUser || !fbDb || !creditor) return;
   try{
+    queuePendingSync('creditor', creditor.id);
     creditorsCol().doc(creditor.id).set(sanitizeForFirestore(creditor))
       .then(()=>clearPendingSync('creditor', creditor.id))
       .catch(()=>queuePendingSync('creditor', creditor.id));
@@ -3152,6 +3183,7 @@ function deleteCreditorDoc(id){
 function addCreditorLedgerDoc(entry){
   if(!fbUser || !fbDb || !entry) return;
   try{
+    queuePendingSync('creditorLedger', entry.id);
     creditorLedgerCol().doc(entry.id).set(sanitizeForFirestore(entry))
       .then(()=>clearPendingSync('creditorLedger', entry.id))
       .catch(()=>queuePendingSync('creditorLedger', entry.id));
@@ -3162,6 +3194,7 @@ function addCreditorLedgerDoc(entry){
 function addKitchenStationDoc(station){
   if(!fbUser || !fbDb || !station) return;
   try{
+    queuePendingSync('kitchenStation', station.id);
     kitchenStationsCol().doc(station.id).set(sanitizeForFirestore(station))
       .then(()=>clearPendingSync('kitchenStation', station.id))
       .catch(()=>queuePendingSync('kitchenStation', station.id));
@@ -3298,7 +3331,10 @@ function mergeById(primary, secondary){
   return list;
 }
 
+const __PENDING_KIND_KEYS = {sale:'sales', ledger:'ledger', expense:'expenses', visit:'visits', creditor:'creditors', creditorLedger:'creditorLedger', table:'tables', reservation:'reservations', kitchenStation:'kitchenStations'};
 async function loadCloudData(){
+  if(typeof navigator !== 'undefined' && navigator.onLine === false){ fbCloudReady = false; return; }
+  const __localCopy = {}; Object.values(__PENDING_KIND_KEYS).forEach(k=>{ __localCopy[k] = (state[k]||[]).slice(); });
   // Tracks what the CLOUD actually confirmed last, specifically for the
   // products/customers pending-sync case below — set to null (meaning
   // "just use whatever state.products ends up being") for every other
@@ -3444,6 +3480,7 @@ async function loadCloudData(){
     // state.products against itself and concluding nothing changed.
     lastSyncedProductsMap = snapshotArrayMap(cloudConfirmedProducts !== null ? cloudConfirmedProducts : state.products);
     lastSyncedCustomersMap = snapshotArrayMap(cloudConfirmedCustomers !== null ? cloudConfirmedCustomers : state.customers);
+    pendingSyncQueue.forEach(q=>{ const key = __PENDING_KIND_KEYS[q.kind]; if(!key) return; state[key] = state[key] || []; if(state[key].some(x=>x && x.id===q.id)) return; const loc = (__localCopy[key]||[]).find(x=>x && x.id===q.id); if(loc) state[key].push(loc); });
     if(!state._hasLocalSettings) restoreDeviceLocalSettings();
     fbCloudReady = true;
     registerThisDevice();
