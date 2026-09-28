@@ -481,6 +481,8 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  staffSessionTitle:{uz:"Siz xodim profili orqali kirgansiz",ru:"Вы вошли через профиль сотрудника",en:"You are signed in with a staff profile",kk:"Сіз қызметкер профилі арқылы кірдіңіз",ky:"Сиз кызматкер профили аркылуу кирдиңиз",tg:"Шумо тавассути профили корманд ворид шудед"},
+  staffSessionText:{uz:"Bu qurilma hozir \"{name}\" xodimining PIN-kodi bilan bulutga ulangan. Email o'zgartirish, akkauntni o'chirish va Super admin paneli faqat biznes egasi o'z email va paroli bilan kirganda ko'rinadi. Egasi sifatida qaytish uchun \"Hisobdan chiqish\"ni bosing va email bilan kiring.",ru:"Это устройство подключено через PIN сотрудника «{name}». Смена email, удаление аккаунта и панель суперадмина доступны только владельцу, вошедшему по своему email и паролю. Чтобы вернуться как владелец, нажмите «Выйти из аккаунта» и войдите по email.",en:"This device is connected with the PIN of staff member \"{name}\". Email change, account deletion and the Super admin panel are available only when the owner signs in with their own email and password. To return as owner, tap Sign out and sign in with email.",kk:"Бұл құрылғы «{name}» қызметкерінің PIN-коды арқылы қосылған.",ky:"Бул түзмөк «{name}» кызматкеринин PIN-коду аркылуу туташкан.",tg:"Ин дастгоҳ бо PIN-и корманд «{name}» пайваст аст."},
   subExpiredNativeText:{uz:"Obuna muddati tugagan. Obunani yangilash bo'yicha Savdo Pos qo'llab-quvvatlash xizmatiga yozing.",ru:"Срок подписки истёк. По продлению напишите в поддержку Savdo Pos.",en:"Your subscription has expired. Contact Savdo Pos support about renewal.",kk:"Жазылым мерзімі аяқталды. Қолдау қызметіне жазыңыз.",ky:"Жазылуу мөөнөтү бүттү. Колдоо кызматына жазыңыз.",tg:"Мӯҳлати обуна тамом шуд. Ба дастгирӣ нависед."},
   delAccTitle:{uz:"Akkauntni o'chirish",ru:"Удалить аккаунт",en:"Delete account",kk:"Аккаунтты жою",ky:"Аккаунтту өчүрүү",tg:"Нест кардани аккаунт"},
   delAccHint:{uz:"Biznes akkaunti va unga tegishli BARCHA ma'lumotlar (mahsulotlar, sotuvlar, mijozlar, qarzlar, xarajatlar, xodimlar, onlayn do'kon) bulutdan va shu qurilmadan butunlay o'chiriladi. Bu amalni qaytarib bo'lmaydi.",ru:"Бизнес-аккаунт и ВСЕ его данные (товары, продажи, клиенты, долги, расходы, сотрудники, онлайн-магазин) будут безвозвратно удалены из облака и с этого устройства.",en:"The business account and ALL its data (products, sales, customers, debts, expenses, staff, online shop) will be permanently deleted from the cloud and this device.",kk:"Бизнес аккаунты және БАРЛЫҚ деректері біржола жойылады.",ky:"Бизнес аккаунту жана БААРДЫК маалыматтары биротоло өчүрүлөт.",tg:"Аккаунт ва ТАМОМИ маълумоти он пурра нест карда мешаванд."},
@@ -12354,7 +12356,20 @@ async function deleteMyAccountAndData(password){
   try{ await fbAuth.signOut(); }catch(e){}
   return authDeleted;
 }
+function isStaffAuthSession(){ return !!(fbUser && fbUser.email && /\.savdopos-staff\.internal$/i.test(fbUser.email)); }
 function renderSettingsAccount(container){
+  if(isStaffAuthSession()){
+    container.innerHTML = `
+      ${settingsBackHeader(tr('accountSection'))}
+      <div class="card" style="border:1px solid rgba(47,111,237,.25);">
+        <div style="font-weight:800;margin-bottom:6px;">${tr('staffSessionTitle')}</div>
+        <p class="subtle" style="margin:0 0 12px;font-size:12.5px;">${tr('staffSessionText').replace('{name}', escapeHtml(state.currentStaff ? state.currentStaff.name : ''))}</p>
+        <button class="btn btn-outline btn-red btn-block" id="account-page-signout-btn">${tr('authLogout')}</button>
+      </div>`;
+    bindSettingsBack(container);
+    document.getElementById('account-page-signout-btn').addEventListener('click', ()=>confirmDialog(tr('authLogout')+'?', ()=>{ fbAuth.signOut(); }, tr('authLogout')));
+    return;
+  }
   const providers = (fbUser && fbUser.providerData) ? fbUser.providerData.map(p=>p.providerId) : [];
   const isGoogleAccount = providers.includes('google.com');
   container.innerHTML = `
@@ -12371,8 +12386,10 @@ function renderSettingsAccount(container){
       <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('delAccHint')}</p>
       <button class="btn btn-outline btn-red btn-block" id="open-delete-account-btn">${tr('delAccTitle')}</button>
     </div>
+    <button class="btn btn-ghost btn-block" id="account-page-signout-btn" style="margin-top:4px;">${tr('authLogout')}</button>
   `;
   bindSettingsBack(container);
+  document.getElementById('account-page-signout-btn').addEventListener('click', ()=>confirmDialog(tr('authLogout')+'?', ()=>{ fbAuth.signOut(); }, tr('authLogout')));
   document.getElementById('open-delete-account-btn').addEventListener('click', openDeleteAccountModal);
   document.getElementById('open-change-email-btn').addEventListener('click', ()=>{
     openModal(`
