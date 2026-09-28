@@ -481,6 +481,9 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  supportFollowup:{uz:"Iltimos ushbu raqamga {phone} Telegram yoki WhatsApp orqali muammo haqida batafsil tushuntiring!",ru:"Пожалуйста, подробно опишите проблему по номеру {phone} в Telegram или WhatsApp!",en:"Please describe the problem in detail via Telegram or WhatsApp at {phone}!",kk:"Мәселені {phone} нөміріне Telegram немесе WhatsApp арқылы толық түсіндіріңіз!",ky:"Көйгөйдү {phone} номерине Telegram же WhatsApp аркылуу толук түшүндүрүңүз!",tg:"Лутфан мушкилро ба рақами {phone} тавассути Telegram ё WhatsApp муфассал шарҳ диҳед!"},
+  saInboxTitle:{uz:"O'qilmagan murojaatlar",ru:"Непрочитанные обращения",en:"Unread requests",kk:"Оқылмаған өтініштер",ky:"Окулбаган кайрылуулар",tg:"Муроҷиатҳои нахонда"},
+  autoReplyLabel:{uz:"avtomatik javob",ru:"автоответ",en:"auto-reply",kk:"автожауап",ky:"автожооп",tg:"ҷавоби худкор"},
   staffSessionTitle:{uz:"Siz xodim profili orqali kirgansiz",ru:"Вы вошли через профиль сотрудника",en:"You are signed in with a staff profile",kk:"Сіз қызметкер профилі арқылы кірдіңіз",ky:"Сиз кызматкер профили аркылуу кирдиңиз",tg:"Шумо тавассути профили корманд ворид шудед"},
   staffSessionText:{uz:"Bu qurilma hozir \"{name}\" xodimining PIN-kodi bilan bulutga ulangan. Email o'zgartirish, akkauntni o'chirish va Super admin paneli faqat biznes egasi o'z email va paroli bilan kirganda ko'rinadi. Egasi sifatida qaytish uchun \"Hisobdan chiqish\"ni bosing va email bilan kiring.",ru:"Это устройство подключено через PIN сотрудника «{name}». Смена email, удаление аккаунта и панель суперадмина доступны только владельцу, вошедшему по своему email и паролю. Чтобы вернуться как владелец, нажмите «Выйти из аккаунта» и войдите по email.",en:"This device is connected with the PIN of staff member \"{name}\". Email change, account deletion and the Super admin panel are available only when the owner signs in with their own email and password. To return as owner, tap Sign out and sign in with email.",kk:"Бұл құрылғы «{name}» қызметкерінің PIN-коды арқылы қосылған.",ky:"Бул түзмөк «{name}» кызматкеринин PIN-коду аркылуу туташкан.",tg:"Ин дастгоҳ бо PIN-и корманд «{name}» пайваст аст."},
   subExpiredNativeText:{uz:"Obuna muddati tugagan. Obunani yangilash bo'yicha Savdo Pos qo'llab-quvvatlash xizmatiga yozing.",ru:"Срок подписки истёк. По продлению напишите в поддержку Savdo Pos.",en:"Your subscription has expired. Contact Savdo Pos support about renewal.",kk:"Жазылым мерзімі аяқталды. Қолдау қызметіне жазыңыз.",ky:"Жазылуу мөөнөтү бүттү. Колдоо кызматына жазыңыз.",tg:"Мӯҳлати обуна тамом шуд. Ба дастгирӣ нависед."},
@@ -3511,6 +3514,7 @@ async function loadCloudData(){
     pendingSyncQueue.forEach(q=>{ const key = __PENDING_KIND_KEYS[q.kind]; if(!key) return; state[key] = state[key] || []; if(state[key].some(x=>x && x.id===q.id)) return; const loc = (__localCopy[key]||[]).find(x=>x && x.id===q.id); if(loc) state[key].push(loc); });
     if(!state._hasLocalSettings) restoreDeviceLocalSettings();
     fbCloudReady = true;
+    try{ const w = JSON.parse(localStorage.getItem(SUPPORT_WAIT_KEY)||'null'); if(w && w.bizId) scheduleSupportFollowup(w.bizId, 20000); }catch(e){}
     registerThisDevice();
     persistAllLocal();
   }catch(e){
@@ -11729,9 +11733,11 @@ function renderSuperAdmin(){
   container.innerHTML = `
     <div class="back-row"><button id="superadmin-back-btn">${ICONS.arrowLeft}</button><span class="t-title">★ ${tr('superAdminPanel')}</span></div>
     <div class="search-bar">${ICONS.search}<input type="text" id="superadmin-search" placeholder="${tr('search')}"></div>
+    <div id="sa-inbox" style="margin:10px 0;"></div>
     <div id="superadmin-list"><div class="empty-state">${tr('noData')}</div></div>
   `;
-  document.getElementById('superadmin-back-btn').addEventListener('click', ()=>{ history.back(); });
+  renderSaInbox();
+  document.getElementById('superadmin-back-btn').addEventListener('click', ()=>{ state.view='settings'; state.settingsCategory=null; renderAll(); });
   document.getElementById('superadmin-search').addEventListener('input', (e)=>{
     state.superAdminSearch = e.target.value;
     renderSuperAdminList();
@@ -13645,9 +13651,9 @@ function renderSettingsSupport(container){
     ` : ''}
     <div class="card">
       <p class="subtle" style="margin:0 0 12px;">${tr('supportChatHint')}</p>
-      <div id="support-chat-messages" style="max-height:260px;overflow-y:auto;margin-bottom:12px;"></div>
+      <div id="support-chat-messages" style="height:55vh;min-height:280px;overflow-y:auto;margin-bottom:12px;padding:8px;background:#f4f7fc;border-radius:14px;"></div>
       <div class="field" style="margin-bottom:8px;">
-        <textarea id="support-chat-input" rows="2" placeholder="${tr('supportChatPlaceholder')}" style="resize:vertical;font-family:inherit;font-size:16px;padding:10px;border-radius:12px;border:1px solid var(--border);width:100%;">${state.pendingPlanRequest ? tr('planRequestMessage').replace('{plan}', planLabelFor(state.pendingPlanRequest)) : ''}</textarea>
+        <textarea id="support-chat-input" rows="3" placeholder="${tr('supportChatPlaceholder')}" style="resize:vertical;font-family:inherit;font-size:16px;padding:10px;border-radius:12px;border:1px solid var(--border);width:100%;">${state.pendingPlanRequest ? tr('planRequestMessage').replace('{plan}', planLabelFor(state.pendingPlanRequest)) : ''}</textarea>
       </div>
       <button class="btn btn-accent btn-block" id="support-send-btn">${tr('supportSendBtn')}</button>
       <div id="support-chat-error" class="error-text" style="margin-top:8px;"></div>
@@ -13670,6 +13676,33 @@ function renderSettingsSupport(container){
   });
 }
 
+const SUPPORT_PHONE = '+998900730103';
+const SUPPORT_WAIT_KEY = 'sardor_support_waiting_v1';
+function supportInboxRef(bizId){ return fbDb.collection('supportInbox').doc(bizId); }
+let __followupTimer = null;
+function scheduleSupportFollowup(bizId, ms){
+  if(__followupTimer) clearTimeout(__followupTimer);
+  __followupTimer = setTimeout(()=>{ __followupTimer = null; checkSupportFollowup(bizId); }, Math.max(5000, ms));
+}
+async function checkSupportFollowup(bizId){
+  try{
+    if(!fbUser || !fbDb || !bizId) return;
+    let waiting = null; try{ waiting = JSON.parse(localStorage.getItem(SUPPORT_WAIT_KEY)||'null'); }catch(e){}
+    if(!waiting || waiting.bizId !== bizId) return;
+    const snap = await supportChatColFor(bizId).orderBy('date','desc').limit(30).get();
+    const msgs = snap.docs.map(d=>d.data()).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+    const lastBiz = msgs.filter(m=>m.from==='business').pop();
+    if(!lastBiz){ localStorage.removeItem(SUPPORT_WAIT_KEY); return; }
+    const after = msgs.filter(m=>m.date > lastBiz.date);
+    if(after.some(m=>m.from==='admin' && (!m.auto || m.kind==='followup'))){ localStorage.removeItem(SUPPORT_WAIT_KEY); return; }
+    const age = Date.now() - new Date(lastBiz.date).getTime();
+    if(age < 10*60000){ scheduleSupportFollowup(bizId, 10*60000 - age + 2000); return; }
+    const f = {id: uid(), text: tr('supportFollowup').replace('{phone}', SUPPORT_PHONE), from:'admin', auto:true, kind:'followup', businessName: state.settings.businessName||'', email:'', date: new Date().toISOString()};
+    await supportChatColFor(bizId).doc(f.id).set(f);
+    localStorage.removeItem(SUPPORT_WAIT_KEY);
+    if(document.getElementById('support-chat-messages')) loadSupportMessages();
+  }catch(e){}
+}
 async function maybeSendSupportAutoReply(bizId){
   try{
     const key = 'sardor_support_autoreply_' + bizId;
@@ -13682,7 +13715,20 @@ async function maybeSendSupportAutoReply(bizId){
 }
 const SA_SUPPORT_SEEN_KEY = 'sardor_sa_support_seen_iso';
 function saSupportSeenIso(){ try{ return localStorage.getItem(SA_SUPPORT_SEEN_KEY) || new Date(Date.now()-7*86400000).toISOString(); }catch(e){ return new Date(Date.now()-7*86400000).toISOString(); } }
-function markSaSupportSeen(){ try{ localStorage.setItem(SA_SUPPORT_SEEN_KEY, new Date().toISOString()); }catch(e){} state.saUnreadSupport = 0; state.saUnreadByBiz = {}; applySupportBadges(); }
+function markSaSupportSeen(bizId){
+  try{ localStorage.setItem(SA_SUPPORT_SEEN_KEY, new Date().toISOString()); }catch(e){}
+  if(bizId){ try{ supportInboxRef(bizId).set({unreadForAdmin:false}, {merge:true}).catch(()=>{}); }catch(e){} state.saInbox = (state.saInbox||[]).filter(x=>x.bizId!==bizId); state.saUnreadSupport = state.saInbox.length; }
+  applySupportBadges(); renderSaInbox();
+}
+function renderSaInbox(){
+  const el = document.getElementById('sa-inbox'); if(!el) return;
+  const list = state.saInbox || [];
+  el.innerHTML = list.length ? `<h3 class="sub-title" style="margin-top:0;">${tr('saInboxTitle')} (${list.length})</h3>` + list.map(x=>`
+    <div class="list-item" style="cursor:pointer;border-left:4px solid #e5484d;" data-sa-open="${escapeHtml(x.bizId)}" data-sa-name="${escapeHtml(x.businessName||'')}">
+      <div class="info" style="min-width:0;"><div class="name">💬 ${escapeHtml(x.businessName||x.bizId)}</div><div class="meta" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(x.lastText||'')} · ${x.lastAt ? new Date(x.lastAt).toLocaleString() : ''}</div></div>
+    </div>`).join('') : '';
+  el.querySelectorAll('[data-sa-open]').forEach(r=>r.addEventListener('click', ()=>openSuperAdminChat(r.dataset.saOpen, r.dataset.saName)));
+}
 function applySupportBadges(){
   const n = state.saUnreadSupport || 0;
   document.querySelectorAll('.support-badge').forEach(b=>b.remove());
@@ -13702,6 +13748,7 @@ async function loadSupportMessages(businessId){
   const box = document.getElementById('support-chat-messages');
   if(!box || !fbUser || !fbDb) return;
   const bizId = businessId || state.businessId || fbUser.uid;
+  if(!businessId){ try{ const w = JSON.parse(localStorage.getItem(SUPPORT_WAIT_KEY)||'null'); if(w && w.bizId===bizId && !__followupTimer) scheduleSupportFollowup(bizId, 3000); }catch(e){} }
   try{
     const snap = await supportChatColFor(bizId).orderBy('date').limit(100).get();
     const msgs = snap.docs.map(d=>d.data());
@@ -13712,8 +13759,9 @@ async function loadSupportMessages(businessId){
     box.innerHTML = msgs.map(m=>{
       const mine = m.from === (businessId ? 'admin' : 'business');
       return `<div style="display:flex;justify-content:${mine?'flex-end':'flex-start'};margin-bottom:8px;">
-        <div style="max-width:80%;background:${mine?'var(--accent)':'var(--surface-soft)'};color:${mine?'#fff':'var(--ink)'};padding:9px 12px;border-radius:14px;font-size:13px;">
-          <div>${m.text}</div>
+        <div style="max-width:85%;background:${mine?'var(--accent)':'#fff'};color:${mine?'#fff':'var(--ink)'};padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.4;box-shadow:0 1px 3px rgba(22,35,59,.08);">
+          ${m.auto ? `<div style="font-size:10.5px;opacity:.75;margin-bottom:2px;">🤖 ${tr('autoReplyLabel')}</div>` : ''}
+          <div style="white-space:pre-wrap;word-break:break-word;">${escapeHtml(m.text||'')}</div>
           <div style="font-size:10px;opacity:0.7;margin-top:3px;">${new Date(m.date).toLocaleString()}</div>
         </div>
       </div>`;
@@ -13742,7 +13790,14 @@ async function sendSupportMessage(businessId){
   try{
     await supportChatColFor(bizId).doc(msg.id).set(msg);
     input.value = '';
-    if(!businessId){ await maybeSendSupportAutoReply(bizId); }
+    if(!businessId){
+      try{ supportInboxRef(bizId).set({bizId, businessName: state.settings.businessName||'', lastText: text.slice(0,200), lastAt: msg.date, lastFrom:'business', unreadForAdmin:true}, {merge:true}).catch(()=>{}); }catch(e){}
+      await maybeSendSupportAutoReply(bizId);
+      try{ localStorage.setItem(SUPPORT_WAIT_KEY, JSON.stringify({bizId, at: msg.date})); }catch(e){}
+      scheduleSupportFollowup(bizId, 10*60000 + 2000);
+    } else {
+      try{ supportInboxRef(businessId).set({lastAt: msg.date, lastFrom:'admin', unreadForAdmin:false}, {merge:true}).catch(()=>{}); }catch(e){}
+    }
     loadSupportMessages(businessId);
   }catch(e){
     // Showing the real Firestore error (not a generic "check your
@@ -13868,19 +13923,19 @@ function startSupportListener(){
   }, ()=>{});
   if(isSuperAdmin()){
     try{
-      superAdminSupportUnsubscribe = fbDb.collectionGroup('support').where('date','>', saSupportSeenIso()).onSnapshot(snap=>{
-        let count = 0; const byBiz = {};
-        snap.docs.forEach(d=>{ const m = d.data(); if(m.from === 'business' && !m.auto){ count++; const bid = d.ref.parent.parent ? d.ref.parent.parent.id : ''; byBiz[bid] = (byBiz[bid]||0)+1; } });
-        state.saUnreadSupport = count; state.saUnreadByBiz = byBiz;
+      superAdminSupportUnsubscribe = fbDb.collection('supportInbox').where('unreadForAdmin','==',true).onSnapshot(snap=>{
+        state.saInbox = snap.docs.map(d=>d.data()).sort((a,b)=>String(b.lastAt).localeCompare(String(a.lastAt)));
+        state.saUnreadSupport = state.saInbox.length;
         snap.docChanges().forEach(change=>{
-          if(change.type !== 'added') return;
+          if(change.type === 'removed') return;
           const m = change.doc.data();
-          if(m.from === 'business' && !m.auto && m.date > sessionStart){
-            showLocalNotification(m.businessName || 'Savdo Pos', m.text || tr('newSupportReplyToast'));
+          if(m.lastFrom === 'business' && m.lastAt > sessionStart){
+            showLocalNotification(m.businessName || 'Savdo Pos', m.lastText || tr('newSupportReplyToast'));
+            try{ showToast('💬 ' + (m.businessName || '') + ': ' + String(m.lastText||'').slice(0,60)); }catch(e){}
           }
         });
-        applySupportBadges();
-      }, ()=>{ /* collection-group rule may not be set up yet — fail silently */ });
+        applySupportBadges(); renderSaInbox();
+      }, ()=>{});
     }catch(e){}
   }
 }
@@ -13890,15 +13945,15 @@ function stopSupportListener(){
 }
 
 function openSuperAdminChat(businessId, businessName){
-  markSaSupportSeen();
+  markSaSupportSeen(businessId);
   openModal(`
     <div class="modal-title">${tr('supportSection')} — ${businessName || businessId}</div>
-    <div id="support-chat-messages" style="max-height:280px;overflow-y:auto;margin-bottom:12px;"></div>
+    <div id="support-chat-messages" style="height:48vh;min-height:260px;overflow-y:auto;margin-bottom:12px;padding:8px;background:#f4f7fc;border-radius:14px;"></div>
     <div class="fav-row" id="quick-reply-row" style="margin-bottom:10px;">
       ${QUICK_REPLY_TEMPLATES.map(k=>`<button class="fav-chip" data-template="${k}">${tr(k)}</button>`).join('')}
     </div>
     <div class="field" style="margin-bottom:8px;">
-      <textarea id="support-chat-input" rows="2" placeholder="${tr('supportChatPlaceholder')}" style="resize:vertical;font-family:inherit;font-size:16px;padding:10px;border-radius:12px;border:1px solid var(--border);width:100%;"></textarea>
+      <textarea id="support-chat-input" rows="3" placeholder="${tr('supportChatPlaceholder')}" style="resize:vertical;font-family:inherit;font-size:16px;padding:10px;border-radius:12px;border:1px solid var(--border);width:100%;"></textarea>
     </div>
     <button class="btn btn-accent btn-block" id="support-send-btn" style="margin-bottom:10px;">${tr('supportSendBtn')}</button>
     <div id="support-chat-error" class="error-text" style="margin:-4px 0 10px;"></div>
@@ -13918,6 +13973,7 @@ function openSuperAdminChat(businessId, businessName){
       try{
         const snap = await supportChatColFor(businessId).get();
         await Promise.all(snap.docs.map(d=>d.ref.delete()));
+        try{ await supportInboxRef(businessId).delete(); }catch(e){}
         showToast(tr('chatCleared'));
         closeModal();
         renderSuperAdminList();
