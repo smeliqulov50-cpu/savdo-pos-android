@@ -481,6 +481,8 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  auCustomerDelete:{uz:"Mijoz o'chirildi",ru:"Клиент удалён",en:"Customer deleted",kk:"Клиент өшірілді",ky:"Кардар өчүрүлдү",tg:"Мизоҷ нест шуд"},
+  auCustomerRestore:{uz:"Mijoz tiklandi",ru:"Клиент восстановлен",en:"Customer restored",kk:"Клиент қалпына келтірілді",ky:"Кардар калыбына келтирилди",tg:"Мизоҷ барқарор шуд"},
   auditReport:{uz:"Audit jurnali",ru:"Журнал действий",en:"Audit log",kk:"Аудит журналы",ky:"Аудит журналы",tg:"Журнали аудит"},
   auditHint:{uz:"Kim, qachon, nima qildi: narx o'zgarishi, o'chirish, qaytarish, chek tahriri, xarajat, xodim, kirish. Bulutda saqlanadi, o'chirib bo'lmaydi.",ru:"Кто, когда, что сделал: изменение цены, удаления, возвраты, правка чека, расходы, сотрудники, вход. Хранится в облаке, не удаляется.",en:"Who did what and when: price changes, deletions, refunds, receipt edits, expenses, staff, logins. Stored in the cloud, cannot be deleted.",kk:"Кім, қашан, не істеді. Бұлтта сақталады.",ky:"Ким, качан, эмне кылды. Булутта сакталат.",tg:"Кӣ, кай, чӣ кард. Дар абр нигоҳ дошта мешавад."},
   auPriceChange:{uz:"Narx o'zgardi",ru:"Изменение цены",en:"Price changed",kk:"Баға өзгерді",ky:"Баа өзгөрдү",tg:"Нарх тағйир ёфт"},
@@ -1481,6 +1483,7 @@ function withoutDeletedProducts(arr){ const del = deletedProductIds(); if(!del.s
 function visibleProducts(){
   return state.products.filter(p => effectiveBranchId(p.branchId) === effectiveBranchId(state.currentBranchId));
 }
+function activeCustomers(){ return visibleCustomers().filter(c=>c && !c.hidden); }
 function visibleCustomers(){
   return state.customers.filter(c => effectiveBranchId(c.branchId) === effectiveBranchId(state.currentBranchId));
 }
@@ -8543,7 +8546,7 @@ function renderReceiptsListItems(sales){
 
 function renderCustomers(){
   const container = document.getElementById('view-container');
-  const branchCustomers = visibleCustomers();
+  const branchCustomers = activeCustomers();
   const totalDebt = branchCustomers.reduce((s,c)=>s+(c.debt||0),0);
   container.innerHTML = `
     <div class="stat-grid">
@@ -9171,7 +9174,7 @@ async function exportDebtsPdf(){
 
 function renderDebtExportOverlay(todayKey){
   const root = document.getElementById('debt-export-root');
-  const totalDebt = visibleCustomers().reduce((s,c)=>s+(c.debt||0),0);
+  const totalDebt = activeCustomers().reduce((s,c)=>s+(c.debt||0),0);
   root.innerHTML = `<div class="login-screen" style="z-index:60;">
     <div class="brand" style="font-size:22px;margin-bottom:10px;">${tr('dailyDebtExportTitle')}</div>
     <p class="subtle" style="margin-bottom:16px;">${tr('dailyDebtExportText')}</p>
@@ -9822,7 +9825,7 @@ function openAddVisitModal(onDone){
     q = (q||'').toLowerCase();
     const listEl = document.getElementById('av-cust-list');
     if(!listEl) return;
-    const matches = state.customers.filter(c=>c.name.toLowerCase().includes(q)).slice(0,30);
+    const matches = state.customers.filter(c=>!c.hidden && c.name.toLowerCase().includes(q)).slice(0,30);
     listEl.innerHTML = matches.length ? matches.map(c=>`
       <div class="list-item" data-av-pick="${c.id}" style="cursor:pointer;${selectedCustomerId===c.id?'border:2px solid var(--accent);':''}">
         <div class="info"><div class="name">${escapeHtml(c.name)}</div>${c.phone?`<div class="meta">${escapeHtml(c.phone)}</div>`:''}</div>
@@ -10416,6 +10419,7 @@ function openCustomerDetail(customerId){
     if(cust.debt > 0){ showToast(tr('cannotDeleteWithDebt')); return; }
     confirmDialog(tr('confirmDeleteCustomer'), ()=>{
       cust.hidden = true;
+      try{ auditLog('customerDelete', cust.name + (cust.phone ? ' · '+cust.phone : ''), {customerId: cust.id}); }catch(e){}
       // Hiding a customer record used to leave literally no trace of who
       // did it or when — someone could quietly make a customer (and
       // their whole purchase/payment history) vanish from every list in
@@ -10760,7 +10764,7 @@ function renderReportsCategory(container, cat){
   const allTotal = activeSales.reduce((a,s)=>a+s.total,0);
   const totalServiceCharge = activeSales.reduce((a,s)=>a+(s.serviceChargeAmount||0),0);
   const totalDeliveryFee = activeSales.reduce((a,s)=>a+(s.deliveryFee||0),0);
-  const totalDebt = visibleCustomers().reduce((s,c)=>s+(c.debt||0),0);
+  const totalDebt = activeCustomers().reduce((s,c)=>s+(c.debt||0),0);
   function profitOf(sales){
     return sales.reduce((sum,s)=> sum + saleProfit(s), 0);
   }
@@ -11168,8 +11172,8 @@ function renderReportsCategory(container, cat){
 
   if(cat==='audit'){
     if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
-    const labels = {priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount'};
-    const colors = {priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)'};
+    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount'};
+    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)'};
     container.innerHTML = `${reportsBackHeader(tr('auditReport'))}<p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('auditHint')}</p>
       <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
       <div id="audit-list"><div class="empty-state">…</div></div>`;
@@ -12151,6 +12155,7 @@ function renderDeletedCustomers(container){
       const cust = state.customers.find(c=>c.id===btn.dataset.restoreCustomer);
       if(!cust) return;
       cust.hidden = false;
+      try{ auditLog('customerRestore', cust.name, {customerId: cust.id}); }catch(e){}
       cust.hiddenAt = null;
       cust.hiddenBy = null;
       saveCustomers();
@@ -12170,7 +12175,7 @@ function renderSettingsBranches(container){
     <div id="branches-error" class="error-text"></div>
     <div id="branches-list">${branches.map(b=>{
       const productCount = state.products.filter(p=>effectiveBranchId(p.branchId)===b.id).length;
-      const customerCount = state.customers.filter(c=>effectiveBranchId(c.branchId)===b.id).length;
+      const customerCount = state.customers.filter(c=>!c.hidden && effectiveBranchId(c.branchId)===b.id).length;
       return `
       <div class="list-item">
         <div class="info"><div class="name">${escapeHtml(b.name)}</div>
@@ -13443,11 +13448,13 @@ function renderSettingsCatalog(container){
         <p class="subtle" style="margin:8px 0 0;font-size:11.5px;">${tr('osAuto')}${cfg.lastPublishedAt ? ' '+tr('osLastPub')+': '+new Date(cfg.lastPublishedAt).toLocaleString() : ''}</p>
       </div>
     </div>
+    <div class="card"><p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('catalogHint')}</p><button class="btn btn-outline btn-block" id="gen-catalog-btn">${tr('generateCatalog')}</button></div>
     ${cfg.enabled && url && cfg.lastPublishedAt ? `<div class="card" style="text-align:center;">
       <div style="font-weight:800;word-break:break-all;color:var(--accent-dark);margin-bottom:10px;">${escapeHtml(url)}</div>
       <div class="btn-row"><button class="btn btn-outline" id="os-share" style="flex:1;">${tr('osShare')}</button><button class="btn btn-outline" id="os-open" style="flex:1;">${tr('osOpen')}</button></div>
     </div>` : ''}`;
   bindSettingsBack(container);
+  { const g = document.getElementById('gen-catalog-btn'); if(g) g.addEventListener('click', generateCatalog); }
   const enabledEl = document.getElementById('os-enabled');
   enabledEl.addEventListener('change', async ()=>{
     const cur = onlineShopCfg();
