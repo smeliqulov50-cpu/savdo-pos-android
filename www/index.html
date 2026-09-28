@@ -1469,6 +1469,15 @@ function effectiveBranchId(id){ return id || DEFAULT_BRANCH_ID; }
 // or customer list. Looking up a SPECIFIC item by id (editing it,
 // building a receipt for a sale that already happened, etc.) does not
 // need this — an id is already unambiguous regardless of branch.
+const DELETED_PRODUCTS_KEY = 'sardor_deleted_product_ids_v1';
+function deletedProductIds(){ try{ return new Set(JSON.parse(localStorage.getItem(DELETED_PRODUCTS_KEY)||'[]')); }catch(e){ return new Set(); } }
+function markProductDeleted(id){
+  if(!id) return;
+  try{ const set = deletedProductIds(); set.add(id); localStorage.setItem(DELETED_PRODUCTS_KEY, JSON.stringify([...set].slice(-5000))); }catch(e){}
+  try{ if(fbUser && fbDb) productsCol().doc(id).delete().catch(()=>{}); }catch(e){}
+  try{ if(fbUser && fbDb) catalogDocRef().get().then(d=>{ const arr = d.exists && d.data().products; if(Array.isArray(arr) && arr.some(x=>x && x.id===id)) catalogDocRef().set({products: arr.filter(x=>x && x.id!==id)}, {merge:true}).catch(()=>{}); }).catch(()=>{}); }catch(e){}
+}
+function withoutDeletedProducts(arr){ const del = deletedProductIds(); if(!del.size) return arr || []; return (arr||[]).filter(p=>p && !del.has(p.id)); }
 function visibleProducts(){
   return state.products.filter(p => effectiveBranchId(p.branchId) === effectiveBranchId(state.currentBranchId));
 }
@@ -2477,9 +2486,11 @@ function watchArrayCollection(colRef, stateKey, pendingKind, keepOlderThan){
 function watchProductsOrCustomers(colRef, stateKey, pendingId, lastSyncedMapSetter){
   const unsub = colRef.onSnapshot(snap=>{
     if(isOwnEchoSnapshot(snap)) return;
-    const cloudItems = snap.docs.map(d=>d.data());
+    let cloudItems = snap.docs.map(d=>d.data());
+    if(stateKey==='products') cloudItems = withoutDeletedProducts(cloudItems);
     const pending = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id===pendingId);
-    const merged = pending ? mergeById(state[stateKey], cloudItems) : cloudItems;
+    let merged = pending ? mergeById(state[stateKey], cloudItems) : cloudItems;
+    if(stateKey==='products') merged = withoutDeletedProducts(merged);
     state[stateKey] = merged;
     lastSyncedMapSetter(snapshotArrayMap(pending ? cloudItems : merged));
     storSetSoon(stateKey);
@@ -3430,13 +3441,14 @@ async function loadCloudData(){
         // in underneath it.
         const productsPending = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id==='products');
         const customersPending = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id==='customers');
-        const cloudProducts = mergeById(mergeById(productsSnap.docs.map(d=>d.data()), catalog.products), bizData.products);
+        const cloudProducts = withoutDeletedProducts(mergeById(mergeById(productsSnap.docs.map(d=>d.data()), catalog.products), bizData.products));
+        { const __del = deletedProductIds(); productsSnap.docs.forEach(d=>{ if(__del.has(d.id)) d.ref.delete().catch(()=>{}); }); }
         const cloudCustomers = mergeById(mergeById(customersSnap.docs.map(d=>d.data()), catalog.customers), bizData.customers);
         cloudConfirmedProducts = cloudProducts;
         cloudConfirmedCustomers = cloudCustomers;
-        state.products = productsPending ? mergeById(state.products, cloudProducts) : cloudProducts;
+        state.products = withoutDeletedProducts(productsPending ? mergeById(state.products, cloudProducts) : cloudProducts);
         state.customers = customersPending ? mergeById(state.customers, cloudCustomers) : cloudCustomers;
-        if(!state.products.length) state.products = seedProducts();
+        /* existing business: never re-seed demo products */
         const productsNeedMigration = (catalog.products||[]).length > 0;
         const customersNeedMigration = (catalog.customers||[]).length > 0;
         if((bizData.products||[]).length || (bizData.customers||[]).length) hadLeftoverLegacyFields = true;
@@ -8025,9 +8037,9 @@ function renderProducts(){
 function productTotalStock(p){ return (p.variants && p.variants.length) ? p.variants.reduce((a,v)=>a+(v.stock||0),0) : (p.stock||0); }
 function productFilterChipsHtml(){
   const thr = state.settings.lowStockThreshold||5;
-  const all = state.products.length;
-  const low = state.products.filter(p=>{ const st=productTotalStock(p); return st>0 && st<=thr; }).length;
-  const out = state.products.filter(p=>productTotalStock(p)<=0).length;
+  const all = visibleProducts().length;
+  const low = visibleProducts().filter(p=>{ const st=productTotalStock(p); return st>0 && st<=thr; }).length;
+  const out = visibleProducts().filter(p=>productTotalStock(p)<=0).length;
   const f = state.productFilter||'all';
   return [['all',tr('pfAll'),all],['low',tr('pfLow'),low],['out',tr('pfOut'),out]].map(([id,label,n])=>
     `<button class="fav-chip ${f===id?'fav-chip-active':''}" data-pf="${id}">${label} · ${n}</button>`).join('');
@@ -8049,7 +8061,7 @@ function renderProductListItems(){
   const q = (state.productSearch||'').toLowerCase();
   const thr = state.settings.lowStockThreshold||5;
   const f = state.productFilter||'all';
-  const filtered = state.products.filter(p=>p.name.toLowerCase().includes(q)).filter(p=>{
+  const filtered = visibleProducts().filter(p=>p.name.toLowerCase().includes(q)).filter(p=>{
     const st = productTotalStock(p);
     if(f==='low') return st>0 && st<=thr;
     if(f==='out') return st<=0;
@@ -8072,7 +8084,7 @@ function renderProductListItems(){
   }).join('') : `<div class="empty-state">${tr('noData')}</div>`;
   listEl.querySelectorAll('[data-act="edit"]').forEach(btn=>btn.addEventListener('click', ()=>openProductForm(btn.dataset.id)));
   listEl.querySelectorAll('[data-act="del"]').forEach(btn=>btn.addEventListener('click', ()=>{
-    confirmDialog(tr('confirmDeleteProduct'), ()=>{ const __dp = state.products.find(p=>p.id===btn.dataset.id); if(__dp) auditLog('productDelete', `${__dp.name} (${tr('stock')}: ${productTotalStock(__dp)})`, {productId: __dp.id}); state.products = state.products.filter(p=>p.id!==btn.dataset.id); saveProducts(); renderProductListItems(); });
+    confirmDialog(tr('confirmDeleteProduct'), ()=>{ markProductDeleted(btn.dataset.id); const __dp = state.products.find(p=>p.id===btn.dataset.id); if(__dp) auditLog('productDelete', `${__dp.name} (${tr('stock')}: ${productTotalStock(__dp)})`, {productId: __dp.id}); state.products = state.products.filter(p=>p.id!==btn.dataset.id); saveProducts(); renderProductListItems(); });
   }));
 }
 
@@ -10776,8 +10788,8 @@ function renderReportsCategory(container, cat){
     if(p.variants && p.variants.length) return p.variants.reduce((s,v)=>s+(v.stock*(v.costPrice!=null?v.costPrice:(p.costPrice||0))),0);
     return (p.stock||0)*(p.costPrice||0);
   }
-  const unsoldValue = state.products.reduce((s,p)=>s+productInventoryValue(p),0);
-  const unsoldCost = state.products.reduce((s,p)=>s+productInventoryCost(p),0);
+  const unsoldValue = visibleProducts().reduce((s,p)=>s+Math.max(0, productInventoryValue(p)),0);
+  const unsoldCost = visibleProducts().reduce((s,p)=>s+Math.max(0, productInventoryCost(p)),0);
 
   if(cat==='receipts'){
     container.innerHTML = `
