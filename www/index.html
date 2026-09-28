@@ -14489,12 +14489,10 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
     const authFallbackTimer = setTimeout(function(){
       if(!authCallbackFired){
         authCallbackFired = true;
-        if(typeof showFatalError === 'function'){
-          showFatalError('Firebase Auth javob bermadi (6 soniyadan keyin) — mahalliy holatda ochilmoqda.');
-        }
+        try{ console.warn('Firebase Auth slow (>8s) - opening from local data'); }catch(e){}
         renderAuthGate('login');
       }
-    }, 6000);
+    }, 8000);
     let syncRetryTimer = null;
     fbAuth.onAuthStateChanged(async (user)=>{
       clearTimeout(authFallbackTimer);
