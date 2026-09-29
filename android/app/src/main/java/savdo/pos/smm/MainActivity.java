@@ -13,9 +13,8 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(UpdatePlugin.class);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        try { supportRequestWindowFeature(android.view.Window.FEATURE_NO_TITLE); } catch (Exception ignored) {}
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         try { if (getSupportActionBar() != null) getSupportActionBar().hide(); } catch (Exception ignored) {}
         try {
             if (bridge != null && bridge.getWebView() != null) {
