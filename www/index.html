@@ -2598,26 +2598,41 @@ function watchForNewRefunds(colRef){
 let printRelaySeenIds = new Set();
 let printRelayReady = false;
 function watchForPrintRelay(colRef){
+  const startMs = Date.now();
+  const wanted = new Set();       // sales explicitly (re)queued while this relay is running, any age
+  const lastTry = new Map();      // per-sale cooldown so a disconnected printer can't cause a claim/release loop
+  let lastDocs = [];
+  function eligible(sale){
+    if(!sale || !sale.id || sale.printed) return false;
+    if(effectiveBranchId(sale.branchId) !== effectiveBranchId(state.currentBranchId)) return false;
+    const t = Date.parse(sale.date || '') || 0;
+    return t >= startMs - 10*60*1000 || wanted.has(sale.id);
+  }
+  function tryRelay(sale){
+    if(!eligible(sale)) return;
+    if(!getBtCharacteristic('main')) return;           // no printer right now: keep it waiting, the sweep retries
+    const last = lastTry.get(sale.id) || 0;
+    if(Date.now() - last < 20000) return;
+    lastTry.set(sale.id, Date.now());
+    claimAndRelayPrintSale(sale.id);
+  }
+  function sweep(){
+    lastDocs.slice().sort((x,y)=>String(x.date||'').localeCompare(String(y.date||''))).forEach(tryRelay);
+  }
   const unsub = colRef.onSnapshot(snap=>{
     const wasReady = printRelayReady;
-    snap.docs.forEach(d=>{
-      const sale = d.data();
-      if(!sale || !sale.id) return;
-      // Deliberately NOT a permanent per-id skip: an id only being
-      // "seen" once meant a sale that failed to relay-print (its claim
-      // released back to printed:false — see claimAndRelayPrintSale)
-      // or one that arrived while this device was offline/closed could
-      // never be retried by this same device again. The Firestore
-      // transaction below is what actually prevents double-printing,
-      // so re-checking an already-seen id is safe, not redundant.
-      if(!wasReady){ printRelaySeenIds.add(sale.id); return; } // skip the entire existing backlog on first load
-      if(sale.printed) return;
-      if(effectiveBranchId(sale.branchId) !== effectiveBranchId(state.currentBranchId)) return;
-      claimAndRelayPrintSale(sale.id);
-    });
     printRelayReady = true;
-  }, ()=>{});
+    lastDocs = snap.docs.map(d=>d.data()).filter(Boolean);
+    if(wasReady){
+      snap.docChanges().forEach(ch=>{ if(ch.type==='added'){ const d = ch.doc.data(); if(d && d.id) wanted.add(d.id); } });
+    } else {
+      lastDocs.forEach(d=>{ if(d && d.id) printRelaySeenIds.add(d.id); });
+    }
+    sweep();
+  }, (err)=>{ state.__printRelayError = (err && (err.code || err.message)) || 'error'; });
+  const iv = setInterval(sweep, 15000);
   liveListenerUnsubs.push(unsub);
+  liveListenerUnsubs.push(()=>clearInterval(iv));
 }
 async function claimAndRelayPrintSale(saleId){
   const docRef = salesCol().doc(saleId);
@@ -2966,6 +2981,7 @@ function syncShiftsDoc(){
 // Firestore — it just overwrites. Comparing settingsUpdatedAt INSIDE the
 // transaction (so the check-and-write is atomic, no race between reading
 // and writing) means an older write loses on purpose instead of by luck.
+const ADMIN_ONLY_SETTING_KEYS = ['subscriptionPlan','subscriptionExpiresAt','subscriptionExpiresAtMs','maxStaff','maxDevices'];
 async function pushSettingsToCloud(){
   const ref = businessDocRef();
   let payload = stripDeviceLocalSettings(Object.assign({}, state.settings, {schemaVersion:2}));
@@ -3005,8 +3021,19 @@ async function pushSettingsToCloud(){
   // concurrent writes correctly on its own, so this manual client-clock
   // check was pure downside. Just write it.
   await fbDb.runTransaction(async (tx)=>{
-    await tx.get(ref);
-    tx.set(ref, sanitizeForFirestore(payload), {merge:true});
+    const snap = await tx.get(ref);
+    const out = Object.assign({}, payload);
+    ADMIN_ONLY_SETTING_KEYS.forEach(k=>{ delete out[k]; });
+    if(!snap.exists){
+      // Business doc was never created (e.g. first creation was rejected): create it now with a proper trial
+      const ms = Date.now() + TRIAL_DAYS*86400000;
+      const def = defaultSettingsObj();
+      out.subscriptionPlan = 'trial'; out.subscriptionExpiresAt = new Date(ms).toISOString(); out.subscriptionExpiresAtMs = ms;
+      out.maxStaff = def.maxStaff; out.maxDevices = def.maxDevices;
+      out.ownerEmail = (fbUser && fbUser.email) || '';
+      state.settings.subscriptionPlan = out.subscriptionPlan; state.settings.subscriptionExpiresAt = out.subscriptionExpiresAt; state.settings.subscriptionExpiresAtMs = ms;
+    }
+    tx.set(ref, sanitizeForFirestore(out), {merge:true});
   });
 }
 function syncSettingsDoc(){
@@ -3417,9 +3444,11 @@ async function loadCloudData(){
     if(!bizDoc.exists){
       // Brand new business
       state.products = (state.products && state.products.length) ? state.products : seedProducts();
-      state.customers = []; state.staff = []; state.shifts = [];
-      state.sales = []; state.ledger = []; state.tables = [];
-      state.settings = defaultSettingsObj();
+      state.customers = state.customers || []; state.staff = state.staff || []; state.shifts = state.shifts || [];
+      state.sales = state.sales || []; state.ledger = state.ledger || []; state.tables = state.tables || [];
+      const __keepLocal = state._hasLocalSettings ? Object.assign({}, state.settings) : {};
+      ADMIN_ONLY_SETTING_KEYS.concat(['lastSeenVersion','settingsUpdatedAt']).forEach(k=>{ delete __keepLocal[k]; });
+      state.settings = Object.assign(defaultSettingsObj(), __keepLocal);
       restoreDeviceLocalSettings();
       state.settings.lastSeenVersion = APP_VERSION;
       try{ localStorage.setItem('sardor_last_seen_version', String(APP_VERSION)); }catch(e){}
@@ -3436,6 +3465,7 @@ async function loadCloudData(){
       await businessDocRef().set(sanitizeForFirestore(Object.assign({}, state.settings, {schemaVersion:2, ownerEmail: fbUser.email || ''})));
       await catalogDocRef().set(sanitizeForFirestore({products:null, customers:null, staff:state.staff, shifts:state.shifts, updatedAt:new Date().toISOString()}));
       try{ await Promise.all(state.products.map(p=>productsCol().doc(p.id).set(sanitizeForFirestore(p)))); }catch(e){ queuePendingSync('catalog','products'); }
+      if(state.customers.length){ try{ await Promise.all(state.customers.map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(c)))); }catch(e){ queuePendingSync('catalog','customers'); } }
     } else {
       const bizData = bizDoc.data();
       if(bizData.schemaVersion === 2){
@@ -3460,6 +3490,7 @@ async function loadCloudData(){
           // undefined.
           if(cloudSettings.subscriptionPlan !== undefined) subscriptionPatch.subscriptionPlan = cloudSettings.subscriptionPlan;
           if(cloudSettings.subscriptionExpiresAt !== undefined) subscriptionPatch.subscriptionExpiresAt = cloudSettings.subscriptionExpiresAt;
+          ['subscriptionExpiresAtMs','maxStaff','maxDevices'].forEach(k=>{ if(cloudSettings[k] !== undefined) subscriptionPatch[k] = cloudSettings[k]; });
           state.settings = Object.assign(defaultSettingsObj(), state.settings, subscriptionPatch);
         }
         if(bizData.ownerEmail !== fbUser.email){
