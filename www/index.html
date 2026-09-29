@@ -483,6 +483,7 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  staffCloudSyncFailed:{uz:"Xodim o'zgarishi bulutga hali yozilmadi (internet?). Ilova egasi keyingi safar kirganda qayta urinadi.",ru:"Изменение сотрудника пока не записано в облако (интернет?). Повторим при следующем входе владельца.",en:"Staff change not saved to the cloud yet (internet?). It will retry next time the owner opens the app.",kk:"Қызметкер өзгерісі бұлтқа әлі жазылмады.",ky:"Кызматкердин өзгөрүүсү булутка азырынча жазылган жок.",tg:"Тағйироти корманд ҳоло ба абр сабт нашуд."},
   permPrinterSetup:{uz:"Printer sozlamalari (shu qurilmada printerni ulash)",ru:"Настройки принтера (подключение на этом устройстве)",en:"Printer settings (connect a printer on this device)",kk:"Принтер баптаулары",ky:"Принтер жөндөөлөрү",tg:"Танзимоти принтер"},
   permBackup:{uz:"Zaxira nusxa va tiklash",ru:"Резервная копия и восстановление",en:"Backup and restore",kk:"Сақтық көшірме және қалпына келтіру",ky:"Камдык көчүрмө жана калыбына келтирүү",tg:"Нусхаи эҳтиётӣ ва барқарорсозӣ"},
   printerOnDemand:{uz:"Chop etishda avtomatik ulanadi",ru:"Подключается автоматически при печати",en:"Connects automatically when printing",kk:"Басып шығарғанда автоматты қосылады",ky:"Басып чыгарганда автоматтык туташат",tg:"Ҳангоми чоп худкор пайваст мешавад"},
@@ -1973,6 +1974,33 @@ function bindAutosaveStatus(){
   document.addEventListener('settings-saved', bindAutosaveStatus.__handler);
 }
 function saveSettingsLocalOnly(){ storSet(STORAGE_KEYS.settings, state.settings); }
+// /staffAuth/{uid} is what the Firestore rules read to decide what a staff
+// login may do. It used to be written only once, when the staff member was
+// created, so later edits (making someone admin, changing permissions) never
+// reached the cloud and a deleted staff member kept cloud access.
+async function syncStaffAuthRecord(st){
+  if(!st || !st.authUid || !fbDb || !fbUser) return false;
+  try{
+    await fbDb.collection('staffAuth').doc(st.authUid).set({
+      businessId: state.businessId || fbUser.uid, staffId: st.id, role: st.role, permissions: st.permissions || {}
+    }, {merge:true});
+    return true;
+  }catch(e){ return false; }
+}
+const STAFF_AUTH_SYNC_KEY = 'sardor_staffauth_sync_v1';
+async function repairStaffAuthRecords(){
+  // Only the owner's own login can reliably write these (rules: admin of the business).
+  if(!fbUser || !fbDb || !state.businessId || fbUser.uid !== state.businessId) return;
+  let done = {};
+  try{ done = JSON.parse(localStorage.getItem(STAFF_AUTH_SYNC_KEY) || '{}'); }catch(e){ done = {}; }
+  for(const st of (state.staff || [])){
+    if(!st || !st.authUid) continue;
+    const sig = JSON.stringify([st.role || '', st.permissions || {}]);
+    if(done[st.id] === sig) continue;
+    if(await syncStaffAuthRecord(st)) done[st.id] = sig;
+  }
+  try{ localStorage.setItem(STAFF_AUTH_SYNC_KEY, JSON.stringify(done)); }catch(e){}
+}
 async function saveStaff(){ await storSet(STORAGE_KEYS.staff, state.staff); syncStaffDoc(); }
 function saveShifts(){ storSet(STORAGE_KEYS.shifts, state.shifts); syncShiftsDoc(); }
 function saveCurrentShift(){ storSet(STORAGE_KEYS.currentShift, state.currentShift); }
@@ -12941,7 +12969,7 @@ function renderSettingsStaff(container){
       showToast(tr('cannotDeleteSelf'));
       return;
     }
-    confirmDialog(tr('confirmDeleteStaff'), ()=>{ const __st = state.staff.find(s=>s.id===btn.dataset.id); if(__st) auditLog('staffDelete', __st.name, {staffId: __st.id}); state.staff = state.staff.filter(s=>s.id!==btn.dataset.id); saveStaff(); renderSettingsStaff(container); });
+    confirmDialog(tr('confirmDeleteStaff'), ()=>{ const __st = state.staff.find(s=>s.id===btn.dataset.id); if(__st) auditLog('staffDelete', __st.name, {staffId: __st.id}); if(__st && __st.authUid && fbDb){ try{ fbDb.collection('staffAuth').doc(__st.authUid).delete().catch(()=>{}); }catch(e){} } state.staff = state.staff.filter(s=>s.id!==btn.dataset.id); saveStaff(); renderSettingsStaff(container); });
   }));
 }
 
@@ -14440,6 +14468,7 @@ function openStaffForm(staffId){
       finalStaffId = newStaffId;
     }
     if(editing){ editing.name=name; editing.pin=pin; editing.role=role; editing.jobTitle=jobTitle; editing.branchId=branchId; editing.permissions=permissions; editing.salary=salary; }
+    if(editing && editing.authUid){ syncStaffAuthRecord(editing).then(ok=>{ if(!ok) showToast(tr('staffCloudSyncFailed')); }); }
     else state.staff.push({id: finalStaffId || uid(), name, pin, role, jobTitle, branchId, permissions, salary, authUid: newStaffAuthUid, authSecret: newStaffAuthSecret});
     if(jobTitle==='agent'){
       const dailyEl = document.getElementById('sf-plan-daily');
@@ -14857,6 +14886,7 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
         await loadPendingSyncQueue();
         await loadCloudData();
         renderAll();
+        repairStaffAuthRecords();
         startSupportListener();
         initPushMessaging();
         startLiveListeners();
