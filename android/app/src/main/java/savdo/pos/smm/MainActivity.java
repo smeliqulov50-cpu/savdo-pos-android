@@ -19,7 +19,11 @@ public class MainActivity extends BridgeActivity {
             if (bridge != null && bridge.getWebView() != null) {
                 android.webkit.WebView wv = bridge.getWebView();
                 android.webkit.WebSettings ws = wv.getSettings();
-                ws.setTextZoom(100);
+                int __maxZoom = getResources().getConfiguration().smallestScreenWidthDp >= 600 ? 130 : 115;
+                int __zoom = Math.round(getResources().getConfiguration().fontScale * 100f);
+                if (__zoom < 100) __zoom = 100;
+                if (__zoom > __maxZoom) __zoom = __maxZoom;
+                ws.setTextZoom(__zoom);
                 if (android.os.Build.VERSION.SDK_INT >= 29) wv.setForceDarkAllowed(false);
                 if (android.os.Build.VERSION.SDK_INT >= 29 && android.os.Build.VERSION.SDK_INT < 33) ws.setForceDark(android.webkit.WebSettings.FORCE_DARK_OFF);
             }
