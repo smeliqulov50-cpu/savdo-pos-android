@@ -15,6 +15,15 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(UpdatePlugin.class);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         super.onCreate(savedInstanceState);
+        try {
+            if (bridge != null && bridge.getWebView() != null) {
+                android.webkit.WebView wv = bridge.getWebView();
+                android.webkit.WebSettings ws = wv.getSettings();
+                ws.setTextZoom(100);
+                if (android.os.Build.VERSION.SDK_INT >= 29) wv.setForceDarkAllowed(false);
+                if (android.os.Build.VERSION.SDK_INT >= 29 && android.os.Build.VERSION.SDK_INT < 33) ws.setForceDark(android.webkit.WebSettings.FORCE_DARK_OFF);
+            }
+        } catch (Exception ignored) {}
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

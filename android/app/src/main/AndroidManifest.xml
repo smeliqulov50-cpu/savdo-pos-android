@@ -15,7 +15,6 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
 
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
