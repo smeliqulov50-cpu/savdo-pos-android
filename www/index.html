@@ -1528,7 +1528,7 @@ function deletedProductIds(){ try{ return new Set(JSON.parse(localStorage.getIte
 function markProductDeleted(id){
   if(!id) return;
   try{ const set = deletedProductIds(); set.add(id); localStorage.setItem(DELETED_PRODUCTS_KEY, JSON.stringify([...set].slice(-5000))); }catch(e){}
-  try{ if(fbUser && fbDb) productsCol().doc(id).delete().catch(()=>{}); }catch(e){}
+  try{ if(fbUser && fbDb){ const __r = productsCol().doc(id); __r.set({_u: Date.now(), _deleted: true}, {merge:true}).catch(()=>{}).then(()=>__r.delete()).catch(()=>{}); } }catch(e){}
   try{ if(fbUser && fbDb) catalogDocRef().get().then(d=>{ const arr = d.exists && d.data().products; if(Array.isArray(arr) && arr.some(x=>x && x.id===id)) catalogDocRef().set({products: arr.filter(x=>x && x.id!==id)}, {merge:true}).catch(()=>{}); }).catch(()=>{}); }catch(e){}
 }
 function withoutDeletedProducts(arr){ const del = deletedProductIds(); if(!del.size) return arr || []; return (arr||[]).filter(p=>p && !del.has(p.id)); }
@@ -2632,10 +2632,40 @@ function watchArrayCollection(colRef, stateKey, pendingKind, keepOlderThan){
 // so the merge here mirrors loadCloudData()'s own products/customers
 // handling: while a local edit is still pending, the WHOLE local array
 // stays primary; once it clears, the cloud's list is taken outright.
+// Delta mode is only used when every active device of this business runs a
+// version that stamps _u on its writes; otherwise an older phone's stock
+// changes would be invisible here. Decided from the devices list.
+const CATALOG_DELTA_KEY = 'sardor_catalog_delta_ok_v1';
+function catalogDeltaOk(){ try{ return !!state.businessId && localStorage.getItem(CATALOG_DELTA_KEY) === state.businessId; }catch(e){ return false; } }
+function watchCatalogDelta(query, stateKey, pendingId, mapGetter, mapSetter){
+  const unsub = query.onSnapshot(snap=>{
+    const changes = snap.docChanges().filter(ch=>!(ch.doc.metadata && ch.doc.metadata.hasPendingWrites));   // own unsent edits are already local
+    if(!changes.length) return;
+    const pending = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id===pendingId);
+    const map = Object.assign({}, mapGetter());
+    let arr = (state[stateKey] || []).slice();
+    const idx = {}; arr.forEach((x, i)=>{ if(x && x.id) idx[x.id] = i; });
+    const removed = new Set();
+    changes.forEach(ch=>{
+      const id = ch.doc.id, d = ch.doc.data() || {};
+      if(ch.type === 'removed' || d._deleted){ removed.add(id); delete map[id]; return; }
+      map[id] = JSON.stringify(d);
+      if(pending && idx[id] !== undefined) return;   // a local edit waiting to upload wins
+      if(idx[id] !== undefined) arr[idx[id]] = d; else { idx[id] = arr.length; arr.push(d); }
+    });
+    if(removed.size && !pending) arr = arr.filter(x=>x && !removed.has(x.id));
+    if(stateKey === 'products') arr = withoutDeletedProducts(arr);
+    state[stateKey] = arr;
+    mapSetter(map);
+    storSetSoon(stateKey);
+    scheduleLiveRender();
+  }, ()=>{});
+  liveListenerUnsubs.push(unsub);
+}
 function watchProductsOrCustomers(colRef, stateKey, pendingId, lastSyncedMapSetter){
   const unsub = colRef.onSnapshot(snap=>{
     if(isOwnEchoSnapshot(snap)) return;
-    let cloudItems = snap.docs.map(d=>d.data());
+    let cloudItems = snap.docs.map(d=>d.data()).filter(x=>x && !x._deleted);
     if(stateKey==='products') cloudItems = withoutDeletedProducts(cloudItems);
     const pending = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id===pendingId);
     let merged = pending ? mergeById(state[stateKey], cloudItems) : cloudItems;
@@ -2770,8 +2800,14 @@ function startLiveListeners(){
   printRelaySeenIds = new Set();
   printRelayReady = false;
 
-  watchProductsOrCustomers(productsCol(), 'products', 'products', m=>{ lastSyncedProductsMap = m; });
-  watchProductsOrCustomers(customersCol(), 'customers', 'customers', m=>{ lastSyncedCustomersMap = m; });
+  if(catalogDeltaOk()){
+    const __from = Date.now() - 10*60*1000;
+    watchCatalogDelta(productsCol().where('_u','>=',__from), 'products', 'products', ()=>lastSyncedProductsMap, m=>{ lastSyncedProductsMap = m; });
+    watchCatalogDelta(customersCol().where('_u','>=',__from), 'customers', 'customers', ()=>lastSyncedCustomersMap, m=>{ lastSyncedCustomersMap = m; });
+  } else {
+    watchProductsOrCustomers(productsCol(), 'products', 'products', m=>{ lastSyncedProductsMap = m; });
+    watchProductsOrCustomers(customersCol(), 'customers', 'customers', m=>{ lastSyncedCustomersMap = m; });
+  }
   watchArrayCollection(tablesCol(), 'tables', 'table');
   watchArrayCollection(salesCol().where('date','>=',liveSyncSinceIso()), 'sales', 'sale', liveSyncSinceIso());
   watchArrayCollection(expensesCol().where('date','>=',cloudHistoryCutoffIso()), 'expenses', 'expense', cloudHistoryCutoffIso());
@@ -3012,8 +3048,11 @@ function computeArraySyncDiff(currentArray, prevMap){
 }
 async function syncArrayToCollection(currentArray, colRef, prevMap){
   const {toWrite, toDelete} = computeArraySyncDiff(currentArray, prevMap);
+  const __now = Date.now();
+  toWrite.forEach(item=>{ try{ item._u = __now; }catch(e){} });   // lets other devices fetch only what changed
   const ops = toWrite.map(item=>colRef.doc(item.id).set(sanitizeForFirestore(item)))
-    .concat(toDelete.map(id=>colRef.doc(id).delete()));
+    // mark first, then delete: a device watching only recent changes still sees the deletion
+    .concat(toDelete.map(id=>colRef.doc(id).set({_u: __now, _deleted: true}, {merge:true}).catch(()=>{}).then(()=>colRef.doc(id).delete())));
   await Promise.all(ops);
   return snapshotArrayMap(currentArray);
 }
@@ -3643,9 +3682,9 @@ async function loadCloudData(){
         // in underneath it.
         const productsPending = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id==='products');
         const customersPending = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id==='customers');
-        const cloudProducts = withoutDeletedProducts(mergeById(mergeById(productsSnap.docs.map(d=>d.data()), catalog.products), bizData.products));
+        const cloudProducts = withoutDeletedProducts(mergeById(mergeById(productsSnap.docs.map(d=>d.data()).filter(x=>x && !x._deleted), catalog.products), bizData.products));
         { const __del = deletedProductIds(); productsSnap.docs.forEach(d=>{ if(__del.has(d.id)) d.ref.delete().catch(()=>{}); }); }
-        const cloudCustomers = mergeById(mergeById(customersSnap.docs.map(d=>d.data()), catalog.customers), bizData.customers);
+        const cloudCustomers = mergeById(mergeById(customersSnap.docs.map(d=>d.data()).filter(x=>x && !x._deleted), catalog.customers), bizData.customers);
         cloudConfirmedProducts = cloudProducts;
         cloudConfirmedCustomers = cloudCustomers;
         state.products = withoutDeletedProducts(productsPending ? mergeById(state.products, cloudProducts) : cloudProducts);
@@ -7665,7 +7704,7 @@ async function registerThisDevice(){
     const ref = devicesCol().doc(id);
     const snap = await ref.get();
     if(snap.exists && snap.data().revoked){ await handleDeviceRevoked(ref); return; }
-    await ref.set({id, name: deviceDisplayName(), lastSeen: new Date().toISOString(), staffName: state.currentStaff ? state.currentStaff.name : '', appVersion: APP_VERSION, platform: isNativeApp() ? 'android' : 'web', revoked: false}, {merge:true});
+    await ref.set({id, deltaSync: true, name: deviceDisplayName(), lastSeen: new Date().toISOString(), staffName: state.currentStaff ? state.currentStaff.name : '', appVersion: APP_VERSION, platform: isNativeApp() ? 'android' : 'web', revoked: false}, {merge:true});
     if(__ownDeviceUnsub) __ownDeviceUnsub();
     __ownDeviceUnsub = ref.onSnapshot(d=>{ if(d.exists && d.data().revoked) handleDeviceRevoked(ref); }, ()=>{});
     refreshDevicesList();
@@ -7683,6 +7722,7 @@ async function refreshDevicesList(){
     const snap = await devicesCol().get();
     const cut = Date.now() - 30*86400000;
     state.devices = snap.docs.map(d=>d.data()).filter(d=>!d.revoked && d.lastSeen && new Date(d.lastSeen).getTime() > cut).sort((a,b)=>String(b.lastSeen).localeCompare(String(a.lastSeen)));
+    try{ const __ok = state.devices.length > 0 && state.devices.every(d=>d.deltaSync === true); if(__ok) localStorage.setItem(CATALOG_DELTA_KEY, state.businessId || ''); else localStorage.removeItem(CATALOG_DELTA_KEY); }catch(e){}
     const max = parseInt(state.settings.maxDevices,10) || 3;
     state.__deviceLimitWarn = state.devices.length > max ? tr('deviceLimitWarn').replace('{n}', state.devices.length).replace('{max}', max) : '';
     return state.devices;
