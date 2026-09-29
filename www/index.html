@@ -483,6 +483,12 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  printerOnDemand:{uz:"Chop etishda avtomatik ulanadi",ru:"Подключается автоматически при печати",en:"Connects automatically when printing",kk:"Басып шығарғанда автоматты қосылады",ky:"Басып чыгарганда автоматтык туташат",tg:"Ҳангоми чоп худкор пайваст мешавад"},
+  printerConnecting:{uz:"Printerga ulanmoqda…",ru:"Подключение к принтеру…",en:"Connecting to printer…",kk:"Принтерге қосылуда…",ky:"Принтерге туташууда…",tg:"Ба принтер пайваст мешавад…"},
+  printerUnreachable:{uz:"Printerga ulanib bo'lmadi. Printer yoqilganini, yaqinligini va boshqa qurilma hozir chop etmayotganini tekshiring.",ru:"Не удалось подключиться к принтеру. Проверьте, что он включён, рядом и сейчас не печатает с другого устройства.",en:"Could not reach the printer. Check it is on, nearby and not printing for another device right now.",kk:"Принтерге қосылу мүмкін болмады.",ky:"Принтерге туташуу мүмкүн болгон жок.",tg:"Ба принтер пайваст шуда нашуд."},
+  authConnecting:{uz:"Ulanmoqda… Internet sekin bo'lishi mumkin. Ma'lumotlaringiz joyida.",ru:"Подключение… Возможно, медленный интернет. Ваши данные на месте.",en:"Connecting… The internet may be slow. Your data is safe.",kk:"Қосылуда… Интернет баяу болуы мүмкін.",ky:"Туташууда… Интернет жай болушу мүмкүн.",tg:"Пайваст мешавад… Интернет суст бошад."},
+  authRetry:{uz:"Qayta urinish",ru:"Повторить",en:"Retry",kk:"Қайталау",ky:"Кайталоо",tg:"Такрор"},
+  authOtherAccount:{uz:"Boshqa akkaunt bilan kirish",ru:"Войти в другой аккаунт",en:"Sign in with another account",kk:"Басқа аккаунтпен кіру",ky:"Башка аккаунт менен кирүү",tg:"Бо аккаунти дигар ворид шавед"},
   saTotal:{uz:"Jami bizneslar",ru:"Всего бизнесов",en:"Total businesses",kk:"Барлық бизнес",ky:"Бардык бизнес",tg:"Ҳамаи тиҷоратҳо"},
   saPaid:{uz:"To'lovli (faol)",ru:"Платные (активные)",en:"Paid (active)",kk:"Ақылы (белсенді)",ky:"Акылуу (активдүү)",tg:"Пулакӣ (фаъол)"},
   saTrial:{uz:"Sinov muddatida",ru:"На пробном периоде",en:"On trial",kk:"Сынақ кезеңінде",ky:"Сыноо мөөнөтүндө",tg:"Дар мӯҳлати санҷишӣ"},
@@ -2109,6 +2115,18 @@ const ICONS = {
 };
 
 /* ---------- FIREBASE AUTH & CLOUD SYNC ---------- */
+function renderAuthConnecting(){
+  const root = document.getElementById('auth-root');
+  if(!root) return;
+  root.innerHTML = `<div class="login-screen">
+    <div class="brand" style="font-size:26px;margin-bottom:10px;">Savdo Pos<span>.</span></div>
+    <div class="subtle" style="margin-bottom:16px;">${tr('authConnecting')}</div>
+    <button class="btn btn-primary btn-block" id="auth-conn-retry">${tr('authRetry')}</button>
+    <button class="btn btn-ghost btn-block" style="margin-top:8px;" id="auth-conn-other">${tr('authOtherAccount')}</button>
+  </div>`;
+  const r = document.getElementById('auth-conn-retry'); if(r) r.addEventListener('click', ()=>{ try{ location.reload(); }catch(e){} });
+  const o = document.getElementById('auth-conn-other'); if(o) o.addEventListener('click', ()=>renderAuthGate('login'));
+}
 function renderAuthGate(mode){
   mode = mode || 'login';
   const root = document.getElementById('auth-root');
@@ -2501,7 +2519,7 @@ function stopLiveListeners(){
 // For a plain array-of-documents collection (tables, sales, ledger,
 // visits, creditors, creditorLedger, kitchenStations) where each item
 // syncs individually and tracks its OWN pending-sync entry by id.
-window.addEventListener('online', ()=>{ setTimeout(async ()=>{ try{ await retryPendingSync(); renderAll(); }catch(e){} }, 1500); });
+window.addEventListener('online', ()=>{ setTimeout(async ()=>{ try{ await retryPendingSync(); scheduleLiveRender(); }catch(e){} }, 1500); });
 window.addEventListener('offline', ()=>{ try{ renderAll(); }catch(e){} });
 function isOwnEchoSnapshot(snap){
   try{ if(snap && snap.metadata && snap.metadata.fromCache) return true; }catch(e){}
@@ -2610,7 +2628,7 @@ function watchForPrintRelay(colRef){
   }
   function tryRelay(sale){
     if(!eligible(sale)) return;
-    if(!getBtCharacteristic('main')) return;           // no printer right now: keep it waiting, the sweep retries
+    if(!getBtCharacteristic('main')){ ensureBtConnected('main'); return; }   // reconnect in background; the sweep retries
     const last = lastTry.get(sale.id) || 0;
     if(Date.now() - last < 20000) return;
     lastTry.set(sale.id, Date.now());
@@ -3136,7 +3154,7 @@ document.addEventListener('visibilitychange', ()=>{
     // time and had to reconnect by hand. This covers that gap.
     if(fbUser) autoReconnectBluetooth();
     if(fbUser) refreshSettingsFromCloud();
-    if(fbUser){ retryPendingSync().then(()=>renderAll()); }
+    if(fbUser){ retryPendingSync().then(()=>scheduleLiveRender()); }
     return;
   }
   Object.keys(tableSyncTimers).forEach(tableId=>{
@@ -4371,7 +4389,7 @@ function renderSale(){
   container.innerHTML = `
     ${tbl ? `<div class="back-row"><button id="back-to-tables-btn">${ICONS.arrowLeft}</button><span class="t-title">${tableWord()}: ${escapeHtml(tbl.name)}</span></div>` : ''}
     ${isTakeawayFromGrid ? `<div class="back-row"><button id="back-to-tables-btn">${ICONS.arrowLeft}</button><span class="t-title">🥡 ${tr('orderTypeTakeaway')}</span></div>` : ''}
-    ${(state.settings.printerMode==='bluetooth' && !getBtCharacteristic('main')) ? `
+    ${(state.settings.printerMode==='bluetooth' && !getBtCharacteristic('main') && !loadRememberedBtDevices().main) ? `
     <div class="card" style="margin-bottom:10px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--danger);">
       <span style="font-size:13px;color:var(--danger);font-weight:700;">🖨️ ${tr('printerNotConnected')}</span>
       <button class="btn btn-primary btn-sm" id="sale-quick-connect-printer-btn">${tr('connectPrinter')}</button>
@@ -6559,7 +6577,7 @@ function openPostSaleModal(sale, custDebtAfter){
     <button class="btn btn-primary" id="post-sale-close">${tr('close')}</button>
   `, {center:true});
   document.getElementById('print-btn').addEventListener('click', async ()=>{
-    if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){
+    if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic && !loadRememberedBtDevices().main){
       await connectBluetoothPrinter();
     }
     printReceipt(sale, customer);
@@ -7168,7 +7186,7 @@ function anyKitchenPrinterConfigured(){
   // receipt already works in browser mode — so it's always "available".
   if(state.settings.printerMode === 'browser') return true;
   if(state.kitchenStations.length) return true;
-  return !!getBtCharacteristic('kitchen');
+  return !!getBtCharacteristic('kitchen') || !!loadRememberedBtDevices().kitchen;
 }
 
 function buildKitchenTicketText(...a){ return withReceiptLang(()=>buildKitchenTicketTextInner(...a)); }
@@ -7260,6 +7278,7 @@ async function sendKitchenTicket(items, tableName, cashierName, slot){
       return false;
     }
   }
+  await ensureBtConnected(slot);
   if(!getBtCharacteristic(slot)) return false;
   try{
     await sendRawBytes(new Uint8Array([0x1B,0x40]), slot);
@@ -7272,8 +7291,10 @@ async function sendKitchenTicket(items, tableName, cashierName, slot){
     if(state.settings.printerAutoCut !== false){
       await sendRawBytes(printerCutBytes(), slot);
     }
+    scheduleBtRelease(slot);
     return true;
   }catch(e){
+    scheduleBtRelease(slot);
     return false;
   }
 }
@@ -7439,8 +7460,11 @@ function buildReceiptHtmlInner(sale, customer){
 
 async function printReceipt(sale, customer){
   if(state.settings.printerMode === 'bluetooth'){
-    if(!state.btCharacteristic){ showToast(tr('willPrintOnOtherDevice')); return; }
+    if(!state.btCharacteristic && loadRememberedBtDevices().main) showToast(tr('printerConnecting'));
+    await ensureBtConnected('main');
+    if(!state.btCharacteristic){ showToast(loadRememberedBtDevices().main ? tr('printerUnreachable') : tr('willPrintOnOtherDevice')); return; }
     const ok = await sendReceiptToBluetoothPrinter(sale, customer);
+    scheduleBtRelease('main');
     // Opening the drawer only makes sense here — Bluetooth mode has an
     // actual raw-byte connection to hardware that's presumably wired to
     // a drawer; browser print mode has no such connection to send this
@@ -7710,7 +7734,7 @@ async function finishBtConnection(slot, device, server){
     // below) — only the deliberate case forgets the remembered device, so
     // the printer coming back in range still reconnects silently later.
     clearBtConnection(slot);
-    if(state.view==='settings') renderSettings();
+    if(state.view==='settings' && !__btQuiet) renderSettings();
   });
   return true;
 }
@@ -7781,6 +7805,7 @@ async function connectBluetoothPrinterNative(slot){
     // stuck across logout/login: it simply was never remembered.
     rememberBtDevice(slot, {id: device.deviceId, name: device.name || ''});
     showToast(tr('printerConnected'));
+    scheduleBtRelease(slot, 60000);
     renderSettings();
   }catch(e){
     showToast(tr('bluetoothConnectFailed'));
@@ -7795,7 +7820,7 @@ async function nativeConnectAndMatch(Ble, slot, deviceId, name){
     // native disconnect callback — mirrors the Web Bluetooth
     // 'gattserverdisconnected' handler above
     clearBtConnection(slot);
-    if(state.view==='settings') renderSettings();
+    if(state.view==='settings' && !__btQuiet) renderSettings();
   });
   let matched = null;
   for(const profile of BT_UART_PROFILES){
@@ -7810,6 +7835,64 @@ async function nativeConnectAndMatch(Ble, slot, deviceId, name){
   return matched;
 }
 
+// Each device connects to its printer only when it actually prints, then
+// releases it after a short idle, so several phones/tablets can share one
+// Bluetooth printer (most printers accept only ONE connection at a time).
+// A device with "print other devices' receipts here" (autoPrintRelay) is
+// the exception: it keeps the connection, because it must be ready.
+const __btReleaseTimers = {};
+let __btQuiet = false;
+const __btEnsureBusy = {};
+function __btShouldHold(){ return !!(state.settings && state.settings.autoPrintRelay); }
+function __btTimeout(p, ms){ return Promise.race([p, new Promise((_, rej)=>setTimeout(()=>rej(new Error('bt-timeout')), ms))]); }
+function cancelBtRelease(slot){ if(__btReleaseTimers[slot]){ clearTimeout(__btReleaseTimers[slot]); delete __btReleaseTimers[slot]; } }
+function scheduleBtRelease(slot, ms){
+  slot = slot || 'main';
+  cancelBtRelease(slot);
+  if(__btShouldHold()) return;
+  __btReleaseTimers[slot] = setTimeout(()=>{
+    delete __btReleaseTimers[slot];
+    __btQuiet = true; setTimeout(()=>{ __btQuiet = false; }, 3000);
+    const charRef = getBtCharacteristic(slot), device = getBtDevice(slot);
+    try{
+      if(charRef && charRef.native){ const Ble = nativeBle(); if(Ble) Ble.disconnect(charRef.deviceId).catch(()=>{}); }
+      else if(device && device.gatt && device.gatt.connected) device.gatt.disconnect();
+    }catch(e){}
+    clearBtConnection(slot);   // NOT forgotten: next print reconnects to the same printer
+  }, ms || 10000);
+}
+async function ensureBtConnected(slot){
+  slot = slot || 'main';
+  cancelBtRelease(slot);
+  if(getBtCharacteristic(slot)) return true;
+  if(__btEnsureBusy[slot]) return __btEnsureBusy[slot];
+  const run = (async ()=>{
+    const entry = loadRememberedBtDevices()[slot];
+    if(!entry || !entry.id) return false;
+    for(let attempt = 0; attempt < 4 && !getBtCharacteristic(slot); attempt++){
+      try{
+        if(isNativeApp()){
+          const Ble = nativeBle(); if(!Ble) return false;
+          try{ await Ble.initialize(); }catch(e){}
+          await __btTimeout(nativeConnectAndMatch(Ble, slot, entry.id, entry.name), 8000);
+        } else if(navigator.bluetooth && navigator.bluetooth.getDevices){
+          const known = await navigator.bluetooth.getDevices();
+          const device = known.find(d=>d.id === entry.id);
+          if(!device) return false;
+          const server = await __btTimeout(device.gatt.connect(), 8000);
+          await finishBtConnection(slot, device, server);
+        } else return false;
+      }catch(e){}
+      if(!getBtCharacteristic(slot)) await new Promise(r=>setTimeout(r, 1500));   // printer may be busy with another device
+    }
+    return !!getBtCharacteristic(slot);
+  })();
+  __btEnsureBusy[slot] = run;
+  let ok = false;
+  try{ ok = await run; } finally { delete __btEnsureBusy[slot]; }
+  if(ok) scheduleBtRelease(slot, 60000);   // safety: never hold a printer forever
+  return ok;
+}
 function disconnectBluetoothPrinter(slot, skipRender){
   slot = slot || 'main';
   const charRef = getBtCharacteristic(slot);
@@ -7840,6 +7923,7 @@ function disconnectBluetoothPrinter(slot, skipRender){
 // printer from Settings — this is what actually fixes that, rather than
 // just working around it.
 async function autoReconnectBluetooth(){
+  if(!__btShouldHold()) return;   // on-demand mode: connect only when printing
   const remembered = loadRememberedBtDevices();
   const slots = Object.keys(remembered);
   if(!slots.length) return;
@@ -8608,7 +8692,8 @@ function renderReceiptsListItems(sales){
       const cust = sale.customerId ? state.customers.find(c=>c.id===sale.customerId) : null;
       confirmDialog(tr('printConfirmQ') + (sale.receiptNumber ? ' (№'+sale.receiptNumber+')' : ''), async ()=>{
         if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){
-          await connectBluetoothPrinter();
+          await ensureBtConnected('main');
+          if(!state.btCharacteristic && !loadRememberedBtDevices().main) await connectBluetoothPrinter();
         }
         if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){ requestRelayPrint(sale); return; }
         printReceipt(sale, cust);
@@ -9538,8 +9623,9 @@ async function printLabels(products){
   if(!jobs.length){ showToast(tr('lbNone')); return; }
   const showStock = !!document.getElementById('lb-stock').checked;
   if(state.settings.printerMode === 'bluetooth'){
-    if(!state.btCharacteristic){ await connectBluetoothPrinter(); }
-    if(!state.btCharacteristic){ showToast(tr('printerNotConnected')); return; }
+    if(!state.btCharacteristic){ await ensureBtConnected('main'); }
+    if(!state.btCharacteristic && !loadRememberedBtDevices().main){ await connectBluetoothPrinter(); }
+    if(!state.btCharacteristic){ showToast(tr('printerUnreachable')); return; }
     try{
       for(const p of jobs){
         const cv = buildLabelCanvas(p, {showStock});
@@ -10474,7 +10560,8 @@ function openCustomerDetail(customerId){
       if(!sale) return;
       confirmDialog(tr('printConfirmQ') + (sale.receiptNumber ? ' (№'+sale.receiptNumber+')' : ''), async ()=>{
         if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){
-          await connectBluetoothPrinter();
+          await ensureBtConnected('main');
+          if(!state.btCharacteristic && !loadRememberedBtDevices().main) await connectBluetoothPrinter();
         }
         if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){ requestRelayPrint(sale); return; }
         printReceipt(sale, cust);
@@ -12997,8 +13084,8 @@ function renderSettingsPrinter(container){
         <p class="subtle" id="ios-note" style="margin:0 0 10px;display:none;color:var(--danger);">${tr('iosNote')}</p>
         <p class="subtle" style="margin:0 0 10px;">${tr('bluetoothReconnectHint')}</p>
         <div class="row" style="margin-bottom:10px;">
-          <span class="subtle">${state.btCharacteristic ? tr('printerConnected') : tr('printerNotConnected')}</span>
-          <span class="badge ${state.btCharacteristic?'badge-clear':'badge-debt'}">${state.btDevice ? state.btDevice.name || '—' : ''}</span>
+          <span class="subtle">${state.btCharacteristic ? tr('printerConnected') : (loadRememberedBtDevices().main ? tr('printerOnDemand') : tr('printerNotConnected'))}</span>
+          <span class="badge ${(state.btCharacteristic || loadRememberedBtDevices().main)?'badge-clear':'badge-debt'}">${state.btDevice ? (state.btDevice.name || '—') : ((loadRememberedBtDevices().main || {}).name || '')}</span>
         </div>
         <div class="btn-row">
           <button class="btn btn-outline" id="bt-connect-btn">${tr('connectPrinter')}</button>
@@ -13136,6 +13223,7 @@ function renderSettingsPrinter(container){
   if(btTestBtn) btTestBtn.addEventListener('click', async ()=>{
       if(btTestBtn.disabled) return;
       btTestBtn.disabled = true;
+      await ensureBtConnected('main');
       try{
     const ok = await (async ()=>{
       try{
@@ -14712,7 +14800,7 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
       if(!authCallbackFired){
         authCallbackFired = true;
         try{ console.warn('Firebase Auth slow (>8s) - opening from local data'); }catch(e){}
-        renderAuthGate('login');
+        if(state.businessId) renderAuthConnecting(); else renderAuthGate('login');
       }
     }, 8000);
     let syncRetryTimer = null;
@@ -14760,8 +14848,9 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
         renderAll();
         if(syncRetryTimer) clearInterval(syncRetryTimer);
         syncRetryTimer = setInterval(async ()=>{
+          const __before = pendingSyncQueue.length;
           await retryPendingSync();
-          renderAll();
+          if(pendingSyncQueue.length !== __before) scheduleLiveRender();
         }, 90*1000);
       } else {
         if(syncRetryTimer){ clearInterval(syncRetryTimer); syncRetryTimer = null; }
