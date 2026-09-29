@@ -2441,6 +2441,32 @@ function planLabelFor(planKey){
 const SUPER_ADMIN_UID = 'M0CZxwtteTMxbs6nyeR5kVrJ68X2';
 function isSuperAdmin(){ return !!(fbUser && fbUser.uid === SUPER_ADMIN_UID); }
 
+// Firestore bills every document read. Re-reading a whole year of sales on
+// every app start is what makes cost grow with each shop and each day. After
+// the first full load, a device only needs what changed since its last
+// successful sync (with a 3-day safety margin); older history stays in the
+// device's own storage.
+const HIST_SYNC_KEY = 'sardor_hist_synced_v1';
+function histSyncSinceIso(){
+  const cut = cloudHistoryCutoffIso();
+  try{
+    const m = JSON.parse(localStorage.getItem(HIST_SYNC_KEY) || 'null');
+    if(m && m.biz && m.biz === state.businessId && m.at && (state.sales || []).length){
+      const since = new Date(new Date(m.at).getTime() - 3*86400000).toISOString();
+      return since > cut ? since : cut;
+    }
+  }catch(e){}
+  return cut;
+}
+function markHistSynced(startedIso){
+  try{ localStorage.setItem(HIST_SYNC_KEY, JSON.stringify({biz: state.businessId, at: startedIso})); }catch(e){}
+}
+// Live listeners only need the last 2 days: everything older is already local.
+function liveSyncSinceIso(){
+  const cut = cloudHistoryCutoffIso();
+  const recent = new Date(Date.now() - 2*86400000).toISOString();
+  return recent > cut ? recent : cut;
+}
 function cloudHistoryCutoffIso(){
   const d = historyWindowDays();
   const days = d ? Math.max(31, d) : 365;
@@ -2636,6 +2662,7 @@ function watchForNewRefunds(colRef){
     snap.docs.forEach(d=>{
       const sale = d.data();
       if(!sale || !sale.id || !sale.refunded) return;
+      { const __i = (state.sales||[]).findIndex(x=>x && x.id===sale.id); if(__i >= 0 && !state.sales[__i].refunded){ state.sales[__i] = sale; storSetSoon('sales'); scheduleLiveRender(); } }
       if(knownRefundedSaleIds.has(sale.id)) return;
       knownRefundedSaleIds.add(sale.id);
       if(wasReady && state.currentStaff && state.currentStaff.role==='admin' && sale.refundedBy && sale.refundedBy !== state.currentStaff.name){
@@ -2685,9 +2712,15 @@ function watchForPrintRelay(colRef){
   const unsub = colRef.onSnapshot(snap=>{
     const wasReady = printRelayReady;
     printRelayReady = true;
+    const prevPrinted = new Map(lastDocs.map(d=>[d.id, !!d.printed]));
     lastDocs = snap.docs.map(d=>d.data()).filter(Boolean);
     if(wasReady){
-      snap.docChanges().forEach(ch=>{ if(ch.type==='added'){ const d = ch.doc.data(); if(d && d.id) wanted.add(d.id); } });
+      snap.docChanges().forEach(ch=>{
+        const d = ch.doc.data(); if(!d || !d.id) return;
+        if(ch.type==='added') wanted.add(d.id);
+        // a reprint request: this sale was printed before and is now unprinted again
+        if(ch.type==='modified' && !d.printed && prevPrinted.get(d.id)) wanted.add(d.id);
+      });
     } else {
       lastDocs.forEach(d=>{ if(d && d.id) printRelaySeenIds.add(d.id); });
     }
@@ -2740,14 +2773,14 @@ function startLiveListeners(){
   watchProductsOrCustomers(productsCol(), 'products', 'products', m=>{ lastSyncedProductsMap = m; });
   watchProductsOrCustomers(customersCol(), 'customers', 'customers', m=>{ lastSyncedCustomersMap = m; });
   watchArrayCollection(tablesCol(), 'tables', 'table');
-  watchArrayCollection(salesCol().where('date','>=',cloudHistoryCutoffIso()), 'sales', 'sale', cloudHistoryCutoffIso());
+  watchArrayCollection(salesCol().where('date','>=',liveSyncSinceIso()), 'sales', 'sale', liveSyncSinceIso());
   watchArrayCollection(expensesCol().where('date','>=',cloudHistoryCutoffIso()), 'expenses', 'expense', cloudHistoryCutoffIso());
   watchArrayCollection(reservationsCol(), 'reservations', 'reservation');
   watchForNewRefunds(salesCol().where('refundedAt','>=', new Date().toISOString()));
   if(state.settings.printerMode==='bluetooth' && state.settings.autoPrintRelay){
-    watchForPrintRelay(salesCol().where('printed','==',false));
+    watchForPrintRelay(salesCol().where('date','>=', new Date(Date.now() - 12*3600000).toISOString()));
   }
-  watchArrayCollection(ledgerCol().where('date','>=',cloudHistoryCutoffIso()), 'ledger', 'ledger', cloudHistoryCutoffIso());
+  watchArrayCollection(ledgerCol().where('date','>=',liveSyncSinceIso()), 'ledger', 'ledger', liveSyncSinceIso());
   watchArrayCollection(visitsCol(), 'visits', 'visit');
   watchArrayCollection(creditorsCol(), 'creditors', 'creditor');
   watchArrayCollection(creditorLedgerCol(), 'creditorLedger', 'creditorLedger');
@@ -3567,14 +3600,25 @@ async function loadCloudData(){
         state.staff = mergeById(catalog.staff, bizData.staff);
         state.shifts = mergeById(catalog.shifts, bizData.shifts);
         if((bizData.staff||[]).length || (bizData.shifts||[]).length) hadLeftoverLegacyFields = true;
-        const [tablesSnap, salesSnap, ledgerSnap, visitsSnap, creditorsSnap, creditorLedgerSnap, kitchenStationsSnap, productsSnap, customersSnap] = await Promise.all([
-          tablesCol().get(), salesCol().where('date','>=',cloudHistoryCutoffIso()).get(), ledgerCol().where('date','>=',cloudHistoryCutoffIso()).get(), visitsCol().get(), creditorsCol().get(), creditorLedgerCol().get(), kitchenStationsCol().get(),
-          productsCol().get(), customersCol().get()
+        const __histStart = new Date().toISOString();
+        const __since = histSyncSinceIso();
+        const __isDelta = __since > cloudHistoryCutoffIso();
+        const __none = Promise.resolve({docs: []});
+        const [tablesSnap, salesSnap, ledgerSnap, visitsSnap, creditorsSnap, creditorLedgerSnap, kitchenStationsSnap, productsSnap, customersSnap, refundedSnap, editedSnap] = await Promise.all([
+          tablesCol().get(), salesCol().where('date','>=',__since).get(), ledgerCol().where('date','>=',__since).get(), visitsCol().get(), creditorsCol().get(), creditorLedgerCol().get(), kitchenStationsCol().get(),
+          productsCol().get(), customersCol().get(),
+          // older sales refunded / edited on another device since the last sync
+          __isDelta ? salesCol().where('refundedAt','>=',__since).get().catch(()=>({docs: []})) : __none,
+          __isDelta ? salesCol().where('editedAt','>=',__since).get().catch(()=>({docs: []})) : __none
         ]);
         state.tables = mergeById(tablesSnap.docs.map(d=>d.data()), bizData.tables);
-        { const cut = cloudHistoryCutoffIso(); const olderSales = (state.sales||[]).filter(x=>x && x.date && x.date < cut); const olderLedger = (state.ledger||[]).filter(x=>x && x.date && x.date < cut);
+        { const cut = __since; const olderSales = (state.sales||[]).filter(x=>x && x.date && x.date < cut); const olderLedger = (state.ledger||[]).filter(x=>x && x.date && x.date < cut);
         state.sales = mergeById(olderSales.concat(salesSnap.docs.map(d=>d.data())), bizData.sales);
-        state.ledger = mergeById(olderLedger.concat(ledgerSnap.docs.map(d=>d.data())), bizData.ledger); }
+        state.ledger = mergeById(olderLedger.concat(ledgerSnap.docs.map(d=>d.data())), bizData.ledger);
+        const __changed = {}; refundedSnap.docs.concat(editedSnap.docs).forEach(d=>{ const x = d.data(); if(x && x.id) __changed[x.id] = x; });
+        if(Object.keys(__changed).length) state.sales = state.sales.map(x=> (x && __changed[x.id]) ? __changed[x.id] : x);
+        // Mark synced only after the data is safely in local storage.
+        Promise.all([storSet(STORAGE_KEYS.sales, state.sales), storSet(STORAGE_KEYS.ledger, state.ledger)]).then(()=>markHistSynced(__histStart)).catch(()=>{}); }
         state.visits = visitsSnap.docs.map(d=>d.data());
         state.creditors = creditorsSnap.docs.map(d=>d.data());
         state.creditorLedger = creditorLedgerSnap.docs.map(d=>d.data());
@@ -3619,8 +3663,8 @@ async function loadCloudData(){
           const missing = (arr, snap)=>{ const h = have(snap); return (arr||[]).filter(x=>x && x.id && !h.has(x.id)); };
           await catalogDocRef().set(sanitizeForFirestore({staff:state.staff, shifts:state.shifts, products:null, customers:null, updatedAt:new Date().toISOString()}), {merge:true});
           await Promise.all(missing(state.tables, tablesSnap).map(t=>tablesCol().doc(t.id).set(sanitizeForFirestore(t))));
-          await Promise.all(missing(state.sales, salesSnap).map(s=>salesCol().doc(s.id).set(sanitizeForFirestore(s))));
-          await Promise.all(missing(state.ledger, ledgerSnap).map(l=>ledgerCol().doc(l.id).set(sanitizeForFirestore(l))));
+          await Promise.all(missing((state.sales||[]).filter(x=>x && x.date && x.date >= __since), salesSnap).map(s=>salesCol().doc(s.id).set(sanitizeForFirestore(s))));
+          await Promise.all(missing((state.ledger||[]).filter(x=>x && x.date && x.date >= __since), ledgerSnap).map(l=>ledgerCol().doc(l.id).set(sanitizeForFirestore(l))));
           await Promise.all(missing(state.products, productsSnap).map(p=>productsCol().doc(p.id).set(sanitizeForFirestore(p))));
           await Promise.all(missing(state.customers, customersSnap).map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(c))));
           const cleared = {products:null, customers:null, staff:null, shifts:null, sales:null, ledger:null, tables:null};
