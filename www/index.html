@@ -12348,7 +12348,7 @@ function settingsMenuItems(){
     {id:'catalog', icon:ICONS.globe, color:'var(--teal)', label:tr('osTitle'), show:canBusinessSettings(), group:'other'},
     {id:'backup', icon:ICONS.cloud, color:'var(--accent)', label:tr('backupSection'), show:canBackup(), group:'other'},
     {id:'support', icon:ICONS.chat, color:'var(--violet)', label:tr('supportSection'), show:true, group:'other'},
-    {id:'website', icon:ICONS.globe, color:'var(--accent)', label:'Veb-sayt (savdo-pos.netlify.app)', show:canBusinessSettings(), group:'other'},
+    {id:'website', icon:ICONS.globe, color:'var(--accent)', label:'Veb-sayt (savdo-pos.pages.dev)', show:canBusinessSettings(), group:'other'},
   ].filter(i=>i.show);
 }
 
@@ -12394,7 +12394,7 @@ function renderSettingsMenu(container){
   container.querySelectorAll('[data-cat]').forEach(el=>{
     el.addEventListener('click', ()=>{
       if(el.dataset.cat === 'superadmin'){ state.view = 'superadmin'; renderAll(); history.pushState({}, '', ''); return; }
-      if(el.dataset.cat === 'website'){ openExternalUrl('https://savdo-pos.netlify.app/'); return; }
+      if(el.dataset.cat === 'website'){ openExternalUrl('https://savdo-pos.pages.dev/'); return; }
       state.settingsCategory = el.dataset.cat;
       renderSettings();
     });
@@ -13836,7 +13836,7 @@ function renderSettingsExpiry(container){
 }
 
 /* --- Online catalog --- */
-const ONLINE_SHOP_BASE = 'https://savdo-pos.netlify.app/s/';
+const ONLINE_SHOP_BASE = 'https://savdo-pos.pages.dev/s/';
 function onlineShopCfg(){ return state.settings.onlineShop || {enabled:false, slug:'', telegram:'', whatsapp:'', showOut:false, lang:'', lastPublishedAt:null}; }
 function onlineShopUrl(slug){ return ONLINE_SHOP_BASE + slug; }
 function validSlug(v){ return /^[a-z0-9](?:[a-z0-9-]{1,28})[a-z0-9]$/.test(v||''); }
