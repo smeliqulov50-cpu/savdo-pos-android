@@ -483,6 +483,8 @@ const T = {
   stock:{uz:"Qoldiq",ru:"Остаток",en:"Stock",kk:"Қалдық",ky:"Калдык",tg:"Бақимонда"},
   unit:{uz:"O'lchov birligi",ru:"Единица",en:"Unit",kk:"Өлшем бірлігі",ky:"Өлчөм бирдиги",tg:"Воҳиди ченак"},
   save:{uz:"Saqlash",ru:"Сохранить",en:"Save",kk:"Сақтау",ky:"Сактоо",tg:"Захира кардан"},
+  permPrinterSetup:{uz:"Printer sozlamalari (shu qurilmada printerni ulash)",ru:"Настройки принтера (подключение на этом устройстве)",en:"Printer settings (connect a printer on this device)",kk:"Принтер баптаулары",ky:"Принтер жөндөөлөрү",tg:"Танзимоти принтер"},
+  permBackup:{uz:"Zaxira nusxa va tiklash",ru:"Резервная копия и восстановление",en:"Backup and restore",kk:"Сақтық көшірме және қалпына келтіру",ky:"Камдык көчүрмө жана калыбына келтирүү",tg:"Нусхаи эҳтиётӣ ва барқарорсозӣ"},
   printerOnDemand:{uz:"Chop etishda avtomatik ulanadi",ru:"Подключается автоматически при печати",en:"Connects automatically when printing",kk:"Басып шығарғанда автоматты қосылады",ky:"Басып чыгарганда автоматтык туташат",tg:"Ҳангоми чоп худкор пайваст мешавад"},
   printerConnecting:{uz:"Printerga ulanmoqda…",ru:"Подключение к принтеру…",en:"Connecting to printer…",kk:"Принтерге қосылуда…",ky:"Принтерге туташууда…",tg:"Ба принтер пайваст мешавад…"},
   printerUnreachable:{uz:"Printerga ulanib bo'lmadi. Printer yoqilganini, yaqinligini va boshqa qurilma hozir chop etmayotganini tekshiring.",ru:"Не удалось подключиться к принтеру. Проверьте, что он включён, рядом и сейчас не печатает с другого устройства.",en:"Could not reach the printer. Check it is on, nearby and not printing for another device right now.",kk:"Принтерге қосылу мүмкін болмады.",ky:"Принтерге туташуу мүмкүн болгон жок.",tg:"Ба принтер пайваст шуда нашуд."},
@@ -1019,7 +1021,7 @@ const T = {
   boldBusinessInfo:{uz:"Do'kon ma'lumotini qalin qilish",ru:"Сделать данные магазина жирными",en:"Make business info bold",kk:"Дүкен ақпаратын қалың қылу",ky:"Дүкөн маалыматын калың кылуу",tg:"Ғафс кардани маълумоти мағоза"},
   largeBusinessInfo:{uz:"Do'kon ma'lumotini kattaroq qilish",ru:"Сделать данные магазина крупнее",en:"Make business info larger",kk:"Дүкен ақпаратын үлкенірек қылу",ky:"Дүкөн маалыматын чоңураак кылуу",tg:"Калон кардани маълумоти мағоза"},
   staffManagePerm:{uz:"Xodimlarni boshqarish (qo'shish/o'chirish)",ru:"Управление сотрудниками (добавление/удаление)",en:"Manage staff (add/remove)",kk:"Қызметкерлерді басқару (қосу/жою)",ky:"Кызматкерлерди башкаруу (кошуу/өчүрүү)",tg:"Идораи кормандон (илова/нест кардан)"},
-  settingsPerm:{uz:"Sozlamalarga kirish",ru:"Доступ к настройкам",en:"Access settings",kk:"Баптауларға кіру",ky:"Жөндөөлөргө кирүү",tg:"Дастрасӣ ба танзимот"},
+  settingsPerm:{uz:"Biznes sozlamalari (ma'lumotlar, chek dizayni, limitlar, onlayn do'kon)",ru:"Настройки бизнеса (данные, дизайн чека, лимиты, онлайн-магазин)",en:"Business settings (info, receipt design, limits, online shop)",kk:"Баптауларға кіру",ky:"Жөндөөлөргө кирүү",tg:"Дастрасӣ ба танзимот"},
   purchaseHistory:{uz:"Xaridlar tarixi",ru:"История покупок",en:"Purchase history",kk:"Сатып алулар тарихы",ky:"Сатып алуулар тарыхы",tg:"Таърихи харидҳо"},
   reprintReceipt:{uz:"Qayta chop etish",ru:"Печать заново",en:"Reprint",kk:"Қайта басып шығару",ky:"Кайра басып чыгаруу",tg:"Аз нав чоп кардан"},
   topCustomersSection:{uz:"Eng faol mijozlar",ru:"Самые активные клиенты",en:"Top customers",kk:"Ең белсенді клиенттер",ky:"Эң активдүү кардарлар",tg:"Мизоҷони фаъолтарин"},
@@ -1675,6 +1677,21 @@ function jobTitleLabel(jobTitle){
   const map = {cashier:'jobCashier', administrator:'jobAdministrator', waiter:'jobWaiter', manager:'jobManager', warehouse:'jobWarehouse', accountant:'jobAccountant', agent:'jobAgent', custom:'jobCustom'};
   return tr(map[jobTitle] || 'roleCashier');
 }
+// Printer setup is device hardware: allowed for every staff member unless the
+// owner explicitly unticks it (older staff records simply don't have the key).
+function canPrinterSetup(){
+  if(isAdmin()) return true;
+  const p = (state.currentStaff && state.currentStaff.permissions) || {};
+  return p.printerSetup !== false || !!p.settings;
+}
+// Backup/restore: its own permission; staff saved before it existed keep
+// exactly what they had (it used to come with "settings").
+function canBackup(){
+  if(isAdmin()) return true;
+  const p = (state.currentStaff && state.currentStaff.permissions) || {};
+  return p.backup !== undefined ? !!p.backup : !!p.settings;
+}
+function canBusinessSettings(){ return isAdmin() || hasPerm('settings'); }
 function hasPerm(p){ return isAdmin() || (state.currentStaff && state.currentStaff.permissions && state.currentStaff.permissions[p]); }
 
 let idbInstance = null;
@@ -4195,7 +4212,7 @@ function renderHeader(){
     ${state.currentStaff && state.currentStaff.jobTitle==='agent' ? `<button class="icon-round" id="my-plan-btn">${ICONS.target}</button>` : ''}
     ${state.currentStaff && state.currentStaff.jobTitle==='agent' ? `<button class="icon-round" id="my-route-btn">${ICONS.route}</button>` : ''}
     ${isAdmin() ? `<button class="icon-round" id="receipts-btn">${ICONS.receiptIcon}</button>` : ''}
-    ${isAdmin() || hasPerm('settings') || hasPerm('staffManage') ? `<button class="icon-round" id="settings-btn">${ICONS.gear}</button>` : ''}
+    ${settingsMenuItems().length ? `<button class="icon-round" id="settings-btn">${ICONS.gear}</button>` : ''}
     ${state.currentStaff ? `<button class="icon-round" id="logout-btn">${ICONS.logout}</button>` : ''}
   `;
   const modeToggle = document.getElementById('sale-mode-toggle');
@@ -12180,6 +12197,9 @@ async function deleteBusinessCompletely(businessId){
 /* ---------- SETTINGS VIEW ---------- */
 function renderSettings(){
   const container = document.getElementById('view-container');
+  // A section this person may not open (e.g. after the owner changed their
+  // permissions) falls back to the menu instead of opening anyway.
+  if(state.settingsCategory && state.settingsCategory !== 'support' && !settingsMenuItems().some(i=>i.id===state.settingsCategory)) state.settingsCategory = null;
   if(!state.settingsCategory){ renderSettingsMenu(container); return; }
   renderSettingsCategory(container, state.settingsCategory);
 }
@@ -12199,7 +12219,7 @@ function settingsMenuItems(){
     {id:'language', icon:ICONS.translate, color:'var(--ink-soft)', label:tr('languageLabel'), show:true, group:'general'},
     {id:'account', icon:ICONS.building, color:'var(--accent)', label:tr('accountSection'), show:isAdmin(), group:'general'},
     {id:'devices', icon:ICONS.phoneCall, color:'var(--teal)', label:tr('devicesSection'), show:isAdmin(), group:'general'},
-    {id:'business', icon:ICONS.building, color:'var(--accent)', label:tr('menuBusiness'), show:true, group:'business'},
+    {id:'business', icon:ICONS.building, color:'var(--accent)', label:tr('menuBusiness'), show:canBusinessSettings(), group:'business'},
     {id:'branches', icon:ICONS.mapPin, color:'var(--violet)', label:tr('branchesSection'), show:isAdmin(), group:'business'},
     {id:'loyalty', icon:ICONS.percent, color:'var(--warm)', label:tr('loyaltySection'), show:isAdmin(), group:'business'},
     {id:'staff', icon:ICONS.peopleIcon, color:'var(--teal)', label:tr('staffSection'), show:(isAdmin() || hasPerm('staffManage')), group:'staff'},
@@ -12207,16 +12227,16 @@ function settingsMenuItems(){
     {id:'agentmap', icon:ICONS.mapPin, color:'var(--violet)', label:tr('agentMapLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
     {id:'agentplans', icon:ICONS.target, color:'var(--warm)', label:tr('agentPlansLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
     {id:'visitroute', icon:ICONS.route, color:'var(--teal)', label:tr('visitRouteLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
-    {id:'printer', icon:ICONS.printer, color:'var(--ink-soft)', label:tr('printerSettings'), show:true, group:'receipt'},
-    {id:'receipt', icon:ICONS.receiptIcon, color:'var(--accent-dark)', label:tr('receiptDesign'), show:true, group:'receipt'},
-    {id:'charges', icon:ICONS.percent, color:'var(--warm)', label:tr('additionalChargesSection'), show:true, group:'limits'},
-    {id:'credit', icon:ICONS.creditCard, color:'var(--danger)', label:tr('creditLimitSection'), show:true, group:'limits'},
-    {id:'lowstock', icon:ICONS.boxWarning, color:'var(--warm)', label:tr('lowStockOnlyLabel'), show:true, group:'limits'},
-    {id:'expiry', icon:ICONS.calendar, color:'var(--danger)', label:tr('expiryOnlyLabel'), show:true, group:'limits'},
-    {id:'catalog', icon:ICONS.globe, color:'var(--teal)', label:tr('osTitle'), show:true, group:'other'},
-    {id:'backup', icon:ICONS.cloud, color:'var(--accent)', label:tr('backupSection'), show:true, group:'other'},
+    {id:'printer', icon:ICONS.printer, color:'var(--ink-soft)', label:tr('printerSettings'), show:canPrinterSetup(), group:'receipt'},
+    {id:'receipt', icon:ICONS.receiptIcon, color:'var(--accent-dark)', label:tr('receiptDesign'), show:canBusinessSettings(), group:'receipt'},
+    {id:'charges', icon:ICONS.percent, color:'var(--warm)', label:tr('additionalChargesSection'), show:canBusinessSettings(), group:'limits'},
+    {id:'credit', icon:ICONS.creditCard, color:'var(--danger)', label:tr('creditLimitSection'), show:canBusinessSettings(), group:'limits'},
+    {id:'lowstock', icon:ICONS.boxWarning, color:'var(--warm)', label:tr('lowStockOnlyLabel'), show:canBusinessSettings(), group:'limits'},
+    {id:'expiry', icon:ICONS.calendar, color:'var(--danger)', label:tr('expiryOnlyLabel'), show:canBusinessSettings(), group:'limits'},
+    {id:'catalog', icon:ICONS.globe, color:'var(--teal)', label:tr('osTitle'), show:canBusinessSettings(), group:'other'},
+    {id:'backup', icon:ICONS.cloud, color:'var(--accent)', label:tr('backupSection'), show:canBackup(), group:'other'},
     {id:'support', icon:ICONS.chat, color:'var(--violet)', label:tr('supportSection'), show:true, group:'other'},
-    {id:'website', icon:ICONS.globe, color:'var(--accent)', label:'Veb-sayt (savdo-pos.netlify.app)', show:true, group:'other'},
+    {id:'website', icon:ICONS.globe, color:'var(--accent)', label:'Veb-sayt (savdo-pos.netlify.app)', show:canBusinessSettings(), group:'other'},
   ].filter(i=>i.show);
 }
 
@@ -13093,7 +13113,7 @@ function renderSettingsPrinter(container){
         </div>
         <button class="btn btn-accent" style="margin-top:8px;" id="bt-test-btn">${tr('testPrint')}</button>
         <button class="btn btn-outline" style="margin-top:8px;" id="bt-drawer-btn">${tr('openCashDrawer')}</button>
-        <div class="checkbox-row"><input type="checkbox" id="s-auto-print-printer" ${state.settings.autoPrintReceipt?'checked':''}><span>${tr('autoPrintToggle')}</span></div>
+        ${canBusinessSettings() ? `<div class="checkbox-row"><input type="checkbox" id="s-auto-print-printer" ${state.settings.autoPrintReceipt?'checked':''}><span>${tr('autoPrintToggle')}</span></div>` : ''}
         <details class="set-section inner" data-sec="adv" ${__psOpen.adv?'open':''}><summary><span>${tr('psAdvanced')}<span class="ss-sub">${tr('psTapToOpen')}</span></span><span class="ss-chev">&#9662;</span></summary><div class="set-inner">
         <div class="checkbox-row"><input type="checkbox" id="s-auto-cut" ${state.settings.printerAutoCut!==false?'checked':''}><span>${tr('autoCutLabel')}</span></div>
         <div class="field" id="cut-type-field" style="${state.settings.printerAutoCut===false?'display:none;':''}">
@@ -14299,8 +14319,10 @@ function openStaffForm(staffId){
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-editreceipt" ${perms.editReceipt?'checked':''}><span>${tr('permEditReceipt')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-expense" ${perms.expense?'checked':''}><span>${tr('permExpense')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-mydebts" ${perms.myDebts?'checked':''}><span>${tr('permMyDebts')}</span></div>
+      <div class="checkbox-row"><input type="checkbox" id="sf-perm-printer" ${perms.printerSetup!==false?'checked':''}><span>${tr('permPrinterSetup')}</span></div>
       ${canGrantAdmin ? `
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-settings" ${perms.settings?'checked':''}><span>${tr('settingsPerm')}</span></div>
+      <div class="checkbox-row"><input type="checkbox" id="sf-perm-backup" ${(perms.backup!==undefined ? perms.backup : perms.settings)?'checked':''}><span>${tr('permBackup')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-staffmanage" ${perms.staffManage?'checked':''}><span>${tr('staffManagePerm')}</span></div>
       ` : ''}
     </div>
@@ -14382,7 +14404,9 @@ function openStaffForm(staffId){
       myDebts: document.getElementById('sf-perm-mydebts').checked,
       expense: document.getElementById('sf-perm-expense').checked,
       settings: settingsEl ? settingsEl.checked : (perms.settings||false),
-      staffManage: staffManageEl ? staffManageEl.checked : (perms.staffManage||false)
+      staffManage: staffManageEl ? staffManageEl.checked : (perms.staffManage||false),
+      printerSetup: document.getElementById('sf-perm-printer') ? document.getElementById('sf-perm-printer').checked : (perms.printerSetup!==false),
+      backup: document.getElementById('sf-perm-backup') ? document.getElementById('sf-perm-backup').checked : (perms.backup!==undefined ? !!perms.backup : !!perms.settings)
     };
     const salaryEl = document.getElementById('sf-salary');
     const salary = salaryEl && salaryEl.value ? (parseMoneyInput(salaryEl.value)||0) : 0;
@@ -14540,7 +14564,7 @@ function renderAll(){
     renderSettingsCategory(lockedContainer, 'support');
     return;
   }
-  if(state.view==='settings' && !isAdmin() && !hasPerm('settings') && !hasPerm('staffManage')) state.view='sale';
+  if(state.view==='settings' && !settingsMenuItems().length) state.view='sale';
   if(state.view==='products' && !hasPerm('products')) state.view='sale';
   if(state.view==='customers' && !hasPerm('customers')) state.view='sale';
   if(state.view==='reports' && !hasPerm('reports') && !hasPerm('expense')) state.view='sale';
