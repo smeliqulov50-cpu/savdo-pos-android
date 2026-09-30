@@ -7989,7 +7989,7 @@ function scheduleBtRelease(slot, ms){
       else if(device && device.gatt && device.gatt.connected) device.gatt.disconnect();
     }catch(e){}
     clearBtConnection(slot);   // NOT forgotten: next print reconnects to the same printer
-  }, ms || 10000);
+  }, ms || 1500);   // fix65: chek chiqishi bilan printer bo'shaydi
 }
 async function ensureBtConnected(slot){
   slot = slot || 'main';
@@ -7999,7 +7999,7 @@ async function ensureBtConnected(slot){
   const run = (async ()=>{
     const entry = loadRememberedBtDevices()[slot];
     if(!entry || !entry.id) return false;
-    for(let attempt = 0; attempt < 4 && !getBtCharacteristic(slot); attempt++){
+    for(let attempt = 0; attempt < 8 && !getBtCharacteristic(slot); attempt++){   // fix65: printer band bo'lsa ko'proq kutadi
       try{
         if(isNativeApp()){
           const Ble = nativeBle(); if(!Ble) return false;
