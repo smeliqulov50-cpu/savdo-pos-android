@@ -583,6 +583,7 @@ const T = {
   pnlGross:{uz:"Yalpi foyda",ru:"Валовая прибыль",en:"Gross profit",kk:"Жалпы пайда",ky:"Жалпы пайда",tg:"Фоидаи умумӣ"},
   pnlOpex:{uz:"Xarajatlar",ru:"Расходы",en:"Expenses",kk:"Шығыстар",ky:"Чыгымдар",tg:"Хароҷот"},
   pnlNet:{uz:"SOF FOYDA",ru:"ЧИСТАЯ ПРИБЫЛЬ",en:"NET PROFIT",kk:"ТАЗА ПАЙДА",ky:"ТАЗА ПАЙДА",tg:"ФОИДАИ СОФ"},
+  pnlRefundsInfo:{uz:"Qaytarilgan cheklar ({n}), foydaga kirmagan",ru:"Возвраты ({n}), в прибыль не входят",en:"Refunded receipts ({n}), not included in profit",kk:"Қайтарылған чектер ({n}), пайдаға кірмейді",ky:"Кайтарылган чектер ({n}), пайдага кирбейт",tg:"Чекҳои баргардонидашуда ({n}), ба фоида дохил нестанд"},
   pnlMargin:{uz:"Sof marja",ru:"Чистая маржа",en:"Net margin",kk:"Таза маржа",ky:"Таза маржа",tg:"Маржаи соф"},
   pnlPurchasesInfo:{uz:"Tovar xaridi (omborga, hisobga olinmaydi)",ru:"Закупка товара (на склад, не вычитается)",en:"Goods purchased (to stock, not deducted)",kk:"Тауар сатып алу (қоймаға, шегерілмейді)",ky:"Товар сатып алуу (кампага, кемитилбейт)",tg:"Хариди мол (ба анбор, тарҳ намешавад)"},
   pnlVsPrev:{uz:"o'tgan oyga nisbatan",ru:"к прошлому месяцу",en:"vs previous month",kk:"өткен айға қарағанда",ky:"өткөн айга салыштырмалуу",tg:"нисбат ба моҳи гузашта"},
@@ -1633,6 +1634,19 @@ function currencyLabel(){
   const fieldByLang = {ru:'symbolRu', en:'symbolEn', kk:'symbolKk', ky:'symbolKy', tg:'symbolTg'};
   const field = fieldByLang[state.lang];
   return (field && cur[field]) || cur.symbolUz;
+}
+const APP_MONTHS = { /* fix68 */
+  uz:{l:['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'], s:['Yan','Fev','Mar','Apr','May','Iyn','Iyl','Avg','Sen','Okt','Noy','Dek']},
+  ru:{l:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'], s:['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек']},
+  en:{l:['January','February','March','April','May','June','July','August','September','October','November','December'], s:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']},
+  kk:{l:['Қаңтар','Ақпан','Наурыз','Сәуір','Мамыр','Маусым','Шілде','Тамыз','Қыркүйек','Қазан','Қараша','Желтоқсан'], s:['Қаң','Ақп','Нау','Сәу','Мам','Мау','Шіл','Там','Қыр','Қаз','Қар','Жел']},
+  ky:{l:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'], s:['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек']},
+  tg:{l:['Январ','Феврал','Март','Апрел','Май','Июн','Июл','Август','Сентябр','Октябр','Ноябр','Декабр'], s:['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек']}
+};
+function appMonthName(d, short){
+  const lang = (typeof state!=='undefined' && state && state.lang) || 'uz';
+  const m = APP_MONTHS[lang] || APP_MONTHS.uz; const i = d.getMonth();
+  return short ? m.s[i] : (m.l[i] + ' ' + d.getFullYear());
 }
 function fmt(n){
   n = Math.round(n||0);
@@ -4580,7 +4594,7 @@ function cartQtyForProduct(productId){
 }
 function saleProfit(sale){
   const itemsProfit = sale.items.reduce((sum,it)=> sum + saleItemProfit(it), 0);
-  return itemsProfit - (sale.discountAmount||0) - (sale.bonusUsed||0);
+  return itemsProfit - (sale.discountAmount||0) - (sale.bonusUsed||0) + (sale.serviceChargeAmount||0) + (sale.deliveryFee||0); /* fix68 */
 }
 
 function saleItemProfit(it){
@@ -10488,8 +10502,10 @@ function editReceiptSubtotal(){
 function editReceiptTotal(){
   const sale = state.sales.find(s=>s.id===editReceiptDraft.saleId);
   const subtotal = editReceiptSubtotal();
-  const serviceChargeAmount = subtotal * ((sale.serviceChargePercent||0)/100);
-  return subtotal + serviceChargeAmount + (sale.deliveryFee||0);
+  const _disc = sale.discountAmount ? Math.min(sale.discountType==='percent' ? subtotal*((sale.discountValue||0)/100) : (sale.discountValue||0), subtotal) : 0; /* fix68 */
+  const _ds = subtotal - _disc;
+  const serviceChargeAmount = _ds * ((sale.serviceChargePercent||0)/100);
+  return _ds - Math.min(sale.bonusUsed||0, _ds) + serviceChargeAmount + (sale.deliveryFee||0);
 }
 
 function renderEditReceiptModal(){
@@ -10649,7 +10665,7 @@ function saveEditedReceipt(){
   ) : 0;
   const discountedSubtotal = subtotal - discountAmount;
   const serviceChargeAmount = discountedSubtotal * ((sale.serviceChargePercent||0)/100);
-  const newTotal = discountedSubtotal + serviceChargeAmount + (sale.deliveryFee||0);
+  const newTotal = discountedSubtotal - Math.min(sale.bonusUsed||0, discountedSubtotal) + serviceChargeAmount + (sale.deliveryFee||0); /* fix68 */
   const oldTotal = sale.total;
   const diff = newTotal - oldTotal;
 
@@ -11226,13 +11242,13 @@ function renderReportsCategory(container, cat){
   // Net profit makes that distinction explicit instead of silently
   // overstating how much the business actually kept.
   const todayExpensesList = visibleExpenses().filter(x=>new Date(x.date).toDateString()===today);
-  const todayExpensesTotal = todayExpensesList.reduce((a,x)=>a+x.amount,0);
+  const todayExpensesTotal = todayExpensesList.filter(x=>x.category!=='purchase').reduce((a,x)=>a+(x.amount||0),0); /* fix68 */
   const todayNetProfit = todayProfit - todayExpensesTotal;
   // Same "gross vs actual bottom line" gap as today's figure — the
   // all-time total profit card had the identical problem, just easier to
   // miss since it's not looked at daily.
   const totalExpensesList = visibleExpenses().filter(x=>!historyCutoff || new Date(x.date) >= historyCutoff);
-  const totalExpensesTotal = totalExpensesList.reduce((a,x)=>a+x.amount,0);
+  const totalExpensesTotal = totalExpensesList.filter(x=>x.category!=='purchase').reduce((a,x)=>a+(x.amount||0),0); /* fix68 */
   const totalNetProfit = totalProfit - totalExpensesTotal;
   function productInventoryValue(p){
     if(p.variants && p.variants.length) return p.variants.reduce((s,v)=>s+(v.stock*v.price),0);
@@ -11539,7 +11555,7 @@ function renderReportsCategory(container, cat){
       // profit) view a shop owner actually wants, so it needs the same
       // expense subtraction to mean anything as a real bottom line.
       const rangeExpenses = visibleExpenses().filter(x=>{ const d=new Date(x.date); return d>=fromD && d<=toD; });
-      const rangeExpensesTotal = rangeExpenses.reduce((a,x)=>a+x.amount,0);
+      const rangeExpensesTotal = rangeExpenses.filter(x=>x.category!=='purchase').reduce((a,x)=>a+(x.amount||0),0); /* fix68 */
       const rangeNetProfit = rangeProfit - rangeExpensesTotal;
       resEl.innerHTML = `
         <div class="row"><span class="subtle">${tr('total')}</span><strong class="stat-value-lg">${fmt(rangeTotal)}</strong></div>
@@ -11659,7 +11675,7 @@ function renderReportsCategory(container, cat){
       return {st, sales, fixed, commission, accrued: fixed+commission, paid, remaining: fixed+commission-paid, pays};
     }).filter(r=>r.accrued>0 || r.paid>0);
     const tot = rows.reduce((a,r)=>({a:a.a+r.accrued, p:a.p+r.paid, r:a.r+r.remaining}), {a:0,p:0,r:0});
-    const monthName = new Date(py, pm-1, 1).toLocaleDateString(undefined, {month:'long', year:'numeric'});
+    const monthName = appMonthName(new Date(py, pm-1, 1));
     container.innerHTML = `
       ${reportsBackHeader(tr('payrollReport'))}
       <div class="row" style="margin-bottom:12px;"><button class="icon-btn" id="pr-prev">&lsaquo;</button><strong style="text-transform:capitalize;">${monthName}</strong><button class="icon-btn" id="pr-next">&rsaquo;</button></div>
@@ -11706,15 +11722,16 @@ function renderReportsCategory(container, cat){
       const byCat = {}; exps.filter(e=>e.category!=='purchase').forEach(e=>{ byCat[e.category||'other'] = (byCat[e.category||'other']||0)+(e.amount||0); });
       const opex = Object.values(byCat).reduce((a,b)=>a+b,0);
       const gross = ok.reduce((a,s)=>a+saleProfit(s),0);
-      return {revenue, refunds, cogs, discounts, gross, byCat, opex, purchases, net: gross - opex, count: ok.length};
+      const goods = ok.reduce((a,s)=>a+s.items.reduce((x,it)=>x+(it.price||0)*(it.qty||0),0),0); const serviceCharge = ok.reduce((a,s)=>a+(s.serviceChargeAmount||0),0); const delivery = ok.reduce((a,s)=>a+(s.deliveryFee||0),0); /* fix68 */
+      return {revenue, refunds, refundCount: ref.length, goods, serviceCharge, delivery, cogs, discounts, gross, byCat, opex, purchases, net: gross - opex, count: ok.length};
     };
     const cur = calc(state.pnlMonth);
     const prevD = new Date(py, pm-2, 1); const prevKey = prevD.getFullYear()+'-'+String(prevD.getMonth()+1).padStart(2,'0');
     const prev = calc(prevKey);
     const delta = prev.net !== 0 ? Math.round((cur.net - prev.net)/Math.abs(prev.net)*100) : null;
-    const last6 = []; for(let i=5;i>=0;i--){ const d = new Date(py, pm-1-i, 1); const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); last6.push({label: d.toLocaleDateString(undefined, {month:'short'}), value: Math.round(calc(k).net)}); }
-    const monthName = new Date(py, pm-1, 1).toLocaleDateString(undefined, {month:'long', year:'numeric'});
-    const row = (l, v, opts)=>`<div class="row" style="padding:7px 0;border-bottom:1px solid var(--line);${opts&&opts.bold?'font-weight:800;':''}"><span ${opts&&opts.sub?'class="subtle" style="padding-left:12px;"':''}>${l}</span><span style="${opts&&opts.color?('color:'+opts.color+';'):''}${opts&&opts.bold?'font-weight:800;':''}">${opts&&opts.neg?'−':''}${fmt(Math.abs(v))}</span></div>`;
+    const last6 = []; for(let i=5;i>=0;i--){ const d = new Date(py, pm-1-i, 1); const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); last6.push({label: appMonthName(d, true), value: Math.round(calc(k).net)}); }
+    const monthName = appMonthName(new Date(py, pm-1, 1));
+    const row = (l, v, opts)=>{ opts = opts||{}; const n = Math.round(v||0); const sign = opts.neg ? (n>0?'−':(n<0?'+':'')) : (n<0 ? '−' : (opts.plus && n>0 ? '+' : '')); return `<div class="row" style="padding:7px 0;border-bottom:1px solid var(--line);gap:10px;${opts.bold?'font-weight:800;':''}"><span class="${opts.sub?'subtle':''}" style="flex:1;min-width:0;${opts.sub?'padding-left:12px;':''}">${l}</span><span style="white-space:nowrap;flex-shrink:0;${opts.color?('color:'+opts.color+';'):''}${opts.bold?'font-weight:800;':''}">${sign}${fmt(Math.abs(n))}</span></div>`; }; /* fix68 */
     container.innerHTML = `
       ${reportsBackHeader(tr('pnlReport'))}
       <div class="row" style="margin-bottom:12px;"><button class="icon-btn" id="pnl-prev">&lsaquo;</button><strong style="text-transform:capitalize;">${monthName}</strong><button class="icon-btn" id="pnl-next">&rsaquo;</button></div>
@@ -11724,15 +11741,17 @@ function renderReportsCategory(container, cat){
         <div class="subtle" style="font-size:12px;">${tr('pnlMargin')}: ${cur.revenue>0?Math.round(cur.net/cur.revenue*100):0}%${delta!==null?` &middot; <span style="color:${delta>=0?'var(--teal)':'var(--danger)'};font-weight:700;">${delta>=0?'+':''}${delta}%</span> ${tr('pnlVsPrev')}`:''}</div>
       </div>
       <div class="card" style="padding:6px 14px 10px;margin-bottom:12px;">
-        ${row(tr('pnlRevenue')+` (${cur.count})`, cur.revenue)}
-        ${cur.refunds ? row(tr('pnlRefunds'), cur.refunds, {sub:true, neg:true}) : ''}
-        ${row(tr('pnlCogs'), cur.cogs, {sub:true, neg:true})}
+        ${row(tr('pnlRevenue')+` (${cur.count})`, cur.goods)}
+        ${cur.serviceCharge ? row(tr('serviceCharge'), cur.serviceCharge, {sub:true, plus:true}) : ''}
+        ${cur.delivery ? row(tr('deliveryFee'), cur.delivery, {sub:true, plus:true}) : ''}
         ${cur.discounts ? row(tr('pnlDiscounts'), cur.discounts, {sub:true, neg:true}) : ''}
+        ${row(tr('pnlCogs'), cur.cogs, {sub:true, neg:true})}
         ${row(tr('pnlGross'), cur.gross, {bold:true})}
         ${Object.keys(cur.byCat).sort((a,b)=>cur.byCat[b]-cur.byCat[a]).map(c=>row(expenseCategoryLabel(c), cur.byCat[c], {sub:true, neg:true})).join('')}
         ${row(tr('pnlOpex'), cur.opex, {neg:true})}
         ${row(tr('pnlNet'), cur.net, {bold:true, color: cur.net>=0?'var(--teal)':'var(--danger)'})}
         ${cur.purchases ? `<div class="subtle" style="font-size:11.5px;margin-top:8px;">${tr('pnlPurchasesInfo')}: ${fmt(cur.purchases)}</div>` : ''}
+        ${cur.refunds ? `<div class="subtle" style="font-size:11.5px;margin-top:4px;">${tr('pnlRefundsInfo').replace('{n}', cur.refundCount)}: ${fmt(cur.refunds)}</div>` : ''}
       </div>
       ${last6.some(x=>x.value) ? `<h3 class="sub-title">${tr('pnlLast6')}</h3><div class="card" style="padding:14px 12px;overflow-x:auto;">${buildBarChartSvg(last6.map(x=>({label:x.label, value:Math.max(0,x.value)})))}</div>` : ''}
       <p class="subtle" style="margin:12px 0 0;font-size:11.5px;">${tr('pnlHint')}</p>`;
