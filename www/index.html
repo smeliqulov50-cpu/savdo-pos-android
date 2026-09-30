@@ -7920,6 +7920,7 @@ async function connectBluetoothPrinterNative(slot){
   if(!Ble){ showToast(tr('bluetoothNotSupported')); return; }
   try{
     await Ble.initialize();
+    try{ if(Ble.isLocationEnabled){ const _r = await Ble.isLocationEnabled(); const _on = (_r && typeof _r==='object') ? !!_r.value : !!_r; if(!_on && confirm("Joylashuv (GPS) o'chiq — printer topilmaydi. Sozlamalarni ochaymi?\n\nГеолокация выключена — принтер не будет найден. Открыть настройки?")){ try{ await Ble.openLocationSettings(); }catch(_e){} } } }catch(_e){}
     const device = await Ble.requestDevice({ optionalServices: btAllOptionalServices() });
     const matched = await nativeConnectAndMatch(Ble, slot, device.deviceId, device.name);
     if(!matched){
@@ -7934,7 +7935,7 @@ async function connectBluetoothPrinterNative(slot){
     // stuck across logout/login: it simply was never remembered.
     rememberBtDevice(slot, {id: device.deviceId, name: device.name || ''});
     showToast(tr('printerConnected'));
-    scheduleBtRelease(slot, 60000);
+    scheduleBtRelease(slot, 15000);
     renderSettings();
   }catch(e){
     showToast(tr('bluetoothConnectFailed'));
@@ -7972,7 +7973,7 @@ async function nativeConnectAndMatch(Ble, slot, deviceId, name){
 const __btReleaseTimers = {};
 let __btQuiet = false;
 const __btEnsureBusy = {};
-function __btShouldHold(){ return !!(state.settings && state.settings.autoPrintRelay); }
+function __btShouldHold(){ return false; /* fix64: relay ham har chekdan keyin printerni bo'shatadi */ }
 function __btTimeout(p, ms){ return Promise.race([p, new Promise((_, rej)=>setTimeout(()=>rej(new Error('bt-timeout')), ms))]); }
 function cancelBtRelease(slot){ if(__btReleaseTimers[slot]){ clearTimeout(__btReleaseTimers[slot]); delete __btReleaseTimers[slot]; } }
 function scheduleBtRelease(slot, ms){
@@ -8019,7 +8020,7 @@ async function ensureBtConnected(slot){
   __btEnsureBusy[slot] = run;
   let ok = false;
   try{ ok = await run; } finally { delete __btEnsureBusy[slot]; }
-  if(ok) scheduleBtRelease(slot, 60000);   // safety: never hold a printer forever
+  if(ok) scheduleBtRelease(slot, 15000);   // safety: never hold a printer forever
   return ok;
 }
 function disconnectBluetoothPrinter(slot, skipRender){
