@@ -13,6 +13,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(UpdatePlugin.class);
+        registerPlugin(ClassicPrinterPlugin.class);   // fix66
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         try { if (getSupportActionBar() != null) getSupportActionBar().hide(); } catch (Exception ignored) {}
