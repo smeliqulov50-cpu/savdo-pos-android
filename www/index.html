@@ -820,6 +820,8 @@ const T = {
   enterPin:{uz:"PIN-kodni kiriting",ru:"Введите PIN-код",en:"Enter PIN",kk:"PIN-кодты енгізіңіз",ky:"PIN-кодду киргизиңиз",tg:"Рамзи PIN-ро ворид кунед"},
   wrongPin:{uz:"PIN noto'g'ri",ru:"Неверный PIN",en:"Wrong PIN",kk:"PIN қате",ky:"PIN туура эмес",tg:"PIN нодуруст аст"},
   signingIn:{uz:"Kirilmoqda...",ru:"Выполняется вход...",en:"Signing in...",kk:"Кіру орындалуда...",ky:"Кирүү аткарылууда...",tg:"Воридшавӣ..."},
+  staffSignInTooMany:{uz:"Juda ko'p urinish bo'ldi. 5–10 daqiqa kutib, qayta urinib ko'ring.",ru:"Слишком много попыток. Подождите 5–10 минут и попробуйте снова.",en:"Too many attempts. Wait 5–10 minutes and try again.",kk:"Тым көп әрекет жасалды. 5–10 минут күтіп, қайта көріңіз.",ky:"Өтө көп аракет болду. 5–10 мүнөт күтүп, кайра аракет кылыңыз.",tg:"Кӯшишҳо аз ҳад зиёд шуд. 5–10 дақиқа интизор шуда, дубора кӯшиш кунед."},
+  staffSignInAccountError:{uz:"Xodim hisobiga kirib bo'lmadi (kod: {code}). Ilovani yopib qayta oching yoki egasiga xabar bering.",ru:"Не удалось войти в аккаунт сотрудника (код: {code}). Перезапустите приложение или сообщите владельцу.",en:"Couldn't sign in to the staff account (code: {code}). Restart the app or tell the owner.",kk:"Қызметкер аккаунтына кіру мүмкін болмады (код: {code}). Қолданбаны қайта ашыңыз немесе иесіне хабарлаңыз.",ky:"Кызматкердин аккаунтуна кирүү мүмкүн болгон жок (код: {code}). Колдонмону кайра ачыңыз же ээсине кабарлаңыз.",tg:"Ворид шудан ба ҳисоби корманд имконнопазир шуд (рамз: {code}). Барномаро аз нав кушоед ё ба соҳиб хабар диҳед."},
   staffSignInFailed:{uz:"Kirib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.",ru:"Не удалось войти. Проверьте интернет и попробуйте снова.",en:"Couldn't sign in. Check your internet connection and try again.",kk:"Кіру мүмкін болмады. Интернетті тексеріп, қайта көріңіз.",ky:"Кирүү мүмкүн болгон жок. Интернетти текшерип, кайра аракет кылыңыз.",tg:"Воридшавӣ имконнопазир шуд. Интернетро санҷида, дубора кӯшиш кунед."},
   forgotPinLink:{uz:"PIN kodni unutdingizmi?",ru:"Забыли PIN-код?",en:"Forgot PIN?",kk:"PIN кодты ұмыттыңыз ба?",ky:"PIN кодду унутуп калдыңызбы?",tg:"PIN-кодро фаромӯш кардед?"},
   forgotPinHint:{uz:"Bu ilova ro'yxatdan o'tgan email va parolingizni kiriting — shu orqali siz haqiqatan biznes egasi ekaningiz tasdiqlanadi.",ru:"Введите email и пароль, с которыми зарегистрировано это приложение — так подтвердится, что вы действительно владелец бизнеса.",en:"Enter the email and password this app was registered with — this confirms you're really the business owner.",kk:"Осы қосымша тіркелген email мен парольді енгізіңіз — осылай сіздің шынымен бизнес иесі екеніңіз расталады.",ky:"Бул колдонмо катталган email жана сырсөздү киргизиңиз — ушундай жол менен сиздин чындап бизнес ээси экениңиз тастыкталат.",tg:"Email ва рамзи феҳристшудаи ин барномаро ворид кунед — ин тасдиқ мекунад, ки шумо воқеан соҳиби бизнес ҳастед."},
@@ -4061,14 +4063,18 @@ function renderPinLogin(){
           // authUid — the owner's own entry, or a not-yet-migrated
           // legacy staff member — skips this and logs in exactly as
           // before, on whatever session is already active.
-          if(match.authUid && match.authSecret){
+          if(match.authUid && match.authSecret && ((fbAuth.currentUser && fbAuth.currentUser.uid) || (fbUser && fbUser.uid)) !== match.authUid){ /* fix67: shu xodim allaqachon kirgan bo'lsa qayta kirmaymiz */
             entered = '';
             root.innerHTML = `<div class="login-screen"><div class="brand" style="font-size:26px;margin-bottom:4px;">Savdo Pos<span>.</span></div><div class="subtle">${tr('signingIn')}</div></div>`;
             try{
               await fbAuth.signInWithEmailAndPassword(staffAuthEmail(match.id, state.businessId || fbUser.uid), match.authSecret);
               logIn(match);
-            }catch(err){
-              draw(tr('staffSignInFailed'));
+            }catch(err){ /* fix67 */
+              const _c = String((err && err.code) || '').replace(/[^a-zA-Z0-9\/_-]/g, '');
+              try{ console.warn('staff sign-in failed', err); }catch(_e){}
+              if(_c.indexOf('too-many-requests') >= 0) draw(tr('staffSignInTooMany'));
+              else if(_c.indexOf('network-request-failed') >= 0 || navigator.onLine === false) draw(tr('staffSignInFailed'));
+              else draw(tr('staffSignInAccountError').replace('{code}', _c || String((err && err.name) || 'unknown').replace(/[^a-zA-Z0-9_-]/g, '')));
             }
           } else {
             logIn(match);
