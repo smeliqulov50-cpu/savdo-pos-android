@@ -7769,7 +7769,94 @@ function getBtDevice(slot){
   if(slot==='main') return state.btDevice;
   return (state.kitchenConnections[slot] && state.kitchenConnections[slot].device) || null;
 }
+/* fix66c: klassik Bluetooth (SPP) va Wi-Fi/LAN printerlar - nativ ClassicPrinter plagini orqali */
+function __cpPlugin(){ try{ return (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.ClassicPrinter) || null; }catch(e){ return null; } }
+function __cpL(uz, ru){ let l=''; try{ l = (typeof state!=='undefined' && state && (state.lang || (state.settings && (state.settings.lang || state.settings.language)))) || document.documentElement.lang || ''; }catch(e){} return /^ru/i.test(String(l)) ? ru : uz; }
+function __cpEntry(slot){ try{ const e = loadRememberedBtDevices()[slot || 'main']; return (e && (e.kind === 'classic' || e.kind === 'tcp')) ? e : null; }catch(e){ return null; } }
+function __cpSave(slot, entry){ try{ const r = loadRememberedBtDevices(); r[slot] = entry; localStorage.setItem(BT_REMEMBERED_KEY, JSON.stringify(r)); }catch(e){} }
+function __cpForget(slot){ try{ const r = loadRememberedBtDevices(); const e = r[slot]; if(e && (e.kind === 'classic' || e.kind === 'tcp')){ delete r[slot]; localStorage.setItem(BT_REMEMBERED_KEY, JSON.stringify(r)); } }catch(e){} }
+function __cpVirtual(entry){ return { classic: true, native: false, entry: entry, properties: {} }; }
+function __cpB64(bytes){ const u = (bytes instanceof Uint8Array) ? bytes : new Uint8Array(bytes); let s = ''; for(let i = 0; i < u.length; i += 0x8000){ s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); } return btoa(s); }
+async function __cpSend(entry, bytes){
+  const P = __cpPlugin();
+  try{
+    if(!P) throw new Error('ClassicPrinter plugin');
+    const data = __cpB64(bytes);
+    if(entry.kind === 'tcp') return await P.printTcp({ host: entry.host, port: entry.port || 9100, data: data });
+    return await P.printBt({ address: entry.id, data: data });
+  }catch(e){
+    try{ showToast(__cpL('Printer: ', 'Принтер: ') + ((e && e.message) || e)); }catch(_){}
+    throw e;
+  }
+}
+function __cpModal(title, note, items){
+  return new Promise(function(res){
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px';
+    const box = document.createElement('div');
+    box.style.cssText = 'background:var(--card,#fff);color:var(--text,#111);border-radius:14px;max-width:420px;width:100%;max-height:80vh;overflow:auto;padding:14px;box-shadow:0 10px 40px rgba(0,0,0,.3)';
+    const h = document.createElement('div'); h.textContent = title; h.style.cssText = 'font-weight:700;font-size:17px;margin:2px 4px 8px'; box.appendChild(h);
+    if(note){ const n = document.createElement('div'); n.textContent = note; n.style.cssText = 'font-size:13px;opacity:.75;margin:0 4px 8px'; box.appendChild(n); }
+    let closed = false;
+    const done = function(v){ if(closed) return; closed = true; ov.remove(); res(v); };
+    items.forEach(function(it){
+      const b = document.createElement('button'); b.type = 'button';
+      b.style.cssText = 'display:block;width:100%;text-align:left;padding:12px;margin:6px 0;border:1px solid rgba(128,128,128,.35);border-radius:10px;background:transparent;color:inherit;font:inherit;cursor:pointer';
+      const t1 = document.createElement('div'); t1.textContent = it.label; t1.style.fontWeight = '600';
+      const t2 = document.createElement('div'); t2.textContent = it.sub || ''; t2.style.cssText = 'font-size:12px;opacity:.65';
+      b.appendChild(t1); b.appendChild(t2); b.onclick = function(){ done(it.value); }; box.appendChild(b);
+    });
+    const c = document.createElement('button'); c.type = 'button'; c.textContent = __cpL('Bekor qilish', 'Отмена');
+    c.style.cssText = 'display:block;width:100%;padding:10px;margin-top:6px;border:0;background:transparent;color:inherit;opacity:.7;font:inherit';
+    c.onclick = function(){ done(null); }; box.appendChild(c);
+    ov.onclick = function(e){ if(e.target === ov) done(null); };
+    ov.appendChild(box); document.body.appendChild(ov);
+  });
+}
+async function __cpPicker(slot){
+  const P = __cpPlugin();
+  if(!P) return 'ble';
+  let paired = [], btOff = false;
+  try{ const r = await P.listPaired(); paired = (r && r.devices) || []; }
+  catch(e){ if(e && e.code === 'disabled') btOff = true; }
+  if(btOff){ try{ showToast(__cpL("Bluetooth o'chiq - uni yoqing", 'Bluetooth выключен - включите его')); }catch(_){} return 'cancel'; }
+  const re = /print|pos|pt-?\d|xp-|xp\d|mtp|mpt|rpp|zj|gp-|thermal|receipt|p58|p80|58mm|80mm|sunmi|bt-?p|inner/i;
+  const cands = paired.filter(function(d){ return d && d.address && d.type !== 2; });
+  cands.sort(function(a, b){ return (re.test(b.name || '') ? 1 : 0) - (re.test(a.name || '') ? 1 : 0); });
+  const likely = cands.filter(function(d){ return re.test(d.name || ''); });
+  const remembered = loadRememberedBtDevices()[slot];
+  let choice;
+  if(slot === 'main' && !remembered && likely.length === 1){
+    choice = likely[0].address;
+  } else {
+    const items = cands.map(function(d){ return { label: d.name || d.address, sub: 'Bluetooth · ' + d.address, value: d.address }; });
+    items.push({ label: __cpL('Bluetooth LE printer qidirish', 'Искать Bluetooth LE принтер'), sub: 'BLE', value: 'ble' });
+    items.push({ label: __cpL('Wi-Fi / LAN printer (IP manzil)', 'Wi-Fi / LAN принтер (IP-адрес)'), sub: 'TCP 9100', value: 'tcp' });
+    const note = cands.length ? '' : __cpL("Klassik printer ro'yxatda yo'qmi? Telefon Sozlamalar > Bluetooth'da printerni juftlang (PIN odatda 0000 yoki 1234), keyin qayta bosing.", 'Классического принтера нет в списке? Сопрягите его в Настройки > Bluetooth (PIN обычно 0000 или 1234) и нажмите снова.');
+    choice = await __cpModal(__cpL('Printerni tanlang', 'Выберите принтер'), note, items);
+  }
+  if(!choice) return 'cancel';
+  if(choice === 'ble') return 'ble';
+  let entry;
+  if(choice === 'tcp'){
+    const prev = (remembered && remembered.kind === 'tcp') ? (remembered.host + ':' + (remembered.port || 9100)) : '';
+    const a = prompt(__cpL('Printer IP manzili (masalan 192.168.1.100):', 'IP-адрес принтера (например 192.168.1.100):'), prev);
+    if(!a) return 'cancel';
+    const m = String(a).trim().match(/^([A-Za-z0-9.\-]+)(?::(\d{1,5}))?$/);
+    if(!m){ try{ showToast(__cpL("Noto'g'ri manzil", 'Неверный адрес')); }catch(_){} return 'cancel'; }
+    entry = { kind: 'tcp', id: 'tcp:' + m[1], host: m[1], port: m[2] ? parseInt(m[2], 10) : 9100, name: 'Wi-Fi ' + m[1] };
+  } else {
+    const d = cands.find(function(x){ return x.address === choice; }) || { name: choice };
+    entry = { kind: 'classic', id: choice, name: d.name || choice };
+  }
+  __cpSave(slot, entry);
+  try{ setBtConnection(slot, { id: entry.id, name: entry.name, classic: true }, __cpVirtual(entry)); }catch(_){}
+  try{ showToast(tr('printerConnected') + ': ' + entry.name); }catch(_){}
+  try{ renderSettings(); }catch(_){}
+  return 'done';
+}
 function getBtCharacteristic(slot){
+  { const __cp = __cpEntry(slot); if(__cp) return __cpVirtual(__cp); }   // fix66c
   if(slot==='main') return state.btCharacteristic;
   return (state.kitchenConnections[slot] && state.kitchenConnections[slot].characteristic) || null;
 }
@@ -7916,6 +8003,7 @@ async function connectBluetoothPrinter(slot){
   }
 }
 async function connectBluetoothPrinterNative(slot){
+  { const __r = await __cpPicker(slot || 'main'); if(__r !== 'ble') return; }   // fix66c
   const Ble = nativeBle();
   if(!Ble){ showToast(tr('bluetoothNotSupported')); return; }
   try{
@@ -8024,6 +8112,7 @@ async function ensureBtConnected(slot){
   return ok;
 }
 function disconnectBluetoothPrinter(slot, skipRender){
+  __cpForget(slot || 'main');   // fix66c
   slot = slot || 'main';
   const charRef = getBtCharacteristic(slot);
   const device = getBtDevice(slot);
@@ -8094,6 +8183,7 @@ async function autoReconnectBluetooth(){
 // range or powered on, which the try/catch below treats the same way:
 // leave it disconnected and quietly try again on the next app launch.
 async function autoReconnectBluetoothNative(remembered, slots){
+  try{ if(Array.isArray(slots)) slots = slots.filter(function(s){ return !(remembered && remembered[s] && (remembered[s].kind === 'classic' || remembered[s].kind === 'tcp')); }); }catch(e){}   // fix66c
   const Ble = nativeBle();
   if(!Ble) return;
   try{ await Ble.initialize(); }catch(e){ return; }
@@ -8115,6 +8205,7 @@ async function autoReconnectBluetoothNative(remembered, slots){
 async function sendRawBytes(bytes, slot){
   const char = getBtCharacteristic(slot || 'main');
   if(!char) return;
+  if(char.classic) return __cpSend(char.entry, bytes);   // fix66c
   if(char.native) return sendRawBytesNative(char, bytes);
   const canFast = char.properties && char.properties.writeWithoutResponse;
   // Cheap Bluetooth-serial thermal printer modules have very small internal
