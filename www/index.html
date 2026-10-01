@@ -6749,7 +6749,7 @@ function openPostSaleModal(sale, custDebtAfter){
     <button class="btn btn-primary" id="post-sale-close">${tr('close')}</button>
   `, {center:true});
   document.getElementById('print-btn').addEventListener('click', async ()=>{
-    if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic && !loadRememberedBtDevices().main){
+    if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main') && !loadRememberedBtDevices().main){
       await connectBluetoothPrinter();
     }
     printReceipt(sale, customer);
@@ -7632,9 +7632,9 @@ function buildReceiptHtmlInner(sale, customer){
 
 async function printReceipt(sale, customer){
   if(state.settings.printerMode === 'bluetooth'){
-    if(!state.btCharacteristic && loadRememberedBtDevices().main) showToast(tr('printerConnecting'));
+    if(!getBtCharacteristic('main') && loadRememberedBtDevices().main) showToast(tr('printerConnecting'));
     await ensureBtConnected('main');
-    if(!state.btCharacteristic){ showToast(loadRememberedBtDevices().main ? tr('printerUnreachable') : tr('willPrintOnOtherDevice')); return; }
+    if(!getBtCharacteristic('main')){ showToast(loadRememberedBtDevices().main ? tr('printerUnreachable') : (state.deviceHasNoPrinter ? tr('willPrintOnOtherDevice') : tr('printerNotConnected'))); return; } /* fix74 */
     const ok = await sendReceiptToBluetoothPrinter(sale, customer);
     scheduleBtRelease('main');
     // Opening the drawer only makes sense here — Bluetooth mode has an
@@ -7832,6 +7832,19 @@ async function __cpSend(entry, bytes){
     try{ showToast(__cpL('Printer: ', 'Принтер: ') + ((e && e.message) || e)); }catch(_){}
     throw e;
   }
+}
+const __cpJob = {}; /* fix74 */
+async function __cpRunJob(slot, fn){
+  const e = __cpEntry(slot); if(!e) return fn();
+  const job = { parts: [] }; __cpJob[slot] = job; let r;
+  try{ r = await fn(); } finally { if(__cpJob[slot] === job) delete __cpJob[slot]; }
+  if(r === false) return false;
+  if(job.parts.length){
+    let len = 0; job.parts.forEach(p=>{ len += p.length; });
+    const all = new Uint8Array(len); let o = 0; job.parts.forEach(p=>{ all.set(p, o); o += p.length; });
+    try{ await __cpSend(e, all); }catch(err){ return false; }
+  }
+  return (r === undefined) ? true : r;
 }
 function __cpModal(title, note, items){
   return new Promise(function(res){
@@ -8249,7 +8262,7 @@ async function autoReconnectBluetoothNative(remembered, slots){
 async function sendRawBytes(bytes, slot){
   const char = getBtCharacteristic(slot || 'main');
   if(!char) return;
-  if(char.classic) return __cpSend(char.entry, bytes);   // fix66c
+  if(char.classic){ const _j = __cpJob[slot || 'main']; if(_j){ _j.parts.push(bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes)); return; } return __cpSend(char.entry, bytes); }   // fix66c + fix74
   if(char.native) return sendRawBytesNative(char, bytes);
   const canFast = char.properties && char.properties.writeWithoutResponse;
   // Cheap Bluetooth-serial thermal printer modules have very small internal
@@ -8361,8 +8374,9 @@ async function kickCashDrawer(slot){
   }catch(e){ return false; }
 }
 
-async function sendReceiptToBluetoothPrinter(sale, customer){
-  if(!state.btCharacteristic) return false;
+async function sendReceiptToBluetoothPrinter(sale, customer){ return __cpRunJob('main', ()=>__sendReceiptRawFix74(sale, customer)); } /* fix74 */
+async function __sendReceiptRawFix74(sale, customer){
+  if(!getBtCharacteristic('main')) return false;
   let textOk = false;
   try{
     await sendRawBytes(new Uint8Array([0x1B,0x40]));
@@ -8957,11 +8971,11 @@ function renderReceiptsListItems(sales){
       if(!sale) return;
       const cust = sale.customerId ? state.customers.find(c=>c.id===sale.customerId) : null;
       confirmDialog(tr('printConfirmQ') + (sale.receiptNumber ? ' (№'+sale.receiptNumber+')' : ''), async ()=>{
-        if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){
+        if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main')){
           await ensureBtConnected('main');
-          if(!state.btCharacteristic && !loadRememberedBtDevices().main) await connectBluetoothPrinter();
+          if(!getBtCharacteristic('main') && !loadRememberedBtDevices().main) await connectBluetoothPrinter();
         }
-        if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){ requestRelayPrint(sale); return; }
+        if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main')){ if(state.deviceHasNoPrinter) requestRelayPrint(sale); else showToast(loadRememberedBtDevices().main ? tr('printerUnreachable') : tr('printerNotConnected')); return; } /* fix74 */
         printReceipt(sale, cust);
       }, tr('actPrint'));
     });
@@ -9893,9 +9907,9 @@ async function printLabels(products){
   if(!jobs.length){ showToast(tr('lbNone')); return; }
   const showStock = !!document.getElementById('lb-stock').checked;
   if(state.settings.printerMode === 'bluetooth'){
-    if(!state.btCharacteristic){ await ensureBtConnected('main'); }
-    if(!state.btCharacteristic && !loadRememberedBtDevices().main){ await connectBluetoothPrinter(); }
-    if(!state.btCharacteristic){ showToast(tr('printerUnreachable')); return; }
+    if(!getBtCharacteristic('main')){ await ensureBtConnected('main'); }
+    if(!getBtCharacteristic('main') && !loadRememberedBtDevices().main){ await connectBluetoothPrinter(); }
+    if(!getBtCharacteristic('main')){ showToast(tr('printerUnreachable')); return; }
     try{
       for(const p of jobs){
         const cv = buildLabelCanvas(p, {showStock});
@@ -10007,7 +10021,7 @@ async function exportProductsPdf(){
 
 async function printCustomersList(){
   const activeCustomers = visibleCustomers().filter(c=>!c.hidden).sort((a,b)=>(b.debt||0)-(a.debt||0));
-  if(state.settings.printerMode==='bluetooth' && state.btCharacteristic){
+  if(state.settings.printerMode==='bluetooth' && (getBtCharacteristic('main') || (loadRememberedBtDevices().main && await ensureBtConnected('main')))){ /* fix74 */
     const width = state.settings.printerCharsPerLine || 32;
     const sep = '-'.repeat(width);
     const lines = [];
@@ -10831,11 +10845,11 @@ function openCustomerDetail(customerId){
       const sale = state.sales.find(s=>s.id===btn.dataset.reprint);
       if(!sale) return;
       confirmDialog(tr('printConfirmQ') + (sale.receiptNumber ? ' (№'+sale.receiptNumber+')' : ''), async ()=>{
-        if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){
+        if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main')){
           await ensureBtConnected('main');
-          if(!state.btCharacteristic && !loadRememberedBtDevices().main) await connectBluetoothPrinter();
+          if(!getBtCharacteristic('main') && !loadRememberedBtDevices().main) await connectBluetoothPrinter();
         }
-        if(state.settings.printerMode === 'bluetooth' && !state.btCharacteristic){ requestRelayPrint(sale); return; }
+        if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main')){ if(state.deviceHasNoPrinter) requestRelayPrint(sale); else showToast(loadRememberedBtDevices().main ? tr('printerUnreachable') : tr('printerNotConnected')); return; } /* fix74 */
         printReceipt(sale, cust);
       }, tr('actPrint'));
     });
@@ -13363,8 +13377,8 @@ function renderSettingsPrinter(container){
         <p class="subtle" id="ios-note" style="margin:0 0 10px;display:none;color:var(--danger);">${tr('iosNote')}</p>
         <p class="subtle" style="margin:0 0 10px;">${tr('bluetoothReconnectHint')}</p>
         <div class="row" style="margin-bottom:10px;">
-          <span class="subtle">${state.btCharacteristic ? tr('printerConnected') : (loadRememberedBtDevices().main ? tr('printerOnDemand') : tr('printerNotConnected'))}</span>
-          <span class="badge ${(state.btCharacteristic || loadRememberedBtDevices().main)?'badge-clear':'badge-debt'}">${state.btDevice ? (state.btDevice.name || '—') : ((loadRememberedBtDevices().main || {}).name || '')}</span>
+          <span class="subtle">${getBtCharacteristic('main') ? tr('printerConnected') : (loadRememberedBtDevices().main ? tr('printerOnDemand') : tr('printerNotConnected'))}</span>
+          <span class="badge ${(getBtCharacteristic('main') || loadRememberedBtDevices().main)?'badge-clear':'badge-debt'}">${state.btDevice ? (state.btDevice.name || '—') : ((loadRememberedBtDevices().main || {}).name || '')}</span>
         </div>
         <div class="btn-row">
           <button class="btn btn-outline" id="bt-connect-btn">${tr('connectPrinter')}</button>
