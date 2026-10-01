@@ -826,6 +826,24 @@ const T = {
   staffSignInAccountError:{uz:"Xodim hisobiga kirib bo'lmadi (kod: {code}). Ilovani yopib qayta oching yoki egasiga xabar bering.",ru:"Не удалось войти в аккаунт сотрудника (код: {code}). Перезапустите приложение или сообщите владельцу.",en:"Couldn't sign in to the staff account (code: {code}). Restart the app or tell the owner.",kk:"Қызметкер аккаунтына кіру мүмкін болмады (код: {code}). Қолданбаны қайта ашыңыз немесе иесіне хабарлаңыз.",ky:"Кызматкердин аккаунтуна кирүү мүмкүн болгон жок (код: {code}). Колдонмону кайра ачыңыз же ээсине кабарлаңыз.",tg:"Ворид шудан ба ҳисоби корманд имконнопазир шуд (рамз: {code}). Барномаро аз нав кушоед ё ба соҳиб хабар диҳед."},
   pinOfflineLogin:{uz:"Oflayn rejim: ma'lumotlar internet tiklanganda yuboriladi",ru:"Офлайн-режим: данные отправятся, когда появится интернет",en:"Offline mode: data will sync when the internet is back",kk:"Офлайн режим: деректер интернет қосылғанда жіберіледі",ky:"Офлайн режим: маалыматтар интернет келгенде жөнөтүлөт",tg:"Реҷаи офлайн: маълумот ҳангоми пайдо шудани интернет фиристода мешавад"},
   btOffBanner:{uz:"Telefon Bluetooth'i o'chiq — chek chiqmaydi",ru:"Bluetooth выключен — чеки не печатаются",en:"Bluetooth is off — receipts won't print",kk:"Bluetooth өшірулі — чек басылмайды",ky:"Bluetooth өчүк — чек басылбайт",tg:"Bluetooth хомӯш аст — чек чоп намешавад"},
+  saNeedsInternet:{uz:"Superadmin paneli faqat internet bilan ishlaydi",ru:"Панель суперадмина работает только с интернетом",en:"The super admin panel needs internet",kk:"Суперадмин панелі тек интернетпен жұмыс істейді",ky:"Суперадмин панели интернет менен гана иштейт",tg:"Панели суперадмин танҳо бо интернет кор мекунад"},
+  saOneTimeLoginHint:{uz:"Bu qurilmada bir marta superadmin email va paroli bilan kiring. Keyin faqat PIN so'raladi.",ru:"Один раз войдите на этом устройстве с email и паролем суперадмина. Дальше будет спрашиваться только PIN.",en:"Sign in once on this device with the super admin email and password. After that only the PIN is asked.",kk:"Бұл құрылғыда бір рет суперадмин email және құпиясөзімен кіріңіз. Кейін тек PIN сұралады.",ky:"Бул түзмөктө бир жолу суперадмин email жана сырсөзү менен кириңиз. Андан кийин PIN гана суралат.",tg:"Дар ин дастгоҳ як бор бо email ва пароли суперадмин ворид шавед. Баъд танҳо PIN пурсида мешавад."},
+  saLoginBtn:{uz:"Kirish",ru:"Войти",en:"Sign in",kk:"Кіру",ky:"Кирүү",tg:"Воридшавӣ"},
+  saNotSuperAdmin:{uz:"Bu superadmin akkaunti emas",ru:"Это не аккаунт суперадмина",en:"This is not the super admin account",kk:"Бұл суперадмин аккаунты емес",ky:"Бул суперадмин аккаунту эмес",tg:"Ин ҳисоби суперадмин нест"},
+  saPinSetupHint:{uz:"Superadmin paneli uchun yangi PIN o'rnating (4–8 raqam). Uni hech kimga aytmang.",ru:"Установите новый PIN для панели суперадмина (4–8 цифр). Никому его не сообщайте.",en:"Set a new PIN for the super admin panel (4–8 digits). Do not share it.",kk:"Суперадмин панелі үшін жаңа PIN орнатыңыз (4–8 сан).",ky:"Суперадмин панели үчүн жаңы PIN коюңуз (4–8 сан).",tg:"Барои панели суперадмин PIN-и нав гузоред (4–8 рақам)."},
+  saPinEnterHint:{uz:"Superadmin PIN kodini kiriting",ru:"Введите PIN суперадмина",en:"Enter the super admin PIN",kk:"Суперадмин PIN кодын енгізіңіз",ky:"Суперадмин PIN кодун киргизиңиз",tg:"PIN-и суперадминро ворид кунед"},
+  saPinOld:{uz:"Hozirgi PIN",ru:"Текущий PIN",en:"Current PIN",kk:"Қазіргі PIN",ky:"Азыркы PIN",tg:"PIN-и ҳозира"},
+  saPinNew:{uz:"Yangi PIN",ru:"Новый PIN",en:"New PIN",kk:"Жаңа PIN",ky:"Жаңы PIN",tg:"PIN-и нав"},
+  saPinLabel:{uz:"PIN",ru:"PIN",en:"PIN",kk:"PIN",ky:"PIN",tg:"PIN"},
+  saPinRepeat:{uz:"PIN'ni takrorlang",ru:"Повторите PIN",en:"Repeat PIN",kk:"PIN қайталаңыз",ky:"PIN кайталаңыз",tg:"PIN-ро такрор кунед"},
+  saUnlockBtn:{uz:"Ochish",ru:"Открыть",en:"Unlock",kk:"Ашу",ky:"Ачуу",tg:"Кушодан"},
+  saPinFormat:{uz:"PIN 4–8 ta raqamdan iborat bo'lsin",ru:"PIN должен быть из 4–8 цифр",en:"PIN must be 4–8 digits",kk:"PIN 4–8 саннан тұрсын",ky:"PIN 4–8 сандан турсун",tg:"PIN бояд 4–8 рақам бошад"},
+  saPinWrong:{uz:"PIN noto'g'ri",ru:"Неверный PIN",en:"Wrong PIN",kk:"PIN қате",ky:"PIN туура эмес",tg:"PIN нодуруст"},
+  saPinMismatch:{uz:"PIN'lar bir xil emas",ru:"PIN не совпадают",en:"PINs do not match",kk:"PIN сәйкес емес",ky:"PIN дал келбейт",tg:"PIN-ҳо мувофиқ нестанд"},
+  saChangePin:{uz:"PIN'ni o'zgartirish",ru:"Сменить PIN",en:"Change PIN",kk:"PIN өзгерту",ky:"PIN өзгөртүү",tg:"Иваз кардани PIN"},
+  saLockBtn:{uz:"Qulflash",ru:"Заблокировать",en:"Lock",kk:"Құлыптау",ky:"Кулпулоо",tg:"Қулф кардан"},
+  saActionFailed:{uz:"Saqlanmadi",ru:"Не сохранено",en:"Not saved",kk:"Сақталмады",ky:"Сакталган жок",tg:"Захира нашуд"},
+  saConfirmExtend:{uz:"Obunani {plan} ga uzaytirasizmi?",ru:"Продлить подписку на {plan}?",en:"Extend the subscription by {plan}?",kk:"Жазылымды {plan} ұзартасыз ба?",ky:"Жазылууну {plan} узартасызбы?",tg:"Обунаро ба {plan} дароз мекунед?"},
   staffSignInFailed:{uz:"Kirib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.",ru:"Не удалось войти. Проверьте интернет и попробуйте снова.",en:"Couldn't sign in. Check your internet connection and try again.",kk:"Кіру мүмкін болмады. Интернетті тексеріп, қайта көріңіз.",ky:"Кирүү мүмкүн болгон жок. Интернетти текшерип, кайра аракет кылыңыз.",tg:"Воридшавӣ имконнопазир шуд. Интернетро санҷида, дубора кӯшиш кунед."},
   forgotPinLink:{uz:"PIN kodni unutdingizmi?",ru:"Забыли PIN-код?",en:"Forgot PIN?",kk:"PIN кодты ұмыттыңыз ба?",ky:"PIN кодду унутуп калдыңызбы?",tg:"PIN-кодро фаромӯш кардед?"},
   forgotPinHint:{uz:"Bu ilova ro'yxatdan o'tgan email va parolingizni kiriting — shu orqali siz haqiqatan biznes egasi ekaningiz tasdiqlanadi.",ru:"Введите email и пароль, с которыми зарегистрировано это приложение — так подтвердится, что вы действительно владелец бизнеса.",en:"Enter the email and password this app was registered with — this confirms you're really the business owner.",kk:"Осы қосымша тіркелген email мен парольді енгізіңіз — осылай сіздің шынымен бизнес иесі екеніңіз расталады.",ky:"Бул колдонмо катталган email жана сырсөздү киргизиңиз — ушундай жол менен сиздин чындап бизнес ээси экениңиз тастыкталат.",tg:"Email ва рамзи феҳристшудаи ин барномаро ворид кунед — ин тасдиқ мекунад, ки шумо воқеан соҳиби бизнес ҳастед."},
@@ -2120,6 +2138,7 @@ window.addEventListener('popstate', ()=>{
     return;
   }
   if(state.view === 'superadmin'){
+    window.__saUnlocked = false; /* fix79 */
     state.view = 'settings';
     renderAll();
     history.pushState({}, '', '');
@@ -12351,17 +12370,120 @@ function applyStocktake(){
     state.view = 'products'; renderAll();
   }, tr('stApply'));
 }
+/* fix79: Superadmin paneli — alohida PIN bilan, istalgan qurilmada */
+let __saApp = null; window.__saUnlocked = false;
+const SA_SESSION_KEY = 'sp_sa_session_v1', SA_LOCK_KEY = 'sp_sa_pin_lock_v1';
+function __saAppGet(){ if(!__saApp){ __saApp = firebase.initializeApp(firebaseConfig, 'spSuperAdmin'); } return __saApp; }
+function __saHasDeviceSession(){ try{ return localStorage.getItem(SA_SESSION_KEY) === '1'; }catch(e){ return false; } }
+function __saUser(){ try{ return __saApp ? __saApp.auth().currentUser : null; }catch(e){ return null; } }
+function saDb(){
+  if(isSuperAdmin()) return fbDb;
+  const u = __saUser();
+  return (u && u.uid === SUPER_ADMIN_UID) ? __saApp.firestore() : fbDb;
+}
+function __saWaitUser(){
+  return new Promise(res=>{
+    try{
+      const a = __saAppGet().auth(); let done = false;
+      const t = setTimeout(()=>{ if(!done){ done = true; res(a.currentUser); } }, 6000);
+      const un = a.onAuthStateChanged(u=>{ if(done) return; done = true; clearTimeout(t); try{ un(); }catch(e){} res(u); });
+    }catch(e){ res(null); }
+  });
+}
+function saMenuVisible(){ return isSuperAdmin() || state.businessId === SUPER_ADMIN_UID || __saHasDeviceSession(); }
+async function __saHash(salt, pin){
+  const data = new TextEncoder().encode(String(salt) + ':' + String(pin));
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function __saPinDoc(){ return saDb().collection('superAdminTokens').doc('__adminPin'); }
+function __saLockInfo(){ try{ return JSON.parse(localStorage.getItem(SA_LOCK_KEY) || '{}') || {}; }catch(e){ return {}; } }
+function __saSetLock(o){ try{ localStorage.setItem(SA_LOCK_KEY, JSON.stringify(o)); }catch(e){} }
+function saLockPanel(){ window.__saUnlocked = false; if(state.view === 'superadmin'){ state.view = 'settings'; state.settingsCategory = null; try{ renderAll(); }catch(e){} } }
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'hidden' && window.__saUnlocked) saLockPanel(); });
+async function openSuperAdminGate(){
+  if(typeof navigator !== 'undefined' && navigator.onLine === false){ showToast(tr('saNeedsInternet')); return; }
+  let ok = isSuperAdmin();
+  if(!ok){ const u = await __saWaitUser(); ok = !!(u && u.uid === SUPER_ADMIN_UID); }
+  if(!ok){ __saLoginModal(); return; }
+  __saPinModal(false);
+}
+function __saLoginModal(){
+  openModal(`<div class="modal-title">★ ${tr('superAdminPanel')}</div>
+    <p class="subtle" style="margin:0 0 12px;">${tr('saOneTimeLoginHint')}</p>
+    <div class="field"><label class="field-label">${tr('authEmail')}</label><input type="email" id="sa-login-email" autocomplete="username"></div>
+    <div class="field"><label class="field-label">${tr('authPassword')}</label><input type="password" id="sa-login-pw" autocomplete="current-password"></div>
+    <div id="sa-login-err" class="error-text"></div>
+    <button class="btn btn-primary btn-block" id="sa-login-btn">${tr('saLoginBtn')}</button>`, {center:true});
+  const btn = document.getElementById('sa-login-btn');
+  btn.addEventListener('click', async ()=>{
+    const email = document.getElementById('sa-login-email').value.trim();
+    const pw = document.getElementById('sa-login-pw').value;
+    const err = document.getElementById('sa-login-err'); err.textContent = '';
+    if(!email || !pw) return;
+    btn.disabled = true;
+    try{
+      const a = __saAppGet().auth();
+      const cred = await a.signInWithEmailAndPassword(email, pw);
+      if(!cred || !cred.user || cred.user.uid !== SUPER_ADMIN_UID){ try{ await a.signOut(); }catch(e){} err.textContent = tr('saNotSuperAdmin'); btn.disabled = false; return; }
+      try{ localStorage.setItem(SA_SESSION_KEY, '1'); }catch(e){}
+      closeModal(); __saPinModal(false);
+    }catch(e){ err.textContent = (typeof mapAuthError === 'function') ? mapAuthError(e) : String((e && e.message) || e); btn.disabled = false; }
+  });
+}
+async function __saPinModal(changeMode){
+  let doc = null;
+  try{ const snap = await __saPinDoc().get(); doc = snap.exists ? (snap.data() || {}) : null; }
+  catch(e){ showToast(tr('saNeedsInternet') + ' (' + ((e && e.code) || 'error') + ')'); return; }
+  const setup = !doc || !doc.hash || !!changeMode;
+  const needOld = !!changeMode && !!(doc && doc.hash);
+  openModal(`<div class="modal-title">★ ${tr('superAdminPanel')}</div>
+    <p class="subtle" style="margin:0 0 12px;">${setup ? tr('saPinSetupHint') : tr('saPinEnterHint')}</p>
+    ${needOld ? `<div class="field"><label class="field-label">${tr('saPinOld')}</label><input type="password" inputmode="numeric" id="sa-pin-old" maxlength="8"></div>` : ''}
+    <div class="field"><label class="field-label">${setup ? tr('saPinNew') : tr('saPinLabel')}</label><input type="password" inputmode="numeric" id="sa-pin-1" maxlength="8"></div>
+    ${setup ? `<div class="field"><label class="field-label">${tr('saPinRepeat')}</label><input type="password" inputmode="numeric" id="sa-pin-2" maxlength="8"></div>` : ''}
+    <div id="sa-pin-err" class="error-text"></div>
+    <button class="btn btn-primary btn-block" id="sa-pin-btn">${setup ? tr('save') : tr('saUnlockBtn')}</button>`, {center:true});
+  const btn = document.getElementById('sa-pin-btn');
+  btn.addEventListener('click', async ()=>{
+    const err = document.getElementById('sa-pin-err'); err.textContent = '';
+    const lk = __saLockInfo();
+    if(lk.until && Date.now() < lk.until){ err.textContent = tr('pinLockedMessage').replace('{seconds}', Math.ceil((lk.until - Date.now())/1000)); return; }
+    const p1 = document.getElementById('sa-pin-1').value.trim();
+    if(!/^[0-9]{4,8}$/.test(p1)){ err.textContent = tr('saPinFormat'); return; }
+    const wrong = ()=>{ const f = (lk.fails || 0) + 1; __saSetLock(f >= 5 ? {fails: 0, until: Date.now() + 60000} : {fails: f}); err.textContent = tr('saPinWrong'); btn.disabled = false; };
+    btn.disabled = true;
+    try{
+      if(setup){
+        if(needOld){ const old = ((document.getElementById('sa-pin-old') || {}).value || '').trim(); if(await __saHash(doc.salt, old) !== doc.hash){ wrong(); return; } }
+        const p2 = document.getElementById('sa-pin-2').value.trim();
+        if(p1 !== p2){ err.textContent = tr('saPinMismatch'); btn.disabled = false; return; }
+        const salt = uid() + uid();
+        await __saPinDoc().set({salt: salt, hash: await __saHash(salt, p1), updatedAt: new Date().toISOString()});
+        showToast(tr('savedSuccess'));
+      } else {
+        if(await __saHash(doc.salt, p1) !== doc.hash){ wrong(); return; }
+      }
+      __saSetLock({});
+      window.__saUnlocked = true; closeModal();
+      state.view = 'superadmin'; renderAll(); try{ history.pushState({}, '', ''); }catch(e){}
+    }catch(e){ err.textContent = tr('saNeedsInternet') + ' (' + ((e && e.code) || 'error') + ')'; btn.disabled = false; }
+  });
+}
 function renderSuperAdmin(){
   const container = document.getElementById('view-container');
   container.innerHTML = `
     <div class="back-row"><button id="superadmin-back-btn">${ICONS.arrowLeft}</button><span class="t-title">★ ${tr('superAdminPanel')}</span></div>
+    <div class="btn-row" style="margin-bottom:10px;"><button class="btn btn-outline btn-sm" id="sa-change-pin">🔑 ${tr('saChangePin')}</button><button class="btn btn-ghost btn-sm" id="sa-lock">🔒 ${tr('saLockBtn')}</button></div>
     <div class="search-bar">${ICONS.search}<input type="text" id="superadmin-search" placeholder="${tr('search')}"></div>
     <div id="sa-inbox" style="margin:10px 0;"></div>
     <div id="sa-stats"></div>
     <div id="superadmin-list"><div class="empty-state">…</div></div>
   `;
   renderSaInbox();
-  document.getElementById('superadmin-back-btn').addEventListener('click', ()=>{ state.view='settings'; state.settingsCategory=null; renderAll(); });
+  document.getElementById('superadmin-back-btn').addEventListener('click', ()=>{ window.__saUnlocked = false; state.view='settings'; state.settingsCategory=null; renderAll(); }); /* fix79 */
+  { const _cp = document.getElementById('sa-change-pin'); if(_cp) _cp.addEventListener('click', ()=>__saPinModal(true)); const _lk = document.getElementById('sa-lock'); if(_lk) _lk.addEventListener('click', ()=>saLockPanel()); }
+  if(!isSuperAdmin()){ saDb().collection('supportInbox').where('unreadForAdmin','==',true).get().then(snap=>{ state.saInbox = snap.docs.map(d=>d.data()).sort((x,y)=>String(y.lastAt).localeCompare(String(x.lastAt))); state.saUnreadSupport = state.saInbox.length; renderSaInbox(); }).catch(()=>{}); }
   document.getElementById('superadmin-search').addEventListener('input', (e)=>{
     state.superAdminSearch = e.target.value;
     renderSuperAdminList();
@@ -12383,7 +12505,7 @@ async function renderSuperAdminList(){
   if(!listEl) return;
   listEl.innerHTML = `<div class="empty-state">…</div>`;
   try{
-    const snap = await fbDb.collection('businesses').get();
+    const snap = await saDb().collection('businesses').get();
     const unreadIds = new Set((state.saInbox||[]).map(x=>x.bizId));
     let all = snap.docs.map(doc=>({id:doc.id, d:doc.data()||{}, unread: unreadIds.has(doc.id)}));
     all.forEach(x=>{ x.st = saStatusOf(x.d); });
@@ -12479,8 +12601,7 @@ async function renderSuperAdminList(){
         const bizId = btn.dataset.setLimits;
         const ms = parseInt(document.getElementById('limit-staff-'+bizId).value,10) || 2;
         const md = parseInt(document.getElementById('limit-dev-'+bizId).value,10) || 3;
-        await fbDb.collection('businesses').doc(bizId).set({maxStaff: ms, maxDevices: md, settingsUpdatedAt: new Date().toISOString()}, {merge:true});
-        showToast(tr('savedSuccess'));
+        try{ await saDb().collection('businesses').doc(bizId).set({maxStaff: ms, maxDevices: md, settingsUpdatedAt: new Date().toISOString()}, {merge:true}); showToast(tr('savedSuccess')); }catch(e){ showToast(tr('saActionFailed') + ': ' + ((e && e.code) || '')); } /* fix79 */
       });
     });
     listEl.querySelectorAll('[data-set-exact]').forEach(btn=>{
@@ -12491,9 +12612,7 @@ async function renderSuperAdminList(){
         if(!val) return;
         confirmDialog(tr('confirmSetExactDate')+' '+val+'?', async ()=>{
           const newExpiry = new Date(val+'T23:59:59');
-          await fbDb.collection('businesses').doc(bizId).set({subscriptionExpiresAt: newExpiry.toISOString(), subscriptionExpiresAtMs: newExpiry.getTime()}, {merge:true});
-          showToast(tr('savedSuccess'));
-          renderSuperAdminList();
+          try{ await saDb().collection('businesses').doc(bizId).set({subscriptionExpiresAt: newExpiry.toISOString(), subscriptionExpiresAtMs: newExpiry.getTime()}, {merge:true}); showToast(tr('savedSuccess')); renderSuperAdminList(); }catch(e){ showToast(tr('saActionFailed') + ': ' + ((e && e.code) || '')); } /* fix79 */
         });
       });
     });
@@ -12522,11 +12641,11 @@ async function renderSuperAdminList(){
       });
     });
     listEl.querySelectorAll('[data-extend]').forEach(btn=>{
-      btn.addEventListener('click', async ()=>{
+      btn.addEventListener('click', ()=>confirmDialog(tr('saConfirmExtend').replace('{plan}', planLabelFor(btn.dataset.plan)), async ()=>{ try{ /* fix79 */
         const bizId = btn.dataset.extend;
         const plan = btn.dataset.plan;
         const days = SUBSCRIPTION_PLANS[plan].days;
-        const bizRef = fbDb.collection('businesses').doc(bizId);
+        const bizRef = saDb().collection('businesses').doc(bizId);
         const snap2 = await bizRef.get();
         const cur = snap2.data() || {};
         const base = (cur.subscriptionExpiresAt && new Date(cur.subscriptionExpiresAt) > new Date()) ? new Date(cur.subscriptionExpiresAt) : new Date();
@@ -12534,9 +12653,10 @@ async function renderSuperAdminList(){
         await bizRef.set({subscriptionPlan:plan, subscriptionExpiresAt:newExpiry.toISOString(), subscriptionExpiresAtMs:newExpiry.getTime()}, {merge:true});
         showToast(tr('savedSuccess'));
         renderSuperAdminList();
-      });
+      }catch(e){ showToast(tr('saActionFailed') + ': ' + ((e && e.code) || '')); } }, tr('yes')));
     });
   }catch(e){
+    if(typeof navigator !== 'undefined' && navigator.onLine === false){ listEl.innerHTML = `<div class="empty-state">${tr('saNeedsInternet')}</div>`; return; } /* fix79 */
     listEl.innerHTML = `<div class="card alert-soft" style="padding:12px 14px;"><div style="font-weight:800;">${tr('saLoadError')}</div><div style="font-size:12px;margin-top:4px;word-break:break-word;">${escapeHtml((e && (e.code||'')) + ' ' + (e && e.message ? e.message : String(e)))}</div></div>`;
   }
 }
@@ -12548,7 +12668,7 @@ async function openBusinessErrorsModal(businessId, businessName){
   `);
   const listEl = document.getElementById('business-errors-list');
   try{
-    const snap = await fbDb.collection('businesses').doc(businessId).collection('errors').orderBy('date','desc').limit(20).get();
+    const snap = await saDb().collection('businesses').doc(businessId).collection('errors').orderBy('date','desc').limit(20).get();
     if(snap.empty){ listEl.innerHTML = `<p class="subtle">${tr('noErrorsFound')}</p>`; return; }
     listEl.innerHTML = snap.docs.map(d=>{
       const e = d.data();
@@ -12593,7 +12713,7 @@ function openDeleteBusinessConfirm(businessId, businessName){
 }
 
 async function deleteBusinessCompletely(businessId){
-  const bizRef = fbDb.collection('businesses').doc(businessId);
+  const bizRef = saDb().collection('businesses').doc(businessId);
   const subcollections = ['tables','sales','ledger','support','agentLocations','visits','creditors','creditorLedger','kitchenStations','errors','products','customers'];
   for(const name of subcollections){
     const snap = await bizRef.collection(name).get();
@@ -12624,7 +12744,7 @@ function openExternalUrl(url){
 }
 function settingsMenuItems(){
   return [
-    {id:'superadmin', icon:'★', color:'var(--gradient-brand)', label:tr('superAdminSection'), show:isSuperAdmin(), group:'admin'},
+    {id:'superadmin', icon:'★', color:'var(--gradient-brand)', label:tr('superAdminSection'), show:saMenuVisible(), group:'admin'},
     {id:'language', icon:ICONS.translate, color:'var(--ink-soft)', label:tr('languageLabel'), show:true, group:'general'},
     {id:'account', icon:ICONS.building, color:'var(--accent)', label:tr('accountSection'), show:isAdmin(), group:'general'},
     {id:'devices', icon:ICONS.phoneCall, color:'var(--teal)', label:tr('devicesSection'), show:isAdmin(), group:'general'},
@@ -12690,7 +12810,7 @@ function renderSettingsMenu(container){
   `;
   container.querySelectorAll('[data-cat]').forEach(el=>{
     el.addEventListener('click', ()=>{
-      if(el.dataset.cat === 'superadmin'){ state.view = 'superadmin'; renderAll(); history.pushState({}, '', ''); return; }
+      if(el.dataset.cat === 'superadmin'){ openSuperAdminGate(); return; } /* fix79 */
       if(el.dataset.cat === 'website'){ openExternalUrl('https://savdo-pos.pages.dev/'); return; }
       state.settingsCategory = el.dataset.cat;
       renderSettings();
@@ -14344,7 +14464,7 @@ function renderSettingsSupport(container){
 
 const SUPPORT_PHONE = '+998900730103';
 const SUPPORT_WAIT_KEY = 'sardor_support_waiting_v1';
-function supportInboxRef(bizId){ return fbDb.collection('supportInbox').doc(bizId); }
+function supportInboxRef(bizId){ return saDb().collection('supportInbox').doc(bizId); } /* fix79 */
 let __followupTimer = null;
 function scheduleSupportFollowup(bizId, ms){
   if(__followupTimer) clearTimeout(__followupTimer);
@@ -14404,7 +14524,7 @@ function applySupportBadges(){
   const tile = document.querySelector('[data-cat="superadmin"] .name'); if(tile){ tile.style.position = 'relative'; tile.appendChild(mk()); }
 }
 function supportChatColFor(businessId){
-  return fbDb.collection('businesses').doc(businessId).collection('support');
+  return saDb().collection('businesses').doc(businessId).collection('support'); /* fix79 */
 }
 function supportChatCol(){
   return supportChatColFor(state.businessId || fbUser.uid);
@@ -14979,7 +15099,7 @@ function renderAll(){
   if(state.view==='products' && !hasPerm('products')) state.view='sale';
   if(state.view==='customers' && !hasPerm('customers')) state.view='sale';
   if(state.view==='reports' && !hasPerm('reports') && !hasPerm('expense')) state.view='sale';
-  if(state.view==='superadmin' && !isSuperAdmin()) state.view='sale';
+  if(state.view==='superadmin' && !window.__saUnlocked) state.view='sale'; /* fix79 */
   if(state.view==='stocktake' && !(isAdmin() || hasPerm('products'))) state.view='products';
   if(state.view==='purchase' && !(isAdmin() || hasPerm('products'))) state.view='products';
   renderHeader();
