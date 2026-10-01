@@ -7142,7 +7142,7 @@ async function shareReceipt(sale, customer, custDebtAfter){
   if(isNativeApp()){
     try{
       const blob = await receiptImageBlob(sale, customer);
-      const ok = await shareFileNative(blob, 'chek.png', title, text);
+      const ok = await shareFileNative(blob, 'chek.png', title, undefined); /* fix75: faqat rasm */
       if(ok) return;
     }catch(e){}
   }
@@ -7151,7 +7151,7 @@ async function shareReceipt(sale, customer, custDebtAfter){
   try{
     const blob = await receiptImageBlob(sale, customer);
     const file = new File([blob], 'chek.png', {type:'image/png'});
-    const shareData = {files:[file], title, text};
+    const shareData = {files:[file], title}; /* fix75: faqat rasm */
     if(navigator.canShare && navigator.canShare(shareData)){
       await navigator.share(shareData);
       return;
@@ -10859,7 +10859,7 @@ function openCustomerDetail(customerId){
       ev.stopPropagation();
       const sale = state.sales.find(s=>s.id===btn.dataset.shareSale);
       if(!sale) return;
-      shareReceipt(sale, cust, cust.debt);
+      shareReceipt(sale, cust, cust ? cust.debt : 0); /* fix75 */
     });
   });
   document.querySelectorAll('[data-purchase-toggle]').forEach(row=>{
