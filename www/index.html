@@ -8891,7 +8891,8 @@ function renderReceiptsList(){
     slot.innerHTML = '';
     const filtered = sortedSales.filter(s=>
       (s.receiptNumber||'').toLowerCase().includes(q) ||
-      s.items.some(it=>it.name.toLowerCase().includes(q))
+      s.items.some(it=>it.name.toLowerCase().includes(q)) ||
+      String(s.cashierName||'').toLowerCase().includes(q) || String(((s.customerId && state.customers.find(c=>c.id===s.customerId))||{}).name||'').toLowerCase().includes(q) /* fix73 */
     );
     renderReceiptsListItems(filtered);
   });
@@ -8921,7 +8922,7 @@ function renderReceiptsListItems(sales){
           <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
           <div>
             <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${new Date(s.date).toLocaleString()}</span></div>
-            <div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${cust?(' · '+escapeHtml(cust.name)):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>
+            <div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${cust?(' · '+escapeHtml(cust.name)):''}${s.cashierName?(' · '+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>
           </div>
         </div>
         <span class="rcpt-chev">›</span>
@@ -11339,7 +11340,8 @@ function renderReportsCategory(container, cat){
       slot.innerHTML = '';
       const filtered = sortedSales.filter(s=>
         (s.receiptNumber||'').toLowerCase().includes(q) ||
-        s.items.some(it=>it.name.toLowerCase().includes(q))
+        s.items.some(it=>it.name.toLowerCase().includes(q)) ||
+        String(s.cashierName||'').toLowerCase().includes(q) || String(((s.customerId && state.customers.find(c=>c.id===s.customerId))||{}).name||'').toLowerCase().includes(q) /* fix73 */
       );
       renderReceiptsListItems(filtered);
     });
