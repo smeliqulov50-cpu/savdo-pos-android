@@ -2640,6 +2640,7 @@ function watchArrayCollection(colRef, stateKey, pendingKind, keepOlderThan){
       });
       state[stateKey] = merged;
     }
+    { const _del = new Set(pendingSyncQueue.filter(q=>q.kind==='del:'+pendingKind).map(q=>q.id)); if(_del.size) state[stateKey] = (state[stateKey]||[]).filter(x=>!(x && _del.has(x.id))); } /* fix72 */
     storSetSoon(stateKey);
     scheduleLiveRender();
   }, ()=>{ /* transient listener errors are left to the periodic retry/reload path */ });
@@ -2993,6 +2994,9 @@ async function __retryPendingSyncInner(){
         const rv = (state.reservations||[]).find(x=>x.id===item.id);
         if(!rv){ clearPendingSync(item.kind, item.id); continue; }
         await reservationsCol().doc(rv.id).set(sanitizeForFirestore(rv));
+      } else if(String(item.kind).indexOf('del:')===0){ /* fix72 */
+        const _dc = {sale:salesCol, expense:expensesCol, table:tablesCol, visit:visitsCol, creditor:creditorsCol, kitchenStation:kitchenStationsCol}[item.kind.slice(4)];
+        if(_dc) await _dc().doc(item.id).delete();
       } else if(item.kind==='kitchenStation'){
         const ks = state.kitchenStations.find(x=>x.id===item.id);
         if(!ks){ clearPendingSync(item.kind, item.id); continue; }
@@ -3344,9 +3348,10 @@ function stopAgentLocationTracking(){
     agentLocationsCol().doc(state.currentStaff.id).delete().catch(()=>{});
   }
 }
-function deleteTableDoc(id){
+function deleteTableDoc(id){ /* fix72 */
+  if(!id) return; queuePendingSync('del:table', id);
   if(!fbUser || !fbDb) return;
-  tablesCol().doc(id).delete().catch(()=>{});
+  try{ tablesCol().doc(id).delete().then(()=>clearPendingSync('del:table', id)).catch(()=>{}); }catch(e){}
 }
 function addSaleDoc(sale){
   if(!sale) return; queuePendingSync('sale', sale.id); if(!fbUser || !fbDb) return; /* fix70 */
@@ -3362,9 +3367,10 @@ function addSaleDoc(sale){
     queuePendingSync('sale', sale.id);
   }
 }
-function deleteSaleDoc(saleId){
-  if(!fbUser || !fbDb || !saleId) return;
-  try{ salesCol().doc(saleId).delete().catch(()=>{}); }catch(e){}
+function deleteSaleDoc(saleId){ /* fix72 */
+  if(!saleId) return; queuePendingSync('del:sale', saleId);
+  if(!fbUser || !fbDb) return;
+  try{ salesCol().doc(saleId).delete().then(()=>clearPendingSync('del:sale', saleId)).catch(()=>{}); }catch(e){}
 }
 function addExpenseDoc(expense){
   if(!expense) return; queuePendingSync('expense', expense.id); if(!fbUser || !fbDb) return; /* fix70 */
@@ -3377,9 +3383,10 @@ function addExpenseDoc(expense){
     queuePendingSync('expense', expense.id);
   }
 }
-function deleteExpenseDoc(expenseId){
-  if(!fbUser || !fbDb || !expenseId) return;
-  try{ expensesCol().doc(expenseId).delete().catch(()=>{}); }catch(e){}
+function deleteExpenseDoc(expenseId){ /* fix72 */
+  if(!expenseId) return; queuePendingSync('del:expense', expenseId);
+  if(!fbUser || !fbDb) return;
+  try{ expensesCol().doc(expenseId).delete().then(()=>clearPendingSync('del:expense', expenseId)).catch(()=>{}); }catch(e){}
 }
 function addReservationDoc(reservation){
   if(!reservation) return; queuePendingSync('reservation', reservation.id); if(!fbUser || !fbDb) return; /* fix70 */
@@ -3414,9 +3421,10 @@ function addVisitDoc(visit){
     queuePendingSync('visit', visit.id);
   }
 }
-function deleteVisitDoc(id){
+function deleteVisitDoc(id){ /* fix72 */
+  if(!id) return; queuePendingSync('del:visit', id);
   if(!fbUser || !fbDb) return;
-  visitsCol().doc(id).delete().catch(()=>{});
+  try{ visitsCol().doc(id).delete().then(()=>clearPendingSync('del:visit', id)).catch(()=>{}); }catch(e){}
 }
 function addCreditorDoc(creditor){
   if(!creditor) return; queuePendingSync('creditor', creditor.id); if(!fbUser || !fbDb) return; /* fix70 */
@@ -3429,9 +3437,10 @@ function addCreditorDoc(creditor){
     queuePendingSync('creditor', creditor.id);
   }
 }
-function deleteCreditorDoc(id){
+function deleteCreditorDoc(id){ /* fix72 */
+  if(!id) return; queuePendingSync('del:creditor', id);
   if(!fbUser || !fbDb) return;
-  creditorsCol().doc(id).delete().catch(()=>{});
+  try{ creditorsCol().doc(id).delete().then(()=>clearPendingSync('del:creditor', id)).catch(()=>{}); }catch(e){}
 }
 function addCreditorLedgerDoc(entry){
   if(!entry) return; queuePendingSync('creditorLedger', entry.id); if(!fbUser || !fbDb) return; /* fix70 */
@@ -3455,9 +3464,10 @@ function addKitchenStationDoc(station){
     queuePendingSync('kitchenStation', station.id);
   }
 }
-function deleteKitchenStationDoc(id){
+function deleteKitchenStationDoc(id){ /* fix72 */
+  if(!id) return; queuePendingSync('del:kitchenStation', id);
   if(!fbUser || !fbDb) return;
-  kitchenStationsCol().doc(id).delete().catch(()=>{});
+  try{ kitchenStationsCol().doc(id).delete().then(()=>clearPendingSync('del:kitchenStation', id)).catch(()=>{}); }catch(e){}
 }
 
 // Printer-related settings belong to THIS device (each device has its own printer), so they never travel through the cloud in either direction.
@@ -3755,6 +3765,7 @@ async function loadCloudData(){
     lastSyncedProductsMap = snapshotArrayMap(cloudConfirmedProducts !== null ? cloudConfirmedProducts : state.products);
     lastSyncedCustomersMap = snapshotArrayMap(cloudConfirmedCustomers !== null ? cloudConfirmedCustomers : state.customers);
     pendingSyncQueue.forEach(q=>{ const key = __PENDING_KIND_KEYS[q.kind]; if(!key) return; state[key] = state[key] || []; if(state[key].some(x=>x && x.id===q.id)) return; const loc = (__localCopy[key]||[]).find(x=>x && x.id===q.id); if(loc) state[key].push(loc); });
+    pendingSyncQueue.forEach(q=>{ if(String(q.kind).indexOf('del:')!==0) return; const key = __PENDING_KIND_KEYS[q.kind.slice(4)]; if(key && Array.isArray(state[key])) state[key] = state[key].filter(x=>!(x && x.id===q.id)); }); /* fix72 */
     if(!state._hasLocalSettings) restoreDeviceLocalSettings();
     fbCloudReady = true;
     try{ const w = JSON.parse(localStorage.getItem(SUPPORT_WAIT_KEY)||'null'); if(w && w.bizId) scheduleSupportFollowup(w.bizId, 20000); }catch(e){}
