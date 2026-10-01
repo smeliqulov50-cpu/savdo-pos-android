@@ -584,6 +584,7 @@ const T = {
   pnlOpex:{uz:"Xarajatlar",ru:"Расходы",en:"Expenses",kk:"Шығыстар",ky:"Чыгымдар",tg:"Хароҷот"},
   pnlNet:{uz:"SOF FOYDA",ru:"ЧИСТАЯ ПРИБЫЛЬ",en:"NET PROFIT",kk:"ТАЗА ПАЙДА",ky:"ТАЗА ПАЙДА",tg:"ФОИДАИ СОФ"},
   pnlRefundsInfo:{uz:"Qaytarilgan cheklar ({n}), foydaga kirmagan",ru:"Возвраты ({n}), в прибыль не входят",en:"Refunded receipts ({n}), not included in profit",kk:"Қайтарылған чектер ({n}), пайдаға кірмейді",ky:"Кайтарылган чектер ({n}), пайдага кирбейт",tg:"Чекҳои баргардонидашуда ({n}), ба фоида дохил нестанд"},
+  creditorNoMatch:{uz:"Qidiruv bo'yicha hech narsa topilmadi",ru:"По запросу ничего не найдено",en:"Nothing matches your search",kk:"Іздеу бойынша ештеңе табылмады",ky:"Издөө боюнча эч нерсе табылган жок",tg:"Аз рӯи ҷустуҷӯ чизе ёфт нашуд"},
   pnlMargin:{uz:"Sof marja",ru:"Чистая маржа",en:"Net margin",kk:"Таза маржа",ky:"Таза маржа",tg:"Маржаи соф"},
   pnlPurchasesInfo:{uz:"Tovar xaridi (omborga, hisobga olinmaydi)",ru:"Закупка товара (на склад, не вычитается)",en:"Goods purchased (to stock, not deducted)",kk:"Тауар сатып алу (қоймаға, шегерілмейді)",ky:"Товар сатып алуу (кампага, кемитилбейт)",tg:"Хариди мол (ба анбор, тарҳ намешавад)"},
   pnlVsPrev:{uz:"o'tgan oyga nisbatan",ru:"к прошлому месяцу",en:"vs previous month",kk:"өткен айға қарағанда",ky:"өткөн айга салыштырмалуу",tg:"нисбат ба моҳи гузашта"},
@@ -1886,6 +1887,7 @@ function saveLang(){ storSet(STORAGE_KEYS.lang, state.lang); }
 function saveSaleMode(){ storSet(STORAGE_KEYS.saleMode, state.saleMode); }
 function saveBusinessId(){ storSet(STORAGE_KEYS.businessId, state.businessId); }
 async function wipeLocalBusinessData(){
+  try{ localStorage.removeItem('sp_fastboot_v1'); }catch(e){} /* fix70 */
   try{ stopLiveListeners(); }catch(e){}
   try{ pendingSyncQueue.length = 0; if(typeof persistPendingSyncQueue==='function') persistPendingSyncQueue(); }catch(e){}
   const arrays = ['products','customers','sales','ledger','staff','shifts','tables','visits','creditors','creditorLedger','kitchenStations','expenses','reservations','audit','purchases','stockMoves','heldCarts'];
@@ -3189,7 +3191,7 @@ async function pushSettingsToCloud(){
   });
 }
 function syncSettingsDoc(){
-  if(!fbUser || !fbDb) return;
+  if(!fbUser || !fbDb){ queuePendingSync('settings','settings'); return; } /* fix70 */
   // Mark as pending BEFORE attempting the write — if the app closes before
   // the network call finishes, this marker survives (it's persisted to
   // local storage immediately), so the next load knows not to trust
@@ -3233,7 +3235,7 @@ function syncSettingsDoc(){
     });
 }
 function syncTableDoc(table){
-  if(!fbUser || !fbDb || !table) return;
+  if(!table) return; queuePendingSync('table', table.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('table', table.id);
     tablesCol().doc(table.id).set(sanitizeForFirestore(table))
@@ -3347,7 +3349,7 @@ function deleteTableDoc(id){
   tablesCol().doc(id).delete().catch(()=>{});
 }
 function addSaleDoc(sale){
-  if(!fbUser || !fbDb || !sale) return;
+  if(!sale) return; queuePendingSync('sale', sale.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('sale', sale.id);
     salesCol().doc(sale.id).set(sanitizeForFirestore(sale))
@@ -3365,7 +3367,7 @@ function deleteSaleDoc(saleId){
   try{ salesCol().doc(saleId).delete().catch(()=>{}); }catch(e){}
 }
 function addExpenseDoc(expense){
-  if(!fbUser || !fbDb || !expense) return;
+  if(!expense) return; queuePendingSync('expense', expense.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('expense', expense.id);
     expensesCol().doc(expense.id).set(sanitizeForFirestore(expense))
@@ -3380,7 +3382,7 @@ function deleteExpenseDoc(expenseId){
   try{ expensesCol().doc(expenseId).delete().catch(()=>{}); }catch(e){}
 }
 function addReservationDoc(reservation){
-  if(!fbUser || !fbDb || !reservation) return;
+  if(!reservation) return; queuePendingSync('reservation', reservation.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('reservation', reservation.id);
     reservationsCol().doc(reservation.id).set(sanitizeForFirestore(reservation))
@@ -3391,7 +3393,7 @@ function addReservationDoc(reservation){
   }
 }
 function addLedgerDoc(entry){
-  if(!fbUser || !fbDb || !entry) return;
+  if(!entry) return; queuePendingSync('ledger', entry.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('ledger', entry.id);
     ledgerCol().doc(entry.id).set(sanitizeForFirestore(entry))
@@ -3402,7 +3404,7 @@ function addLedgerDoc(entry){
   }
 }
 function addVisitDoc(visit){
-  if(!fbUser || !fbDb || !visit) return;
+  if(!visit) return; queuePendingSync('visit', visit.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('visit', visit.id);
     visitsCol().doc(visit.id).set(sanitizeForFirestore(visit))
@@ -3417,7 +3419,7 @@ function deleteVisitDoc(id){
   visitsCol().doc(id).delete().catch(()=>{});
 }
 function addCreditorDoc(creditor){
-  if(!fbUser || !fbDb || !creditor) return;
+  if(!creditor) return; queuePendingSync('creditor', creditor.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('creditor', creditor.id);
     creditorsCol().doc(creditor.id).set(sanitizeForFirestore(creditor))
@@ -3432,7 +3434,7 @@ function deleteCreditorDoc(id){
   creditorsCol().doc(id).delete().catch(()=>{});
 }
 function addCreditorLedgerDoc(entry){
-  if(!fbUser || !fbDb || !entry) return;
+  if(!entry) return; queuePendingSync('creditorLedger', entry.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('creditorLedger', entry.id);
     creditorLedgerCol().doc(entry.id).set(sanitizeForFirestore(entry))
@@ -3443,7 +3445,7 @@ function addCreditorLedgerDoc(entry){
   }
 }
 function addKitchenStationDoc(station){
-  if(!fbUser || !fbDb || !station) return;
+  if(!station) return; queuePendingSync('kitchenStation', station.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
     queuePendingSync('kitchenStation', station.id);
     kitchenStationsCol().doc(station.id).set(sanitizeForFirestore(station))
@@ -3653,8 +3655,9 @@ async function loadCloudData(){
         // Merge (never pick-one-and-discard) so nothing left over from an
         // earlier partial migration is ever silently lost.
         let hadLeftoverLegacyFields = false;
-        state.staff = mergeById(catalog.staff, bizData.staff);
-        state.shifts = mergeById(catalog.shifts, bizData.shifts);
+        const __stP = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id==='staff'), __shP = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id==='shifts'); /* fix70 */
+        state.staff = __stP ? mergeById(state.staff, mergeById(catalog.staff, bizData.staff)) : mergeById(catalog.staff, bizData.staff);
+        state.shifts = __shP ? mergeById(state.shifts, mergeById(catalog.shifts, bizData.shifts)) : mergeById(catalog.shifts, bizData.shifts);
         if((bizData.staff||[]).length || (bizData.shifts||[]).length) hadLeftoverLegacyFields = true;
         const __histStart = new Date().toISOString();
         const __since = histSyncSinceIso();
@@ -3667,6 +3670,7 @@ async function loadCloudData(){
           __isDelta ? salesCol().where('refundedAt','>=',__since).get().catch(()=>({docs: []})) : __none,
           __isDelta ? salesCol().where('editedAt','>=',__since).get().catch(()=>({docs: []})) : __none
         ]);
+        Object.values(__PENDING_KIND_KEYS).forEach(k=>{ __localCopy[k] = mergeById(state[k]||[], __localCopy[k]); }); /* fix70 */
         state.tables = mergeById(tablesSnap.docs.map(d=>d.data()), bizData.tables);
         { const cut = __since; const olderSales = (state.sales||[]).filter(x=>x && x.date && x.date < cut); const olderLedger = (state.ledger||[]).filter(x=>x && x.date && x.date < cut);
         state.sales = mergeById(olderSales.concat(salesSnap.docs.map(d=>d.data())), bizData.sales);
@@ -4081,7 +4085,7 @@ function renderPinLogin(){
           if(match.authUid && match.authSecret && ((fbAuth.currentUser && fbAuth.currentUser.uid) || (fbUser && fbUser.uid)) !== match.authUid){ /* fix67: shu xodim allaqachon kirgan bo'lsa qayta kirmaymiz */
             entered = '';
             root.innerHTML = `<div class="login-screen"><div class="brand" style="font-size:26px;margin-bottom:4px;">Savdo Pos<span>.</span></div><div class="subtle">${tr('signingIn')}</div></div>`;
-            const _sess = !!(fbAuth.currentUser || fbUser); /* fix69: oflayn PIN */
+            const _sess = !!(fbAuth.currentUser || fbUser || window.__spFastBooted); /* fix70 */ /* fix69: oflayn PIN */
             const _offlineLogin = ()=>{ logIn(match); try{ showToast(tr('pinOfflineLogin')); }catch(_e){} };
             if(navigator.onLine === false && _sess){ _offlineLogin(); return; }
             try{
@@ -9033,11 +9037,13 @@ function renderMyDebts(){
       <div class="stat-card"><div class="stat-label">${tr('totalMyDebt')}</div><div class="stat-value" style="color:var(--danger);">${fmt(totalOwed)}</div></div>
       <div class="stat-card"><div class="stat-label">${tr('myDebtsLabel')}</div><div class="stat-value">${state.creditors.length}</div></div>
     </div>
+    <div class="search-bar">${ICONS.search}<input type="text" id="creditor-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.creditorSearch||'')}"></div>
     <button class="btn btn-accent" style="margin-bottom:10px;" id="add-creditor-btn">${ICONS.plus} ${tr('addCreditorBtn')}</button>
     <button class="btn btn-outline btn-block" style="margin-bottom:14px;" id="pdf-creditors-btn">${tr('exportPdf')}</button>
     <div id="creditor-list"></div>
   `;
   renderCreditorList();
+  { const _ci = document.getElementById('creditor-search-input'); if(_ci) _ci.addEventListener('input', (e)=>{ state.creditorSearch = e.target.value; renderCreditorList(); }); } /* fix71 */
   document.getElementById('my-debts-back-btn').addEventListener('click', ()=>{ state.view='customers'; renderAll(); });
   document.getElementById('add-creditor-btn').addEventListener('click', ()=>openCreditorForm());
   document.getElementById('pdf-creditors-btn').addEventListener('click', exportCreditorsPdf);
@@ -9057,7 +9063,9 @@ function creditorBalanceHtml(debt, size){
 function renderCreditorList(){
   const listEl = document.getElementById('creditor-list');
   if(!listEl) return;
-  const sorted = state.creditors.slice().sort((a,b)=>(b.debt||0)-(a.debt||0));
+  const _q = String(state.creditorSearch||'').trim().toLowerCase(); const _qd = _q.replace(/\D/g,''); /* fix71 */
+  const _match = (c)=> !_q || String(c.name||'').toLowerCase().includes(_q) || String(c.phone||'').toLowerCase().includes(_q) || (_qd.length>=2 && String(c.phone||'').replace(/\D/g,'').includes(_qd)) || String(c.note||c.comment||'').toLowerCase().includes(_q);
+  const sorted = state.creditors.filter(_match).sort((a,b)=>(b.debt||0)-(a.debt||0));
   listEl.innerHTML = sorted.length ? sorted.map(c=>{
     const last = creditorLastActivity(c.id);
     return `
@@ -9069,7 +9077,7 @@ function renderCreditorList(){
       ${creditorBalanceHtml(c.debt, 14)}
     </div>
   `;
-  }).join('') : `<div class="empty-state">${tr('noCreditors')}</div>`;
+  }).join('') : `<div class="empty-state">${(_q && state.creditors.length) ? tr('creditorNoMatch') : tr('noCreditors')}</div>`;
   listEl.querySelectorAll('[data-creditor-open]').forEach(row=>{
     row.addEventListener('click', ()=>openCreditorDetail(row.dataset.creditorOpen));
   });
@@ -15058,12 +15066,22 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
     // hasn't fired within a few seconds, render the logged-out gate using
     // whatever loaded locally, rather than waiting forever for a callback
     // that may never come.
+    /* fix70: oflayn-birinchi tezkor ochilish */
+    try{
+      const __fbk = localStorage.getItem('sp_fastboot_v1');
+      if(__fbk && state.businessId && __fbk === state.businessId){
+        window.__spFastBooted = true;
+        const __ar = document.getElementById('auth-root'); if(__ar) __ar.innerHTML = '';
+        window.__spQueueLoaded = loadPendingSyncQueue();
+        window.__spQueueLoaded.then(()=>{ try{ renderAll(); }catch(e){ try{ console.warn('fastboot render failed', e); }catch(_e){} } });
+      }
+    }catch(e){}
     let authCallbackFired = false;
     const authFallbackTimer = setTimeout(function(){
       if(!authCallbackFired){
         authCallbackFired = true;
         try{ console.warn('Firebase Auth slow (>8s) - opening from local data'); }catch(e){}
-        if(state.businessId) renderAuthConnecting(); else renderAuthGate('login');
+        if(window.__spFastBooted){ /* fix70: ilova allaqachon ochiq */ } else if(state.businessId) renderAuthConnecting(); else renderAuthGate('login');
       }
     }, 8000);
     let syncRetryTimer = null;
@@ -15093,9 +15111,10 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
           saveBusinessId();
         }
         document.getElementById('auth-root').innerHTML = '';
-        await loadPendingSyncQueue();
+        if(window.__spQueueLoaded){ try{ await window.__spQueueLoaded; }catch(e){} } else { await loadPendingSyncQueue(); } /* fix70 */
         await loadCloudData();
-        renderAll();
+        if(window.__spFastBooted) scheduleLiveRender(); else renderAll();
+        try{ if(state.businessId && fbCloudReady) localStorage.setItem('sp_fastboot_v1', state.businessId); }catch(e){}
         repairStaffAuthRecords();
         startSupportListener();
         initPushMessaging();
@@ -15109,7 +15128,7 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
         // the first attempt didn't already connect it.
         setTimeout(()=>{ if(!getBtCharacteristic('main')) autoReconnectBluetooth(); }, 4000);
         await retryPendingSync();
-        renderAll();
+        if(window.__spFastBooted) scheduleLiveRender(); else renderAll(); /* fix70 */
         if(syncRetryTimer) clearInterval(syncRetryTimer);
         syncRetryTimer = setInterval(async ()=>{
           const __before = pendingSyncQueue.length;
@@ -15118,6 +15137,7 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
         }, 90*1000);
       } else {
         if(syncRetryTimer){ clearInterval(syncRetryTimer); syncRetryTimer = null; }
+        try{ localStorage.removeItem('sp_fastboot_v1'); }catch(e){} window.__spFastBooted = false; /* fix70 */
         renderAuthGate('login');
         document.getElementById('view-container').innerHTML = '';
         document.getElementById('bottom-nav').innerHTML = '';
