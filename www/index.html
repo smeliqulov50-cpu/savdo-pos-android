@@ -959,7 +959,18 @@ const T = {
   cloudSynced:{uz:"Bulutga saqlandi",ru:"Сохранено в облаке",en:"Saved to cloud",kk:"Бұлтқа сақталды",ky:"Булутка сакталды",tg:"Ба абр захира шуд"},
   cloudOffline:{uz:"Offline — internetga ulanganda avtomatik sinxronlanadi",ru:"Офлайн — синхронизация произойдёт при подключении к интернету",en:"Offline — will sync automatically once online",kk:"Офлайн — интернетке қосылғанда автоматты синхрондалады",ky:"Офлайн — интернетке туташканда автоматтык синхрондолот",tg:"Офлайн — ҳангоми пайвастшавӣ ба интернет ба таври худкор синхрон мешавад"},
   productNotFound:{uz:"Bu shtrix-kodli mahsulot topilmadi",ru:"Товар с таким штрих-кодом не найден",en:"No product found with this barcode",kk:"Бұл штрих-кодты тауар табылмады",ky:"Бул штрих-коддогу товар табылган жок",tg:"Моле бо ин штрих-код ёфт нашуд"},
-  costPrice:{uz:"Tan narxi (qancha oldingiz)",ru:"Себестоимость (цена закупки)",en:"Cost price (purchase price)",kk:"Өзіндік құн (қанша алдыңыз)",ky:"Өздүк наркы (канчага алдыңыз)",tg:"Нархи харид (чанд харидед)"},
+  costPrice:{uz:"Tan narxi — 1 dona uchun (qancha oldingiz)",ru:"Себестоимость за 1 шт (цена закупки)",en:"Cost price per 1 unit (purchase price)",kk:"Өзіндік құн — 1 дана үшін",ky:"Өздүк наркы — 1 даана үчүн",tg:"Нархи харид — барои 1 адад"},
+  pnlAccuracy:{uz:"Hisobot aniqligi",ru:"Точность отчёта",en:"Report accuracy",kk:"Есеп дәлдігі",ky:"Отчёттун тактыгы",tg:"Дақиқии ҳисобот"},
+  pnlBelowCost:{uz:"Tannarxdan arzon sotilgan",ru:"Продано ниже себестоимости",en:"Sold below cost",kk:"Өзіндік құннан арзан сатылған",ky:"Өздүк нарктан арзан сатылган",tg:"Арзонтар аз нархи харид фурӯхта шуд"},
+  pnlBelowCostHint:{uz:"Agar mahsulotda tan narxi blok narxi sifatida yozilgan bo'lsa, uni 1 dona narxiga to'g'rilang va \"Qayta hisoblash\" ni bosing: shu oy cheklaridagi tannarx yangilanadi.",ru:"Если себестоимость указана за блок, исправьте её на цену за 1 шт и нажмите «Пересчитать»: себестоимость в чеках этого месяца обновится.",en:"If the cost was entered per box, change it to the per-unit cost and tap Recalculate: this month's receipts will be updated.",kk:"Өзіндік құн блок үшін жазылса, оны 1 данаға түзетіп «Қайта есептеу» басыңыз.",ky:"Өздүк нарк блок үчүн жазылса, аны 1 даанага оңдоп «Кайра эсептөө» басыңыз.",tg:"Агар нархи харид барои блок навишта шуда бошад, онро ба 1 адад ислоҳ карда «Аз нав ҳисоб» -ро пахш кунед."},
+  pnlRecost:{uz:"Qayta hisoblash",ru:"Пересчитать",en:"Recalculate",kk:"Қайта есептеу",ky:"Кайра эсептөө",tg:"Аз нав ҳисоб"},
+  pnlRecostQ:{uz:"Shu oydagi cheklarda bu mahsulot tannarxi hozirgi tan narxiga ({cost}) almashtirilsinmi?",ru:"Заменить себестоимость этого товара в чеках месяца на текущую ({cost})?",en:"Replace this product's cost in this month's receipts with the current cost ({cost})?",kk:"Осы айдағы чектерде өзіндік құн қазіргіге ({cost}) ауыстырылсын ба?",ky:"Ушул айдагы чектерде өздүк нарк азыркыга ({cost}) алмаштырылсынбы?",tg:"Дар чекҳои ин моҳ нархи харид ба нархи ҳозира ({cost}) иваз шавад?"},
+  pnlRecostDone:{uz:"Tannarx yangilandi: {n} ta chek",ru:"Себестоимость обновлена: {n} чек(ов)",en:"Cost updated: {n} receipt(s)",kk:"Өзіндік құн жаңартылды: {n} чек",ky:"Өздүк нарк жаңыртылды: {n} чек",tg:"Нархи харид нав шуд: {n} чек"},
+  pnlRecostNoProduct:{uz:"Mahsulot topilmadi (o'chirilgan)",ru:"Товар не найден (удалён)",en:"Product not found (deleted)",kk:"Тауар табылмады",ky:"Товар табылган жок",tg:"Мол ёфт нашуд"},
+  pnlNoCost:{uz:"Tan narxi kiritilmagan ({n} qator) — foydasi to'liq hisoblangan",ru:"Без себестоимости ({n} строк) — прибыль завышена",en:"No cost entered ({n} lines) — profit overstated",kk:"Өзіндік құн енгізілмеген ({n} жол)",ky:"Өздүк нарк киргизилген эмес ({n} сап)",tg:"Нархи харид ворид нашудааст ({n} сатр)"},
+  pnlOversold:{uz:"Omborda yo'q holda sotilgan ({n} qator)",ru:"Продано при отсутствии на складе ({n} строк)",en:"Sold while out of stock ({n} lines)",kk:"Қоймада жоқ кезде сатылған ({n} жол)",ky:"Кампада жок кезде сатылган ({n} сап)",tg:"Ҳангоми набудан дар анбор фурӯхта шуд ({n} сатр)"},
+  boxCostLabel:{uz:"Blok tannarxi",ru:"Себестоимость блока",en:"Box cost",kk:"Блок өзіндік құны",ky:"Блоктун өздүк наркы",tg:"Нархи харидии блок"},
+  boxBelowCostWarning:{uz:"blok narxi tannarxdan arzon!",ru:"цена блока ниже себестоимости!",en:"box price is below cost!",kk:"блок бағасы өзіндік құннан арзан!",ky:"блоктун баасы өздүк нарктан арзан!",tg:"нархи блок аз нархи харид арзонтар!"},
   supplierInfo:{uz:"Yetkazib beruvchi",ru:"Поставщик",en:"Supplier",kk:"Жеткізуші",ky:"Жеткирүүчү",tg:"Таъминкунанда"},
   supplierName:{uz:"Ism",ru:"Имя",en:"Name",kk:"Аты",ky:"Аты",tg:"Ном"},
   supplierPhone:{uz:"Telefon",ru:"Телефон",en:"Phone",kk:"Телефон",ky:"Телефон",tg:"Телефон"},
@@ -6553,6 +6564,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
       customerId = selId;
     }
   }
+  const __ovUsed = {}; /* fix77 */
   const items = cart.map(c=>{
     const p=state.products.find(pr=>pr.id===c.productId);
     const v = getVariant(p, c.variantId);
@@ -6564,6 +6576,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
       : (isBox ? `${p.name} (${c.boxLabel||tr('boxDefaultLabel')})${takeawaySuffix}` : (isWholesaleUnit ? `${p.name} (${tr('wholesaleModeShort')})${takeawaySuffix}` : `${p.name}${takeawaySuffix}`));
     const costPrice = v ? (v.costPrice||p.costPrice||0) : (p.costPrice||0);
     const item = {productId:p.id, variantId:c.variantId||null, name, qty:c.qty, price:cartItemPrice(c,p), costPrice};
+    try{ const _k = p.id+'|'+(c.variantId||''); const _units = isBox ? c.qty*(c.unitsPerBox||1) : c.qty; const _avail = Math.max(0, (v ? (v.stock||0) : (p.stock||0)) - (__ovUsed[_k]||0)); __ovUsed[_k] = (__ovUsed[_k]||0) + _units; if(_units > _avail) item.oversoldUnits = _units - _avail; }catch(_e){} /* fix77 */
     if(isBox){ item.saleMode = 'box'; item.unitsPerBox = c.unitsPerBox||1; }
     if(isWholesaleUnit){ item.priceTier = 'wholesale'; }
     if(c.isTakeaway){ item.isTakeaway = true; }
@@ -8685,7 +8698,8 @@ function openProductForm(productId, draft){
       if(referencePrice > 0){
         noteKey = matches ? tr('matchesWholesaleUnit') : (cheaper ? tr('cheaperThanRetail') : tr('notCheaperWarning'));
       }
-      compareEl.innerHTML = `${tr('boxPerUnitLabel')}: <strong>${fmt(perUnitInBox)}</strong>${referencePrice>0 ? ` <span style="color:${cheaper?'var(--success)':'var(--danger)'};font-weight:700;">(${noteKey})</span>` : ''}`;
+      const _uc = parseMoneyInput((document.getElementById('pf-cost')||{}).value||'') || 0; const _bc = _uc * unitsPerBox; /* fix77 */
+      compareEl.innerHTML = `${tr('boxPerUnitLabel')}: <strong>${fmt(perUnitInBox)}</strong>${referencePrice>0 ? ` <span style="color:${cheaper?'var(--success)':'var(--danger)'};font-weight:700;">(${noteKey})</span>` : ''}${_uc>0 ? `<br>${tr('boxCostLabel')}: <strong>${fmt(_bc)}</strong>${_bc > boxPrice ? ` <span style="color:var(--danger);font-weight:700;">(${tr('boxBelowCostWarning')})</span>` : ''}` : ''}`;
     } else {
       compareEl.innerHTML = '';
     }
@@ -8695,6 +8709,7 @@ function openProductForm(productId, draft){
   if(unitsPerBoxEl) unitsPerBoxEl.addEventListener('input', updateBoxHelpers);
   const boxPriceEl = document.getElementById('pf-box-price');
   if(boxPriceEl) boxPriceEl.addEventListener('input', updateBoxHelpers);
+  { const _pfc = document.getElementById('pf-cost'); if(_pfc) _pfc.addEventListener('input', updateBoxHelpers); } /* fix77 */
   document.getElementById('pf-price').addEventListener('input', updateBoxHelpers);
   const wholesalePriceEl = document.getElementById('pf-wholesale-price');
   if(wholesalePriceEl) wholesalePriceEl.addEventListener('input', updateBoxHelpers);
@@ -11780,6 +11795,14 @@ function renderReportsCategory(container, cat){
       const revenue = ok.reduce((a,s)=>a+(s.total||0),0);
       const refunds = ref.reduce((a,s)=>a+(s.total||0),0);
       const cogs = ok.reduce((a,s)=>a+s.items.reduce((x,it)=>x+((it.saleMode==='box' ? (it.costPrice||0)*(it.unitsPerBox||1) : (it.costPrice||0))*it.qty),0),0);
+      const __acc = {lossTotal:0, lossMap:{}, noCostRev:0, noCostN:0, overRev:0, overN:0}; /* fix77 */
+      ok.forEach(s=>(s.items||[]).forEach(it=>{
+        const pr = it.price||0, q = it.qty||0, lc = it.saleMode==='box' ? (it.costPrice||0)*(it.unitsPerBox||1) : (it.costPrice||0);
+        if(!(it.costPrice>0)){ __acc.noCostRev += pr*q; __acc.noCostN++; }
+        else if(lc > pr){ const l = (lc-pr)*q, k = it.productId+'|'+(it.variantId||''); __acc.lossTotal += l; (__acc.lossMap[k] = __acc.lossMap[k] || {name: it.name, productId: it.productId, variantId: it.variantId||'', loss: 0}).loss += l; }
+        if(it.oversoldUnits > 0){ const u = it.saleMode==='box' ? q*(it.unitsPerBox||1) : q; __acc.overRev += pr*q*Math.min(1, it.oversoldUnits/(u||1)); __acc.overN++; }
+      }));
+      __acc.lossList = Object.values(__acc.lossMap).sort((a,b)=>b.loss-a.loss);
       const discounts = ok.reduce((a,s)=>a+(s.discountAmount||0)+(s.bonusUsed||0),0);
       const exps = visibleExpenses().filter(e=>monthKeyOf(e.date)===key);
       const purchases = exps.filter(e=>e.category==='purchase').reduce((a,e)=>a+(e.amount||0),0);
@@ -11787,7 +11810,7 @@ function renderReportsCategory(container, cat){
       const opex = Object.values(byCat).reduce((a,b)=>a+b,0);
       const gross = ok.reduce((a,s)=>a+saleProfit(s),0);
       const goods = ok.reduce((a,s)=>a+s.items.reduce((x,it)=>x+(it.price||0)*(it.qty||0),0),0); const serviceCharge = ok.reduce((a,s)=>a+(s.serviceChargeAmount||0),0); const delivery = ok.reduce((a,s)=>a+(s.deliveryFee||0),0); /* fix68 */
-      return {revenue, refunds, refundCount: ref.length, goods, serviceCharge, delivery, cogs, discounts, gross, byCat, opex, purchases, net: gross - opex, count: ok.length};
+      return {revenue, refunds, refundCount: ref.length, goods, serviceCharge, delivery, cogs, discounts, gross, byCat, opex, purchases, net: gross - opex, count: ok.length, acc: __acc};
     };
     const cur = calc(state.pnlMonth);
     const prevD = new Date(py, pm-2, 1); const prevKey = prevD.getFullYear()+'-'+String(prevD.getMonth()+1).padStart(2,'0');
@@ -11817,12 +11840,36 @@ function renderReportsCategory(container, cat){
         ${cur.purchases ? `<div class="subtle" style="font-size:11.5px;margin-top:8px;">${tr('pnlPurchasesInfo')}: ${fmt(cur.purchases)}</div>` : ''}
         ${cur.refunds ? `<div class="subtle" style="font-size:11.5px;margin-top:4px;">${tr('pnlRefundsInfo').replace('{n}', cur.refundCount)}: ${fmt(cur.refunds)}</div>` : ''}
       </div>
+      ${(cur.acc.lossList.length || cur.acc.noCostN || cur.acc.overN) ? `<h3 class="sub-title">${tr('pnlAccuracy')}</h3><div class="card" style="padding:10px 14px;margin-bottom:12px;">
+        ${cur.acc.lossList.length ? `<div style="font-weight:700;color:var(--danger);margin-bottom:4px;">⚠️ ${tr('pnlBelowCost')}: −${fmt(cur.acc.lossTotal)}</div>
+        ${cur.acc.lossList.slice(0,10).map(x=>`<div class="row" style="padding:6px 0;border-bottom:1px solid var(--line);gap:8px;"><span style="flex:1;min-width:0;font-size:13px;">${escapeHtml(x.name||'')}</span><span style="white-space:nowrap;flex-shrink:0;color:var(--danger);font-size:13px;font-weight:700;">−${fmt(x.loss)}</span><button class="btn btn-outline btn-sm" style="flex-shrink:0;" data-pnl-recost="${escapeHtml(x.productId+'|'+(x.variantId||''))}">${tr('pnlRecost')}</button></div>`).join('')}
+        <p class="subtle" style="font-size:11.5px;margin:6px 0 8px;">${tr('pnlBelowCostHint')}</p>` : ''}
+        ${cur.acc.noCostN ? `<div class="subtle" style="font-size:12.5px;margin:4px 0;">${tr('pnlNoCost').replace('{n}', cur.acc.noCostN)}: ${fmt(cur.acc.noCostRev)}</div>` : ''}
+        ${cur.acc.overN ? `<div class="subtle" style="font-size:12.5px;margin:4px 0;">${tr('pnlOversold').replace('{n}', cur.acc.overN)}: ${fmt(cur.acc.overRev)}</div>` : ''}
+      </div>` : ''}
       ${last6.some(x=>x.value) ? `<h3 class="sub-title">${tr('pnlLast6')}</h3><div class="card" style="padding:14px 12px;overflow-x:auto;">${buildBarChartSvg(last6.map(x=>({label:x.label, value:Math.max(0,x.value)})))}</div>` : ''}
       <p class="subtle" style="margin:12px 0 0;font-size:11.5px;">${tr('pnlHint')}</p>`;
     bindReportsBack();
     const shift = (n)=>{ const d = new Date(py, pm-1+n, 1); state.pnlMonth = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); renderReports(); };
     document.getElementById('pnl-prev').addEventListener('click', ()=>shift(-1));
     document.getElementById('pnl-next').addEventListener('click', ()=>shift(1));
+    container.querySelectorAll('[data-pnl-recost]').forEach(b=>b.addEventListener('click', ()=>{ /* fix77 */
+      const [pid, vid] = String(b.dataset.pnlRecost).split('|');
+      const p = state.products.find(x=>x.id===pid); if(!p){ showToast(tr('pnlRecostNoProduct')); return; }
+      const v = vid ? getVariant(p, vid) : null;
+      const newCost = v ? (v.costPrice||p.costPrice||0) : (p.costPrice||0);
+      confirmDialog(tr('pnlRecostQ').replace('{cost}', fmt(newCost)), ()=>{
+        let n = 0;
+        state.sales.forEach(sl=>{
+          if(monthKeyOf(sl.date)!==state.pnlMonth || effectiveBranchId(sl.branchId)!==effectiveBranchId(state.currentBranchId)) return;
+          let ch = false;
+          (sl.items||[]).forEach(it=>{ if(it.productId===pid && String(it.variantId||'')===String(vid||'') && it.costPrice!==newCost){ it.costPrice = newCost; ch = true; } });
+          if(ch){ n++; addSaleDoc(sl); }
+        });
+        if(n){ saveSales(); try{ auditLog('saleEdit', tr('pnlRecostDone').replace('{n}', n), {}); }catch(e){} }
+        showToast(tr('pnlRecostDone').replace('{n}', n)); renderReports();
+      }, tr('pnlRecost'));
+    }));
     return;
   }
   if(cat==='productprofit'){
