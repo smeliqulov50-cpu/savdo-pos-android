@@ -2688,6 +2688,7 @@ function watchCatalogDelta(query, stateKey, pendingId, mapGetter, mapSetter){
     if(removed.size && !pending) arr = arr.filter(x=>x && !removed.has(x.id));
     if(stateKey === 'products') arr = withoutDeletedProducts(arr);
     state[stateKey] = arr;
+    if(stateKey === 'customers') __spRebaseDebts(changes.filter(ch=>ch.type !== 'removed').map(ch=>Object.assign({id: ch.doc.id}, ch.doc.data() || {}))); /* fix78 */
     mapSetter(map);
     storSetSoon(stateKey);
     scheduleLiveRender();
@@ -2703,6 +2704,7 @@ function watchProductsOrCustomers(colRef, stateKey, pendingId, lastSyncedMapSett
     let merged = pending ? mergeById(state[stateKey], cloudItems) : cloudItems;
     if(stateKey==='products') merged = withoutDeletedProducts(merged);
     state[stateKey] = merged;
+    if(stateKey === 'customers') __spRebaseDebts(cloudItems); /* fix78 */
     lastSyncedMapSetter(snapshotArrayMap(pending ? cloudItems : merged));
     storSetSoon(stateKey);
     scheduleLiveRender();
@@ -2952,7 +2954,7 @@ async function __retryPendingSyncInner(){
         if(item.id === 'products'){
           lastSyncedProductsMap = await syncArrayToCollection(state.products, productsCol(), lastSyncedProductsMap);
         } else if(item.id === 'customers'){
-          lastSyncedCustomersMap = await syncArrayToCollection(state.customers, customersCol(), lastSyncedCustomersMap);
+          lastSyncedCustomersMap = await syncArrayToCollection(state.customers, customersCol(), lastSyncedCustomersMap, true);
         } else if(item.id === 'staff' || item.id === 'shifts'){
           await catalogDocRef().set(sanitizeForFirestore({[item.id]: state[item.id], updatedAt: new Date().toISOString()}), {merge:true});
         } else {
@@ -3006,6 +3008,9 @@ async function __retryPendingSyncInner(){
         const rv = (state.reservations||[]).find(x=>x.id===item.id);
         if(!rv){ clearPendingSync(item.kind, item.id); continue; }
         await reservationsCol().doc(rv.id).set(sanitizeForFirestore(rv));
+      } else if(item.kind === 'debt'){ /* fix78 */
+        if(!(state.customers || []).some(c=>c.id === item.id)){ const _o = __spOps(); delete _o[item.id]; __spSaveOps(); }
+        else { await __spFlushDebtOpsFor(item.id); if((__spOps()[item.id] || []).length) setTimeout(()=>queuePendingSync('debt', item.id), 0); }
       } else if(String(item.kind).indexOf('del:')===0){ /* fix72 */
         const _dc = {sale:salesCol, expense:expensesCol, table:tablesCol, visit:visitsCol, creditor:creditorsCol, kitchenStation:kitchenStationsCol}[item.kind.slice(4)];
         if(_dc) await _dc().doc(item.id).delete();
@@ -3081,11 +3086,11 @@ function computeArraySyncDiff(currentArray, prevMap){
   const toDelete = Object.keys(prevMap).filter(id=>!currentById[id]);
   return {toWrite, toDelete};
 }
-async function syncArrayToCollection(currentArray, colRef, prevMap){
+async function syncArrayToCollection(currentArray, colRef, prevMap, isCustomers){
   const {toWrite, toDelete} = computeArraySyncDiff(currentArray, prevMap);
   const __now = Date.now();
   toWrite.forEach(item=>{ try{ item._u = __now; }catch(e){} });   // lets other devices fetch only what changed
-  const ops = toWrite.map(item=>colRef.doc(item.id).set(sanitizeForFirestore(item)))
+  const ops = toWrite.map(item=>{ if(isCustomers){ const p = sanitizeForFirestore(Object.assign({}, item)); delete p.debt; delete p._appliedOps; return colRef.doc(item.id).set(p, {merge:true}); } return colRef.doc(item.id).set(sanitizeForFirestore(item)); }) /* fix78 */
     // mark first, then delete: a device watching only recent changes still sees the deletion
     .concat(toDelete.map(id=>colRef.doc(id).set({_u: __now, _deleted: true}, {merge:true}).catch(()=>{}).then(()=>colRef.doc(id).delete())));
   await Promise.all(ops);
@@ -3112,7 +3117,7 @@ function syncCustomersDoc(){
   if(customersSyncTimer) clearTimeout(customersSyncTimer);
   customersSyncTimer = setTimeout(async ()=>{
     try{
-      lastSyncedCustomersMap = await syncArrayToCollection(state.customers, customersCol(), lastSyncedCustomersMap);
+      lastSyncedCustomersMap = await syncArrayToCollection(state.customers, customersCol(), lastSyncedCustomersMap, true);
       clearPendingSync('catalog', 'customers');
     }catch(e){ queuePendingSync('catalog', 'customers'); }
   }, 1200);
@@ -3411,6 +3416,69 @@ function addReservationDoc(reservation){
     queuePendingSync('reservation', reservation.id);
   }
 }
+/* fix78: mijoz qarzi o'zgarishlari serverga qo'shish/ayirish sifatida qo'llanadi, ustidan yozilmaydi */
+let __spOpsCache = null, __spOpsBiz = null; const __spFlushing = {};
+function __spOpsKey(){ return 'sp_debt_ops_v1_' + (state.businessId || 'x'); }
+function __spOps(){
+  if(__spOpsCache && __spOpsBiz === state.businessId) return __spOpsCache;
+  try{ __spOpsCache = JSON.parse(localStorage.getItem(__spOpsKey()) || '{}') || {}; }catch(e){ __spOpsCache = {}; }
+  __spOpsBiz = state.businessId; return __spOpsCache;
+}
+function __spSaveOps(){ try{ const o = __spOps(); Object.keys(o).forEach(k=>{ if(!o[k] || !o[k].length) delete o[k]; }); localStorage.setItem(__spOpsKey(), JSON.stringify(o)); }catch(e){} }
+function __spClearOps(){ __spOpsCache = {}; __spOpsBiz = state.businessId; __spSaveOps(); }
+function __spPendingSum(cid){ return (__spOps()[cid] || []).reduce((a,o)=>a+(Number(o.d)||0), 0); }
+function __spBaseCopy(c){ const x = Object.assign({}, c); delete x._appliedOps; const ps = __spPendingSum(c.id); if(ps) x.debt = Math.max(0, Math.round((Number(c.debt)||0) - ps)); return x; }
+function __spDebtSet(cust, value){
+  if(!cust) return;
+  const old = Number(cust.debt) || 0; const v = Math.round(Number(value) || 0); cust.debt = v;
+  const d = v - old; if(!d) return;
+  const o = __spOps(); (o[cust.id] = o[cust.id] || []).push({id: uid(), d}); __spSaveOps();
+  queuePendingSync('debt', cust.id);
+  const cid = cust.id;
+  setTimeout(()=>{ __spFlushDebtOpsFor(cid).then(()=>{ if(!(__spOps()[cid] || []).length) clearPendingSync('debt', cid); }).catch(()=>{}); }, 1500);
+}
+function __spFlushDebtOpsFor(cid){
+  if(!fbUser || !fbDb || !cid) return Promise.resolve();
+  if(typeof navigator !== 'undefined' && navigator.onLine === false) return Promise.resolve();
+  if(__spFlushing[cid]) return __spFlushing[cid];
+  const ops = (__spOps()[cid] || []).slice(); if(!ops.length) return Promise.resolve();
+  const ref = customersCol().doc(cid);
+  const p = fbDb.runTransaction(async tx=>{
+    const snap = await tx.get(ref);
+    if(!snap.exists) throw new Error('customer-not-uploaded');
+    const d = snap.data() || {};
+    const applied = Array.isArray(d._appliedOps) ? d._appliedOps.slice() : [];
+    const seen = new Set(applied);
+    let debt = Number(d.debt) || 0;
+    ops.forEach(op=>{ if(!seen.has(op.id)){ debt = Math.max(0, debt + (Number(op.d)||0)); applied.push(op.id); seen.add(op.id); } });
+    debt = Math.round(debt);
+    tx.update(ref, {debt: debt, _appliedOps: applied.slice(-200), _u: Date.now()});
+    return debt;
+  }).then(serverDebt=>{
+    const done = new Set(ops.map(op=>op.id));
+    const o = __spOps(); o[cid] = (o[cid] || []).filter(op=>!done.has(op.id)); __spSaveOps();
+    const c = (state.customers || []).find(x=>x.id === cid);
+    if(c){ c.debt = Math.max(0, Math.round(serverDebt + __spPendingSum(cid))); try{ storSetSoon('customers'); }catch(e){} try{ scheduleLiveRender(); }catch(e){} }
+  }).finally(()=>{ delete __spFlushing[cid]; });
+  __spFlushing[cid] = p;
+  return p;
+}
+function __spRebaseDebts(cloudList){
+  try{
+    if(!Array.isArray(cloudList) || !cloudList.length) return;
+    const o = __spOps(); let changed = false;
+    const byId = {}; (state.customers || []).forEach(c=>{ if(c && c.id) byId[c.id] = c; });
+    cloudList.forEach(d=>{
+      if(!d || !d.id || d._deleted || d.debt === undefined || d.debt === null) return;
+      const c = byId[d.id]; if(!c) return;
+      let list = o[d.id] || [];
+      if(list.length && Array.isArray(d._appliedOps)){ const ap = new Set(d._appliedOps); const keep = list.filter(op=>!ap.has(op.id)); if(keep.length !== list.length){ o[d.id] = keep; list = keep; changed = true; } }
+      const extra = list.reduce((a,op)=>a+(Number(op.d)||0), 0);
+      c.debt = Math.max(0, Math.round((Number(d.debt)||0) + extra));
+    });
+    if(changed) __spSaveOps();
+  }catch(e){}
+}
 function addLedgerDoc(entry){
   if(!entry) return; queuePendingSync('ledger', entry.id); if(!fbUser || !fbDb) return; /* fix70 */
   try{
@@ -3569,7 +3637,7 @@ async function migrateLegacyToV2(legacyData){
     (legacyData.sales||[]).forEach(s=>ops.push(salesCol().doc(s.id).set(sanitizeForFirestore(s), {merge:true})));
     (legacyData.ledger||[]).forEach(l=>ops.push(ledgerCol().doc(l.id).set(sanitizeForFirestore(l), {merge:true})));
     mergedProducts.forEach(p=>ops.push(productsCol().doc(p.id).set(sanitizeForFirestore(p), {merge:true})));
-    mergedCustomers.forEach(c=>ops.push(customersCol().doc(c.id).set(sanitizeForFirestore(c), {merge:true})));
+    mergedCustomers.forEach(c=>ops.push(customersCol().doc(c.id).set(sanitizeForFirestore(__spBaseCopy(c)), {merge:true})));
     await Promise.all(ops);
     const recoveredSettings = extractSettingsFromDoc(legacyData);
     const cleared = {products:null, customers:null, staff:null, shifts:null, sales:null, ledger:null, tables:null};
@@ -3586,7 +3654,7 @@ async function fullResyncToCloud(){
     }), {merge:true});
     await businessDocRef().set(sanitizeForFirestore(Object.assign({}, state.settings, {schemaVersion:2})), {merge:true});
     await Promise.all(state.products.map(p=>productsCol().doc(p.id).set(sanitizeForFirestore(p))));
-    await Promise.all(state.customers.map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(c))));
+    await Promise.all(state.customers.map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(__spBaseCopy(c)))));
     await Promise.all(state.tables.map(t=>tablesCol().doc(t.id).set(sanitizeForFirestore(t))));
     await Promise.all(state.sales.map(s=>salesCol().doc(s.id).set(sanitizeForFirestore(s))));
     await Promise.all(state.ledger.map(l=>ledgerCol().doc(l.id).set(sanitizeForFirestore(l))));
@@ -3641,7 +3709,7 @@ async function loadCloudData(){
       await businessDocRef().set(sanitizeForFirestore(Object.assign({}, state.settings, {schemaVersion:2, ownerEmail: fbUser.email || ''})));
       await catalogDocRef().set(sanitizeForFirestore({products:null, customers:null, staff:state.staff, shifts:state.shifts, updatedAt:new Date().toISOString()}));
       try{ await Promise.all(state.products.map(p=>productsCol().doc(p.id).set(sanitizeForFirestore(p)))); }catch(e){ queuePendingSync('catalog','products'); }
-      if(state.customers.length){ try{ await Promise.all(state.customers.map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(c)))); }catch(e){ queuePendingSync('catalog','customers'); } }
+      if(state.customers.length){ try{ await Promise.all(state.customers.map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(__spBaseCopy(c))))); }catch(e){ queuePendingSync('catalog','customers'); } }
     } else {
       const bizData = bizDoc.data();
       if(bizData.schemaVersion === 2){
@@ -3732,6 +3800,7 @@ async function loadCloudData(){
         cloudConfirmedCustomers = cloudCustomers;
         state.products = withoutDeletedProducts(productsPending ? mergeById(state.products, cloudProducts) : cloudProducts);
         state.customers = customersPending ? mergeById(state.customers, cloudCustomers) : cloudCustomers;
+        __spRebaseDebts(cloudCustomers); /* fix78 */
         /* existing business: never re-seed demo products */
         const productsNeedMigration = (catalog.products||[]).length > 0;
         const customersNeedMigration = (catalog.customers||[]).length > 0;
@@ -3748,7 +3817,7 @@ async function loadCloudData(){
           await Promise.all(missing((state.sales||[]).filter(x=>x && x.date && x.date >= __since), salesSnap).map(s=>salesCol().doc(s.id).set(sanitizeForFirestore(s))));
           await Promise.all(missing((state.ledger||[]).filter(x=>x && x.date && x.date >= __since), ledgerSnap).map(l=>ledgerCol().doc(l.id).set(sanitizeForFirestore(l))));
           await Promise.all(missing(state.products, productsSnap).map(p=>productsCol().doc(p.id).set(sanitizeForFirestore(p))));
-          await Promise.all(missing(state.customers, customersSnap).map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(c))));
+          await Promise.all(missing(state.customers, customersSnap).map(c=>customersCol().doc(c.id).set(sanitizeForFirestore(__spBaseCopy(c)))));
           const cleared = {products:null, customers:null, staff:null, shifts:null, sales:null, ledger:null, tables:null};
           await businessDocRef().set(sanitizeForFirestore(Object.assign({}, state.settings, {schemaVersion:2}, cleared)), {merge:true});
         }
@@ -6682,13 +6751,13 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     // amount, so the customer's ledger history honestly shows "bought
     // worth X" and "paid Y of it right away" as the two things that
     // actually happened, not one pre-netted number that hides the split.
-    cust.debt = (cust.debt||0) + total;
+    __spDebtSet(cust, (cust.debt||0) + total); /* fix78 */
     const saleLedgerEntry = {id:uid(), customerId, type:'sale', amount:total, date:new Date().toISOString(), note:'', staffName: state.currentStaff ? state.currentStaff.name : ''};
     state.ledger.push(saleLedgerEntry);
     addLedgerDoc(saleLedgerEntry);
     const paidNow = total - creditAmount;
     if(paidNow > 0){
-      cust.debt = Math.max(0, cust.debt - paidNow);
+      __spDebtSet(cust, Math.max(0, cust.debt - paidNow)); /* fix78 */
       const methodLabel = paymentTypeLabel(hasSplit ? (paymentType==='credit' ? splitMethodUsed : paymentType) : paymentType);
       const paymentLedgerEntry = {id:uid(), customerId, type:'payment', amount:paidNow, date:new Date().toISOString(), note: tr('splitPaymentToggle')+' ('+methodLabel+')'+(sale.receiptNumber?(' №'+sale.receiptNumber):''), staffName: state.currentStaff ? state.currentStaff.name : ''};
       state.ledger.push(paymentLedgerEntry);
@@ -10462,7 +10531,7 @@ function refundSale(saleId, afterDone){
     if(saleCreditAmount > 0 && sale.customerId){
       const cust = state.customers.find(c=>c.id===sale.customerId);
       if(cust){
-        cust.debt = Math.max(0, (cust.debt||0) - saleCreditAmount);
+        __spDebtSet(cust, Math.max(0, (cust.debt||0) - saleCreditAmount)); /* fix78 */
         const entry = {
           id: uid(), customerId: sale.customerId, type:'payment', amount: saleCreditAmount,
           date: new Date().toISOString(), note: tr('refunded') + (sale.receiptNumber?(' №'+sale.receiptNumber):''),
@@ -10759,7 +10828,7 @@ function saveEditedReceipt(){
   if(creditInvolvedInSale && sale.customerId && diff !== 0){
     const cust = state.customers.find(c=>c.id===sale.customerId);
     if(cust){
-      cust.debt = Math.max(0, (cust.debt||0) + diff);
+      __spDebtSet(cust, Math.max(0, (cust.debt||0) + diff)); /* fix78 */
       const entry = {
         id: uid(), customerId: sale.customerId, type: diff>0 ? 'sale' : 'payment', amount: Math.abs(diff),
         date: new Date().toISOString(), note: tr('receiptEditedLabel') + (sale.receiptNumber?(' №'+sale.receiptNumber):''),
@@ -11126,8 +11195,8 @@ function openLedgerForm(customerId, type){
     }
     btn.disabled = true;
     let ledgerEntry;
-    if(type==='payment'){ cust.debt = Math.max(0,(cust.debt||0)-amount); ledgerEntry = {id:uid(),customerId,type:'payment',amount,date:iso,note,staffName}; }
-    else { cust.debt = (cust.debt||0)+amount; ledgerEntry = {id:uid(),customerId,type:'sale',amount,date:iso,note,staffName}; }
+    if(type==='payment'){ __spDebtSet(cust, Math.max(0,(cust.debt||0)-amount)); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'payment',amount,date:iso,note,staffName}; }
+    else { __spDebtSet(cust, (cust.debt||0)+amount); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'sale',amount,date:iso,note,staffName}; }
     state.ledger.push(ledgerEntry);
     saveCustomers(); saveLedger(); addLedgerDoc(ledgerEntry); closeModal(); renderAll();
   });
@@ -14828,6 +14897,7 @@ function downloadBackup(){
 }
 
 function restoreBackup(data){
+  try{ __spClearOps(); }catch(e){} /* fix78 */
   state.products = data.products || [];
   state.customers = data.customers || [];
   state.sales = data.sales || [];
