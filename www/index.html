@@ -9087,7 +9087,7 @@ function renderReceiptsListItems(sales){
           <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
           <div>
             <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${new Date(s.date).toLocaleString()}</span></div>
-            <div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${cust?(' · '+escapeHtml(cust.name)):''}${s.cashierName?(' · '+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>
+            <div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${cust?(' · '+escapeHtml(cust.name)):''}${s.cashierName?(' · '+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · ✏️ '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>
           </div>
         </div>
         <span class="rcpt-chev">›</span>
@@ -10688,7 +10688,11 @@ function openEditReceiptModal(saleId, afterDone){
     saleId,
     items: sale.items.map(it=>({...it, _origQty: it.qty, _isOriginal: true})),
     removedOriginals: [],
-    afterDone
+    afterDone,
+    deliveryFee: sale.deliveryFee || 0, /* fix82 */
+    discountType: sale.discountType === 'percent' ? 'percent' : 'amount',
+    discountValue: sale.discountAmount ? (sale.discountValue || 0) : 0,
+    serviceChargePercent: sale.serviceChargePercent || 0
   };
   renderEditReceiptModal();
 }
@@ -10696,13 +10700,26 @@ function openEditReceiptModal(saleId, afterDone){
 function editReceiptSubtotal(){
   return editReceiptDraft.items.reduce((s,it)=>s + it.price*it.qty, 0);
 }
-function editReceiptTotal(){
-  const sale = state.sales.find(s=>s.id===editReceiptDraft.saleId);
-  const subtotal = editReceiptSubtotal();
-  const _disc = sale.discountAmount ? Math.min(sale.discountType==='percent' ? subtotal*((sale.discountValue||0)/100) : (sale.discountValue||0), subtotal) : 0; /* fix68 */
-  const _ds = subtotal - _disc;
-  const serviceChargeAmount = _ds * ((sale.serviceChargePercent||0)/100);
-  return _ds - Math.min(sale.bonusUsed||0, _ds) + serviceChargeAmount + (sale.deliveryFee||0);
+function __erDiscount(d, subtotal){ /* fix82 */
+  const v = Number(d.discountValue) || 0; if(v <= 0) return 0;
+  return Math.round(Math.min(d.discountType === 'percent' ? subtotal * (v/100) : v, subtotal));
+}
+function editReceiptTotal(){ /* fix82 */
+  const d = editReceiptDraft; const sale = state.sales.find(s=>s.id===d.saleId) || {};
+  const subtotal = editReceiptSubtotal(); const ds = subtotal - __erDiscount(d, subtotal);
+  const svc = Math.round(ds * ((Number(d.serviceChargePercent)||0)/100));
+  return Math.round(ds - Math.min(sale.bonusUsed||0, ds) + svc + (Number(d.deliveryFee)||0));
+}
+function __erSummaryHtml(){ /* fix82 */
+  const d = editReceiptDraft; const sale = state.sales.find(s=>s.id===d.saleId) || {};
+  const subtotal = editReceiptSubtotal(); const disc = __erDiscount(d, subtotal); const ds = subtotal - disc;
+  const svc = Math.round(ds * ((Number(d.serviceChargePercent)||0)/100)); const bonus = Math.min(sale.bonusUsed||0, ds);
+  return `<div class="row"><span class="subtle">${tr('subtotal')}</span><strong>${fmt(subtotal)}</strong></div>`
+    + (disc ? `<div class="row"><span class="subtle">${tr('discountLabel')}</span><strong style="color:var(--warm);">−${fmt(disc)}</strong></div>` : '')
+    + (bonus ? `<div class="row"><span class="subtle">Bonus</span><strong style="color:var(--warm);">−${fmt(bonus)}</strong></div>` : '')
+    + (svc ? `<div class="row"><span class="subtle">${tr('serviceCharge')}</span><strong>+${fmt(svc)}</strong></div>` : '')
+    + ((Number(d.deliveryFee)||0) ? `<div class="row"><span class="subtle">${tr('deliveryFee')}</span><strong>+${fmt(d.deliveryFee)}</strong></div>` : '')
+    + `<div class="row"><span class="subtle" style="font-weight:800;">${tr('total')}</span><strong style="color:var(--accent-dark);font-size:16px;">${fmt(editReceiptTotal())}</strong></div>`;
 }
 
 function renderEditReceiptModal(){
@@ -10732,10 +10749,12 @@ function renderEditReceiptModal(){
       `).join('') : `<div class="empty-state">${tr('cannotEditEmptyReceipt')}</div>`}
     </div>
     <button class="btn btn-outline btn-block" id="er-add-product-btn" style="margin:6px 0 16px;">${tr('addProductToReceipt')}</button>
-    <div class="card" style="margin-bottom:14px;">
-      <div class="row"><span class="subtle">${tr('subtotal')}</span><strong>${fmt(editReceiptSubtotal())}</strong></div>
-      <div class="row"><span class="subtle" style="font-weight:800;">${tr('total')}</span><strong style="color:var(--accent-dark);font-size:16px;">${fmt(editReceiptTotal())}</strong></div>
+    <div class="card" style="margin-bottom:10px;padding:10px 12px;">
+      <div class="field" style="margin-bottom:8px;"><label class="field-label">${tr('deliveryFee')}</label><input type="text" inputmode="numeric" id="er-delivery" value="${d.deliveryFee ? formatMoneyInputValue(d.deliveryFee) : ''}" placeholder="0"></div>
+      ${canApplyDiscount() ? `<div class="field" style="margin-bottom:8px;"><label class="field-label">${tr('discountLabel')}</label><div style="display:flex;gap:6px;"><input type="text" inputmode="decimal" id="er-disc-val" value="${d.discountValue ? (d.discountType==='percent' ? d.discountValue : formatMoneyInputValue(d.discountValue)) : ''}" placeholder="0" style="flex:1;min-width:0;"><select id="er-disc-type" style="width:96px;"><option value="amount" ${d.discountType!=='percent'?'selected':''}>${escapeHtml((fmt(0).replace(/^[\s0.,-]+/,'') || '#'))}</option><option value="percent" ${d.discountType==='percent'?'selected':''}>%</option></select></div></div>` : ''}
+      ${(state.settings.restaurantMode || d.serviceChargePercent) ? `<div class="field" style="margin-bottom:0;"><label class="field-label">${tr('serviceCharge')} (%)</label><input type="text" inputmode="decimal" id="er-svc" value="${d.serviceChargePercent || ''}" placeholder="0"></div>` : ''}
     </div>
+    <div class="card" style="margin-bottom:14px;" id="er-summary">${__erSummaryHtml()}</div>
     <div id="er-error" class="error-text"></div>
     <div class="btn-row">
       <button class="btn btn-outline" id="er-cancel-btn">${tr('cancel')}</button>
@@ -10774,6 +10793,19 @@ function renderEditReceiptModal(){
     });
   });
   document.getElementById('er-save-btn').addEventListener('click', saveEditedReceipt);
+  { /* fix82 */
+    const _num = (v)=>{ const n = parseFloat(String(v||'').replace(/\s/g,'').replace(',', '.')); return isNaN(n) ? 0 : n; };
+    const _upd = ()=>{
+      const dl = document.getElementById('er-delivery'); if(dl){ const v = parseMoneyInput(dl.value); d.deliveryFee = (isNaN(v) || v < 0) ? 0 : v; }
+      const dv = document.getElementById('er-disc-val'), dt = document.getElementById('er-disc-type');
+      if(dv && dt){ d.discountType = dt.value === 'percent' ? 'percent' : 'amount'; let v = d.discountType === 'percent' ? _num(dv.value) : parseMoneyInput(dv.value); if(isNaN(v) || v < 0) v = 0; if(d.discountType === 'percent' && v > 100) v = 100; d.discountValue = v; }
+      const sv = document.getElementById('er-svc'); if(sv){ let v = _num(sv.value); if(v < 0) v = 0; if(v > 100) v = 100; d.serviceChargePercent = v; }
+      const sm = document.getElementById('er-summary'); if(sm) sm.innerHTML = __erSummaryHtml();
+    };
+    attachMoneyInputsById('er-delivery');
+    ['er-delivery','er-disc-val','er-svc'].forEach(id=>{ const el = document.getElementById(id); if(el) el.addEventListener('input', _upd); });
+    const _dt = document.getElementById('er-disc-type'); if(_dt) _dt.addEventListener('change', _upd);
+  }
 }
 
 function openAddProductToReceiptPicker(){
@@ -10868,13 +10900,10 @@ function saveEditedReceipt(){
   // editing — recomputed against the NEW subtotal (a percent discount
   // scales with it; a fixed-amount one stays fixed, but never past the
   // new subtotal itself, same cap used at checkout time).
-  const discountAmount = sale.discountAmount ? Math.min(
-    sale.discountType==='percent' ? subtotal * ((sale.discountValue||0)/100) : (sale.discountValue||0),
-    subtotal
-  ) : 0;
+  const discountAmount = __erDiscount(d, subtotal); /* fix82 */
   const discountedSubtotal = subtotal - discountAmount;
-  const serviceChargeAmount = discountedSubtotal * ((sale.serviceChargePercent||0)/100);
-  const newTotal = discountedSubtotal - Math.min(sale.bonusUsed||0, discountedSubtotal) + serviceChargeAmount + (sale.deliveryFee||0); /* fix68 */
+  const serviceChargeAmount = Math.round(discountedSubtotal * ((Number(d.serviceChargePercent)||0)/100)); /* fix82 */
+  const newTotal = Math.round(discountedSubtotal - Math.min(sale.bonusUsed||0, discountedSubtotal) + serviceChargeAmount + (Number(d.deliveryFee)||0)); /* fix68 + fix82 */
   const oldTotal = sale.total;
   const diff = newTotal - oldTotal;
 
@@ -10908,6 +10937,11 @@ function saveEditedReceipt(){
   if(diff !== 0 && sale.splitPayments){
     const creditEntry = sale.splitPayments.find(p=>p.method==='credit');
     if(creditEntry) creditEntry.amount = Math.max(0, creditEntry.amount + diff);
+    else if(sale.splitPayments.length){ /* fix82 */
+      const sp = sale.splitPayments; sp[0].amount = (Number(sp[0].amount)||0) + diff;
+      if(sp[0].amount < 0 && sp[1]){ sp[1].amount = Math.max(0, (Number(sp[1].amount)||0) + sp[0].amount); sp[0].amount = 0; }
+      if(sp[0].amount < 0) sp[0].amount = 0;
+    }
   }
 
   // 5. Save the updated sale
@@ -10915,6 +10949,8 @@ function saveEditedReceipt(){
   sale.subtotal = subtotal;
   sale.discountAmount = discountAmount;
   sale.serviceChargeAmount = serviceChargeAmount;
+  sale.deliveryFee = Number(d.deliveryFee) || 0; sale.serviceChargePercent = Number(d.serviceChargePercent) || 0; /* fix82 */
+  sale.discountType = discountAmount > 0 ? d.discountType : null; sale.discountValue = discountAmount > 0 ? (Number(d.discountValue) || 0) : 0;
   sale.total = newTotal;
   if(!sale.edited){ sale.originalTotal = oldTotal; }
   sale.edited = true;
@@ -10970,7 +11006,7 @@ function openCustomerDetail(customerId){
         <div class="row" style="padding-left:6px;">
           <div class="info" style="display:flex;align-items:center;gap:10px;">
             <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
-            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${new Date(s.date).toLocaleString()}</span>${(s.receiptNumber||s.cashierName)?(`<div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${s.cashierName?((s.receiptNumber?' · ':'')+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>`):''}</div>
+            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${new Date(s.date).toLocaleString()}</span>${(s.receiptNumber||s.cashierName)?(`<div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${s.cashierName?((s.receiptNumber?' · ':'')+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · ✏️ '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>`):''}</div>
           </div>
           <span class="rcpt-chev">›</span>
         </div>
