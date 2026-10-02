@@ -10755,36 +10755,48 @@ function openAddProductToReceiptPicker(){
     q = (q||'').toLowerCase();
     const listEl = document.getElementById('er-product-list');
     if(!listEl) return;
-    const matches = state.products.filter(p=>p.name.toLowerCase().includes(q)).slice(0,30);
-    listEl.innerHTML = matches.length ? matches.map(p=>{
-      if(p.variants && p.variants.length){
-        return p.variants.map(v=>`
-          <div class="row" data-er-pick="${p.id}" data-er-variant="${v.id}" style="cursor:pointer;padding:10px 4px;border-bottom:1px solid var(--border);">
-            <div class="info"><div class="name">${escapeHtml(p.name)} — ${escapeHtml(v.name)}</div><div class="meta">${fmt(v.price)} · ${tr('stock')}: ${v.stock}</div></div>
-          </div>`).join('');
-      }
-      return `
-        <div class="row" data-er-pick="${p.id}" style="cursor:pointer;padding:10px 4px;border-bottom:1px solid var(--border);">
-          <div class="info"><div class="name">${escapeHtml(p.name)}</div><div class="meta">${fmt(p.price)} · ${tr('stock')}: ${p.stock}</div></div>
-        </div>`;
-    }).join('') : `<div class="empty-state">${tr('noData')}</div>`;
-    listEl.querySelectorAll('[data-er-pick]').forEach(row=>{
-      row.addEventListener('click', ()=>{
-        const p = state.products.find(pr=>pr.id===row.dataset.erPick);
+    const matches = state.products.filter(p=>p.name.toLowerCase().includes(q)).slice(0,30); /* fix80 */
+    const rows = [];
+    matches.forEach(p=>{
+      const vs = (p.variants && p.variants.length) ? p.variants : [null];
+      vs.forEach(v=>{
+        const title = v ? `${p.name} — ${v.name}` : p.name;
+        const stock = v ? v.stock : p.stock;
+        const retail = v ? v.price : p.price;
+        const whole = v ? (v.wholesalePrice > 0 ? v.wholesalePrice : 0) : (p.wholesalePrice > 0 ? p.wholesalePrice : 0);
+        const boxP = (p.unitsPerBox > 0) ? (v ? (v.boxPrice > 0 ? v.boxPrice : 0) : (p.boxPrice > 0 ? p.boxPrice : 0)) : 0;
+        const vid = v ? v.id : '';
+        const btn = (mode, label, price)=>`<button class="btn btn-outline btn-sm" style="flex:1;min-width:0;padding:6px 4px;" data-er-pick="${p.id}" data-er-variant="${vid}" data-er-mode="${mode}"><span style="display:block;font-size:11px;opacity:.75;">${escapeHtml(label)}</span><strong>${fmt(price)}</strong></button>`;
+        rows.push(`<div style="padding:10px 4px;border-bottom:1px solid var(--border);">
+          <div class="name" style="font-weight:700;">${escapeHtml(title)}</div>
+          <div class="subtle" style="font-size:12px;margin:2px 0 8px;">${tr('stock')}: ${stock}</div>
+          <div style="display:flex;gap:6px;">${btn('retail', tr('retailModeShort'), retail)}${whole > 0 ? btn('wholesale', tr('wholesaleModeShort'), whole) : ''}${boxP > 0 ? btn('box', (p.boxLabel || tr('boxDefaultLabel')) + ' (' + p.unitsPerBox + ')', boxP) : ''}</div>
+        </div>`);
+      });
+    });
+    listEl.innerHTML = rows.length ? rows.join('') : `<div class="empty-state">${tr('noData')}</div>`;
+    listEl.querySelectorAll('[data-er-pick]').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const p = state.products.find(pr=>pr.id===b.dataset.erPick);
         if(!p) return;
-        const variantId = row.dataset.erVariant || null;
+        const variantId = b.dataset.erVariant || null;
         const v = getVariant(p, variantId);
-        const available = variantStock(p, variantId);
-        if(!state.settings.allowOversell && available < 1){ showToast(tr('notEnoughStockToAdd')); return; }
-        const existing = editReceiptDraft.items.find(it=>it.productId===p.id && (it.variantId||null)===(variantId||null) && it.saleMode!=='box' && !it.priceTier);
-        if(existing){
-          if(!state.settings.allowOversell && variantStock(p, variantId) < 1){ showToast(tr('notEnoughStockToAdd')); return; }
-          existing.qty += 1;
-        } else {
-          const name = v ? `${p.name} — ${v.name}` : p.name;
-          const price = v ? v.price : p.price;
+        const mode = b.dataset.erMode;
+        const isBox = mode === 'box', isWh = mode === 'wholesale';
+        const unitsPer = isBox ? (p.unitsPerBox || 1) : 1;
+        if(!state.settings.allowOversell && variantStock(p, variantId) < unitsPer){ showToast(tr('notEnoughStockToAdd')); return; }
+        const existing = editReceiptDraft.items.find(it=>it.productId===p.id && (it.variantId||null)===(variantId||null) && (isBox ? it.saleMode==='box' : (it.saleMode!=='box' && (isWh ? it.priceTier==='wholesale' : !it.priceTier))));
+        if(existing){ existing.qty += 1; }
+        else {
+          const label = p.boxLabel || tr('boxDefaultLabel');
+          const base = v ? `${p.name} — ${v.name}` : p.name;
+          const name = isBox ? `${base} (${label})` : (isWh ? `${base} (${tr('wholesaleModeShort')})` : base);
+          const price = isBox ? (v ? v.boxPrice : p.boxPrice) : (isWh ? (v ? (v.wholesalePrice > 0 ? v.wholesalePrice : v.price) : p.wholesalePrice) : (v ? v.price : p.price));
           const costPrice = v ? (v.costPrice||p.costPrice||0) : (p.costPrice||0);
-          editReceiptDraft.items.push({productId:p.id, variantId:variantId||null, name, qty:1, price, costPrice, _isOriginal:false});
+          const item = {productId:p.id, variantId:variantId||null, name, qty:1, price, costPrice, _isOriginal:false};
+          if(isBox){ item.saleMode = 'box'; item.unitsPerBox = p.unitsPerBox || 1; }
+          if(isWh){ item.priceTier = 'wholesale'; }
+          editReceiptDraft.items.push(item);
         }
         closeModal();
         renderEditReceiptModal();
