@@ -844,6 +844,13 @@ const T = {
   saLockBtn:{uz:"Qulflash",ru:"Заблокировать",en:"Lock",kk:"Құлыптау",ky:"Кулпулоо",tg:"Қулф кардан"},
   saActionFailed:{uz:"Saqlanmadi",ru:"Не сохранено",en:"Not saved",kk:"Сақталмады",ky:"Сакталган жок",tg:"Захира нашуд"},
   saConfirmExtend:{uz:"Obunani {plan} ga uzaytirasizmi?",ru:"Продлить подписку на {plan}?",en:"Extend the subscription by {plan}?",kk:"Жазылымды {plan} ұзартасыз ба?",ky:"Жазылууну {plan} узартасызбы?",tg:"Обунаро ба {plan} дароз мекунед?"},
+  payMethodLabel:{uz:"To'lov usuli",ru:"Способ оплаты",en:"Payment method",kk:"Төлем тәсілі",ky:"Төлөм ыкмасы",tg:"Тарзи пардохт"},
+  debtPaymentsCash:{uz:"Qarz to'lovlari (naqd)",ru:"Погашение долгов (наличные)",en:"Debt payments (cash)",kk:"Қарыз төлемдері (қолма-қол)",ky:"Карыз төлөмдөрү (накта)",tg:"Пардохти қарз (нақд)"},
+  debtPaymentsToday:{uz:"Bugungi qarz to'lovlari",ru:"Погашения долгов сегодня",en:"Debt payments today",kk:"Бүгінгі қарыз төлемдері",ky:"Бүгүнкү карыз төлөмдөрү",tg:"Пардохти қарзи имрӯз"},
+  creditorPaidCash:{uz:"Yetkazib beruvchiga to'lov (naqd)",ru:"Оплата поставщикам (наличные)",en:"Paid to suppliers (cash)",kk:"Жеткізушіге төлем (қолма-қол)",ky:"Жеткирүүчүгө төлөм (накта)",tg:"Пардохт ба таъминкунанда (нақд)"},
+  refundsCash:{uz:"Qaytarilgan (naqd, oldingi cheklar)",ru:"Возвраты (наличные, прошлые чеки)",en:"Refunds (cash, earlier receipts)",kk:"Қайтарылған (қолма-қол)",ky:"Кайтарылган (накта)",tg:"Баргардонидашуда (нақд)"},
+  payFromCashbox:{uz:"Kassadan (naqd)",ru:"Из кассы (наличные)",en:"From the register (cash)",kk:"Кассадан (қолма-қол)",ky:"Кассадан (накта)",tg:"Аз касса (нақд)"},
+  payFromOther:{uz:"Boshqa (karta / hisob)",ru:"Другое (карта / счёт)",en:"Other (card / account)",kk:"Басқа (карта / шот)",ky:"Башка (карта / эсеп)",tg:"Дигар (корт / ҳисоб)"},
   staffSignInFailed:{uz:"Kirib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.",ru:"Не удалось войти. Проверьте интернет и попробуйте снова.",en:"Couldn't sign in. Check your internet connection and try again.",kk:"Кіру мүмкін болмады. Интернетті тексеріп, қайта көріңіз.",ky:"Кирүү мүмкүн болгон жок. Интернетти текшерип, кайра аракет кылыңыз.",tg:"Воридшавӣ имконнопазир шуд. Интернетро санҷида, дубора кӯшиш кунед."},
   forgotPinLink:{uz:"PIN kodni unutdingizmi?",ru:"Забыли PIN-код?",en:"Forgot PIN?",kk:"PIN кодты ұмыттыңыз ба?",ky:"PIN кодду унутуп калдыңызбы?",tg:"PIN-кодро фаромӯш кардед?"},
   forgotPinHint:{uz:"Bu ilova ro'yxatdan o'tgan email va parolingizni kiriting — shu orqali siz haqiqatan biznes egasi ekaningiz tasdiqlanadi.",ru:"Введите email и пароль, с которыми зарегистрировано это приложение — так подтвердится, что вы действительно владелец бизнеса.",en:"Enter the email and password this app was registered with — this confirms you're really the business owner.",kk:"Осы қосымша тіркелген email мен парольді енгізіңіз — осылай сіздің шынымен бизнес иесі екеніңіз расталады.",ky:"Бул колдонмо катталган email жана сырсөздү киргизиңиз — ушундай жол менен сиздин чындап бизнес ээси экениңиз тастыкталат.",tg:"Email ва рамзи феҳристшудаи ин барномаро ворид кунед — ин тасдиқ мекунад, ки шумо воқеан соҳиби бизнес ҳастед."},
@@ -4282,12 +4289,14 @@ function openCashBalanceModal(){
   const cashTotal = sumSalesByMethod(shiftSales, 'cash');
   const shiftCashExpenses = state.expenses.filter(x=>x.shiftId===shift.id && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
-  const expected = shift.startCash + cashTotal - cashExpensesTotal;
+  const __cx = shiftCashExtras(shift); /* fix81 */
+  const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
   openModal(`
     <div class="modal-title">Kassa balansi</div>
     <div class="row" style="justify-content:space-between"><span class="subtle">Boshlang'ich kassa</span><strong>${fmt(shift.startCash)}</strong></div>
     <div class="row" style="justify-content:space-between"><span class="subtle">Naqd sotuvlar</span><strong>+${fmt(cashTotal)}</strong></div>
     <div class="row" style="justify-content:space-between"><span class="subtle">Naqd xarajatlar</span><strong style="color:var(--danger)">-${fmt(cashExpensesTotal)}</strong></div>
+    ${__cxRowsHtml(__cx)}
     <hr/>
     <div class="row" style="justify-content:space-between"><span class="subtle">Joriy kassa balansi</span><strong style="font-size:1.3em">${fmt(expected)}</strong></div>
   `);
@@ -4306,7 +4315,8 @@ function autoCloseStaleShift(shift){
   const profitTotal = shiftSales.reduce((a,s)=>a+saleProfit(s), 0);
   const shiftCashExpenses = state.expenses.filter(x=>x.shiftId===shift.id && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
-  const expected = shift.startCash + cashTotal - cashExpensesTotal;
+  const __cx = shiftCashExtras(shift); /* fix81 */
+  const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
   state.shifts.push({...shift, endTime:new Date().toISOString(), endCash:expected, expectedCash:expected, cashTotal, cardTotal, creditTotal, discountTotal, serviceChargeTotal, deliveryFeeTotal, refundedTotal, cashExpensesTotal, profitTotal, salesCount: shiftSales.length, autoClosed:true});
   saveShifts();
   state.currentShift = {id:uid(), staffId:shift.staffId, staffName:shift.staffName, startTime:new Date().toISOString(), startCash:expected, branchId:shift.branchId};
@@ -4357,7 +4367,8 @@ function openEndShiftModal(){
   // actually a discrepancy.
   const shiftCashExpenses = state.expenses.filter(x=>x.shiftId===shift.id && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
-  const expected = shift.startCash + cashTotal - cashExpensesTotal;
+  const __cx = shiftCashExtras(shift); /* fix81 */
+  const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
   openModal(`
     <div class="modal-title">${tr('shiftSummary')}</div>
     <div class="stat-grid" style="margin-bottom:14px;">
@@ -4378,6 +4389,7 @@ function openEndShiftModal(){
       <div class="row"><span class="subtle">${tr('startingCash')}</span><strong>${fmt(shift.startCash)}</strong></div>
       <div class="row"><span class="subtle">+ ${tr('cashLabel')}</span><strong>${fmt(cashTotal)}</strong></div>
       ${cashExpensesTotal>0?`<div class="row"><span class="subtle">- ${tr('cashExpensesLabel')}</span><strong style="color:var(--danger);">${fmt(cashExpensesTotal)}</strong></div>`:''}
+      ${__cxRowsHtml(__cx)}
       <div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin-top:4px;"><span class="subtle">${tr('expectedCash')}</span><strong>${fmt(expected)}</strong></div>
     </div>
     <div class="field">
@@ -7665,6 +7677,22 @@ function salePaymentBreakdown(sale){
   }
   return out;
 }
+/* fix81: kassadagi naqd — qarz to'lovlari, yetkazib beruvchiga to'lov, qaytarishlar */
+function __fx81Day(iso){ return new Date(iso).toDateString(); }
+function __fx81Sum(arr){ return arr.reduce((a,e)=>a+(Number(e.amount)||0), 0); }
+function shiftCashExtras(shift){
+  const sid = shift && shift.id;
+  if(!sid) return {debtCash:0, debtCard:0, credCash:0, refundCash:0};
+  const debt = (state.ledger||[]).filter(e=>e && e.type==='payment' && e.method && e.shiftId===sid);
+  const cred = (state.creditorLedger||[]).filter(e=>e && e.type==='payment' && e.method==='cash' && e.shiftId===sid);
+  const refundCash = state.sales.filter(x=>x && x.refunded && x.refundShiftId===sid && x.shiftId!==sid).reduce((a,x)=>a+(salePaymentBreakdown(x).cash||0), 0);
+  return {debtCash: __fx81Sum(debt.filter(e=>e.method==='cash')), debtCard: __fx81Sum(debt.filter(e=>e.method==='card')), credCash: __fx81Sum(cred), refundCash: refundCash};
+}
+function __cxRowsHtml(cx){
+  return (cx.debtCash>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">+ ${tr('debtPaymentsCash')}</span><strong>${fmt(cx.debtCash)}</strong></div>` : '')
+    + (cx.credCash>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">- ${tr('creditorPaidCash')}</span><strong style="color:var(--danger);">${fmt(cx.credCash)}</strong></div>` : '')
+    + (cx.refundCash>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">- ${tr('refundsCash')}</span><strong style="color:var(--danger);">${fmt(cx.refundCash)}</strong></div>` : '');
+}
 function sumSalesByMethod(sales, method){
   return sales.reduce((a,s)=>a + (salePaymentBreakdown(s)[method]||0), 0);
 }
@@ -9380,6 +9408,7 @@ function openCreditorTransactionForm(creditorId, type){
     <div class="modal-title">${type==='debt'?tr('iTookDebtBtn'):tr('iPaidBtn')}</div>
     <p class="subtle" style="margin:0 0 12px;">${tr('debt')}: ${fmt(c0?c0.debt||0:0)}</p>
     <div class="field"><label class="field-label">${tr('debtAmountLabel')}</label><input type="text" inputmode="numeric" id="ct-amount"></div>
+    ${type==='payment' ? `<div class="field"><label class="field-label">${tr('payMethodLabel')}</label><select id="ct-method"><option value="cash">${tr('payFromCashbox')}</option><option value="card">${tr('payFromOther')}</option></select></div>` : ''}
     <div class="field"><label class="field-label">${tr('debtNoteOptional')}</label><input type="text" id="ct-note"></div>
     <div id="ct-error" class="error-text"></div>
     <button class="btn btn-primary btn-block" id="ct-save-btn">${tr('save')}</button>
@@ -9401,6 +9430,7 @@ function openCreditorTransactionForm(creditorId, type){
     const c = state.creditors.find(x=>x.id===creditorId);
     if(!c){ btn.disabled = false; return; }
     const entry = {id:uid(), creditorId, type, amount, note, date:new Date().toISOString(), staffName: state.currentStaff?state.currentStaff.name:''};
+    if(type === 'payment'){ entry.method = (((document.getElementById('ct-method')||{}).value)||'cash'); entry.shiftId = state.currentShift ? state.currentShift.id : null; entry.branchId = state.currentBranchId; entry.createdAt = entry.date; } /* fix81 */
     state.creditorLedger.push(entry);
     c.debt = applyCreditorTransaction(c.debt, type, amount);
     saveCreditors(); saveCreditorLedger(); addCreditorDoc(c); addCreditorLedgerDoc(entry);
@@ -10585,6 +10615,7 @@ function refundSale(saleId, afterDone){
     auditLog('saleRefund', `№ ${sale.receiptNumber||sale.id} — ${fmt(sale.total)}`, {saleId: sale.id});
     sale.refundedAt = new Date().toISOString();
     sale.refundedBy = state.currentStaff ? state.currentStaff.name : '';
+    sale.refundShiftId = state.currentShift ? state.currentShift.id : null; /* fix81 */
     saveProducts(); saveSales(); addSaleDoc(sale);
     showToast(tr('refundSuccess'));
     if(afterDone) afterDone();
@@ -11195,6 +11226,7 @@ function openLedgerForm(customerId, type){
         </select>
       </div>
     ` : ''}
+    ${type==='payment' ? `<div class="field"><label class="field-label">${tr('payMethodLabel')}</label><select id="lf-method"><option value="cash">${tr('cashLabel')}</option><option value="card">${tr('cardLabel')}</option></select></div>` : ''}
     <div class="field"><label class="field-label">${tr('note')}</label><input type="text" id="lf-note"></div>
     <div id="lf-error" class="error-text"></div>
     <button class="btn ${type==='payment' ? 'btn-primary' : 'btn-danger btn-solid'}" id="lf-save-btn" style="width:100%;">${type==='payment' ? tr('save') : tr('addDebtManually')}</button>
@@ -11226,7 +11258,7 @@ function openLedgerForm(customerId, type){
     }
     btn.disabled = true;
     let ledgerEntry;
-    if(type==='payment'){ __spDebtSet(cust, Math.max(0,(cust.debt||0)-amount)); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'payment',amount,date:iso,note,staffName}; }
+    if(type==='payment'){ __spDebtSet(cust, Math.max(0,(cust.debt||0)-amount)); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'payment',amount,date:iso,note,staffName, method: (((document.getElementById('lf-method')||{}).value)||'cash'), createdAt: new Date().toISOString(), shiftId: state.currentShift ? state.currentShift.id : null, branchId: state.currentBranchId}; /* fix81 */ }
     else { __spDebtSet(cust, (cust.debt||0)+amount); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'sale',amount,date:iso,note,staffName}; }
     state.ledger.push(ledgerEntry);
     saveCustomers(); saveLedger(); addLedgerDoc(ledgerEntry); closeModal(); renderAll();
@@ -11397,7 +11429,7 @@ function renderReportsCategory(container, cat){
   // section below doesn't need its own branch-filtering logic repeated.
   const activeSales = state.sales.filter(s=>!s.refunded && (!historyCutoff || new Date(s.date) >= historyCutoff) && effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId));
   const todaySales = activeSales.filter(s=> new Date(s.date).toDateString() === today);
-  const todayRefunds = state.sales.filter(s=> s.refunded && new Date(s.date).toDateString() === today && effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId));
+  const todayRefunds = state.sales.filter(s=> s.refunded && new Date(s.refundedAt || s.date).toDateString() === today && effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId)); /* fix81: bugun bajarilgan qaytarishlar */
   const todayRefundTotal = todayRefunds.reduce((a,s)=>a+s.total,0);
   const todayTotal = todaySales.reduce((a,s)=>a+s.total,0);
   const todayCash = sumSalesByMethod(todaySales, 'cash');
@@ -11631,7 +11663,14 @@ function renderReportsCategory(container, cat){
     if(state.currentShift && new Date(state.currentShift.startTime).toDateString()===today && effectiveBranchId(state.currentShift.branchId)===effectiveBranchId(state.currentBranchId)){
       startingCashToday += state.currentShift.startCash||0;
     }
-    const cashInRegister = startingCashToday + todayCash;
+    const __sb = (b)=>effectiveBranchId(b)===effectiveBranchId(state.currentBranchId); /* fix81 */
+    const __todayDebt = (state.ledger||[]).filter(e=>e && e.type==='payment' && e.method && __sb(e.branchId) && __fx81Day(e.createdAt||e.date)===today);
+    const todayDebtCash = __fx81Sum(__todayDebt.filter(e=>e.method==='cash'));
+    const todayDebtCard = __fx81Sum(__todayDebt.filter(e=>e.method==='card'));
+    const todayCredPayCash = __fx81Sum((state.creditorLedger||[]).filter(e=>e && e.type==='payment' && e.method==='cash' && __sb(e.branchId) && __fx81Day(e.createdAt||e.date)===today));
+    const todayCashExpenses = visibleExpenses().filter(x=>__fx81Day(x.date)===today && x.paidFrom!=='other').reduce((a,x)=>a+(Number(x.amount)||0), 0);
+    const todayCashRefundsOld = state.sales.filter(x=>x && x.refunded && x.refundedAt && __sb(x.branchId) && __fx81Day(x.refundedAt)===today && __fx81Day(x.date)!==today).reduce((a,x)=>a+(salePaymentBreakdown(x).cash||0), 0);
+    const cashInRegister = startingCashToday + todayCash + todayDebtCash - todayCashExpenses - todayCredPayCash - todayCashRefundsOld;
     const orderTypeHtml = state.settings.restaurantMode ? (()=>{
       const dineIn = todaySales.filter(s=>s.orderType==='dine_in').reduce((a,s)=>a+s.total,0);
       const takeaway = todaySales.filter(s=>s.orderType==='takeaway').reduce((a,s)=>a+s.total,0);
@@ -11658,6 +11697,15 @@ function renderReportsCategory(container, cat){
         ` : ''}
         ${todayRefundTotal ? `<div class="stat-card" style="background:var(--warm-bg);"><div class="stat-label">${tr('refundsTotal')}</div><div class="stat-value" style="color:var(--warm);">${fmt(todayRefundTotal)}</div></div>` : ''}
         <div class="stat-card" style="background:var(--danger-bg);"><div class="stat-label">${tr('totalDebt')}</div><div class="stat-value" style="color:var(--danger);">${fmt(totalDebt)}</div></div>
+        ${(todayDebtCash || todayDebtCard) ? `<div class="stat-card" style="background:var(--teal-bg);"><div class="stat-label">${tr('debtPaymentsToday')}</div><div class="stat-value" style="color:var(--success);">${fmt(todayDebtCash + todayDebtCard)}</div><div class="subtle" style="font-size:11px;">${tr('cashLabel')}: ${fmt(todayDebtCash)} · ${tr('cardLabel')}: ${fmt(todayDebtCard)}</div></div>` : ''}
+      </div>
+      <h3 class="sub-title">${tr('cashInRegisterLabel')}</h3>
+      <div class="card" style="padding:10px 14px;margin-bottom:12px;">
+        <div class="row" style="justify-content:space-between"><span class="subtle">${tr('startingCash')}</span><strong>${fmt(startingCashToday)}</strong></div>
+        <div class="row" style="justify-content:space-between"><span class="subtle">+ ${tr('cashLabel')}</span><strong>${fmt(todayCash)}</strong></div>
+        ${todayCashExpenses>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">- ${tr('cashExpensesLabel')}</span><strong style="color:var(--danger);">${fmt(todayCashExpenses)}</strong></div>` : ''}
+        ${__cxRowsHtml({debtCash: todayDebtCash, credCash: todayCredPayCash, refundCash: todayCashRefundsOld})}
+        <div class="row" style="justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;margin-top:4px;"><span class="subtle">${tr('expectedCash')}</span><strong>${fmt(cashInRegister)}</strong></div>
       </div>
       ${(todayServiceCharge || todayDeliveryFee) ? `
       <h3 class="sub-title">${tr('additionalChargesSection')}</h3>
