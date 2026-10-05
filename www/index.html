@@ -10999,96 +10999,24 @@ function openCustomerDetail(customerId){
       <button class="tool-chip" id="share-history-btn"><span class="tool-ic" style="background:#e8f1ff;color:#2f6fed;">${ICONS.share}</span><span>${tr('shareHistory')}</span></button>
       <button class="tool-chip" id="edit-customer-btn"><span class="tool-ic" style="background:#f1f5f9;color:#475569;">${ICONS.edit}</span><span>${tr('edit')}</span></button>
     </div>
-    <h3 class="sub-title">${tr('purchaseHistory')}</h3>
-    <div>${purchases.length ? purchases.map(s=>`
-      <div class="card" data-purchase-toggle="${s.id}" style="cursor:pointer;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;${s.refunded?'opacity:0.55;':''}">
-        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${paymentTypeColor(s.paymentType)};"></div>
-        <div class="row" style="padding-left:6px;">
-          <div class="info" style="display:flex;align-items:center;gap:10px;">
-            <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
-            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${new Date(s.date).toLocaleString()}</span>${(s.receiptNumber||s.cashierName)?(`<div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${s.cashierName?((s.receiptNumber?' · ':'')+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · ✏️ '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>`):''}</div>
-          </div>
-          <span class="rcpt-chev">›</span>
-        </div>
-        <div id="purchase-items-${s.id}" class="rcpt-panel" style="display:none;margin-top:12px;padding:10px 12px;background:var(--surface-soft);border-radius:12px;">
-          <div class="rcpt-actions">
-          <button class="rcpt-act" data-reprint="${s.id}"><span class="tool-ic" style="background:#e8f1ff;color:#2f6fed;">${ICONS.printer}</span><span>${tr('actPrint')}</span></button>
-          <button class="rcpt-act" data-share-sale="${s.id}"><span class="tool-ic" style="background:#e7f6f3;color:#0f9d8a;">${ICONS.share}</span><span>${tr('actSharePdf')}</span></button>
-          ${state.settings.businessInn ? `<button class="rcpt-act" data-invoice="${s.id}"><span class="tool-ic" style="background:#fff4e5;color:#d97706;">${ICONS.building}</span><span>${tr('actInvoice')}</span></button>` : ''}
-          ${!s.refunded && canEditReceipt() ? `<button class="rcpt-act" data-edit-receipt="${s.id}"><span class="tool-ic" style="background:#f1f5f9;color:#475569;">${ICONS.edit}</span><span>${tr('actEdit')}</span></button>` : ''}
-        </div>
-          ${s.items.map(it=>`<div class="ledger-row"><span>${escapeHtml(it.name)} x${it.qty}</span><span style="font-weight:700;">${fmt(it.price*it.qty)}</span></div>`).join('')}
-          ${s.edited ? `<div class="subtle" style="font-size:11px;margin-top:6px;">${tr('receiptEditedLabel')}${s.editedAt?(' · '+new Date(s.editedAt).toLocaleString()):''}</div>` : ''}
-          ${!s.refunded && canRefund() && isWithinRefundWindow(s) ? `<button class="btn btn-danger btn-block btn-sm" style="margin-top:10px;" data-refund="${s.id}">${tr('refundSale')}</button>` : ''}
-          ${!s.refunded && canRefund() && !isWithinRefundWindow(s) ? `<p class="subtle" style="margin:10px 0 0;font-size:11px;">${tr('refundWindowExpired')}</p>` : ''}
-          ${canDeleteSale() ? `<button class="btn btn-outline btn-block btn-sm" style="margin-top:10px;color:var(--danger);border-color:var(--danger);" data-delete-sale="${s.id}">${tr('deleteSaleRecord')}</button>` : ''}
-        </div>
-      </div>
-    `).join('') : `<div class="subtle" style="padding:10px 0;">${tr('noHistory')}</div>`}</div>
-    <h3 class="sub-title">${tr('history')}</h3>
-    <div>${history.length ? history.map(h=>`
-      <div class="ledger-row" style="flex-direction:column;align-items:stretch;gap:2px;">
-        <div style="display:flex;justify-content:space-between;">
-          <span>${new Date(h.date).toLocaleString()}</span>
-          <span class="ledger-amt ${h.type==='sale'?'up':'down'}">${h.type==='sale'?'+':'−'}${fmt(h.amount)}</span>
-        </div>
-        ${(h.staffName || h.note) ? `<div class="subtle" style="font-size:11px;">${h.staffName ? (tr('cashier')+': '+h.staffName) : ''}${h.staffName && h.note ? ' · ' : ''}${escapeHtml(h.note||'')}</div>` : ''}
-      </div>
-    `).join('') : `<div class="subtle" style="padding:10px 0;">${tr('noHistory')}</div>`}</div>
+    <div class="card" data-nav="purchases" style="cursor:pointer;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:800;">${tr('purchaseHistory')}</span><span class="subtle" style="font-size:12px;">${purchases.length}</span></div>
+      <span class="rcpt-chev">›</span>
+    </div>
+    <div class="card" data-nav="ledger" style="cursor:pointer;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:800;">${tr('history')}</span><span class="subtle" style="font-size:12px;">${history.length}</span></div>
+      <span class="rcpt-chev">›</span>
+    </div>
     <button class="btn btn-danger btn-block" style="margin-top:16px;${isAdmin()?'':'display:none;'}" id="delete-customer-btn">${tr('delete')}</button>
   `);
   document.getElementById('record-payment-btn').addEventListener('click', ()=>openLedgerForm(customerId,'payment'));
   document.getElementById('add-debt-btn').addEventListener('click', ()=>openLedgerForm(customerId,'sale'));
   document.getElementById('edit-customer-btn').addEventListener('click', ()=>openCustomerEditForm(customerId));
   document.getElementById('share-history-btn').addEventListener('click', ()=>shareCustomerHistoryPdf(cust, history));
-  document.querySelectorAll('[data-reprint]').forEach(btn=>{
-    btn.addEventListener('click', async (ev)=>{
-      ev.stopPropagation();
-      const sale = state.sales.find(s=>s.id===btn.dataset.reprint);
-      if(!sale) return;
-      confirmDialog(tr('printConfirmQ') + (sale.receiptNumber ? ' (№'+sale.receiptNumber+')' : ''), async ()=>{
-        if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main')){
-          await ensureBtConnected('main');
-          if(!getBtCharacteristic('main') && !loadRememberedBtDevices().main) await connectBluetoothPrinter();
-        }
-        if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main')){ if(state.deviceHasNoPrinter) requestRelayPrint(sale); else showToast(loadRememberedBtDevices().main ? tr('printerUnreachable') : tr('printerNotConnected')); return; } /* fix74 */
-        printReceipt(sale, cust);
-      }, tr('actPrint'));
-    });
-  });
-  document.querySelectorAll('[data-share-sale]').forEach(btn=>{
-    btn.addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      const sale = state.sales.find(s=>s.id===btn.dataset.shareSale);
-      if(!sale) return;
-      shareReceipt(sale, cust, cust ? cust.debt : 0); /* fix75 */
-    });
-  });
-  document.querySelectorAll('[data-purchase-toggle]').forEach(row=>{
-    row.addEventListener('click', (ev)=>{
-      if(ev.target.closest && ev.target.closest('.rcpt-panel')) return;
-      const itemsEl = document.getElementById('purchase-items-'+row.dataset.purchaseToggle);
-      if(itemsEl){ const open = itemsEl.style.display==='none'; itemsEl.style.display = open ? '' : 'none'; row.classList.toggle('rcpt-open', open); }
-    });
-  });
-  document.querySelectorAll('[data-refund]').forEach(btn=>{
-    btn.addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      refundSale(btn.dataset.refund, ()=>{ closeModal(); openCustomerDetail(customerId); });
-    });
-  });
-  document.querySelectorAll('[data-delete-sale]').forEach(btn=>{
-    btn.addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      deleteSaleRecord(btn.dataset.deleteSale, ()=>{ closeModal(); openCustomerDetail(customerId); });
-    });
-  });
-  document.querySelectorAll('[data-edit-receipt]').forEach(btn=>{
-    btn.addEventListener('click', (ev)=>{
-      ev.stopPropagation();
-      openEditReceiptModal(btn.dataset.editReceipt, ()=>{ openCustomerDetail(customerId); });
-    });
-  });
+  const navPurchases = document.querySelector('[data-nav="purchases"]');
+  if(navPurchases) navPurchases.addEventListener('click', ()=>openCustomerPurchases(customerId));
+  const navLedger = document.querySelector('[data-nav="ledger"]');
+  if(navLedger) navLedger.addEventListener('click', ()=>openCustomerLedger(customerId));
   const smsBtn = document.getElementById('sms-debt-btn');
   if(smsBtn) smsBtn.addEventListener('click', ()=>{
     const msg = {
@@ -11126,6 +11054,108 @@ function openCustomerDetail(customerId){
       saveCustomers(); closeModal(); renderAll();
     });
   });
+}
+
+function openCustomerPurchases(customerId){
+  const cust = state.customers.find(c=>c.id===customerId);
+  if(!cust) return;
+  const purchases = state.sales.filter(s=>s.customerId===customerId).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  openModal(`
+    <div class="back-row"><button id="cust-purchases-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('purchaseHistory')}</span></div>
+    <div>${purchases.length ? purchases.map(s=>`
+      <div class="card" data-purchase-toggle="${s.id}" style="cursor:pointer;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;${s.refunded?'opacity:0.55;':''}">
+        <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${paymentTypeColor(s.paymentType)};"></div>
+        <div class="row" style="padding-left:6px;">
+          <div class="info" style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
+            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${new Date(s.date).toLocaleString()}</span>${(s.receiptNumber||s.cashierName)?(`<div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${s.cashierName?((s.receiptNumber?' · ':'')+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · ✏️ '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>`):''}</div>
+          </div>
+          <span class="rcpt-chev">›</span>
+        </div>
+        <div id="purchase-items-${s.id}" class="rcpt-panel" style="display:none;margin-top:12px;padding:10px 12px;background:var(--surface-soft);border-radius:12px;">
+          <div class="rcpt-actions">
+          <button class="rcpt-act" data-reprint="${s.id}"><span class="tool-ic" style="background:#e8f1ff;color:#2f6fed;">${ICONS.printer}</span><span>${tr('actPrint')}</span></button>
+          <button class="rcpt-act" data-share-sale="${s.id}"><span class="tool-ic" style="background:#e7f6f3;color:#0f9d8a;">${ICONS.share}</span><span>${tr('actSharePdf')}</span></button>
+          ${state.settings.businessInn ? `<button class="rcpt-act" data-invoice="${s.id}"><span class="tool-ic" style="background:#fff4e5;color:#d97706;">${ICONS.building}</span><span>${tr('actInvoice')}</span></button>` : ''}
+          ${!s.refunded && canEditReceipt() ? `<button class="rcpt-act" data-edit-receipt="${s.id}"><span class="tool-ic" style="background:#f1f5f9;color:#475569;">${ICONS.edit}</span><span>${tr('actEdit')}</span></button>` : ''}
+        </div>
+          ${s.items.map(it=>`<div class="ledger-row"><span>${escapeHtml(it.name)} x${it.qty}</span><span style="font-weight:700;">${fmt(it.price*it.qty)}</span></div>`).join('')}
+          ${s.edited ? `<div class="subtle" style="font-size:11px;margin-top:6px;">${tr('receiptEditedLabel')}${s.editedAt?(' · '+new Date(s.editedAt).toLocaleString()):''}</div>` : ''}
+          ${!s.refunded && canRefund() && isWithinRefundWindow(s) ? `<button class="btn btn-danger btn-block btn-sm" style="margin-top:10px;" data-refund="${s.id}">${tr('refundSale')}</button>` : ''}
+          ${!s.refunded && canRefund() && !isWithinRefundWindow(s) ? `<p class="subtle" style="margin:10px 0 0;font-size:11px;">${tr('refundWindowExpired')}</p>` : ''}
+          ${canDeleteSale() ? `<button class="btn btn-outline btn-block btn-sm" style="margin-top:10px;color:var(--danger);border-color:var(--danger);" data-delete-sale="${s.id}">${tr('deleteSaleRecord')}</button>` : ''}
+        </div>
+      </div>
+    `).join('') : `<div class="subtle" style="padding:10px 0;">${tr('noHistory')}</div>`}</div>
+  `);
+  document.getElementById('cust-purchases-back').addEventListener('click', ()=>openCustomerDetail(customerId));
+  document.querySelectorAll('[data-reprint]').forEach(btn=>{
+    btn.addEventListener('click', async (ev)=>{
+      ev.stopPropagation();
+      const sale = state.sales.find(s=>s.id===btn.dataset.reprint);
+      if(!sale) return;
+      confirmDialog(tr('printConfirmQ') + (sale.receiptNumber ? ' (№'+sale.receiptNumber+')' : ''), async ()=>{
+        if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main')){
+          await ensureBtConnected('main');
+          if(!getBtCharacteristic('main') && !loadRememberedBtDevices().main) await connectBluetoothPrinter();
+        }
+        if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main')){ if(state.deviceHasNoPrinter) requestRelayPrint(sale); else showToast(loadRememberedBtDevices().main ? tr('printerUnreachable') : tr('printerNotConnected')); return; }
+        printReceipt(sale, cust);
+      }, tr('actPrint'));
+    });
+  });
+  document.querySelectorAll('[data-share-sale]').forEach(btn=>{
+    btn.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      const sale = state.sales.find(s=>s.id===btn.dataset.shareSale);
+      if(!sale) return;
+      shareReceipt(sale, cust, cust ? cust.debt : 0);
+    });
+  });
+  document.querySelectorAll('[data-purchase-toggle]').forEach(row=>{
+    row.addEventListener('click', (ev)=>{
+      if(ev.target.closest && ev.target.closest('.rcpt-panel')) return;
+      const itemsEl = document.getElementById('purchase-items-'+row.dataset.purchaseToggle);
+      if(itemsEl){ const open = itemsEl.style.display==='none'; itemsEl.style.display = open ? '' : 'none'; row.classList.toggle('rcpt-open', open); }
+    });
+  });
+  document.querySelectorAll('[data-refund]').forEach(btn=>{
+    btn.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      refundSale(btn.dataset.refund, ()=>{ closeModal(); openCustomerPurchases(customerId); });
+    });
+  });
+  document.querySelectorAll('[data-delete-sale]').forEach(btn=>{
+    btn.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      deleteSaleRecord(btn.dataset.deleteSale, ()=>{ closeModal(); openCustomerPurchases(customerId); });
+    });
+  });
+  document.querySelectorAll('[data-edit-receipt]').forEach(btn=>{
+    btn.addEventListener('click', (ev)=>{
+      ev.stopPropagation();
+      openEditReceiptModal(btn.dataset.editReceipt, ()=>{ openCustomerPurchases(customerId); });
+    });
+  });
+}
+
+function openCustomerLedger(customerId){
+  const cust = state.customers.find(c=>c.id===customerId);
+  if(!cust) return;
+  const history = state.ledger.filter(l=>l.customerId===customerId).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  openModal(`
+    <div class="back-row"><button id="cust-ledger-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('history')}</span></div>
+    <div>${history.length ? history.map(h=>`
+      <div class="ledger-row" style="flex-direction:column;align-items:stretch;gap:2px;">
+        <div style="display:flex;justify-content:space-between;">
+          <span>${new Date(h.date).toLocaleString()}</span>
+          <span class="ledger-amt ${h.type==='sale'?'up':'down'}">${h.type==='sale'?'+':'−'}${fmt(h.amount)}</span>
+        </div>
+        ${(h.staffName || h.note) ? `<div class="subtle" style="font-size:11px;">${h.staffName ? (tr('cashier')+': '+h.staffName) : ''}${h.staffName && h.note ? ' · ' : ''}${escapeHtml(h.note||'')}</div>` : ''}
+      </div>
+    `).join('') : `<div class="subtle" style="padding:10px 0;">${tr('noHistory')}</div>`}</div>
+  `);
+  document.getElementById('cust-ledger-back').addEventListener('click', ()=>openCustomerDetail(customerId));
 }
 
 function toLocalDatetimeInputValue(d){
