@@ -1129,6 +1129,11 @@ const T = {
   editReceipt:{uz:"Chekni tahrirlash",ru:"Редактировать чек",en:"Edit receipt",kk:"Чекті өңдеу",ky:"Чекти оңдоо",tg:"Таҳрири чек"},
   editReceiptTitle:{uz:"Chekni tahrirlash",ru:"Редактирование чека",en:"Edit receipt",kk:"Чекті өңдеу",ky:"Чекти оңдоо",tg:"Таҳрири чек"},
   addProductToReceipt:{uz:"Mahsulot qo'shish",ru:"Добавить товар",en:"Add product",kk:"Тауар қосу",ky:"Товар кошуу",tg:"Илова кардани мол"},
+  erPickerTitle:{uz:"Mahsulot qo'shish",ru:"Добавление товара",en:"Add products",kk:"Тауар қосу",ky:"Товар кошуу",tg:"Илова кардани мол"},
+  erSaveConfirm:{uz:"Chekdagi o'zgarishlar saqlansinmi?",ru:"Сохранить изменения в чеке?",en:"Save the changes to this receipt?",kk:"Чектегі өзгерістер сақталсын ба?",ky:"Чектеги өзгөрүүлөр сакталсынбы?",tg:"Тағйирот дар чек захира карда шавад?"},
+  erYesSave:{uz:"Ha, saqlansin",ru:"Да, сохранить",en:"Yes, save",kk:"Иә, сақталсын",ky:"Ооба, сакталсын",tg:"Ҳа, захира кун"},
+  erNoCancel:{uz:"Yo'q",ru:"Нет",en:"No",kk:"Жоқ",ky:"Жок",tg:"Не"},
+  erItemsInReceipt:{uz:"Chekda",ru:"В чеке",en:"In receipt",kk:"Чекте",ky:"Чекте",tg:"Дар чек"},
   removeItemConfirm:{uz:"Bu mahsulot chekdan olib tashlansinmi?",ru:"Удалить этот товар из чека?",en:"Remove this item from the receipt?",kk:"Бұл тауар чектен алынып тасталсын ба?",ky:"Бул товар чектен алынып салынсынбы?",tg:"Ин мол аз чек хориҷ карда шавад?"},
   receiptEditSaved:{uz:"Chek yangilandi",ru:"Чек обновлён",en:"Receipt updated",kk:"Чек жаңартылды",ky:"Чек жаңыртылды",tg:"Чек нав карда шуд"},
   receiptEditedLabel:{uz:"Tahrirlangan",ru:"Изменён",en:"Edited",kk:"Өзгертілген",ky:"Өзгөртүлгөн",tg:"Таҳриршуда"},
@@ -10762,7 +10767,7 @@ function renderEditReceiptModal(){
     </div>
   `);
   document.getElementById('er-cancel-btn').addEventListener('click', ()=>{ editReceiptDraft=null; closeModal(); });
-  document.getElementById('er-add-product-btn').addEventListener('click', openAddProductToReceiptPicker);
+  document.getElementById('er-add-product-btn').addEventListener('click', function(){ openErProductPicker(); }); /* fix84 */
   document.querySelectorAll('[data-er-inc]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const i = +btn.dataset.erInc;
@@ -10792,7 +10797,7 @@ function renderEditReceiptModal(){
       });
     });
   });
-  document.getElementById('er-save-btn').addEventListener('click', saveEditedReceipt);
+  document.getElementById('er-save-btn').addEventListener('click', erConfirmAndSave); /* fix84 */
   { /* fix82 */
     const _num = (v)=>{ const n = parseFloat(String(v||'').replace(/\s/g,'').replace(',', '.')); return isNaN(n) ? 0 : n; };
     const _upd = ()=>{
@@ -10808,7 +10813,225 @@ function renderEditReceiptModal(){
   }
 }
 
-function openAddProductToReceiptPicker(){
+/* fix84: "Mahsulot qo'shish" — asosiy sotuv oynasidagidek savat setkasi.
+   Chekka allaqachon qo'shilgan mahsulot soni kartochkada badge bo'lib
+   turadi, pastda esa "Sotish/Kutish" emas, "Saqlash" paneli. */
+function erDraftQtyForProduct(productId){
+  if(!editReceiptDraft) return 0;
+  return editReceiptDraft.items
+    .filter(function(it){ return it.productId === productId; })
+    .reduce(function(a, it){ return a + (it.saleMode === 'box' ? it.qty * (it.unitsPerBox || 1) : it.qty); }, 0);
+}
+
+function erProductCardHtml(p){
+  var hasVariants = p.variants && p.variants.length;
+  var totalStock = hasVariants ? p.variants.reduce(function(a,v){ return a + v.stock; }, 0) : p.stock;
+  var priceLabel = hasVariants
+    ? (fmt(Math.min.apply(null, p.variants.map(function(v){ return v.price; }))) + ' ' + tr('fromPrice'))
+    : fmt(p.price);
+  var hasBox = !hasVariants && p.unitsPerBox > 0 && p.boxPrice > 0;
+  var qty = erDraftQtyForProduct(p.id);
+  return '<div class="product-card ' + (totalStock <= 0 ? 'out' : '') + ' '
+    + ((totalStock <= 0 && state.settings.allowOversell) ? 'can-oversell' : '') + '" data-erq="' + p.id + '">'
+    + '<div style="position:relative;">'
+    + (p.image
+        ? '<img class="product-thumb" src="' + p.image + '" draggable="false">'
+        : '<div class="product-thumb-placeholder" style="background:' + avatarColorFor(p.name)
+          + ';color:#fff;font-weight:800;font-size:20px;">'
+          + escapeHtml((p.name || '?').charAt(0).toUpperCase()) + '</div>')
+    + (qty > 0 ? '<span class="cart-qty-badge">' + qty + '</span>' : '')
+    + (hasVariants ? '<span class="variant-badge">' + p.variants.length + ' ' + tr('variantsCountSuffix') + '</span>' : '')
+    + (hasBox ? '<span class="variant-badge">\u{1F4E6} ' + escapeHtml(p.boxLabel || tr('boxDefaultLabel')) + '</span>' : '')
+    + '</div>'
+    + '<div class="product-name">' + escapeHtml(p.name) + '</div>'
+    + '<div class="product-price">' + priceLabel + '</div>'
+    + '<div class="product-stock" style="' + (totalStock <= 0 ? 'color:var(--danger);font-weight:700;' : '') + '">'
+    + tr('stock') + ': ' + totalStock + ' ' + unitLabel(p.unit) + '</div>'
+    + '</div>';
+}
+
+/* Mahsulotni (yoki uning variantini / qutisini) chek qoralamasiga
+   qo'shadi. Narx/zaxira/birlashtirish mantiqi eski pikkerdagi bilan
+   bir xil — shuning uchun hisob-kitob o'zgarmaydi. */
+function erAddToDraft(productId, variantId, mode){
+  var d = editReceiptDraft;
+  if(!d) return false;
+  var p = state.products.find(function(pr){ return pr.id === productId; });
+  if(!p) return false;
+  variantId = variantId || null;
+  var v = getVariant(p, variantId);
+  var isBox = mode === 'box', isWh = mode === 'wholesale';
+  var unitsPer = isBox ? (p.unitsPerBox || 1) : 1;
+  if(!state.settings.allowOversell && variantStock(p, variantId) < unitsPer){
+    showToast(tr('notEnoughStockToAdd'));
+    return false;
+  }
+  var existing = d.items.find(function(it){
+    return it.productId === p.id
+      && (it.variantId || null) === variantId
+      && (isBox ? it.saleMode === 'box'
+                : (it.saleMode !== 'box' && (isWh ? it.priceTier === 'wholesale' : !it.priceTier)));
+  });
+  if(existing){ existing.qty += 1; return true; }
+  var label = p.boxLabel || tr('boxDefaultLabel');
+  var base = v ? (p.name + ' — ' + v.name) : p.name;
+  var name = isBox ? (base + ' (' + label + ')') : (isWh ? (base + ' (' + tr('wholesaleModeShort') + ')') : base);
+  var price = isBox ? (v ? v.boxPrice : p.boxPrice)
+                    : (isWh ? (v ? (v.wholesalePrice > 0 ? v.wholesalePrice : v.price) : p.wholesalePrice)
+                            : (v ? v.price : p.price));
+  var costPrice = v ? (v.costPrice || p.costPrice || 0) : (p.costPrice || 0);
+  var item = {productId: p.id, variantId: variantId, name: name, qty: 1, price: price, costPrice: costPrice, _isOriginal: false};
+  if(isBox){ item.saleMode = 'box'; item.unitsPerBox = p.unitsPerBox || 1; }
+  if(isWh){ item.priceTier = 'wholesale'; }
+  d.items.push(item);
+  return true;
+}
+
+/* Variantli yoki qutili mahsulot bosilganda — qaysi narx turini
+   qo'shishni so'raydi. Bitta variant/narx bo'lsa, to'g'ridan-to'g'ri
+   qo'shiladi va hech qanday oyna chiqmaydi. */
+function erPickOptions(productId){
+  var p = state.products.find(function(pr){ return pr.id === productId; });
+  if(!p) return;
+  var opts = [];
+  var vs = (p.variants && p.variants.length) ? p.variants : [null];
+  vs.forEach(function(v){
+    var vid = v ? v.id : '';
+    var title = v ? (p.name + ' — ' + v.name) : p.name;
+    var retail = v ? v.price : p.price;
+    var whole = v ? (v.wholesalePrice > 0 ? v.wholesalePrice : 0) : (p.wholesalePrice > 0 ? p.wholesalePrice : 0);
+    var boxP = (p.unitsPerBox > 0) ? (v ? (v.boxPrice > 0 ? v.boxPrice : 0) : (p.boxPrice > 0 ? p.boxPrice : 0)) : 0;
+    opts.push({vid: vid, title: title, mode: 'retail', label: tr('retailModeShort'), price: retail});
+    if(whole > 0) opts.push({vid: vid, title: title, mode: 'wholesale', label: tr('wholesaleModeShort'), price: whole});
+    if(boxP > 0) opts.push({vid: vid, title: title, mode: 'box', label: (p.boxLabel || tr('boxDefaultLabel')) + ' (' + p.unitsPerBox + ')', price: boxP});
+  });
+  if(!opts.length) return;
+  if(opts.length === 1){
+    if(erAddToDraft(p.id, opts[0].vid || null, opts[0].mode)) erRefreshPickerGrid();
+    return;
+  }
+  var prevScroll = 0;
+  var sheet = document.querySelector('#modal-root .modal-sheet');
+  if(sheet) prevScroll = sheet.scrollTop;
+  openModal('<div class="modal-title">' + escapeHtml(p.name) + '</div>'
+    + opts.map(function(o, idx){
+        return '<button class="btn btn-outline btn-block" data-eropt="' + idx + '" style="margin-bottom:8px;text-align:left;">'
+          + '<span style="display:block;font-size:11px;opacity:.75;">' + escapeHtml(o.title) + ' · ' + escapeHtml(o.label) + '</span>'
+          + '<strong>' + fmt(o.price) + '</strong></button>';
+      }).join('')
+    + '<button class="btn btn-outline btn-block" id="eropt-cancel">' + tr('cancel') + '</button>', {center: true});
+  document.querySelectorAll('#modal-root [data-eropt]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var o = opts[+b.dataset.eropt];
+      var ok = erAddToDraft(p.id, o.vid || null, o.mode);
+      closeModal();
+      openErProductPicker(prevScroll);
+      if(!ok) showToast(tr('notEnoughStockToAdd'));
+    });
+  });
+  document.getElementById('eropt-cancel').addEventListener('click', function(){
+    closeModal();
+    openErProductPicker(prevScroll);
+  });
+}
+
+/* Setka va pastdagi "Saqlash" panelini qayta chizadi — butun oynani
+   qayta ochmasdan, shuning uchun qidiruv matni va scroll joyida qoladi. */
+function erRefreshPickerGrid(){
+  var d = editReceiptDraft;
+  var grid = document.getElementById('er-pick-grid');
+  if(!grid || !d) return;
+  var qEl = document.getElementById('er-pick-search');
+  var q = (qEl ? qEl.value : '').toLowerCase();
+  var cat = grid.dataset.cat || '';
+  var list = visibleProducts().filter(function(p){
+    return p.name.toLowerCase().indexOf(q) !== -1 && (!cat || p.category === cat);
+  }).sort(function(a, b){ return a.name.localeCompare(b.name); });
+  grid.innerHTML = list.length
+    ? list.map(erProductCardHtml).join('')
+    : '<div class="empty-state" style="grid-column:1/-1;">' + tr('noData') + '</div>';
+  var sel = state.settings.allowOversell ? '[data-erq]' : '[data-erq]:not(.out)';
+  grid.querySelectorAll(sel).forEach(function(card){
+    card.addEventListener('click', function(){ erPickOptions(card.dataset.erq); });
+  });
+  var cnt = d.items.reduce(function(a, it){ return a + it.qty; }, 0);
+  var cEl = document.getElementById('er-pick-count');
+  if(cEl) cEl.textContent = cnt + ' ' + tr('itemsWord');
+  var sEl = document.getElementById('er-pick-sum');
+  if(sEl) sEl.textContent = fmt(editReceiptTotal());
+}
+
+function openErProductPicker(restoreScroll){
+  var d = editReceiptDraft;
+  if(!d){ closeModal(); return; }
+  var cats = Array.from(new Set(visibleProducts().map(function(p){ return p.category; }).filter(Boolean)));
+  openModal('<div class="back-row"><button id="er-pick-back">' + ICONS.arrowLeft + '</button>'
+    + '<span class="t-title">' + tr('erPickerTitle') + '</span></div>'
+    + '<div class="search-bar" style="margin-bottom:10px;">' + ICONS.search
+    + '<input type="text" id="er-pick-search" placeholder="' + tr('searchProductToAdd') + '"></div>'
+    + (cats.length
+        ? '<div class="fav-row" id="er-pick-cats"><button class="fav-chip fav-chip-active" data-ercat="">' + tr('allCategories') + '</button>'
+          + cats.map(function(c){ return '<button class="fav-chip" data-ercat="' + escapeHtml(c) + '">' + escapeHtml(c) + '</button>'; }).join('')
+          + '</div>'
+        : '')
+    + '<div class="product-grid" id="er-pick-grid" data-cat=""></div>'
+    + '<div style="height:76px;"></div>'
+    + '<div class="cart-bar" style="position:sticky;bottom:0;margin:0 -2px;">'
+    + '<div class="left"><div class="count" id="er-pick-count"></div><div class="sum" id="er-pick-sum"></div></div>'
+    + '<div style="display:flex;gap:8px;"><button id="er-pick-save">' + tr('save') + '</button></div>'
+    + '</div>', {noClose: true});
+  document.getElementById('er-pick-back').addEventListener('click', function(){
+    closeModal();
+    renderEditReceiptModal();
+  });
+  document.getElementById('er-pick-search').addEventListener('input', erRefreshPickerGrid);
+  var catRow = document.getElementById('er-pick-cats');
+  if(catRow) catRow.querySelectorAll('[data-ercat]').forEach(function(b){
+    b.addEventListener('click', function(){
+      catRow.querySelectorAll('[data-ercat]').forEach(function(o){ o.classList.remove('fav-chip-active'); });
+      b.classList.add('fav-chip-active');
+      var g = document.getElementById('er-pick-grid');
+      if(g) g.dataset.cat = b.dataset.ercat || '';
+      erRefreshPickerGrid();
+    });
+  });
+  document.getElementById('er-pick-save').addEventListener('click', erConfirmAndSave);
+  erRefreshPickerGrid();
+  if(restoreScroll){
+    var sheet = document.querySelector('#modal-root .modal-sheet');
+    if(sheet) sheet.scrollTop = restoreScroll;
+  }
+}
+
+/* "Saqlash" → "Ha / Yo'q" tasdiqlash. Tasodifan bosilib ketgan
+   holatda chek o'zgarmaydi. */
+function erConfirmAndSave(){
+  if(!editReceiptDraft) return;
+  if(!editReceiptDraft.items.length){ showToast(tr('cannotEditEmptyReceipt')); return; }
+  var d = editReceiptDraft;
+  openModal('<p style="font-size:14px;margin:0 0 16px;">' + tr('erSaveConfirm') + '</p>'
+    + '<div class="btn-row">'
+    + '<button class="btn btn-outline" id="er-conf-no">' + tr('erNoCancel') + '</button>'
+    + '<button class="btn btn-primary" id="er-conf-yes">' + tr('erYesSave') + '</button>'
+    + '</div>', {center: true, noClose: true});
+  document.getElementById('er-conf-no').addEventListener('click', function(){
+    closeModal();
+    editReceiptDraft = d;
+    renderEditReceiptModal();
+  });
+  document.getElementById('er-conf-yes').addEventListener('click', function(){
+    var btn = document.getElementById('er-conf-yes');
+    if(btn.disabled) return;
+    btn.disabled = true;
+    closeModal();
+    editReceiptDraft = d;
+    renderEditReceiptModal();
+    saveEditedReceipt();
+  });
+}
+
+/* fix84: eski ro'yxat ko'rinishidagi pikker — o'chirilmadi, zaxira sifatida qoldi */
+function openAddProductToReceiptPickerLegacy(){
   openModal(`
     <div class="modal-title">${tr('addProductToReceipt')}</div>
     <div class="search-bar" style="margin-bottom:12px;">${ICONS.search}<input type="text" id="er-product-search" placeholder="${tr('searchProductToAdd')}"></div>
