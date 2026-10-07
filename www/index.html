@@ -139,6 +139,8 @@
   .product-card:active{transform:scale(0.97);}
   .product-card.out{opacity:1;pointer-events:none;}
   .product-card.out.can-oversell{pointer-events:auto;}
+  /* pc-border-v90 */ .product-grid .product-card, #quick-product-grid .product-card{border:1px solid #b9c8e0;}
+  .product-grid .product-card.out, #quick-product-grid .product-card.out{pointer-events:auto;}
   .product-thumb{width:100%;height:52px;border-radius:9px;background:var(--surface-soft);object-fit:cover;display:block;-webkit-touch-callout:none;-webkit-user-drag:none;-webkit-user-select:none;user-select:none;}
   .product-thumb-placeholder{width:100%;height:52px;border-radius:9px;background:var(--surface-soft);display:flex;align-items:center;justify-content:center;color:var(--ink-faint);}
   .product-name{font-weight:800;font-size:12px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;letter-spacing:-0.1px;color:var(--ink);}
@@ -206,7 +208,9 @@
   .cart-line .qty-stepper button{width:38px;height:38px;border-radius:10px;font-size:18px;line-height:1;}
   .cart-line .qty-stepper span{display:inline-block;min-width:38px !important;padding:10px 0;font-size:15px !important;}
   .cart-line [data-price-edit]{display:inline-block;padding:9px 8px;margin:-9px -8px;}
-  .list-item.vp-out .meta{color:var(--danger);font-weight:700;}
+  .stock-neg{color:var(--danger) !important;font-weight:700;}
+  /* fix91-er */ #er-pick-screen{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;background:inherit;}
+  #er-pick-screen .cart-bar{bottom:calc(12px + max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px)));}
 
   .empty-state{text-align:center;padding:40px 20px;color:var(--ink-faint);}
   .empty-state svg{margin-bottom:14px;opacity:.9;color:var(--accent);background:var(--accent-bg);border-radius:50%;padding:16px;width:52px;height:52px;box-sizing:content-box;}
@@ -2167,6 +2171,7 @@ window.addEventListener('popstate', ()=>{
     document.getElementById('modal-root').innerHTML = '';
     return;
   }
+  if(window.__erPickOpen){ history.pushState({}, '', ''); erClosePickerToEdit(); return; }
   if(!state.currentStaff) return; // pre-login screens — let a real back happen
   if(state.view === 'settings' && state.settingsCategory){
     state.settingsCategory = null;
@@ -2210,7 +2215,8 @@ function openModal(html, opts){
   const root = document.getElementById('modal-root');
   const __needX = !opts.noClose && !/back-row|confirm-yes-btn|id="modal-close/.test(html);
   root.innerHTML = `<div class="modal-overlay ${opts.center?'center':''}" id="modal-overlay"><div class="modal-sheet">${__needX?'<button type="button" class="modal-x" aria-label="close" onclick="closeModal()">&times;</button>':''}${opts.center?'':'<div class="modal-handle"></div>'}${html}</div></div>`;
-  document.getElementById('modal-overlay').addEventListener('click',(e)=>{ if(e.target.id==='modal-overlay') closeModal(); });
+  const __ovT = Date.now();
+  document.getElementById('modal-overlay').addEventListener('click',(e)=>{ if(e.target.id==='modal-overlay' && Date.now()-__ovT > 450) closeModal(); });
 }
 function closeModal(){ document.getElementById('modal-root').innerHTML=''; }
 initBackButtonHandling();
@@ -4813,9 +4819,10 @@ function productCardHtml(p){
     }
   }
   const hasBox = !hasVariants && p.unitsPerBox > 0 && p.boxPrice > 0;
-  const cartQty = cartQtyForProduct(p.id);
+  const cartQty = (window.__erCardQty !== undefined && window.__erCardQty !== null) ? window.__erCardQty : cartQtyForProduct(p.id);
+  const isOut = hasVariants ? !p.variants.some(v=>v.stock>0) : totalStock<=0;
   return `
-    <div class="product-card ${totalStock<=0?'out':''} ${(totalStock<=0 && state.settings.allowOversell)?'can-oversell':''}" data-id="${p.id}">
+    <div class="product-card ${isOut?'out':''} ${(isOut && state.settings.allowOversell)?'can-oversell':''}" data-id="${p.id}">
       <div style="position:relative;">
         ${p.image ? `<img class="product-thumb" src="${p.image}" draggable="false">` : `<div class="product-thumb-placeholder" style="background:${avatarColorFor(p.name)};color:#fff;font-weight:800;font-size:20px;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div>`}
         ${cartQty>0 ? `<span class="cart-qty-badge">${cartQty}</span>` : ''}
@@ -4862,6 +4869,14 @@ function renderProductGrid(){
   grid.querySelectorAll(tappableSelector).forEach(card=>{
     attachTapOrLongPress(card, ()=>addToCart(card.dataset.id), ()=>openAddQtyKeypad(card.dataset.id));
   });
+  if(!state.settings.allowOversell){
+    [quickGrid, grid].forEach(g=>{
+      if(!g) return;
+      g.querySelectorAll('.product-card.out').forEach(card=>{
+        attachTapOrLongPress(card, ()=>showToast(tr('notEnoughStock')), ()=>showToast(tr('notEnoughStock')));
+      });
+    });
+  }
 }
 
 function renderTableGrid(){
@@ -5062,7 +5077,7 @@ function openAddQtyKeypad(productId){
   function draw(err){
     root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">
       <div class="modal-title">${escapeHtml(product.name)}</div>
-      <div class="subtle">${tr('stock')}: ${product.stock} ${unitLabel(product.unit)}</div>
+      <div class="subtle${product.stock<=0?' stock-neg':''}">${tr('stock')}: ${product.stock} ${unitLabel(product.unit)}</div>
       <div style="text-align:center;font-size:32px;font-weight:800;margin:16px 0;">${entered||'0'}</div>
       ${err?`<div class="error-text" style="text-align:center;">${err}</div>`:''}
       <div class="pin-pad" style="margin-top:8px;">
@@ -5173,6 +5188,15 @@ function attachTapOrLongPress(el, onTap, onLongPress, duration){
     el.addEventListener('touchmove', (e)=>{ const t=e.touches[0]; onMove(t.clientX, t.clientY); }, {passive:true});
     el.addEventListener('touchend', onEnd);
     el.addEventListener('touchcancel', onCancel);
+    // Sensorli qurilmaga ulangan sichqoncha/touchpad touch hodisasi bermaydi — faqat pointer (mouse) turida keladi.
+    // Barmoq bosishi bu yerga tushmaydi (u 'touch' turida), shuning uchun ikki marta ishlamaydi.
+    if(window.PointerEvent){
+      el.addEventListener('pointerdown', (e)=>{ if(e.pointerType==='mouse') onStart(e.clientX, e.clientY); });
+      el.addEventListener('pointermove', (e)=>{ if(e.pointerType==='mouse') onMove(e.clientX, e.clientY); });
+      el.addEventListener('pointerup', (e)=>{ if(e.pointerType==='mouse') onEnd(); });
+      el.addEventListener('pointercancel', (e)=>{ if(e.pointerType==='mouse') onCancel(); });
+      el.addEventListener('pointerleave', (e)=>{ if(e.pointerType==='mouse') onCancel(); });
+    }
   } else {
     el.addEventListener('mousedown', (e)=>onStart(e.clientX, e.clientY));
     el.addEventListener('mousemove', (e)=>onMove(e.clientX, e.clientY));
@@ -5283,7 +5307,7 @@ function openVariantPicker(product){
           return `
           <div class="row" style="gap:8px;margin-bottom:8px;">
             <div class="list-item${v.stock>unitCartQty?'':' vp-out'}" data-variant-id="${v.id}" data-mode="unit" style="flex:1;cursor:${v.stock>unitCartQty?'pointer':'not-allowed'};">
-              <div class="info"><div class="name">${escapeHtml(v.name)} ${tr('unitSuffix')}${unitCartQty>0?` <span style="color:var(--accent-dark);">×${unitCartQty}</span>`:''}</div><div class="meta">${tr('stock')}: ${v.stock}</div></div>
+              <div class="info"><div class="name">${escapeHtml(v.name)} ${tr('unitSuffix')}${unitCartQty>0?` <span style="color:var(--accent-dark);">×${unitCartQty}</span>`:''}</div><div class="meta${v.stock<=0?' stock-neg':''}">${tr('stock')}: ${v.stock}</div></div>
               <span class="badge badge-clear">${fmt(unitPrice)}</span>
             </div>
             <div class="list-item${maxBoxes>boxCartQty?'':' vp-out'}" data-variant-id="${v.id}" data-mode="box" style="flex:1;cursor:${maxBoxes>boxCartQty?'pointer':'not-allowed'};">
@@ -5295,7 +5319,7 @@ function openVariantPicker(product){
         }
         return `
         <div class="list-item${v.stock>unitCartQty?'':' vp-out'}" data-variant-id="${v.id}" data-mode="unit" style="cursor:${v.stock>unitCartQty?'pointer':'not-allowed'};">
-          <div class="info"><div class="name">${escapeHtml(v.name)}${unitCartQty>0?` <span style="color:var(--accent-dark);">×${unitCartQty}</span>`:''}</div><div class="meta">${tr('stock')}: ${v.stock} ${unitLabel(product.unit)}</div></div>
+          <div class="info"><div class="name">${escapeHtml(v.name)}${unitCartQty>0?` <span style="color:var(--accent-dark);">×${unitCartQty}</span>`:''}</div><div class="meta${v.stock<=0?' stock-neg':''}">${tr('stock')}: ${v.stock} ${unitLabel(product.unit)}</div></div>
           <span class="badge badge-clear">${fmt(unitPrice)}</span>
         </div>
       `;
@@ -5386,7 +5410,7 @@ function openAddVariantQtyKeypad(product, variant, mode){
   function draw(err){
     root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">
       <div class="modal-title">${escapeHtml(label)}</div>
-      <div class="subtle">${tr('stock')}: ${stockLabel}</div>
+      <div class="subtle${variant.stock<=0?' stock-neg':''}">${tr('stock')}: ${stockLabel}</div>
       <div style="text-align:center;font-size:32px;font-weight:800;margin:16px 0;">${entered||'0'}</div>
       ${err?`<div class="error-text" style="text-align:center;">${err}</div>`:''}
       <div class="pin-pad" style="margin-top:8px;">
@@ -10826,7 +10850,7 @@ function renderEditReceiptModal(){
       const p = state.products.find(pr=>pr.id===it.productId);
       const available = p ? variantStock(p, it.variantId) : 0;
       const unitStep = it.saleMode==='box' ? (it.unitsPerBox||1) : 1;
-      if(!state.settings.allowOversell && available < unitStep){ showToast(tr('notEnoughStockToAdd')); return; }
+      if(!state.settings.allowOversell && !(p && erAvailUnits(p, it.variantId) >= unitStep)){ showToast(tr('notEnoughStockToAdd')); return; }
       it.qty += 1;
       renderEditReceiptModal();
     });
@@ -10874,7 +10898,7 @@ function erDraftQtyForProduct(productId){
     .reduce(function(a, it){ return a + (it.saleMode === 'box' ? it.qty * (it.unitsPerBox || 1) : it.qty); }, 0);
 }
 
-function erProductCardHtml(p){
+function erProductCardHtmlLegacy(p){
   var hasVariants = p.variants && p.variants.length;
   var totalStock = hasVariants ? p.variants.reduce(function(a,v){ return a + v.stock; }, 0) : p.stock;
   var priceLabel = hasVariants
@@ -10904,7 +10928,7 @@ function erProductCardHtml(p){
 /* Mahsulotni (yoki uning variantini / qutisini) chek qoralamasiga
    qo'shadi. Narx/zaxira/birlashtirish mantiqi eski pikkerdagi bilan
    bir xil — shuning uchun hisob-kitob o'zgarmaydi. */
-function erAddToDraft(productId, variantId, mode){
+function erAddToDraft(productId, variantId, mode, qty){
   var d = editReceiptDraft;
   if(!d) return false;
   var p = state.products.find(function(pr){ return pr.id === productId; });
@@ -10913,7 +10937,8 @@ function erAddToDraft(productId, variantId, mode){
   var v = getVariant(p, variantId);
   var isBox = mode === 'box', isWh = mode === 'wholesale';
   var unitsPer = isBox ? (p.unitsPerBox || 1) : 1;
-  if(!state.settings.allowOversell && variantStock(p, variantId) < unitsPer){
+  var n = Math.floor(Number(qty)); if(!(n > 0)) n = 1;
+  if(!erCanAdd(p, variantId, unitsPer * n)){
     showToast(tr('notEnoughStockToAdd'));
     return false;
   }
@@ -10923,7 +10948,7 @@ function erAddToDraft(productId, variantId, mode){
       && (isBox ? it.saleMode === 'box'
                 : (it.saleMode !== 'box' && (isWh ? it.priceTier === 'wholesale' : !it.priceTier)));
   });
-  if(existing){ existing.qty += 1; return true; }
+  if(existing){ existing.qty += n; return true; }
   var label = p.boxLabel || tr('boxDefaultLabel');
   var base = v ? (p.name + ' — ' + v.name) : p.name;
   var name = isBox ? (base + ' (' + label + ')') : (isWh ? (base + ' (' + tr('wholesaleModeShort') + ')') : base);
@@ -10931,7 +10956,7 @@ function erAddToDraft(productId, variantId, mode){
                     : (isWh ? (v ? (v.wholesalePrice > 0 ? v.wholesalePrice : v.price) : p.wholesalePrice)
                             : (v ? v.price : p.price));
   var costPrice = v ? (v.costPrice || p.costPrice || 0) : (p.costPrice || 0);
-  var item = {productId: p.id, variantId: variantId, name: name, qty: 1, price: price, costPrice: costPrice, _isOriginal: false};
+  var item = {productId: p.id, variantId: variantId, name: name, qty: n, price: price, costPrice: costPrice, _isOriginal: false};
   if(isBox){ item.saleMode = 'box'; item.unitsPerBox = p.unitsPerBox || 1; }
   if(isWh){ item.priceTier = 'wholesale'; }
   d.items.push(item);
@@ -10988,7 +11013,7 @@ function erPickOptions(productId){
 
 /* Setka va pastdagi "Saqlash" panelini qayta chizadi — butun oynani
    qayta ochmasdan, shuning uchun qidiruv matni va scroll joyida qoladi. */
-function erRefreshPickerGrid(){
+function erRefreshPickerGridLegacy(){
   var d = editReceiptDraft;
   var grid = document.getElementById('er-pick-grid');
   if(!grid || !d) return;
@@ -11012,7 +11037,7 @@ function erRefreshPickerGrid(){
   if(sEl) sEl.textContent = fmt(editReceiptTotal());
 }
 
-function openErProductPicker(restoreScroll){
+function openErProductPickerLegacy(restoreScroll){
   var d = editReceiptDraft;
   if(!d){ closeModal(); return; }
   var cats = Array.from(new Set(visibleProducts().map(function(p){ return p.category; }).filter(Boolean)));
@@ -11079,6 +11104,354 @@ function erConfirmAndSave(){
     renderEditReceiptModal();
     saveEditedReceipt();
   });
+}
+
+/* fix91: kvitansiya tahriri — "Mahsulot qo'shish" endi asosiy sotuv (savat) oynasi bilan bir xil:
+   shu setka/kartochka, tur tanlash oynasi, uzoq bosish (miqdor klaviaturasi), tugagan mahsulot xabari,
+   Chakana/Ulgurji tugmasi va pastdagi panel. Eski funksiyalar ...Legacy nomi bilan saqlab qolindi. */
+function erSameVar(a, b){ return (a || null) === (b || null); }
+
+/* Chekni saqlaguncha ombor o'zgarmaydi: mavjud qoldiqdan qoralamadagi qo'shimcha donalar ayriladi,
+   olib tashlangan/kamaytirilgan asl qatorlar esa qaytariladi. */
+function erAvailUnits(p, variantId){
+  var d = editReceiptDraft;
+  var avail = variantStock(p, variantId || null);
+  if(!d) return avail;
+  d.items.forEach(function(it){
+    if(it.productId === p.id && erSameVar(it.variantId, variantId)) avail -= computeReceiptEditStockUnitsDelta(it);
+  });
+  (d.removedOriginals || []).forEach(function(it){
+    if(it.productId === p.id && erSameVar(it.variantId, variantId)) avail += computeReceiptEditRestoreUnits(it);
+  });
+  return avail;
+}
+function erCanAdd(p, variantId, units){
+  return !!state.settings.allowOversell || erAvailUnits(p, variantId) >= units;
+}
+function erHasAnyAvail(p){
+  if(p.variants && p.variants.length) return p.variants.some(function(v){ return erAvailUnits(p, v.id) >= 1; });
+  return erAvailUnits(p, null) >= 1;
+}
+function erFindLine(productId, variantId, mode){
+  var d = editReceiptDraft; if(!d) return null;
+  var isBox = mode === 'box', isWh = mode === 'wholesale';
+  return d.items.find(function(it){
+    return it.productId === productId && erSameVar(it.variantId, variantId)
+      && (isBox ? it.saleMode === 'box' : (it.saleMode !== 'box' && (isWh ? it.priceTier === 'wholesale' : !it.priceTier)));
+  }) || null;
+}
+/* Asosiy savatdagi kabi: kartochkadagi badge — shu mahsulotning chekdagi qator miqdorlari yig'indisi */
+function erCartQty(productId){
+  var d = editReceiptDraft; if(!d) return 0;
+  return d.items.filter(function(it){ return it.productId === productId; })
+    .reduce(function(a, it){ return a + it.qty; }, 0);
+}
+/* Klaviatura ("set"): qatorning umumiy miqdorini yozilgan songa tenglaydi */
+function erSetQty(productId, variantId, mode, qty){
+  var cur = erFindLine(productId, variantId, mode);
+  var delta = qty - (cur ? cur.qty : 0);
+  if(delta === 0) return true;
+  if(delta > 0) return erAddToDraft(productId, variantId, mode, delta);
+  cur.qty = qty;
+  return true;
+}
+
+/* Asosiy sotuv kartochkasi bilan aynan bir xil HTML (badge — chek qoralamasidan) */
+function erProductCardHtml(p){
+  var html;
+  window.__erCardQty = erCartQty(p.id);
+  try{ html = productCardHtml(p); } finally { window.__erCardQty = null; }
+  return html.replace(' data-id="', ' data-erq="');
+}
+
+function erTapProduct(productId){
+  var p = state.products.find(function(pr){ return pr.id === productId; });
+  if(!p || !editReceiptDraft) return;
+  if(p.variants && p.variants.length){ erOpenVariantPicker(p); return; }
+  if(state.saleMode === 'wholesale'){
+    var hu = p.wholesalePrice > 0, hb = p.unitsPerBox > 0 && p.boxPrice > 0;
+    if(hu && hb){ erOpenWholesalePicker(p); return; }
+    if(hb) erAddToDraft(p.id, null, 'box');
+    else if(hu) erAddToDraft(p.id, null, 'wholesale');
+    else { showToast(tr('noWholesaleConfigured')); erAddToDraft(p.id, null, 'retail'); }
+  } else {
+    erAddToDraft(p.id, null, 'retail');
+  }
+  erRefreshPickerGrid();
+}
+
+function erKeypad(title, stockText, onOk, onCancel){
+  var entered = '';
+  var root = document.getElementById('modal-root');
+  function draw(err){
+    root.innerHTML = '<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">'
+      + '<div class="modal-title">' + escapeHtml(title) + '</div>'
+      + '<div class="subtle">' + stockText + '</div>'
+      + '<div style="text-align:center;font-size:32px;font-weight:800;margin:16px 0;">' + (entered || '0') + '</div>'
+      + (err ? '<div class="error-text" style="text-align:center;">' + err + '</div>' : '')
+      + '<div class="pin-pad" style="margin-top:8px;">'
+      + [1,2,3,4,5,6,7,8,9].map(function(n){ return '<button class="pin-key" data-n="' + n + '">' + n + '</button>'; }).join('')
+      + '<button class="pin-key" data-del="1">⌫</button>'
+      + '<button class="pin-key" data-n="0">0</button>'
+      + '<button class="pin-key" data-ok="1" style="background:var(--accent);color:#fff;border-color:var(--accent);">✓</button>'
+      + '</div>'
+      + '<button class="btn btn-outline btn-block" style="margin-top:14px;" id="qty-cancel-btn">' + tr('cancel') + '</button>'
+      + '</div></div>';
+    root.querySelectorAll('[data-n]').forEach(function(b){
+      b.addEventListener('click', function(){
+        if(entered.length >= 4) return;
+        entered = (entered === '0' ? '' : entered) + b.dataset.n;
+        draw();
+      });
+    });
+    root.querySelector('[data-del]').addEventListener('click', function(){ entered = entered.slice(0, -1); draw(); });
+    root.querySelector('[data-ok]').addEventListener('click', function(){
+      var q = parseInt(entered, 10);
+      if(isNaN(q) || q <= 0){ entered = ''; draw(tr('invalidAmount')); return; }
+      onOk(q);
+    });
+    root.querySelector('#qty-cancel-btn').addEventListener('click', onCancel);
+  }
+  draw();
+}
+
+/* Uzoq bosish: aniq miqdorni yozish (asosiy oynadagi openAddQtyKeypad bilan bir xil mantiq) */
+function erLongPress(productId){
+  var p = state.products.find(function(pr){ return pr.id === productId; });
+  if(!p || !editReceiptDraft) return;
+  if(p.variants && p.variants.length){ erOpenVariantPicker(p); return; }
+  var mode = 'retail';
+  if(state.saleMode === 'wholesale'){
+    var hu = p.wholesalePrice > 0, hb = p.unitsPerBox > 0 && p.boxPrice > 0;
+    if(hu && hb){ erOpenWholesalePicker(p); return; }
+    else if(hb) mode = 'box';
+    else if(hu) mode = 'wholesale';
+  }
+  erKeypad(p.name, tr('stock') + ': ' + p.stock + ' ' + unitLabel(p.unit), function(q){
+    closeModal();
+    erSetQty(p.id, null, mode, q);
+    erRefreshPickerGrid();
+  }, function(){ closeModal(); });
+}
+
+function erOpenWholesalePicker(p){
+  var d = editReceiptDraft; if(!d) return;
+  var unitQ = d.items.filter(function(c){ return c.productId === p.id && c.saleMode !== 'box' && c.priceTier === 'wholesale'; })
+    .reduce(function(s, c){ return s + c.qty; }, 0);
+  var boxQ = d.items.filter(function(c){ return c.productId === p.id && c.saleMode === 'box'; })
+    .reduce(function(s, c){ return s + c.qty; }, 0);
+  openModal('<div class="modal-title">' + escapeHtml(p.name) + '</div>'
+    + '<p class="subtle" style="margin:0 0 14px;">' + tr('stock') + ': ' + p.stock + ' ' + unitLabel(p.unit) + '</p>'
+    + '<div class="list-item" id="erwp-unit-btn" style="cursor:pointer;"><div class="info"><div class="name">' + tr('sellByUnit')
+    + (unitQ > 0 ? ' <span style="color:var(--accent-dark);">×' + unitQ + '</span>' : '')
+    + '</div><div class="meta">' + fmt(p.wholesalePrice) + ' / ' + unitLabel(p.unit) + '</div></div><span class="subtle">›</span></div>'
+    + '<div class="list-item" id="erwp-box-btn" style="cursor:pointer;"><div class="info"><div class="name">' + tr('sellByBox')
+    + (boxQ > 0 ? ' <span style="color:var(--accent-dark);">×' + boxQ + '</span>' : '')
+    + '</div><div class="meta">' + fmt(p.boxPrice) + ' / ' + escapeHtml(p.boxLabel || tr('boxDefaultLabel')) + ' (' + p.unitsPerBox + ' ' + unitLabel(p.unit) + ')</div></div><span class="subtle">›</span></div>',
+    {center: true});
+  document.getElementById('erwp-unit-btn').addEventListener('click', function(){ erAddToDraft(p.id, null, 'wholesale'); closeModal(); erRefreshPickerGrid(); });
+  document.getElementById('erwp-box-btn').addEventListener('click', function(){ erAddToDraft(p.id, null, 'box'); closeModal(); erRefreshPickerGrid(); });
+}
+
+/* Tur tanlash oynasi — asosiy oynadagi openVariantPicker bilan bir xil ko'rinish va xatti-harakat:
+   ochiq qoladi, ×N hisoblagich, qoldiq (minus bo'lsa qizil), uzoq bosish — klaviatura, "Yopish". */
+function erOpenVariantPicker(product){
+  var d = editReceiptDraft; if(!d) return;
+  var wholesaleActive = state.saleMode === 'wholesale';
+  function draw(){
+    var vp = document.querySelector('#modal-root .modal-sheet[data-vp]');
+    var vpTop = vp ? vp.scrollTop : 0;
+    var rows = product.variants.map(function(v){
+      var unitQ = d.items.filter(function(c){ return c.productId === product.id && erSameVar(c.variantId, v.id) && c.saleMode !== 'box'; })
+        .reduce(function(s, c){ return s + c.qty; }, 0);
+      var boxQ = d.items.filter(function(c){ return c.productId === product.id && erSameVar(c.variantId, v.id) && c.saleMode === 'box'; })
+        .reduce(function(s, c){ return s + c.qty; }, 0);
+      var hasBox = wholesaleActive && product.unitsPerBox > 0 && v.boxPrice > 0;
+      var unitPrice = wholesaleActive && v.wholesalePrice > 0 ? v.wholesalePrice : v.price;
+      var unitOk = erCanAdd(product, v.id, 1);
+      var neg = v.stock <= 0 ? ' stock-neg' : '';
+      if(hasBox){
+        var boxOk = erCanAdd(product, v.id, product.unitsPerBox);
+        return '<div class="row" style="gap:8px;margin-bottom:8px;">'
+          + '<div class="list-item' + (unitOk ? '' : ' vp-out') + '" data-variant-id="' + v.id + '" data-mode="unit" style="flex:1;cursor:' + (unitOk ? 'pointer' : 'not-allowed') + ';">'
+          + '<div class="info"><div class="name">' + escapeHtml(v.name) + ' ' + tr('unitSuffix') + (unitQ > 0 ? ' <span style="color:var(--accent-dark);">×' + unitQ + '</span>' : '') + '</div>'
+          + '<div class="meta' + neg + '">' + tr('stock') + ': ' + v.stock + '</div></div>'
+          + '<span class="badge badge-clear">' + fmt(unitPrice) + '</span></div>'
+          + '<div class="list-item' + (boxOk ? '' : ' vp-out') + '" data-variant-id="' + v.id + '" data-mode="box" style="flex:1;cursor:' + (boxOk ? 'pointer' : 'not-allowed') + ';">'
+          + '<div class="info"><div class="name">' + escapeHtml(v.name) + ' ' + escapeHtml(product.boxLabel || tr('boxDefaultLabel')) + (boxQ > 0 ? ' <span style="color:var(--accent-dark);">×' + boxQ + '</span>' : '') + '</div>'
+          + '<div class="meta">' + product.unitsPerBox + ' ' + unitLabel(product.unit) + '</div></div>'
+          + '<span class="badge badge-clear">' + fmt(v.boxPrice) + '</span></div></div>';
+      }
+      return '<div class="list-item' + (unitOk ? '' : ' vp-out') + '" data-variant-id="' + v.id + '" data-mode="unit" style="cursor:' + (unitOk ? 'pointer' : 'not-allowed') + ';">'
+        + '<div class="info"><div class="name">' + escapeHtml(v.name) + (unitQ > 0 ? ' <span style="color:var(--accent-dark);">×' + unitQ + '</span>' : '') + '</div>'
+        + '<div class="meta' + neg + '">' + tr('stock') + ': ' + v.stock + ' ' + unitLabel(product.unit) + '</div></div>'
+        + '<span class="badge badge-clear">' + fmt(unitPrice) + '</span></div>';
+    }).join('');
+    document.getElementById('modal-root').innerHTML = '<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">'
+      + '<div class="modal-title">' + escapeHtml(product.name) + ' — ' + tr('selectVariant') + '</div>'
+      + '<div>' + rows + '</div>'
+      + '<button class="btn btn-primary btn-block" style="margin-top:14px;" id="variant-done-btn">' + tr('close') + '</button>'
+      + '</div></div>';
+    var vn = document.querySelector('#modal-root .modal-sheet');
+    if(vn){ vn.setAttribute('data-vp', '1'); vn.scrollTop = vpTop; }
+    document.querySelectorAll('#modal-root [data-variant-id]').forEach(function(el){
+      var variant = product.variants.find(function(v){ return v.id === el.dataset.variantId; });
+      var mode = el.dataset.mode;
+      var addMode = mode === 'box' ? 'box' : ((wholesaleActive && variant && variant.wholesalePrice > 0) ? 'wholesale' : 'retail');
+      attachTapOrLongPress(el, function(){
+        erAddToDraft(product.id, el.dataset.variantId, addMode);
+        draw();
+      }, function(){
+        if(!variant) return;
+        var isBox = mode === 'box';
+        var label = isBox ? (product.name + ' — ' + variant.name + ' (' + (product.boxLabel || tr('boxDefaultLabel')) + ')') : (product.name + ' — ' + variant.name);
+        var stockLabel = isBox
+          ? (Math.floor(variant.stock / (product.unitsPerBox || 1)) + ' ' + (product.boxLabel || tr('boxDefaultLabel')))
+          : (variant.stock + ' ' + unitLabel(product.unit));
+        erKeypad(label, tr('stock') + ': ' + stockLabel, function(q){
+          erSetQty(product.id, variant.id, addMode, q);
+          erOpenVariantPicker(product);
+        }, function(){ erOpenVariantPicker(product); });
+      });
+    });
+    document.getElementById('variant-done-btn').addEventListener('click', function(){ closeModal(); erRefreshPickerGrid(); });
+  }
+  draw();
+}
+
+/* Setka + pastdagi panelni qayta chizadi (qidiruv matni va scroll joyida qoladi) */
+function erRefreshPickerGrid(){
+  var d = editReceiptDraft;
+  var grid = document.getElementById('er-pick-grid');
+  if(!grid || !d) return;
+  var qEl = document.getElementById('er-pick-search');
+  var q = (qEl ? qEl.value : '').toLowerCase();
+  var cat = grid.dataset.cat || '';
+  var list = visibleProducts().filter(function(p){
+    return p.name.toLowerCase().indexOf(q) !== -1 && (!cat || p.category === cat);
+  }).sort(function(a, b){ return a.name.localeCompare(b.name); });
+  grid.innerHTML = list.length
+    ? list.map(erProductCardHtml).join('')
+    : '<div class="empty-state" style="grid-column:1/-1;">' + tr('noData') + '</div>';
+  var quickWrap = document.getElementById('er-pick-quick-wrap');
+  var quickGrid = document.getElementById('er-pick-quick');
+  var quickProducts = visibleProducts().filter(function(p){ return p.quickAccess; });
+  var showQuick = !!(quickGrid && quickProducts.length && !q && !cat);
+  if(quickWrap) quickWrap.style.display = showQuick ? '' : 'none';
+  if(quickGrid) quickGrid.innerHTML = showQuick ? quickProducts.map(erProductCardHtml).join('') : '';
+  var tappable = state.settings.allowOversell ? '.product-card' : '.product-card:not(.out)';
+  [quickGrid, grid].forEach(function(g){
+    if(!g) return;
+    g.querySelectorAll(tappable).forEach(function(card){
+      attachTapOrLongPress(card, function(){ erTapProduct(card.dataset.erq); }, function(){ erLongPress(card.dataset.erq); });
+    });
+    if(!state.settings.allowOversell){
+      g.querySelectorAll('.product-card.out').forEach(function(card){
+        var tapOut = function(){
+          var p = state.products.find(function(pr){ return pr.id === card.dataset.erq; });
+          if(p && erHasAnyAvail(p)) erTapProduct(p.id); else showToast(tr('notEnoughStock'));
+        };
+        attachTapOrLongPress(card, tapOut, function(){ showToast(tr('notEnoughStock')); });
+      });
+    }
+  });
+  var cnt = d.items.reduce(function(a, it){ return a + it.qty; }, 0);
+  var cEl = document.getElementById('er-pick-count');
+  if(cEl) cEl.textContent = cnt + ' ' + tr('itemsWord');
+  var sEl = document.getElementById('er-pick-sum');
+  if(sEl) sEl.textContent = fmt(editReceiptTotal());
+}
+
+function erClosePickerToEdit(){
+  var el = document.getElementById('er-pick-screen');
+  if(el) el.remove();
+  window.__erPickOpen = false;
+  if(editReceiptDraft) renderEditReceiptModal();
+}
+
+/* "Mahsulot qo'shish" — asosiy sotuv oynasi ko'rinishidagi to'liq ekran */
+function openErProductPicker(restoreScroll){
+  var d = editReceiptDraft;
+  if(!d){ closeModal(); return; }
+  closeModal();
+  var old = document.getElementById('er-pick-screen');
+  if(old) old.remove();
+  var app = document.getElementById('app');
+  if(!app) return;
+  var cats = Array.from(new Set(visibleProducts().map(function(p){ return p.category; }).filter(Boolean)));
+  var showToggle = !state.settings.restaurantMode;
+  var el = document.createElement('div');
+  el.id = 'er-pick-screen';
+  el.innerHTML = '<header>'
+    + '<div style="display:flex;align-items:center;gap:10px;min-width:0;">'
+    + '<button class="icon-round" id="er-pick-back" aria-label="back">' + ICONS.arrowLeft + '</button>'
+    + '<div class="t-title" style="font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + tr('erPickerTitle') + '</div>'
+    + '</div>'
+    + '<div class="header-right" id="er-pick-hr">'
+    + (showToggle ? '<div class="sale-mode-toggle" id="er-pick-toggle">'
+        + '<button data-mode="retail" class="' + (state.saleMode !== 'wholesale' ? 'active' : '') + '">' + tr('retailModeShort') + '</button>'
+        + '<button data-mode="wholesale" class="' + (state.saleMode === 'wholesale' ? 'active' : '') + '">' + tr('wholesaleModeShort') + '</button>'
+        + '</div>' : '')
+    + '</div></header>'
+    + '<main id="er-pick-main">'
+    + '<div class="search-bar">' + ICONS.search + '<input type="text" id="er-pick-search" placeholder="' + tr('search') + '">'
+    + '<button id="er-pick-scan" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:var(--ink);color:#fff;border:none;border-radius:8px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">' + ICONS.barcode + '</button></div>'
+    + (cats.length
+        ? '<div class="fav-row" id="er-pick-cats"><button class="fav-chip fav-chip-active" data-ercat="">' + tr('allCategories') + '</button>'
+          + cats.map(function(c){ return '<button class="fav-chip" data-ercat="' + escapeHtml(c) + '">' + escapeHtml(c) + '</button>'; }).join('')
+          + '</div>'
+        : '')
+    + '<div id="er-pick-quick-wrap" style="display:none;"><h3 class="sub-title">' + tr('quickAccessSection') + '</h3>'
+    + '<div class="product-grid" id="er-pick-quick"></div>'
+    + '<h3 class="sub-title">' + tr('allProductsSection') + '</h3></div>'
+    + '<div class="product-grid" id="er-pick-grid" data-cat=""></div>'
+    + '</main>'
+    + '<div class="cart-bar"><div class="left"><div class="count" id="er-pick-count"></div><div class="sum" id="er-pick-sum"></div></div>'
+    + '<div style="display:flex;gap:8px;"><button id="er-pick-save">' + tr('save') + '</button></div></div>';
+  app.appendChild(el);
+  window.__erPickOpen = true;
+  document.getElementById('er-pick-back').addEventListener('click', erClosePickerToEdit);
+  document.getElementById('er-pick-search').addEventListener('input', erRefreshPickerGrid);
+  var tg = document.getElementById('er-pick-toggle');
+  if(tg) tg.querySelectorAll('[data-mode]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      state.saleMode = btn.dataset.mode;
+      saveSaleMode();
+      showToast(state.saleMode === 'wholesale' ? tr('wholesaleModeOn') : tr('retailModeOn'));
+      tg.querySelectorAll('[data-mode]').forEach(function(o){ o.classList.toggle('active', o.dataset.mode === state.saleMode); });
+      erRefreshPickerGrid();
+    });
+  });
+  document.getElementById('er-pick-scan').addEventListener('click', function(){
+    openBarcodeScanner(function(code){
+      var product = visibleProducts().find(function(p){ return p.barcode && p.barcode === code; });
+      if(!product){ showToast(tr('productNotFound')); return; }
+      erTapProduct(product.id);
+      showToast(product.name);
+    });
+  });
+  var catRow = document.getElementById('er-pick-cats');
+  if(catRow) catRow.querySelectorAll('[data-ercat]').forEach(function(b){
+    b.addEventListener('click', function(){
+      catRow.querySelectorAll('[data-ercat]').forEach(function(o){ o.classList.remove('fav-chip-active'); });
+      b.classList.add('fav-chip-active');
+      var g = document.getElementById('er-pick-grid');
+      if(g) g.dataset.cat = b.dataset.ercat || '';
+      erRefreshPickerGrid();
+    });
+  });
+  document.getElementById('er-pick-save').addEventListener('click', function(){
+    if(!editReceiptDraft || !editReceiptDraft.items.length){ showToast(tr('cannotEditEmptyReceipt')); return; }
+    var scr = document.getElementById('er-pick-screen');
+    if(scr) scr.remove();
+    window.__erPickOpen = false;
+    erConfirmAndSave();
+  });
+  erRefreshPickerGrid();
+  if(restoreScroll){
+    var mn = document.getElementById('er-pick-main');
+    if(mn) mn.scrollTop = restoreScroll;
+  }
 }
 
 /* fix84: eski ro'yxat ko'rinishidagi pikker — o'chirilmadi, zaxira sifatida qoldi */
@@ -15394,6 +15767,7 @@ function requestNotificationPermission(){
 let fcmMessagingInstance = null;
 async function initPushMessaging(){
   try{
+    if(isNativeApp()){ await initNativePush(); return; }
     if(!('serviceWorker' in navigator) || !('PushManager' in window)) return;
     if(typeof firebase === 'undefined' || !firebase.messaging || !firebase.messaging.isSupported) return;
     const supported = await firebase.messaging.isSupported().catch(()=>false);
@@ -15413,6 +15787,33 @@ async function initPushMessaging(){
     // notification; FCM's job is purely to cover the app-closed case.
     fcmMessagingInstance.onMessage(()=>{});
   }catch(e){ /* push is an enhancement, never block the app on it */ }
+}
+
+// Android ilova (Capacitor): native FCM. Veb-push (service worker) Android WebView'da ishlamaydi,
+// shuning uchun token native plagin orqali olinadi va oldingi bilan bir xil joyga saqlanadi.
+async function initNativePush(){
+  try{
+    const PN = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications;
+    if(!PN) return;
+    let perm = await PN.checkPermissions();
+    if(perm && (perm.receive === 'prompt' || perm.receive === 'prompt-with-rationale')){
+      perm = await PN.requestPermissions();
+    }
+    if(!perm || perm.receive !== 'granted') return;
+    if(!window.__nativePushListeners){
+      window.__nativePushListeners = true;
+      await PN.addListener('registration', function(t){
+        if(t && t.value){ window.__fcmNativeToken = t.value; saveFcmToken(t.value); }
+      });
+      await PN.addListener('registrationError', function(){});
+      // Push ustiga bosilganda — yordam chatini ochish
+      await PN.addListener('pushNotificationActionPerformed', function(){
+        try{ if(fbUser){ state.view = 'settings'; state.settingsCategory = 'support'; renderAll(); } }catch(e){}
+      });
+    }
+    try{ await PN.createChannel({id:'support', name:'Yordam xabarlari', description:'Yordam chatidagi yangi xabarlar', importance:4, visibility:1}); }catch(e){}
+    await PN.register();
+  }catch(e){ /* push qo'shimcha imkoniyat — ilovani hech qachon to'xtatmaydi */ }
 }
 
 async function saveFcmToken(token){
