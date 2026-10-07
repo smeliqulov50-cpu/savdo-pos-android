@@ -1180,6 +1180,38 @@ const T = {
   renewHelpNote:{uz:"Tarifni tanlab, so'rov yuborsangiz, biz siz bilan tez orada bog'lanamiz va to'lovni birga rasmiylashtiramiz.",ru:"Выберите тариф и отправьте запрос — мы скоро свяжемся с вами и оформим оплату.",en:"Choose a plan and send a request — we'll reach out shortly to arrange payment.",kk:"Тарифті таңдап, сұрау жіберсеңіз, біз сізбен жақын арада байланысамыз және төлемді бірге рәсімдейміз.",ky:"Тарифти тандап, суроо жөнөтсөңүз, биз сиз менен жакында байланышабыз жана төлөмдү бирге тариздейбиз.",tg:"Тарифро интихоб карда, дархост фиристед, мо ба зудӣ бо шумо тамос мегирем ва пардохтро якҷоя ба анҷом мерасонем."},
   planRequestMessage:{uz:"Salom! Men \"{plan}\" tarifini xohlayman, to'lovni qanday amalga oshirsam bo'ladi?",ru:"Здравствуйте! Хочу тариф \"{plan}\", как оплатить?",en:"Hi! I'd like the \"{plan}\" plan — how can I pay?",kk:"Сәлем! Мен \"{plan}\" тарифін қалаймын, төлемді қалай жасаймын?",ky:"Салам! Мен \"{plan}\" тарифин каалайм, төлөмдү кантип жасайм?",tg:"Салом! Ман тарифи \"{plan}\"-ро мехоҳам, чӣ гуна пардохт кунам?"},
   subscriptionStatusTitle:{uz:"Obuna holati",ru:"Статус подписки",en:"Subscription status",kk:"Жазылым жағдайы",ky:"Жазылуу абалы",tg:"Ҳолати обуна"},
+  payTitle:{uz:"Obunani rasmiylashtirish",ru:"Оформление подписки",en:"Subscribe",kk:"Жазылымды рәсімдеу",ky:"Жазылууну тариздөө",tg:"Расмӣ кардани обуна"},
+  paySubtitle:{uz:"Tarifni tanlang",ru:"Выберите тариф",en:"Choose a plan",kk:"Тарифті таңдаңыз",ky:"Тарифти тандаңыз",tg:"Тарифро интихоб кунед"},
+  payPlanMonthly:{uz:"Oylik obuna",ru:"Месячная подписка",en:"Monthly subscription",kk:"Айлық жазылым",ky:"Айлык жазылуу",tg:"Обунаи моҳона"},
+  payPlanSixMonth:{uz:"6 oylik obuna",ru:"Подписка на 6 месяцев",en:"6-month subscription",kk:"6 айлық жазылым",ky:"6 айлык жазылуу",tg:"Обуна барои 6 моҳ"},
+  payPlanYearly:{uz:"Yillik obuna (VIP)",ru:"Годовая подписка (VIP)",en:"Yearly subscription (VIP)",kk:"Жылдық жазылым (VIP)",ky:"Жылдык жазылуу (VIP)",tg:"Обунаи солона (VIP)"},
+  payPerMonth:{uz:"oyiga",ru:"в месяц",en:"per month",kk:"айына",ky:"айына",tg:"дар як моҳ"},
+  payMethodTitle:{uz:"To'lov usuli",ru:"Способ оплаты",en:"Payment method",kk:"Төлем әдісі",ky:"Төлөм ыкмасы",tg:"Усули пардохт"},
+  payTotalLabel:{uz:"Jami",ru:"Итого",en:"Total",kk:"Жиыны",ky:"Жалпы",tg:"Ҷамъ"},
+  payCta:{uz:"To'lov qilish / Obuna bo'lish",ru:"Оплатить / Подписаться",en:"Pay / Subscribe",kk:"Төлеу / Жазылу",ky:"Төлөө / Жазылуу",tg:"Пардохт / Обуна шудан"},
+  payRedirecting:{uz:"To'lov sahifasiga o'tilmoqda…",ru:"Переход на страницу оплаты…",en:"Redirecting to payment…",kk:"Төлем бетіне өтілуде…",ky:"Төлөм бетине өтүлүүдө…",tg:"Гузариш ба саҳифаи пардохт…"},
+  payNeedLogin:{uz:"Avval hisobingizga kiring",ru:"Сначала войдите в аккаунт",en:"Please sign in first",kk:"Алдымен аккаунтқа кіріңіз",ky:"Адегенде аккаунтка кириңиз",tg:"Аввал ба ҳисоб ворид шавед"},
+  payErrOwnerOnly:{uz:"Obuna to'lovini faqat biznes egasi amalga oshira oladi",ru:"Оплатить подписку может только владелец бизнеса",en:"Only the business owner can pay for the subscription",kk:"Жазылым үшін тек бизнес иесі төлей алады",ky:"Жазылуу үчүн бизнестин ээси гана төлөй алат",tg:"Обунаро танҳо соҳиби бизнес пардохт карда метавонад"},
+  payErrGeneric:{uz:"To'lovni boshlab bo'lmadi. Birozdan so'ng qayta urinib ko'ring.",ru:"Не удалось начать оплату. Повторите попытку позже.",en:"Couldn't start the payment. Please try again later.",kk:"Төлемді бастау мүмкін болмады. Кейінірек қайталап көріңіз.",ky:"Төлөмдү баштоо мүмкүн болбоду. Бир аздан кийин кайра аракет кылыңыз.",tg:"Пардохтро оғоз кардан натавонист. Баъдтар бори дигар кӯшиш кунед."},
+  payErrNetwork:{uz:"Internet bilan aloqa yo'q yoki server javob bermadi",ru:"Нет связи с интернетом или сервер не отвечает",en:"No internet connection or the server did not respond",kk:"Интернет байланысы жоқ немесе сервер жауап бермеді",ky:"Интернет байланышы жок же сервер жооп берген жок",tg:"Алоқа бо интернет нест ё сервер ҷавоб надод"},
+  payChecking:{uz:"To'lov tekshirilmoqda…",ru:"Проверяем оплату…",en:"Checking your payment…",kk:"Төлем тексерілуде…",ky:"Төлөм текшерилүүдө…",tg:"Пардохт санҷида истодааст…"},
+  paySuccess:{uz:"To'lov qabul qilindi! Obuna {date} gacha uzaytirildi.",ru:"Оплата принята! Подписка продлена до {date}.",en:"Payment received! Your subscription now runs until {date}.",kk:"Төлем қабылданды! Жазылым {date} дейін ұзартылды.",ky:"Төлөм кабыл алынды! Жазылуу {date} чейин узартылды.",tg:"Пардохт қабул шуд! Обуна то {date} дароз карда шуд."},
+  payNotYet:{uz:"To'lov hali tasdiqlanmadi. To'lov tizimidan tasdiq kelishi bir necha daqiqa olishi mumkin.",ru:"Оплата пока не подтверждена. Подтверждение от платёжной системы может занять несколько минут.",en:"The payment isn't confirmed yet. Confirmation from the payment system can take a few minutes.",kk:"Төлем әлі расталмады. Төлем жүйесінің растауы бірнеше минут алуы мүмкін.",ky:"Төлөм азырынча ырасталган жок. Төлөм тутумунун ырастоосу бир нече мүнөт алышы мүмкүн.",tg:"Пардохт ҳанӯз тасдиқ нашудааст. Тасдиқи низоми пардохт чанд дақиқа вақт гирифта метавонад."},
+  payRecheck:{uz:"Qayta tekshirish",ru:"Проверить снова",en:"Check again",kk:"Қайта тексеру",ky:"Кайра текшерүү",tg:"Боз санҷидан"},
+  payClose:{uz:"Yopish",ru:"Закрыть",en:"Close",kk:"Жабу",ky:"Жабуу",tg:"Пӯшидан"},
+  payOnlineBtn:{uz:"Onlayn to'lov (Payme / Click)",ru:"Онлайн-оплата (Payme / Click)",en:"Pay online (Payme / Click)",kk:"Онлайн төлем (Payme / Click)",ky:"Онлайн төлөм (Payme / Click)",tg:"Пардохти онлайн (Payme / Click)"},
+  payHistoryTitle:{uz:"To'lovlar va Obunalar Tarixi",ru:"История платежей и подписок",en:"Payments & Subscriptions History",kk:"Төлемдер мен жазылымдар тарихы",ky:"Төлөмдөр жана жазылуулар тарыхы",tg:"Таърихи пардохтҳо ва обунаҳо"},
+  payHistoryMine:{uz:"Mening to'lovlarim",ru:"Мои платежи",en:"My payments",kk:"Менің төлемдерім",ky:"Менин төлөмдөрүм",tg:"Пардохтҳои ман"},
+  payHistoryEmpty:{uz:"Hali muvaffaqiyatli to'lovlar yo'q",ru:"Успешных платежей пока нет",en:"No successful payments yet",kk:"Сәтті төлемдер әлі жоқ",ky:"Ийгиликтүү төлөмдөр азырынча жок",tg:"Пардохтҳои муваффақ ҳанӯз нест"},
+  payHistoryLoadFail:{uz:"To'lovlar tarixini yuklab bo'lmadi (internet yoki Firestore qoidalarini tekshiring)",ru:"Не удалось загрузить историю платежей (проверьте интернет или правила Firestore)",en:"Couldn't load payment history (check your internet or the Firestore rules)",kk:"Төлемдер тарихын жүктеу мүмкін болмады (интернетті немесе Firestore ережелерін тексеріңіз)",ky:"Төлөмдөр тарыхын жүктөө мүмкүн болбоду (интернетти же Firestore эрежелерин текшериңиз)",tg:"Таърихи пардохтҳоро боргирӣ карда нашуд (интернет ё қоидаҳои Firestore-ро санҷед)"},
+  payColDate:{uz:"Sana",ru:"Дата",en:"Date",kk:"Күні",ky:"Күнү",tg:"Сана"},
+  payColBusiness:{uz:"Biznes",ru:"Бизнес",en:"Business",kk:"Бизнес",ky:"Бизнес",tg:"Бизнес"},
+  payColPlan:{uz:"Tarif",ru:"Тариф",en:"Plan",kk:"Тариф",ky:"Тариф",tg:"Тариф"},
+  payColAmount:{uz:"Summa",ru:"Сумма",en:"Amount",kk:"Сома",ky:"Сумма",tg:"Маблағ"},
+  payColProvider:{uz:"To'lov tizimi",ru:"Платёжная система",en:"Provider",kk:"Төлем жүйесі",ky:"Төлөм тутуму",tg:"Низоми пардохт"},
+  payColTx:{uz:"Tranzaksiya ID",ru:"ID транзакции",en:"Transaction ID",kk:"Транзакция ID",ky:"Транзакция ID",tg:"ID транзаксия"},
+  payColUser:{uz:"User ID",ru:"ID пользователя",en:"User ID",kk:"Пайдаланушы ID",ky:"Колдонуучу ID",tg:"ID корбар"},
+  payComingSoon:{uz:"Tez orada",ru:"Скоро",en:"Coming soon",kk:"Жақында",ky:"Жакында",tg:"Ба қарибӣ"},
   lowStockOnlyLabel:{uz:"Kam qolgan tovarlar",ru:"Заканчивающиеся товары",en:"Low stock items",kk:"Аз қалған тауарлар",ky:"Аз калган товарлар",tg:"Молҳои каммонда"},
   lowStockOnlyHint:{uz:"Mahsulot zaxirasi shu sondan kam qolsa, ogohlantirish chiqadi.",ru:"Если остаток товара станет меньше этого числа, появится предупреждение.",en:"A warning appears when a product's stock falls below this number.",kk:"Тауар қоры осы саннан аз қалса, ескерту шығады.",ky:"Товар запасы бул сандан аз калса, эскертүү чыгат.",tg:"Агар захираи мол аз ин рақам камтар шавад, огоҳинома пайдо мешавад."},
   expiryOnlyLabel:{uz:"Yaroqlilik muddati",ru:"Срок годности",en:"Expiry date",kk:"Жарамдылық мерзімі",ky:"Жарактуулук мөөнөтү",tg:"Мӯҳлати эътибор"},
@@ -9628,6 +9660,7 @@ function renderSubscriptionExpiredScreen(){
   root.innerHTML = `<div class="login-screen" style="z-index:70;justify-content:flex-start;padding-top:32px;overflow-y:auto;">
     <div class="brand" style="font-size:22px;margin-bottom:10px;">${tr('subscriptionExpiredTitle')}</div>
     <p class="subtle" style="margin-bottom:16px;">${tr('subscriptionExpiredText')}</p>
+    ${payExpiredButtonHtml()}
     ${plansHtml}
     <p class="subtle" style="margin-top:14px;text-align:center;font-size:12px;">${tr('renewHelpNote')}</p>
   </div>`;
@@ -12553,7 +12586,8 @@ function renderReportsCategory(container, cat){
 /* ---------- SUPER ADMIN ---------- */
 let purchaseDraft = {supplier:'', note:'', items:[], updateCost:true, payMode:'cash'};
 function savePurchases(){ storSet(STORAGE_KEYS.purchases, (state.purchases||[]).slice(-500)); }
-function purchaseTotal(){ return purchaseDraft.items.reduce((a,it)=>a + (parseFloat(it.qty)||0)*(parseFloat(it.cost)||0), 0); }
+function purchaseLineSum(it){ const q = parseFloat(it.qty)||0; return q > 0 ? q*(parseFloat(it.cost)||0) : 0; }
+function purchaseTotal(){ return purchaseDraft.items.reduce((a,it)=>a + purchaseLineSum(it), 0); }
 function renderPurchase(){
   const container = document.getElementById('view-container');
   const suppliers = [...new Set(visibleProducts().map(p=>p.supplierName).filter(Boolean).concat((state.creditors||[]).map(c=>c.name).filter(Boolean)))];
@@ -12570,7 +12604,7 @@ function renderPurchase(){
         <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;margin-top:8px;align-items:end;">
           <div><label class="field-label">${tr('puQty')}</label><input type="number" inputmode="decimal" data-pu-qty="${i}" value="${it.qty}" style="text-align:center;"></div>
           <div><label class="field-label">${tr('puCost')}</label><input type="text" inputmode="numeric" data-money data-pu-cost="${i}" value="${formatMoneyInputValue(it.cost)}"></div>
-          <div class="subtle" style="text-align:right;font-weight:800;padding-bottom:10px;" data-pu-line="${i}">${fmt((parseFloat(it.qty)||0)*(parseFloat(it.cost)||0))}</div>
+          <div class="subtle" style="text-align:right;font-weight:800;padding-bottom:10px;" data-pu-line="${i}">${fmt(purchaseLineSum(it))}</div>
         </div>
       </div>`).join('') : `<div class="empty-state">${tr('puEmpty')}</div>`}</div>
     <button class="btn btn-outline btn-block" id="pu-add" style="margin-bottom:10px;">${tr('puAddItem')}</button>
@@ -12593,7 +12627,7 @@ function renderPurchase(){
   document.getElementById('pu-add').addEventListener('click', openPurchasePicker);
   document.getElementById('pu-apply').addEventListener('click', applyPurchase);
   container.querySelectorAll('[data-pu-del]').forEach(b=>b.addEventListener('click', ()=>{ purchaseDraft.items.splice(parseInt(b.dataset.puDel,10),1); renderPurchase(); }));
-  const refreshLine = (i)=>{ const it = purchaseDraft.items[i]; const el = container.querySelector(`[data-pu-line="${i}"]`); if(el) el.textContent = fmt((parseFloat(it.qty)||0)*(parseFloat(it.cost)||0)); document.getElementById('pu-total').textContent = fmt(purchaseTotal()); };
+  const refreshLine = (i)=>{ const it = purchaseDraft.items[i]; const el = container.querySelector(`[data-pu-line="${i}"]`); if(el) el.textContent = fmt(purchaseLineSum(it)); document.getElementById('pu-total').textContent = fmt(purchaseTotal()); };
   container.querySelectorAll('[data-pu-qty]').forEach(inp=>inp.addEventListener('input', ()=>{ purchaseDraft.items[inp.dataset.puQty].qty = parseFloat(String(inp.value).replace(',','.'))||0; refreshLine(parseInt(inp.dataset.puQty,10)); }));
   container.querySelectorAll('[data-pu-cost]').forEach(inp=>{ attachMoneyInputFormatting(inp); inp.addEventListener('input', ()=>{ const v = parseMoneyInput(inp.value); purchaseDraft.items[inp.dataset.puCost].cost = isNaN(v)?0:v; refreshLine(parseInt(inp.dataset.puCost,10)); }); });
 }
@@ -12620,11 +12654,12 @@ function openPurchasePicker(){
   setTimeout(()=>document.getElementById('pu-pick-search').focus(), 60);
 }
 function applyPurchase(){
-  const items = purchaseDraft.items.filter(it=>(parseFloat(it.qty)||0) > 0);
+  const items = purchaseDraft.items.filter(it=>(parseFloat(it.qty)||0) > 0 && state.products.some(x=>x.id===it.productId));
   if(!items.length){ showToast(tr('puEmpty')); return; }
   const payMode = purchaseDraft.payMode || 'cash';
   if(payMode==='credit' && !purchaseDraft.supplier.trim()){ showToast(tr('puSupplierRequired')); return; }
-  const doc = {id:uid(), date:new Date().toISOString(), supplier: purchaseDraft.supplier.trim(), note: purchaseDraft.note.trim(), payMode, items: items.map(it=>({productId:it.productId, variantId:it.variantId, name:it.name, qty:parseFloat(it.qty)||0, cost:parseFloat(it.cost)||0})), total: purchaseTotal(), staffName: state.currentStaff?state.currentStaff.name:'', branchId: state.currentBranchId};
+  const doc = {id:uid(), date:new Date().toISOString(), supplier: purchaseDraft.supplier.trim(), note: purchaseDraft.note.trim(), payMode, items: items.map(it=>({productId:it.productId, variantId:it.variantId, name:it.name, qty:parseFloat(it.qty)||0, cost:parseFloat(it.cost)||0})), total: 0, staffName: state.currentStaff?state.currentStaff.name:'', branchId: state.currentBranchId};
+  doc.total = doc.items.reduce((a,it)=>a + it.qty*it.cost, 0);
   if(doc.total > 0){
     if(payMode==='credit'){
       let cr = state.creditors.find(c=>(c.name||'').trim().toLowerCase()===doc.supplier.toLowerCase());
@@ -12819,11 +12854,362 @@ async function __saPinModal(changeMode){
     }catch(e){ err.textContent = tr('saNeedsInternet') + ' (' + ((e && e.code) || 'error') + ')'; btn.disabled = false; }
   });
 }
+/* ===== fix85: obuna to'lovi (Payme / Click) + to'lovlar tarixi ===== */
+/* Eslatma: bu yerdagi narxlar FAQAT ko'rsatish uchun. To'lov summasi va muddati serverda
+   (Firebase Functions, functions/src/domain/plans.js) belgilanadi — brauzerdan yuborilgan summaga ishonilmaydi. */
+const PAY_FN_REGION = 'us-central1';
+const PAY_PLANS = {
+  monthly:  {months: 1,  price: 70000,  nameKey: 'payPlanMonthly'},
+  sixmonth: {months: 6,  price: 420000, nameKey: 'payPlanSixMonth'},
+  yearly:   {months: 12, price: 840000, nameKey: 'payPlanYearly', vip: true}
+};
+const PAY_PROVIDERS = [
+  {id: 'payme', label: 'Payme', color: '#00B8B8', off: true},
+  {id: 'click', label: 'Click', color: '#0090D9'}
+];
+const PAY_ALLOWED_HOSTS = ['checkout.paycom.uz', 'my.click.uz'];
+const PAY_LAST_KEY = 'sp_pay_last_v1';
+
+function payFnUrl(name){ return 'https://' + PAY_FN_REGION + '-' + firebaseConfig.projectId + '.cloudfunctions.net/' + name; }
+function payPlanName(key){
+  const m = {monthly: 'payPlanMonthly', sixmonth: 'payPlanSixMonth', yearly: 'payPlanYearly'};
+  return m[key] ? tr(m[key]) : escapeHtml(String(key == null ? '' : key));
+}
+function payProviderLabel(id){
+  const p = PAY_PROVIDERS.find(function(x){ return x.id === id; });
+  return p ? p.label : escapeHtml(String(id == null ? '' : id));
+}
+function payDateStr(ms){
+  const n = Number(ms);
+  if(!isFinite(n) || n <= 0) return '—';
+  try{ return new Date(n).toLocaleString(); }catch(e){ return '—'; }
+}
+
+function payEnsureStyle(){
+  if(document.getElementById('pay-style')) return;
+  const st = document.createElement('style');
+  st.id = 'pay-style';
+  st.textContent = [
+    '.pay-opt{position:relative;display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--border);border-radius:var(--radius);background:var(--surface);cursor:pointer;margin-bottom:10px;text-align:left;}',
+    '.pay-opt.sel{border-color:var(--accent);background:var(--accent-bg);}',
+    '.pay-opt input[type=radio]{position:absolute;opacity:0;pointer-events:none;width:0;height:0;padding:0;border:0;}',
+    '.pay-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--ink-faint);flex-shrink:0;display:flex;align-items:center;justify-content:center;}',
+    '.pay-opt.sel .pay-dot{border-color:var(--accent);}',
+    '.pay-opt.sel .pay-dot::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent);}',
+    '.pay-body{flex:1;min-width:0;}',
+    '.pay-name{font-weight:800;font-size:15px;color:var(--ink);}',
+    '.pay-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}',
+    '.pay-price{font-weight:800;color:var(--accent-dark);white-space:nowrap;}',
+    '.pay-vip{position:absolute;top:-10px;right:12px;background:var(--accent);color:#fff;font-size:11px;font-weight:800;padding:2px 10px;border-radius:10px;}',
+    '.pay-methods{display:flex;gap:10px;margin-bottom:14px;}',
+    '.pay-methods .pay-opt{flex:1;margin-bottom:0;justify-content:center;padding:12px;}',
+    '.pay-brand{font-weight:900;font-size:16px;}',
+    '.pay-opt.off{opacity:.45;cursor:not-allowed;}',
+    '.pay-soon{font-size:11px;color:var(--ink-soft);font-weight:700;margin-top:2px;}',
+    '.pay-total{display:flex;justify-content:space-between;align-items:center;margin:4px 0 12px;font-weight:800;}',
+    '.pay-table{width:100%;border-collapse:collapse;font-size:12.5px;}',
+    '.pay-table th,.pay-table td{padding:8px 8px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}',
+    '.pay-table th{color:var(--ink-soft);font-weight:700;}',
+    '.pay-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}'
+  ].join('\n');
+  document.head.appendChild(st);
+}
+
+/* ---------- To'lov oynasi (faqat veb: Google Play qoidasi) ---------- */
+function openPaymentScreen(){
+  if(isNativeApp()) return;
+  if(!fbUser){ showToast(tr('payNeedLogin')); return; }
+  const P = window.__pay = window.__pay || {plan: 'monthly', provider: 'click', busy: false, err: ''};
+  P.busy = false; P.err = '';
+  payRenderScreen();
+}
+function payCloseScreen(){
+  const r = document.getElementById('pay-root');
+  if(r) r.remove();
+  try{ renderAll(); }catch(e){}
+}
+function payRenderScreen(){
+  payEnsureStyle();
+  let root = document.getElementById('pay-root');
+  if(!root){ root = document.createElement('div'); root.id = 'pay-root'; document.body.appendChild(root); }
+  const P = window.__pay || (window.__pay = {plan: 'monthly', provider: 'click', busy: false, err: ''});
+  const prev = root.querySelector('.login-screen');
+  const scrollTop = prev ? prev.scrollTop : 0;
+
+  const plansHtml = Object.keys(PAY_PLANS).map(function(k){
+    const p = PAY_PLANS[k];
+    const sel = P.plan === k;
+    return '<label class="pay-opt' + (sel ? ' sel' : '') + '" data-pay-plan-card="' + k + '">'
+      + (p.vip ? '<span class="pay-vip">VIP</span>' : '')
+      + '<input type="radio" name="pay-plan" value="' + k + '"' + (sel ? ' checked' : '') + '>'
+      + '<span class="pay-dot"></span>'
+      + '<span class="pay-body"><div class="pay-name">' + payPlanName(k) + '</div>'
+      + '<div class="pay-sub">' + fmt(Math.round(p.price / p.months)) + ' / ' + tr('payPerMonth') + '</div></span>'
+      + '<span class="pay-price">' + fmt(p.price) + '</span></label>';
+  }).join('');
+
+  const methodsHtml = PAY_PROVIDERS.map(function(m){
+    const sel = P.provider === m.id;
+    if(m.off){
+      return '<label class="pay-opt off" data-pay-method-card="' + m.id + '" aria-disabled="true">'
+        + '<input type="radio" name="pay-method" value="' + m.id + '" disabled>'
+        + '<span class="pay-dot"></span><span style="display:flex;flex-direction:column;align-items:center;">'
+        + '<span class="pay-brand" style="color:' + m.color + ';">' + m.label + '</span>'
+        + '<span class="pay-soon">' + tr('payComingSoon') + '</span></span></label>';
+    }
+    return '<label class="pay-opt' + (sel ? ' sel' : '') + '" data-pay-method-card="' + m.id + '">'
+      + '<input type="radio" name="pay-method" value="' + m.id + '"' + (sel ? ' checked' : '') + '>'
+      + '<span class="pay-dot"></span><span class="pay-brand" style="color:' + m.color + ';">' + m.label + '</span></label>';
+  }).join('');
+
+  root.innerHTML = '<div class="login-screen" style="z-index:80;justify-content:flex-start;padding-top:56px;">'
+    + authLangRowHtml()
+    + '<div class="back-row"><button type="button" id="pay-back-btn">' + ICONS.arrowLeft + '</button><span class="t-title">' + tr('payTitle') + '</span></div>'
+    + '<p class="subtle" style="margin:0 0 14px;font-weight:700;">' + tr('paySubtitle') + '</p>'
+    + plansHtml
+    + '<h3 class="sub-title" style="margin-top:6px;">' + tr('payMethodTitle') + '</h3>'
+    + '<div class="pay-methods">' + methodsHtml + '</div>'
+    + '<div class="pay-total"><span>' + tr('payTotalLabel') + '</span><span style="color:var(--accent-dark);" id="pay-total-amt">' + fmt(PAY_PLANS[P.plan].price) + '</span></div>'
+    + '<div id="pay-error" class="error-text" style="margin-bottom:8px;">' + escapeHtml(P.err || '') + '</div>'
+    + '<button type="button" class="btn btn-primary btn-pill btn-block" id="pay-cta"' + (P.busy ? ' disabled' : '') + '>'
+    + (P.busy ? tr('payRedirecting') : tr('payCta')) + '</button>'
+    + '</div>';
+
+  const sc = root.querySelector('.login-screen');
+  if(sc) sc.scrollTop = scrollTop;
+
+  payBindLang(root);
+  document.getElementById('pay-back-btn').addEventListener('click', payCloseScreen);
+  root.querySelectorAll('input[name="pay-plan"]').forEach(function(inp){
+    inp.addEventListener('change', function(){ if(P.busy) return; if(PAY_PLANS[inp.value]){ P.plan = inp.value; P.err = ''; payRenderScreen(); } });
+  });
+  root.querySelectorAll('input[name="pay-method"]').forEach(function(inp){
+    inp.addEventListener('change', function(){
+      if(P.busy) return;
+      if(PAY_PROVIDERS.some(function(m){ return m.id === inp.value && !m.off; })){ P.provider = inp.value; P.err = ''; payRenderScreen(); }
+    });
+  });
+  document.getElementById('pay-cta').addEventListener('click', payStart);
+}
+
+/* Til tanlash (ilovadagi mavjud ko'rinishdan foydalanadi, lekin faqat shu oyna ichida ishlaydi) */
+function payBindLang(root){
+  const toggle = root.querySelector('.auth-lang-current');
+  const dropdown = root.querySelector('.auth-lang-dropdown');
+  if(!toggle || !dropdown) return;
+  toggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+  });
+  dropdown.querySelectorAll('[data-lang]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      dropdown.style.display = 'none';
+      if(state.lang === el.dataset.lang) return;
+      state.lang = el.dataset.lang;
+      saveLang();
+      payRenderScreen();
+    });
+  });
+  root.onclick = function(){ dropdown.style.display = 'none'; };
+}
+
+function payErrText(code){
+  if(code === 'only-owner-can-pay') return tr('payErrOwnerOnly');
+  if(code === 'unauthenticated') return tr('payNeedLogin');
+  return tr('payErrGeneric');
+}
+function payUrlAllowed(u){
+  try{
+    const x = new URL(u);
+    return x.protocol === 'https:' && PAY_ALLOWED_HOSTS.indexOf(x.hostname) !== -1;
+  }catch(e){ return false; }
+}
+async function payStart(){
+  const P = window.__pay;
+  if(!P || P.busy) return;
+  if(PAY_PROVIDERS.some(function(m){ return m.id === P.provider && m.off; })){ P.provider = 'click'; payRenderScreen(); return; }
+  if(!fbUser){ P.err = tr('payNeedLogin'); payRenderScreen(); return; }
+  P.busy = true; P.err = ''; payRenderScreen();
+  let redirected = false;
+  try{
+    const token = await fbUser.getIdToken();
+    const returnUrl = location.origin + location.pathname + '?pay=1';
+    const resp = await fetch(payFnUrl('createPaymentOrder'), {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
+      body: JSON.stringify({plan: P.plan, provider: P.provider, returnUrl: returnUrl, lang: state.lang})
+    });
+    let data = null;
+    try{ data = await resp.json(); }catch(e){}
+    if(!resp.ok || !data || !data.ok || !data.url){ P.err = payErrText(data && data.code); }
+    else if(!payUrlAllowed(data.url)){ P.err = tr('payErrGeneric'); }
+    else{
+      try{ localStorage.setItem(PAY_LAST_KEY, JSON.stringify({orderId: data.orderId, ts: Date.now(), provider: P.provider})); }catch(e){}
+      redirected = true;
+      window.location.href = data.url;
+    }
+  }catch(e){
+    P.err = tr('payErrNetwork');
+  }
+  if(!redirected){ P.busy = false; if(document.getElementById('pay-root')) payRenderScreen(); }
+}
+
+/* ---------- To'lovdan qaytgach: tasdiqni kutish ---------- */
+function payStatusScreen(kind, text, withRecheck){
+  payEnsureStyle();
+  let root = document.getElementById('pay-root');
+  if(!root){ root = document.createElement('div'); root.id = 'pay-root'; document.body.appendChild(root); }
+  const icon = kind === 'ok' ? '✅' : (kind === 'wait' ? '⏳' : 'ℹ️');
+  root.innerHTML = '<div class="login-screen" style="z-index:80;text-align:center;">'
+    + '<div style="font-size:44px;margin-bottom:10px;">' + icon + '</div>'
+    + '<div class="brand" style="font-size:20px;margin-bottom:16px;">' + text + '</div>'
+    + (kind === 'wait' ? '' :
+        (withRecheck ? '<button type="button" class="btn btn-outline btn-pill btn-block" id="pay-recheck-btn" style="margin-bottom:10px;">' + tr('payRecheck') + '</button>' : '')
+        + '<button type="button" class="btn btn-primary btn-pill btn-block" id="pay-status-close">' + (kind === 'ok' ? 'OK' : tr('payClose')) + '</button>')
+    + '</div>';
+  const c = document.getElementById('pay-status-close');
+  if(c) c.addEventListener('click', payCloseScreen);
+  const rc = document.getElementById('pay-recheck-btn');
+  if(rc) rc.addEventListener('click', function(){ payHandleReturn(true); });
+}
+async function payPollForPayment(last, tries, delayMs){
+  for(let i = 0; i < tries; i++){
+    try{
+      if(last && last.orderId){
+        const snap = await fbDb.collection('payments').doc(last.orderId).get();
+        if(snap.exists && snap.data().status === 'PAID') return snap.data();
+      }else{
+        const q = await fbDb.collection('payments').where('businessId', '==', state.businessId).get();
+        const since = Date.now() - 20 * 60000;
+        const hit = q.docs.map(function(d){ return d.data(); }).filter(function(r){ return r.status === 'PAID' && (r.paidAtMs || 0) >= since; })
+          .sort(function(a, b){ return (b.paidAtMs || 0) - (a.paidAtMs || 0); })[0];
+        if(hit) return hit;
+      }
+    }catch(e){}
+    if(i < tries - 1) await new Promise(function(r){ setTimeout(r, delayMs); });
+  }
+  return null;
+}
+async function payApplyServerSubscription(){
+  const snap = await businessDocRef().get();
+  if(!snap.exists) return null;
+  const d = snap.data() || {};
+  ['subscriptionPlan', 'subscriptionExpiresAt', 'subscriptionExpiresAtMs'].forEach(function(k){ if(d[k] !== undefined) state.settings[k] = d[k]; });
+  try{ saveSettingsLocalOnly(); }catch(e){}
+  return d;
+}
+async function payHandleReturn(isRecheck){
+  let last = null;
+  try{ last = JSON.parse(localStorage.getItem(PAY_LAST_KEY) || 'null'); }catch(e){}
+  try{ history.replaceState(null, '', location.pathname); }catch(e){}
+  payStatusScreen('wait', tr('payChecking'));
+  const ms = window.__payPollMs || 3000;
+  const found = await payPollForPayment(last, isRecheck ? 5 : 40, ms);
+  if(!found){ payStatusScreen('info', tr('payNotYet'), true); return; }
+  let d = null;
+  try{ d = await payApplyServerSubscription(); }catch(e){}
+  const expIso = (d && d.subscriptionExpiresAt) || (found.newExpiryMs ? new Date(found.newExpiryMs).toISOString() : '');
+  const dateTxt = expIso ? new Date(expIso).toLocaleDateString() : '';
+  try{ localStorage.removeItem(PAY_LAST_KEY); }catch(e){}
+  payStatusScreen('ok', tr('paySuccess').replace('{date}', dateTxt));
+}
+(function payWatchReturn(){
+  let tries = 0;
+  const timer = setInterval(function(){
+    tries++;
+    try{
+      if(tries > 120 || !new URLSearchParams(location.search).has('pay')){ clearInterval(timer); return; }
+      if(!fbUser || !state.setupDone) return;
+      clearInterval(timer);
+      payHandleReturn(false);
+    }catch(e){}
+  }, 1000);
+})();
+
+/* ---------- To'lovlar tarixi (jadval) ---------- */
+function payHistoryTableHtml(rows, admin){
+  const head = '<tr><th>' + tr('payColDate') + '</th>' + (admin ? '<th>' + tr('payColBusiness') + '</th>' : '')
+    + '<th>' + tr('payColPlan') + '</th><th>' + tr('payColAmount') + '</th><th>' + tr('payColProvider') + '</th>'
+    + '<th>' + tr('payColTx') + '</th>' + (admin ? '<th>' + tr('payColUser') + '</th>' : '') + '</tr>';
+  const body = rows.map(function(r){
+    return '<tr><td>' + escapeHtml(payDateStr(r.paidAtMs)) + '</td>'
+      + (admin ? '<td>' + escapeHtml(String(r.businessName || r.ownerEmail || r.businessId || '')) + '</td>' : '')
+      + '<td>' + payPlanName(r.plan) + '</td><td><strong>' + fmt(Number(r.amount) || 0) + '</strong></td>'
+      + '<td>' + payProviderLabel(r.provider) + '</td><td>' + escapeHtml(String(r.transactionId || '')) + '</td>'
+      + (admin ? '<td>' + escapeHtml(String(r.userId || '')) + '</td>' : '') + '</tr>';
+  }).join('');
+  return '<div class="pay-scroll"><table class="pay-table"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+}
+function payExpiredButtonHtml(){
+  if(isNativeApp()) return '';
+  return '<button type="button" class="btn btn-primary btn-pill btn-block" style="margin-bottom:14px;" onclick="openPaymentScreen()">💳 ' + tr('payOnlineBtn') + '</button>';
+}
+function paySettingsHtml(){
+  payEnsureStyle();
+  const buy = (!isNativeApp() && isAdmin())
+    ? '<div class="card"><button type="button" class="btn btn-primary btn-block" onclick="openPaymentScreen()">💳 ' + tr('payOnlineBtn') + '</button></div>' : '';
+  return buy + '<h3 class="sub-title">' + tr('payHistoryMine') + '</h3><div class="card" id="pay-history-card"><div class="subtle">…</div></div>';
+}
+async function payBindSettings(){
+  const el = document.getElementById('pay-history-card');
+  if(!el) return;
+  try{
+    if(!fbDb || !state.businessId) throw new Error('offline');
+    const snap = await fbDb.collection('payments').where('businessId', '==', state.businessId).get();
+    const rows = snap.docs.map(function(d){ return d.data(); }).filter(function(r){ return r && r.status === 'PAID'; })
+      .sort(function(a, b){ return (b.paidAtMs || 0) - (a.paidAtMs || 0); });
+    const el2 = document.getElementById('pay-history-card');
+    if(!el2) return;
+    el2.innerHTML = rows.length ? payHistoryTableHtml(rows, false) : '<div class="subtle">' + tr('payHistoryEmpty') + '</div>';
+  }catch(e){
+    const el3 = document.getElementById('pay-history-card');
+    if(el3) el3.innerHTML = '<div class="subtle">' + tr('payHistoryLoadFail') + '</div>';
+  }
+}
+
+/* ---------- Super Admin: barcha muvaffaqiyatli to'lovlar ---------- */
+async function openSaPayments(){
+  if(!(window.__saUnlocked || (typeof isSuperAdmin === 'function' && isSuperAdmin()))) return;
+  payEnsureStyle();
+  openModal('<div class="modal-title">💳 ' + tr('payHistoryTitle') + '</div>'
+    + '<div class="search-bar" style="margin-bottom:10px;">' + ICONS.search + '<input type="text" id="sa-pay-search" placeholder="' + tr('search') + '"></div>'
+    + '<div id="sa-pay-body" class="subtle">…</div>');
+  let rows = [];
+  try{
+    const snap = await saDb().collection('payments').orderBy('paidAtMs', 'desc').limit(500).get();
+    rows = snap.docs.map(function(d){ return d.data(); }).filter(function(r){ return r && r.status === 'PAID'; });
+  }catch(e){
+    const b = document.getElementById('sa-pay-body');
+    if(b) b.innerHTML = tr('payHistoryLoadFail');
+    return;
+  }
+  const draw = function(){
+    const body = document.getElementById('sa-pay-body');
+    if(!body) return;
+    const qEl = document.getElementById('sa-pay-search');
+    const q = ((qEl && qEl.value) || '').toLowerCase().trim();
+    const list = !q ? rows : rows.filter(function(r){
+      return [r.businessName, r.ownerEmail, r.businessId, r.userId, r.transactionId, r.provider, r.plan].some(function(v){ return String(v || '').toLowerCase().indexOf(q) !== -1; });
+    });
+    const total = list.reduce(function(s, r){ return s + (Number(r.amount) || 0); }, 0);
+    body.className = '';
+    body.innerHTML = list.length
+      ? '<div class="pay-total"><span>' + tr('payTotalLabel') + ' (' + list.length + ')</span><span style="color:var(--accent-dark);">' + fmt(total) + '</span></div>' + payHistoryTableHtml(list, true)
+      : '<div class="subtle">' + tr('payHistoryEmpty') + '</div>';
+  };
+  draw();
+  const s = document.getElementById('sa-pay-search');
+  if(s) s.addEventListener('input', draw);
+}
+/* ===== /fix85 ===== */
+
 function renderSuperAdmin(){
   const container = document.getElementById('view-container');
   container.innerHTML = `
     <div class="back-row"><button id="superadmin-back-btn">${ICONS.arrowLeft}</button><span class="t-title">★ ${tr('superAdminPanel')}</span></div>
     <div class="btn-row" style="margin-bottom:10px;"><button class="btn btn-outline btn-sm" id="sa-change-pin">🔑 ${tr('saChangePin')}</button><button class="btn btn-ghost btn-sm" id="sa-lock">🔒 ${tr('saLockBtn')}</button></div>
+    <div style="margin-bottom:10px;"><button type="button" class="btn btn-accent btn-block btn-sm" onclick="openSaPayments()">💳 ${tr('payHistoryTitle')}</button></div>
     <div class="search-bar">${ICONS.search}<input type="text" id="superadmin-search" placeholder="${tr('search')}"></div>
     <div id="sa-inbox" style="margin:10px 0;"></div>
     <div id="sa-stats"></div>
@@ -14784,6 +15170,7 @@ function renderSettingsSupport(container){
         <div class="row"><span class="subtle">${tr('expiresOn')}</span><span>${expires.toLocaleDateString()}</span></div>
       </div>
     ` : ''}
+    ${paySettingsHtml()}
     <div class="card">
       <p class="subtle" style="margin:0 0 12px;">${tr('supportChatHint')}</p>
       <div id="support-chat-messages" style="height:55vh;min-height:280px;overflow-y:auto;margin-bottom:12px;padding:8px;background:#f4f7fc;border-radius:14px;"></div>
@@ -14803,6 +15190,7 @@ function renderSettingsSupport(container){
   `;
   bindSettingsBack(container);
   loadSupportMessages();
+  payBindSettings(); /* fix85 */
   state.pendingPlanRequest = null;
   document.getElementById('support-send-btn').addEventListener('click', ()=>sendSupportMessage());
   const signoutBtn = document.getElementById('account-signout-btn');
