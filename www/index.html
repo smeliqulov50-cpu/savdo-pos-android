@@ -201,6 +201,12 @@
   .qty-stepper{display:flex;align-items:center;gap:8px;}
   .qty-stepper button{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--surface-soft);font-weight:700;font-size:14px;}
   .qty-stepper span{min-width:20px;text-align:center;font-weight:700;font-size:13px;}
+  .cart-line{border:1px solid var(--border);border-radius:12px;padding:8px 10px;margin-bottom:8px;align-items:center;}
+  .cart-line .qty-stepper{gap:4px;}
+  .cart-line .qty-stepper button{width:38px;height:38px;border-radius:10px;font-size:18px;line-height:1;}
+  .cart-line .qty-stepper span{display:inline-block;min-width:38px !important;padding:10px 0;font-size:15px !important;}
+  .cart-line [data-price-edit]{display:inline-block;padding:9px 8px;margin:-9px -8px;}
+  .list-item.vp-out .meta{color:var(--danger);font-weight:700;}
 
   .empty-state{text-align:center;padding:40px 20px;color:var(--ink-faint);}
   .empty-state svg{margin-bottom:14px;opacity:.9;color:var(--accent);background:var(--accent-bg);border-radius:50%;padding:16px;width:52px;height:52px;box-sizing:content-box;}
@@ -5263,6 +5269,8 @@ function addBoxToCart(productId, qty, mode){
 function openVariantPicker(product){
   const wholesaleActive = state.saleMode==='wholesale';
   function draw(){
+    const __vp = document.querySelector('#modal-root .modal-sheet[data-vp]');
+    const __vpTop = __vp ? __vp.scrollTop : 0;
     document.getElementById('modal-root').innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">
       <div class="modal-title">${escapeHtml(product.name)} — ${tr('selectVariant')}</div>
       <div>${product.variants.map(v=>{
@@ -5274,11 +5282,11 @@ function openVariantPicker(product){
           const maxBoxes = Math.floor(v.stock/product.unitsPerBox);
           return `
           <div class="row" style="gap:8px;margin-bottom:8px;">
-            <div class="list-item" data-variant-id="${v.id}" data-mode="unit" style="flex:1;cursor:${v.stock>unitCartQty?'pointer':'not-allowed'};opacity:${v.stock>unitCartQty?1:0.5};">
+            <div class="list-item${v.stock>unitCartQty?'':' vp-out'}" data-variant-id="${v.id}" data-mode="unit" style="flex:1;cursor:${v.stock>unitCartQty?'pointer':'not-allowed'};">
               <div class="info"><div class="name">${escapeHtml(v.name)} ${tr('unitSuffix')}${unitCartQty>0?` <span style="color:var(--accent-dark);">×${unitCartQty}</span>`:''}</div><div class="meta">${tr('stock')}: ${v.stock}</div></div>
               <span class="badge badge-clear">${fmt(unitPrice)}</span>
             </div>
-            <div class="list-item" data-variant-id="${v.id}" data-mode="box" style="flex:1;cursor:${maxBoxes>boxCartQty?'pointer':'not-allowed'};opacity:${maxBoxes>boxCartQty?1:0.5};">
+            <div class="list-item${maxBoxes>boxCartQty?'':' vp-out'}" data-variant-id="${v.id}" data-mode="box" style="flex:1;cursor:${maxBoxes>boxCartQty?'pointer':'not-allowed'};">
               <div class="info"><div class="name">${escapeHtml(v.name)} ${escapeHtml(product.boxLabel||tr('boxDefaultLabel'))}${boxCartQty>0?` <span style="color:var(--accent-dark);">×${boxCartQty}</span>`:''}</div><div class="meta">${product.unitsPerBox} ${unitLabel(product.unit)}</div></div>
               <span class="badge badge-clear">${fmt(v.boxPrice)}</span>
             </div>
@@ -5286,7 +5294,7 @@ function openVariantPicker(product){
         `;
         }
         return `
-        <div class="list-item" data-variant-id="${v.id}" data-mode="unit" style="cursor:${v.stock>unitCartQty?'pointer':'not-allowed'};opacity:${v.stock>unitCartQty?1:0.5};">
+        <div class="list-item${v.stock>unitCartQty?'':' vp-out'}" data-variant-id="${v.id}" data-mode="unit" style="cursor:${v.stock>unitCartQty?'pointer':'not-allowed'};">
           <div class="info"><div class="name">${escapeHtml(v.name)}${unitCartQty>0?` <span style="color:var(--accent-dark);">×${unitCartQty}</span>`:''}</div><div class="meta">${tr('stock')}: ${v.stock} ${unitLabel(product.unit)}</div></div>
           <span class="badge badge-clear">${fmt(unitPrice)}</span>
         </div>
@@ -5294,6 +5302,8 @@ function openVariantPicker(product){
       }).join('')}</div>
       <button class="btn btn-primary btn-block" style="margin-top:14px;" id="variant-done-btn">${tr('close')}</button>
     </div></div>`;
+    const __vn = document.querySelector('#modal-root .modal-sheet');
+    if(__vn){ __vn.setAttribute('data-vp', '1'); __vn.scrollTop = __vpTop; }
     document.querySelectorAll('[data-variant-id]').forEach(el=>{
       const variant = product.variants.find(v=>v.id===el.dataset.variantId);
       const mode = el.dataset.mode;
@@ -5422,7 +5432,7 @@ function renderCartBar(){
       <button id="open-cart-btn">${tr('cart')}</button>
     </div>
   </div>`;
-  document.getElementById('open-cart-btn').addEventListener('click', openCartModal);
+  document.getElementById('open-cart-btn').addEventListener('click', ()=>{ window.__cartScroll = 0; openCartModal(); });
   const holdBtn = document.getElementById('hold-cart-btn');
   if(holdBtn) holdBtn.addEventListener('click', holdCurrentCart);
   const quickSaveBtn = document.getElementById('quick-save-order-btn');
@@ -5871,7 +5881,7 @@ function renderCartModalContent(){
     const edited = c.priceOverride!=null && c.priceOverride!==basePrice;
     const key = cartLineKey(c);
     const label = c.saleMode==='box' ? `${escapeHtml(p.name)} (${escapeHtml(c.boxLabel||tr('boxDefaultLabel'))})` : (c.priceTier==='wholesale' ? `${escapeHtml(p.name)} (${tr('wholesaleModeShort')})` : (v ? `${escapeHtml(p.name)} — ${escapeHtml(v.name)}` : escapeHtml(p.name)));
-    return `<div class="row" style="margin-bottom:10px;align-items:flex-start;">
+    return `<div class="row cart-line">
       <div style="flex:1;min-width:0;">
         <div style="font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px;">${label}${c.isTakeaway?`<span class="badge badge-clear" style="font-size:10px;">🥡 ${tr('orderTypeTakeaway')}</span>`:''}</div>
         <div style="font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;">
@@ -5898,6 +5908,12 @@ function renderCartModalContent(){
       ${inTableMode ? `<button class="btn btn-outline btn-block" id="save-logout-btn" style="margin-top:10px;">🚪 ${tr('saveAndLogoutBtn')}</button>` : ''}
     ` : ''}
   `);
+  (function(){
+    const sh = document.querySelector('#modal-root .modal-sheet');
+    if(!sh) return;
+    sh.scrollTop = window.__cartScroll || 0;
+    sh.addEventListener('scroll', ()=>{ window.__cartScroll = sh.scrollTop; }, {passive:true});
+  })();
 
   const clearBtn = document.getElementById('clear-cart-btn');
   if(clearBtn) clearBtn.addEventListener('click', ()=>{
@@ -5994,6 +6010,7 @@ function openQtyKeypad(key){
   const label = c.saleMode==='box' ? `${escapeHtml(p.name)} (${escapeHtml(c.boxLabel||tr('boxDefaultLabel'))})` : (v ? `${escapeHtml(p.name)} — ${escapeHtml(v.name)}` : escapeHtml(p.name));
   const stockUnitLabel = c.saleMode==='box' ? (c.boxLabel||tr('boxDefaultLabel')) : unitLabel(p.unit);
   let entered = String(c.qty);
+  let freshQty = true;
   const root = document.getElementById('modal-root');
   function draw(err){
     root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">
@@ -6010,14 +6027,15 @@ function openQtyKeypad(key){
       <button class="btn btn-outline btn-block" style="margin-top:14px;" id="qty-cancel-btn">${tr('cancel')}</button>
     </div></div>`;
     root.querySelectorAll('[data-n]').forEach(b=>b.addEventListener('click', ()=>{
+      if(freshQty){ entered = ''; freshQty = false; }
       if(entered.length>=4) return;
       entered = (entered==='0'?'':entered) + b.dataset.n;
       draw();
     }));
-    root.querySelector('[data-del]').addEventListener('click', ()=>{ entered = entered.slice(0,-1); draw(); });
+    root.querySelector('[data-del]').addEventListener('click', ()=>{ freshQty = false; entered = entered.slice(0,-1); draw(); });
     root.querySelector('[data-ok]').addEventListener('click', ()=>{
       const qty = parseInt(entered,10);
-      if(isNaN(qty) || qty<=0){ entered=''; draw(tr('invalidAmount')); return; }
+      if(isNaN(qty) || qty<=0){ entered=''; freshQty = false; draw(tr('invalidAmount')); return; }
       if(!state.settings.allowOversell && qty > maxStock){ draw(tr('notEnoughStock')); return; }
       c.qty = qty;
       if(state.settings.restaurantMode){ saveTables(); syncActiveTable(); } else { saveCart(); }
