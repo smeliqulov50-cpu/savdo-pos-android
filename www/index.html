@@ -323,6 +323,165 @@
     #print-receipt .print-report{font-family:Arial,Helvetica,sans-serif;}
     @page{margin:14mm;}
   }
+
+  /* fix92-colors — jonli palitra + rangli ikonkalar (faqat ko'rinish) */
+  :root{
+    --accent:#2563EB; --accent-dark:#1D4ED8; --accent-bg:#DBEAFE;
+    --teal:#0D9488; --teal-bg:#CCFBF1;
+    --violet:#7C3AED; --violet-bg:#EDE9FE;
+    --warm:#EA580C; --warm-bg:#FFEDD5; --warning:#F59E0B; --warning-bg:#FEF3C7;
+    --danger:#DC2626; --danger-bg:#FEE2E2; --success:#15803D; --success-bg:#DCFCE7;
+    --ink:#0F172A; --ink-soft:#475569;
+    --gradient-brand:linear-gradient(135deg,#2563EB 0%,#7C3AED 100%);
+    --gradient-primary:linear-gradient(135deg,#1D4ED8 0%,#7C3AED 100%);
+    --gradient-warm:linear-gradient(135deg,#F97316 0%,#DC2626 100%);
+    --gradient-teal:linear-gradient(135deg,#0D9488 0%,#2563EB 100%);
+    --gradient-success:linear-gradient(135deg,#16A34A 0%,#0D9488 100%);
+  }
+  /* pastki menyu: har bir bo'lim o'z rangida */
+  .nav-item{--nc:#2563EB;--ncb:#DBEAFE;color:var(--ink-soft);}
+  .nav-item[data-view="sale"]{--nc:#2563EB;--ncb:#DBEAFE;}
+  .nav-item[data-view="products"]{--nc:#0D9488;--ncb:#CCFBF1;}
+  .nav-item[data-view="customers"]{--nc:#7C3AED;--ncb:#EDE9FE;}
+  .nav-item[data-view="reports"]{--nc:#EA580C;--ncb:#FFEDD5;}
+  .nav-item[data-view="expense"]{--nc:#DC2626;--ncb:#FEE2E2;}
+  .nav-item[data-view="receipts"]{--nc:#0284C7;--ncb:#E0F2FE;}
+  .nav-item svg{color:var(--nc);opacity:.78;transition:opacity .15s, background .15s;}
+  .nav-item.active svg{opacity:1;background:var(--ncb);box-sizing:content-box;padding:5px 15px;margin:-5px 0;border-radius:14px;}
+  .nav-item.active{color:var(--nc);}
+  .nav-item.active::before{display:none;}
+  /* tepadagi tugmalar */
+  #receipts-btn{background:var(--violet-bg);color:var(--violet);}
+  #settings-btn{background:var(--accent-bg);color:var(--accent);}
+  #logout-btn{background:var(--danger-bg);color:var(--danger);}
+  #my-plan-btn{background:var(--warm-bg);color:var(--warm);}
+  #my-route-btn{background:var(--teal-bg);color:var(--teal);}
+  /* Chakana / Ulgurji */
+  .sale-mode-toggle button[data-mode="retail"].active{color:#1D4ED8;}
+  .sale-mode-toggle button[data-mode="wholesale"].active{background:#FFEDD5;color:#C2410C;}
+  /* chiplar va ma'noli tugmalar */
+  .fav-chip-active{background:var(--gradient-brand);color:#fff;}
+  #confirm-sale-btn{background:var(--gradient-success);box-shadow:0 6px 16px rgba(22,163,74,.30);}
+  #clear-cart-btn{background:var(--danger-bg);color:var(--danger);}
+  #hold-cart-btn{background:#FEF3C7 !important;color:#B45309;}
+  /* o'chirish / tahrirlash ikonkalari */
+  button:has(> svg > path[d="M3 6h18"]){color:var(--danger);}
+  .icon-btn:has(> svg > path[d="M3 6h18"]){background:var(--danger-bg);}
+  button:has(> svg > path[d^="M11 4H4a2"]){color:var(--accent);}
+  /* hisobot kartalari: yuqori chiziq har xil rangda */
+  .stat-card:nth-child(4n+2)::before{background:var(--gradient-teal);}
+  .stat-card:nth-child(4n+3)::before{background:var(--gradient-warm);}
+  .stat-card:nth-child(4n+4)::before{background:var(--gradient-success);}
+
+  /* fix93-cust — tezkor mijoz oynasi */
+  #cust-hub-root{position:fixed;inset:0;z-index:55;display:none;background:rgba(15,23,42,.45);align-items:flex-end;justify-content:center;}
+  #cust-hub-root.open{display:flex;}
+  .ch-sheet{width:100%;max-width:520px;height:92%;background:var(--surface);border-radius:22px 22px 0 0;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(15,23,42,.25);animation:chUp .14s ease-out;}
+  @keyframes chUp{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+  .ch-head{display:flex;align-items:center;gap:8px;padding:12px 12px 10px;border-bottom:1px solid var(--line);flex-shrink:0;}
+  .ch-title{flex:1;min-width:0;font-size:17px;font-weight:800;letter-spacing:-.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ch-hbtn{width:38px;height:38px;border-radius:12px;border:none;background:#eef2f9;color:var(--ink-soft);font-size:24px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;padding:0;}
+  .ch-hbtn svg{width:18px;height:18px;}
+  .ch-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px 24px;}
+  .ch-body.kp{padding-bottom:300px;}
+  .ch-ava{width:42px;height:42px;border-radius:14px;background:var(--gradient-brand);color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .ch-selected{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:10px 12px;margin-bottom:10px;border-radius:16px;background:var(--accent-bg);border:1.5px solid var(--accent);}
+  .ch-sel-main{display:flex;align-items:center;gap:10px;min-width:0;flex:1;}
+  .ch-sel-lbl{font-size:11px;font-weight:700;color:var(--accent-dark);text-transform:uppercase;letter-spacing:.04em;}
+  .ch-name{font-weight:800;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .ch-sel-act{display:flex;gap:6px;}
+  .ch-mini{border:none;border-radius:10px;padding:8px 12px;font-weight:700;font-size:12.5px;background:#fff;color:var(--accent-dark);cursor:pointer;}
+  .ch-mini.ch-danger{background:var(--danger-bg,#FEE2E2);color:var(--danger);}
+  .ch-newbtn{width:100%;margin:0 0 10px;padding:12px;border-radius:14px;border:1.5px dashed var(--accent);background:transparent;color:var(--accent-dark);font-weight:800;font-size:14px;cursor:pointer;}
+  .ch-newform{padding:12px;margin:-2px 0 12px;border-radius:14px;background:var(--surface-soft);border:1px solid var(--line);}
+  .ch-newform input{width:100%;margin:0 0 8px;box-sizing:border-box;}
+  .ch-newrow{display:flex;align-items:center;gap:10px;}
+  .ch-link{border:none;background:transparent;color:var(--accent-dark);font-weight:700;font-size:13px;padding:8px 4px;cursor:pointer;}
+  .ch-sec{font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8a97ab;margin:12px 2px 6px;}
+  .ch-row{display:flex;align-items:center;gap:10px;padding:10px 8px 10px 12px;margin-bottom:6px;border-radius:14px;background:#fff;border:1px solid var(--v4-line, var(--line));cursor:pointer;}
+  .ch-row:active{transform:scale(.99);}
+  .ch-row.on{border:2px solid var(--accent);padding:9px 7px 9px 11px;}
+  .ch-info{flex:1;min-width:0;}
+  .ch-meta{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .ch-debt{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--danger-bg,#FEE2E2);color:var(--danger);font-size:11px;font-weight:800;}
+  .ch-check{color:var(--success);font-weight:800;}
+  .ch-more{width:38px;height:38px;border:none;border-radius:12px;background:transparent;color:var(--ink-soft);font-size:22px;line-height:1;flex-shrink:0;cursor:pointer;padding:0;}
+  .ch-more:active{background:#eef2f9;}
+  .ch-dhead{display:flex;align-items:center;gap:12px;margin:2px 0 12px;}
+  .ch-dhead .ch-ava{width:52px;height:52px;border-radius:17px;font-size:22px;}
+  .ch-dname{font-size:18px;font-weight:800;letter-spacing:-.2px;}
+  .ch-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .ch-stat{padding:10px 12px;border-radius:14px;background:#fff;border:1px solid var(--v4-line, var(--line));}
+  .ch-sl{font-size:11px;font-weight:700;color:#8a97ab;text-transform:uppercase;letter-spacing:.04em;}
+  .ch-sv{font-size:17px;font-weight:800;margin-top:2px;}
+  .ch-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .ch-act{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;border:1px solid var(--v4-line, var(--line));background:#fff;color:var(--ink);font-weight:700;font-size:12.5px;text-align:left;cursor:pointer;}
+  .ch-act:active{transform:scale(.98);}
+  .ch-ai{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .ch-ai svg{width:18px;height:18px;}
+  .ch-limitbox{margin-top:12px;padding:12px;border-radius:14px;background:var(--surface-soft);border:1px solid var(--line);}
+  .ch-limitrow{display:flex;gap:8px;align-items:center;}
+  .ch-limitrow input{flex:1;min-width:0;}
+  .ch-sale{padding:10px 12px;margin-bottom:6px;border-radius:14px;background:#fff;border:1px solid var(--v4-line, var(--line));cursor:pointer;}
+  .ch-sale-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;font-size:13px;}
+  .ch-sale-items{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+  /* savat oynasidagi "Mijoz" qatori */
+  .cart-cust{display:flex;align-items:center;gap:10px;width:100%;margin:2px 0 12px;padding:11px 12px;border-radius:14px;border:1.5px dashed #94A3B8;background:transparent;color:var(--ink-soft);font-weight:700;font-size:14px;text-align:left;cursor:pointer;}
+  .cart-cust .cc-ic{width:30px;height:30px;border-radius:10px;background:var(--violet-bg,#EDE9FE);color:var(--violet,#7C3AED);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .cart-cust .cc-ic svg{width:17px;height:17px;}
+  .cart-cust .cc-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cart-cust .cc-go{flex-shrink:0;font-size:18px;color:var(--accent);font-weight:800;}
+  .cart-cust.on{border:1.5px solid var(--accent);background:var(--accent-bg);color:var(--ink);}
+
+  /* fix94-ok — to'lov turlari, qo'shimchalar qatori, tasdiq animatsiyasi */
+  .toggle-opt[data-pt]{display:flex;align-items:center;justify-content:center;gap:6px;font-weight:800;}
+  .toggle-opt[data-pt] .pt-ic{font-size:18px;line-height:1;}
+  .toggle-opt[data-pt="cash"]{color:#15803D;}
+  .toggle-opt[data-pt="card"]{color:#0F766E;}
+  .toggle-opt[data-pt="credit"]{color:#C2410C;}
+  .toggle-opt[data-pt="cash"].active{background:linear-gradient(135deg,#22C55E,#15803D);color:#fff;box-shadow:0 3px 10px rgba(21,128,61,.35);}
+  .toggle-opt[data-pt="card"].active{background:linear-gradient(135deg,#2DD4BF,#0D9488);color:#fff;box-shadow:0 3px 10px rgba(13,148,136,.35);}
+  .toggle-opt[data-pt="credit"].active{background:linear-gradient(135deg,#FB923C,#EA580C);color:#fff;box-shadow:0 3px 10px rgba(234,88,12,.35);}
+  .co-summary.co-extras{background:linear-gradient(135deg,#FFF7ED,#FEF3C7);border:1.5px solid #FDBA74;color:#9A3412;gap:8px;padding:10px 12px;}
+  .co-extras .cx-ics{display:flex;gap:4px;flex-shrink:0;}
+  .co-extras .cx-ics i{width:26px;height:26px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:14px;line-height:1;}
+  .co-extras .cx-txt{white-space:normal !important;overflow:visible !important;text-overflow:clip !important;color:#9A3412 !important;font-weight:800 !important;font-size:13px;line-height:1.25;}
+  .co-extras .co-act{width:26px;height:26px;border-radius:50%;background:#FFEDD5;color:#EA580C !important;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .co-summary.co-extras:not(.open){animation:coPulse 2.6s ease-in-out infinite;}
+  @keyframes coPulse{0%,100%{box-shadow:0 0 0 0 rgba(249,115,22,0)}50%{box-shadow:0 0 0 5px rgba(249,115,22,.22)}}
+  .sale-ok{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:#fff;pointer-events:none;animation:soIn .18s ease-out both;}
+  .sale-ok.out{animation:soOut .25s ease-in forwards;}
+  .so-box{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .so-svg{width:132px;height:132px;animation:soPop .45s 1s ease-out;}
+  .so-glow{fill:rgba(34,197,94,.10);opacity:0;animation:soGlow .5s .55s ease-out forwards;}
+  .so-ring{fill:none;stroke:#16A34A;stroke-width:6;stroke-linecap:round;stroke-dasharray:327;stroke-dashoffset:327;transform:rotate(-90deg);transform-origin:60px 60px;animation:soRing .6s .1s cubic-bezier(.65,0,.35,1) forwards;}
+  .so-check{fill:none;stroke:#16A34A;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:80;stroke-dashoffset:80;animation:soCheck .4s .65s ease-out forwards;}
+  .so-amount{font-size:30px;font-weight:800;color:#0F172A;letter-spacing:-.4px;opacity:0;animation:soTxt .35s .55s ease-out forwards;}
+  .so-label{font-size:15px;font-weight:700;color:#15803D;opacity:0;animation:soTxt .35s .7s ease-out forwards;}
+  .so-snd{position:absolute;top:calc(14px + env(safe-area-inset-top, 0px));right:14px;width:44px;height:44px;border-radius:50%;border:none;background:#F1F5F9;font-size:20px;line-height:1;pointer-events:auto;cursor:pointer;padding:0;}
+  @keyframes soIn{from{opacity:0}to{opacity:1}}
+  @keyframes soOut{from{opacity:1}to{opacity:0}}
+  @keyframes soRing{to{stroke-dashoffset:0}}
+  @keyframes soCheck{to{stroke-dashoffset:0}}
+  @keyframes soGlow{to{opacity:1}}
+  @keyframes soTxt{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes soPop{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+
+  /* fix95-notif — bildirishnoma sozlamalari */
+  .nf-card{padding:4px 14px;margin-bottom:12px;}
+  .nf-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--line);}
+  .nf-row:first-child{border-top:none;}
+  .nf-ic{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+  .nf-txt{flex:1;min-width:0;}
+  .nf-ttl{font-weight:800;font-size:14px;color:var(--ink);}
+  .nf-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.35;}
+  .nf-sw{appearance:none;-webkit-appearance:none;width:50px;height:30px;border-radius:999px;background:#CBD5E1;position:relative;flex-shrink:0;cursor:pointer;transition:background .15s;border:none;padding:0;margin:0;}
+  .nf-sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(15,23,42,.3);transition:transform .15s;}
+  .nf-sw:checked{background:#16A34A;}
+  .nf-sw:checked::after{transform:translateX(20px);}
+
+  /* fix96-offline */
+  .au-day{font-size:12px;font-weight:800;color:var(--ink-soft);margin:14px 2px 6px;letter-spacing:.3px;}
 </style>
 </head>
 <body>
@@ -546,7 +705,7 @@ const T = {
   auCustomerDelete:{uz:"Mijoz o'chirildi",ru:"Клиент удалён",en:"Customer deleted",kk:"Клиент өшірілді",ky:"Кардар өчүрүлдү",tg:"Мизоҷ нест шуд"},
   auCustomerRestore:{uz:"Mijoz tiklandi",ru:"Клиент восстановлен",en:"Customer restored",kk:"Клиент қалпына келтірілді",ky:"Кардар калыбына келтирилди",tg:"Мизоҷ барқарор шуд"},
   auditReport:{uz:"Audit jurnali",ru:"Журнал действий",en:"Audit log",kk:"Аудит журналы",ky:"Аудит журналы",tg:"Журнали аудит"},
-  auditHint:{uz:"Kim, qachon, nima qildi: narx o'zgarishi, o'chirish, qaytarish, chek tahriri, xarajat, xodim, kirish. Bulutda saqlanadi, o'chirib bo'lmaydi.",ru:"Кто, когда, что сделал: изменение цены, удаления, возвраты, правка чека, расходы, сотрудники, вход. Хранится в облаке, не удаляется.",en:"Who did what and when: price changes, deletions, refunds, receipt edits, expenses, staff, logins. Stored in the cloud, cannot be deleted.",kk:"Кім, қашан, не істеді. Бұлтта сақталады.",ky:"Ким, качан, эмне кылды. Булутта сакталат.",tg:"Кӣ, кай, чӣ кард. Дар абр нигоҳ дошта мешавад."},
+  auditHint:{uz:"Kim, qachon, nima qildi: narx o'zgarishi, o'chirish, qaytarish, chek tahriri, xarajat, xodim, kirish. So'nggi 30 kun saqlanadi; eskilari bulutdan ham avtomatik o'chiriladi.",ru:"Кто, когда, что сделал: изменение цены, удаления, возвраты, правка чека, расходы, сотрудники, вход. Хранятся последние 30 дней; старые записи автоматически удаляются и из облака.",en:"Who did what and when: price changes, deletions, refunds, receipt edits, expenses, staff, logins. The last 30 days are kept; older entries are removed from the cloud automatically.",kk:"Кім, қашан, не істеді. Соңғы 30 күн сақталады; ескілері бұлттан автоматты түрде өшіріледі.",ky:"Ким, качан, эмне кылды. Акыркы 30 күн сакталат; эскилери булуттан автоматтык өчүрүлөт.",tg:"Кӣ, кай, чӣ кард. 30 рӯзи охир нигоҳ дошта мешавад; навиштаҳои кӯҳна аз абр худкор нест мешаванд."},
   auPriceChange:{uz:"Narx o'zgardi",ru:"Изменение цены",en:"Price changed",kk:"Баға өзгерді",ky:"Баа өзгөрдү",tg:"Нарх тағйир ёфт"},
   auProductDelete:{uz:"Mahsulot o'chirildi",ru:"Товар удалён",en:"Product deleted",kk:"Тауар өшірілді",ky:"Товар өчүрүлдү",tg:"Маҳсулот нест шуд"},
   auSaleDelete:{uz:"Chek o'chirildi",ru:"Чек удалён",en:"Receipt deleted",kk:"Чек өшірілді",ky:"Чек өчүрүлдү",tg:"Чек нест шуд"},
@@ -1346,6 +1505,33 @@ const T = {
   wholesaleModeShort:{uz:"Ulgurji",ru:"Опт",en:"Wholesale",kk:"Көтерме",ky:"Дүң",tg:"Яклухт"},
   retailModeOn:{uz:"Chakana savdo rejimi yoqildi",ru:"Включён режим розничной продажи",en:"Retail mode enabled",kk:"Бөлшек сату режимі қосылды",ky:"Чекене сатуу режими күйгүзүлдү",tg:"Реҷаи фурӯши чакана фаъол шуд"},
   wholesaleModeOn:{uz:"Ulgurji savdo rejimi yoqildi",ru:"Включён режим оптовой продажи",en:"Wholesale mode enabled",kk:"Көтерме сату режимі қосылды",ky:"Дүң сатуу режими күйгүзүлдү",tg:"Реҷаи фурӯши яклухт фаъол шуд"},
+  /* fix93-cust i18n */
+  chRecent:{uz:"Oxirgilar",ru:"Недавние",en:"Recent"},
+  chAll:{uz:"Barcha mijozlar",ru:"Все клиенты",en:"All customers"},
+  chQuickAdd:{uz:"Qo'shish va tanlash",ru:"Добавить и выбрать",en:"Add & select"},
+  chMore:{uz:"Manzil va limit",ru:"Адрес и лимит",en:"Address & limit"},
+  chSelected:{uz:"Tanlangan mijoz",ru:"Выбран клиент",en:"Selected customer"},
+  chRemove:{uz:"Olib tashlash",ru:"Убрать",en:"Remove"},
+  chOpen:{uz:"Ochish",ru:"Открыть",en:"Open"},
+  chNewShort:{uz:"Yangi mijoz",ru:"Новый клиент",en:"New customer"},
+  chPhoneExists:{uz:"Bu raqam allaqachon bor",ru:"Этот номер уже есть",en:"This number already exists"},
+  chDebtHistory:{uz:"Qarz va to'lovlar",ru:"Долги и платежи",en:"Debts & payments"},
+  chSelect:{uz:"Shu mijozni tanlash",ru:"Выбрать клиента",en:"Select this customer"},
+  chLimitLeft:{uz:"Limitdan qoldi",ru:"Остаток лимита",en:"Limit left"},
+  chSaved:{uz:"Saqlandi",ru:"Сохранено",en:"Saved"},
+  /* fix95-notif i18n */
+  notifSection:{uz:"Bildirishnomalar va ovoz",ru:"Уведомления и звук",en:"Notifications & sound"},
+  notifSoundLabel:{uz:"Bildirishnoma ovozi",ru:"Звук уведомлений",en:"Notification sound"},
+  notifSoundHint:{uz:"Yangi yordam xabari, kunlik qarz eslatmasi va boshqa xabarlar kelganda ovoz chalinadi (SMS kabi).",ru:"Звук при новых сообщениях поддержки, ежедневном напоминании о долгах и других уведомлениях (как SMS).",en:"Plays a sound for new support messages, the daily debt reminder and other notifications (like an SMS)."},
+  notifSaleSoundLabel:{uz:"Sotuv tasdiqlash ovozi",ru:"Звук подтверждения продажи",en:"Sale confirmation sound"},
+  notifSaleSoundHint:{uz:"Sotuv tasdiqlanganda ✓ animatsiyasi bilan birga ovoz chalinadi.",ru:"Звук вместе с анимацией ✓ при подтверждении продажи.",en:"Plays a sound with the ✓ animation when a sale is confirmed."},
+  notifDebtLabel:{uz:"Kunlik qarz hisoboti eslatmasi",ru:"Ежедневное напоминание об отчёте по долгам",en:"Daily debt report reminder"},
+  notifDebtHint:{uz:"Har kuni 21:00 da jami qarz va hisobotni yuklab olish haqida xabar keladi (faqat egasi/admin qurilmasiga).",ru:"Каждый день в 21:00 приходит уведомление об общем долге и отчёте (только на устройство владельца/админа).",en:"Every day at 21:00 you get a notice with the total debt and the report to download (owner/admin device only)."},
+  notifTestBtn:{uz:"Ovozni sinab ko'rish",ru:"Проверить звук",en:"Test the sound"},
+  notifPhoneHint:{uz:"Ilova yopiq bo'lganda ovoz telefonning bildirishnoma sozlamalariga ham bog'liq: telefon ovozsiz rejimda bo'lsa yoki ilovaga bildirishnoma ruxsati berilmagan bo'lsa, ovoz chiqmaydi.",ru:"Когда приложение закрыто, звук зависит и от настроек уведомлений телефона: в беззвучном режиме или без разрешения на уведомления звука не будет.",en:"When the app is closed, the sound also depends on the phone's notification settings: in silent mode or without notification permission there will be no sound."},
+  /* fix96-offline i18n */
+  notifLocalDebtTitle:{uz:"Kunlik qarz hisoboti",ru:"Ежедневный отчёт по долгам",en:"Daily debt report"},
+  notifLocalDebtBody:{uz:"Ish kunini yakunlang: jami qarz va mijozlar ro'yxatini yuklab oling.",ru:"Завершите рабочий день: скачайте список клиентов и общий долг.",en:"Wrap up the day: download the customer list and total debt."},
   noWholesaleConfigured:{uz:"Bu mahsulot uchun ulgurji (blok) narx sozlanmagan — dona narxida qo'shildi",ru:"Для этого товара не настроена оптовая цена — добавлено по розничной цене",en:"No wholesale price set for this product — added at retail price instead",kk:"Бұл тауар үшін көтерме (блок) баға белгіленбеген — дана бағасында қосылды",ky:"Бул товар үчүн дүң (блок) баа коюлган эмес — даана баасында кошулду",tg:"Барои ин мол нархи яклухт (қуттӣ) танзим нашудааст — бо нархи дона илова шуд"},
   totalInventoryValue:{uz:"Ombor qiymati (sotuv narxida)",ru:"Стоимость склада (по продажной цене)",en:"Inventory value (at sale price)",kk:"Қойма құны (сату бағасында)",ky:"Кампа наркы (сатуу баасында)",tg:"Арзиши анбор (бо нархи фурӯш)"},
   totalInventoryCost:{uz:"Ombor tannarxi",ru:"Себестоимость склада",en:"Inventory cost",kk:"Қойма өзіндік құны",ky:"Кампа өздүк наркы",tg:"Нархи анбор"},
@@ -1930,6 +2116,7 @@ async function loadAll(){
   state.setupDone = !!setupDone;
   state.cart = cart || [];
   state.audit = (await storGet(STORAGE_KEYS.audit)) || [];
+  try{ pruneAudit(); }catch(e){} /* fix96 */
   state.purchases = (await storGet(STORAGE_KEYS.purchases)) || [];
   state.subCloudCheck = (await storGet(STORAGE_KEYS.subCloudCheck)) || 0;
   state.stockMoves = (await storGet(STORAGE_KEYS.stockMoves)) || [];
@@ -2166,6 +2353,7 @@ window.addEventListener('popstate', ()=>{
     selfInitiatedBack = false;
     return;
   }
+  if(window.__custHubOpen){ history.pushState({}, '', ''); __custHubBack(); return; } /* fix93 */
   if(modalOpenViaHistory){
     closingModalViaPopstate = true;
     document.getElementById('modal-root').innerHTML = '';
@@ -2756,8 +2944,9 @@ function watchCatalogDelta(query, stateKey, pendingId, mapGetter, mapSetter){
     changes.forEach(ch=>{
       const id = ch.doc.id, d = ch.doc.data() || {};
       if(ch.type === 'removed' || d._deleted){ removed.add(id); delete map[id]; return; }
+      const __prevJson = map[id];
       map[id] = JSON.stringify(d);
-      if(pending && idx[id] !== undefined) return;   // a local edit waiting to upload wins
+      if(pending && idx[id] !== undefined && !(stateKey === 'products' && __prevJson !== undefined && __prevJson === JSON.stringify(arr[idx[id]]))) return;   // a local edit waiting to upload wins (fix96: faqat shu qurilmada o'zgartirilgani)
       if(idx[id] !== undefined) arr[idx[id]] = d; else { idx[id] = arr.length; arr.push(d); }
     });
     if(removed.size && !pending) arr = arr.filter(x=>x && !removed.has(x.id));
@@ -2776,7 +2965,12 @@ function watchProductsOrCustomers(colRef, stateKey, pendingId, lastSyncedMapSett
     let cloudItems = snap.docs.map(d=>d.data()).filter(x=>x && !x._deleted);
     if(stateKey==='products') cloudItems = withoutDeletedProducts(cloudItems);
     const pending = pendingSyncQueue.some(q=>q.kind==='catalog' && q.id===pendingId);
-    let merged = pending ? mergeById(state[stateKey], cloudItems) : cloudItems;
+    let __loc = state[stateKey];
+    if(pending && stateKey === 'products'){ /* fix96 */
+      const __cb = {}; cloudItems.forEach(x=>{ if(x && x.id) __cb[x.id] = x; });
+      __loc = (state[stateKey] || []).map(x=>{ if(x && x.id && __cb[x.id] && lastSyncedProductsMap[x.id] !== undefined && lastSyncedProductsMap[x.id] === JSON.stringify(x)) return __cb[x.id]; return x; });
+    }
+    let merged = pending ? mergeById(__loc, cloudItems) : cloudItems;
     if(stateKey==='products') merged = withoutDeletedProducts(merged);
     state[stateKey] = merged;
     if(stateKey === 'customers') __spRebaseDebts(cloudItems); /* fix78 */
@@ -3011,13 +3205,20 @@ function sanitizeForFirestore(value){
 let __retryRunning = false;
 async function retryPendingSync(){
   if(__retryRunning) return;
-  if(!fbUser || !fbDb || !pendingSyncQueue.length) return;
+  if(!fbUser || !fbDb) return;
   if(typeof navigator !== 'undefined' && navigator.onLine === false) return;
+  if(window.__startedOffline){ /* fix96: oflaynda ochilgan sessiya — avval bulut bilan asos olinadi */
+    __retryRunning = true;
+    try{ await loadCloudData(); }catch(e){} finally { __retryRunning = false; }
+    try{ scheduleLiveRender(); }catch(e){}
+  }
+  if(!pendingSyncQueue.length) return;
   __retryRunning = true;
   try{ await __retryPendingSyncInner(); } finally { __retryRunning = false; }
 }
 async function __retryPendingSyncInner(){
   for(const item of pendingSyncQueue.slice()){
+    if(item.kind==='catalog' && (item.id==='products' || item.id==='customers') && window.__startedOffline) continue; /* fix96: asossiz to'liq qayta yuklashni oldini olish */
     try{
       if(item.kind==='catalog'){
         // item.id tells us WHICH field failed. products/customers now
@@ -3083,6 +3284,10 @@ async function __retryPendingSyncInner(){
         const rv = (state.reservations||[]).find(x=>x.id===item.id);
         if(!rv){ clearPendingSync(item.kind, item.id); continue; }
         await reservationsCol().doc(rv.id).set(sanitizeForFirestore(rv));
+      } else if(item.kind === 'audit'){ /* fix96 */
+        const __au = (state.audit || []).find(x=>x && x.id === item.id);
+        if(!__au || String(__au.date) < __auditCutoffIso()){ clearPendingSync(item.kind, item.id); continue; }
+        await fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('audit').doc(__au.id).set(sanitizeForFirestore(__au));
       } else if(item.kind === 'debt'){ /* fix78 */
         if(!(state.customers || []).some(c=>c.id === item.id)){ const _o = __spOps(); delete _o[item.id]; __spSaveOps(); }
         else { await __spFlushDebtOpsFor(item.id); if((__spOps()[item.id] || []).length) setTimeout(()=>queuePendingSync('debt', item.id), 0); }
@@ -3179,6 +3384,7 @@ function syncProductsDoc(){
   if(!fbUser || !fbDb) return;
   if(productsSyncTimer) clearTimeout(productsSyncTimer);
   productsSyncTimer = setTimeout(async ()=>{
+    if(window.__startedOffline) return; /* fix96 */
     try{
       lastSyncedProductsMap = await syncArrayToCollection(state.products, productsCol(), lastSyncedProductsMap);
       clearPendingSync('catalog', 'products');
@@ -3191,6 +3397,7 @@ function syncCustomersDoc(){
   if(!fbUser || !fbDb) return;
   if(customersSyncTimer) clearTimeout(customersSyncTimer);
   customersSyncTimer = setTimeout(async ()=>{
+    if(window.__startedOffline) return; /* fix96 */
     try{
       lastSyncedCustomersMap = await syncArrayToCollection(state.customers, customersCol(), lastSyncedCustomersMap, true);
       clearPendingSync('catalog', 'customers');
@@ -3751,7 +3958,7 @@ function mergeById(primary, secondary){
 
 const __PENDING_KIND_KEYS = {sale:'sales', ledger:'ledger', expense:'expenses', visit:'visits', creditor:'creditors', creditorLedger:'creditorLedger', table:'tables', reservation:'reservations', kitchenStation:'kitchenStations'};
 async function loadCloudData(){
-  if(typeof navigator !== 'undefined' && navigator.onLine === false){ fbCloudReady = false; return; }
+  if(typeof navigator !== 'undefined' && navigator.onLine === false){ fbCloudReady = false; window.__startedOffline = true; return; } /* fix96 */
   const __localCopy = {}; Object.values(__PENDING_KIND_KEYS).forEach(k=>{ __localCopy[k] = (state[k]||[]).slice(); });
   // Tracks what the CLOUD actually confirmed last, specifically for the
   // products/customers pending-sync case below — set to null (meaning
@@ -3923,7 +4130,7 @@ async function loadCloudData(){
     pendingSyncQueue.forEach(q=>{ const key = __PENDING_KIND_KEYS[q.kind]; if(!key) return; state[key] = state[key] || []; if(state[key].some(x=>x && x.id===q.id)) return; const loc = (__localCopy[key]||[]).find(x=>x && x.id===q.id); if(loc) state[key].push(loc); });
     pendingSyncQueue.forEach(q=>{ if(String(q.kind).indexOf('del:')!==0) return; const key = __PENDING_KIND_KEYS[q.kind.slice(4)]; if(key && Array.isArray(state[key])) state[key] = state[key].filter(x=>!(x && x.id===q.id)); }); /* fix72 */
     if(!state._hasLocalSettings) restoreDeviceLocalSettings();
-    fbCloudReady = true;
+    fbCloudReady = true; window.__startedOffline = false; /* fix96 */
     try{ const w = JSON.parse(localStorage.getItem(SUPPORT_WAIT_KEY)||'null'); if(w && w.bizId) scheduleSupportFollowup(w.bizId, 20000); }catch(e){}
     registerThisDevice();
     persistAllLocal();
@@ -5440,15 +5647,370 @@ function openAddVariantQtyKeypad(product, variant, mode){
 }
 
 
+/* fix93-cust: tezkor mijoz oynasi */
+/* fix93: TEZKOR MIJOZ OYNASI — savat va to'lov oynasi ustida alohida qatlam bo'lib ochiladi
+   (ostidagi oyna o'chmaydi, shuning uchun to'lov sozlamalari yo'qolmaydi). Tanlangan mijoz savatga
+   bog'lanadi: savatga qaytib yana mahsulot qo'shsangiz ham mijoz joyida turadi. */
+var __CC_KEY = 'savdo_cart_cust', __CP_KEY = 'savdo_cust_picked';
+function __lsGet(k){ try{ return JSON.parse(localStorage.getItem(k) || '{}') || {}; }catch(e){ return {}; } }
+function __lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function __ccKey(){ return (state.settings.restaurantMode && state.activeTableId) ? ('T' + state.activeTableId) : 'main'; }
+function getCartCustomerId(){
+  var m = __lsGet(__CC_KEY), id = m[__ccKey()];
+  if(!id) return null;
+  var c = state.customers.find(function(x){ return x.id === id && !x.hidden; });
+  if(!c){ delete m[__ccKey()]; __lsSet(__CC_KEY, m); return null; }
+  return id;
+}
+function setCartCustomerId(id){
+  var m = __lsGet(__CC_KEY);
+  if(id){
+    m[__ccKey()] = id;
+    var p = __lsGet(__CP_KEY); p[id] = Date.now();
+    var keys = Object.keys(p);
+    if(keys.length > 40){ keys.sort(function(a, b){ return p[b] - p[a]; }).slice(40).forEach(function(k){ delete p[k]; }); }
+    __lsSet(__CP_KEY, p);
+  } else { delete m[__ccKey()]; }
+  __lsSet(__CC_KEY, m);
+}
+/* Savat bo'shab qolsa (sotuv tugadi, tozalandi, kutishga qo'yildi) — unga bog'langan mijoz ham o'chadi */
+function __ccSweep(){
+  var m = __lsGet(__CC_KEY), changed = false;
+  Object.keys(m).forEach(function(k){
+    var cart = null;
+    if(k === 'main') cart = state.cart;
+    else { var t = (state.tables || []).find(function(x){ return 'T' + x.id === k; }); cart = t ? t.cart : null; }
+    if(!cart || !cart.length){ delete m[k]; changed = true; }
+  });
+  if(changed) __lsSet(__CC_KEY, m);
+}
+function __chCanView(){ return isAdmin() || !!hasPerm('customers'); }
+function __chCanLimit(){ return isAdmin() || !!hasPerm('creditLimit'); }
+function __chLimitOf(c){ return Number(c.creditLimit || state.settings.defaultCreditLimit || 0); }
+
+function __chActivityMap(){
+  var map = {};
+  state.sales.forEach(function(s){ if(s.customerId){ var t = new Date(s.date).getTime() || 0; if(t > (map[s.customerId] || 0)) map[s.customerId] = t; } });
+  state.ledger.forEach(function(l){ if(l.customerId){ var t = new Date(l.date).getTime() || 0; if(t > (map[l.customerId] || 0)) map[l.customerId] = t; } });
+  var p = __lsGet(__CP_KEY);
+  Object.keys(p).forEach(function(id){ if(p[id] > (map[id] || 0)) map[id] = p[id]; });
+  return map;
+}
+
+function closeCustomerHub(){
+  var r = document.getElementById('cust-hub-root');
+  if(r){ r.classList.remove('open'); r.innerHTML = ''; }
+  window.__custHubOpen = false;
+  window.__custHub = null;
+}
+/* Telefon "orqaga" tugmasi: ichki sahifadan ro'yxatga, ro'yxatdan yopishga */
+function __custHubBack(){
+  var h = window.__custHub; if(!h) return;
+  if(h.view === 'edit' || h.view === 'pay' || h.view === 'sales' || h.view === 'ledger'){ h.view = 'detail'; h.render(); }
+  else if(h.view !== 'list'){ h.view = 'list'; h.render(); }
+  else { closeCustomerHub(); }
+}
+
+/* opts: { onSelect(customerId|null), title } */
+function openCustomerHub(opts){
+  opts = opts || {};
+  var root = document.getElementById('cust-hub-root');
+  if(!root){ root = document.createElement('div'); root.id = 'cust-hub-root'; document.body.appendChild(root); }
+  var H = { view: 'list', custId: null, query: '', showNew: false, showMore: false, opened: Date.now(), render: null };
+  window.__custHub = H; window.__custHubOpen = true;
+  root.classList.add('open');
+  root.onclick = function(e){ if(e.target === root && Date.now() - H.opened > 350) closeCustomerHub(); };
+
+  function selectedId(){ return getCartCustomerId(); }
+  function finish(id){
+    setCartCustomerId(id || null);
+    closeCustomerHub();
+    try{ if(typeof renderCartBar === 'function') renderCartBar(); }catch(e){}
+    if(opts.onSelect) opts.onSelect(id || null);
+  }
+  function custById(id){ return state.customers.find(function(c){ return c.id === id; }); }
+  function avatar(c){ return '<div class="ch-ava">' + escapeHtml((c.name || '?').trim().charAt(0).toUpperCase()) + '</div>'; }
+  function debtBadge(c){
+    if(!__chCanView()) return '';
+    return (c.debt > 0) ? '<span class="ch-debt">' + tr('debt') + ': ' + fmt(c.debt) + '</span>' : '';
+  }
+  function shell(title, bodyHtml, canBack){
+    root.innerHTML = '<div class="ch-sheet"><div class="ch-head">'
+      + (canBack ? '<button type="button" class="ch-hbtn" id="ch-back">' + ICONS.arrowLeft + '</button>' : '')
+      + '<div class="ch-title">' + title + '</div>'
+      + '<button type="button" class="ch-hbtn" id="ch-close" aria-label="close">&times;</button></div>'
+      + '<div class="ch-body' + ((H.view === 'detail' || H.view === 'pay' || H.view === 'list') ? ' kp' : '') + '" id="ch-body">' + bodyHtml + '</div></div>';
+    document.getElementById('ch-close').addEventListener('click', closeCustomerHub);
+    var b = document.getElementById('ch-back'); if(b) b.addEventListener('click', __custHubBack);
+  }
+
+  /* ---------------- ro'yxat ---------------- */
+  function renderList(keepFocus){
+    var sel = selectedId(), selC = sel ? custById(sel) : null;
+    var act = __chActivityMap();
+    var q = (H.query || '').trim().toLowerCase();
+    var all = visibleCustomers().filter(function(c){ return !c.hidden; });
+    var list = all.filter(function(c){ return !q || (c.name || '').toLowerCase().indexOf(q) !== -1 || (c.phone || '').toLowerCase().indexOf(q) !== -1; });
+    var byRecent = function(a, b){ return (act[b.id] || 0) - (act[a.id] || 0); };
+    var html = '';
+    if(selC){
+      html += '<div class="ch-selected"><div class="ch-sel-main">' + avatar(selC) + '<div style="min-width:0;"><div class="ch-sel-lbl">' + tr('chSelected') + '</div>'
+        + '<div class="ch-name">' + escapeHtml(selC.name) + '</div></div></div>'
+        + '<div class="ch-sel-act"><button type="button" class="ch-mini" data-ch-detail="' + selC.id + '">' + tr('chOpen') + '</button>'
+        + '<button type="button" class="ch-mini ch-danger" id="ch-remove">' + tr('chRemove') + '</button></div></div>';
+    }
+    html += '<div class="search-bar" style="margin-bottom:8px;">' + ICONS.search + '<input type="text" id="ch-search" placeholder="' + tr('search') + '" value="' + escapeHtml(H.query) + '" autocomplete="off"></div>';
+    html += '<button type="button" class="ch-newbtn" id="ch-newtoggle">' + (H.showNew ? '&#9652; ' : '+ ') + tr('chNewShort') + '</button>';
+    if(H.showNew){
+      var qd = (H.query || '').trim(), looksPhone = /^[+\d\s()\-]{5,}$/.test(qd);
+      var pn = H.draft ? H.draft.name : (looksPhone ? '' : qd), pp = H.draft ? H.draft.phone : (looksPhone ? qd : '');
+      html += '<div class="ch-newform">'
+        + '<input type="text" id="ch-n-name" placeholder="' + tr('customerName') + '" value="' + escapeHtml(pn) + '" autocomplete="off">'
+        + '<input type="text" id="ch-n-phone" inputmode="tel" placeholder="+998 90 123 45 67" value="' + escapeHtml(pp) + '" autocomplete="off">'
+        + (H.showMore ? '<input type="text" id="ch-n-addr" placeholder="' + tr('customerAddress') + '" autocomplete="off">'
+            + (__chCanLimit() ? '<input type="text" inputmode="numeric" id="ch-n-limit" placeholder="' + tr('creditLimitSection') + '">' : '') : '')
+        + '<div id="ch-n-err" class="error-text"></div>'
+        + '<div class="ch-newrow"><button type="button" class="ch-link" id="ch-n-more">' + (H.showMore ? '&#9652; ' : '&#9662; ') + tr('chMore') + '</button>'
+        + '<button type="button" class="btn btn-primary" id="ch-n-save" style="flex:1;">' + tr('chQuickAdd') + '</button></div></div>';
+    }
+    var recents = [], rest = [];
+    if(!q){
+      recents = list.filter(function(c){ return act[c.id]; }).sort(byRecent).slice(0, 5);
+      var rid = {}; recents.forEach(function(c){ rid[c.id] = 1; });
+      rest = list.filter(function(c){ return !rid[c.id]; }).sort(function(a, b){ return (a.name || '').localeCompare(b.name || ''); });
+    } else { rest = list.sort(byRecent); }
+    function row(c){
+      var on = (sel === c.id);
+      return '<div class="ch-row' + (on ? ' on' : '') + '" data-ch-pick="' + c.id + '">' + avatar(c)
+        + '<div class="ch-info"><div class="ch-name">' + escapeHtml(c.name) + (on ? ' <span class="ch-check">&#10003;</span>' : '') + '</div>'
+        + '<div class="ch-meta">' + escapeHtml(c.phone || '') + debtBadge(c) + '</div></div>'
+        + '<button type="button" class="ch-more" data-ch-detail="' + c.id + '" aria-label="more">&#8942;</button></div>';
+    }
+    if(recents.length){ html += '<div class="ch-sec">' + tr('chRecent') + '</div>' + recents.map(row).join(''); }
+    if(rest.length){
+      if(!q && recents.length) html += '<div class="ch-sec">' + tr('chAll') + '</div>';
+      html += rest.slice(0, 80).map(row).join('');
+    }
+    if(!recents.length && !rest.length) html += '<div class="empty-state" style="padding:18px 0;">' + tr('noData') + '</div>';
+    shell(escapeHtml(opts.title || tr('coCustomer')), html, false);
+
+    var s = document.getElementById('ch-search');
+    s.addEventListener('input', function(){
+      H.query = s.value;
+      var pos = s.selectionStart;
+      renderList(true);
+      var s2 = document.getElementById('ch-search'); if(s2){ s2.focus(); try{ s2.setSelectionRange(pos, pos); }catch(e){} }
+    });
+    var rm = document.getElementById('ch-remove'); if(rm) rm.addEventListener('click', function(){ finish(null); });
+    document.querySelectorAll('#ch-body [data-ch-detail]').forEach(function(b){
+      b.addEventListener('click', function(e){ e.stopPropagation(); H.custId = b.dataset.chDetail; H.view = 'detail'; H.render(); });
+    });
+    document.querySelectorAll('#ch-body [data-ch-pick]').forEach(function(r){
+      r.addEventListener('click', function(){ finish(r.dataset.chPick); });
+    });
+    document.getElementById('ch-newtoggle').addEventListener('click', function(){
+      H.showNew = !H.showNew; H.draft = null; renderList();
+      if(H.showNew){ var n = document.getElementById('ch-n-name'); if(n && !n.value) n.focus(); }
+    });
+    if(H.showNew){
+      var saveNew = function(){
+        var name = document.getElementById('ch-n-name').value.trim();
+        var phone = document.getElementById('ch-n-phone').value.trim();
+        var errEl = document.getElementById('ch-n-err');
+        if(!name){ errEl.textContent = tr('needCustomerName'); return; }
+        var digits = phone.replace(/\D/g, '');
+        if(digits.length >= 7){
+          var dup = visibleCustomers().find(function(c){ return !c.hidden && (c.phone || '').replace(/\D/g, '') === digits; });
+          if(dup){ errEl.textContent = tr('chPhoneExists') + ': ' + dup.name; H.draft = { name: name, phone: phone }; return; }
+        }
+        var c = { id: uid(), branchId: state.currentBranchId, name: name, phone: phone, address: '', debt: 0, bonusBalance: 0, createdAt: new Date().toISOString() };
+        var ad = document.getElementById('ch-n-addr'); if(ad) c.address = ad.value.trim();
+        var lm = document.getElementById('ch-n-limit'); if(lm && __chCanLimit()){ var lv = parseMoneyInput(lm.value); if(!isNaN(lv) && lv > 0) c.creditLimit = lv; }
+        state.customers.push(c); saveCustomers();
+        finish(c.id);
+      };
+      document.getElementById('ch-n-save').addEventListener('click', saveNew);
+      ['ch-n-name', 'ch-n-phone'].forEach(function(id){ document.getElementById(id).addEventListener('keydown', function(e){ if(e.key === 'Enter') saveNew(); }); });
+      document.getElementById('ch-n-more').addEventListener('click', function(){
+        H.draft = { name: document.getElementById('ch-n-name').value, phone: document.getElementById('ch-n-phone').value };
+        H.showMore = !H.showMore; renderList();
+      });
+      attachMoneyInputsById('ch-n-limit');
+    }
+  }
+
+  /* ---------------- mijoz sahifasi ---------------- */
+  function renderDetail(){
+    var c = custById(H.custId); if(!c){ H.view = 'list'; return renderList(); }
+    var canView = __chCanView(), canLimit = __chCanLimit();
+    var limit = __chLimitOf(c), left = limit > 0 ? (limit - (c.debt || 0)) : null;
+    var isSel = (selectedId() === c.id);
+    var nSales = state.sales.filter(function(s){ return s.customerId === c.id; }).length;
+    var nLed = state.ledger.filter(function(l){ return l.customerId === c.id; }).length;
+    var html = '<div class="ch-dhead">' + avatar(c) + '<div style="min-width:0;"><div class="ch-dname">' + escapeHtml(c.name) + '</div>'
+      + (c.phone ? '<div class="subtle">' + escapeHtml(c.phone) + '</div>' : '')
+      + (c.address ? '<div class="subtle" style="font-size:12px;">' + escapeHtml(c.address) + '</div>' : '') + '</div></div>';
+    if(canView){
+      html += '<div class="ch-stats">'
+        + '<div class="ch-stat"><div class="ch-sl">' + tr('debt') + '</div><div class="ch-sv" style="color:' + (c.debt > 0 ? 'var(--danger)' : 'var(--success)') + ';">' + fmt(c.debt || 0) + '</div></div>'
+        + '<div class="ch-stat"><div class="ch-sl">' + tr('creditLimitSection') + '</div><div class="ch-sv">' + (limit > 0 ? fmt(limit) : '—') + '</div></div>'
+        + (left !== null ? '<div class="ch-stat"><div class="ch-sl">' + tr('chLimitLeft') + '</div><div class="ch-sv" style="color:' + (left < 0 ? 'var(--danger)' : 'var(--success)') + ';">' + fmt(left) + '</div></div>' : '')
+        + (state.settings.loyaltyEnabled ? '<div class="ch-stat"><div class="ch-sl">' + tr('bonusAvailableLabel') + '</div><div class="ch-sv" style="color:var(--warm);">' + fmt(c.bonusBalance || 0) + '</div></div>' : '')
+        + '</div>';
+    }
+    html += '<button type="button" class="btn btn-primary btn-block" id="ch-d-select" style="margin:10px 0;">' + (isSel ? '&#10003; ' + tr('chSelected') : tr('chSelect')) + '</button>';
+    html += '<div class="ch-actions">'
+      + (c.phone ? '<button type="button" class="ch-act" id="ch-d-call"><span class="ch-ai" style="background:#CCFBF1;color:#0D9488;">' + ICONS.phoneCall + '</span>' + tr('callBtn') + '</button>' : '')
+      + (canView ? '<button type="button" class="ch-act" id="ch-d-edit"><span class="ch-ai" style="background:#E0E7FF;color:#4F46E5;">' + ICONS.edit + '</span>' + tr('edit') + '</button>' : '')
+      + (canView && (c.debt > 0) ? '<button type="button" class="ch-act" id="ch-d-pay"><span class="ch-ai" style="background:#DCFCE7;color:#15803D;">' + ICONS.creditCard + '</span>' + tr('recordPayment') + '</button>' : '')
+      + (canView ? '<button type="button" class="ch-act" id="ch-d-sales"><span class="ch-ai" style="background:#DBEAFE;color:#2563EB;">' + ICONS.receiptIcon + '</span>' + tr('purchaseHistory') + ' · ' + nSales + '</button>' : '')
+      + (canView ? '<button type="button" class="ch-act" id="ch-d-ledger"><span class="ch-ai" style="background:#FFEDD5;color:#EA580C;">' + ICONS.calendar + '</span>' + tr('chDebtHistory') + ' · ' + nLed + '</button>' : '')
+      + '</div>';
+    if(canLimit){
+      html += '<div class="ch-limitbox"><div class="ch-sl" style="margin-bottom:6px;">' + tr('customCreditLimit') + '</div>'
+        + '<div class="ch-limitrow"><input type="text" inputmode="numeric" id="ch-d-limit" value="' + (c.creditLimit ? formatMoneyInputValue(c.creditLimit) : '') + '" placeholder="' + (state.settings.defaultCreditLimit ? formatMoneyInputValue(state.settings.defaultCreditLimit) : '0') + '">'
+        + '<button type="button" class="btn btn-accent" id="ch-d-limit-save" style="width:auto;padding:10px 16px;">' + tr('save') + '</button></div></div>';
+    } else if(canView){
+      html += '<p class="subtle" style="font-size:12px;margin:10px 2px 0;">' + tr('noPermCreditLimit') + '</p>';
+    }
+    shell(escapeHtml(c.name), html, true);
+    document.getElementById('ch-d-select').addEventListener('click', function(){ finish(c.id); });
+    var call = document.getElementById('ch-d-call'); if(call) call.addEventListener('click', function(){ window.location.href = 'tel:' + c.phone; });
+    var go = function(id, v){ var el = document.getElementById(id); if(el) el.addEventListener('click', function(){ H.view = v; H.render(); }); };
+    go('ch-d-edit', 'edit'); go('ch-d-pay', 'pay'); go('ch-d-sales', 'sales'); go('ch-d-ledger', 'ledger');
+    if(canLimit){
+      attachMoneyInputsById('ch-d-limit');
+      document.getElementById('ch-d-limit-save').addEventListener('click', function(){
+        var v = parseMoneyInput(document.getElementById('ch-d-limit').value);
+        c.creditLimit = (isNaN(v) || v < 0) ? 0 : v;
+        saveCustomers(); showToast(tr('chSaved')); renderDetail();
+      });
+    }
+  }
+
+  /* ---------------- tahrirlash ---------------- */
+  function renderEdit(){
+    var c = custById(H.custId); if(!c){ H.view = 'list'; return renderList(); }
+    var html = '<div class="field"><label class="field-label">' + tr('customerName') + '</label><input type="text" id="ch-e-name" value="' + escapeHtml(c.name) + '"></div>'
+      + '<div class="field"><label class="field-label">' + tr('phone') + '</label><input type="text" inputmode="tel" id="ch-e-phone" value="' + escapeHtml(c.phone || '') + '"></div>'
+      + '<div class="field"><label class="field-label">' + tr('customerAddress') + '</label><input type="text" id="ch-e-addr" value="' + escapeHtml(c.address || '') + '"></div>'
+      + '<div id="ch-e-err" class="error-text"></div><button type="button" class="btn btn-primary btn-block" id="ch-e-save">' + tr('save') + '</button>';
+    shell(tr('edit'), html, true);
+    document.getElementById('ch-e-save').addEventListener('click', function(){
+      var name = document.getElementById('ch-e-name').value.trim();
+      if(!name){ document.getElementById('ch-e-err').textContent = tr('needCustomerName'); return; }
+      c.name = name; c.phone = document.getElementById('ch-e-phone').value.trim(); c.address = document.getElementById('ch-e-addr').value.trim();
+      saveCustomers(); H.view = 'detail'; H.render();
+    });
+  }
+
+  /* ---------------- qarz to'lash ---------------- */
+  function renderPay(){
+    var c = custById(H.custId); if(!c){ H.view = 'list'; return renderList(); }
+    var method = 'cash';
+    var html = '<div class="card" style="padding:12px 14px;margin-bottom:12px;"><div class="ch-sl">' + tr('debt') + '</div><div class="ch-sv" style="color:var(--danger);">' + fmt(c.debt || 0) + '</div></div>'
+      + '<div class="field"><label class="field-label">' + tr('paymentAmount') + '</label><input type="text" inputmode="numeric" id="ch-p-amt" placeholder="' + formatMoneyInputValue(c.debt || 0) + '"></div>'
+      + '<div class="toggle-group" style="margin-bottom:10px;"><div class="toggle-opt active" data-ch-m="cash">' + tr('cash') + '</div><div class="toggle-opt" data-ch-m="card">' + tr('card') + '</div></div>'
+      + '<div class="field"><label class="field-label">' + tr('note') + '</label><input type="text" id="ch-p-note"></div>'
+      + '<div id="ch-p-err" class="error-text"></div><button type="button" class="btn btn-primary btn-block" id="ch-p-save">' + tr('save') + '</button>';
+    shell(tr('recordPayment'), html, true);
+    attachMoneyInputsById('ch-p-amt');
+    document.querySelectorAll('#ch-body [data-ch-m]').forEach(function(o){
+      o.addEventListener('click', function(){ method = o.dataset.chM; document.querySelectorAll('#ch-body [data-ch-m]').forEach(function(x){ x.classList.toggle('active', x === o); }); });
+    });
+    document.getElementById('ch-p-save').addEventListener('click', function(e){
+      var btn = e.currentTarget; if(btn.disabled) return;
+      var amount = parseMoneyInput(document.getElementById('ch-p-amt').value);
+      var err = document.getElementById('ch-p-err');
+      if(isNaN(amount) || amount <= 0){ err.textContent = tr('invalidAmount'); return; }
+      if(amount > (c.debt || 0)){ err.textContent = tr('paymentExceedsDebt') + ': ' + fmt(c.debt || 0); return; }
+      btn.disabled = true;
+      __spDebtSet(c, Math.max(0, (c.debt || 0) - amount));
+      var entry = { id: uid(), customerId: c.id, type: 'payment', amount: amount, date: new Date().toISOString(), note: document.getElementById('ch-p-note').value.trim(),
+        staffName: state.currentStaff ? state.currentStaff.name : '', method: method, createdAt: new Date().toISOString(),
+        shiftId: state.currentShift ? state.currentShift.id : null, branchId: state.currentBranchId };
+      state.ledger.push(entry);
+      saveCustomers(); saveLedger(); addLedgerDoc(entry);
+      showToast(tr('chSaved'));
+      H.view = 'detail'; H.render();
+    });
+  }
+
+  /* ---------------- cheklar tarixi ---------------- */
+  function renderSales(){
+    var c = custById(H.custId); if(!c){ H.view = 'list'; return renderList(); }
+    var list = state.sales.filter(function(s){ return s.customerId === c.id; }).sort(function(a, b){ return new Date(b.date) - new Date(a.date); }).slice(0, 100);
+    var html = list.length ? list.map(function(s){
+      var items = (s.items || []).map(function(it){ return escapeHtml(it.name || '') + ' × ' + it.qty; }).join(', ');
+      return '<div class="ch-sale" data-ch-sale="' + s.id + '"><div class="ch-sale-top"><div><b>' + (s.receiptNumber ? '№' + escapeHtml(String(s.receiptNumber)) + ' · ' : '') + new Date(s.date).toLocaleString() + '</b>'
+        + '<div class="subtle" style="font-size:12px;">' + paymentTypeLabel(s.paymentType) + (s.refunded ? ' · <span style="color:var(--danger);">' + tr('refundSale') + '</span>' : '') + '</div></div>'
+        + '<b>' + fmt(s.total || 0) + '</b></div><div class="ch-sale-items" style="display:none;">' + (items || '—') + '</div></div>';
+    }).join('') : '<div class="subtle" style="padding:12px 0;">' + tr('noHistory') + '</div>';
+    shell(tr('purchaseHistory'), html, true);
+    document.querySelectorAll('#ch-body [data-ch-sale]').forEach(function(el){
+      el.addEventListener('click', function(){ var d = el.querySelector('.ch-sale-items'); d.style.display = d.style.display === 'none' ? '' : 'none'; });
+    });
+  }
+
+  /* ---------------- qarz va to'lovlar tarixi ---------------- */
+  function renderLedger(){
+    var c = custById(H.custId); if(!c){ H.view = 'list'; return renderList(); }
+    var list = state.ledger.filter(function(l){ return l.customerId === c.id; }).sort(function(a, b){ return new Date(b.date) - new Date(a.date); }).slice(0, 150);
+    var html = '<div class="card" style="padding:10px 14px;margin-bottom:10px;display:flex;justify-content:space-between;"><span class="subtle">' + tr('debt') + '</span><b style="color:' + (c.debt > 0 ? 'var(--danger)' : 'var(--success)') + ';">' + fmt(c.debt || 0) + '</b></div>';
+    html += list.length ? list.map(function(h){
+      var isSale = h.type === 'sale';
+      return '<div class="ledger-row" style="flex-direction:column;align-items:stretch;gap:2px;"><div style="display:flex;justify-content:space-between;"><span>' + new Date(h.date).toLocaleString()
+        + '</span><span class="ledger-amt ' + (isSale ? 'up' : 'down') + '">' + (isSale ? '+' : '−') + fmt(h.amount) + '</span></div>'
+        + ((h.staffName || h.note) ? '<div class="subtle" style="font-size:11px;">' + (h.staffName ? escapeHtml(h.staffName) : '') + (h.staffName && h.note ? ' · ' : '') + escapeHtml(h.note || '') + '</div>' : '') + '</div>';
+    }).join('') : '<div class="subtle" style="padding:12px 0;">' + tr('noHistory') + '</div>';
+    shell(tr('chDebtHistory'), html, true);
+  }
+
+  H.render = function(){
+    if(H.view === 'detail') renderDetail();
+    else if(H.view === 'edit') renderEdit();
+    else if(H.view === 'pay') renderPay();
+    else if(H.view === 'sales') renderSales();
+    else if(H.view === 'ledger') renderLedger();
+    else renderList();
+  };
+  H.render();
+}
+
+/* Savat oynasidagi "Mijoz" qatori */
+function cartCustomerBarHtml(){
+  var id = getCartCustomerId(), c = id ? state.customers.find(function(x){ return x.id === id; }) : null;
+  if(!c){
+    return '<button type="button" class="cart-cust" id="cart-cust-btn"><span class="cc-ic">' + ICONS.customers + '</span><span class="cc-txt">' + tr('addCustomer') + '</span><span class="cc-go">+</span></button>';
+  }
+  var debt = (__chCanView() && c.debt > 0) ? ' <span class="ch-debt">' + tr('debt') + ': ' + fmt(c.debt) + '</span>' : '';
+  return '<button type="button" class="cart-cust on" id="cart-cust-btn"><span class="cc-ic">' + ICONS.customers + '</span><span class="cc-txt">' + escapeHtml(c.name) + debt + '</span><span class="cc-go">&#9998;</span></button>';
+}
+function bindCartCustomerBar(){
+  var b = document.getElementById('cart-cust-btn');
+  if(b) b.addEventListener('click', function(){
+    openCustomerHub({ onSelect: function(){ if(document.getElementById('modal-root').innerHTML.trim()) renderCartModalContent(); } });
+  });
+}
+
+
+/* Savat satrida mijoz ismi (" · Ism") */
+function __cartBarCust(){
+  var id = getCartCustomerId(); if(!id) return '';
+  var c = state.customers.find(function(x){ return x.id === id; }); if(!c) return '';
+  return ' &middot; ' + escapeHtml(c.name);
+}
+
 function renderCartBar(){
   const slot = document.getElementById('cart-bar-slot');
   const cart = activeCart();
+  try{ if(state.setupDone) __ccSweep(); }catch(_e){}
   if(state.view !== 'sale' || cart.length===0 || (state.settings.restaurantMode && !state.activeTableId && !state.takeawayMode)){ slot.innerHTML=''; return; }
   const total = cartTotal();
   const count = cart.reduce((a,c)=>a+c.qty,0);
   const inTableMode = state.settings.restaurantMode && state.activeTableId;
   slot.innerHTML = `<div class="cart-bar">
-    <div class="left"><div class="count">${count} ${tr('itemsWord')}</div><div class="sum">${fmt(total)}</div></div>
+    <div class="left"><div class="count">${count} ${tr('itemsWord')}${__cartBarCust()}</div><div class="sum">${fmt(total)}</div></div>
     <div style="display:flex;gap:8px;">
       ${inTableMode ? `<button id="quick-save-order-btn" style="background:rgba(255,255,255,0.16);">${tr('saveOrder')}</button>` : ''}
       ${inTableMode ? `<button id="quick-save-logout-btn" title="${tr('saveAndLogoutBtn')}" style="background:rgba(255,255,255,0.16);">🚪</button>` : ''}
@@ -5544,19 +6106,25 @@ function auditLog(action, detail, meta){
     state.audit = state.audit || []; state.audit.push(entry);
     if(state.audit.length > 1000) state.audit = state.audit.slice(-1000);
     storSet(STORAGE_KEYS.audit, state.audit);
-    if(fbUser && fbDb){ try{ fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('audit').doc(entry.id).set(sanitizeForFirestore(entry)).catch(()=>{}); }catch(e){} }
+    queuePendingSync('audit', entry.id); /* fix96: oflayn bo'lsa yo'qolmaydi */
+    if(fbUser && fbDb){ try{ fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('audit').doc(entry.id).set(sanitizeForFirestore(entry)).then(()=>clearPendingSync('audit', entry.id)).catch(()=>{}); }catch(e){} }
   }catch(e){}
 }
-async function loadCloudAudit(limit){
-  if(!fbUser || !fbDb) return state.audit || [];
+async function loadCloudAudit(limit){ /* fix96: oxirgi 30 kun, yangisi tepada */
+  try{ pruneAudit(); }catch(e){}
+  const lim = limit || 1000;
+  const byNew = (a,b)=>String(b.date).localeCompare(String(a.date));
+  const localList = (state.audit||[]).slice().sort(byNew);
+  if(!fbUser || !fbDb || (typeof navigator !== 'undefined' && navigator.onLine === false)) return localList.slice(0, lim);
   try{
-    const snap = await fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('audit').orderBy('date','desc').limit(limit||300).get();
+    const q = fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('audit').where('date','>=',__auditCutoffIso()).orderBy('date','desc').limit(lim).get();
+    const snap = await Promise.race([q, new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')), 8000))]);
     const cloud = snap.docs.map(d=>d.data());
     const ids = new Set(cloud.map(x=>x.id));
-    const merged = cloud.concat((state.audit||[]).filter(x=>!ids.has(x.id)));
-    merged.sort((a,b)=>String(b.date).localeCompare(String(a.date)));
-    return merged.slice(0, limit||300);
-  }catch(e){ return (state.audit||[]).slice().reverse(); }
+    const merged = cloud.concat(localList.filter(x=>!ids.has(x.id)));
+    merged.sort(byNew);
+    return merged.slice(0, lim);
+  }catch(e){ return localList.slice(0, lim); }
 }
 function stockChange(p, v, delta, reason, refId){
   if(!p || !delta) return;
@@ -5920,6 +6488,7 @@ function renderCartModalContent(){
 
   openModal(`
     <div class="modal-title">${tr('cart')}</div>
+    ${cart.length ? cartCustomerBarHtml() : ''}
     ${cart.length ? rows : `<div class="empty-state">${ICONS.box}<div>${tr('emptyCart')}</div></div>`}
     ${cart.length ? `
       <div class="row" style="border-top:1px solid var(--border);padding-top:12px;margin-top:6px;"><strong>${tr('total')}</strong><strong>${fmt(cartSubtotal())}</strong></div>
@@ -5939,6 +6508,7 @@ function renderCartModalContent(){
     sh.addEventListener('scroll', ()=>{ window.__cartScroll = sh.scrollTop; }, {passive:true});
   })();
 
+  try{ bindCartCustomerBar(); }catch(_e){}
   const clearBtn = document.getElementById('clear-cart-btn');
   if(clearBtn) clearBtn.addEventListener('click', ()=>{
     confirmDialog(tr('confirmClearCart'), ()=>{
@@ -6112,7 +6682,7 @@ function openCheckoutModal(){
   let paymentType = 'cash';
   let tenderedAmount = 0;
   let orderType = state.takeawayMode ? 'takeaway' : 'dine_in';
-  let selectedCustomerId = '__none__';
+  let selectedCustomerId = getCartCustomerId() || '__none__';
   let scCustomMode = false;
   let dfCustomMode = false;
   // Splitting a sale across TWO payment methods — "half cash half card",
@@ -6183,9 +6753,9 @@ function openCheckoutModal(){
     return `
       <div class="back-row" style="margin-bottom:14px;"><button id="checkout-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('checkout')}</span></div>
       <div class="toggle-group">
-        <div class="toggle-opt ${paymentType==='cash'?'active':''}" data-pt="cash">${tr('cash')}</div>
-        <div class="toggle-opt ${paymentType==='card'?'active':''}" data-pt="card">${tr('card')}</div>
-        ${canSellOnCredit() ? `<div class="toggle-opt ${paymentType==='credit'?'active':''}" data-pt="credit">${tr('credit')}</div>` : ''}
+        <div class="toggle-opt ${paymentType==='cash'?'active':''}" data-pt="cash"><span class="pt-ic">${paymentTypeIcon('cash')}</span>${tr('cash')}</div>
+        <div class="toggle-opt ${paymentType==='card'?'active':''}" data-pt="card"><span class="pt-ic">${paymentTypeIcon('card')}</span>${tr('card')}</div>
+        ${canSellOnCredit() ? `<div class="toggle-opt ${paymentType==='credit'?'active':''}" data-pt="credit"><span class="pt-ic">${paymentTypeIcon('credit')}</span>${tr('credit')}</div>` : ''}
       </div>
       ${showOrderType ? `
       <div class="field">
@@ -6197,9 +6767,9 @@ function openCheckoutModal(){
       </div>
       ` : ''}
       <button type="button" class="co-summary" id="co-customer-toggle"><span>&#128100; ${tr('coCustomer')}:</span><span class="co-val" id="co-customer-name"></span><span class="co-act" id="co-customer-act"></span></button>
-      <div class="co-body" id="co-customer-body"><div id="credit-fields"></div></div>
-      <button type="button" class="co-summary" id="co-extras-toggle"><span class="co-val" style="color:var(--ink);font-weight:700;">${tr('coExtras')}</span><span class="co-act" id="co-extras-act">&#9662;</span></button>
-      <div class="co-body" id="co-extras-body"><div id="charges-fields"></div><div id="bonus-fields"></div></div>
+      <div class="co-body" id="co-customer-body"></div>
+      <button type="button" class="co-summary co-extras" id="co-extras-toggle"><span class="cx-ics"><i style="background:#FEE2E2;">&#127991;&#65039;</i><i style="background:#EDE9FE;">&#128718;&#65039;</i><i style="background:#DBEAFE;">&#128666;</i></span><span class="co-val cx-txt">${tr('coExtras')}</span><span class="co-act" id="co-extras-act">&#9662;</span></button>
+      <div class="co-body" id="co-extras-body"><div id="credit-fields"></div><div id="charges-fields"></div><div id="bonus-fields"></div></div>
       <div class="row"><span class="subtle">${tr('subtotal')}</span><span>${fmt(subtotal())}</span></div>
       ${canApplyDiscount() ? `<div class="row" id="discount-row" style="${discountAmount()>0?'':'display:none;'}"><span class="subtle">${tr('discountLabel')}</span><span id="discount-amount-display">-${fmt(discountAmount())}</span></div>` : ''}
       <div class="row" id="bonus-row" style="${bonusAmount()>0?'':'display:none;'}"><span class="subtle">${tr('bonusUsedLabel')}</span><span id="bonus-amount-display">-${fmt(bonusAmount())}</span></div>
@@ -6332,18 +6902,17 @@ function openCheckoutModal(){
     const dfCustomInput = document.getElementById('cf-delivery-fee-custom');
     if(dfCustomInput){ attachMoneyInputFormatting(dfCustomInput); dfCustomInput.addEventListener('input', (e)=>{ deliveryFee = parseMoneyInput(e.target.value) || 0; refreshTotals(); }); }
   }
+  function syncCustomerFromHub(){
+    selectedCustomerId = getCartCustomerId() || '__none__';
+    bonusRedeemAmount = 0;
+    const bf = document.getElementById('bonus-fields');
+    if(bf){ bf.innerHTML = bonusFieldsHtml(); bindBonusFieldEvents(); }
+    refreshTotals();
+  }
   function creditFieldsHtml(){
     const isCredit = paymentType === 'credit';
     const custRequired = creditInvolved();
     return `
-      <div class="field"><label class="field-label">${custRequired ? tr('selectCustomer') : tr('linkCustomerOptional')}</label>
-        <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="customer-checkout-search" placeholder="${tr('search')}"></div>
-        <div id="customer-checkout-results" style="max-height:180px;overflow-y:auto;"></div>
-      </div>
-      <div id="new-customer-fields" style="${selectedCustomerId==='__new__'?'':'display:none;'}">
-        <div class="field"><label class="field-label">${tr('customerName')}</label><input type="text" id="new-cust-name"></div>
-        <div class="field"><label class="field-label">${tr('phoneOpt')}</label><input type="text" id="new-cust-phone" placeholder="+998901234567"></div>
-      </div>
       <div class="field">
         <div class="row" style="margin-bottom:${splitOn?'10px':'0'};gap:10px;">
           <span class="field-label" style="margin-bottom:0;flex-shrink:0;">${tr('splitPaymentToggle')}</span>
@@ -6411,10 +6980,10 @@ function openCheckoutModal(){
     nameEl.textContent = name;
     const tgl = document.getElementById('co-customer-toggle');
     const body = document.getElementById('co-customer-body');
-    const openC = coCustomerOpen!=null ? coCustomerOpen : (required || splitOn || (selectedCustomerId!=='__none__'));
+    const openC = false; /* fix93: mijoz tezkor oynada tanlanadi */
     body.classList.toggle('open', openC); tgl.classList.toggle('open', openC); tgl.classList.toggle('required', required && !cust && selectedCustomerId!=='__new__');
-    document.getElementById('co-customer-act').innerHTML = openC ? '&#9652;' : ('+&#128100; ' + tr('coChoose'));
-    const openE = coExtrasOpen!=null ? coExtrasOpen : (discountOn || serviceChargeOn || deliveryFeeOn || bonusRedeemAmount>0);
+    document.getElementById('co-customer-act').innerHTML = cust ? '&#9998;' : ('+&#128100; ' + tr('coChoose'));
+    const openE = coExtrasOpen!=null ? coExtrasOpen : (discountOn || serviceChargeOn || deliveryFeeOn || bonusRedeemAmount>0 || splitOn);
     document.getElementById('co-extras-body').classList.toggle('open', openE);
     document.getElementById('co-extras-toggle').classList.toggle('open', openE);
     document.getElementById('co-extras-act').innerHTML = openE ? '&#9652;' : '&#9662;';
@@ -6422,7 +6991,7 @@ function openCheckoutModal(){
   function bindCheckoutSectionToggles(){
     const ct = document.getElementById('co-customer-toggle');
     const et = document.getElementById('co-extras-toggle');
-    if(ct) ct.addEventListener('click', ()=>{ coCustomerOpen = !document.getElementById('co-customer-body').classList.contains('open'); updateCheckoutSummaries(); if(coCustomerOpen){ const si=document.getElementById('customer-checkout-search'); if(si) si.focus(); } });
+    if(ct) ct.addEventListener('click', ()=>{ openCustomerHub({ onSelect: syncCustomerFromHub }); });
     if(et) et.addEventListener('click', ()=>{ coExtrasOpen = !document.getElementById('co-extras-body').classList.contains('open'); updateCheckoutSummaries(); });
   }
   function refreshTotals(){
@@ -6498,7 +7067,7 @@ function openCheckoutModal(){
     document.querySelectorAll('#modal-root [data-pt]').forEach(el=>{
       el.addEventListener('click', ()=>{
         paymentType = el.dataset.pt;
-        if(paymentType==='credit' && selectedCustomerId==='__none__') selectedCustomerId = '__new__';
+        if(paymentType==='credit' && selectedCustomerId==='__none__') openCustomerHub({ onSelect: syncCustomerFromHub });
         // The split's "other" method must never equal the new primary —
         // e.g. switching primary from cash to card while split was set to
         // "card" would otherwise leave both sides pointing at the same
@@ -6533,6 +7102,11 @@ function openCheckoutModal(){
       // the user can correct it and try again.
       const btn = e.currentTarget;
       if(btn.disabled) return;
+      if(creditInvolved() && !selectedCustomer()){
+        document.getElementById('checkout-error').textContent = tr('selectCustomer');
+        openCustomerHub({ onSelect: syncCustomerFromHub });
+        return;
+      }
       if(splitOn && splitAmount >= grandTotal()){
         document.getElementById('checkout-error').textContent = tr('partialPaymentTooMuch');
         return;
@@ -6608,6 +7182,48 @@ function openCheckoutModal(){
       });
     }
   }
+}
+
+/* fix94-ok: sotuv tasdiqlanganda 1,5 soniyalik jonli tasdiq (aylana + ✓), ovoz, tebranish */
+function __soSoundOn(){ try{ return localStorage.getItem('savdo_ok_sound') !== '0'; }catch(e){ return true; } }
+function __soChime(){
+  try{
+    var AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+    var ctx = window.__soCtx || (window.__soCtx = new AC());
+    if(ctx.state === 'suspended' && ctx.resume) ctx.resume();
+    var t0 = ctx.currentTime + 0.55; /* aylana chizilib bo'lgan paytda — ✓ chizilishi bilan */
+    [[784, 0], [1047, 0.12], [1319, 0.24]].forEach(function(n){
+      var o = ctx.createOscillator(), g = ctx.createGain(), t = t0 + n[1];
+      o.type = 'sine'; o.frequency.value = n[0];
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.28, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + 0.42);
+    });
+  }catch(e){}
+}
+function playSaleSuccess(sale){
+  var old = document.getElementById('sale-ok'); if(old) old.remove();
+  var el = document.createElement('div');
+  el.id = 'sale-ok'; el.className = 'sale-ok';
+  var snd = __soSoundOn();
+  el.innerHTML = '<button type="button" class="so-snd" id="so-snd" aria-label="sound">' + (snd ? '&#128266;' : '&#128263;') + '</button>'
+    + '<div class="so-box"><svg class="so-svg" viewBox="0 0 120 120"><circle class="so-glow" cx="60" cy="60" r="52"></circle>'
+    + '<circle class="so-ring" cx="60" cy="60" r="52"></circle><path class="so-check" d="M36 62 L54 80 L86 44"></path></svg>'
+    + '<div class="so-amount">' + fmt(sale && sale.total ? sale.total : 0) + '</div>'
+    + '<div class="so-label">' + tr('saleComplete') + '</div></div>';
+  document.body.appendChild(el);
+  var sb = document.getElementById('so-snd');
+  sb.addEventListener('click', function(e){
+    e.stopPropagation();
+    var on = !__soSoundOn();
+    try{ localStorage.setItem('savdo_ok_sound', on ? '1' : '0'); }catch(_e){}
+    sb.innerHTML = on ? '&#128266;' : '&#128263;';
+  });
+  if(snd){ __soChime(); }
+  try{ if(navigator.vibrate) navigator.vibrate(35); }catch(e){}
+  setTimeout(function(){ el.classList.add('out'); }, 1250);
+  setTimeout(function(){ if(el.parentNode) el.remove(); }, 1500);
 }
 
 async function doCheckout(paymentType, getSelectedCustomerId, extras){
@@ -6918,6 +7534,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   else { state.cart = []; saveCart(); state.takeawayMode = false; }
   closeModal();
   showToast(tr('saleSuccess'));
+  try{ playSaleSuccess(sale); }catch(_e){}
   renderAll();
   openPostSaleModal(sale, custDebtAfter);
  }catch(e){
@@ -9769,6 +10386,7 @@ function checkSubscriptionReminder(){
 }
 
 function renderSubscriptionReminderOverlay(todayKey, daysLeft, expires){
+  try{ if(localStorage.getItem('savdo_sub_ding') !== todayKey){ localStorage.setItem('savdo_sub_ding', todayKey); playNotifySound(); } }catch(_e){}
   const root = document.getElementById('sub-reminder-root');
   const planLabel = state.settings.subscriptionPlan==='trial' ? tr('trialActiveNote') : (state.settings.subscriptionPlan ? planLabelFor(state.settings.subscriptionPlan) : '');
   root.innerHTML = `<div class="login-screen" style="z-index:55;">
@@ -9887,6 +10505,7 @@ async function exportDebtsPdf(){
 
 function renderDebtExportOverlay(todayKey){
   const root = document.getElementById('debt-export-root');
+  try{ if(localStorage.getItem('savdo_debt_ding') !== todayKey){ localStorage.setItem('savdo_debt_ding', todayKey); playNotifySound(); } }catch(_e){}
   const totalDebt = activeCustomers().reduce((s,c)=>s+(c.debt||0),0);
   root.innerHTML = `<div class="login-screen" style="z-index:60;">
     <div class="brand" style="font-size:22px;margin-bottom:10px;">${tr('dailyDebtExportTitle')}</div>
@@ -12037,9 +12656,9 @@ function renderReportsMenu(container){
     <h2 class="section-title">${ICONS.reports} ${tr('navReports')}</h2>
     ${alertCount ? `<div class="card alert-soft" style="cursor:pointer;" id="alerts-shortcut"><p style="margin:0;color:var(--danger);font-weight:700;">⚠ ${alertCount} ${tr('lowStockAlert')}</p></div>` : ''}
     ${(()=>{
-      const G = {receipts:['sales','receiptIcon','#2f6fed'], today:['sales','sale','#2f6fed'], total:['sales','reports','#2f6fed'], range:['sales','calendar','#2f6fed'], daily:['sales','calendar','#5b6cff'], refunds:['sales','arrowLeft','#e5484d'],
+      const G = {receipts:['sales','receiptIcon','#2563eb'], today:['sales','sale','#16a34a'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
         pnl:['finance','percent','#0f9d8a'], productprofit:['finance','percent','#12a37f'], expenses:['finance','creditCard','#d97706'], payroll:['finance','peopleIcon','#7c5cfc'],
-        inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], products:['stock','products','#0891b2'],
+        inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], products:['sales','products','#0891b2'],
         customers:['people','customers','#8b5cf6'], staff:['people','peopleIcon','#a855f7'], branches:['people','mapPin','#6366f1'],
         audit:['control','target','#475569']};
       const order = [['sales','rgSales'],['finance','rgFinance'],['stock','rgStock'],['people','rgPeople'],['control','rgControl']];
@@ -12584,12 +13203,12 @@ function renderReportsCategory(container, cat){
       <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
       <div id="audit-list"><div class="empty-state">…</div></div>`;
     bindReportsBack();
-    loadCloudAudit(300).then(list=>{
+    loadCloudAudit(1000).then(list=>{
       const el = document.getElementById('audit-list'); if(!el) return;
       const draw = ()=>{
         const q = (document.getElementById('audit-search').value||'').toLowerCase();
         const rows = list.filter(a=>!q || (a.detail||'').toLowerCase().includes(q) || (a.staffName||'').toLowerCase().includes(q) || tr(labels[a.action]||'').toLowerCase().includes(q));
-        el.innerHTML = rows.length ? rows.map(a=>`<div class="card" style="padding:10px 12px;margin-bottom:6px;border-left:4px solid ${colors[a.action]||'var(--line)'};">
+        el.innerHTML = rows.length ? rows.map((a,i)=>__auditDayHead(rows,i)+`<div class="card" style="padding:10px 12px;margin-bottom:6px;border-left:4px solid ${colors[a.action]||'var(--line)'};">
           <div class="row" style="font-size:12px;"><strong style="color:${colors[a.action]||'var(--ink)'};">${tr(labels[a.action]||a.action)}</strong><span class="subtle">${new Date(a.date).toLocaleString()}</span></div>
           <div style="font-size:13px;margin-top:2px;">${escapeHtml(a.detail||'')}</div>
           <div class="subtle" style="font-size:11.5px;">${escapeHtml(a.staffName||'—')}</div></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`;
@@ -13871,14 +14490,14 @@ function openExternalUrl(url){
 function settingsMenuItems(){
   return [
     {id:'superadmin', icon:'★', color:'var(--gradient-brand)', label:tr('superAdminSection'), show:saMenuVisible(), group:'admin'},
-    {id:'language', icon:ICONS.translate, color:'var(--ink-soft)', label:tr('languageLabel'), show:true, group:'general'},
     {id:'account', icon:ICONS.building, color:'var(--accent)', label:tr('accountSection'), show:isAdmin(), group:'general'},
     {id:'devices', icon:ICONS.phoneCall, color:'var(--teal)', label:tr('devicesSection'), show:isAdmin(), group:'general'},
+    {id:'language', icon:ICONS.translate, color:'var(--ink-soft)', label:tr('languageLabel'), show:true, group:'general'},
+    {id:'notifications', icon:ICONS.bell, color:'var(--warm)', label:tr('notifSection'), show:true, group:'general'},
     {id:'business', icon:ICONS.building, color:'var(--accent)', label:tr('menuBusiness'), show:canBusinessSettings(), group:'business'},
     {id:'branches', icon:ICONS.mapPin, color:'var(--violet)', label:tr('branchesSection'), show:isAdmin(), group:'business'},
     {id:'loyalty', icon:ICONS.percent, color:'var(--warm)', label:tr('loyaltySection'), show:isAdmin(), group:'business'},
     {id:'staff', icon:ICONS.peopleIcon, color:'var(--teal)', label:tr('staffSection'), show:(isAdmin() || hasPerm('staffManage')), group:'staff'},
-    {id:'deletedCustomers', icon:ICONS.trash, color:'var(--danger)', label:tr('deletedCustomersSection'), show:(isAdmin() && state.customers.some(c=>c.hidden)), group:'staff'},
     {id:'agentmap', icon:ICONS.mapPin, color:'var(--violet)', label:tr('agentMapLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
     {id:'agentplans', icon:ICONS.target, color:'var(--warm)', label:tr('agentPlansLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
     {id:'visitroute', icon:ICONS.route, color:'var(--teal)', label:tr('visitRouteLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
@@ -13889,6 +14508,7 @@ function settingsMenuItems(){
     {id:'lowstock', icon:ICONS.boxWarning, color:'var(--warm)', label:tr('lowStockOnlyLabel'), show:canBusinessSettings(), group:'limits'},
     {id:'expiry', icon:ICONS.calendar, color:'var(--danger)', label:tr('expiryOnlyLabel'), show:canBusinessSettings(), group:'limits'},
     {id:'catalog', icon:ICONS.globe, color:'var(--teal)', label:tr('osTitle'), show:canBusinessSettings(), group:'other'},
+    {id:'deletedCustomers', icon:ICONS.trash, color:'var(--danger)', label:tr('deletedCustomersSection'), show:(isAdmin() && state.customers.some(c=>c.hidden)), group:'other'},
     {id:'backup', icon:ICONS.cloud, color:'var(--accent)', label:tr('backupSection'), show:canBackup(), group:'other'},
     {id:'support', icon:ICONS.chat, color:'var(--violet)', label:tr('supportSection'), show:true, group:'other'},
     {id:'website', icon:ICONS.globe, color:'var(--accent)', label:'Veb-sayt (savdo-pos.pages.dev)', show:canBusinessSettings(), group:'other'},
@@ -13974,6 +14594,7 @@ function bindSettingsBack(container){
 
 function renderSettingsCategory(container, cat){
   if(cat==='language') return renderSettingsLanguage(container);
+  if(cat==='notifications') return renderSettingsNotifications(container);
   if(cat==='business') return renderSettingsBusiness(container);
   if(cat==='branches') return renderSettingsBranches(container);
   if(cat==='deletedCustomers') return renderDeletedCustomers(container);
@@ -15807,28 +16428,227 @@ async function initNativePush(){
       });
       await PN.addListener('registrationError', function(){});
       // Push ustiga bosilganda — yordam chatini ochish
-      await PN.addListener('pushNotificationActionPerformed', function(){
-        try{ if(fbUser){ state.view = 'settings'; state.settingsCategory = 'support'; renderAll(); } }catch(e){}
+      await PN.addListener('pushNotificationActionPerformed', function(ev){
+        try{
+          var d = (ev && ev.notification && ev.notification.data) || {};
+          if(d.type === 'debtReport'){
+            if(fbUser && state.currentStaff && isAdmin()){ state.view = 'customers'; renderAll(); renderDebtExportOverlay(new Date().toDateString()); }
+            return;
+          }
+          if(fbUser){ state.view = 'settings'; state.settingsCategory = 'support'; renderAll(); }
+        }catch(e){}
+      });
+      /* fix95-notif: ilova ochiq paytida kelgan push — ovoz + xabar (yordam xabarini Firestore tinglovchisi o'zi ko'rsatadi) */
+      await PN.addListener('pushNotificationReceived', function(n){
+        try{
+          var d = (n && n.data) || {};
+          if(d.type === 'support') return;
+          playNotifySound();
+          showToast('🔔 ' + ((n && n.title) ? n.title + ': ' : '') + ((n && n.body) || ''));
+        }catch(e){}
       });
     }
     try{ await PN.createChannel({id:'support', name:'Yordam xabarlari', description:'Yordam chatidagi yangi xabarlar', importance:4, visibility:1}); }catch(e){}
+    try{ await PN.createChannel({id:'reminders', name:'Eslatmalar', description:'Kunlik qarz hisoboti va boshqa eslatmalar', importance:4, visibility:1, vibration:true}); }catch(e){}
+    try{ await PN.createChannel({id:'quiet', name:'Ovozsiz xabarlar', description:'Ovozi o\'chirilgan bildirishnomalar', importance:2, visibility:1}); }catch(e){}
     await PN.register();
   }catch(e){ /* push qo'shimcha imkoniyat — ilovani hech qachon to'xtatmaydi */ }
 }
 
 async function saveFcmToken(token){
   if(!fbUser || !fbDb || !token) return;
+  window.__pushTokenLast = token;
   const now = new Date().toISOString();
   try{
     const bizId = state.businessId || fbUser.uid;
     await fbDb.collection('businesses').doc(bizId).collection('pushTokens').doc(token)
-      .set({ token, uid: fbUser.uid, updatedAt: now }, {merge:true});
+      .set(Object.assign({ token, uid: fbUser.uid, updatedAt: now }, __pushPrefs()), {merge:true});
     if(isSuperAdmin()){
       await fbDb.collection('superAdminTokens').doc(token)
-        .set({ token, uid: fbUser.uid, updatedAt: now }, {merge:true});
+        .set(Object.assign({ token, uid: fbUser.uid, updatedAt: now }, __pushPrefs()), {merge:true});
     }
   }catch(e){ /* non-critical — local notifications still work */ }
 }
+/* fix95-notif: ovozli bildirishnomalar (SMS kabi "ding-dong"), qurilma sozlamalari */
+ICONS.bell = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>';
+var __NS_KEY = 'savdo_notif_sound', __DD_KEY = 'savdo_debt_daily';
+function __notifSoundOn(){ try{ return localStorage.getItem(__NS_KEY) !== '0'; }catch(e){ return true; } }
+function __debtDailyOn(){ try{ return localStorage.getItem(__DD_KEY) !== '0'; }catch(e){ return true; } }
+function __dingNow(){
+  try{
+    var AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+    var ctx = window.__soCtx || (window.__soCtx = new AC());
+    if(ctx.state === 'suspended' && ctx.resume) ctx.resume();
+    var t0 = ctx.currentTime + 0.02;
+    [[988, 0], [1319, 0.17]].forEach(function(n){
+      var o = ctx.createOscillator(), g = ctx.createGain(), t = t0 + n[1];
+      o.type = 'sine'; o.frequency.value = n[0];
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.32, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + 0.6);
+    });
+  }catch(e){}
+}
+function playNotifySound(){ if(__notifSoundOn()) __dingNow(); }
+function __pushPrefs(){
+  var adm;
+  if(state.currentStaff){ adm = state.currentStaff.role === 'admin'; window.__pushAdminLast = adm; }
+  else adm = (window.__pushAdminLast !== undefined) ? window.__pushAdminLast : true;
+  return { sound: __notifSoundOn(), admin: adm, debtDaily: __debtDailyOn(), lang: state.lang || 'uz', localDebt: !!window.__lnDebtScheduled };
+}
+var __pushSig = '';
+async function __pushPrefsSync(force){
+  var tok = window.__pushTokenLast;
+  if(!tok || !fbUser || !fbDb) return;
+  var p = __pushPrefs(), sig = JSON.stringify(p) + tok;
+  if(!force && sig === __pushSig) return;
+  try{
+    var bizId = state.businessId || fbUser.uid;
+    var doc = Object.assign({ token: tok, uid: fbUser.uid, updatedAt: new Date().toISOString() }, p);
+    await fbDb.collection('businesses').doc(bizId).collection('pushTokens').doc(tok).set(doc, {merge:true});
+    if(isSuperAdmin()) await fbDb.collection('superAdminTokens').doc(tok).set(doc, {merge:true});
+    __pushSig = sig;
+  }catch(e){}
+}
+setInterval(function(){ try{ __pushPrefsSync(false); }catch(e){} }, 20000);
+
+function renderSettingsNotifications(container){
+  function row(id, ic, bg, title, sub, on){
+    return '<div class="nf-row"><div class="nf-ic" style="background:' + bg + ';">' + ic + '</div><div class="nf-txt"><div class="nf-ttl">' + title + '</div><div class="nf-sub">' + sub + '</div></div>'
+      + '<input type="checkbox" class="nf-sw" id="' + id + '"' + (on ? ' checked' : '') + '></div>';
+  }
+  container.innerHTML = settingsBackHeader(tr('notifSection'))
+    + '<div class="card nf-card">'
+    + row('nf-sound', '&#128276;', '#FEF3C7', tr('notifSoundLabel'), tr('notifSoundHint'), __notifSoundOn())
+    + row('nf-sale', '&#9989;', '#DCFCE7', tr('notifSaleSoundLabel'), tr('notifSaleSoundHint'), __soSoundOn())
+    + (isAdmin() ? row('nf-debt', '&#128210;', '#FFEDD5', tr('notifDebtLabel'), tr('notifDebtHint'), __debtDailyOn()) : '')
+    + '</div>'
+    + '<button type="button" class="btn btn-outline btn-block" id="nf-test">&#128266; ' + tr('notifTestBtn') + '</button>'
+    + '<p class="subtle" style="margin:12px 2px 0;font-size:12px;line-height:1.4;">' + tr('notifPhoneHint') + '</p>';
+  bindSettingsBack(container);
+  function bind(id, key, after){
+    var el = document.getElementById(id); if(!el) return;
+    el.addEventListener('change', function(){
+      try{ localStorage.setItem(key, el.checked ? '1' : '0'); }catch(e){}
+      if(after) after(el.checked);
+      __pushPrefsSync(true);
+    });
+  }
+  bind('nf-sound', __NS_KEY, function(on){ if(on) __dingNow(); });
+  bind('nf-sale', 'savdo_ok_sound', function(on){ if(on) __dingNow(); });
+  bind('nf-debt', __DD_KEY);
+  document.getElementById('nf-test').addEventListener('click', function(){
+    __dingNow();
+    try{ if(navigator.vibrate) navigator.vibrate(40); }catch(e){}
+  });
+}
+
+/* fix96-offline: audit 30 kun + oflayn navbat, oflayn ovozli qarz eslatmasi */
+var AUDIT_KEEP_DAYS = 30;
+function __auditCutoffIso(){ return new Date(Date.now() - AUDIT_KEEP_DAYS * 86400000).toISOString(); }
+function pruneAudit(){
+  try{
+    var c = __auditCutoffIso(), a = state.audit || [], n = a.length;
+    var keep = a.filter(function(x){ return x && x.date && String(x.date) >= c; });
+    if(keep.length !== n){ state.audit = keep; storSet(STORAGE_KEYS.audit, keep); }
+    return n - keep.length;
+  }catch(e){ return 0; }
+}
+/* Bulutdagi eski yozuvlarni o'chirishga urinish (kuniga bir marta). Asosiy o'chirish — server funksiyasi (cleanupAuditLog). */
+async function pruneCloudAudit(){
+  if(!fbUser || !fbDb || !isAdmin() || (typeof navigator !== 'undefined' && navigator.onLine === false)) return;
+  var today = new Date().toDateString();
+  try{ if(localStorage.getItem('savdo_audit_pruned') === today) return; localStorage.setItem('savdo_audit_pruned', today); }catch(e){}
+  try{
+    var col = fbDb.collection('businesses').doc(state.businessId || fbUser.uid).collection('audit');
+    for(var i = 0; i < 10; i++){
+      var snap = await col.where('date', '<', __auditCutoffIso()).limit(400).get();
+      if(snap.empty) break;
+      var b = fbDb.batch(); snap.docs.forEach(function(d){ b.delete(d.ref); }); await b.commit();
+      if(snap.size < 400) break;
+    }
+  }catch(e){}
+}
+function __auditDayHead(rows, i){
+  try{
+    var d = new Date(rows[i].date);
+    if(i > 0 && new Date(rows[i - 1].date).toDateString() === d.toDateString()) return '';
+    return '<div class="au-day">' + d.toLocaleDateString() + '</div>';
+  }catch(e){ return ''; }
+}
+
+var __LN_DEBT_ID = 9121, __lnSig = '', __lnBusy = false, __lnListening = false;
+function __lnPlugin(){
+  try{
+    var C = window.Capacitor;
+    return (C && C.isNativePlatform && C.isNativePlatform() && C.Plugins && C.Plugins.LocalNotifications) || null;
+  }catch(e){ return null; }
+}
+/* Telefonning o'z rejalashtirgichi: internet YO'Q va ilova YOPIQ bo'lsa ham har kuni 21:00 da ovozli eslatadi. */
+async function __lnEnsureDebtReminder(force){
+  var LN = __lnPlugin(); if(!LN || __lnBusy) return;
+  if(!state.setupDone || !state.currentStaff) return;
+  var on = __debtDailyOn();
+  if(on && !isAdmin()) return;                 // kassir kirgan qurilmada egasining eslatmasiga tegmaymiz
+  var snd = __notifSoundOn();
+  var sig = (on ? '1' : '0') + '|' + (state.lang || 'uz') + '|' + (snd ? '1' : '0');
+  if(!force && sig === __lnSig) return;
+  __lnBusy = true;
+  try{
+    if(!on){
+      await LN.cancel({ notifications: [{ id: __LN_DEBT_ID }] });
+      window.__lnDebtScheduled = false;
+    } else {
+      var p = await LN.checkPermissions();
+      if(!p || p.display !== 'granted') p = await LN.requestPermissions();
+      if(!p || p.display !== 'granted'){ window.__lnDebtScheduled = false; __lnSig = sig; return; }
+      try{ await LN.createChannel({ id: 'reminders', name: 'Eslatmalar', description: 'Kunlik qarz hisoboti va boshqa eslatmalar', importance: 4, visibility: 1, vibration: true }); }catch(e){}
+      try{ await LN.createChannel({ id: 'quiet', name: 'Ovozsiz xabarlar', description: "Ovozi o'chirilgan bildirishnomalar", importance: 2, visibility: 1 }); }catch(e){}
+      await LN.cancel({ notifications: [{ id: __LN_DEBT_ID }] });
+      await LN.schedule({ notifications: [{
+        id: __LN_DEBT_ID, title: tr('notifLocalDebtTitle'), body: tr('notifLocalDebtBody'),
+        channelId: snd ? 'reminders' : 'quiet',
+        schedule: { on: { hour: 21, minute: 0 }, allowWhileIdle: true },
+        extra: { type: 'debtReport' }
+      }] });
+      window.__lnDebtScheduled = true;
+      if(!__lnListening){
+        __lnListening = true;
+        try{
+          LN.addListener('localNotificationActionPerformed', function(ev){
+            try{
+              var d = (ev && ev.notification && ev.notification.extra) || {};
+              if(d.type === 'debtReport' && state.currentStaff && isAdmin()){ state.view = 'customers'; renderAll(); renderDebtExportOverlay(new Date().toDateString()); }
+            }catch(e){}
+          });
+        }catch(e){}
+      }
+    }
+    __lnSig = sig;
+    try{ __pushPrefsSync(false); }catch(e){}
+  }catch(e){
+    window.__lnDebtScheduled = false;
+  } finally { __lnBusy = false; }
+}
+/* Ilova ochiq tursa ham soat 21:00 da qarz/qarzdor hisobotlari o'zi chiqadi (ichki soat — internet kerak emas). */
+function __dailyTick(){
+  try{
+    pruneAudit();
+    pruneCloudAudit();
+    if(!state.setupDone || !state.currentStaff) return;
+    var mr = document.getElementById('modal-root');
+    if(mr && mr.innerHTML.trim()) return;       // sotuv/oyna ochiq paytida bezovta qilmaymiz
+    var r1 = document.getElementById('debt-export-root');
+    if(r1 && !r1.innerHTML.trim()) checkDailyDebtExport();
+    var r2 = document.getElementById('creditor-export-root');
+    if(r2 && !r2.innerHTML.trim()) checkDailyCreditorExport();
+  }catch(e){}
+}
+setInterval(function(){ try{ __dailyTick(); __lnEnsureDebtReminder(false); }catch(e){} }, 30000);
+document.addEventListener('visibilitychange', function(){ try{ if(document.visibilityState === 'visible'){ __dailyTick(); __lnEnsureDebtReminder(false); } }catch(e){} });
+window.addEventListener('online', function(){ setTimeout(function(){ try{ pruneCloudAudit(); __pushPrefsSync(false); }catch(e){} }, 4000); });
+
 function showLocalNotification(title, body){
   // Screen-on / app-open notifications only — no server, no cost. If the tab
   // is focused, an in-app toast (with a short vibration, if supported) is
@@ -15836,12 +16656,13 @@ function showLocalNotification(title, body){
   // a real OS-level notification instead.
   if(document.visibilityState === 'visible'){
     showToast(`💬 ${body}`);
+    try{ playNotifySound(); }catch(e){}
     if(navigator.vibrate){ try{ navigator.vibrate([80,40,80]); }catch(e){} }
     return;
   }
   if(!('Notification' in window) || Notification.permission !== 'granted') return;
   try{
-    const n = new Notification(title, {body, icon: 'icon-192.png', tag: 'savdo-pos-support-'+Date.now(), requireInteraction: true});
+    const n = new Notification(title, {body, icon: 'icon-192.png', tag: 'savdo-pos-support-'+Date.now(), requireInteraction: true, silent: false});
     n.onclick = ()=>{ window.focus(); n.close(); };
   }catch(e){}
 }
