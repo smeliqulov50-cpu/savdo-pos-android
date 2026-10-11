@@ -2852,6 +2852,11 @@ let liveRenderTimer = null;
 // (right when the listeners are first attached) would otherwise trigger
 // a full re-render per collection; this coalesces any that land within
 // the same tick into a single redraw.
+/* fix98-taps: barmoq ekranda turgan paytda fondagi yangilanish ekranni qayta chizmasin (bosilayotgan tugma almashib ketmasin) */
+window.__spTouch = { down: false, start: 0, end: 0 };
+document.addEventListener('touchstart', function(){ window.__spTouch.down = true; window.__spTouch.start = Date.now(); }, {capture:true, passive:true});
+['touchend','touchcancel'].forEach(function(ev){ document.addEventListener(ev, function(e){ if(!e.touches || e.touches.length === 0){ window.__spTouch.down = false; window.__spTouch.end = Date.now(); } }, {capture:true, passive:true}); });
+function __spFingerBusy(){ var t = window.__spTouch, n = Date.now(); return (t.down && n - t.start < 2500) || (n - t.end < 250); }
 function scheduleLiveRender(){
   if(liveRenderTimer) return;
   liveRenderTimer = setTimeout(function tick(){
@@ -2865,6 +2870,7 @@ function scheduleLiveRender(){
     // screen is safe to rebuild freely since they don't hold that kind
     // of in-progress, uncommitted input.
     if(state.view==='settings' && state.settingsCategory) return;
+    if(__spFingerBusy()){ liveRenderTimer = setTimeout(tick, 250); return; }   /* fix98-taps */
     const ae = document.activeElement;
     const typing = ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName) && document.getElementById('view-container') && document.getElementById('view-container').contains(ae);
     if(typing){ liveRenderTimer = setTimeout(tick, 800); return; }
@@ -6526,6 +6532,7 @@ function renderCartModalContent(){
       const key = btn.dataset.key;
       const c = activeCart();
       const item = c.find(x=>cartLineKey(x)===key);
+      if(!item){ /* fix98-taps: savat boshqa joyda o'zgargan — oynani yangilaymiz */ renderCartModalContent(); renderProductGrid(); renderCartBar(); return; }
       const product = state.products.find(p=>p.id===item.productId);
       const maxStock = variantStock(product, item.variantId);
       // Other lines of the SAME product+variant (e.g. a takeaway split, or
@@ -6597,6 +6604,7 @@ function maxQtyForCartLine(c, p){
 }
 function openQtyKeypad(key){
   const c = activeCart().find(x=>cartLineKey(x)===key);
+  if(!c){ try{ if(document.querySelector('#modal-root [data-act]')) renderCartModalContent(); }catch(e){} return; } /* fix98-taps */
   const p = state.products.find(pr=>pr.id===c.productId);
   if(!c || !p) return;
   const v = getVariant(p, c.variantId);
@@ -6645,6 +6653,7 @@ function openQtyKeypad(key){
 
 function openPriceEditModal(key){
   const c = activeCart().find(x=>cartLineKey(x)===key);
+  if(!c){ try{ if(document.querySelector('#modal-root [data-act]')) renderCartModalContent(); }catch(e){} return; } /* fix98-taps */
   const p = state.products.find(pr=>pr.id===c.productId);
   if(!c || !p) return;
   const v = getVariant(p, c.variantId);
@@ -7583,7 +7592,9 @@ function openPostSaleModal(sale, custDebtAfter){
     // covers named kitchen-station slots and the native-app connection
     // path, unlike checking state.btCharacteristic directly); otherwise it
     // skips printing rather than interrupting the cashier with a picker.
-    if(getBtCharacteristic('main') || state.settings.printerMode !== 'bluetooth'){
+    /* fix97-autoprint: printer har chekdan keyin bo'shatiladi, shuning uchun 'hozir ulangan' sharti o'rniga 'eslab qolingan printer bor' sharti ham qabul qilinadi;
+       printReceipt() o'zi jim ulanadi (qurilma tanlash oynasisiz). Printer umuman sozlanmagan bo'lsa — avvalgidek hech narsa chiqmaydi. */
+    if(getBtCharacteristic('main') || state.settings.printerMode !== 'bluetooth' || loadRememberedBtDevices().main){
       printReceipt(sale, customer);
     }
   }
