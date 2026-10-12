@@ -5490,11 +5490,12 @@ function attachTapOrLongPress(el, onTap, onLongPress, duration){
 
   function clearTimer(){ if(timer){ clearTimeout(timer); timer = null; } }
 
+  let lastX = 0, lastY = 0;   /* fix103-ghost */
   function onStart(x, y){
     pointerDown = true;
     moved = false;
     longPressFired = false;
-    startX = x; startY = y;
+    startX = x; startY = y; lastX = x; lastY = y;
     clearTimer();
     timer = setTimeout(()=>{
       timer = null;
@@ -5506,14 +5507,30 @@ function attachTapOrLongPress(el, onTap, onLongPress, duration){
   }
   function onMove(x, y){
     if(!pointerDown) return;
+    lastX = x; lastY = y;
     if(Math.abs(x-startX) > MOVE_THRESHOLD || Math.abs(y-startY) > MOVE_THRESHOLD){
       moved = true;
       clearTimer();
     }
   }
-  function onEnd(){
+  function onEnd(ev, fromTouch){
     clearTimer();
+    const __tapped = pointerDown && !moved;   /* fix103-ghost: bosish (yoki uzoq bosish) bo'ldi, sudralmadi */
+    /* fix103-ghost: brauzer touchend'dan keyin o'sha nuqtaga qo'shimcha "click" yuboradi — u yangi ochilgan oynadagi tugmaga
+       (masalan "Yopish") tushib, oynani darrov yopib qo'yardi. Bu bosish tugagani uchun uni bekor qilamiz. */
+    let __needMark = !!__tapped && !fromTouch;
+    if(__tapped && fromTouch && ev){
+      try{ if(ev.cancelable) ev.preventDefault(); else __needMark = true; }catch(e){ __needMark = true; }
+    }
     if(pointerDown && !longPressFired && !moved) guardedFire(onTap);
+    if(__needMark){
+      try{
+        let cx = lastX, cy = lastY;
+        if(ev && ev.changedTouches && ev.changedTouches[0]){ cx = ev.changedTouches[0].clientX; cy = ev.changedTouches[0].clientY; }
+        else if(ev && typeof ev.clientX === 'number'){ cx = ev.clientX; cy = ev.clientY; }
+        window.__ghostTap = {t: Date.now(), x: cx, y: cy};
+      }catch(e){}
+    }
     pointerDown = false;
   }
   function onCancel(){
@@ -5524,21 +5541,21 @@ function attachTapOrLongPress(el, onTap, onLongPress, duration){
   if(hasTouch){
     el.addEventListener('touchstart', (e)=>{ const t=e.touches[0]; onStart(t.clientX, t.clientY); }, {passive:true});
     el.addEventListener('touchmove', (e)=>{ const t=e.touches[0]; onMove(t.clientX, t.clientY); }, {passive:true});
-    el.addEventListener('touchend', onEnd);
+    el.addEventListener('touchend', (e)=>onEnd(e, true));   /* fix103-ghost */
     el.addEventListener('touchcancel', onCancel);
     // Sensorli qurilmaga ulangan sichqoncha/touchpad touch hodisasi bermaydi — faqat pointer (mouse) turida keladi.
     // Barmoq bosishi bu yerga tushmaydi (u 'touch' turida), shuning uchun ikki marta ishlamaydi.
     if(window.PointerEvent){
       el.addEventListener('pointerdown', (e)=>{ if(e.pointerType==='mouse') onStart(e.clientX, e.clientY); });
       el.addEventListener('pointermove', (e)=>{ if(e.pointerType==='mouse') onMove(e.clientX, e.clientY); });
-      el.addEventListener('pointerup', (e)=>{ if(e.pointerType==='mouse') onEnd(); });
+      el.addEventListener('pointerup', (e)=>{ if(e.pointerType==='mouse') onEnd(e, false); });
       el.addEventListener('pointercancel', (e)=>{ if(e.pointerType==='mouse') onCancel(); });
       el.addEventListener('pointerleave', (e)=>{ if(e.pointerType==='mouse') onCancel(); });
     }
   } else {
     el.addEventListener('mousedown', (e)=>onStart(e.clientX, e.clientY));
     el.addEventListener('mousemove', (e)=>onMove(e.clientX, e.clientY));
-    el.addEventListener('mouseup', onEnd);
+    el.addEventListener('mouseup', (e)=>onEnd(e, false));   /* fix103-ghost */
     el.addEventListener('mouseleave', onCancel);
   }
 
@@ -5549,6 +5566,19 @@ function attachTapOrLongPress(el, onTap, onLongPress, duration){
   // context menu here lets our own press-and-hold logic run instead.
   el.addEventListener('contextmenu', (e)=>{ e.preventDefault(); });
 }
+
+/* fix103-ghost: zaxira qo'riqchi — kartochka bosilgandan keyin ~0,4 s ichida, XUDDI SHU nuqtaga kelgan bitta "click" yutiladi */
+(function(){
+  if(window.__ghostInstalled) return; window.__ghostInstalled = true;
+  document.addEventListener('click', function(e){
+    var g = window.__ghostTap;
+    if(!g || !g.t) return;
+    if(Date.now() - g.t > 400){ g.t = 0; return; }
+    if(Math.abs(e.clientX - g.x) > 24 || Math.abs(e.clientY - g.y) > 24) return;
+    g.t = 0;
+    e.stopPropagation(); e.preventDefault();
+  }, true);
+})();
 
 function openWholesalePicker(product){
   const unitCartQty = activeCart().filter(c=>c.productId===product.id && c.saleMode!=='box' && c.priceTier==='wholesale').reduce((s,c)=>s+c.qty,0);
