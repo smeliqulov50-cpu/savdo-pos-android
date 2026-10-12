@@ -8406,23 +8406,22 @@ async function sendKitchenTicket(items, tableName, cashierName, slot){
       return false;
     }
   }
-  await ensureBtConnected(slot);
-  if(!getBtCharacteristic(slot)) return false;
-  try{
-    await sendRawBytes(new Uint8Array([0x1B,0x40]), slot);
-    await sendRawBytes(new Uint8Array([0x1D,0x21,0x11]), slot);
-    const text = buildKitchenTicketText(items, tableName, cashierName, kitchenStationName(slot));
-    await sendRawBytes(new TextEncoder().encode(text + '\n'), slot);
-    await sendRawBytes(new Uint8Array([0x1D,0x21,0x00]), slot);
-    const feedLines = state.settings.printerFeedLines != null ? state.settings.printerFeedLines : 5;
-    await sendRawBytes(new Uint8Array([0x1B,0x64, feedLines]), slot);
-    if(state.settings.printerAutoCut !== false){
-      await sendRawBytes(printerCutBytes(), slot);
-    }
-    scheduleBtRelease(slot);
-    return true;
+  try{   /* fix102: butun chek = bitta ulanish, tugashi bilan printer bo'shaydi */
+    const __kr = await __btPrintJob(slot, async ()=>{
+      await sendRawBytes(new Uint8Array([0x1B,0x40]), slot);
+      await sendRawBytes(new Uint8Array([0x1D,0x21,0x11]), slot);
+      const text = buildKitchenTicketText(items, tableName, cashierName, kitchenStationName(slot));
+      await sendRawBytes(new TextEncoder().encode(text + '\n'), slot);
+      await sendRawBytes(new Uint8Array([0x1D,0x21,0x00]), slot);
+      const feedLines = state.settings.printerFeedLines != null ? state.settings.printerFeedLines : 5;
+      await sendRawBytes(new Uint8Array([0x1B,0x64, feedLines]), slot);
+      if(state.settings.printerAutoCut !== false){
+        await sendRawBytes(printerCutBytes(), slot);
+      }
+      return true;
+    });
+    return __kr !== false;
   }catch(e){
-    scheduleBtRelease(slot);
     return false;
   }
 }
@@ -8607,15 +8606,11 @@ async function printReceipt(sale, customer){
     if(!getBtCharacteristic('main') && loadRememberedBtDevices().main) showToast(tr('printerConnecting'));
     await ensureBtConnected('main');
     if(!getBtCharacteristic('main')){ showToast(loadRememberedBtDevices().main ? tr('printerUnreachable') : (state.deviceHasNoPrinter ? tr('willPrintOnOtherDevice') : tr('printerNotConnected'))); return; } /* fix74 */
-    const ok = await sendReceiptToBluetoothPrinter(sale, customer);
-    scheduleBtRelease('main');
+    const ok = await sendReceiptToBluetoothPrinter(sale, customer, {drawer: (sale.paymentType==='cash' && !!state.settings.openDrawerOnCash)});   /* fix102: tortma ham shu ulanishda; printer darrov bo'shaydi */
     // Opening the drawer only makes sense here — Bluetooth mode has an
     // actual raw-byte connection to hardware that's presumably wired to
     // a drawer; browser print mode has no such connection to send this
     // command down at all, so there's nothing equivalent to do there.
-    if(ok && sale.paymentType==='cash' && state.settings.openDrawerOnCash){
-      kickCashDrawer('main');
-    }
     if(ok){
       markSalePrinted(sale);
       showToast(tr('printReceipt'));
@@ -9079,13 +9074,14 @@ async function connectBluetoothPrinterNative(slot){
 // deviceId already connected (or about to be), finds which known UART
 // profile it matches and wires up state via setBtConnection. Returns the
 // matched profile (truthy) or null.
-async function nativeConnectAndMatch(Ble, slot, deviceId, name){
+async function nativeConnectAndMatch(Ble, slot, deviceId, name, tok){
   await Ble.connect(deviceId, ()=>{
     // native disconnect callback — mirrors the Web Bluetooth
     // 'gattserverdisconnected' handler above
     clearBtConnection(slot);
     if(state.view==='settings' && !__btQuiet) renderSettings();
   });
+  if(tok != null && __btAttempt[slot] !== tok){ try{ await Ble.disconnect(deviceId); }catch(e){} return null; }   /* fix102: bekor qilingan urinish kechikib ulandi — darrov uziladi */
   let matched = null;
   for(const profile of BT_UART_PROFILES){
     try{
@@ -9094,6 +9090,7 @@ async function nativeConnectAndMatch(Ble, slot, deviceId, name){
     }catch(e){ matched = matched || profile; }
   }
   if(!matched) return null;
+  if(tok != null && __btAttempt[slot] !== tok){ try{ await Ble.disconnect(deviceId); }catch(e){} return null; }   /* fix102 */
   const charRef = {native:true, deviceId, service:matched.service, char:matched.char};
   setBtConnection(slot, {name: name || ''}, charRef);
   return matched;
@@ -9107,6 +9104,49 @@ async function nativeConnectAndMatch(Ble, slot, deviceId, name){
 const __btReleaseTimers = {};
 let __btQuiet = false;
 const __btEnsureBusy = {};
+/* fix102-btshare: har chop etish = bitta ulanish, navbat bilan, tugashi bilan printer bo'shatiladi */
+var __btInJob = {};
+var __btQueue = {};
+var __btWaiting = {};
+var __btAttemptSeq = 0, __btAttempt = {};
+function __btSleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
+async function __btReleaseNow(slot){
+  slot = slot || 'main';
+  cancelBtRelease(slot);
+  const charRef = getBtCharacteristic(slot), device = getBtDevice(slot);
+  if(!charRef || charRef.classic) return;   // klassik: ulanishni Java tomoni o'zi yopadi
+  __btQuiet = true; setTimeout(()=>{ __btQuiet = false; }, 3000);
+  try{
+    if(charRef.native){ const Ble = nativeBle(); if(Ble) await __btTimeout(Ble.disconnect(charRef.deviceId), 4000); }
+    else if(device && device.gatt && device.gatt.connected) device.gatt.disconnect();
+  }catch(e){}
+  clearBtConnection(slot);   // unutilmaydi: keyingi chop yana shu printerga ulanadi
+}
+async function __btPrintJob(slot, fn){
+  slot = slot || 'main';
+  const prev = __btQueue[slot] || Promise.resolve();
+  let open; const gate = new Promise(r=>{ open = r; });
+  __btQueue[slot] = prev.then(()=>gate);
+  __btWaiting[slot] = (__btWaiting[slot] || 0) + 1;
+  try{ await prev; }catch(e){}
+  __btWaiting[slot] = Math.max(0, (__btWaiting[slot] || 1) - 1);
+  __btInJob[slot] = true;
+  try{
+    cancelBtRelease(slot);
+    if(!getBtCharacteristic(slot)) await ensureBtConnected(slot);
+    if(!getBtCharacteristic(slot)) return false;
+    cancelBtRelease(slot);   // ensureBtConnected qo'ygan 15s xavfsizlik taymeri chop o'rtasida ishlamasin
+    return await __cpRunJob(slot, fn);
+  } finally {
+    try{
+      const c = getBtCharacteristic(slot);
+      if(c && !c.classic && !(__btWaiting[slot] > 0)){ await __btSleep(1200); }   // printer buferi bo'shab olsin
+    }catch(e){}
+    delete __btInJob[slot];
+    if(!(__btWaiting[slot] > 0)){ try{ await __btReleaseNow(slot); }catch(e){} }
+    open();
+  }
+}
 function __btShouldHold(){ return false; /* fix64: relay ham har chekdan keyin printerni bo'shatadi */ }
 function __btTimeout(p, ms){ return Promise.race([p, new Promise((_, rej)=>setTimeout(()=>rej(new Error('bt-timeout')), ms))]); }
 function cancelBtRelease(slot){ if(__btReleaseTimers[slot]){ clearTimeout(__btReleaseTimers[slot]); delete __btReleaseTimers[slot]; } }
@@ -9116,6 +9156,7 @@ function scheduleBtRelease(slot, ms){
   if(__btShouldHold()) return;
   __btReleaseTimers[slot] = setTimeout(()=>{
     delete __btReleaseTimers[slot];
+    if(__btInJob[slot]){ scheduleBtRelease(slot, 3000); return; }   /* fix102: chop ketayotgan bo'lsa uzmaydi */
     __btQuiet = true; setTimeout(()=>{ __btQuiet = false; }, 3000);
     const charRef = getBtCharacteristic(slot), device = getBtDevice(slot);
     try{
@@ -9133,12 +9174,15 @@ async function ensureBtConnected(slot){
   const run = (async ()=>{
     const entry = loadRememberedBtDevices()[slot];
     if(!entry || !entry.id) return false;
-    for(let attempt = 0; attempt < 8 && !getBtCharacteristic(slot); attempt++){   // fix65: printer band bo'lsa ko'proq kutadi
+    const __t0 = Date.now();
+    for(let attempt = 0; attempt < 14 && !getBtCharacteristic(slot) && (Date.now() - __t0) < 60000; attempt++){   // fix65 + fix102: printer band bo'lsa ~60s gacha kutadi
+      const __tok = ++__btAttemptSeq; __btAttempt[slot] = __tok;
       try{
         if(isNativeApp()){
           const Ble = nativeBle(); if(!Ble) return false;
           try{ await Ble.initialize(); }catch(e){}
-          await __btTimeout(nativeConnectAndMatch(Ble, slot, entry.id, entry.name), 8000);
+          try{ await __btTimeout(nativeConnectAndMatch(Ble, slot, entry.id, entry.name, __tok), 8000); }
+          catch(e2){ __btAttempt[slot] = 0; try{ await Ble.disconnect(entry.id); }catch(_e){} throw e2; }   /* fix102: tugamagan urinish bekor */
         } else if(navigator.bluetooth && navigator.bluetooth.getDevices){
           const known = await navigator.bluetooth.getDevices();
           const device = known.find(d=>d.id === entry.id);
@@ -9147,7 +9191,7 @@ async function ensureBtConnected(slot){
           await finishBtConnection(slot, device, server);
         } else return false;
       }catch(e){}
-      if(!getBtCharacteristic(slot)) await new Promise(r=>setTimeout(r, 1500));   // printer may be busy with another device
+      if(!getBtCharacteristic(slot)) await new Promise(r=>setTimeout(r, 1200 + Math.floor(Math.random()*1800)));   // printer band bo'lishi mumkin; fix102: tasodifiy kutish — qurilmalar to'qnashmasin
     }
     return !!getBtCharacteristic(slot);
   })();
@@ -9356,14 +9400,21 @@ function printerCutBytes(){
 // ~250ms off) is what opens it on virtually every model that supports
 // this at all. Safe to send even to a printer with nothing plugged into
 // that port — it simply has no effect.
-async function kickCashDrawer(slot){
+async function __kickRaw(slot){ await sendRawBytes(new Uint8Array([0x1B,0x70,0x00,0x19,0xFA]), slot); }
+async function kickCashDrawer(slot){ /* fix102 */
   try{
-    await sendRawBytes(new Uint8Array([0x1B,0x70,0x00,0x19,0xFA]), slot);
-    return true;
+    const r = await __btPrintJob(slot || 'main', async ()=>{ await __kickRaw(slot); return true; });
+    return r !== false;
   }catch(e){ return false; }
 }
 
-async function sendReceiptToBluetoothPrinter(sale, customer){ return __cpRunJob('main', ()=>__sendReceiptRawFix74(sale, customer)); } /* fix74 */
+async function sendReceiptToBluetoothPrinter(sale, customer, opts){ /* fix74 + fix102 */
+  return __btPrintJob('main', async ()=>{
+    const r = await __sendReceiptRawFix74(sale, customer);
+    if(r !== false && opts && opts.drawer){ try{ await __kickRaw('main'); }catch(e){} }
+    return r;
+  });
+}
 async function __sendReceiptRawFix74(sale, customer){
   if(!getBtCharacteristic('main')) return false;
   let textOk = false;
@@ -10907,6 +10958,7 @@ async function printLabels(products){
     if(!getBtCharacteristic('main') && !loadRememberedBtDevices().main){ await connectBluetoothPrinter(); }
     if(!getBtCharacteristic('main')){ showToast(tr('printerUnreachable')); return; }
     try{
+      const __lr = await __btPrintJob('main', async ()=>{   /* fix102 */
       for(const p of jobs){
         const cv = buildLabelCanvas(p, {showStock});
         await sendRawBytes(new Uint8Array([0x1B,0x61,0x01]));
@@ -10915,6 +10967,9 @@ async function printLabels(products){
         await sendRawBytes(new Uint8Array([0x1B,0x64, Math.max(1, Math.min(8, feed))]));
         if(state.settings.printerAutoCut !== false) await sendRawBytes(new Uint8Array([0x1D,0x56, state.settings.printerCutType==='full' ? 0x00 : 0x01]));
       }
+      return true;
+      });
+      if(__lr === false) throw new Error('bt');
       showToast(tr('lbDone')); labelSelection = {}; closeModal();
     }catch(e){ showToast(tr('bluetoothConnectFailed')); }
     return;
@@ -11033,14 +11088,18 @@ async function printCustomersList(){
     });
     lines.push(sep);
     lines.push(padLine(tr('totalDebt'), fmt(total), width));
-    try{
-      await sendRawBytes(new Uint8Array([0x1B,0x40]));
-      await sendRawBytes(new TextEncoder().encode(lines.join('\n') + '\n'));
-      const feedLines = state.settings.printerFeedLines != null ? state.settings.printerFeedLines : 5;
-      await sendRawBytes(new Uint8Array([0x1B,0x64, feedLines]));
-      if(state.settings.printerAutoCut !== false){
-        await sendRawBytes(printerCutBytes());
-      }
+    try{   /* fix102 */
+      const __cl = await __btPrintJob('main', async ()=>{
+        await sendRawBytes(new Uint8Array([0x1B,0x40]));
+        await sendRawBytes(new TextEncoder().encode(lines.join('\n') + '\n'));
+        const feedLines = state.settings.printerFeedLines != null ? state.settings.printerFeedLines : 5;
+        await sendRawBytes(new Uint8Array([0x1B,0x64, feedLines]));
+        if(state.settings.printerAutoCut !== false){
+          await sendRawBytes(printerCutBytes());
+        }
+        return true;
+      });
+      if(__cl === false) throw new Error('bt');
       showToast(tr('printReceipt'));
     }catch(e){
       showToast(tr('bluetoothConnectFailed'));
@@ -15688,7 +15747,7 @@ function renderSettingsPrinter(container){
       btTestBtn.disabled = true;
       await ensureBtConnected('main');
       try{
-    const ok = await (async ()=>{
+    const ok = await __btPrintJob('main', async ()=>{   /* fix102 */
       try{
         await sendRawBytes(new Uint8Array([0x1B,0x40]));
         const lineSpacing = state.settings.printerLineSpacing!=null ? state.settings.printerLineSpacing : 65;
@@ -15722,7 +15781,7 @@ function renderSettingsPrinter(container){
         }
         return true;
       }catch(e){ return false; }
-    })();
+    });
     if(!ok) showToast(tr('bluetoothConnectFailed'));
    } finally { btTestBtn.disabled = false; }
     });

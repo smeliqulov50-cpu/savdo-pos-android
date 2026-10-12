@@ -18,7 +18,12 @@ import com.getcapacitor.annotation.PermissionCallback;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 /* fix66: klassik Bluetooth (SPP) va Wi-Fi/LAN (TCP 9100) printerlar. Har chop etish: ulanadi -> yozadi -> yopadi. */
@@ -27,7 +32,15 @@ import java.util.UUID;
 })
 public class ClassicPrinterPlugin extends Plugin {
     private static final UUID SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private static final Object LOCK = new Object();
+    /* fix102: har bir printer (manzil) uchun alohida qulf — bitta printer band bo'lsa boshqa printerga (masalan oshxona) chop etish kutib qolmaydi */
+    private static final Map<String, Object> LOCKS = new HashMap<>();
+    private static final Random RND = new Random();
+    private static final long CONNECT_BUDGET_MS = 60000L;   // printer band bo'lsa shuncha vaqt navbat kutadi (10-30 qurilma bo'lishi mumkin)
+    private static synchronized Object lockFor(String address) {
+        Object l = LOCKS.get(address);
+        if (l == null) { l = new Object(); LOCKS.put(address, l); }
+        return l;
+    }
 
     private boolean needBtPerm() {
         return Build.VERSION.SDK_INT >= 31 && getPermissionState("bt") != PermissionState.GRANTED;
@@ -81,16 +94,20 @@ public class ClassicPrinterPlugin extends Plugin {
         final String data = call.getString("data");
         if (address == null || data == null) { call.reject("address/data yo'q", "invalid_data"); return; }
         new Thread(() -> {
-            synchronized (LOCK) {
+            synchronized (lockFor(address)) {
                 BluetoothSocket sock = null;
+                Timer watchdog = null;
                 try {
-                    byte[] bytes = Base64.decode(data, Base64.DEFAULT);
+                    final byte[] bytes = Base64.decode(data, Base64.DEFAULT);
                     BluetoothAdapter ad = BluetoothAdapter.getDefaultAdapter();
                     if (ad == null) { call.reject("Bluetooth yo'q", "unavailable"); return; }
                     try { ad.cancelDiscovery(); } catch (Exception ignored) {}
                     BluetoothDevice dev = ad.getRemoteDevice(address);
                     String lastErr = "";
-                    for (int i = 0; i < 6 && sock == null; i++) {
+                    long t0 = System.currentTimeMillis();
+                    int i = 0;
+                    /* fix102: printer boshqa qurilmada band bo'lsa ~60s gacha, tasodifiy kutish bilan qayta urinadi */
+                    while (sock == null && System.currentTimeMillis() - t0 < CONNECT_BUDGET_MS) {
                         BluetoothSocket s = null;
                         try {
                             s = (i % 2 == 0) ? dev.createRfcommSocketToServiceRecord(SPP) : dev.createInsecureRfcommSocketToServiceRecord(SPP);
@@ -99,10 +116,17 @@ public class ClassicPrinterPlugin extends Plugin {
                         } catch (Exception e) {
                             lastErr = String.valueOf(e.getMessage());
                             try { if (s != null) s.close(); } catch (Exception ignored) {}
-                            Thread.sleep(1500);
+                            Thread.sleep(600 + RND.nextInt(1400));
                         }
+                        i++;
                     }
                     if (sock == null) { call.reject("Printerga ulanib bo'lmadi: " + lastErr, "connect_failed"); return; }
+                    /* fix102: qo'riqchi — printer qog'ozsiz/qopqoq ochiq bo'lib yozish qotib qolsa ham ulanish albatta yopiladi va printer bo'shaydi */
+                    final BluetoothSocket guarded = sock;
+                    watchdog = new Timer(true);
+                    watchdog.schedule(new TimerTask() {
+                        @Override public void run() { try { guarded.close(); } catch (Exception ignored) {} }
+                    }, 20000L + bytes.length / 8L);
                     OutputStream os = sock.getOutputStream();
                     int off = 0;
                     while (off < bytes.length) {
@@ -119,7 +143,9 @@ public class ClassicPrinterPlugin extends Plugin {
                 } catch (Exception e) {
                     call.reject("Chop etishda xato: " + e.getMessage(), "write_failed");
                 } finally {
+                    if (watchdog != null) watchdog.cancel();
                     try { if (sock != null) sock.close(); } catch (Exception ignored) {}
+                    if (sock != null) { try { Thread.sleep(250); } catch (Exception ignored) {} }   // fix102: ulanish to'liq uzilib bo'lgach navbat boshqasiga o'tadi
                 }
             }
         }).start();
