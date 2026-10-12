@@ -711,6 +711,8 @@ const T = {
   auSaleDelete:{uz:"Chek o'chirildi",ru:"Чек удалён",en:"Receipt deleted",kk:"Чек өшірілді",ky:"Чек өчүрүлдү",tg:"Чек нест шуд"},
   auSaleRefund:{uz:"Savdo qaytarildi",ru:"Возврат продажи",en:"Sale refunded",kk:"Сату қайтарылды",ky:"Сатуу кайтарылды",tg:"Фурӯш баргардонда шуд"},
   auSaleEdit:{uz:"Chek tahrirlandi",ru:"Чек изменён",en:"Receipt edited",kk:"Чек өзгертілді",ky:"Чек өзгөртүлдү",tg:"Чек таҳрир шуд"},
+  auDebtPayment:{uz:"Qarz to'lovi qabul qilindi",ru:"Принят платёж по долгу",en:"Debt payment received",kk:"Қарыз төлемі қабылданды",ky:"Карыз төлөмү кабыл алынды",tg:"Пардохти қарз қабул шуд"},
+  auDebtManual:{uz:"Qo'lda qarz qo'shildi",ru:"Долг добавлен вручную",en:"Debt added manually",kk:"Қарыз қолмен қосылды",ky:"Карыз кол менен кошулду",tg:"Қарз дастӣ илова шуд"},
   auExpenseDelete:{uz:"Xarajat o'chirildi",ru:"Расход удалён",en:"Expense deleted",kk:"Шығыс өшірілді",ky:"Чыгым өчүрүлдү",tg:"Хароҷот нест шуд"},
   auStaffDelete:{uz:"Xodim o'chirildi",ru:"Сотрудник удалён",en:"Staff deleted",kk:"Қызметкер өшірілді",ky:"Кызматкер өчүрүлдү",tg:"Корманд нест шуд"},
   auLogin:{uz:"Kirish (PIN)",ru:"Вход (PIN)",en:"Login (PIN)",kk:"Кіру (PIN)",ky:"Кирүү (PIN)",tg:"Воруд (PIN)"},
@@ -1881,6 +1883,8 @@ async function nextReceiptNumber(){
   return `${deviceId}-${String(cachedReceiptCounter).padStart(4,'0')}`;
 }
 function todayStr(){ return new Date().toDateString(); }
+/* fix100-audit: mahalliy YYYY-MM-DD (toISOString UTC beradi va UTC+5 da sanani bir kunga suradi) */
+function __ymdLocal(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 // Currencies the business can choose to LABEL amounts with (see the
 // currency picker in Business settings). This changes the displayed
 // symbol/label only — it does not convert amounts or add decimal
@@ -5942,6 +5946,7 @@ function openCustomerHub(opts){
         shiftId: state.currentShift ? state.currentShift.id : null, branchId: state.currentBranchId };
       state.ledger.push(entry);
       saveCustomers(); saveLedger(); addLedgerDoc(entry);
+      try{ auditLog('debtPayment', c.name + ': ' + fmt(amount) + ' (' + method + ')', {customerId: c.id}); }catch(_e){} /* fix100 */
       showToast(tr('chSaved'));
       H.view = 'detail'; H.render();
     });
@@ -6745,9 +6750,9 @@ function openCheckoutModal(){
     // Never let a discount exceed the sale itself — a fixed-amount discount
     // typed larger than the cart total would otherwise produce a negative
     // sale, which breaks stock/debt accounting downstream.
-    return Math.min(raw, subtotal());
+    return Math.round(Math.min(raw, subtotal())); /* fix100 */
   }
-  function serviceChargeAmount(){ return (subtotal() - discountAmount()) * (serviceChargePercent/100); }
+  function serviceChargeAmount(){ return Math.round((subtotal() - discountAmount()) * (serviceChargePercent/100)); /* fix100 */ }
   function selectedCustomer(){
     return (selectedCustomerId && selectedCustomerId!=='__none__' && selectedCustomerId!=='__new__')
       ? state.customers.find(c=>c.id===selectedCustomerId) : null;
@@ -6761,7 +6766,7 @@ function openCheckoutModal(){
     return Math.min(cust.bonusBalance, Math.max(0, subtotal() - discountAmount()));
   }
   function bonusAmount(){ return Math.min(bonusRedeemAmount, maxBonusRedeemable()); }
-  function grandTotal(){ return subtotal() - discountAmount() - bonusAmount() + serviceChargeAmount() + deliveryFee; }
+  function grandTotal(){ return Math.round(subtotal() - discountAmount() - bonusAmount() + serviceChargeAmount() + deliveryFee); /* fix100 */ }
   const showOrderType = state.settings.restaurantMode;
 
   function bodyHtml(){
@@ -7304,9 +7309,9 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     extras.discountType==='percent' ? subtotalPreview * ((extras.discountValue||0)/100) : (extras.discountValue||0),
     subtotalPreview
   );
-  const discountedSubtotalPreview = subtotalPreview - discountAmountPreview;
-  const serviceChargePreview = discountedSubtotalPreview * ((extras.serviceChargePercent||0)/100);
-  const totalPreview = discountedSubtotalPreview + serviceChargePreview + (extras.deliveryFee||0);
+  const discountedSubtotalPreview = subtotalPreview - Math.round(discountAmountPreview); /* fix100 */
+  const serviceChargePreview = Math.round(discountedSubtotalPreview * ((extras.serviceChargePercent||0)/100));
+  const totalPreview = Math.round(discountedSubtotalPreview + serviceChargePreview + (extras.deliveryFee||0));
 
   // A sale can now be split across two payment methods (half cash half
   // card, half card half on credit, etc.) instead of only ever being ONE
@@ -7345,6 +7350,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     } else {
       customerId = selId;
       existingCustomerForLimitCheck = state.customers.find(c=>c.id===selId);
+      if(!existingCustomerForLimitCheck){ errorEl.textContent = tr('selectCustomer'); return; } /* fix100: mijoz yo'q — sotuv boshlanmaydi */
     }
     const limit = (existingCustomerForLimitCheck && existingCustomerForLimitCheck.creditLimit) || state.settings.defaultCreditLimit || 0;
     const currentDebt = (existingCustomerForLimitCheck && existingCustomerForLimitCheck.debt) || 0;
@@ -7393,10 +7399,10 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     return item;
   });
   const subtotal = cartSubtotal();
-  const discountAmount = Math.min(
+  const discountAmount = Math.round(Math.min(
     extras.discountType==='percent' ? subtotal * ((extras.discountValue||0)/100) : (extras.discountValue||0),
     subtotal
-  );
+  )); /* fix100 */
   const discountedSubtotal = subtotal - discountAmount;
   // Re-validated here against the actual customer record — never just
   // trusting whatever number the checkout screen sent — for the exact
@@ -7409,9 +7415,9 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   const bonusRedeemed = (state.settings.loyaltyEnabled && customerForBonus && customerForBonus.bonusBalance > 0)
     ? Math.max(0, Math.min(extras.bonusRedeemAmount||0, customerForBonus.bonusBalance, discountedSubtotal))
     : 0;
-  const serviceChargeAmount = discountedSubtotal * ((extras.serviceChargePercent||0)/100);
+  const serviceChargeAmount = Math.round(discountedSubtotal * ((extras.serviceChargePercent||0)/100)); /* fix100 */
   const deliveryFee = extras.deliveryFee || 0;
-  const total = discountedSubtotal - bonusRedeemed + serviceChargeAmount + deliveryFee;
+  const total = Math.round(discountedSubtotal - bonusRedeemed + serviceChargeAmount + deliveryFee); /* fix100 */
   items.forEach(it=>{
     const p=state.products.find(pr=>pr.id===it.productId);
     const v = getVariant(p, it.variantId);
@@ -12434,7 +12440,7 @@ function openCustomerLedger(customerId){
           <span>${new Date(h.date).toLocaleString()}</span>
           <span class="ledger-amt ${h.type==='sale'?'up':'down'}">${h.type==='sale'?'+':'−'}${fmt(h.amount)}</span>
         </div>
-        ${(h.staffName || h.note) ? `<div class="subtle" style="font-size:11px;">${h.staffName ? (tr('cashier')+': '+h.staffName) : ''}${h.staffName && h.note ? ' · ' : ''}${escapeHtml(h.note||'')}</div>` : ''}
+        ${(h.staffName || h.note) ? `<div class="subtle" style="font-size:11px;">${h.staffName ? (tr('cashier')+': '+escapeHtml(h.staffName)) : ''}${h.staffName && h.note ? ' · ' : ''}${escapeHtml(h.note||'')}</div>` : ''}
       </div>
     `).join('') : `<div class="subtle" style="padding:10px 0;">${tr('noHistory')}</div>`}</div>
   `);
@@ -12567,10 +12573,10 @@ function openLedgerForm(customerId, type){
   openModal(`
     <div class="modal-title">${type==='payment'?tr('recordPayment'):tr('addDebtManually')}</div>
     <div class="field"><label class="field-label">${tr('paymentAmount')}</label><input type="text" inputmode="numeric" id="lf-amount"></div>
-    <div class="field"><label class="field-label">${tr('dateTime')}</label><input type="datetime-local" id="lf-datetime" value="${toLocalDatetimeInputValue(new Date())}"></div>
+    <div class="field"><label class="field-label">${tr('dateTime')}</label><input type="datetime-local" id="lf-datetime" value="${toLocalDatetimeInputValue(new Date())}"${isAdmin()?'':' disabled'}></div>
     ${state.staff.length ? `
       <div class="field"><label class="field-label">${tr('cashier')}</label>
-        <select id="lf-staff">
+        <select id="lf-staff"${isAdmin()?'':' disabled'}>
           ${state.staff.map(s=>`<option value="${escapeHtml(s.name)}" ${state.currentStaff && state.currentStaff.id===s.id?'selected':''}>${escapeHtml(s.name)}</option>`).join('')}
         </select>
       </div>
@@ -12587,9 +12593,10 @@ function openLedgerForm(customerId, type){
     const amount = parseMoneyInput(document.getElementById('lf-amount').value);
     const note = document.getElementById('lf-note').value.trim();
     const dtVal = document.getElementById('lf-datetime').value;
-    const iso = dtVal ? new Date(dtVal).toISOString() : new Date().toISOString();
+    const __lfAdmin = isAdmin(); /* fix100: xodim sana/ismni o'zgartira olmaydi */
+    let iso; try{ iso = (dtVal && __lfAdmin) ? new Date(dtVal).toISOString() : new Date().toISOString(); }catch(_e){ iso = new Date().toISOString(); }
     const staffSelect = document.getElementById('lf-staff');
-    const staffName = staffSelect ? staffSelect.value : (state.currentStaff ? state.currentStaff.name : '');
+    const staffName = (staffSelect && __lfAdmin) ? staffSelect.value : (state.currentStaff ? state.currentStaff.name : (staffSelect ? staffSelect.value : ''));
     if(isNaN(amount) || amount<=0){ document.getElementById('lf-error').textContent = tr('invalidAmount'); return; }
     const cust = state.customers.find(c=>c.id===customerId);
     if(!cust){ return; }
@@ -12610,7 +12617,9 @@ function openLedgerForm(customerId, type){
     if(type==='payment'){ __spDebtSet(cust, Math.max(0,(cust.debt||0)-amount)); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'payment',amount,date:iso,note,staffName, method: (((document.getElementById('lf-method')||{}).value)||'cash'), createdAt: new Date().toISOString(), shiftId: state.currentShift ? state.currentShift.id : null, branchId: state.currentBranchId}; /* fix81 */ }
     else { __spDebtSet(cust, (cust.debt||0)+amount); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'sale',amount,date:iso,note,staffName}; }
     state.ledger.push(ledgerEntry);
-    saveCustomers(); saveLedger(); addLedgerDoc(ledgerEntry); closeModal(); renderAll();
+    saveCustomers(); saveLedger(); addLedgerDoc(ledgerEntry);
+    try{ auditLog(type==='payment' ? 'debtPayment' : 'debtManual', cust.name + ': ' + fmt(amount), {customerId: cust.id}); }catch(_e){} /* fix100 */
+    closeModal(); renderAll();
   });
 }
 
@@ -13156,15 +13165,15 @@ function renderReportsCategory(container, cat){
       // about a work week rather than the JS-default Sunday-start one.
       const diffToMonday = (day===0) ? 6 : day-1;
       const monday = new Date(now); monday.setDate(now.getDate()-diffToMonday);
-      document.getElementById('range-from').value = monday.toISOString().slice(0,10);
-      document.getElementById('range-to').value = now.toISOString().slice(0,10);
+      document.getElementById('range-from').value = __ymdLocal(monday);
+      document.getElementById('range-to').value = __ymdLocal(now);
       runRangeReport();
     });
     document.getElementById('range-preset-month').addEventListener('click', ()=>{
       const now = new Date();
       const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      document.getElementById('range-from').value = firstOfMonth.toISOString().slice(0,10);
-      document.getElementById('range-to').value = now.toISOString().slice(0,10);
+      document.getElementById('range-from').value = __ymdLocal(firstOfMonth);
+      document.getElementById('range-to').value = __ymdLocal(now);
       runRangeReport();
     });
     return;
@@ -13214,8 +13223,8 @@ function renderReportsCategory(container, cat){
 
   if(cat==='audit'){
     if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
-    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount'};
-    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)'};
+    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount'};
+    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)'};
     container.innerHTML = `${reportsBackHeader(tr('auditReport'))}<p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('auditHint')}</p>
       <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
       <div id="audit-list"><div class="empty-state">…</div></div>`;
@@ -13590,7 +13599,7 @@ function renderReportsCategory(container, cat){
         <div id="inv-details-${rowKey}" style="display:none;margin:-4px 0 8px;padding:10px 12px;background:var(--surface-soft);border-radius:12px;">
           <div class="row"><span class="subtle">${tr('costPrice')}</span><span>${fmt(p.costPrice||0)}</span></div>
           <div class="row"><span class="subtle">${tr('price')}</span><span>${fmt(p.price)}</span></div>
-          ${p.supplierName ? `<div class="row"><span class="subtle">${tr('supplierInfo')}</span><span>${p.supplierName} ${p.supplierPhone?('· '+p.supplierPhone):''}</span></div>` : ''}
+          ${p.supplierName ? `<div class="row"><span class="subtle">${tr('supplierInfo')}</span><span>${escapeHtml(p.supplierName)} ${p.supplierPhone?('· '+escapeHtml(p.supplierPhone)):''}</span></div>` : ''}
           <div class="row"><span class="subtle">${tr('expiryDate')}</span><span style="color:${expiryColor};font-weight:700;">${expiryText}</span></div>
         </div>
       `;
@@ -15261,7 +15270,7 @@ async function renderSettingsAgentMap(container){
     const bounds = [];
     points.forEach(p=>{
       const marker = L.marker([p.lat, p.lng]).addTo(map);
-      marker.bindPopup(`<strong>${p.staffName}</strong><br>${new Date(p.updatedAt).toLocaleString()}`);
+      marker.bindPopup(`<strong>${escapeHtml(p.staffName)}</strong><br>${new Date(p.updatedAt).toLocaleString()}`);
       bounds.push([p.lat, p.lng]);
     });
     if(bounds.length > 1) map.fitBounds(bounds, {padding:[30,30]});
@@ -15271,7 +15280,7 @@ async function renderSettingsAgentMap(container){
         const minsAgo = Math.floor((new Date() - new Date(p.updatedAt))/60000);
         const stale = minsAgo > 30;
         return `<div class="list-item">
-          <div class="info"><div class="name">${p.staffName}</div><div class="meta">${minsAgo} ${tr('minutesAgoSuffix')}</div></div>
+          <div class="info"><div class="name">${escapeHtml(p.staffName)}</div><div class="meta">${minsAgo} ${tr('minutesAgoSuffix')}</div></div>
           <span class="badge ${stale?'badge-debt':'badge-clear'}">${stale?tr('locationStale'):tr('locationLive')}</span>
         </div>`;
       }).join('');
