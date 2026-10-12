@@ -119,6 +119,7 @@ if (!__fbAdmin.apps.length) __fbAdmin.initializeApp();
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { handleSupportMessage, handleDailyDebt } = require('./src/push/notify');
+const { handleDailyReports } = require('./src/push/dailyReport');   /* fix105-report */
 
 /* Yordam chatiga yangi xabar yozilsa: biznes -> super adminga, super admin -> biznesga push (ovoz bilan) */
 exports.notifySupportMessage = onDocumentCreated('businesses/{bizId}/support/{msgId}', async function (event) {
@@ -130,11 +131,12 @@ exports.notifySupportMessage = onDocumentCreated('businesses/{bizId}/support/{ms
   } catch (e) { console.error('notifySupportMessage xatosi', e); }
 });
 
-/* Har kuni 21:00 (Toshkent) — ega/admin qurilmalariga kunlik qarz hisoboti eslatmasi (ovoz bilan) */
-exports.dailyDebtPush = onSchedule({ schedule: '0 21 * * *', timeZone: 'Asia/Tashkent' }, async function () {
+/* fix105-report: Har 10 daqiqada tekshiradi; har bir biznesning o'zi belgilagan kunlik hisobot vaqti kelganda
+   ega/admin qurilmalariga "Kunlik xulosa" + qarz eslatmasi yuboradi (ovoz bilan). Kuniga bir marta. */
+exports.dailyDebtPush = onSchedule({ schedule: 'every 10 minutes', timeZone: 'Asia/Tashkent' }, async function () {
   try {
-    const st = await handleDailyDebt({ db: __fbAdmin.firestore(), messaging: __fbAdmin.messaging() });
-    console.log('dailyDebtPush', JSON.stringify(st));
+    const st = await handleDailyReports({ db: __fbAdmin.firestore(), messaging: __fbAdmin.messaging() }, new Date());
+    if (st.businesses || st.errors) console.log('dailyDebtPush', JSON.stringify(st));
   } catch (e) { console.error('dailyDebtPush xatosi', e); }
 });
 
