@@ -6403,7 +6403,8 @@ async function buildInvoicePdf(sale){
       txt(trR('invDate')+': '+new Date(sale.date).toLocaleString(), W/2, y, 20, false, 'center'); y += 40;
       ctx.font = 'bold 20px Arial, sans-serif'; ctx.textAlign = 'left';
       txt(trR('invSeller')+': ', M, y, 20, true); txt((st.businessName||'')+(st.businessDirector?(' — '+st.businessDirector):''), M+220, y, 20); y += 28;
-      txt(trR('invBuyer')+': ', M, y, 20, true); txt(cust ? (cust.name+(cust.phone?(' — '+cust.phone):'')) : trR('noCustomerLinked'), M+220, y, 20); y += 40;
+      txt(trR('invBuyer')+': ', M, y, 20, true); txt(cust ? (cust.name+(cust.phone?(' — '+cust.phone):'')) : trR('noCustomerLinked'), M+220, y, 20); y += (cust && __custAddress(cust)) ? 28 : 40;
+      if(cust && __custAddress(cust)){ txt(trR('customerAddress')+': ', M, y, 20, true); txt(__custAddress(cust).slice(0, 90), M+220, y, 20); y += 40; }   /* fix104-custline */
     } else { txt(trR('invTitle')+' '+trR('invNo')+' '+number+' — '+(pi+1), M, y, 22, true); y += 40; }
     const cols = [M, M+60, M+580, M+680, M+780, M+930, W-M];
     ctx.fillStyle = '#e8eef9'; ctx.fillRect(M, y, W-2*M, 40); ctx.fillStyle = '#000';
@@ -7843,6 +7844,8 @@ function receiptImageBlob(sale, customer){
     const ctx = canvas.getContext('2d');
 
     const itemLayouts = sale.items.map(it=>computeReceiptItemLayout(ctx, it, width, padding));
+    ctx.font = '13px Arial';
+    const __custLines = customer ? __custReceiptLines(customer, t=>__wrapCanvasText(ctx, t, width - padding*2)) : [];   /* fix104-custline */
 
     // First pass: measure total height
     let y = padding;
@@ -7857,7 +7860,7 @@ function receiptImageBlob(sale, customer){
     if(sale.tableName) y += smallLineH;
     if(sale.orderType) y += smallLineH;
     if(sale.cashierName) y += smallLineH;
-    if(customer) y += smallLineH;
+    if(customer) y += smallLineH * Math.max(1, __custLines.length);   /* fix104-custline */
     y += 16;
     itemLayouts.forEach(layout=>{ y += (layout.sameLine ? 1 : (layout.mergeLast ? layout.nameLines.length : layout.nameLines.length+1)) * lineH; });
     y += 16;
@@ -7924,7 +7927,7 @@ function receiptImageBlob(sale, customer){
     if(sale.tableName){ ctx.fillText(tableWord()+': '+sale.tableName, padding, cy); cy += smallLineH; }
     if(sale.orderType){ ctx.fillText(sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway'), padding, cy); cy += smallLineH; }
     if(sale.cashierName){ ctx.fillText(trR('cashier')+': '+sale.cashierName, padding, cy); cy += smallLineH; }
-    if(customer){ ctx.fillText(trR('customerName')+': '+customer.name, padding, cy); cy += smallLineH; }
+    if(customer){ __custLines.forEach(l=>{ ctx.fillText(l, padding, cy); cy += smallLineH; }); }   /* fix104-custline */
     cy += 4; sepLine(cy); cy += 22;
 
     sale.items.forEach((it,idx)=>{
@@ -8273,6 +8276,33 @@ function buildItemReceiptLines(nameQtyText, priceStr, width){
   return lines;
 }
 
+/* fix104-custline: chekda mijoz — "Mijoz: Ism, telefon" va keyingi qatorda "Manzil: ..." */
+function __custNamePhone(c){ return String(c.name||'') + (c.phone ? ', ' + String(c.phone) : ''); }
+function __custNamePhoneAtomic(c){ return String(c.name||'') + (c.phone ? ', ' + String(c.phone).replace(/ /g, ' ') : ''); }   /* telefon o'rashda bo'linmasin */
+function __custAddress(c){ return (c && c.address) ? String(c.address).trim() : ''; }
+function __custReceiptLines(c, wrapFn){
+  const out = [];
+  if(!c) return out;
+  wrapFn(trR('customerName') + ': ' + __custNamePhoneAtomic(c)).forEach(l=>out.push(l.replace(/ /g, ' ')));
+  const ad = __custAddress(c);
+  if(ad) wrapFn(trR('customerAddress') + ': ' + ad).forEach(l=>out.push(l));
+  return out;
+}
+function __wrapCanvasText(ctx, text, maxW){
+  const words = String(text).split(' '), lines = []; let cur = '';
+  words.forEach(w=>{
+    let word = w;
+    while(ctx.measureText(word).width > maxW && word.length > 1){   // juda uzun so'z — bo'lib yoziladi
+      let k = word.length; while(k > 1 && ctx.measureText(word.slice(0,k)).width > maxW) k--;
+      if(cur){ lines.push(cur); cur = ''; }
+      lines.push(word.slice(0,k)); word = word.slice(k);
+    }
+    const t = cur ? cur + ' ' + word : word;
+    if(cur && ctx.measureText(t).width > maxW){ lines.push(cur); cur = word; } else cur = t;
+  });
+  if(cur) lines.push(cur);
+  return lines.length ? lines : [''];
+}
 function buildReceiptText(...a){ return withReceiptLang(()=>buildReceiptTextInner(...a)); }
 function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   const s = state.settings;
@@ -8293,7 +8323,7 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   if(sale.receiptNumber) lines.push(trR('receiptNumberLabel')+': '+sale.receiptNumber);
   if(sale.tableName) lines.push(tableWord()+': '+sale.tableName);
   if(sale.cashierName) lines.push(trR('cashier')+': '+sale.cashierName);
-  if(customer) lines.push(trR('customerName')+': '+customer.name);
+  if(customer) __custReceiptLines(customer, t=>wrapText(t, width)).forEach(l=>lines.push(l));   /* fix104-custline */
   lines.push(sep);
   sale.items.forEach(it=>{
     const amount = fmt(it.price*it.qty);
@@ -8607,7 +8637,7 @@ function buildReceiptHtmlInner(sale, customer){
     ${sale.tableName?`<div>${tableWord()}: ${escapeHtml(sale.tableName)}</div>`:''}
     ${sale.orderType?`<div>${sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway')}</div>`:''}
     ${sale.cashierName?`<div>${trR('cashier')}: ${escapeHtml(sale.cashierName)}</div>`:''}
-    ${customer?`<div>${trR('customerName')}: ${escapeHtml(customer.name)}</div>`:''}
+    ${customer?`<div>${trR('customerName')}: ${escapeHtml(__custNamePhone(customer))}</div>`:''}${(customer && __custAddress(customer))?`<div>${trR('customerAddress')}: ${escapeHtml(__custAddress(customer))}</div>`:''}   <!-- fix104-custline -->
     <hr style="${hrStyle}">
     <table style="width:100%;border-collapse:collapse;">${rows}</table>
     <hr style="${hrStyle}">
