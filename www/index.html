@@ -5044,7 +5044,7 @@ function productCardHtml(p){
       </div>
       <div class="product-name">${escapeHtml(p.name)}</div>
       <div class="product-price" style="${inWholesale?'color:var(--warm);font-size:12px;':''}">${priceLabel}</div>
-      <div class="product-stock" style="${totalStock<=0?'color:var(--danger);font-weight:700;':''}">${tr('stock')}: ${totalStock} ${unitLabel(p.unit)}</div>
+      <div class="product-stock" style="${totalStock<=0?'color:var(--danger);font-weight:700;':''}">${tr('stock')}: ${totalStock} ${unitLabel(p.unit)}${(hasBox && totalStock>=p.unitsPerBox) ? ' · ≈'+Math.floor(totalStock/p.unitsPerBox)+' '+escapeHtml(p.boxLabel||tr('boxDefaultLabel')) : ''}</div>
     </div>
   `;
 }
@@ -5444,6 +5444,11 @@ function openWholesalePicker(product){
   document.getElementById('wp-box-btn').addEventListener('click', ()=>{ addBoxToCart(product.id); closeModal(); });
 }
 
+/* fix99-stock: bir mahsulot/variantning BOSHQA qatorlari band qilgan jami dona (blok = qty x blokdagi dona) */
+function __unitsOtherLines(cart, productId, variantId, exclude){
+  return cart.filter(c=>c!==exclude && c.productId===productId && (c.variantId||null)===(variantId||null))
+    .reduce((s,c)=>s + (c.saleMode==='box' ? c.qty*(c.unitsPerBox||1) : c.qty), 0);
+}
 function addUnitToCart(productId, qty, mode){
   qty = (qty===undefined||qty===null) ? 1 : qty;
   const product = state.products.find(p=>p.id===productId);
@@ -5457,7 +5462,7 @@ function addUnitToCart(productId, qty, mode){
   // it at 5, not silently add up to 25, which is what a plain tap already
   // does and is NOT what typing a fresh number should mean.
   const finalQty = mode==='set' ? qty : inCartQty + qty;
-  if(!state.settings.allowOversell && finalQty > product.stock){ showToast(tr('notEnoughStock')); return; }
+  if(!state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else cart.push({productId, qty:finalQty});
@@ -5475,7 +5480,7 @@ function addWholesaleUnitToCart(productId, qty, mode){
   const otherUnitsUsed = cart.filter(c=>c.productId===productId && c.saleMode!=='box' && c.priceTier!=='wholesale').reduce((s,c)=>s+c.qty,0);
   const inCartQty = existing ? existing.qty : 0;
   const finalQty = mode==='set' ? qty : inCartQty + qty;
-  if(!state.settings.allowOversell && finalQty + otherUnitsUsed > product.stock){ showToast(tr('notEnoughStock')); return; }
+  if(!state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else cart.push({productId, qty:finalQty, priceTier:'wholesale'});
@@ -5493,7 +5498,7 @@ function addBoxToCart(productId, qty, mode){
   const inCartBoxes = existing ? existing.qty : 0;
   const unitsAlreadyUsed = cart.filter(c=>c.productId===productId && c.saleMode!=='box').reduce((s,c)=>s+c.qty,0);
   const finalQty = mode==='set' ? qty : inCartBoxes + qty;
-  if(!state.settings.allowOversell && finalQty*product.unitsPerBox + unitsAlreadyUsed > product.stock){ showToast(tr('notEnoughStock')); return; }
+  if(!state.settings.allowOversell && finalQty*product.unitsPerBox + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else cart.push({productId, qty:finalQty, saleMode:'box', unitsPerBox:product.unitsPerBox, boxLabel: product.boxLabel || tr('boxDefaultLabel')});
@@ -5572,7 +5577,7 @@ function addVariantToCart(productId, variantId, skipRerender, asWholesale, qty, 
   const otherModeQty = cart.filter(c=>c.productId===productId && c.variantId===variantId && c.saleMode!=='box' && !(useWholesale ? c.priceTier==='wholesale' : c.priceTier!=='wholesale')).reduce((s,c)=>s+c.qty,0);
   const inCartQty = existing ? existing.qty : 0;
   const finalQty = mode==='set' ? qty : inCartQty + qty;
-  if(!state.settings.allowOversell && finalQty + otherModeQty > variant.stock){ showToast(tr('notEnoughStock')); return; }
+  if(!state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, variantId, existing) > variant.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else{
@@ -5595,7 +5600,7 @@ function addVariantBoxToCart(productId, variantId, skipRerender, qty, mode){
   const inCartBoxes = existing ? existing.qty : 0;
   const unitsAlreadyUsed = cart.filter(c=>c.productId===productId && c.variantId===variantId && c.saleMode!=='box').reduce((s,c)=>s+c.qty,0);
   const finalQty = mode==='set' ? qty : inCartBoxes + qty;
-  if(!state.settings.allowOversell && finalQty*product.unitsPerBox + unitsAlreadyUsed > variant.stock){ showToast(tr('notEnoughStock')); return; }
+  if(!state.settings.allowOversell && finalQty*product.unitsPerBox + __unitsOtherLines(cart, productId, variantId, existing) > variant.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else cart.push({productId, variantId, qty:finalQty, saleMode:'box', unitsPerBox:product.unitsPerBox, boxLabel: product.boxLabel || tr('boxDefaultLabel')});
@@ -6485,6 +6490,7 @@ function renderCartModalContent(){
         <div style="font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;">
           <span data-price-edit="${key}" style="text-decoration:underline dotted;cursor:pointer;${edited?'color:var(--accent-dark);font-weight:700;':''}">${fmt(price)}</span>
           ${edited ? `<span style="text-decoration:line-through;color:var(--ink-faint);">${fmt(basePrice)}</span>` : ''}
+          ${c.saleMode==='box' ? `<span class="box-units-hint" style="color:var(--ink-faint);">· ${c.qty*(c.unitsPerBox||1)} ${escapeHtml(unitLabel(p.unit))}</span>` : ''}
         </div>
       </div>
       <div class="qty-stepper"><button data-act="dec" data-key="${key}">−</button><span data-qty-edit="${key}" style="cursor:pointer;text-decoration:underline dotted;min-width:20px;text-align:center;font-weight:700;font-size:13px;">${c.qty}</span><button data-act="inc" data-key="${key}">+</button></div>
