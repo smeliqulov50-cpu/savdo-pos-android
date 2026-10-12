@@ -970,6 +970,10 @@ const T = {
   businessAddress:{uz:"Manzil",ru:"Адрес",en:"Address",kk:"Мекенжай",ky:"Дарек",tg:"Суроға"},
   businessPhone:{uz:"Telefon",ru:"Телефон",en:"Phone",kk:"Телефон",ky:"Телефон",tg:"Телефон"},
   currencyLabel2:{uz:"Valyuta",ru:"Валюта",en:"Currency",kk:"Валюта",ky:"Валюта",tg:"Асъор"},
+  tzLabel:{uz:"Soat poyasi",ru:"Часовой пояс",en:"Time zone",kk:"Уақыт белдеуі",ky:"Убакыт алкагы",tg:"Минтақаи вақт"},
+  tzAuto:{uz:"Qurilma vaqti (avtomatik)",ru:"Время устройства (авто)",en:"Device time (automatic)",kk:"Құрылғы уақыты (автоматты)",ky:"Түзмөк убактысы (автоматтык)",tg:"Вақти дастгоҳ (худкор)"},
+  tzHint:{uz:"Hisobotlar, «bugun», smena va barcha sanalar shu poyas bo'yicha hisoblanadi. Hamma qurilmada bir xil bo'ladi.",ru:"Отчёты, «сегодня», смены и все даты считаются по этому поясу. Одинаково на всех устройствах.",en:"Reports, “today”, shifts and all dates use this zone. Same on every device.",kk:"Есептер, «бүгін», ауысым және барлық күндер осы белдеу бойынша есептеледі. Барлық құрылғыда бірдей болады.",ky:"Отчеттор, «бүгүн», смена жана бардык даталар ушул алкак боюнча эсептелет. Бардык түзмөктө бирдей болот.",tg:"Ҳисоботҳо, «имрӯз», баст ва ҳамаи санаҳо аз рӯи ин минтақа ҳисоб карда мешаванд. Дар ҳамаи дастгоҳҳо яксон мешавад."},
+  tzNow:{uz:"Hozir shu poyasda",ru:"Сейчас в этом поясе",en:"Now in this zone",kk:"Қазір осы белдеуде",ky:"Азыр ушул алкакта",tg:"Ҳоло дар ин минтақа"},
   currencyHint:{uz:"Bu faqat chek/ekranlardagi belgi va joylashuvni o'zgartiradi (masalan so'm -> $) — avtomatik kurs bilan aylantirish emas. Narxlarni yangi valyutada o'zingiz qayta kiritishingiz kerak.",ru:"Это меняет только отображаемый символ и его положение (например сум -> $) — без автоматической конвертации по курсу. Цены нужно ввести заново в новой валюте.",en:"This only changes the displayed symbol and its position (e.g. so'm -> $) — it does not convert amounts by an exchange rate. You'll need to re-enter prices in the new currency yourself.",kk:"Бұл тек чектегі/экрандағы белгі мен орналасуын өзгертеді (мысалы сум -> $) — автоматты курс бойынша айырбастау емес. Бағаларды жаңа валютада өзіңіз қайта енгізуіңіз керек.",ky:"Бул чектеги/экрандагы белгини жана жайгашуусун гана өзгөртөт (мисалы сом -> $) — автоматтык курс менен алмаштыруу эмес. Бааларды жаңы валютада өзүңүз кайра киргизишиңиз керек.",tg:"Ин танҳо аломат ва ҷойгиршавии он дар чек/экранро тағйир медиҳад (масалан сӯм -> $) — на табдили автоматӣ бо қурб. Нархҳоро дар асъори нав худатон дубора ворид кунед."},
   receiptFooter:{uz:"Chek pastidagi matn",ru:"Текст внизу чека",en:"Receipt footer text",kk:"Чек астындағы мәтін",ky:"Чектин астындагы текст",tg:"Матни поёни чек"},
   staffSection:{uz:"Xodimlar",ru:"Сотрудники",en:"Staff",kk:"Қызметкерлер",ky:"Кызматкерлер",tg:"Кормандон"},
@@ -1883,6 +1887,121 @@ async function nextReceiptNumber(){
   return `${deviceId}-${String(cachedReceiptCounter).padStart(4,'0')}`;
 }
 function todayStr(){ return new Date().toDateString(); }
+
+/* fix101-tz: SOAT POYASI. Faqat sozlamalarda poyas tanlansa Date'ning "mahalliy" metodlari shu poyas bo'yicha ishlaydi.
+   Tanlanmasa (standart) hech narsa o'zgartirilmaydi. */
+var __TZ = { active:'', O:null, saved:null, fmt:null, memoTs:null, memoP:null, zone:'' };
+var TZ_OPTIONS = ['Asia/Tashkent','Asia/Almaty','Asia/Bishkek','Asia/Dushanbe','Asia/Ashgabat','Asia/Baku','Asia/Tbilisi','Asia/Yerevan','Europe/Moscow','Europe/Istanbul','Europe/Kyiv','Asia/Dubai','Asia/Seoul','UTC'];
+function __tzValid(z){ try{ new Intl.DateTimeFormat('en-US', {timeZone: z}); return true; }catch(e){ return false; } }
+function tzOffsetLabel(z){
+  try{
+    var p = new Intl.DateTimeFormat('en-US', {timeZone: z, timeZoneName: 'shortOffset'}).formatToParts(new (__TZ.O || Date)()).filter(function(x){ return x.type === 'timeZoneName'; })[0];
+    return (p ? p.value : '').replace('GMT', 'UTC') || '';
+  }catch(e){ return ''; }
+}
+function deviceTimeZone(){ try{ return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; }catch(e){ return ''; } }
+function __tzParts(ts){
+  var T = __TZ; if(T.memoTs === ts && T.memoP) return T.memoP;
+  var arr = T.fmt.formatToParts(ts), o = {};
+  for(var i = 0; i < arr.length; i++) o[arr[i].type] = arr[i].value;
+  var r = {y:+o.year, m:+o.month - 1, d:+o.day, h:(+o.hour) % 24, mi:+o.minute, s:+o.second, wd:o.weekday};
+  T.memoTs = ts; T.memoP = r; return r;
+}
+function __tzOff(ts){
+  var p = __tzParts(ts), ms = ((ts % 1000) + 1000) % 1000;
+  return __TZ.O.UTC(p.y, p.m, p.d, p.h, p.mi, p.s) - (ts - ms);
+}
+function __tzWall(y, m, d, h, mi, s, ms){
+  var g = __TZ.O.UTC(y, m, d, h, mi, s, ms); if(g !== g) return NaN;
+  var o1 = __tzOff(g - __tzOff(g)), t = g - o1, o2 = __tzOff(t);
+  if(o2 !== o1) t = g - o2;
+  return t;
+}
+function __tzHasZone(str){
+  var t = String(str).trim();
+  return /GMT|UTC/.test(t) || /Z$/i.test(t) || /[+-]\d{2}:?\d{2}$/.test(t) || /^\d{4}-\d{2}-\d{2}$/.test(t);
+}
+function __tzInstall(z){
+  var T = __TZ;
+  if(!T.O) T.O = window.Date;
+  var O = T.O, P = O.prototype, S = {};
+  T.zone = z;
+  T.fmt = new Intl.DateTimeFormat('en-US', {timeZone: z, hourCycle: 'h23', weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'});
+  T.memoTs = null; T.memoP = null;
+  ['getFullYear','getMonth','getDate','getDay','getHours','getMinutes','getSeconds','getTimezoneOffset','setFullYear','setMonth','setDate','setHours','setMinutes','setSeconds','setMilliseconds','toDateString','toTimeString','toString','toLocaleDateString','toLocaleTimeString','toLocaleString','constructor'].forEach(function(n){ S[n] = P[n]; });
+  T.saved = S;
+  var WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function pad(n, l){ n = String(n); while(n.length < (l || 2)) n = '0' + n; return n; }
+  function part(f){ return function(){ var t = this.getTime(); return t !== t ? NaN : f(__tzParts(t)); }; }
+  P.getFullYear = part(function(p){ return p.y; });
+  P.getMonth = part(function(p){ return p.m; });
+  P.getDate = part(function(p){ return p.d; });
+  P.getDay = part(function(p){ return WD.indexOf(p.wd); });
+  P.getHours = part(function(p){ return p.h; });
+  P.getMinutes = part(function(p){ return p.mi; });
+  P.getSeconds = part(function(p){ return p.s; });
+  P.getTimezoneOffset = function(){ var t = this.getTime(); return t !== t ? NaN : -__tzOff(t) / 60000; };
+  function setter(apply, fromInvalid){
+    return function(){
+      var t = this.getTime(), p, ms;
+      if(t !== t){ if(!fromInvalid) return NaN; p = {y:1970, m:0, d:1, h:0, mi:0, s:0}; ms = 0; }
+      else { var q = __tzParts(t); p = {y:q.y, m:q.m, d:q.d, h:q.h, mi:q.mi, s:q.s}; ms = ((t % 1000) + 1000) % 1000; }
+      var a = arguments; p.ms = ms; apply(p, a);
+      var nt = __tzWall(p.y, p.m, p.d, p.h, p.mi, p.s, p.ms);
+      this.setTime(nt); return nt;
+    };
+  }
+  P.setFullYear = setter(function(p, a){ p.y = +a[0]; if(a.length > 1) p.m = +a[1]; if(a.length > 2) p.d = +a[2]; }, true);
+  P.setMonth = setter(function(p, a){ p.m = +a[0]; if(a.length > 1) p.d = +a[1]; });
+  P.setDate = setter(function(p, a){ p.d = +a[0]; });
+  P.setHours = setter(function(p, a){ p.h = +a[0]; if(a.length > 1) p.mi = +a[1]; if(a.length > 2) p.s = +a[2]; if(a.length > 3) p.ms = +a[3]; });
+  P.setMinutes = setter(function(p, a){ p.mi = +a[0]; if(a.length > 1) p.s = +a[1]; if(a.length > 2) p.ms = +a[2]; });
+  P.setSeconds = setter(function(p, a){ p.s = +a[0]; if(a.length > 1) p.ms = +a[1]; });
+  P.setMilliseconds = setter(function(p, a){ p.ms = +a[0]; });
+  P.toDateString = function(){ var t = this.getTime(); if(t !== t) return 'Invalid Date'; var p = __tzParts(t); return p.wd + ' ' + MN[p.m] + ' ' + pad(p.d) + ' ' + pad(p.y, 4); };
+  P.toTimeString = function(){ var t = this.getTime(); if(t !== t) return 'Invalid Date'; var p = __tzParts(t), off = __tzOff(t) / 60000, sg = off < 0 ? '-' : '+', ao = Math.abs(off);
+    return pad(p.h) + ':' + pad(p.mi) + ':' + pad(p.s) + ' GMT' + sg + pad(Math.floor(ao / 60)) + pad(ao % 60) + ' (' + T.zone + ')'; };
+  P.toString = function(){ var t = this.getTime(); return t !== t ? 'Invalid Date' : (this.toDateString() + ' ' + this.toTimeString()); };
+  ['toLocaleDateString','toLocaleTimeString','toLocaleString'].forEach(function(n){
+    var f = S[n];
+    P[n] = function(loc, opts){ var o = Object.assign({}, opts); if(!o.timeZone) o.timeZone = T.zone; return f.call(this, loc, o); };
+  });
+  var PD = new Proxy(O, {
+    construct: function(target, args, nt){
+      var n = args.length, a0 = args[0];
+      if(n >= 2){
+        var v = []; for(var i = 0; i < 7; i++) v[i] = i < n ? +args[i] : (i === 2 ? 1 : 0);
+        if(v[0] >= 0 && v[0] <= 99) v[0] += 1900;
+        return Reflect.construct(target, [__tzWall(v[0], v[1], v[2], v[3], v[4], v[5], v[6])], nt);
+      }
+      if(n === 1 && typeof a0 === 'string' && !__tzHasZone(a0)){
+        var tmp = new target(a0);
+        if(tmp.getTime() !== tmp.getTime()) return Reflect.construct(target, [NaN], nt);
+        return Reflect.construct(target, [__tzWall(S.getFullYear.call(tmp), S.getMonth.call(tmp), S.getDate.call(tmp), S.getHours.call(tmp), S.getMinutes.call(tmp), S.getSeconds.call(tmp), tmp.getMilliseconds())], nt);
+      }
+      return Reflect.construct(target, args, nt);
+    },
+    apply: function(){ return new PD().toString(); }
+  });
+  P.constructor = PD;
+  window.Date = PD;
+}
+function __tzUninstall(){
+  var T = __TZ; if(!T.O || !T.saved) return;
+  var P = T.O.prototype;
+  Object.keys(T.saved).forEach(function(n){ P[n] = T.saved[n]; });
+  window.Date = T.O; T.saved = null; T.fmt = null; T.memoTs = null; T.memoP = null; T.zone = '';
+}
+function applyTimeZone(){
+  try{
+    var want = (typeof state !== 'undefined' && state && state.settings && state.settings.timeZone) || '';
+    if(want && !__tzValid(want)) want = '';
+    if(want === __TZ.active) return;
+    if(__TZ.active) __tzUninstall();
+    if(want) __tzInstall(want);
+    __TZ.active = want;
+  }catch(e){ try{ __tzUninstall(); }catch(_e){} __TZ.active = ''; }
+}
 /* fix100-audit: mahalliy YYYY-MM-DD (toISOString UTC beradi va UTC+5 da sanani bir kunga suradi) */
 function __ymdLocal(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 // Currencies the business can choose to LABEL amounts with (see the
@@ -2108,6 +2227,7 @@ async function loadAll(){
   state.ledger = l || [];
   state.lang = lang || 'uz';
   state.settings = Object.assign({businessName:'Savdo Pos', businessAddress:'', businessPhone:'', receiptFooter:'', printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true}, settings || {});
+  try{ applyTimeZone(); }catch(_e){} /* fix101-tz */
   // Remember whether this device already had its own saved settings. This
   // is used later (loadCloudData) to decide whether the cloud copy is
   // allowed to overwrite settings at all — see the note there for why.
@@ -2235,6 +2355,7 @@ function bindAuthLangRow(onLangChange){
   }, 0);
 }
 async function saveSettings(){
+  try{ applyTimeZone(); }catch(_e){} /* fix101-tz */
   // Stamped on every intentional local edit — the ONLY thing that lets
   // syncSettingsDoc()/pushSettingsToCloud() tell a genuinely newer edit
   // (made on another device, or in another tab of this same browser)
@@ -2574,7 +2695,7 @@ function productsCol(){ return businessDocRef().collection('products'); }
 function customersCol(){ return businessDocRef().collection('customers'); }
 
 function defaultSettingsObj(){
-  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', businessInn:'', businessBank:'', businessDirector:'', maxStaff:2, maxDevices:3, onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
+  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', businessInn:'', businessBank:'', businessDirector:'', maxStaff:2, maxDevices:3, onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', timeZone:'', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
 }
 
 const APP_VERSION = 110;
@@ -15041,6 +15162,15 @@ function renderSettingsBusiness(container){
         </select>
         <p class="subtle" style="margin:6px 0 0;font-size:11px;">${tr('currencyHint')}</p>
       </div>
+      <div class="field" id="tz-field">
+        <label class="field-label">${tr('tzLabel')}</label>
+        <select id="s-timezone">
+          <option value="" ${!state.settings.timeZone?'selected':''}>${tr('tzAuto')}${deviceTimeZone()?(' — '+escapeHtml(deviceTimeZone())):''}</option>
+          ${(state.settings.timeZone && TZ_OPTIONS.indexOf(state.settings.timeZone)<0 ? [state.settings.timeZone] : []).concat(TZ_OPTIONS).map(z=>`<option value="${escapeHtml(z)}" ${state.settings.timeZone===z?'selected':''}>${escapeHtml(z)}${tzOffsetLabel(z)?(' ('+tzOffsetLabel(z)+')'):''}</option>`).join('')}
+        </select>
+        <p class="subtle" style="margin:6px 0 0;font-size:11px;">${tr('tzHint')}</p>
+        <p class="subtle" style="margin:4px 0 0;font-size:11.5px;">${tr('tzNow')}: <strong>${new Date().toLocaleString()}</strong></p>
+      </div>
     </div>
 
     <h3 class="sub-title">${tr('businessType')}</h3>
@@ -15115,6 +15245,7 @@ function renderSettingsBusiness(container){
     if(phoneEl) state.settings.businessPhone = phoneEl.value.trim();
     if(ownerPhoneEl) state.settings.ownerPhone = ownerPhoneEl.value.trim();
     if(currencyEl) state.settings.currency = currencyEl.value;
+    const tzEl = document.getElementById('s-timezone'); if(tzEl) state.settings.timeZone = tzEl.value; /* fix101-tz */
   }
   if(restModeCheckbox) restModeCheckbox.addEventListener('change', (e)=>{
     captureVisibleFormFields();
@@ -15129,6 +15260,15 @@ function renderSettingsBusiness(container){
     saveSettings();
     if(e.target.checked) ensureDefaultTables();
     renderSettingsBusiness(container);
+  });
+  const tzSel = document.getElementById('s-timezone'); /* fix101-tz */
+  if(tzSel) tzSel.addEventListener('change', async (e)=>{
+    captureVisibleFormFields();
+    state.settings.timeZone = e.target.value;
+    await saveSettings();
+    applyTimeZone();
+    showToast(tr('savedSuccess'));
+    renderAll();
   });
   const businessTypeSelect = document.getElementById('s-business-type');
   if(businessTypeSelect) businessTypeSelect.addEventListener('change', (e)=>{
@@ -15185,7 +15325,8 @@ function renderSettingsBusiness(container){
       businessBank: (document.getElementById('s-bank')||{value:''}).value.trim(),
       businessDirector: (document.getElementById('s-director')||{value:''}).value.trim(),
       ownerPhone: document.getElementById('s-owner-phone').value.trim(),
-      currency: document.getElementById('s-currency').value
+      currency: document.getElementById('s-currency').value,
+      timeZone: (document.getElementById('s-timezone')||{value:(state.settings.timeZone||'')}).value
     });
     // Wait for the write to actually land in local storage before telling
     // the person it's saved — otherwise closing the app right after seeing
@@ -17082,6 +17223,7 @@ h1{font-family:'Manrope',sans-serif;font-weight:800;text-align:center;}
 
 /* ---------- MAIN RENDER ---------- */
 function renderAll(){
+  try{ applyTimeZone(); }catch(_e){} /* fix101-tz */
   document.getElementById('brand-label').innerHTML = 'Savdo Pos<span>.</span>';
   renderLoginIfNeeded();
   if(!state.setupDone && state.staff.length===0) return;
