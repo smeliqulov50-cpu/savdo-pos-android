@@ -1262,6 +1262,25 @@ const T = {
   deletedCustomersHint:{uz:"Bu yerda xodimlar tomonidan o'chirilgan mijozlar ko'rinadi — kim va qachon o'chirganini ko'rish, kerak bo'lsa tiklash mumkin.",ru:"Здесь показаны клиенты, удалённые сотрудниками — видно, кто и когда удалил, при необходимости можно восстановить.",en:"Customers deleted by staff appear here — you can see who deleted them and when, and restore them if needed.",kk:"Мұнда қызметкерлер жойған клиенттер көрінеді — кім және қашан жойғанын көруге, қажет болса қалпына келтіруге болады.",ky:"Бул жерде кызматкерлер өчүргөн кардарлар көрүнөт — ким жана качан өчүргөнүн көрүүгө, керек болсо калыбына келтирүүгө болот.",tg:"Дар ин ҷо мизоҷони аз ҷониби кормандон нестшуда нишон дода мешаванд — шумо мебинед, ки кӣ ва кай нест кардааст ва дар сурати зарурат барқарор карда метавонед."},
   deletedByLabel:{uz:"Kim o'chirdi",ru:"Кто удалил",en:"Deleted by",kk:"Кім жойды",ky:"Ким өчүрдү",tg:"Кӣ нест кард"},
   restoreBtn:{uz:"Tiklash",ru:"Восстановить",en:"Restore",kk:"Қалпына келтіру",ky:"Калыбына келтирүү",tg:"Барқарор кардан"},
+  /* fix105-report */
+  dailyReportTimeLabel:{uz:"Kunlik hisobot vaqti",ru:"Время ежедневного отчёта",en:"Daily report time",kk:"Күнделікті есеп уақыты",ky:"Күндөлүк отчёт убактысы",tg:"Вақти ҳисоботи рӯзона"},
+  dailyReportTimeHint:{uz:"Har kuni shu vaqtdan boshlab qarz hisoboti va bugungi xulosa chiqadi. Hisobotni yuklab olish majburiy — uni o'chirib bo'lmaydi. Vaqtni 12:00 dan 23:00 gacha tanlash mumkin.",ru:"Каждый день с этого времени появляется отчёт по долгам и итоги дня. Скачивание отчёта обязательно — отключить его нельзя. Время можно выбрать с 12:00 до 23:00.",en:"From this time every day the debt report and today's summary appear. Downloading the report is mandatory and cannot be turned off. You can choose a time between 12:00 and 23:00.",kk:"Күн сайын осы уақыттан бастап қарыз есебі мен бүгінгі қорытынды шығады. Есепті жүктеу міндетті — оны өшіруге болмайды. Уақытты 12:00-ден 23:00-ге дейін таңдауға болады.",ky:"Күн сайын ушул убактан тартып карыз отчёту жана бүгүнкү жыйынтык чыгат. Отчётту жүктөп алуу милдеттүү — аны өчүрүүгө болбойт. Убакытты 12:00дөн 23:00гө чейин тандаса болот.",tg:"Ҳар рӯз аз ҳамин вақт ҳисоботи қарз ва хулосаи имрӯза пайдо мешавад. Боргирии ҳисобот ҳатмист — онро хомӯш кардан мумкин нест. Вақтро аз 12:00 то 23:00 интихоб кардан мумкин аст."},
+  dailyReportTimeSaved:{uz:"Saqlandi. Kunlik hisobot har kuni {t} dan chiqadi.",ru:"Сохранено. Ежедневный отчёт будет появляться каждый день с {t}.",en:"Saved. The daily report will appear every day from {t}.",kk:"Сақталды. Күнделікті есеп күн сайын {t} бастап шығады.",ky:"Сакталды. Күндөлүк отчёт күн сайын {t} тартып чыгат.",tg:"Нигоҳ дошта шуд. Ҳисоботи рӯзона ҳар рӯз аз {t} пайдо мешавад."},
+  dsTitle:{uz:"Bugungi xulosa",ru:"Итоги дня",en:"Today's summary",kk:"Бүгінгі қорытынды",ky:"Бүгүнкү жыйынтык",tg:"Хулосаи имрӯза"},
+  dsSales:{uz:"Sotuv",ru:"Продажи",en:"Sales",kk:"Сатылым",ky:"Сатуу",tg:"Фурӯш"},
+  dsChecks:{uz:"{n} ta chek",ru:"чеков: {n}",en:"{n} receipts",kk:"{n} чек",ky:"{n} чек",tg:"{n} чек"},
+  dsCash:{uz:"Naqd",ru:"Наличные",en:"Cash",kk:"Қолма-қол",ky:"Накта",tg:"Нақд"},
+  dsCard:{uz:"Karta",ru:"Карта",en:"Card",kk:"Карта",ky:"Карта",tg:"Корт"},
+  dsCredit:{uz:"Nasiyaga",ru:"В долг",en:"On credit",kk:"Қарызға",ky:"Насыяга",tg:"Қарзӣ"},
+  dsProfit:{uz:"Foyda (tannarxdan keyin)",ru:"Прибыль (после себестоимости)",en:"Profit (after cost)",kk:"Пайда (өзіндік құннан кейін)",ky:"Пайда (өздүк нарктан кийин)",tg:"Фоида (баъди арзиш)"},
+  dsExpenses:{uz:"Xarajatlar",ru:"Расходы",en:"Expenses",kk:"Шығындар",ky:"Чыгымдар",tg:"Хароҷот"},
+  dsNet:{uz:"Sof foyda",ru:"Чистая прибыль",en:"Net profit",kk:"Таза пайда",ky:"Таза пайда",tg:"Фоидаи софи"},
+  dsDebtPaid:{uz:"Qarz to'lovlari (olindi)",ru:"Оплаты долгов (получено)",en:"Debt payments received",kk:"Қарыз төлемдері (алынды)",ky:"Карыз төлөмдөрү (алынды)",tg:"Пардохти қарзҳо (гирифта шуд)"},
+  dsRefunds:{uz:"Qaytarishlar",ru:"Возвраты",en:"Refunds",kk:"Қайтарулар",ky:"Кайтаруулар",tg:"Бозгардонӣ"},
+  dsTop:{uz:"Eng ko'p sotilgan",ru:"Чаще всего продано",en:"Top sellers",kk:"Ең көп сатылған",ky:"Эң көп сатылган",tg:"Бештар фурӯхташуда"},
+  dsLow:{uz:"Kam qolgan tovarlar",ru:"Товаров на исходе",en:"Low-stock items",kk:"Азайған тауарлар",ky:"Азайган товарлар",tg:"Молҳои кам монда"},
+  dsNoSales:{uz:"Bugun hali sotuv bo'lmadi",ru:"Сегодня продаж ещё не было",en:"No sales yet today",kk:"Бүгін әлі сатылым болмады",ky:"Бүгүн азырынча сатуу болгон жок",tg:"Имрӯз ҳанӯз фурӯш нашуд"},
+  dsAllBranches:{uz:"Barcha filiallar bo'yicha",ru:"По всем филиалам",en:"All branches combined",kk:"Барлық филиалдар бойынша",ky:"Бардык филиалдар боюнча",tg:"Аз рӯи ҳамаи филиалҳо"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -1532,7 +1551,7 @@ const T = {
   notifSaleSoundLabel:{uz:"Sotuv tasdiqlash ovozi",ru:"Звук подтверждения продажи",en:"Sale confirmation sound"},
   notifSaleSoundHint:{uz:"Sotuv tasdiqlanganda ✓ animatsiyasi bilan birga ovoz chalinadi.",ru:"Звук вместе с анимацией ✓ при подтверждении продажи.",en:"Plays a sound with the ✓ animation when a sale is confirmed."},
   notifDebtLabel:{uz:"Kunlik qarz hisoboti eslatmasi",ru:"Ежедневное напоминание об отчёте по долгам",en:"Daily debt report reminder"},
-  notifDebtHint:{uz:"Har kuni 21:00 da jami qarz va hisobotni yuklab olish haqida xabar keladi (faqat egasi/admin qurilmasiga).",ru:"Каждый день в 21:00 приходит уведомление об общем долге и отчёте (только на устройство владельца/админа).",en:"Every day at 21:00 you get a notice with the total debt and the report to download (owner/admin device only)."},
+  notifDebtHint:{uz:"Ega belgilagan kunlik hisobot vaqtida jami qarz va bugungi xulosa haqida xabar keladi (faqat egasi/admin qurilmasiga).",ru:"В установленное владельцем время приходит уведомление об общем долге и итогах дня (только на устройство владельца/админа).",en:"At the daily report time set by the owner you get a notice with the total debt and today's summary (owner/admin device only)."},
   notifTestBtn:{uz:"Ovozni sinab ko'rish",ru:"Проверить звук",en:"Test the sound"},
   notifPhoneHint:{uz:"Ilova yopiq bo'lganda ovoz telefonning bildirishnoma sozlamalariga ham bog'liq: telefon ovozsiz rejimda bo'lsa yoki ilovaga bildirishnoma ruxsati berilmagan bo'lsa, ovoz chiqmaydi.",ru:"Когда приложение закрыто, звук зависит и от настроек уведомлений телефона: в беззвучном режиме или без разрешения на уведомления звука не будет.",en:"When the app is closed, the sound also depends on the phone's notification settings: in silent mode or without notification permission there will be no sound."},
   /* fix96-offline i18n */
@@ -2695,7 +2714,7 @@ function productsCol(){ return businessDocRef().collection('products'); }
 function customersCol(){ return businessDocRef().collection('customers'); }
 
 function defaultSettingsObj(){
-  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', businessInn:'', businessBank:'', businessDirector:'', maxStaff:2, maxDevices:3, onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', timeZone:'', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, settingsUpdatedAt:null};
+  return {businessName:'Savdo Pos', businessAddress:'', businessPhone:'', ownerPhone:'', receiptFooter:'', receiptLanguage:'', businessInn:'', businessBank:'', businessDirector:'', maxStaff:2, maxDevices:3, onlineShop:null, printerMode:'browser', restaurantMode:false, printerCharsPerLine:48, businessType:'retail', tableUnitName:'', receiptLogo:null, receiptAlign:'center', receiptExtraLine:'', defaultServiceChargePercent:0, defaultDeliveryFee:0, serviceChargePresets:[5,10,15], deliveryFeePresets:[10000,15000,20000], serviceChargeDefaultOn:false, deliveryFeeDefaultOn:false, logoScalePercent:60, footerImage:null, footerImageScalePercent:60, defaultCreditLimit:1500000, lowStockThreshold:5, showSardorBranding:false, autoPrintReceipt:false, receiptBusinessBold:true, receiptBusinessLarge:false, oldDebtDays:30, lastDebtExportDate:null, lastCreditorExportDate:null, lastSubReminderDate:null, subscriptionPlan:null, subscriptionExpiresAt:null, subscriptionExpiresAtMs:null, printerAutoCut:true, printerCutType:'partial', openDrawerOnCash:false, printerFeedLines:5, priceSameLine:true, staffCommissionPercent:0, expiryWarningDays:7, lastSeenVersion:0, currency:'UZS', timeZone:'', allowOversell:true, autoPrintRelay:false, loyaltyEnabled:false, loyaltyEarnPercent:2, loyaltyMode:'cashback', staffCanExportDebtPdf:true, dailyReportTime:'21:00', settingsUpdatedAt:null};
 }
 
 const APP_VERSION = 110;
@@ -10496,13 +10515,81 @@ async function exportCreditorsPdf(){
   const fileName = `mening-qarzlarim-${new Date().toISOString().slice(0,10)}.pdf`;
   await sharePdfBlob(doc, fileName, tr('creditorsListTitle'));
 }
+/* fix105-report: kunlik hisobot vaqti (ega belgilaydi, o'chirib bo'lmaydi) va kunlik xulosa */
+var DAILY_REPORT_MIN = 12*60, DAILY_REPORT_MAX = 23*60, DAILY_REPORT_DEFAULT = 21*60;
+function dailyReportMinutes(){
+  var m = /^(\d{1,2}):(\d{2})$/.exec(String((state.settings && state.settings.dailyReportTime) || ''));
+  if(!m) return DAILY_REPORT_DEFAULT;
+  var v = (+m[1]) * 60 + (+m[2]);
+  if(!isFinite(v)) return DAILY_REPORT_DEFAULT;
+  return Math.max(DAILY_REPORT_MIN, Math.min(DAILY_REPORT_MAX, v));
+}
+function dailyReportTimeStr(){ var v = dailyReportMinutes(), h = Math.floor(v/60), mm = v % 60; return (h<10?'0':'') + h + ':' + (mm<10?'0':'') + mm; }
+function dailyReportDue(now){ now = now || new Date(); return (now.getHours() * 60 + now.getMinutes()) >= dailyReportMinutes(); }
+function dailyReportTimeOptions(){ var out = []; for(var v = DAILY_REPORT_MIN; v <= DAILY_REPORT_MAX; v += 30){ var h = Math.floor(v/60), mm = v % 60; out.push((h<10?'0':'') + h + ':' + (mm<10?'0':'') + mm); } return out; }
+function computeDailySummary(){
+  var today = new Date().toDateString();
+  var sameDay = function(iso){ try{ return !!iso && new Date(iso).toDateString() === today; }catch(e){ return false; } };
+  var sales = (state.sales || []).filter(function(x){ return x && !x.refunded && Array.isArray(x.items) && sameDay(x.date); });
+  var refunds = (state.sales || []).filter(function(x){ return x && x.refunded && sameDay(x.refundedAt || x.date); });
+  var revenue = 0, profit = 0, cash = 0, card = 0, credit = 0, prod = {};
+  sales.forEach(function(x){
+    revenue += Number(x.total) || 0;
+    profit += saleProfit(x);
+    var b = salePaymentBreakdown(x);
+    cash += b.cash || 0; card += b.card || 0; credit += b.credit || 0;
+    x.items.forEach(function(it){
+      var k = it.name || it.productId || '?';
+      var r = prod[k] || (prod[k] = { name: k, sum: 0 });
+      r.sum += (Number(it.price) || 0) * (Number(it.qty) || 0);
+    });
+  });
+  var expenses = (state.expenses || []).filter(function(x){ return x && x.category !== 'purchase' && sameDay(x.date); }).reduce(function(a,x){ return a + (Number(x.amount) || 0); }, 0);
+  var debtPaid = (state.ledger || []).filter(function(e){ return e && e.type === 'payment' && e.method && sameDay(e.date); }).reduce(function(a,e){ return a + (Number(e.amount) || 0); }, 0);
+  var thr = state.settings.lowStockThreshold || 5;
+  var low = (state.products || []).filter(function(p){ return p && !p.hidden && productTotalStock(p) <= thr; }).length;
+  return {
+    count: sales.length, revenue: revenue, cash: cash, card: card, credit: credit, profit: profit,
+    expenses: expenses, net: profit - expenses, debtPaid: debtPaid,
+    refundCount: refunds.length, refundTotal: refunds.reduce(function(a,x){ return a + (Number(x.total) || 0); }, 0),
+    top: Object.keys(prod).map(function(k){ return prod[k]; }).sort(function(a,b){ return b.sum - a.sum; }).slice(0, 3),
+    lowStock: low
+  };
+}
+function dailySummaryHtml(){
+  var d;
+  try{ d = computeDailySummary(); }catch(e){ return ''; }
+  var row = function(label, val, color){ return '<div class="row" style="align-items:flex-start;gap:10px;"><span class="subtle" style="text-align:left;">' + label + '</span><strong style="text-align:right;' + (color ? ('color:' + color + ';') : '') + '">' + val + '</strong></div>'; };
+  var h = '<div class="card" id="daily-summary-card" style="margin-bottom:12px;text-align:left;">'
+    + '<div style="font-weight:800;margin-bottom:2px;">&#128202; ' + tr('dsTitle') + '</div>'
+    + '<div class="subtle" style="font-size:11.5px;margin-bottom:6px;">' + tr('dsAllBranches') + '</div>';
+  if(!d.count && !d.expenses && !d.debtPaid && !d.refundCount){
+    h += '<div class="subtle" style="padding:6px 0;">' + tr('dsNoSales') + '</div>';
+  } else {
+    h += row(tr('dsSales') + ' <span style="font-weight:400;">(' + tr('dsChecks').replace('{n}', d.count) + ')</span>', fmt(d.revenue));
+    if(d.cash > 0) h += row('&nbsp;&nbsp;' + tr('dsCash'), fmt(d.cash));
+    if(d.card > 0) h += row('&nbsp;&nbsp;' + tr('dsCard'), fmt(d.card));
+    if(d.credit > 0) h += row('&nbsp;&nbsp;' + tr('dsCredit'), fmt(d.credit));
+    h += row(tr('dsProfit'), fmt(d.profit), 'var(--success,#16a34a)');
+    if(d.expenses > 0) h += row(tr('dsExpenses'), fmt(d.expenses), 'var(--danger)');
+    h += row(tr('dsNet'), fmt(d.net), d.net < 0 ? 'var(--danger)' : 'var(--success,#16a34a)');
+    if(d.debtPaid > 0) h += row(tr('dsDebtPaid'), fmt(d.debtPaid));
+    if(d.refundCount > 0) h += row(tr('dsRefunds') + ' (' + d.refundCount + ')', fmt(d.refundTotal), 'var(--danger)');
+  }
+  if(d.top.length){
+    h += '<div class="subtle" style="margin-top:8px;font-size:12px;">' + tr('dsTop') + '</div>';
+    h += d.top.map(function(t, i){ return row((i+1) + '. ' + escapeHtml(String(t.name).slice(0, 40)), fmt(t.sum)); }).join('');
+  }
+  if(d.lowStock > 0) h += row(tr('dsLow'), String(d.lowStock), 'var(--danger)');
+  return h + '</div>';
+}
 function checkDailyCreditorExport(){
   const root = document.getElementById('creditor-export-root');
   if(!root) return;
   if(!isAdmin()){ root.innerHTML = ''; return; }
   if(!state.creditors.length){ root.innerHTML = ''; return; }
   const now = new Date();
-  if(now.getHours() < 21){ root.innerHTML = ''; return; }
+  if(!dailyReportDue(now)){ root.innerHTML = ''; return; }   /* fix105-report */
   const todayKey = now.toDateString();
   if(state.settings.lastCreditorExportDate === todayKey){ root.innerHTML = ''; return; }
   renderCreditorExportOverlay(todayKey);
@@ -10594,7 +10681,7 @@ function checkDailyDebtExport(){
   if(!root) return;
   if(!isAdmin()){ root.innerHTML = ''; return; }
   const now = new Date();
-  if(now.getHours() < 21){ root.innerHTML = ''; return; }
+  if(!dailyReportDue(now)){ root.innerHTML = ''; return; }   /* fix105-report */
   const todayKey = now.toDateString();
   if(state.settings.lastDebtExportDate === todayKey){ root.innerHTML = ''; return; }
   renderDebtExportOverlay(todayKey);
@@ -10762,10 +10849,11 @@ function renderDebtExportOverlay(todayKey){
   const root = document.getElementById('debt-export-root');
   try{ if(localStorage.getItem('savdo_debt_ding') !== todayKey){ localStorage.setItem('savdo_debt_ding', todayKey); playNotifySound(); } }catch(_e){}
   const totalDebt = activeCustomers().reduce((s,c)=>s+(c.debt||0),0);
-  root.innerHTML = `<div class="login-screen" style="z-index:60;">
-    <div class="brand" style="font-size:22px;margin-bottom:10px;">${tr('dailyDebtExportTitle')}</div>
+  root.innerHTML = `<div class="login-screen" style="z-index:60;justify-content:flex-start;overflow-y:auto;padding-top:28px;padding-bottom:28px;">
+    <div class="brand" style="font-size:22px;margin-bottom:10px;white-space:normal;line-height:1.25;">${tr('dailyDebtExportTitle')}</div>
     <p class="subtle" style="margin-bottom:16px;">${tr('dailyDebtExportText')}</p>
-    <div class="card" style="margin-bottom:20px;"><div class="row"><span class="subtle">${tr('totalDebt')}</span><strong style="color:var(--danger);">${fmt(totalDebt)}</strong></div></div>
+    <div class="card" style="margin-bottom:12px;"><div class="row"><span class="subtle">${tr('totalDebt')}</span><strong style="color:var(--danger);">${fmt(totalDebt)}</strong></div></div>
+    ${dailySummaryHtml().replace('margin-bottom:12px;', 'margin-bottom:20px;')}
     <button class="btn btn-primary btn-pill btn-block" id="debt-export-btn">${tr('downloadAndContinue')}</button>
   </div>`;
   document.getElementById('debt-export-btn').addEventListener('click', ()=>{
@@ -15290,6 +15378,13 @@ function renderSettingsBusiness(container){
         <p class="subtle" style="margin:6px 0 0;font-size:11px;">${tr('tzHint')}</p>
         <p class="subtle" style="margin:4px 0 0;font-size:11.5px;">${tr('tzNow')}: <strong>${new Date().toLocaleString()}</strong></p>
       </div>
+      ${isAdmin() ? `<div class="field" id="report-time-field">
+        <label class="field-label">${tr('dailyReportTimeLabel')}</label>
+        <select id="s-report-time">
+          ${dailyReportTimeOptions().map(t=>`<option value="${t}" ${dailyReportTimeStr()===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+        <p class="subtle" style="margin:6px 0 0;font-size:11px;">${tr('dailyReportTimeHint')}</p>
+      </div>` : ''}   <!-- fix105-report -->
     </div>
 
     <h3 class="sub-title">${tr('businessType')}</h3>
@@ -15365,6 +15460,7 @@ function renderSettingsBusiness(container){
     if(ownerPhoneEl) state.settings.ownerPhone = ownerPhoneEl.value.trim();
     if(currencyEl) state.settings.currency = currencyEl.value;
     const tzEl = document.getElementById('s-timezone'); if(tzEl) state.settings.timeZone = tzEl.value; /* fix101-tz */
+    const rtEl = document.getElementById('s-report-time'); if(rtEl && rtEl.value) state.settings.dailyReportTime = rtEl.value;   /* fix105-report */
   }
   if(restModeCheckbox) restModeCheckbox.addEventListener('change', (e)=>{
     captureVisibleFormFields();
@@ -15388,6 +15484,14 @@ function renderSettingsBusiness(container){
     applyTimeZone();
     showToast(tr('savedSuccess'));
     renderAll();
+  });
+  const reportSel = document.getElementById('s-report-time');   /* fix105-report */
+  if(reportSel) reportSel.addEventListener('change', async (e)=>{
+    captureVisibleFormFields();
+    state.settings.dailyReportTime = e.target.value;
+    await saveSettings();
+    showToast(tr('dailyReportTimeSaved').replace('{t}', dailyReportTimeStr()));
+    try{ __lnEnsureDebtReminder(true); }catch(_e){}
   });
   const businessTypeSelect = document.getElementById('s-business-type');
   if(businessTypeSelect) businessTypeSelect.addEventListener('change', (e)=>{
@@ -15445,7 +15549,8 @@ function renderSettingsBusiness(container){
       businessDirector: (document.getElementById('s-director')||{value:''}).value.trim(),
       ownerPhone: document.getElementById('s-owner-phone').value.trim(),
       currency: document.getElementById('s-currency').value,
-      timeZone: (document.getElementById('s-timezone')||{value:(state.settings.timeZone||'')}).value
+      timeZone: (document.getElementById('s-timezone')||{value:(state.settings.timeZone||'')}).value,
+      dailyReportTime: (document.getElementById('s-report-time')||{value:(state.settings.dailyReportTime||'21:00')}).value   /* fix105-report */
     });
     // Wait for the write to actually land in local storage before telling
     // the person it's saved — otherwise closing the app right after seeing
@@ -16717,7 +16822,7 @@ async function initNativePush(){
       await PN.addListener('pushNotificationActionPerformed', function(ev){
         try{
           var d = (ev && ev.notification && ev.notification.data) || {};
-          if(d.type === 'debtReport'){
+          if(d.type === 'debtReport' || d.type === 'dailySummary'){   /* fix105-report */
             if(fbUser && state.currentStaff && isAdmin()){ state.view = 'customers'; renderAll(); renderDebtExportOverlay(new Date().toDateString()); }
             return;
           }
@@ -16878,7 +16983,7 @@ async function __lnEnsureDebtReminder(force){
   var on = __debtDailyOn();
   if(on && !isAdmin()) return;                 // kassir kirgan qurilmada egasining eslatmasiga tegmaymiz
   var snd = __notifSoundOn();
-  var sig = (on ? '1' : '0') + '|' + (state.lang || 'uz') + '|' + (snd ? '1' : '0');
+  var sig = (on ? '1' : '0') + '|' + (state.lang || 'uz') + '|' + (snd ? '1' : '0') + '|' + dailyReportMinutes();   /* fix105-report */
   if(!force && sig === __lnSig) return;
   __lnBusy = true;
   try{
@@ -16895,7 +17000,7 @@ async function __lnEnsureDebtReminder(force){
       await LN.schedule({ notifications: [{
         id: __LN_DEBT_ID, title: tr('notifLocalDebtTitle'), body: tr('notifLocalDebtBody'),
         channelId: snd ? 'reminders' : 'quiet',
-        schedule: { on: { hour: 21, minute: 0 }, allowWhileIdle: true },
+        schedule: { on: { hour: Math.floor(dailyReportMinutes() / 60), minute: dailyReportMinutes() % 60 }, allowWhileIdle: true },   /* fix105-report */
         extra: { type: 'debtReport' }
       }] });
       window.__lnDebtScheduled = true;
