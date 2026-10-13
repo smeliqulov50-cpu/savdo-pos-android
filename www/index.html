@@ -1281,6 +1281,16 @@ const T = {
   dsLow:{uz:"Kam qolgan tovarlar",ru:"Товаров на исходе",en:"Low-stock items",kk:"Азайған тауарлар",ky:"Азайган товарлар",tg:"Молҳои кам монда"},
   dsNoSales:{uz:"Bugun hali sotuv bo'lmadi",ru:"Сегодня продаж ещё не было",en:"No sales yet today",kk:"Бүгін әлі сатылым болмады",ky:"Бүгүн азырынча сатуу болгон жок",tg:"Имрӯз ҳанӯз фурӯш нашуд"},
   dsAllBranches:{uz:"Barcha filiallar bo'yicha",ru:"По всем филиалам",en:"All branches combined",kk:"Барлық филиалдар бойынша",ky:"Бардык филиалдар боюнча",tg:"Аз рӯи ҳамаи филиалҳо"},
+  /* fix106-loss */
+  lossTitle:{uz:"Zararga sotilyapti!",ru:"Продажа в убыток!",en:"Selling at a loss!",kk:"Зиянға сатылып жатыр!",ky:"Зыянга сатылууда!",tg:"Бо зарар фурӯхта истодааст!"},
+  lossReasonPrice:{uz:"narxi tannarxdan past",ru:"цена ниже себестоимости",en:"price is below cost",kk:"бағасы өзіндік құннан төмен",ky:"баасы өздүк нарктан төмөн",tg:"нарх аз арзиш паст аст"},
+  lossReasonDisc:{uz:"chegirmadan keyin tannarxdan past",ru:"после скидки ниже себестоимости",en:"below cost after the discount",kk:"жеңілдіктен кейін өзіндік құннан төмен",ky:"арзандатуудан кийин өздүк нарктан төмөн",tg:"баъди тахфиф аз арзиш паст"},
+  lossNow:{uz:"hozir",ru:"сейчас",en:"now",kk:"қазір",ky:"азыр",tg:"ҳозир"},
+  lossCost:{uz:"tannarx",ru:"себестоимость",en:"cost",kk:"өзіндік құн",ky:"өздүк нарк",tg:"арзиш"},
+  lossTotal:{uz:"Bu sotuvdan zarar",ru:"Убыток по этой продаже",en:"Loss on this sale",kk:"Осы сатылымнан зиян",ky:"Бул сатуудан зыян",tg:"Зарар аз ин фурӯш"},
+  lossOverallOk:{uz:"Sotuv umuman foydada, lekin yuqoridagi tovar zararga ketyapti.",ru:"Продажа в целом прибыльна, но товар выше уходит в убыток.",en:"The sale is profitable overall, but the item(s) above sell at a loss.",kk:"Сатылым жалпы пайдалы, бірақ жоғарыдағы тауар зиянға кетіп жатыр.",ky:"Сатуу жалпысынан пайдалуу, бирок жогорудагы товар зыянга кетип жатат.",tg:"Фурӯш умуман фоидаовар аст, аммо моли боло бо зарар меравад."},
+  lossBack:{uz:"Orqaga qaytish",ru:"Вернуться",en:"Go back",kk:"Артқа қайту",ky:"Артка кайтуу",tg:"Бозгашт"},
+  lossGo:{uz:"Baribir sotish",ru:"Всё равно продать",en:"Sell anyway",kk:"Бәрібір сату",ky:"Баары бир сатуу",tg:"Ба ҳар ҳол фурӯхтан"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -2257,7 +2267,7 @@ async function loadAll(){
   state.currentShift = curShift || null;
   state.tables = tables || [];
   state.setupDone = !!setupDone;
-  state.cart = cart || [];
+  state.cart = cart || []; window.__ccWasEmpty = null;   /* fix106-nocust */
   state.audit = (await storGet(STORAGE_KEYS.audit)) || [];
   try{ pruneAudit(); }catch(e){} /* fix96 */
   state.purchases = (await storGet(STORAGE_KEYS.purchases)) || [];
@@ -2438,7 +2448,7 @@ async function repairStaffAuthRecords(){
 async function saveStaff(){ await storSet(STORAGE_KEYS.staff, state.staff); syncStaffDoc(); }
 function saveShifts(){ storSet(STORAGE_KEYS.shifts, state.shifts); syncShiftsDoc(); }
 function saveCurrentShift(){ storSet(STORAGE_KEYS.currentShift, state.currentShift); }
-function saveTables(){ storSet(STORAGE_KEYS.tables, state.tables); }
+function saveTables(){ storSet(STORAGE_KEYS.tables, state.tables); try{ if(state.setupDone && typeof __ccSweep === 'function') __ccSweep(); }catch(_e){} /* fix106-nocust */ }
 async function saveSetupDone(){ await storSet(STORAGE_KEYS.setupDone, true); }
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); }
@@ -2497,6 +2507,7 @@ window.addEventListener('popstate', ()=>{
     selfInitiatedBack = false;
     return;
   }
+  if(window.__lossWarnOpen){ history.pushState({}, '', ''); __closeLossWarn(); return; } /* fix106-loss */
   if(window.__custHubOpen){ history.pushState({}, '', ''); __custHubBack(); return; } /* fix93 */
   if(modalOpenViaHistory){
     closingModalViaPopstate = true;
@@ -4303,7 +4314,7 @@ function persistAllLocal(){
   storSet(STORAGE_KEYS.shifts, state.shifts);
   storSet(STORAGE_KEYS.tables, state.tables);
 }
-function saveCart(){ storSet(STORAGE_KEYS.cart, state.cart); }
+function saveCart(){ storSet(STORAGE_KEYS.cart, state.cart); try{ if(state.setupDone && typeof __ccSweep === 'function') __ccSweep(); }catch(_e){} /* fix106-nocust */ }
 
 /* ---------- BARCODE SCANNER ---------- */
 let html5QrScanner = null;
@@ -5861,6 +5872,16 @@ function setCartCustomerId(id){
 /* Savat bo'shab qolsa (sotuv tugadi, tozalandi, kutishga qo'yildi) — unga bog'langan mijoz ham o'chadi */
 function __ccSweep(){
   var m = __lsGet(__CC_KEY), changed = false;
+  /* fix106-nocust: bo'sh savatga birinchi tovar qo'shilishi = yangi chek; eski mijoz bog'lanishi o'chadi (ilova ochilganda tiklangan savatga tegmaydi) */
+  try{
+    var __first = !window.__ccWasEmpty, prev = window.__ccWasEmpty || (window.__ccWasEmpty = {});
+    var keysNow = { main: !(state.cart && state.cart.length) };
+    (state.tables || []).forEach(function(t){ keysNow['T' + t.id] = !(t.cart && t.cart.length); });
+    Object.keys(keysNow).forEach(function(k){
+      if(!__first && prev[k] === true && keysNow[k] === false && m[k]){ delete m[k]; changed = true; }
+      prev[k] = keysNow[k];
+    });
+  }catch(_e){}
   Object.keys(m).forEach(function(k){
     var cart = null;
     if(k === 'main') cart = state.cart;
@@ -5908,6 +5929,7 @@ function openCustomerHub(opts){
 
   function selectedId(){ return getCartCustomerId(); }
   function finish(id){
+    if(Date.now() - H.opened < 450) return;   /* fix106-nocust: ochilgan zahoti tasodifiy bosish mijozni tanlab yubormasin */
     setCartCustomerId(id || null);
     closeCustomerHub();
     try{ if(typeof renderCartBar === 'function') renderCartBar(); }catch(e){}
@@ -6869,6 +6891,64 @@ function openPriceEditModal(key){
   });
 }
 
+/* fix106-loss: zararga sotishdan oldin ogohlantirish */
+function __lossAnalyze(cart, discountAmt, bonusAmt, extraIncome){
+  var rows = [], subtotal = 0, net = 0, any = false;
+  var lines = (cart || []).map(function(c){
+    var p = state.products.find(function(x){ return x.id === c.productId; });
+    if(!p) return null;
+    var v = getVariant(p, c.variantId), isBox = c.saleMode === 'box';
+    var price = Number(cartItemPrice(c, p)) || 0, qty = Number(c.qty) || 0;
+    var per = v ? (v.costPrice || p.costPrice || 0) : (p.costPrice || 0);
+    var unitCost = isBox ? per * (c.unitsPerBox || 1) : per;
+    subtotal += price * qty;
+    var name = p.name + (v ? ' — ' + v.name : '') + (isBox ? ' (' + (c.boxLabel || tr('boxDefaultLabel')) + ')' : '');
+    return { name: name, price: price, qty: qty, unitCost: Number(unitCost) || 0 };
+  }).filter(Boolean);
+  var ratio = subtotal > 0 ? Math.min(1, (discountAmt || 0) / subtotal) : 0;
+  lines.forEach(function(l){
+    net += (l.price - l.unitCost) * l.qty;
+    if(!(l.unitCost > 0)) return;
+    any = true;
+    var eff = l.price * (1 - ratio);
+    if(l.price < l.unitCost - 0.5) rows.push({ name: l.name, reason: 'price', now: eff, cost: l.unitCost });
+    else if(eff < l.unitCost - 0.5) rows.push({ name: l.name, reason: 'discount', now: eff, cost: l.unitCost });
+  });
+  net = net - (discountAmt || 0) - (bonusAmt || 0) + (extraIncome || 0);
+  var overall = any && net < -0.5;
+  return { rows: rows, net: net, overall: overall, warn: rows.length > 0 || overall };
+}
+function __closeLossWarn(){
+  var r = document.getElementById('loss-warn-root'); if(r) r.remove();
+  window.__lossWarnOpen = false;
+}
+function __showLossWarning(a, onYes){
+  __closeLossWarn();
+  var seeCost = isAdmin();
+  var rowsHtml = a.rows.slice(0, 8).map(function(r){
+    var why = tr(r.reason === 'price' ? 'lossReasonPrice' : 'lossReasonDisc');
+    var nums = seeCost ? ('<div style="font-size:12.5px;opacity:.85;">' + tr('lossNow') + ': <b>' + fmt(r.now) + '</b> &middot; ' + tr('lossCost') + ': <b>' + fmt(r.cost) + '</b></div>') : '';
+    return '<div style="padding:8px 0;border-top:1px solid var(--line,#ddd);text-align:left;"><div style="font-weight:700;">' + escapeHtml(r.name) + '</div><div style="font-size:13px;color:var(--danger,#dc2626);">' + why + '</div>' + nums + '</div>';
+  }).join('');
+  if(a.rows.length > 8) rowsHtml += '<div class="subtle" style="padding-top:6px;text-align:left;">+ ' + (a.rows.length - 8) + '</div>';
+  var foot = '';
+  if(seeCost && a.net < -0.5) foot = '<div style="margin-top:10px;font-weight:800;color:var(--danger,#dc2626);text-align:left;">' + tr('lossTotal') + ': ' + fmt(-a.net) + '</div>';
+  else if(a.rows.length && !a.overall) foot = '<div class="subtle" style="margin-top:10px;text-align:left;font-size:12.5px;">' + tr('lossOverallOk') + '</div>';
+  var el = document.createElement('div');
+  el.id = 'loss-warn-root';
+  el.setAttribute('style', 'position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;');
+  el.innerHTML = '<div role="alertdialog" aria-modal="true" style="background:var(--card,#fff);color:var(--ink,inherit);border-radius:18px;padding:18px;max-width:440px;width:100%;max-height:86vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.35);">'
+    + '<div style="font-size:19px;font-weight:800;color:var(--danger,#dc2626);margin-bottom:8px;text-align:left;">&#9888; ' + tr('lossTitle') + '</div>'
+    + rowsHtml + foot
+    + '<div class="btn-row" style="margin-top:16px;"><button type="button" class="btn btn-primary" id="loss-back-btn">' + tr('lossBack') + '</button>'
+    + '<button type="button" class="btn btn-outline" id="loss-go-btn" style="color:var(--danger,#dc2626);border-color:var(--danger,#dc2626);">' + tr('lossGo') + '</button></div></div>';
+  document.body.appendChild(el);
+  window.__lossWarnOpen = true;
+  var opened = Date.now();
+  el.addEventListener('click', function(e){ if(e.target === el && Date.now() - opened > 350) __closeLossWarn(); });
+  document.getElementById('loss-back-btn').addEventListener('click', function(){ if(Date.now() - opened < 350) return; __closeLossWarn(); });
+  document.getElementById('loss-go-btn').addEventListener('click', function(){ if(Date.now() - opened < 350) return; __closeLossWarn(); onYes(); });
+}
 function openCheckoutModal(){
   let paymentType = 'cash';
   let tenderedAmount = 0;
@@ -6901,6 +6981,7 @@ function openCheckoutModal(){
   // and always requires canApplyDiscount() below regardless of who opened
   // the checkout screen.
   let discountOn = false;
+  let lossAck = false;   /* fix106-loss */
   let discountType = 'percent';
   let discountValue = 0;
   // How much of the CURRENTLY selected customer's accumulated cashback
@@ -7302,6 +7383,15 @@ function openCheckoutModal(){
         document.getElementById('checkout-error').textContent = tr('partialPaymentTooMuch');
         return;
       }
+      if(!lossAck){   /* fix106-loss: zararga sotishdan oldin ogohlantirish */
+        let la = null;
+        try{ la = __lossAnalyze(activeCart(), discountAmount(), bonusAmount(), serviceChargeAmount() + (Number(deliveryFee) || 0)); }catch(_e){ la = null; }
+        if(la && la.warn){
+          __showLossWarning(la, ()=>{ lossAck = true; const b2 = document.getElementById('confirm-sale-btn'); if(b2) b2.click(); });
+          return;
+        }
+      }
+      lossAck = false;
       btn.disabled = true;
       try{
         await doCheckout(paymentType, ()=>selectedCustomerId, {
