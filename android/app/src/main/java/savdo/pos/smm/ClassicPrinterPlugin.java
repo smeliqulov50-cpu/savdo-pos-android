@@ -151,6 +151,22 @@ public class ClassicPrinterPlugin extends Plugin {
         }).start();
     }
 
+    /* fix109-relay: relay planshetida ilova ochiq turganda ekran o'zi o'chmasin (FLAG_KEEP_SCREEN_ON faqat shu oyna ko'rinib turganda ishlaydi) */
+    @PluginMethod
+    public void keepAwake(final PluginCall call) {
+        final Boolean onObj = call.getBoolean("on", false);
+        final boolean on = onObj != null && onObj;
+        getActivity().runOnUiThread(() -> {
+            try {
+                if (on) getActivity().getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                else getActivity().getWindow().clearFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                call.resolve();
+            } catch (Exception e) {
+                call.reject("keepAwake: " + e.getMessage());
+            }
+        });
+    }
+
     @PluginMethod
     public void printTcp(final PluginCall call) {
         final String host = call.getString("host");

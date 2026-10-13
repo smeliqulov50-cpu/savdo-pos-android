@@ -3185,8 +3185,22 @@ function watchForNewRefunds(colRef){
 // device the owner has explicitly turned it on for.
 let printRelaySeenIds = new Set();
 let printRelayReady = false;
+let __relayWake = null;
+async function __relayKeepAwake(on){   /* fix109-relay */
+  try{ const P = __cpPlugin(); if(P && P.keepAwake){ await P.keepAwake({on: !!on}); return; } }catch(e){}
+  try{
+    if(on){
+      if(navigator.wakeLock && !__relayWake && document.visibilityState === 'visible'){ __relayWake = await navigator.wakeLock.request('screen'); __relayWake.addEventListener('release', ()=>{ __relayWake = null; }); }
+    } else if(__relayWake){ const w = __relayWake; __relayWake = null; await w.release(); }
+  }catch(e){}
+}
+var RELAY_ALIVE_KEY = 'savdo_relay_alive_v1';
 function watchForPrintRelay(colRef){
   const startMs = Date.now();
+  /* fix109-relay: oxirgi marta qachon ishlab turgani eslab qolinadi — ilova to'xtab qolgan paytdagi (eng ko'pi 30 daqiqa) cheklar ham chiqadi.
+     Birinchi marta yoqilganda avvalgidek faqat oxirgi 10 daqiqa. */
+  let __lastAlive = 0; try{ __lastAlive = parseInt(localStorage.getItem(RELAY_ALIVE_KEY) || '0', 10) || 0; }catch(e){}
+  const __fromMs = Math.min(startMs - 10*60*1000, Math.max(startMs - 30*60*1000, __lastAlive ? __lastAlive - 60*1000 : startMs));
   const wanted = new Set();       // sales explicitly (re)queued while this relay is running, any age
   const lastTry = new Map();      // per-sale cooldown so a disconnected printer can't cause a claim/release loop
   let lastDocs = [];
@@ -3194,17 +3208,21 @@ function watchForPrintRelay(colRef){
     if(!sale || !sale.id || sale.printed) return false;
     if(effectiveBranchId(sale.branchId) !== effectiveBranchId(state.currentBranchId)) return false;
     const t = Date.parse(sale.date || '') || 0;
-    return t >= startMs - 10*60*1000 || wanted.has(sale.id);
+    /* fix109-relay: shu planshetning o'z sotuvi — avval o'zi chop etsin (30 s), aks holda ikki marta chiqardi */
+    const __loc = window.__relayLocalSales && window.__relayLocalSales.get(sale.id);
+    if(__loc && Date.now() - __loc < 30000) return false;
+    return t >= __fromMs || wanted.has(sale.id);
   }
   function tryRelay(sale){
     if(!eligible(sale)) return;
-    if(!getBtCharacteristic('main')){ ensureBtConnected('main'); return; }   // reconnect in background; the sweep retries
+    if(!getBtCharacteristic('main')){ ensureBtConnected('main').then(ok=>{ if(ok) setTimeout(sweep, 50); }).catch(()=>{}); return; }   // fix109-relay: ulangan zahoti darrov (avval 15 s kutardi)
     const last = lastTry.get(sale.id) || 0;
     if(Date.now() - last < 20000) return;
     lastTry.set(sale.id, Date.now());
     claimAndRelayPrintSale(sale.id);
   }
   function sweep(){
+    try{ localStorage.setItem(RELAY_ALIVE_KEY, String(Date.now())); }catch(e){}   // fix109-relay
     lastDocs.slice().sort((x,y)=>String(x.date||'').localeCompare(String(y.date||''))).forEach(tryRelay);
   }
   const unsub = colRef.onSnapshot(snap=>{
@@ -3227,6 +3245,11 @@ function watchForPrintRelay(colRef){
   const iv = setInterval(sweep, 15000);
   liveListenerUnsubs.push(unsub);
   liveListenerUnsubs.push(()=>clearInterval(iv));
+  /* fix109-relay: ilova ekranga qaytishi bilan navbat tekshiriladi; ilova ochiq turganda ekran o'chib qolmaydi */
+  const __onVis = ()=>{ if(document.visibilityState === 'visible'){ setTimeout(sweep, 800); __relayKeepAwake(true); } };
+  document.addEventListener('visibilitychange', __onVis);
+  __relayKeepAwake(true);
+  liveListenerUnsubs.push(()=>{ document.removeEventListener('visibilitychange', __onVis); __relayKeepAwake(false); });
 }
 async function claimAndRelayPrintSale(saleId){
   const docRef = salesCol().doc(saleId);
@@ -7752,6 +7775,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     changeDue: (extras.cashTendered && extras.cashTendered > total) ? extras.cashTendered - total : 0
   };
   state.sales.push(sale);
+  try{ (window.__relayLocalSales = window.__relayLocalSales || new Map()).set(sale.id, Date.now()); }catch(e){}   /* fix109-relay */
   tagPendingStockMoves(sale.id);
 
   let custDebtAfter = 0;
@@ -16155,6 +16179,7 @@ function renderSettingsPrinter(container){
   const autoPrintRelayCheckbox = document.getElementById('s-auto-print-relay');
   if(autoPrintRelayCheckbox) autoPrintRelayCheckbox.addEventListener('change', (e)=>{
     state.settings.autoPrintRelay = e.target.checked;
+    if(!e.target.checked){ try{ localStorage.removeItem(RELAY_ALIVE_KEY); }catch(_){} }   /* fix109-relay: qayta yoqilsa eski cheklar to'dasi chiqmaydi */
     saveSettings();
     // startLiveListeners() only checks this setting once, when listeners
     // first start — restarting here is what actually makes flipping the
