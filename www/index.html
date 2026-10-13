@@ -1291,6 +1291,10 @@ const T = {
   lossOverallOk:{uz:"Sotuv umuman foydada, lekin yuqoridagi tovar zararga ketyapti.",ru:"Продажа в целом прибыльна, но товар выше уходит в убыток.",en:"The sale is profitable overall, but the item(s) above sell at a loss.",kk:"Сатылым жалпы пайдалы, бірақ жоғарыдағы тауар зиянға кетіп жатыр.",ky:"Сатуу жалпысынан пайдалуу, бирок жогорудагы товар зыянга кетип жатат.",tg:"Фурӯш умуман фоидаовар аст, аммо моли боло бо зарар меравад."},
   lossBack:{uz:"Orqaga qaytish",ru:"Вернуться",en:"Go back",kk:"Артқа қайту",ky:"Артка кайтуу",tg:"Бозгашт"},
   lossGo:{uz:"Baribir sotish",ru:"Всё равно продать",en:"Sell anyway",kk:"Бәрібір сату",ky:"Баары бир сатуу",tg:"Ба ҳар ҳол фурӯхтан"},
+  /* fix107-bthold */
+  btHoldLabel:{uz:"Printerlar faqat shu qurilmada — ulanish uzilmasin",ru:"Принтеры только на этом устройстве — не разрывать подключение",en:"Printers used only by this device — keep connected",kk:"Принтерлер тек осы құрылғыда — қосылым үзілмесін",ky:"Принтерлер ушул түзмөктө гана — туташуу үзүлбөсүн",tg:"Принтерҳо танҳо дар ҳамин дастгоҳ — пайваст қатъ нашавад"},
+  btHoldHint:{uz:"Bitta planshet o'z printer(lar)i bilan ishlasa yoqing: printer har chekdan keyin uzilmaydi, ikkinchi chek va oshxona cheki darrov chiqadi. Bitta printerni bir nechta telefon birga ishlatsa, o'chiq qoldiring.",ru:"Включите, если планшет работает со своими принтерами: принтер не отключается после каждого чека, повторный и кухонный чеки печатаются сразу. Если один принтер используют несколько телефонов, оставьте выключенным.",en:"Turn on when one tablet uses its own printer(s): the printer stays connected after each receipt, so reprints and kitchen tickets print right away. Leave off if several phones share one printer.",kk:"Бір планшет өз принтер(лер)імен жұмыс істесе қосыңыз: принтер әр чектен кейін ажыратылмайды, қайталама және ас үй чегі бірден шығады. Бір принтерді бірнеше телефон бірге қолданса, өшірулі қалдырыңыз.",ky:"Бир планшет өз принтер(лер)и менен иштесе күйгүзүңүз: принтер ар бир чектен кийин ажыратылбайт, кайра чек жана ашкана чеги дароо чыгат. Бир принтерди бир нече телефон бирге колдонсо, өчүк калтырыңыз.",tg:"Агар як планшет бо принтер(ҳо)и худ кор кунад, фаъол кунед: принтер баъд аз ҳар чек қатъ намешавад, чеки такрорӣ ва чеки ошхона дарҳол чоп мешаванд. Агар як принтерро якчанд телефон истифода барад, хомӯш гузоред."},
+  btHoldOnToast:{uz:"Printer ulangan holda qoladi",ru:"Принтер останется подключённым",en:"Printer will stay connected",kk:"Принтер қосулы күйде қалады",ky:"Принтер туташкан бойдон калат",tg:"Принтер пайваст мемонад"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -9244,12 +9248,12 @@ async function connectBluetoothPrinterNative(slot){
 // profile it matches and wires up state via setBtConnection. Returns the
 // matched profile (truthy) or null.
 async function nativeConnectAndMatch(Ble, slot, deviceId, name, tok){
-  await Ble.connect(deviceId, ()=>{
+  await Ble.connect(deviceId, ()=>{   /* fix107-btreconnect: qayta ulanishda tizim muddati 5-9 s (JS 14 s) */
     // native disconnect callback — mirrors the Web Bluetooth
     // 'gattserverdisconnected' handler above
     clearBtConnection(slot);
     if(state.view==='settings' && !__btQuiet) renderSettings();
-  });
+  }, (tok != null ? { timeout: (__bleConnTo || 9000) } : undefined));
   if(tok != null && __btAttempt[slot] !== tok){ try{ await Ble.disconnect(deviceId); }catch(e){} return null; }   /* fix102: bekor qilingan urinish kechikib ulandi — darrov uziladi */
   let matched = null;
   for(const profile of BT_UART_PROFILES){
@@ -9286,7 +9290,7 @@ async function __btReleaseNow(slot){
   if(!charRef || charRef.classic) return;   // klassik: ulanishni Java tomoni o'zi yopadi
   __btQuiet = true; setTimeout(()=>{ __btQuiet = false; }, 3000);
   try{
-    if(charRef.native){ const Ble = nativeBle(); if(Ble) await __btTimeout(Ble.disconnect(charRef.deviceId), 4000); }
+    if(charRef.native){ const Ble = nativeBle(); if(Ble && !__bleIdInUse(charRef.deviceId, slot)){ try{ await __btTimeout(Ble.disconnect(charRef.deviceId), 7000); }catch(_e){} __bleLastDisc[charRef.deviceId] = Date.now(); } }   /* fix107-btreconnect */
     else if(device && device.gatt && device.gatt.connected) device.gatt.disconnect();
   }catch(e){}
   clearBtConnection(slot);   // unutilmaydi: keyingi chop yana shu printerga ulanadi
@@ -9305,18 +9309,64 @@ async function __btPrintJob(slot, fn){
     if(!getBtCharacteristic(slot)) await ensureBtConnected(slot);
     if(!getBtCharacteristic(slot)) return false;
     cancelBtRelease(slot);   // ensureBtConnected qo'ygan 15s xavfsizlik taymeri chop o'rtasida ishlamasin
-    return await __cpRunJob(slot, fn);
+    /* fix107-btretry: ulangan deb ko'rinib, aslida uzilgan BLE ulanish — birinchi yozuvdayoq xato bo'lsa bir marta qayta ulanib, chek boshidan yuboriladi.
+       Qog'ozga hech narsa yozilmagan bo'lsagina (yozuvlar soni o'zgarmagan) takrorlanadi — chek ikki marta chiqmaydi. */
+    const __c0 = getBtCharacteristic(slot);
+    const __isBle = !!(__c0 && __c0.native && !__c0.classic);
+    const __w0 = __isBle ? (__bleWrites[__c0.deviceId] || 0) : 0;
+    let __r, __err = null;
+    try{ __r = await __cpRunJob(slot, fn); }catch(e){ __err = e; __r = false; }
+    if(__isBle && __r === false && (__bleWrites[__c0.deviceId] || 0) === __w0){
+      try{ await __bleDropLink(slot); }catch(e){}
+      if(await ensureBtConnected(slot)){ cancelBtRelease(slot); __err = null; __r = await __cpRunJob(slot, fn); }
+    }
+    if(__err) throw __err;
+    return __r;
   } finally {
     try{
       const c = getBtCharacteristic(slot);
-      if(c && !c.classic && !(__btWaiting[slot] > 0)){ await __btSleep(1200); }   // printer buferi bo'shab olsin
+      if(!__btShouldHold() && c && !c.classic && !(__btWaiting[slot] > 0)){ await __btSleep(1200); }   // printer buferi bo'shab olsin
     }catch(e){}
     delete __btInJob[slot];
-    if(!(__btWaiting[slot] > 0)){ try{ await __btReleaseNow(slot); }catch(e){} }
+    if(!(__btWaiting[slot] > 0) && !__btShouldHold()){ try{ await __btReleaseNow(slot); }catch(e){} }   /* fix107-bthold: ushlab turish rejimida uzilmaydi */
     open();
   }
 }
-function __btShouldHold(){ return false; /* fix64: relay ham har chekdan keyin printerni bo'shatadi */ }
+/* fix107-bthold: standart — har chekdan keyin printer bo'shatiladi (fix64); ega shu qurilmada "ulanish uzilmasin"ni yoqsa — ushlab turiladi */
+var BT_HOLD_KEY = 'savdo_bt_hold_v1';
+function __btHoldOn(){ try{ return localStorage.getItem(BT_HOLD_KEY) === '1'; }catch(e){ return false; } }
+function __btShouldHold(){ return __btHoldOn(); }
+/* fix107-btreconnect: BLE qayta ulanish yordamchilari */
+var __bleLastDisc = {}, __bleWrites = {}, __bleNeedScan = {}, __bleConnTo = 9000;
+async function __bleSettle(id){ const t = __bleLastDisc[id]; if(t){ const w = 1000 - (Date.now() - t); if(w > 0) await __btSleep(w); } }
+function __bleIdInUse(id, exceptSlot){
+  try{
+    if(exceptSlot !== 'main' && state.btCharacteristic && state.btCharacteristic.native && state.btCharacteristic.deviceId === id) return true;
+    const kc = state.kitchenConnections || {};
+    return Object.keys(kc).some(k=>k !== exceptSlot && kc[k] && kc[k].characteristic && kc[k].characteristic.native && kc[k].characteristic.deviceId === id);
+  }catch(e){ return false; }
+}
+async function __bleRescan(Ble, id, ms){
+  if(!Ble || !Ble.requestLEScan) return false;
+  let found = false;
+  try{
+    await __btTimeout(Ble.requestLEScan({ allowDuplicates: false }, (res)=>{ try{ if(res && res.device && res.device.deviceId === id) found = true; }catch(e){} }), 3000);
+    const t0 = Date.now();
+    while(!found && Date.now() - t0 < ms) await __btSleep(200);
+  }catch(e){}
+  try{ await __btTimeout(Ble.stopLEScan(), 3000); }catch(e){}
+  return found;
+}
+async function __bleDropLink(slot){
+  const c = getBtCharacteristic(slot);
+  const id = (c && c.native && !c.classic) ? c.deviceId : null;
+  clearBtConnection(slot);
+  if(id && !__bleIdInUse(id, slot)){
+    const Ble = nativeBle();
+    if(Ble){ try{ await __btTimeout(Ble.disconnect(id), 7000); }catch(e){} }
+    __bleLastDisc[id] = Date.now();
+  }
+}
 function __btTimeout(p, ms){ return Promise.race([p, new Promise((_, rej)=>setTimeout(()=>rej(new Error('bt-timeout')), ms))]); }
 function cancelBtRelease(slot){ if(__btReleaseTimers[slot]){ clearTimeout(__btReleaseTimers[slot]); delete __btReleaseTimers[slot]; } }
 function scheduleBtRelease(slot, ms){
@@ -9329,7 +9379,7 @@ function scheduleBtRelease(slot, ms){
     __btQuiet = true; setTimeout(()=>{ __btQuiet = false; }, 3000);
     const charRef = getBtCharacteristic(slot), device = getBtDevice(slot);
     try{
-      if(charRef && charRef.native){ const Ble = nativeBle(); if(Ble) Ble.disconnect(charRef.deviceId).catch(()=>{}); }
+      if(charRef && charRef.native){ const Ble = nativeBle(); if(Ble && !__bleIdInUse(charRef.deviceId, slot)){ Ble.disconnect(charRef.deviceId).catch(()=>{}); __bleLastDisc[charRef.deviceId] = Date.now(); } }   /* fix107-btreconnect */
       else if(device && device.gatt && device.gatt.connected) device.gatt.disconnect();
     }catch(e){}
     clearBtConnection(slot);   // NOT forgotten: next print reconnects to the same printer
@@ -9350,8 +9400,16 @@ async function ensureBtConnected(slot){
         if(isNativeApp()){
           const Ble = nativeBle(); if(!Ble) return false;
           try{ await Ble.initialize(); }catch(e){}
-          try{ await __btTimeout(nativeConnectAndMatch(Ble, slot, entry.id, entry.name, __tok), 8000); }
-          catch(e2){ __btAttempt[slot] = 0; try{ await Ble.disconnect(entry.id); }catch(_e){} throw e2; }   /* fix102: tugamagan urinish bekor */
+          /* fix107-btreconnect: (a) yaqinda uzilgan bo'lsa tizim tugatguncha kutadi; (b) eski osilib qolgan ulanish oldin yopiladi;
+             (c) tizimning o'z ulanish muddati JS muddatidan qisqa — navbat tiqilmaydi; (d) bir marta o'xshamasa qisqa qidiruv */
+          await __bleSettle(entry.id);
+          if(!__bleIdInUse(entry.id, slot)){ try{ await __btTimeout(Ble.disconnect(entry.id), 7000); }catch(_e){} }
+          let __scan = false;
+          if(attempt === 1 || attempt === 4 || (attempt === 0 && __bleNeedScan[entry.id])){ __scan = true; await __bleRescan(Ble, entry.id, 4000); }
+          __bleConnTo = (attempt === 0 && !__bleNeedScan[entry.id]) ? 5000 : 9000;   // sog' printer 1-3 s da ulanadi; birinchi urinish tez kesilib, qidiruvga o'tiladi
+          try{ await __btTimeout(nativeConnectAndMatch(Ble, slot, entry.id, entry.name, __tok), 14000); }
+          catch(e2){ __btAttempt[slot] = 0; if(!__bleIdInUse(entry.id, slot)){ try{ await __btTimeout(Ble.disconnect(entry.id), 7000); }catch(_e){} __bleLastDisc[entry.id] = Date.now(); } throw e2; }   /* fix102: tugamagan urinish bekor */
+          if(__scan && getBtCharacteristic(slot)) __bleNeedScan[entry.id] = true;   // shu printer qidiruvdan keyingina ulanadi — keyingi safar darrov qidiradi
         } else if(navigator.bluetooth && navigator.bluetooth.getDevices){
           const known = await navigator.bluetooth.getDevices();
           const device = known.find(d=>d.id === entry.id);
@@ -9497,6 +9555,7 @@ async function sendRawBytesNative(charRef, bytes){
     const chunk = bytes.slice(i, i+chunkSize);
     const dv = new DataView(chunk.buffer.slice(chunk.byteOffset, chunk.byteOffset+chunk.byteLength));
     await Ble.writeWithoutResponse(charRef.deviceId, charRef.service, charRef.char, dv);
+    __bleWrites[charRef.deviceId] = (__bleWrites[charRef.deviceId] || 0) + 1;   /* fix107-btretry */
     await new Promise(r=>setTimeout(r, 6));
   }
 }
@@ -15763,6 +15822,7 @@ function renderKitchenPrinterSection(){
           ${state.kitchenStations.map(st=>{
             const connected = !!getBtCharacteristic(st.id);
             const device = getBtDevice(st.id);
+            const __rem = loadRememberedBtDevices()[st.id];   /* fix107-btstatus */
             return `
             <div class="card" style="margin-bottom:10px;">
               <div class="row" style="margin-bottom:${isBrowser?'0':'8px'};">
@@ -15771,8 +15831,8 @@ function renderKitchenPrinterSection(){
               </div>
               ${isBrowser ? '' : `
                 <div class="row" style="margin-bottom:10px;">
-                  <span class="subtle">${connected ? tr('printerConnected') : tr('printerNotConnected')}</span>
-                  <span class="badge ${connected?'badge-clear':'badge-debt'}">${device ? (device.name || '—') : ''}</span>
+                  <span class="subtle">${connected ? tr('printerConnected') : (__rem ? tr('printerOnDemand') : tr('printerNotConnected'))}</span>
+                  <span class="badge ${(connected || __rem)?'badge-clear':'badge-debt'}">${device ? (device.name || '—') : (__rem ? (__rem.name || '—') : '')}</span>
                 </div>
                 <div class="btn-row">
                   <button class="btn btn-outline" data-connect-station="${st.id}">${tr('connectPrinter')}</button>
@@ -15788,8 +15848,8 @@ function renderKitchenPrinterSection(){
         <button class="btn btn-outline btn-block" id="add-kitchen-station-btn">${ICONS.plus} ${tr('addKitchenStation')}</button>
       ` : `
         <div class="row" style="margin-bottom:10px;">
-          <span class="subtle">${getBtCharacteristic('kitchen') ? tr('printerConnected') : tr('printerNotConnected')}</span>
-          <span class="badge ${getBtCharacteristic('kitchen')?'badge-clear':'badge-debt'}">${getBtDevice('kitchen') ? (getBtDevice('kitchen').name || '—') : ''}</span>
+          <span class="subtle">${getBtCharacteristic('kitchen') ? tr('printerConnected') : (loadRememberedBtDevices().kitchen ? tr('printerOnDemand') : tr('printerNotConnected'))}</span>   <!-- fix107-btstatus -->
+          <span class="badge ${(getBtCharacteristic('kitchen') || loadRememberedBtDevices().kitchen)?'badge-clear':'badge-debt'}">${getBtDevice('kitchen') ? (getBtDevice('kitchen').name || '—') : ((loadRememberedBtDevices().kitchen || {}).name || '')}</span>
         </div>
         <div class="btn-row">
           <button class="btn btn-outline" id="bt-connect-kitchen-btn">${tr('connectPrinter')}</button>
@@ -15881,6 +15941,8 @@ function renderSettingsPrinter(container){
           </div>
           <p class="subtle" style="margin:4px 0 0;">${tr('cutTypeHint')}</p>
         </div>
+        <div class="checkbox-row"><input type="checkbox" id="s-bt-hold" ${__btHoldOn()?'checked':''}><span>${tr('btHoldLabel')}</span></div>
+        <p class="subtle" style="margin:4px 0 10px;">${tr('btHoldHint')}</p>
         <div class="checkbox-row"><input type="checkbox" id="s-drawer-on-cash" ${state.settings.openDrawerOnCash?'checked':''}><span>${tr('openDrawerOnCashLabel')}</span></div>
         <div class="checkbox-row"><input type="checkbox" id="s-auto-print-relay" ${state.settings.autoPrintRelay?'checked':''}><span>${tr('autoPrintRelayLabel')}</span></div>
         <p class="subtle" style="margin:4px 0 0;">${tr('autoPrintRelayHint')}</p>
@@ -16083,6 +16145,12 @@ function renderSettingsPrinter(container){
   if(drawerOnCashCheckbox) drawerOnCashCheckbox.addEventListener('change', (e)=>{
     state.settings.openDrawerOnCash = e.target.checked;
     saveSettings();
+  });
+  const btHoldCb = document.getElementById('s-bt-hold');   /* fix107-bthold */
+  if(btHoldCb) btHoldCb.addEventListener('change', (e)=>{
+    try{ localStorage.setItem(BT_HOLD_KEY, e.target.checked ? '1' : '0'); }catch(_){}
+    if(e.target.checked){ try{ showToast(tr('btHoldOnToast')); }catch(_){} }
+    else { try{ Object.keys(loadRememberedBtDevices()).forEach(sl=>{ if(!__btInJob[sl]) __btReleaseNow(sl).catch(()=>{}); }); }catch(_){} }
   });
   const autoPrintRelayCheckbox = document.getElementById('s-auto-print-relay');
   if(autoPrintRelayCheckbox) autoPrintRelayCheckbox.addEventListener('change', (e)=>{
