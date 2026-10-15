@@ -1295,6 +1295,27 @@ const T = {
   btHoldLabel:{uz:"Printerlar faqat shu qurilmada — ulanish uzilmasin",ru:"Принтеры только на этом устройстве — не разрывать подключение",en:"Printers used only by this device — keep connected",kk:"Принтерлер тек осы құрылғыда — қосылым үзілмесін",ky:"Принтерлер ушул түзмөктө гана — туташуу үзүлбөсүн",tg:"Принтерҳо танҳо дар ҳамин дастгоҳ — пайваст қатъ нашавад"},
   btHoldHint:{uz:"Bitta planshet o'z printer(lar)i bilan ishlasa yoqing: printer har chekdan keyin uzilmaydi, ikkinchi chek va oshxona cheki darrov chiqadi. Bitta printerni bir nechta telefon birga ishlatsa, o'chiq qoldiring.",ru:"Включите, если планшет работает со своими принтерами: принтер не отключается после каждого чека, повторный и кухонный чеки печатаются сразу. Если один принтер используют несколько телефонов, оставьте выключенным.",en:"Turn on when one tablet uses its own printer(s): the printer stays connected after each receipt, so reprints and kitchen tickets print right away. Leave off if several phones share one printer.",kk:"Бір планшет өз принтер(лер)імен жұмыс істесе қосыңыз: принтер әр чектен кейін ажыратылмайды, қайталама және ас үй чегі бірден шығады. Бір принтерді бірнеше телефон бірге қолданса, өшірулі қалдырыңыз.",ky:"Бир планшет өз принтер(лер)и менен иштесе күйгүзүңүз: принтер ар бир чектен кийин ажыратылбайт, кайра чек жана ашкана чеги дароо чыгат. Бир принтерди бир нече телефон бирге колдонсо, өчүк калтырыңыз.",tg:"Агар як планшет бо принтер(ҳо)и худ кор кунад, фаъол кунед: принтер баъд аз ҳар чек қатъ намешавад, чеки такрорӣ ва чеки ошхона дарҳол чоп мешаванд. Агар як принтерро якчанд телефон истифода барад, хомӯш гузоред."},
   btHoldOnToast:{uz:"Printer ulangan holda qoladi",ru:"Принтер останется подключённым",en:"Printer will stay connected",kk:"Принтер қосулы күйде қалады",ky:"Принтер туташкан бойдон калат",tg:"Принтер пайваст мемонад"},
+  /* fix110-btbuttons fix110-mixpay fix110-relaystat */
+  btDisconnectedToast:{uz:"Printer uzildi",ru:"Принтер отключён",en:"Printer disconnected",kk:"Принтер ажыратылды",ky:"Принтер ажыратылды",tg:"Принтер қатъ шуд"},
+  mixPay:{uz:"Aralash",ru:"Смешанная",en:"Mixed",kk:"Аралас",ky:"Аралаш",tg:"Омехта"},
+  mixHint:{uz:"Har bir usulga summani yozing. «Qolgani» — qolgan summani shu usulga qo'yadi.",ru:"Введите сумму для каждого способа. «Остаток» — ставит оставшуюся сумму на этот способ.",en:"Enter an amount for each method. \"Rest\" puts the remaining amount on that method.",kk:"Әр тәсілге соманы жазыңыз. «Қалғаны» — қалған соманы осы тәсілге қояды.",ky:"Ар бир ыкмага сумманы жазыңыз. «Калганы» — калган сумманы ушул ыкмага коет.",tg:"Барои ҳар усул маблағро нависед. «Боқимонда» — маблағи боқимондаро ба ҳамин усул мегузорад."},
+  mixRest:{uz:"Qolgani",ru:"Остаток",en:"Rest",kk:"Қалғаны",ky:"Калганы",tg:"Боқимонда"},
+  mixLeft:{uz:"Qoldi",ru:"Осталось",en:"Remaining",kk:"Қалды",ky:"Калды",tg:"Монд"},
+  mixOver:{uz:"Ortiqcha",ru:"Лишнее",en:"Over",kk:"Артық",ky:"Ашыкча",tg:"Зиёдатӣ"},
+  mixOk:{uz:"To'liq",ru:"Полностью",en:"Complete",kk:"Толық",ky:"Толук",tg:"Пурра"},
+  mixNeedMore:{uz:"Yana {x} kiritilmagan",ru:"Не хватает {x}",en:"{x} still missing",kk:"Тағы {x} енгізілмеген",ky:"Дагы {x} киргизилген жок",tg:"Боз {x} ворид нашудааст"},
+  mixTooMuch:{uz:"{x} ortiqcha kiritildi",ru:"Введено лишнее: {x}",en:"{x} too much entered",kk:"{x} артық енгізілді",ky:"{x} ашыкча киргизилди",tg:"{x} зиёдатӣ ворид шуд"},
+  mixEmpty:{uz:"Kamida bitta summa kiriting",ru:"Введите хотя бы одну сумму",en:"Enter at least one amount",kk:"Кемінде бір соманы енгізіңіз",ky:"Жок дегенде бир сумма киргизиңиз",tg:"Ақаллан як маблағ ворид кунед"},
+  relayStatus:{uz:"Holat",ru:"Состояние",en:"Status",kk:"Күйі",ky:"Абалы",tg:"Ҳолат"},
+  relayRunning:{uz:"ishlayapti",ru:"работает",en:"running",kk:"жұмыс істеп тұр",ky:"иштеп жатат",tg:"кор мекунад"},
+  relayStopped:{uz:"ishlamayapti",ru:"не работает",en:"not running",kk:"жұмыс істемейді",ky:"иштебей жатат",tg:"кор намекунад"},
+  relayNeedCloud:{uz:"internet yoki hisobga kirish yo'q",ru:"нет интернета или входа в аккаунт",en:"no internet or not signed in",kk:"интернет немесе кіру жоқ",ky:"интернет же кирүү жок",tg:"интернет ё воридшавӣ нест"},
+  relayNoPrinter:{uz:"kassa printeri tanlanmagan — yuqoridagi «Ulash»ni bosing",ru:"кассовый принтер не выбран — нажмите «Подключить» выше",en:"no receipt printer chosen — tap \"Connect\" above",kk:"касса принтері таңдалмаған — жоғарыдағы «Қосу»ды басыңыз",ky:"касса принтери тандалган жок — жогорудагы «Туташтыруу»ну басыңыз",tg:"принтери касса интихоб нашудааст — «Пайваст»-ро дар боло пахш кунед"},
+  relayPrinter:{uz:"printer",ru:"принтер",en:"printer",kk:"принтер",ky:"принтер",tg:"принтер"},
+  relayLastCheck:{uz:"oxirgi tekshiruv",ru:"последняя проверка",en:"last check",kk:"соңғы тексеру",ky:"акыркы текшерүү",tg:"санҷиши охирин"},
+  relayWaiting:{uz:"navbatda",ru:"в очереди",en:"waiting",kk:"кезекте",ky:"кезекте",tg:"дар навбат"},
+  relayPrintedN:{uz:"chop etildi",ru:"напечатано",en:"printed",kk:"басылды",ky:"басылды",tg:"чоп шуд"},
+  relayLastErr:{uz:"oxirgi xato",ru:"последняя ошибка",en:"last error",kk:"соңғы қате",ky:"акыркы ката",tg:"хатои охирин"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -2108,7 +2129,7 @@ function attachMoneyInputFormatting(el){
     const distanceFromEnd = el.value.length - el.selectionStart;
     el.value = formatMoneyInputValue(el.value);
     const pos = Math.max(0, el.value.length - distanceFromEnd);
-    el.setSelectionRange(pos, pos);
+    if(document.activeElement === el){ try{ el.setSelectionRange(pos, pos); }catch(_e){} }   /* fix110-keypad: fokussiz maydonda iPhone kursorni surmaydi */
   });
 }
 // Convenience for the very common pattern of formatting several money
@@ -3195,8 +3216,29 @@ async function __relayKeepAwake(on){   /* fix109-relay */
   }catch(e){}
 }
 var RELAY_ALIVE_KEY = 'savdo_relay_alive_v1';
+/* fix110-relaystat: relay holati — sozlamalarda ko'rinadi */
+window.__relayStat = window.__relayStat || {running:false, lastSnap:0, lastSweep:0, waiting:0, printed:0, lastErr:'', lastErrAt:0};
+function __relayErr(m){ try{ window.__relayStat.lastErr = String(m || 'error').slice(0, 80); window.__relayStat.lastErrAt = Date.now(); }catch(e){} }
+function __relayTime(t){ try{ return t ? new Date(t).toLocaleTimeString() : '—'; }catch(e){ return '—'; } }
+function __relayStatusHtml(){
+  const st = window.__relayStat || {};
+  const rem = loadRememberedBtDevices().main;
+  const parts = [];
+  if(!state.settings.autoPrintRelay) return '';
+  if(!fbUser || !fbDb) parts.push(`<b style="color:var(--danger);">${tr('relayStopped')}</b> — ${tr('relayNeedCloud')}`);
+  else parts.push(st.running ? `<b style="color:var(--teal);">${tr('relayRunning')}</b>` : `<b style="color:var(--danger);">${tr('relayStopped')}</b>`);
+  parts.push(rem ? `${tr('relayPrinter')}: ${escapeHtml(rem.name || rem.id || '—')}` : `<span style="color:var(--danger);">${tr('relayNoPrinter')}</span>`);
+  if(st.running){
+    parts.push(`${tr('relayLastCheck')}: ${__relayTime(st.lastSweep)}`);
+    parts.push(`${tr('relayWaiting')}: ${st.waiting || 0} · ${tr('relayPrintedN')}: ${st.printed || 0}`);
+  }
+  if(st.lastErr) parts.push(`<span style="color:var(--danger);">${tr('relayLastErr')}: ${escapeHtml(st.lastErr)} (${__relayTime(st.lastErrAt)})</span>`);
+  return `${tr('relayStatus')}: ` + parts.join('<br>');
+}
+setInterval(()=>{ try{ const el = document.getElementById('relay-status'); if(el) el.innerHTML = __relayStatusHtml(); }catch(e){} }, 2000);
 function watchForPrintRelay(colRef){
   const startMs = Date.now();
+  try{ window.__relayStat.running = true; window.__relayStat.lastErr = ''; }catch(e){}
   /* fix109-relay: oxirgi marta qachon ishlab turgani eslab qolinadi — ilova to'xtab qolgan paytdagi (eng ko'pi 30 daqiqa) cheklar ham chiqadi.
      Birinchi marta yoqilganda avvalgidek faqat oxirgi 10 daqiqa. */
   let __lastAlive = 0; try{ __lastAlive = parseInt(localStorage.getItem(RELAY_ALIVE_KEY) || '0', 10) || 0; }catch(e){}
@@ -3215,7 +3257,7 @@ function watchForPrintRelay(colRef){
   }
   function tryRelay(sale){
     if(!eligible(sale)) return;
-    if(!getBtCharacteristic('main')){ ensureBtConnected('main').then(ok=>{ if(ok) setTimeout(sweep, 50); }).catch(()=>{}); return; }   // fix109-relay: ulangan zahoti darrov (avval 15 s kutardi)
+    if(!getBtCharacteristic('main')){ if(!loadRememberedBtDevices().main){ __relayErr('printer'); return; } ensureBtConnected('main').then(ok=>{ if(ok) setTimeout(sweep, 50); else __relayErr('printer: ' + tr('printerUnreachable').slice(0, 40)); }).catch(()=>{}); return; }   /* fix110-relaystat */   // fix109-relay: ulangan zahoti darrov (avval 15 s kutardi)
     const last = lastTry.get(sale.id) || 0;
     if(Date.now() - last < 20000) return;
     lastTry.set(sale.id, Date.now());
@@ -3223,6 +3265,7 @@ function watchForPrintRelay(colRef){
   }
   function sweep(){
     try{ localStorage.setItem(RELAY_ALIVE_KEY, String(Date.now())); }catch(e){}   // fix109-relay
+    try{ window.__relayStat.lastSweep = Date.now(); window.__relayStat.waiting = lastDocs.filter(eligible).length; }catch(e){}   /* fix110-relaystat */
     lastDocs.slice().sort((x,y)=>String(x.date||'').localeCompare(String(y.date||''))).forEach(tryRelay);
   }
   const unsub = colRef.onSnapshot(snap=>{
@@ -3241,7 +3284,7 @@ function watchForPrintRelay(colRef){
       lastDocs.forEach(d=>{ if(d && d.id) printRelaySeenIds.add(d.id); });
     }
     sweep();
-  }, (err)=>{ state.__printRelayError = (err && (err.code || err.message)) || 'error'; });
+  }, (err)=>{ state.__printRelayError = (err && (err.code || err.message)) || 'error'; __relayErr('listen: ' + state.__printRelayError); });
   const iv = setInterval(sweep, 15000);
   liveListenerUnsubs.push(unsub);
   liveListenerUnsubs.push(()=>clearInterval(iv));
@@ -3249,7 +3292,7 @@ function watchForPrintRelay(colRef){
   const __onVis = ()=>{ if(document.visibilityState === 'visible'){ setTimeout(sweep, 800); __relayKeepAwake(true); } };
   document.addEventListener('visibilitychange', __onVis);
   __relayKeepAwake(true);
-  liveListenerUnsubs.push(()=>{ document.removeEventListener('visibilitychange', __onVis); __relayKeepAwake(false); });
+  liveListenerUnsubs.push(()=>{ document.removeEventListener('visibilitychange', __onVis); __relayKeepAwake(false); try{ window.__relayStat.running = false; }catch(e){} });
 }
 async function claimAndRelayPrintSale(saleId){
   const docRef = salesCol().doc(saleId);
@@ -3269,10 +3312,11 @@ async function claimAndRelayPrintSale(saleId){
       transaction.update(docRef, {printed: true});
       claimedSale = data;
     });
-  }catch(e){ return; }
+  }catch(e){ __relayErr('claim: ' + ((e && (e.code || e.message)) || 'error')); return; }   /* fix110-relaystat */
   if(!claimedSale) return;
   const customer = claimedSale.customerId ? state.customers.find(c=>c.id===claimedSale.customerId) : null;
   const ok = await sendReceiptToBluetoothPrinter(claimedSale, customer);
+  try{ if(ok){ window.__relayStat.printed = (window.__relayStat.printed || 0) + 1; } else { __relayErr('print'); } }catch(_e){}   /* fix110-relaystat */
   if(!ok){
     // Printing itself failed even after successfully claiming it (e.g.
     // the printer dropped its connection a moment ago) — release the
@@ -6997,8 +7041,42 @@ function openCheckoutModal(){
   function splitMethodOptions(){
     return ['cash','card','credit'].filter(m=>m!==paymentType && (m!=='credit' || canSellOnCredit()));
   }
+  /* fix110-mixpay: "Aralash" — naqd + karta + nasiya (istalgan 2 yoki 3 tasi) */
+  let mixAmt = {cash:0, card:0, credit:0};
+  function mixMethods(){ return ['cash','card'].concat(canSellOnCredit() ? ['credit'] : []); }
+  function mixSum(){ return mixMethods().reduce((a,m)=>a + (Math.round(mixAmt[m]||0)), 0); }
   function creditInvolved(){
-    return paymentType==='credit' || (splitOn && splitMethod==='credit');
+    return paymentType==='credit' || (splitOn && splitMethod==='credit') || (paymentType==='mixed' && (mixAmt.credit||0) > 0);
+  }
+  function mixBlockHtml(){
+    return `<div class="subtle" style="margin-bottom:8px;font-size:12.5px;">${tr('mixHint')}</div>`
+      + mixMethods().map(m=>`<div class="mix-row" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="width:92px;flex-shrink:0;font-weight:700;">${paymentTypeIcon(m)} ${paymentTypeLabel(m)}</span>
+          <input type="text" inputmode="numeric" id="cf-mix-${m}" data-mix="${m}" data-money="1" value="${mixAmt[m]?formatMoneyInputValue(mixAmt[m]):''}" placeholder="0" style="flex:1;min-width:0;">
+          <button type="button" class="btn btn-outline btn-sm" data-mix-rest="${m}" style="width:auto;flex-shrink:0;">${tr('mixRest')}</button>
+        </div>`).join('')
+      + `<div class="row" style="margin-top:4px;"><span class="subtle" id="mix-status-label">${tr('mixLeft')}</span><strong id="mix-status" style="font-size:18px;">${fmt(grandTotal())}</strong></div>`;
+  }
+  function updateMixStatus(){
+    const st = document.getElementById('mix-status'), lb = document.getElementById('mix-status-label');
+    if(!st || !lb) return;
+    const left = grandTotal() - mixSum();
+    if(left > 0){ lb.textContent = tr('mixLeft'); st.textContent = fmt(left); st.style.color = 'var(--danger)'; }
+    else if(left < 0){ lb.textContent = tr('mixOver'); st.textContent = fmt(-left); st.style.color = 'var(--danger)'; }
+    else { lb.textContent = tr('mixOk'); st.textContent = '✓ ' + fmt(grandTotal()); st.style.color = 'var(--teal)'; }
+  }
+  function bindMixEvents(){
+    document.querySelectorAll('#mix-block [data-mix]').forEach(inp=>{
+      attachMoneyInputFormatting(inp);
+      inp.addEventListener('input', ()=>{ mixAmt[inp.dataset.mix] = parseMoneyInput(inp.value) || 0; updateMixStatus(); updateCheckoutSummaries(); });
+    });
+    document.querySelectorAll('#mix-block [data-mix-rest]').forEach(b=>b.addEventListener('click', ()=>{
+      const m = b.dataset.mixRest;
+      const others = mixMethods().filter(x=>x!==m).reduce((a,x)=>a + (Math.round(mixAmt[x]||0)), 0);
+      mixAmt[m] = Math.max(0, grandTotal() - others);
+      const inp = document.getElementById('cf-mix-' + m); if(inp) inp.value = mixAmt[m] ? formatMoneyInputValue(mixAmt[m]) : '';
+      updateMixStatus(); updateCheckoutSummaries();
+    }));
   }
   let serviceChargeOn = !!state.settings.serviceChargeDefaultOn;
   let deliveryFeeOn = !!state.settings.deliveryFeeDefaultOn;
@@ -7055,6 +7133,7 @@ function openCheckoutModal(){
         <div class="toggle-opt ${paymentType==='cash'?'active':''}" data-pt="cash"><span class="pt-ic">${paymentTypeIcon('cash')}</span>${tr('cash')}</div>
         <div class="toggle-opt ${paymentType==='card'?'active':''}" data-pt="card"><span class="pt-ic">${paymentTypeIcon('card')}</span>${tr('card')}</div>
         ${canSellOnCredit() ? `<div class="toggle-opt ${paymentType==='credit'?'active':''}" data-pt="credit"><span class="pt-ic">${paymentTypeIcon('credit')}</span>${tr('credit')}</div>` : ''}
+        <div class="toggle-opt ${paymentType==='mixed'?'active':''}" data-pt="mixed"><span class="pt-ic">&#128256;</span>${tr('mixPay')}</div>
       </div>
       ${showOrderType ? `
       <div class="field">
@@ -7080,6 +7159,7 @@ function openCheckoutModal(){
         <div id="tender-quick" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;"></div>
         <div class="row" style="margin-top:10px;"><span class="subtle">${tr('changeDueLabel')}</span><strong id="change-due-display" style="font-size:18px;color:var(--teal);">${fmt(0)}</strong></div>
       </div>
+      <div id="mix-block" style="${paymentType==='mixed'?'':'display:none;'}margin:-6px 0 14px;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-soft);">${mixBlockHtml()}</div>
       <div id="split-summary-rows" style="${(splitOn && splitAmount>0)?'':'display:none;'}">
         <div class="row"><span class="subtle" id="split-primary-label">${paymentTypeLabel(paymentType)}</span><span id="split-primary-display">${fmt(Math.max(0, grandTotal()-splitAmount))}</span></div>
         <div class="row"><span class="subtle" id="split-method-label">${splitMethod?paymentTypeLabel(splitMethod):''}</span><strong style="${splitMethod==='credit'?'color:var(--danger);':''}" id="split-amount-display">${fmt(splitAmount)}</strong></div>
@@ -7209,6 +7289,7 @@ function openCheckoutModal(){
     refreshTotals();
   }
   function creditFieldsHtml(){
+    if(paymentType === 'mixed') return '';   /* fix110-mixpay: aralashda eski 2 usulli bo'lish kerak emas */
     const isCredit = paymentType === 'credit';
     const custRequired = creditInvolved();
     return `
@@ -7264,6 +7345,7 @@ function openCheckoutModal(){
   document.getElementById('bonus-fields').innerHTML = bonusFieldsHtml();
   document.getElementById('charges-fields').innerHTML = chargesFieldsHtml();
   attachCheckoutHandlers();
+  bindMixEvents();   /* fix110-mixpay */
   bindChargesFieldEvents();
   bindCheckoutSectionToggles();
   updateCheckoutSummaries();
@@ -7310,6 +7392,7 @@ function openCheckoutModal(){
       bonusRow.style.display = amt > 0 ? '' : 'none';
       document.getElementById('bonus-amount-display').textContent = '-' + fmt(amt);
     }
+    updateMixStatus();   /* fix110-mixpay */
     const splitRows = document.getElementById('split-summary-rows');
     if(splitRows){
       const show = splitOn && splitAmount>0;
@@ -7374,12 +7457,14 @@ function openCheckoutModal(){
         if(splitOn && splitMethod === paymentType){
           splitMethod = splitMethodOptions()[0];
         }
+        if(paymentType === 'mixed'){ splitOn = false; splitAmount = 0; }   /* fix110-mixpay */
         document.querySelectorAll('#modal-root [data-pt]').forEach(o=>o.classList.remove('active'));
         el.classList.add('active');
         document.getElementById('credit-fields').innerHTML = creditFieldsHtml();
         bindCreditFieldEvents();
         const tb = document.getElementById('cash-tender-block');
         if(tb) tb.style.display = paymentType==='cash' ? '' : 'none';
+        const __mb = document.getElementById('mix-block'); if(__mb) __mb.style.display = paymentType==='mixed' ? '' : 'none';   /* fix110-mixpay */
         coCustomerOpen = null;
         refreshTotals();
       });
@@ -7406,6 +7491,15 @@ function openCheckoutModal(){
         openCustomerHub({ onSelect: syncCustomerFromHub });
         return;
       }
+      let __mixParts = null;   /* fix110-mixpay */
+      if(paymentType === 'mixed'){
+        const __tot = grandTotal();
+        __mixParts = mixMethods().map(m=>({method:m, amount: Math.round(mixAmt[m]||0)})).filter(p=>p.amount > 0);
+        const __sum = __mixParts.reduce((a,p)=>a + p.amount, 0);
+        if(!__mixParts.length && __tot > 0){ document.getElementById('checkout-error').textContent = tr('mixEmpty'); return; }
+        if(__sum < __tot){ document.getElementById('checkout-error').textContent = tr('mixNeedMore').replace('{x}', fmt(__tot - __sum)); return; }
+        if(__sum > __tot){ document.getElementById('checkout-error').textContent = tr('mixTooMuch').replace('{x}', fmt(__sum - __tot)); return; }
+      }
       if(splitOn && splitAmount >= grandTotal()){
         document.getElementById('checkout-error').textContent = tr('partialPaymentTooMuch');
         return;
@@ -7421,11 +7515,18 @@ function openCheckoutModal(){
       lossAck = false;
       btn.disabled = true;
       try{
-        await doCheckout(paymentType, ()=>selectedCustomerId, {
+        let __pt = paymentType, __parts = null;   /* fix110-mixpay: eng katta qism — asosiy usul; qolganlari splitPayments'da */
+        if(paymentType === 'mixed'){
+          const __ps = (__mixParts || []).slice().sort((a,b)=>b.amount - a.amount);
+          __pt = __ps.length ? __ps[0].method : 'cash';
+          if(__ps.length > 1) __parts = (__mixParts || []).slice();
+        }
+        await doCheckout(__pt, ()=>selectedCustomerId, {
           serviceChargePercent, deliveryFee, discountType, discountValue: (discountOn?discountValue:0),
           orderType: showOrderType?orderType:null,
-          splitAmount: splitOn ? splitAmount : 0,
-          splitMethod: splitOn ? splitMethod : null,
+          splitAmount: (splitOn && paymentType!=='mixed') ? splitAmount : 0,
+          splitMethod: (splitOn && paymentType!=='mixed') ? splitMethod : null,
+          splitParts: __parts,
           bonusRedeemAmount: bonusAmount(),
           cashTendered: (paymentType==='cash' && !splitOn) ? tenderedAmount : 0
         });
@@ -7534,6 +7635,24 @@ function playSaleSuccess(sale){
   setTimeout(function(){ if(el.parentNode) el.remove(); }, 1500);
 }
 
+/* fix110-mixpay: aralash to'lov qismlarini tekshiradi; yaxlitlash farqi bo'lsa eng katta qismga qo'shadi */
+function __mixNormalize(parts, total){
+  if(!Array.isArray(parts)) return null;
+  const ok = ['cash','card','credit'];
+  const out = [];
+  parts.forEach(p=>{ if(p && ok.indexOf(p.method) >= 0){ const a = Math.max(0, Math.round(Number(p.amount) || 0)); if(a > 0){ const ex = out.find(x=>x.method===p.method); if(ex) ex.amount += a; else out.push({method:p.method, amount:a}); } } });
+  if(out.length < 2) return null;
+  const sum = out.reduce((a,p)=>a + p.amount, 0);
+  let diff = Math.round(total) - sum;
+  if(diff !== 0){
+    const order = out.slice().sort((a,b)=>b.amount - a.amount);
+    for(const p of order){ if(diff === 0) break; const na = Math.max(0, p.amount + diff); diff -= (na - p.amount); p.amount = na; }
+  }
+  const parts2 = out.filter(p=>p.amount > 0);
+  if(parts2.length < 2) return null;
+  const cr = parts2.find(p=>p.method==='credit');
+  return {parts: parts2, credit: cr ? cr.amount : 0};
+}
 async function doCheckout(paymentType, getSelectedCustomerId, extras){
  if(isCheckoutInProgress) return;
   isCheckoutInProgress = true;
@@ -7551,7 +7670,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   // the permission check entirely and create real debt), refuse the sale
   // outright rather than silently downgrading it to some other payment
   // type (which could record a payment that never actually happened).
-  if((paymentType === 'credit' || extras.splitMethod === 'credit') && !canSellOnCredit()){
+  if((paymentType === 'credit' || extras.splitMethod === 'credit' || (Array.isArray(extras.splitParts) && extras.splitParts.some(p=>p && p.method==='credit' && p.amount>0))) && !canSellOnCredit()){   /* fix110-mixpay */
     const errorEl0 = document.getElementById('checkout-error');
     if(errorEl0) errorEl0.textContent = tr('noPermSellOnCredit');
     return;
@@ -7618,7 +7737,9 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   } else if(hasSplitPreview && splitMethodPreview === 'credit'){
     creditAmountPreview = splitCappedPreview;
   }
-  const creditInvolvedHere = paymentType === 'credit' || (hasSplitPreview && splitMethodPreview === 'credit');
+  const __mixPrev = __mixNormalize(extras.splitParts, totalPreview);   /* fix110-mixpay */
+  if(__mixPrev) creditAmountPreview = __mixPrev.credit;
+  const creditInvolvedHere = __mixPrev ? (__mixPrev.credit > 0) : (paymentType === 'credit' || (hasSplitPreview && splitMethodPreview === 'credit'));
 
   let customerId = null;
   let existingCustomerForLimitCheck = null;
@@ -7728,10 +7849,12 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   } else if(hasSplit && splitMethodUsed === 'credit'){
     creditAmount = splitCapped;
   }
-  const splitPayments = hasSplit ? [
+  let splitPayments = hasSplit ? [
     {method: paymentType, amount: primaryAmount},
     {method: splitMethodUsed, amount: splitCapped}
   ] : null;
+  const __mixF = __mixNormalize(extras.splitParts, total);   /* fix110-mixpay: 2-3 usulli aralash to'lov */
+  if(__mixF){ splitPayments = __mixF.parts; creditAmount = __mixF.credit; }
   // Cashback is earned on the portion actually being paid now — the
   // credit slice isn't real money in hand yet, and money that's about to
   // come straight back out as newly-redeemed bonus balance would just be
@@ -7794,8 +7917,8 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     const paidNow = total - creditAmount;
     if(paidNow > 0){
       __spDebtSet(cust, Math.max(0, cust.debt - paidNow)); /* fix78 */
-      const methodLabel = paymentTypeLabel(hasSplit ? (paymentType==='credit' ? splitMethodUsed : paymentType) : paymentType);
-      const paymentLedgerEntry = {id:uid(), customerId, type:'payment', amount:paidNow, date:new Date().toISOString(), note: tr('splitPaymentToggle')+' ('+methodLabel+')'+(sale.receiptNumber?(' №'+sale.receiptNumber):''), staffName: state.currentStaff ? state.currentStaff.name : ''};
+      const methodLabel = __mixF ? __mixF.parts.filter(p=>p.method!=='credit').map(p=>paymentTypeLabel(p.method)).join(' + ') : paymentTypeLabel(hasSplit ? (paymentType==='credit' ? splitMethodUsed : paymentType) : paymentType);   /* fix110-mixpay */
+      const paymentLedgerEntry = {id:uid(), customerId, type:'payment', amount:paidNow, date:new Date().toISOString(), note: (__mixF ? tr('mixPay') : tr('splitPaymentToggle'))+' ('+methodLabel+')'+(sale.receiptNumber?(' №'+sale.receiptNumber):''), staffName: state.currentStaff ? state.currentStaff.name : ''};
       state.ledger.push(paymentLedgerEntry);
       addLedgerDoc(paymentLedgerEntry);
     }
@@ -8816,6 +8939,10 @@ async function printReceipt(sale, customer){
     showToast(tr('bluetoothConnectFailed'));
     return;
   }
+  if(state.deviceHasNoPrinter){   /* fix110-relaystat: printeri yo'q qurilma (iPhone) — befoyda chop oynasi ochilmaydi, chek planshetga yuboriladi */
+    if(sale && sale.printed) requestRelayPrint(sale); else showToast(tr('willPrintOnOtherDevice'));
+    return;
+  }
   try{
     document.getElementById('print-receipt').innerHTML = buildReceiptHtml(sale, customer);
     window.print();
@@ -8828,7 +8955,7 @@ async function printReceipt(sale, customer){
     // so this change doesn't newly trigger relay printing for shops
     // where browser mode already works fine today.
     if(!state.deviceHasNoPrinter){ markSalePrinted(sale); }
-    else { showToast(tr('willPrintOnOtherDevice')); }
+    else { showToast(tr('willPrintOnOtherDevice')); }   /* fix110-relaystat: bu yerga faqat printerli qurilmada keladi */
   }catch(e){
     showToast(tr('cameraError'));
   }
@@ -9123,6 +9250,14 @@ function rememberBtDevice(slot, device){
     localStorage.setItem(BT_REMEMBERED_KEY, JSON.stringify(remembered));
   }catch(e){}
 }
+/* fix110-btbuttons: avvalgi xato bilan "[object ...]" nomi ostida saqlangan kassa printeri "main"ga ko'chiriladi */
+(function __btRepairKeys(){
+  try{
+    const r = JSON.parse(localStorage.getItem(BT_REMEMBERED_KEY) || '{}'); let ch = false;
+    Object.keys(r).forEach(k=>{ if(/^\[object /.test(k)){ if(!r.main && r[k] && r[k].id) r.main = r[k]; delete r[k]; ch = true; } });
+    if(ch) localStorage.setItem(BT_REMEMBERED_KEY, JSON.stringify(r));
+  }catch(e){}
+})();
 function forgetRememberedBtDevice(slot){
   try{
     const remembered = loadRememberedBtDevices();
@@ -9194,7 +9329,7 @@ async function finishBtConnection(slot, device, server){
 }
 
 async function connectBluetoothPrinter(slot){
-  slot = slot || 'main';
+  slot = (typeof slot === 'string' && slot) ? slot : 'main';   /* fix110-btbuttons */
   if(isNativeApp()) return connectBluetoothPrinterNative(slot);
   if(!navigator.bluetooth){ showToast(tr('bluetoothNotSupported')); return; }
   try{
@@ -9453,6 +9588,7 @@ async function ensureBtConnected(slot){
   return ok;
 }
 function disconnectBluetoothPrinter(slot, skipRender){
+  if(typeof slot !== 'string' || !slot) slot = 'main';   /* fix110-btbuttons */
   __cpForget(slot || 'main');   // fix66c
   slot = slot || 'main';
   const charRef = getBtCharacteristic(slot);
@@ -9470,7 +9606,7 @@ function disconnectBluetoothPrinter(slot, skipRender){
   // should not silently reconnect to this exact printer on next launch
   // until they explicitly pick it again.
   forgetRememberedBtDevice(slot);
-  if(!skipRender) renderSettings();
+  if(!skipRender){ renderSettings(); try{ showToast(tr('btDisconnectedToast')); }catch(_e){} }   /* fix110-btbuttons */
 }
 
 // Called once at app startup — tries to silently reconnect to whichever
@@ -15970,6 +16106,7 @@ function renderSettingsPrinter(container){
         <div class="checkbox-row"><input type="checkbox" id="s-drawer-on-cash" ${state.settings.openDrawerOnCash?'checked':''}><span>${tr('openDrawerOnCashLabel')}</span></div>
         <div class="checkbox-row"><input type="checkbox" id="s-auto-print-relay" ${state.settings.autoPrintRelay?'checked':''}><span>${tr('autoPrintRelayLabel')}</span></div>
         <p class="subtle" style="margin:4px 0 0;">${tr('autoPrintRelayHint')}</p>
+        ${state.settings.autoPrintRelay ? `<div id="relay-status" class="subtle" style="margin:8px 0 4px;padding:8px 10px;border:1px dashed var(--border);border-radius:10px;font-size:12.5px;line-height:1.5;">${__relayStatusHtml()}</div>` : ''}
         <div class="field">
           <label class="field-label">${tr('feedLinesLabel')}</label>
           <select id="s-feed-lines">
@@ -16078,9 +16215,9 @@ function renderSettingsPrinter(container){
     });
   });
   const btConnectBtn = document.getElementById('bt-connect-btn');
-  if(btConnectBtn) btConnectBtn.addEventListener('click', connectBluetoothPrinter);
+  if(btConnectBtn) btConnectBtn.addEventListener('click', ()=>connectBluetoothPrinter('main'));   /* fix110-btbuttons: avval bosish hodisasi (event) printer nomi o'rniga o'tib ketardi */
   const btDisconnectBtn = document.getElementById('bt-disconnect-btn');
-  if(btDisconnectBtn) btDisconnectBtn.addEventListener('click', disconnectBluetoothPrinter);
+  if(btDisconnectBtn) btDisconnectBtn.addEventListener('click', ()=>disconnectBluetoothPrinter('main'));   /* fix110-btbuttons */
   bindKitchenPrinterSectionEvents();
   const btTestBtn = document.getElementById('bt-test-btn');
   if(btTestBtn) btTestBtn.addEventListener('click', async ()=>{
@@ -17723,7 +17860,9 @@ function moneyKeypadEl(){
       <button type="button" class="mk-alt" data-mk="00">00</button><button type="button" data-mk="0">0</button><button type="button" class="mk-done" data-mk="done" style="grid-column:span 2;">OK</button>
     </div>`;
   document.body.appendChild(mkEl);
-  mkEl.addEventListener('pointerdown', (e)=>{ e.preventDefault(); });
+  mkEl.addEventListener('pointerdown', (e)=>{ __mkTapAt = Date.now(); e.preventDefault(); });
+  mkEl.addEventListener('mousedown', (e)=>{ __mkTapAt = Date.now(); e.preventDefault(); });   /* fix110-keypad */
+  mkEl.addEventListener('touchstart', ()=>{ __mkTapAt = Date.now(); }, {passive:true});
   mkEl.addEventListener('click', (e)=>{
     const k = e.target.closest('[data-mk]');
     if(!k || !mkTarget) return;
@@ -17731,8 +17870,10 @@ function moneyKeypadEl(){
   });
   return mkEl;
 }
+var __mkTapAt = 0, __mkShownAt = 0;   /* fix110-keypad: oxirgi klaviatura bosilgan vaqt — iPhone maydondan fokusni olsa ham klaviatura yopilmaydi */
 function moneyKeypadPress(k){
-  const el = mkTarget;
+  let el = mkTarget;
+  if(el && !document.body.contains(el)){ const __f = el.id ? document.getElementById(el.id) : null; if(__f){ mkTarget = el = __f; } else { hideMoneyKeypad(false); return; } }   /* fix110-keypad */
   let v = String(el.value||'').replace(/[^\d]/g,'');
   if(k==='done'){ hideMoneyKeypad(true); return; }
   if(k==='back') v = v.slice(0,-1);
@@ -17748,7 +17889,7 @@ function moneyKeypadPress(k){
   el.dispatchEvent(new Event('input', {bubbles:true}));
 }
 function showMoneyKeypad(el){
-  mkTarget = el;
+  mkTarget = el; __mkShownAt = Date.now();   /* fix110-keypad */
   const box = moneyKeypadEl();
   const v = String(el.value||'').replace(/[^\d]/g,'');
   document.getElementById('mk-preview-value').textContent = v ? Number(v).toLocaleString('ru-RU') : '0';
@@ -17771,8 +17912,16 @@ document.addEventListener('focusin', (e)=>{
 });
 document.addEventListener('focusout', (e)=>{
   if(!mkTarget || e.target!==mkTarget) return;
-  setTimeout(()=>{ if(mkTarget && document.activeElement!==mkTarget && !(mkEl && mkEl.contains(document.activeElement))) hideMoneyKeypad(true); }, 150);
+  setTimeout(()=>{ if(Date.now() - __mkTapAt < 1200) return; /* fix110-keypad */ if(mkTarget && document.activeElement!==mkTarget && !(mkEl && mkEl.contains(document.activeElement))) hideMoneyKeypad(true); }, 150);
 });
+document.addEventListener('click', (e)=>{   /* fix110-keypad: klaviatura va maydondan tashqariga bosilganda yopiladi (fokusga bog'liq emas) */
+  if(!mkEl || !mkEl.classList.contains('show') || !mkTarget) return;
+  const t = e.target;
+  if(mkEl.contains(t) || t === mkTarget || isMoneyInput(t)) return;
+  if(document.activeElement === mkTarget) return;   // fokus maydonda — odatdagi yopilish (focusout) ishlaydi
+  if(Date.now() - __mkShownAt < 600) return;   // ochilish paytidagi siljish bosishi
+  hideMoneyKeypad(true);
+}, true);
 function enhanceInputs(root){
   if(!root.querySelectorAll) return;
   const inputs = [...root.querySelectorAll('input')]; if(root.matches && root.matches('input')) inputs.push(root);
