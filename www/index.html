@@ -1316,6 +1316,12 @@ const T = {
   relayWaiting:{uz:"navbatda",ru:"в очереди",en:"waiting",kk:"кезекте",ky:"кезекте",tg:"дар навбат"},
   relayPrintedN:{uz:"chop etildi",ru:"напечатано",en:"printed",kk:"басылды",ky:"басылды",tg:"чоп шуд"},
   relayLastErr:{uz:"oxirgi xato",ru:"последняя ошибка",en:"last error",kk:"соңғы қате",ky:"акыркы ката",tg:"хатои охирин"},
+  /* fix113-contact */
+  cpkBtn:{uz:"Kontaktlardan tanlash",ru:"Выбрать из контактов",en:"Pick from contacts",kk:"Контактілерден таңдау",ky:"Байланыштардан тандоо",tg:"Аз тамосҳо интихоб кардан"},
+  cpkAdded:{uz:"Raqam kontaktdan qo'shildi",ru:"Номер добавлен из контактов",en:"Number added from contacts",kk:"Нөмір контактіден қосылды",ky:"Номер байланыштан кошулду",tg:"Рақам аз тамосҳо илова шуд"},
+  cpkNoNumber:{uz:"Bu kontaktda telefon raqam yo'q",ru:"У этого контакта нет номера",en:"This contact has no phone number",kk:"Бұл контактіде нөмір жоқ",ky:"Бул байланышта номер жок",tg:"Ин тамос рақам надорад"},
+  cpkFail:{uz:"Kontaktni o'qib bo'lmadi",ru:"Не удалось прочитать контакт",en:"Couldn't read the contact",kk:"Контактіні оқу мүмкін болмады",ky:"Байланышты окуу мүмкүн болбоду",tg:"Тамосро хондан нашуд"},
+  cpkChoose:{uz:"Raqamni tanlang",ru:"Выберите номер",en:"Choose a number",kk:"Нөмірді таңдаңыз",ky:"Номерди тандаңыз",tg:"Рақамро интихоб кунед"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -17957,6 +17963,94 @@ function enhanceInputs(root){
     bar.appendChild(btn);
   });
 }
+/* fix113-contact: telefon maydonlari yonida "kontaktdan tanlash" tugmasi */
+var CPK_PHONE_IDS = {'cf-phone':'cf-name','ce-phone':'ce-name','ch-n-phone':'ch-n-name','ch-e-phone':'ch-e-name','cr-phone':'cr-name','cr-edit-phone':'cr-edit-name','rf-phone':'rf-name','pf-supplier-phone':'pf-supplier-name','s-phone':'','s-owner-phone':'','os-phone':'','os-wa':''};
+var CPK_SEL = Object.keys(CPK_PHONE_IDS).map(function(k){ return '#' + k; }).join(',');
+function __cpkNative(){ try{ const C = window.Capacitor; return !!(C && C.isNativePlatform && C.isNativePlatform() && C.Plugins && C.Plugins.ContactPick && C.Plugins.ContactPick.pick); }catch(e){ return false; } }
+function __cpkWeb(){ try{ return !!(navigator.contacts && navigator.contacts.select && ('ContactsManager' in window)); }catch(e){ return false; } }
+function __cpkAvailable(){ return __cpkNative() || __cpkWeb(); }
+function __cpkUz(){ try{ return ((state.settings && state.settings.currency) || 'UZS') === 'UZS'; }catch(e){ return true; } }
+function __cpkNorm(raw){
+  const s = String(raw || '').trim();
+  const plus = s.charAt(0) === '+' || s.indexOf('00') === 0;
+  let d = s.replace(/\D/g, '');
+  if(s.indexOf('00') === 0) d = d.replace(/^00/, '');
+  if(d.length < 3) return '';                                                          // *#06# kabi kodlar
+  if(d.length === 12 && d.indexOf('998') === 0) return '+' + d;                       // 998 90 123 45 67
+  if(!plus && __cpkUz()){
+    if(d.length === 9) return '+998' + d;                                                // 90 123 45 67
+    if(d.length === 10 && d.charAt(0) === '8') return '+998' + d.slice(1);               // eski: 8 90 1234567
+  }
+  return (plus ? '+' : '') + d;
+}
+function __cpkSet(el, v){ if(!el) return; el.value = v; try{ el.dispatchEvent(new Event('input', {bubbles:true})); el.dispatchEvent(new Event('change', {bubbles:true})); }catch(e){} }
+var __cpkBusyAt = 0;
+async function __cpkPick(inp){
+  if(Date.now() - __cpkBusyAt < 30000) return;   // ikki marta bosilsa ikkita oyna ochilmasin
+  __cpkBusyAt = Date.now();
+  try{ await __cpkPickRun(inp); } finally { __cpkBusyAt = 0; }
+}
+async function __cpkPickRun(inp){
+  let res = null;
+  try{
+    if(__cpkNative()){
+      const r = await window.Capacitor.Plugins.ContactPick.pick();
+      if(!r || r.cancelled) return;
+      res = { name: r.name || '', tels: [r.phone] };
+    } else if(__cpkWeb()){
+      const list = await navigator.contacts.select(['name', 'tel'], { multiple: false });
+      if(!list || !list.length) return;
+      const c = list[0];
+      res = { name: (c.name && c.name[0]) || '', tels: (c.tel || []).filter(Boolean) };
+    } else return;
+  }catch(e){
+    const code = e && e.code;
+    if(code === 'no_number'){ try{ showToast(tr('cpkNoNumber')); }catch(_){} return; }
+    if(/cancel/i.test(String((e && e.message) || e))) return;
+    try{ showToast(tr('cpkFail')); }catch(_){}
+    return;
+  }
+  const seen = {}; const tels = (res.tels || []).map(__cpkNorm).filter(t=>t && !seen[t] && (seen[t] = 1));
+  if(!tels.length){ try{ showToast(tr('cpkNoNumber')); }catch(_){} return; }
+  let tel = tels[0];
+  if(tels.length > 1){
+    tel = await __cpModal(tr('cpkChoose'), res.name || '', tels.map(t=>({ label: t, sub: '', value: t })));
+    if(!tel) return;
+  }
+  if(!document.body.contains(inp) && inp.id){ const f = document.getElementById(inp.id); if(f) inp = f; else return; }   // oyna yopilgan bo'lsa
+  __cpkSet(inp, tel);
+  const nameId = CPK_PHONE_IDS[inp.id];
+  if(nameId && res.name){ const n = document.getElementById(nameId); if(n && !String(n.value || '').trim()) __cpkSet(n, String(res.name).trim()); }
+  try{ showToast(tr('cpkAdded')); }catch(_){}
+}
+function __cpkEnhance(root){
+  if(!root || !root.querySelectorAll || !__cpkAvailable()) return;
+  const list = [...root.querySelectorAll(CPK_SEL)]; if(root.matches && root.matches(CPK_SEL)) list.push(root);
+  list.forEach(inp=>{
+    if(inp.tagName !== 'INPUT' || inp.dataset.cpk || !inp.parentNode) return;
+    inp.dataset.cpk = '1';
+    let mt = '', mb = '';
+    try{ const cs = getComputedStyle(inp); if(parseFloat(cs.marginTop)) mt = cs.marginTop; if(parseFloat(cs.marginBottom)) mb = cs.marginBottom; }catch(e){}
+    const wrap = document.createElement('div');
+    wrap.className = 'cpk-wrap';
+    wrap.style.cssText = 'display:flex;align-items:center;gap:6px;';
+    if(mt){ wrap.style.marginTop = mt; inp.style.marginTop = '0'; }
+    if(mb){ wrap.style.marginBottom = mb; inp.style.marginBottom = '0'; }
+    inp.parentNode.insertBefore(wrap, inp);
+    wrap.appendChild(inp);
+    inp.style.flex = '1'; inp.style.minWidth = '0';
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn btn-outline cpk-btn';
+    b.title = tr('cpkBtn'); b.setAttribute('aria-label', tr('cpkBtn'));
+    b.style.cssText = 'width:44px;min-width:44px;height:44px;min-height:44px;padding:0;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin:0;';
+    b.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M7.5 17a4.5 4.5 0 0 1 9 0"/><path d="M2 6h2M2 12h2M2 18h2"/></svg>';
+    b.addEventListener('pointerdown', (e)=>e.preventDefault());
+    b.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); __cpkPick(inp); });
+    wrap.appendChild(b);
+  });
+}
+new MutationObserver((muts)=>{ if(!__cpkAvailable()) return; muts.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType === 1){ try{ __cpkEnhance(n); }catch(e){} } })); }).observe(document.documentElement, {childList:true, subtree:true});
+document.addEventListener('DOMContentLoaded', ()=>{ try{ __cpkEnhance(document); }catch(e){} });
 new MutationObserver((muts)=>{
   muts.forEach(m=>m.addedNodes.forEach(n=>{ if(n.nodeType===1) enhanceInputs(n); }));
 }).observe(document.documentElement, {childList:true, subtree:true});

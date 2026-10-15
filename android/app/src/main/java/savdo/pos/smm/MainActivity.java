@@ -14,6 +14,7 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(UpdatePlugin.class);
         registerPlugin(ClassicPrinterPlugin.class);   // fix66
+        registerPlugin(ContactPickerPlugin.class);   // fix113-contact
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         try { if (getSupportActionBar() != null) getSupportActionBar().hide(); } catch (Exception ignored) {}
