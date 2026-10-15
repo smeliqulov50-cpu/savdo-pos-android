@@ -2293,6 +2293,7 @@ async function loadAll(){
   state.tables = tables || [];
   state.setupDone = !!setupDone;
   state.cart = cart || []; window.__ccWasEmpty = null;   /* fix106-nocust */
+  window.__ccReady = true;   /* fix111-nocust: savat yuklandi — mijoz tozalovchisi endi har qanday qurilmada ishlaydi (setupDone bo'lmasa ham) */
   state.audit = (await storGet(STORAGE_KEYS.audit)) || [];
   try{ pruneAudit(); }catch(e){} /* fix96 */
   state.purchases = (await storGet(STORAGE_KEYS.purchases)) || [];
@@ -2473,7 +2474,7 @@ async function repairStaffAuthRecords(){
 async function saveStaff(){ await storSet(STORAGE_KEYS.staff, state.staff); syncStaffDoc(); }
 function saveShifts(){ storSet(STORAGE_KEYS.shifts, state.shifts); syncShiftsDoc(); }
 function saveCurrentShift(){ storSet(STORAGE_KEYS.currentShift, state.currentShift); }
-function saveTables(){ storSet(STORAGE_KEYS.tables, state.tables); try{ if(state.setupDone && typeof __ccSweep === 'function') __ccSweep(); }catch(_e){} /* fix106-nocust */ }
+function saveTables(){ storSet(STORAGE_KEYS.tables, state.tables); try{ if((state.setupDone || window.__ccReady) && typeof __ccSweep === 'function') __ccSweep(); }catch(_e){} /* fix106-nocust */ }
 async function saveSetupDone(){ await storSet(STORAGE_KEYS.setupDone, true); }
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); }
@@ -4385,7 +4386,7 @@ function persistAllLocal(){
   storSet(STORAGE_KEYS.shifts, state.shifts);
   storSet(STORAGE_KEYS.tables, state.tables);
 }
-function saveCart(){ storSet(STORAGE_KEYS.cart, state.cart); try{ if(state.setupDone && typeof __ccSweep === 'function') __ccSweep(); }catch(_e){} /* fix106-nocust */ }
+function saveCart(){ storSet(STORAGE_KEYS.cart, state.cart); try{ if((state.setupDone || window.__ccReady) && typeof __ccSweep === 'function') __ccSweep(); }catch(_e){} /* fix106-nocust */ }
 
 /* ---------- BARCODE SCANNER ---------- */
 let html5QrScanner = null;
@@ -6283,7 +6284,7 @@ function __cartBarCust(){
 function renderCartBar(){
   const slot = document.getElementById('cart-bar-slot');
   const cart = activeCart();
-  try{ if(state.setupDone) __ccSweep(); }catch(_e){}
+  try{ if(state.setupDone || window.__ccReady) __ccSweep(); }catch(_e){}   /* fix111-nocust */
   if(state.view !== 'sale' || cart.length===0 || (state.settings.restaurantMode && !state.activeTableId && !state.takeawayMode)){ slot.innerHTML=''; return; }
   const total = cartTotal();
   const count = cart.reduce((a,c)=>a+c.qty,0);
