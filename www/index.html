@@ -180,6 +180,7 @@
   .stat-value{background:linear-gradient(90deg, var(--accent-dark) 0%, var(--violet) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
   .stat-label{font-size:12px;color:var(--ink-soft);margin-bottom:4px;}
   .stat-value{font-size:19px;font-weight:800;}
+  /* fix117-eye */ .td-label{display:flex;align-items:center;justify-content:space-between;gap:6px;} .td-eye{flex-shrink:0;width:36px;height:36px;margin:-10px -8px -10px 0;padding:0;border:none;border-radius:10px;background:transparent;color:var(--ink-faint);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;} .td-eye:active{background:var(--accent-bg);} .td-eye svg{pointer-events:none;} .td-mask{letter-spacing:3px;white-space:nowrap;} [data-td-amount]{position:relative;} [data-td-amount] .td-keep{visibility:hidden;} [data-td-amount] .td-keep + .td-mask{position:absolute;left:0;top:0;}
   /* The one headline number on a report screen — "Jami"/"Umumiy sotuvlar"
      — reads as just another stat-card at the same size as its cash/card/
      debt breakdown neighbors, when it should visually lead them, since
@@ -1385,6 +1386,9 @@ const T = {
   websiteMenu:{uz:"Veb-sayt (savdo-pos.pages.dev)",ru:"Веб-сайт (savdo-pos.pages.dev)",en:"Website (savdo-pos.pages.dev)",kk:"Веб-сайт (savdo-pos.pages.dev)",ky:"Веб-сайт (savdo-pos.pages.dev)",tg:"Вебсайт (savdo-pos.pages.dev)"},
   gpsOffConfirm:{uz:"Joylashuv (GPS) o'chiq — printer topilmaydi. Sozlamalarni ochaymi?",ru:"Геолокация выключена — принтер не будет найден. Открыть настройки?",en:"Location (GPS) is off — the printer won't be found. Open settings?",kk:"Геолокация (GPS) өшірулі — принтер табылмайды. Баптауларды ашайын ба?",ky:"Жайгашкан жер (GPS) өчүк — принтер табылбайт. Жөндөөлөрдү ачайынбы?",tg:"Ҷойгиршавӣ (GPS) хомӯш аст — принтер ёфт намешавад. Танзимотро кушоям?"},
   idbRecovered:{uz:"Saqlangan ma'lumotlar to'liq yuklandi",ru:"Сохранённые данные полностью загружены",en:"Saved data fully loaded",kk:"Сақталған деректер толық жүктелді",ky:"Сакталган маалыматтар толук жүктөлдү",tg:"Маълумоти захирашуда пурра бор шуд"},
+  /* fix117-eye */
+  tdShow:{uz:"Summani ko'rsatish",ru:"Показать сумму",en:"Show amount",kk:"Соманы көрсету",ky:"Сумманы көрсөтүү",tg:"Нишон додани маблағ"},
+  tdHide:{uz:"Summani yashirish",ru:"Скрыть сумму",en:"Hide amount",kk:"Соманы жасыру",ky:"Сумманы жашыруу",tg:"Пинҳон кардани маблағ"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -2875,7 +2879,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.20';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.21';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -10577,13 +10581,37 @@ function renderReceiptsListItems(sales){
   });
 }
 
+/* fix117-eye: "Umumiy qarzlar" summasini ko'rsatish / yashirish — parol ko'zchasi kabi. Tanlov shu qurilmada saqlanadi. */
+var TD_HIDE_KEY = 'sp_hide_total_debt_v1', __tdMem = null;
+var __TD_SVG_OPEN = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+var __TD_SVG_OFF = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+var __TD_MASK = '<span class="td-mask">••••••</span>';
+function __tdHidden(){ try{ const v = localStorage.getItem(TD_HIDE_KEY); if(v !== null) return v === '1'; }catch(e){} return __tdMem === true; }
+function __tdSet(h){ __tdMem = !!h; try{ localStorage.setItem(TD_HIDE_KEY, h ? '1' : '0'); }catch(e){} }
+/* yashirilganda haqiqiy summa joyini (balandligini) ko'rinmas holda egallab turadi — bosilganda ekran sakramaydi */
+function __tdHtml(amount, h){ return h ? '<span class="td-keep" aria-hidden="true">' + fmt(amount) + '</span>' + __TD_MASK : fmt(amount); }
+function __tdValue(amount){ return __tdHtml(amount, __tdHidden()); }
+/* parol maydonidagi kabi: yashirilganda ochiq ko'z (bosilsa ko'rsatadi), ko'rinib turganda chizilgan ko'z (bosilsa yashiradi) */
+function __tdEyeBtn(){ const h = __tdHidden(); const t = tr(h ? 'tdShow' : 'tdHide'); return '<button type="button" class="td-eye" data-td-eye="1" aria-label="' + escapeHtml(t) + '" title="' + escapeHtml(t) + '" aria-pressed="' + (h ? 'true' : 'false') + '">' + (h ? __TD_SVG_OPEN : __TD_SVG_OFF) + '</button>'; }
+function __tdApply(){
+  const h = __tdHidden();
+  document.querySelectorAll('[data-td-amount]').forEach(el=>{ el.innerHTML = __tdHtml(Number(el.getAttribute('data-td-amount')) || 0, h); });
+  document.querySelectorAll('[data-td-eye]').forEach(b=>{ const t = tr(h ? 'tdShow' : 'tdHide'); b.innerHTML = h ? __TD_SVG_OPEN : __TD_SVG_OFF; b.setAttribute('aria-label', t); b.setAttribute('title', t); b.setAttribute('aria-pressed', h ? 'true' : 'false'); });
+}
+document.addEventListener('click', (e)=>{
+  const b = e.target && e.target.closest ? e.target.closest('[data-td-eye]') : null;
+  if(!b) return;
+  e.preventDefault(); e.stopPropagation();
+  __tdSet(!__tdHidden()); __tdApply();
+}, true);
+document.addEventListener('pointerdown', (e)=>{ const b = e.target && e.target.closest ? e.target.closest('[data-td-eye]') : null; if(b) e.preventDefault(); }, true);   // fokusni (klaviaturani) o'g'irlamasin
 function renderCustomers(){
   const container = document.getElementById('view-container');
   const branchCustomers = activeCustomers();
   const totalDebt = branchCustomers.reduce((s,c)=>s+(c.debt||0),0);
   container.innerHTML = `
     <div class="stat-grid">
-      <div class="stat-card"><div class="stat-label">${tr('totalDebt')}</div><div class="stat-value" style="color:var(--danger);">${fmt(totalDebt)}</div></div>
+      <div class="stat-card"><div class="stat-label td-label"><span>${tr('totalDebt')}</span>${__tdEyeBtn()}</div><div class="stat-value" style="color:var(--danger);" data-td-amount="${Math.round(totalDebt||0)}">${__tdValue(totalDebt)}</div></div>
       <div class="stat-card"><div class="stat-label">${tr('navCustomers')}</div><div class="stat-value">${branchCustomers.length}</div></div>
     </div>
     <div class="search-bar">${ICONS.search}<input type="text" id="customer-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.customerSearch||'')}"></div>
@@ -14127,7 +14155,7 @@ function renderReportsCategory(container, cat){
         <div class="stat-card" style="background:${todayNetProfit>=0?'var(--teal-bg)':'var(--danger-bg)'};"><div class="stat-label">${tr('netProfitLabel')}</div><div class="stat-value stat-value-lg" style="color:${todayNetProfit>=0?'var(--success)':'var(--danger)'};">${fmt(todayNetProfit)}</div></div>
         ` : ''}
         ${todayRefundTotal ? `<div class="stat-card" style="background:var(--warm-bg);"><div class="stat-label">${tr('refundsTotal')}</div><div class="stat-value" style="color:var(--warm);">${fmt(todayRefundTotal)}</div></div>` : ''}
-        <div class="stat-card" style="background:var(--danger-bg);"><div class="stat-label">${tr('totalDebt')}</div><div class="stat-value" style="color:var(--danger);">${fmt(totalDebt)}</div></div>
+        <div class="stat-card" style="background:var(--danger-bg);"><div class="stat-label td-label"><span>${tr('totalDebt')}</span>${__tdEyeBtn()}</div><div class="stat-value" style="color:var(--danger);" data-td-amount="${Math.round(totalDebt||0)}">${__tdValue(totalDebt)}</div></div>
         ${(todayDebtCash || todayDebtCard) ? `<div class="stat-card" style="background:var(--teal-bg);"><div class="stat-label">${tr('debtPaymentsToday')}</div><div class="stat-value" style="color:var(--success);">${fmt(todayDebtCash + todayDebtCard)}</div><div class="subtle" style="font-size:11px;">${tr('cashLabel')}: ${fmt(todayDebtCash)} · ${tr('cardLabel')}: ${fmt(todayDebtCard)}</div></div>` : ''}
       </div>
       <h3 class="sub-title">${tr('cashInRegisterLabel')}</h3>
