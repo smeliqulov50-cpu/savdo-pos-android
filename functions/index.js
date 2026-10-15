@@ -148,3 +148,45 @@ exports.cleanupAuditLog = onSchedule({ schedule: '30 3 * * *', timeZone: 'Asia/T
     console.log('cleanupAuditLog', JSON.stringify(st));
   } catch (e) { console.error('cleanupAuditLog xatosi', e); }
 });
+
+/* ---------- fix114-debts: do'konlar orasidagi qarzlar (qarzdor "Mening qarzlarim"da faqat ko'radi) ---------- */
+const { onDocumentWritten } = require('firebase-functions/v2/firestore');
+const __SD = require('./src/debts/shared');
+const __SD_SUPER_UID = 'M0CZxwtteTMxbs6nyeR5kVrJ68X2';   // ilovadagi SUPER_ADMIN_UID bilan bir xil
+
+/* Mijoz yozuvi o'zgarganda: telefon raqami bo'yicha indeks + qarz o'zgarsa, raqamini bog'lagan qarzdor do'konga push */
+exports.sharedDebtIndex = onDocumentWritten('businesses/{bizId}/customers/{custId}', async function (event) {
+  const ch = event.data;
+  if (!ch) return;
+  try {
+    const before = ch.before && ch.before.exists ? ch.before.data() : null;
+    const after = ch.after && ch.after.exists ? ch.after.data() : null;
+    const r = await __SD.handleCustomerWrite({ db: __fbAdmin.firestore(), messaging: __fbAdmin.messaging(), nowMs: nowMs }, event.params.bizId, event.params.custId, before, after);
+    if (r && r.pushed) console.log('sharedDebtIndex', JSON.stringify(r));
+  } catch (e) { console.error('sharedDebtIndex xatosi', e); }
+});
+
+/* Ilova so'rovlari: status / link / unlink / list / detail (+ superadmin: adminRelease). Firebase ID token bilan. */
+exports.sharedDebts = onRequest({ cors: true }, async function (req, res) {
+  try {
+    if (req.method !== 'POST') { res.status(405).json({ ok: false, code: 'method-not-allowed' }); return; }
+    const m = /^Bearer\s+(.+)$/i.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    let decoded;
+    try { decoded = await __fbAdmin.auth().verifyIdToken(m[1]); }
+    catch (e) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    const out = await __SD.handleRequest({ db: __fbAdmin.firestore(), nowMs: nowMs, superUid: __SD_SUPER_UID }, decoded.uid, req.body || {});
+    res.status(out.status || 200).json(out.body);
+  } catch (e) {
+    console.error('sharedDebts xatosi', e);
+    res.status(500).json({ ok: false, code: 'internal' });
+  }
+});
+
+/* Server qo'yilishidan oldingi mijozlarni bir marta indeksga yozadi (keyin har soatda faqat 1 ta belgini o'qib chiqadi) */
+exports.sharedDebtBackfill = onSchedule({ schedule: 'every 60 minutes', timeZone: 'Asia/Tashkent', timeoutSeconds: 540 }, async function () {
+  try {
+    const st = await __SD.runBackfill({ db: __fbAdmin.firestore(), nowMs: nowMs });
+    if (!st.skipped) console.log('sharedDebtBackfill', JSON.stringify(st));
+  } catch (e) { console.error('sharedDebtBackfill xatosi', e); }
+});

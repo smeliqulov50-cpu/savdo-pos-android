@@ -1322,6 +1322,55 @@ const T = {
   cpkNoNumber:{uz:"Bu kontaktda telefon raqam yo'q",ru:"У этого контакта нет номера",en:"This contact has no phone number",kk:"Бұл контактіде нөмір жоқ",ky:"Бул байланышта номер жок",tg:"Ин тамос рақам надорад"},
   cpkFail:{uz:"Kontaktni o'qib bo'lmadi",ru:"Не удалось прочитать контакт",en:"Couldn't read the contact",kk:"Контактіні оқу мүмкін болмады",ky:"Байланышты окуу мүмкүн болбоду",tg:"Тамосро хондан нашуд"},
   cpkChoose:{uz:"Raqamni tanlang",ru:"Выберите номер",en:"Choose a number",kk:"Нөмірді таңдаңыз",ky:"Номерди тандаңыз",tg:"Рақамро интихоб кунед"},
+  /* fix114-debts */
+  sdTitle:{uz:"Savdo Pos do'konlaridagi qarzlarim",ru:"Мои долги в магазинах Savdo Pos",en:"My debts at Savdo Pos shops",kk:"Savdo Pos дүкендеріндегі қарыздарым",ky:"Savdo Pos дүкөндөрүндөгү карыздарым",tg:"Қарзҳои ман дар мағозаҳои Savdo Pos"},
+  sdHint:{uz:"Boshqa do'konlar sizni Savdo Pos'da shu raqam bilan yozgan bo'lsa, ular yozgan qarz, to'lovlar va nasiya cheklari shu yerda ko'rinadi. Faqat ko'rish mumkin.",ru:"Если другие магазины записали вас в Savdo Pos с этим номером, здесь будут видны их записи о долге, оплатах и чеках в долг. Только просмотр.",en:"If other shops recorded you in Savdo Pos with this number, the debt, payments and credit receipts they recorded appear here. View only.",kk:"Басқа дүкендер сізді Savdo Pos-та осы нөмірмен жазса, олар жазған қарыз, төлемдер және несие чектері осында көрінеді. Тек қарау.",ky:"Башка дүкөндөр сизди Savdo Pos'то ушул номер менен жазса, алар жазган карыз, төлөмдөр жана насыя чектери ушул жерде көрүнөт. Көрүү гана.",tg:"Агар мағозаҳои дигар шуморо дар Savdo Pos бо ҳамин рақам сабт карда бошанд, қарз, пардохтҳо ва чекҳои насияи онҳо дар ин ҷо намоён мешаванд. Танҳо дидан."},
+  sdPhoneLabel:{uz:"Sizning telefon raqamingiz",ru:"Ваш номер телефона",en:"Your phone number",kk:"Сіздің телефон нөміріңіз",ky:"Сиздин телефон номериңиз",tg:"Рақами телефони шумо"},
+  sdLinkBtn:{uz:"Raqamni bog'lash",ru:"Привязать номер",en:"Link number",kk:"Нөмірді байланыстыру",ky:"Номерди байлоо",tg:"Пайваст кардани рақам"},
+  sdOnlyOwn:{uz:"Faqat o'zingizning raqamingizni kiriting. Bitta raqam faqat bitta hisobga bog'lanadi.",ru:"Вводите только свой номер. Один номер привязывается только к одному аккаунту.",en:"Enter only your own number. One number can be linked to only one account.",kk:"Тек өз нөміріңізді енгізіңіз. Бір нөмір тек бір аккаунтқа байланысады.",ky:"Өзүңүздүн номериңизди гана жазыңыз. Бир номер бир гана аккаунтка байланат.",tg:"Танҳо рақами худро ворид кунед. Як рақам танҳо ба як ҳисоб пайваст мешавад."},
+  sdLinkedAs:{uz:"Bog'langan raqam",ru:"Привязанный номер",en:"Linked number",kk:"Байланысқан нөмір",ky:"Байланган номер",tg:"Рақами пайвастшуда"},
+  sdChange:{uz:"O'zgartirish",ru:"Изменить",en:"Change",kk:"Өзгерту",ky:"Өзгөртүү",tg:"Иваз кардан"},
+  sdUnlinkQ:{uz:"Raqam ajratilsinmi? Boshqa do'konlardagi qarzlaringiz bu yerda ko'rinmay qoladi. Keyin boshqa raqamni bog'lashingiz mumkin (30 kunda 3 martagacha).",ru:"Отвязать номер? Долги в других магазинах перестанут здесь отображаться. Потом можно привязать другой номер (до 3 раз за 30 дней).",en:"Unlink the number? Your debts at other shops will stop showing here. You can then link another number (up to 3 times in 30 days).",kk:"Нөмірді ажырату керек пе? Басқа дүкендердегі қарыздарыңыз мұнда көрінбейді. Кейін басқа нөмірді байланыстыра аласыз (30 күнде 3 ретке дейін).",ky:"Номерди ажыратасызбы? Башка дүкөндөрдөгү карыздарыңыз бул жерде көрүнбөй калат. Кийин башка номерди байлай аласыз (30 күндө 3 жолуга чейин).",tg:"Рақамро ҷудо кунем? Қарзҳои шумо дар мағозаҳои дигар дар ин ҷо намоён намешаванд. Баъд метавонед рақами дигарро пайваст кунед (то 3 бор дар 30 рӯз)."},
+  sdUnlinkBtn:{uz:"Ajratish",ru:"Отвязать",en:"Unlink",kk:"Ажырату",ky:"Ажыратуу",tg:"Ҷудо кардан"},
+  sdOwnerMust:{uz:"Raqamni biznes egasi yoki administrator bog'laydi.",ru:"Номер привязывает владелец бизнеса или администратор.",en:"The business owner or an administrator links the number.",kk:"Нөмірді бизнес иесі немесе әкімші байланыстырады.",ky:"Номерди бизнес ээси же администратор байлайт.",tg:"Рақамро соҳиби тиҷорат ё администратор пайваст мекунад."},
+  sdNeedLogin:{uz:"Bu bo'lim hisob bilan (bulutga) kirganda ishlaydi.",ru:"Этот раздел работает при входе в аккаунт (облако).",en:"This section works when you are signed in to an account (cloud).",kk:"Бұл бөлім аккаунтқа (бұлтқа) кіргенде жұмыс істейді.",ky:"Бул бөлүм аккаунтка (булутка) киргенде иштейт.",tg:"Ин бахш ҳангоми ворид шудан ба ҳисоб (абр) кор мекунад."},
+  sdNone:{uz:"Hozircha boshqa do'konlarda qarzingiz yo'q.",ru:"Пока у вас нет долгов в других магазинах.",en:"You have no debts at other shops yet.",kk:"Әзірге басқа дүкендерде қарызыңыз жоқ.",ky:"Азырынча башка дүкөндөрдө карызыңыз жок.",tg:"Ҳоло дар мағозаҳои дигар қарз надоред."},
+  sdTotal:{uz:"Do'konlarga jami qarzim",ru:"Всего долгов магазинам",en:"Total owed to shops",kk:"Дүкендерге жалпы қарызым",ky:"Дүкөндөргө жалпы карызым",tg:"Ҳамагӣ қарзи ман ба мағозаҳо"},
+  sdShowPaid:{uz:"To'langanlarni ko'rsatish ({n})",ru:"Показать погашенные ({n})",en:"Show paid ({n})",kk:"Төленгендерді көрсету ({n})",ky:"Төлөнгөндөрдү көрсөтүү ({n})",tg:"Нишон додани пардохташудаҳо ({n})"},
+  sdHidePaid:{uz:"To'langanlarni yashirish",ru:"Скрыть погашенные",en:"Hide paid",kk:"Төленгендерді жасыру",ky:"Төлөнгөндөрдү жашыруу",tg:"Пинҳон кардани пардохташудаҳо"},
+  sdPaid:{uz:"To'langan",ru:"Погашено",en:"Paid",kk:"Төленді",ky:"Төлөндү",tg:"Пардохт шуд"},
+  sdRefresh:{uz:"Yangilash",ru:"Обновить",en:"Refresh",kk:"Жаңарту",ky:"Жаңылоо",tg:"Навсозӣ"},
+  sdUpdated:{uz:"Yangilangan",ru:"Обновлено",en:"Updated",kk:"Жаңартылды",ky:"Жаңыланды",tg:"Навсозӣ шуд"},
+  sdLoading:{uz:"Yuklanmoqda…",ru:"Загрузка…",en:"Loading…",kk:"Жүктелуде…",ky:"Жүктөлүүдө…",tg:"Боргирӣ…"},
+  sdOffline:{uz:"Internet yo'q — oxirgi saqlangan ma'lumot ko'rsatilmoqda.",ru:"Нет интернета — показаны последние сохранённые данные.",en:"No internet — showing the last saved data.",kk:"Интернет жоқ — соңғы сақталған деректер көрсетілуде.",ky:"Интернет жок — акыркы сакталган маалымат көрсөтүлүүдө.",tg:"Интернет нест — маълумоти охирини захирашуда нишон дода мешавад."},
+  sdErrNet:{uz:"Server bilan aloqa yo'q. Internetni tekshirib, qayta urinib ko'ring.",ru:"Нет связи с сервером. Проверьте интернет и попробуйте снова.",en:"Can't reach the server. Check the internet and try again.",kk:"Сервермен байланыс жоқ. Интернетті тексеріп, қайта көріңіз.",ky:"Сервер менен байланыш жок. Интернетти текшерип, кайра аракет кылыңыз.",tg:"Бо сервер алоқа нест. Интернетро санҷед ва дубора кӯшиш кунед."},
+  sdErrTaken:{uz:"Bu raqam boshqa hisobga bog'langan. Agar bu sizning raqamingiz bo'lsa, yordam xizmatiga yozing.",ru:"Этот номер привязан к другому аккаунту. Если это ваш номер, напишите в поддержку.",en:"This number is linked to another account. If it is your number, contact support.",kk:"Бұл нөмір басқа аккаунтқа байланысқан. Егер бұл сіздің нөміріңіз болса, қолдау қызметіне жазыңыз.",ky:"Бул номер башка аккаунтка байланган. Эгер бул сиздин номериңиз болсо, колдоо кызматына жазыңыз.",tg:"Ин рақам ба ҳисоби дигар пайваст аст. Агар ин рақами шумо бошад, ба хадамоти дастгирӣ нависед."},
+  sdErrRate:{uz:"Juda ko'p urinish. Ertaga qayta urinib ko'ring.",ru:"Слишком много попыток. Попробуйте завтра.",en:"Too many attempts. Try again tomorrow.",kk:"Тым көп әрекет. Ертең қайта көріңіз.",ky:"Өтө көп аракет. Эртең кайра аракет кылыңыз.",tg:"Кӯшишҳо аз ҳад зиёд. Фардо дубора кӯшиш кунед."},
+  sdErrRateLinks:{uz:"Raqamni 30 kun ichida 3 martadan ko'p o'zgartirib bo'lmaydi.",ru:"Номер нельзя менять чаще 3 раз за 30 дней.",en:"The number can't be changed more than 3 times in 30 days.",kk:"Нөмірді 30 күнде 3 реттен артық өзгертуге болмайды.",ky:"Номерди 30 күндө 3 жолудан ашык өзгөртүүгө болбойт.",tg:"Рақамро дар 30 рӯз беш аз 3 бор иваз кардан мумкин нест."},
+  sdErrPhone:{uz:"Telefon raqami noto'g'ri.",ru:"Неверный номер телефона.",en:"Invalid phone number.",kk:"Телефон нөмірі қате.",ky:"Телефон номери туура эмес.",tg:"Рақами телефон нодуруст аст."},
+  sdErrNoBiz:{uz:"Avval biznes ma'lumotlarini sozlang.",ru:"Сначала настройте данные бизнеса.",en:"Set up your business details first.",kk:"Алдымен бизнес деректерін баптаңыз.",ky:"Адегенде бизнес маалыматтарын жөндөңүз.",tg:"Аввал маълумоти тиҷоратро танзим кунед."},
+  sdErrGone:{uz:"Bu qarz endi ko'rinmaydi (do'kon raqamni o'zgartirgan yoki yozuvni o'chirgan).",ru:"Этот долг больше не доступен (магазин изменил номер или удалил запись).",en:"This debt is no longer available (the shop changed the number or deleted the record).",kk:"Бұл қарыз енді көрінбейді (дүкен нөмірді өзгертті немесе жазбаны өшірді).",ky:"Бул карыз эми көрүнбөйт (дүкөн номерди өзгөрттү же жазууну өчүрдү).",tg:"Ин қарз дигар намоён нест (мағоза рақамро иваз кард ё сабтро нест кард)."},
+  sdErrGeneric:{uz:"Xatolik yuz berdi. Qayta urinib ko'ring.",ru:"Произошла ошибка. Попробуйте снова.",en:"Something went wrong. Try again.",kk:"Қате орын алды. Қайта көріңіз.",ky:"Ката кетти. Кайра аракет кылыңыз.",tg:"Хато рӯй дод. Дубора кӯшиш кунед."},
+  sdRetry:{uz:"Qayta urinish",ru:"Повторить",en:"Retry",kk:"Қайталау",ky:"Кайталоо",tg:"Такрор"},
+  sdYouAs:{uz:"Do'kon sizni shunday yozgan",ru:"Магазин записал вас как",en:"The shop recorded you as",kk:"Дүкен сізді былай жазған",ky:"Дүкөн сизди мындай жазган",tg:"Мағоза шуморо чунин сабт кардааст"},
+  sdHistory:{uz:"To'lovlar tarixi",ru:"История платежей",en:"Payment history",kk:"Төлемдер тарихы",ky:"Төлөмдөр тарыхы",tg:"Таърихи пардохтҳо"},
+  sdReceipts:{uz:"Nasiya cheklari",ru:"Чеки в долг",en:"Credit receipts",kk:"Несие чектері",ky:"Насыя чектери",tg:"Чекҳои насия"},
+  sdTypeDebt:{uz:"Qarz",ru:"Долг",en:"Debt",kk:"Қарыз",ky:"Карыз",tg:"Қарз"},
+  sdTypePay:{uz:"To'lov",ru:"Оплата",en:"Payment",kk:"Төлем",ky:"Төлөм",tg:"Пардохт"},
+  sdReadOnly:{uz:"Bu qarzni faqat do'kon qo'shadi, o'zgartiradi va o'chiradi.",ru:"Этот долг добавляет, изменяет и удаляет только магазин.",en:"Only the shop can add, change or delete this debt.",kk:"Бұл қарызды тек дүкен қосады, өзгертеді және өшіреді.",ky:"Бул карызды дүкөн гана кошот, өзгөртөт жана өчүрөт.",tg:"Ин қарзро танҳо мағоза илова, иваз ва нест мекунад."},
+  sdCreditPart:{uz:"Nasiyaga",ru:"В долг",en:"On credit",kk:"Несиеге",ky:"Насыяга",tg:"Ба насия"},
+  sdDiscount:{uz:"Chegirma",ru:"Скидка",en:"Discount",kk:"Жеңілдік",ky:"Арзандатуу",tg:"Тахфиф"},
+  sdRefunded:{uz:"Qaytarilgan",ru:"Возврат",en:"Refunded",kk:"Қайтарылған",ky:"Кайтарылган",tg:"Баргардонида шуд"},
+  sdNoHistory:{uz:"Yozuvlar yo'q",ru:"Записей нет",en:"No records",kk:"Жазбалар жоқ",ky:"Жазуулар жок",tg:"Сабтҳо нест"},
+  sdReceiptNo:{uz:"Chek №",ru:"Чек №",en:"Receipt #",kk:"Чек №",ky:"Чек №",tg:"Чек №"},
+  sdLinkedOk:{uz:"Raqam bog'landi",ru:"Номер привязан",en:"Number linked",kk:"Нөмір байланысты",ky:"Номер байланды",tg:"Рақам пайваст шуд"},
+  sdUnlinked:{uz:"Raqam ajratildi",ru:"Номер отвязан",en:"Number unlinked",kk:"Нөмір ажыратылды",ky:"Номер ажыратылды",tg:"Рақам ҷудо шуд"},
+  sdCreditorHint:{uz:"Bu mijoz Savdo Pos ishlatsa va shu raqamni bog'lagan bo'lsa, qarzi va to'lovlarini o'z ilovasida ko'radi (faqat ko'radi).",ru:"Если этот клиент пользуется Savdo Pos и привязал этот номер, он видит свой долг и оплаты в своём приложении (только просмотр).",en:"If this customer uses Savdo Pos and linked this number, they see their debt and payments in their own app (view only).",kk:"Бұл клиент Savdo Pos қолданса және осы нөмірді байланыстырса, қарызы мен төлемдерін өз қолданбасында көреді (тек қарау).",ky:"Бул кардар Savdo Pos колдонсо жана ушул номерди байласа, карызын жана төлөмдөрүн өз колдонмосунда көрөт (көрүү гана).",tg:"Агар ин мизоҷ Savdo Pos-ро истифода барад ва ин рақамро пайваст карда бошад, қарз ва пардохтҳояшро дар барномаи худ мебинад (танҳо дидан)."},
+  sdSaRelease:{uz:"Qarz raqamini bo'shatish",ru:"Освободить номер долгов",en:"Release a debt-sharing number",kk:"Қарыз нөмірін босату",ky:"Карыз номерин бошотуу",tg:"Озод кардани рақами қарз"},
+  sdSaReleaseHint:{uz:"Raqam noto'g'ri hisobga bog'lanib qolgan bo'lsa, shu yerda bo'shating — keyin haqiqiy egasi o'zi bog'laydi.",ru:"Если номер привязан не к тому аккаунту, освободите его здесь — затем настоящий владелец привяжет его сам.",en:"If a number is linked to the wrong account, release it here — then the real owner links it.",kk:"Нөмір қате аккаунтқа байланып қалса, осында босатыңыз — кейін нақты иесі өзі байланыстырады.",ky:"Номер туура эмес аккаунтка байланып калса, ушул жерден бошотуңуз — кийин чыныгы ээси өзү байлайт.",tg:"Агар рақам ба ҳисоби нодуруст пайваст шуда бошад, онро дар ин ҷо озод кунед — баъд соҳиби аслӣ худаш пайваст мекунад."},
+  sdSaReleaseBtn:{uz:"Bo'shatish",ru:"Освободить",en:"Release",kk:"Босату",ky:"Бошотуу",tg:"Озод кардан"},
+  sdSaReleased:{uz:"Raqam bo'shatildi",ru:"Номер освобождён",en:"Number released",kk:"Нөмір босатылды",ky:"Номер бошотулду",tg:"Рақам озод шуд"},
+  sdSaNotFound:{uz:"Bu raqam hech qaysi hisobga bog'lanmagan",ru:"Этот номер ни к какому аккаунту не привязан",en:"This number is not linked to any account",kk:"Бұл нөмір ешбір аккаунтқа байланыспаған",ky:"Бул номер эч бир аккаунтка байланган эмес",tg:"Ин рақам ба ягон ҳисоб пайваст нашудааст"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -6137,6 +6186,7 @@ function openCustomerHub(opts){
     var html = '<div class="ch-dhead">' + avatar(c) + '<div style="min-width:0;"><div class="ch-dname">' + escapeHtml(c.name) + '</div>'
       + (c.phone ? '<div class="subtle">' + escapeHtml(c.phone) + '</div>' : '')
       + (c.address ? '<div class="subtle" style="font-size:12px;">' + escapeHtml(c.address) + '</div>' : '') + '</div></div>';
+    if(canView && c.phone) html += '<p class="subtle" style="font-size:11.5px;line-height:1.35;margin:6px 2px 10px;">&#128241; ' + escapeHtml(tr('sdCreditorHint')) + '</p>';   /* fix114-debts */
     if(canView){
       html += '<div class="ch-stats">'
         + '<div class="ch-stat"><div class="ch-sl">' + tr('debt') + '</div><div class="ch-sv" style="color:' + (c.debt > 0 ? 'var(--danger)' : 'var(--success)') + ';">' + fmt(c.debt || 0) + '</div></div>'
@@ -10480,6 +10530,295 @@ function renderCustomers(){
 }
 
 /* ---------- MY DEBTS (money/goods owed BY the business to suppliers/others) ---------- */
+/* fix114-debts: "Savdo Pos do'konlaridagi qarzlarim" — boshqa do'kon (qarz beruvchi) yozgan qarz, to'lovlar va nasiya cheklari.
+   Faqat ko'rish: qo'shish, o'zgartirish va o'chirish faqat qarz beruvchi do'konda. Ma'lumot server (sharedDebts) orqali keladi. */
+var SD_CACHE_PREFIX = 'sp_sd_v1_', SD_DCACHE_PREFIX = 'sp_sd_d_v1_';
+window.__sd = window.__sd || { bid: '', data: null, loading: false, busy: false, err: '', showPaid: false, fetchedAt: 0, draftPhone: null, detail: {}, tab: 'hist' };
+function __sdBid(){ try{ return state.businessId || (fbUser && fbUser.uid) || ''; }catch(e){ return ''; } }
+function __sdState(){
+  const S = window.__sd; const b = __sdBid();
+  if(S.bid !== b){ S.bid = b; S.data = null; S.err = ''; S.fetchedAt = 0; S.detail = {}; S.draftPhone = null; S.showPaid = false; }
+  return S;
+}
+function __sdCacheGet(){ try{ const b = __sdBid(); if(!b) return null; const v = JSON.parse(localStorage.getItem(SD_CACHE_PREFIX + b) || 'null'); return (v && typeof v === 'object' && Array.isArray(v.items)) ? v : null; }catch(e){ return null; } }
+function __sdCacheSet(v){ try{ const b = __sdBid(); if(b) localStorage.setItem(SD_CACHE_PREFIX + b, JSON.stringify(v)); }catch(e){} }
+function __sdDCacheGet(k){ try{ const m = JSON.parse(localStorage.getItem(SD_DCACHE_PREFIX + __sdBid()) || '{}') || {}; return m[k] || null; }catch(e){ return null; } }
+function __sdDCacheSet(k, v){
+  try{
+    const key = SD_DCACHE_PREFIX + __sdBid(); const m = JSON.parse(localStorage.getItem(key) || '{}') || {};
+    m[k] = v; m[k].__at = Date.now();
+    const ks = Object.keys(m).sort((a, b)=>(m[b].__at || 0) - (m[a].__at || 0)); ks.slice(10).forEach(x=>{ delete m[x]; });   // eng ko'pi 10 ta do'kon
+    localStorage.setItem(key, JSON.stringify(m));
+  }catch(e){}
+}
+function __sdFmt(n, code){
+  const cur = CURRENCY_OPTIONS[code] || CURRENCY_OPTIONS.UZS;
+  const f = {ru:'symbolRu', en:'symbolEn', kk:'symbolKk', ky:'symbolKy', tg:'symbolTg'}[state.lang];
+  const sym = (f && cur[f]) || cur.symbolUz;
+  const s = Math.round(Number(n) || 0).toLocaleString('en-US').replace(/,/g, ' ');
+  return cur.position === 'before' ? (sym + s) : (s + ' ' + sym);
+}
+function __sdDate(iso, withTime){
+  const d = new Date(iso); if(isNaN(d.getTime())) return '';
+  return d.toLocaleDateString() + (withTime ? ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '');
+}
+function __sdErrText(code){
+  const m = { taken:'sdErrTaken', rate:'sdErrRate', rate_links:'sdErrRateLinks', invalid_phone:'sdErrPhone', no_business:'sdErrNoBiz', forbidden:'sdErrGone',
+    not_linked:'sdErrGone', net:'sdErrNet', no_server:'sdErrNet', internal:'sdErrGeneric', offline:'sdOffline', login:'sdNeedLogin' };
+  return tr(m[code] || 'sdErrGeneric');
+}
+async function __sdApi(action, payload, asSuperAdmin){
+  let user = fbUser;
+  if(asSuperAdmin){ try{ user = isSuperAdmin() ? fbUser : __saUser(); }catch(e){ user = null; } }
+  if(!user) throw {code: asSuperAdmin ? 'forbidden' : 'login'};
+  if(typeof navigator !== 'undefined' && navigator.onLine === false) throw {code: 'offline'};
+  let token;
+  try{ token = await user.getIdToken(); }catch(e){ throw {code: 'net'}; }
+  const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  const to = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch(e){} }, 20000);
+  try{
+    const resp = await fetch(payFnUrl('sharedDebts'), {
+      method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
+      body: JSON.stringify(Object.assign({}, payload || {}, {action: action})), signal: ctrl ? ctrl.signal : undefined
+    });
+    let data = null; try{ data = await resp.json(); }catch(e){}
+    if(!data) throw {code: resp.status === 404 ? 'no_server' : 'net'};
+    if(!data.ok) throw {code: data.code || 'internal', status: resp.status};
+    return data;
+  }catch(e){
+    if(e && e.code) throw e;
+    throw {code: 'net'};
+  }finally{ clearTimeout(to); }
+}
+function __sdMount(){
+  const S = __sdState();
+  if(!S.data){ const c = __sdCacheGet(); if(c) S.data = c; }
+  __sdRender();
+  if(fbUser && (!S.fetchedAt || Date.now() - S.fetchedAt > 60000)) __sdRefresh();
+}
+async function __sdRefresh(force){
+  const S = __sdState();
+  if(!fbUser){ __sdRender(); return; }
+  if(S.loading) return;
+  const b = S.bid;
+  S.loading = true; S.err = ''; __sdRender();
+  try{
+    const r = await __sdApi('list');
+    if(__sdBid() !== b) return;
+    S.data = { linked: !!r.linked, phone: r.phone || '', items: Array.isArray(r.items) ? r.items : [], at: Date.now() };
+    S.fetchedAt = Date.now();
+    __sdCacheSet(S.data);
+  }catch(e){
+    S.err = (e && e.code) || 'net';
+    if(S.err !== 'offline') S.fetchedAt = Date.now() - 45000;   // xatoda 15 soniyadan keyin qayta urinadi (sahifa qayta ochilsa)
+  }finally{
+    S.loading = false;
+  }
+  __sdRender();
+}
+function __sdBalanceHtml(debt, cur, size){
+  if((Number(debt) || 0) > 0) return '<strong style="color:var(--danger);font-size:' + (size || 14) + 'px;white-space:nowrap;">' + escapeHtml(__sdFmt(debt, cur)) + '</strong>';
+  return '<strong style="color:var(--success);font-size:' + Math.min(size || 14, 13) + 'px;white-space:nowrap;">' + escapeHtml(tr('sdPaid')) + '</strong>';
+}
+function __sdRender(){
+  const root = document.getElementById('sd-root'); if(!root) return;
+  const S = __sdState(); const D = S.data;
+  const canLink = isAdmin();
+  let h = '<div class="card" style="padding:14px;margin:0 0 14px;">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">'
+    + '<div style="font-weight:800;font-size:15px;color:var(--ink);">' + escapeHtml(tr('sdTitle')) + '</div>'
+    + ((fbUser && D && D.linked) ? '<button type="button" class="btn btn-ghost btn-sm" id="sd-refresh" style="width:auto;min-height:34px;padding:0 12px;flex-shrink:0;"' + (S.loading ? ' disabled' : '') + '>' + (S.loading ? '…' : '&#8635; ' + escapeHtml(tr('sdRefresh'))) + '</button>' : '')
+    + '</div>';
+  if(!fbUser){
+    h += '<p class="subtle" style="font-size:12.5px;margin:6px 0 0;">' + escapeHtml(tr('sdNeedLogin')) + '</p>';
+  } else if(!D){
+    if(S.loading) h += '<p class="subtle" style="font-size:12.5px;margin:6px 0 0;">' + escapeHtml(tr('sdLoading')) + '</p>';
+    else if(S.err) h += '<div class="error-text" style="margin:6px 0 8px;">' + escapeHtml(__sdErrText(S.err === 'offline' ? 'net' : S.err)) + '</div><button type="button" class="btn btn-outline btn-block btn-sm" id="sd-retry">' + escapeHtml(tr('sdRetry')) + '</button>';
+  } else if(!D.linked){
+    h += '<p class="subtle" style="font-size:12.5px;margin:6px 0 10px;">' + escapeHtml(tr('sdHint')) + '</p>';
+    if(canLink){
+      const v = S.draftPhone != null ? S.draftPhone : ((state.settings && state.settings.ownerPhone) || '');
+      h += '<div class="field" style="margin-bottom:6px;"><label class="field-label">' + escapeHtml(tr('sdPhoneLabel')) + '</label>'
+        + '<input type="tel" inputmode="tel" id="sd-phone" autocomplete="tel" placeholder="+998 90 123 45 67" value="' + escapeHtml(v) + '"></div>'
+        + '<div id="sd-err" class="error-text">' + ((S.err && S.err !== 'offline') ? escapeHtml(__sdErrText(S.err)) : (S.err === 'offline' ? escapeHtml(tr('sdOffline')) : '')) + '</div>'
+        + '<button type="button" class="btn btn-primary btn-block" id="sd-link"' + (S.busy ? ' disabled' : '') + '>' + (S.busy ? '…' : escapeHtml(tr('sdLinkBtn'))) + '</button>'
+        + '<p class="subtle" style="font-size:11.5px;margin:8px 2px 0;">' + escapeHtml(tr('sdOnlyOwn')) + '</p>';
+    } else {
+      h += '<p class="subtle" style="font-size:12.5px;margin:0;">' + escapeHtml(tr('sdOwnerMust')) + '</p>';
+    }
+  } else {
+    const items = D.items || [];
+    const open = items.filter(x=>(Number(x.debt) || 0) > 0), paid = items.filter(x=>!((Number(x.debt) || 0) > 0));
+    const tot = {}; open.forEach(x=>{ const c = x.currency || 'UZS'; tot[c] = (tot[c] || 0) + (Number(x.debt) || 0); });
+    h += '<div class="subtle" style="font-size:12px;margin:0 0 10px;">' + escapeHtml(tr('sdLinkedAs')) + ': <b style="color:var(--ink);">' + escapeHtml(D.phone || '') + '</b>'
+      + (canLink ? ' · <a href="#" id="sd-change" style="color:var(--accent);font-weight:700;text-decoration:none;">' + escapeHtml(tr('sdChange')) + '</a>' : '') + '</div>';
+    if(Object.keys(tot).length){
+      h += '<div class="row" style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;margin:0 0 10px;border-radius:12px;background:var(--surface-soft);">'
+        + '<span class="subtle" style="font-weight:700;">' + escapeHtml(tr('sdTotal')) + '</span><span style="text-align:right;">'
+        + Object.keys(tot).map(c=>'<strong style="color:var(--danger);font-size:16px;display:block;">' + escapeHtml(__sdFmt(tot[c], c)) + '</strong>').join('') + '</span></div>';
+    }
+    const row = (x)=>'<div class="list-item" data-sd-b="' + escapeHtml(x.bid) + '" data-sd-c="' + escapeHtml(x.cid) + '" style="cursor:pointer;">'
+      + '<div class="info" style="min-width:0;flex:1;"><div class="name" style="overflow-wrap:anywhere;">' + escapeHtml(x.shop || '') + '</div>'
+      + '<div class="meta">' + escapeHtml(x.shopPhone || '') + (x.updatedAt ? ((x.shopPhone ? ' · ' : '') + escapeHtml(__sdDate(x.updatedAt))) : '') + '</div></div>'
+      + __sdBalanceHtml(x.debt, x.currency) + '</div>';
+    if(!items.length) h += '<div class="empty-state" style="padding:10px 0;">' + escapeHtml(tr('sdNone')) + '</div>';
+    else if(!open.length && !S.showPaid) h += '<div class="empty-state" style="padding:10px 0;">' + escapeHtml(tr('sdNone')) + '</div>';
+    h += open.map(row).join('');
+    if(paid.length){
+      if(S.showPaid) h += paid.map(row).join('');
+      h += '<button type="button" class="btn btn-ghost btn-block btn-sm" id="sd-paid" style="margin-top:4px;">' + escapeHtml(S.showPaid ? tr('sdHidePaid') : tr('sdShowPaid').replace('{n}', paid.length)) + '</button>';
+    }
+    if(S.err) h += '<div class="' + (S.err === 'offline' ? 'subtle' : 'error-text') + '" style="font-size:12px;margin:8px 0 0;">' + escapeHtml(S.err === 'offline' ? tr('sdOffline') : __sdErrText(S.err)) + '</div>';
+    if(D.at) h += '<div class="subtle" style="font-size:11px;margin:8px 2px 0;">' + escapeHtml(tr('sdUpdated')) + ': ' + escapeHtml(__sdDate(D.at, true)) + '</div>';
+  }
+  h += '</div>';
+  root.innerHTML = h;
+  const on = (id, fn)=>{ const el = document.getElementById(id); if(el) el.addEventListener('click', fn); };
+  on('sd-refresh', ()=>__sdRefresh(true));
+  on('sd-retry', ()=>{ __sdState().fetchedAt = 0; __sdRefresh(true); });
+  on('sd-link', __sdLink);
+  on('sd-paid', ()=>{ const s = __sdState(); s.showPaid = !s.showPaid; __sdRender(); });
+  on('sd-change', (e)=>{ e.preventDefault(); __sdUnlink(); });
+  const ph = document.getElementById('sd-phone');
+  if(ph){
+    ph.addEventListener('input', ()=>{ __sdState().draftPhone = ph.value; });
+    ph.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); __sdLink(); } });
+  }
+  root.querySelectorAll('[data-sd-b]').forEach(el=>el.addEventListener('click', ()=>__sdOpenDetail(el.getAttribute('data-sd-b'), el.getAttribute('data-sd-c'))));
+}
+async function __sdLink(){
+  const S = __sdState(); if(S.busy) return;
+  const inp = document.getElementById('sd-phone'); const phone = inp ? String(inp.value || '').trim() : '';
+  S.draftPhone = phone;
+  if(phone.replace(/\D/g, '').length < 9){ S.err = 'invalid_phone'; __sdRender(); return; }
+  S.busy = true; S.err = ''; __sdRender();
+  try{
+    const r = await __sdApi('link', {phone: phone});
+    S.busy = false; S.draftPhone = null;
+    S.data = { linked: true, phone: r.phone || phone, items: [], at: 0 };
+    try{ showToast(tr('sdLinkedOk')); }catch(_){}
+    S.fetchedAt = 0;
+    await __sdRefresh(true);
+    return;
+  }catch(e){ S.err = (e && e.code) || 'net'; }
+  S.busy = false; __sdRender();
+}
+function __sdUnlink(){
+  confirmDialog(escapeHtml(tr('sdUnlinkQ')), async ()=>{
+    const S = __sdState();
+    try{
+      await __sdApi('unlink');
+      S.data = { linked: false, phone: '', items: [], at: Date.now() }; S.draftPhone = null; S.err = '';
+      __sdCacheSet(S.data);
+      try{ localStorage.removeItem(SD_DCACHE_PREFIX + __sdBid()); }catch(_){}
+      S.detail = {};
+      try{ showToast(tr('sdUnlinked')); }catch(_){}
+    }catch(e){ try{ showToast(__sdErrText((e && e.code) || 'net')); }catch(_){} }
+    __sdRender();
+  }, tr('sdUnlinkBtn'));
+}
+function __sdMethodLabel(m){ if(m === 'cash') return tr('cash'); if(m === 'card') return tr('card'); return m ? String(m) : ''; }
+function __sdQty(q){ q = Number(q) || 0; return String(Math.round(q * 1000) / 1000); }
+function __sdDetailHtml(D, loading, err){
+  const S = __sdState();
+  if(!D){
+    return '<div class="back-row"><button type="button" id="sd-d-back">' + ICONS.arrowLeft + '</button><span class="t-title">' + escapeHtml(tr('sdTitle')) + '</span></div>'
+      + (loading ? '<p class="subtle">' + escapeHtml(tr('sdLoading')) + '</p>' : '<div class="error-text" style="margin:8px 0 12px;">' + escapeHtml(__sdErrText((!err || err === 'offline') ? 'net' : err)) + '</div><button type="button" class="btn btn-outline btn-block" id="sd-d-retry">' + escapeHtml(tr('sdRetry')) + '</button>');
+  }
+  const cur = D.currency || 'UZS';
+  const ledger = Array.isArray(D.ledger) ? D.ledger : [], sales = Array.isArray(D.sales) ? D.sales : [];
+  let h = '<div class="back-row"><button type="button" id="sd-d-back">' + ICONS.arrowLeft + '</button><span class="t-title" style="min-width:0;overflow-wrap:anywhere;">' + escapeHtml(D.shop || '') + '</span></div>';
+  if(D.shopPhone) h += '<p class="subtle" style="margin:0 0 2px;">' + escapeHtml(D.shopPhone) + '</p>';
+  if(D.shopAddress) h += '<p class="subtle" style="margin:0 0 2px;font-size:12px;">' + escapeHtml(D.shopAddress) + '</p>';
+  h += '<div class="card" style="margin:10px 0 10px;"><div class="row" style="display:flex;justify-content:space-between;align-items:center;"><span class="subtle">' + escapeHtml(tr('debt')) + '</span>' + __sdBalanceHtml(D.debt, cur, 20) + '</div>'
+    + (D.name ? '<div class="subtle" style="font-size:12px;margin-top:6px;">' + escapeHtml(tr('sdYouAs')) + ': <b style="color:var(--ink);">' + escapeHtml(D.name) + '</b></div>' : '') + '</div>';
+  if(D.shopPhone) h += '<button type="button" class="btn btn-outline btn-block" id="sd-d-call" style="margin-bottom:10px;">' + ICONS.phoneCall + ' ' + escapeHtml(tr('callBtn')) + '</button>';
+  h += '<p class="subtle" style="font-size:11.5px;margin:0 2px 12px;">&#128274; ' + escapeHtml(tr('sdReadOnly')) + '</p>';
+  if(err) h += '<div class="' + (err === 'offline' ? 'subtle' : 'error-text') + '" style="font-size:12px;margin:0 0 10px;">' + escapeHtml(err === 'offline' ? tr('sdOffline') : __sdErrText(err)) + '</div>';
+  if(loading) h += '<p class="subtle" style="font-size:12px;margin:0 0 10px;">' + escapeHtml(tr('sdLoading')) + '</p>';
+  const tab = S.tab === 'rc' ? 'rc' : 'hist';
+  h += '<div class="toggle-group" style="margin-bottom:10px;">'
+    + '<div class="toggle-opt' + (tab === 'hist' ? ' active' : '') + '" data-sd-tab="hist">' + escapeHtml(tr('sdHistory')) + ' · ' + ledger.length + '</div>'
+    + '<div class="toggle-opt' + (tab === 'rc' ? ' active' : '') + '" data-sd-tab="rc">' + escapeHtml(tr('sdReceipts')) + ' · ' + sales.length + '</div></div>';
+  if(tab === 'hist'){
+    h += ledger.length ? ledger.map(l=>{
+      const up = l.type === 'sale', down = l.type === 'payment';
+      const lab = up ? tr('sdTypeDebt') : (down ? tr('sdTypePay') : String(l.type || ''));
+      const meth = down && l.method ? ' · ' + __sdMethodLabel(l.method) : '';
+      return '<div class="ledger-row"><span style="flex:1;min-width:0;padding-right:8px;overflow-wrap:anywhere;">' + escapeHtml(__sdDate(l.date)) + ' — ' + escapeHtml(lab + meth) + (l.note ? ' <span class="subtle">(' + escapeHtml(l.note) + ')</span>' : '') + '</span>'
+        + '<span class="ledger-amt' + (up ? ' up' : (down ? ' down' : '')) + '" style="white-space:nowrap;flex-shrink:0;">' + (up ? '+' : (down ? '−' : '')) + escapeHtml(__sdFmt(l.amount, cur)) + '</span></div>';
+    }).join('') : '<p class="subtle" style="font-size:12px;">' + escapeHtml(tr('sdNoHistory')) + '</p>';
+  } else {
+    h += sales.length ? sales.map(s=>{
+      const items = Array.isArray(s.items) ? s.items : [];
+      return '<div class="card" style="padding:10px 12px;margin:0 0 8px;">'
+        + '<div style="display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:13.5px;"><span style="flex:1;min-width:0;overflow-wrap:anywhere;">' + escapeHtml(tr('sdReceiptNo')) + escapeHtml(s.no || '—') + ' · ' + escapeHtml(__sdDate(s.date, true)) + '</span><span style="white-space:nowrap;flex-shrink:0;">' + escapeHtml(__sdFmt(s.total, cur)) + '</span></div>'
+        + '<div class="subtle" style="font-size:12px;margin:2px 0 6px;">' + escapeHtml(tr('sdCreditPart')) + ': <b style="color:var(--danger);">' + escapeHtml(__sdFmt(s.credit, cur)) + '</b>'
+        + (s.discount ? ' · ' + escapeHtml(tr('sdDiscount')) + ': ' + escapeHtml(__sdFmt(s.discount, cur)) : '')
+        + (s.refunded ? ' · <b style="color:var(--warm);">' + escapeHtml(tr('sdRefunded')) + '</b>' : '') + '</div>'
+        + items.map(it=>'<div style="display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:4px 0;border-top:1px dashed var(--border);">'
+          + '<span style="flex:1;min-width:0;overflow-wrap:anywhere;">' + escapeHtml(it.name || '') + ' <span class="subtle">' + escapeHtml(__sdQty(it.qty)) + ' × ' + escapeHtml(__sdFmt(it.price, cur)) + '</span></span>'
+          + '<span style="white-space:nowrap;flex-shrink:0;">' + escapeHtml(__sdFmt((Number(it.qty) || 0) * (Number(it.price) || 0), cur)) + '</span></div>').join('')
+        + '</div>';
+    }).join('') : '<p class="subtle" style="font-size:12px;">' + escapeHtml(tr('sdNoHistory')) + '</p>';
+  }
+  return h;
+}
+function __sdDetailPaint(k, D, loading, err){
+  const box = document.getElementById('sd-detail');
+  if(!box || box.getAttribute('data-k') !== k) return false;   // oyna yopilgan yoki boshqasi ochilgan
+  box.innerHTML = __sdDetailHtml(D, loading, err);
+  const on = (id, fn)=>{ const el = document.getElementById(id); if(el) el.addEventListener('click', fn); };
+  on('sd-d-back', ()=>closeModal());
+  on('sd-d-retry', ()=>{ const p = k.split('__'); __sdOpenDetail(p[0], p[1]); });
+  on('sd-d-call', ()=>{ if(D && D.shopPhone) window.location.href = 'tel:' + String(D.shopPhone).replace(/[^\d+]/g, ''); });
+  box.querySelectorAll('[data-sd-tab]').forEach(el=>el.addEventListener('click', ()=>{ __sdState().tab = el.getAttribute('data-sd-tab'); __sdDetailPaint(k, D, loading, err); }));
+  return true;
+}
+async function __sdOpenDetail(bid, cid){
+  if(!bid || !cid) return;
+  const S = __sdState(); const k = bid + '__' + cid;
+  S.tab = 'hist';
+  const cached = S.detail[k] || __sdDCacheGet(k);
+  openModal('<div id="sd-detail" data-k="' + escapeHtml(k) + '"></div>');
+  __sdDetailPaint(k, cached, true, '');
+  try{
+    const r = await __sdApi('detail', {bid: bid, cid: cid});
+    S.detail[k] = r; __sdDCacheSet(k, r);
+    __sdDetailPaint(k, r, false, '');
+  }catch(e){
+    const code = (e && e.code) || 'net';
+    if(code === 'forbidden' || code === 'not_linked'){ delete S.detail[k]; __sdDetailPaint(k, null, false, code); S.fetchedAt = 0; return; }
+    __sdDetailPaint(k, cached, false, code);
+  }
+}
+function __sdOpenFromPush(d){
+  try{
+    if(!fbUser || !state.currentStaff || !(isAdmin() || hasPerm('myDebts'))) return;
+    __sdState().fetchedAt = 0;
+    closeModal(); state.view = 'myDebts'; renderAll();
+    if(d && d.bid && d.cid) setTimeout(()=>{ try{ __sdOpenDetail(String(d.bid), String(d.cid)); }catch(e){} }, 400);
+  }catch(e){}
+}
+function __sdSaReleaseModal(){
+  openModal('<div class="modal-title">&#128241; ' + escapeHtml(tr('sdSaRelease')) + '</div>'
+    + '<p class="subtle" style="font-size:12.5px;margin:0 0 10px;">' + escapeHtml(tr('sdSaReleaseHint')) + '</p>'
+    + '<div class="field"><label class="field-label">' + escapeHtml(tr('phone')) + '</label><input type="tel" inputmode="tel" id="sd-sa-phone" placeholder="+998 90 123 45 67"></div>'
+    + '<div id="sd-sa-msg" class="error-text"></div>'
+    + '<button type="button" class="btn btn-danger btn-block" id="sd-sa-go">' + escapeHtml(tr('sdSaReleaseBtn')) + '</button>');
+  document.getElementById('sd-sa-go').addEventListener('click', async (e)=>{
+    const btn = e.currentTarget; if(btn.disabled) return;
+    const phone = document.getElementById('sd-sa-phone').value.trim(); const m = document.getElementById('sd-sa-msg');
+    if(phone.replace(/\D/g, '').length < 9){ m.textContent = tr('sdErrPhone'); return; }
+    btn.disabled = true; m.textContent = '';
+    try{
+      const r = await __sdApi('adminRelease', {phone: phone}, true);
+      if(r.released){ try{ showToast(tr('sdSaReleased') + ': ' + (r.phone || '')); }catch(_){} closeModal(); return; }
+      m.textContent = tr('sdSaNotFound');
+    }catch(err){ m.textContent = __sdErrText((err && err.code) || 'net'); }
+    btn.disabled = false;
+  });
+}
 function renderMyDebts(){
   const container = document.getElementById('view-container');
   if(!(isAdmin() || hasPerm('myDebts'))){
@@ -10498,6 +10837,7 @@ function renderMyDebts(){
       <div class="t-title">${tr('myDebtsLabel')}</div>
     </div>
     <p class="subtle" style="margin:0 0 12px;">${tr('myDebtsHint')}</p>
+    <div id="sd-root"></div>
     <div class="stat-grid">
       <div class="stat-card"><div class="stat-label">${tr('totalMyDebt')}</div><div class="stat-value" style="color:var(--danger);">${fmt(totalOwed)}</div></div>
       <div class="stat-card"><div class="stat-label">${tr('myDebtsLabel')}</div><div class="stat-value">${state.creditors.length}</div></div>
@@ -10508,6 +10848,7 @@ function renderMyDebts(){
     <div id="creditor-list"></div>
   `;
   renderCreditorList();
+  try{ __sdMount(); }catch(e){}   /* fix114-debts */
   { const _ci = document.getElementById('creditor-search-input'); if(_ci) _ci.addEventListener('input', (e)=>{ state.creditorSearch = e.target.value; renderCreditorList(); }); } /* fix71 */
   document.getElementById('my-debts-back-btn').addEventListener('click', ()=>{ state.view='customers'; renderAll(); });
   document.getElementById('add-creditor-btn').addEventListener('click', ()=>openCreditorForm());
@@ -12917,6 +13258,7 @@ function openCustomerDetail(customerId){
         ${cust.address ? `<div class="subtle" style="font-size:12px;">${tr('customerAddress')}: ${escapeHtml(cust.address)}</div>` : ''}
       </div>
     </div>
+    ${cust.phone ? `<p class="subtle" style="font-size:11.5px;line-height:1.35;margin:-6px 2px 10px;">&#128241; ${escapeHtml(tr('sdCreditorHint'))}</p>` : ''}
     <div class="card cust-balance" style="margin-bottom:14px;${oldDebtFlag?'border:2px solid var(--danger);':''}">
       <div class="subtle" style="font-size:12px;font-weight:700;">${tr('debt')}</div>
       <div class="cust-debt" style="color:${cust.debt>0?'var(--danger)':'var(--success)'};">${fmt(cust.debt||0)}</div>
@@ -14892,12 +15234,14 @@ function renderSuperAdmin(){
     <div class="back-row"><button id="superadmin-back-btn">${ICONS.arrowLeft}</button><span class="t-title">★ ${tr('superAdminPanel')}</span></div>
     <div class="btn-row" style="margin-bottom:10px;"><button class="btn btn-outline btn-sm" id="sa-change-pin">🔑 ${tr('saChangePin')}</button><button class="btn btn-ghost btn-sm" id="sa-lock">🔒 ${tr('saLockBtn')}</button></div>
     <div style="margin-bottom:10px;"><button type="button" class="btn btn-accent btn-block btn-sm" onclick="openSaPayments()">💳 ${tr('payHistoryTitle')}</button></div>
+    <div style="margin-bottom:10px;"><button type="button" class="btn btn-outline btn-block btn-sm" id="sa-sd-release">&#128241; ${tr('sdSaRelease')}</button></div>
     <div class="search-bar">${ICONS.search}<input type="text" id="superadmin-search" placeholder="${tr('search')}"></div>
     <div id="sa-inbox" style="margin:10px 0;"></div>
     <div id="sa-stats"></div>
     <div id="superadmin-list"><div class="empty-state">…</div></div>
   `;
   renderSaInbox();
+  { const _sdr = document.getElementById('sa-sd-release'); if(_sdr) _sdr.addEventListener('click', ()=>__sdSaReleaseModal()); }   /* fix114-debts */
   document.getElementById('superadmin-back-btn').addEventListener('click', ()=>{ window.__saUnlocked = false; state.view='settings'; state.settingsCategory=null; renderAll(); }); /* fix79 */
   { const _cp = document.getElementById('sa-change-pin'); if(_cp) _cp.addEventListener('click', ()=>__saPinModal(true)); const _lk = document.getElementById('sa-lock'); if(_lk) _lk.addEventListener('click', ()=>saLockPanel()); }
   if(!isSuperAdmin()){ saDb().collection('supportInbox').where('unreadForAdmin','==',true).get().then(snap=>{ state.saInbox = snap.docs.map(d=>d.data()).sort((x,y)=>String(y.lastAt).localeCompare(String(x.lastAt))); state.saUnreadSupport = state.saInbox.length; renderSaInbox(); }).catch(()=>{}); }
@@ -17151,6 +17495,7 @@ async function initNativePush(){
       await PN.addListener('pushNotificationActionPerformed', function(ev){
         try{
           var d = (ev && ev.notification && ev.notification.data) || {};
+          if(d.type === 'sharedDebt'){ __sdOpenFromPush(d); return; }   /* fix114-debts */
           if(d.type === 'debtReport' || d.type === 'dailySummary'){   /* fix105-report */
             if(fbUser && state.currentStaff && isAdmin()){ state.view = 'customers'; renderAll(); renderDebtExportOverlay(new Date().toDateString()); }
             return;
@@ -17163,6 +17508,7 @@ async function initNativePush(){
         try{
           var d = (n && n.data) || {};
           if(d.type === 'support') return;
+          if(d.type === 'sharedDebt'){ try{ __sdState().fetchedAt = 0; if(state.view === 'myDebts') __sdRefresh(true); }catch(_){} }   /* fix114-debts */
           playNotifySound();
           showToast('🔔 ' + ((n && n.title) ? n.title + ': ' : '') + ((n && n.body) || ''));
         }catch(e){}
