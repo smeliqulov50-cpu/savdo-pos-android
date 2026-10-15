@@ -2476,6 +2476,8 @@ function saveShifts(){ storSet(STORAGE_KEYS.shifts, state.shifts); syncShiftsDoc
 function saveCurrentShift(){ storSet(STORAGE_KEYS.currentShift, state.currentShift); }
 function saveTables(){ storSet(STORAGE_KEYS.tables, state.tables); try{ if((state.setupDone || window.__ccReady) && typeof __ccSweep === 'function') __ccSweep(); }catch(_e){} /* fix106-nocust */ }
 async function saveSetupDone(){ await storSet(STORAGE_KEYS.setupDone, true); }
+/* fix112-setup: biznes sozlangan — shu qurilmada ochilgan (setupDone) yoki hisob bilan kirilgan (xodimlar bor). renderAll'dagi qoida bilan bir xil. */
+function __isSetUp(){ return !!state.setupDone || !!(state.staff && state.staff.length); }
 
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600); }
 
@@ -14794,7 +14796,7 @@ async function payHandleReturn(isRecheck){
     tries++;
     try{
       if(tries > 120 || !new URLSearchParams(location.search).has('pay')){ clearInterval(timer); return; }
-      if(!fbUser || !state.setupDone) return;
+      if(!fbUser || !__isSetUp()) return;   /* fix112-setup */
       clearInterval(timer);
       payHandleReturn(false);
     }catch(e){}
@@ -17300,7 +17302,7 @@ function __lnPlugin(){
 /* Telefonning o'z rejalashtirgichi: internet YO'Q va ilova YOPIQ bo'lsa ham har kuni 21:00 da ovozli eslatadi. */
 async function __lnEnsureDebtReminder(force){
   var LN = __lnPlugin(); if(!LN || __lnBusy) return;
-  if(!state.setupDone || !state.currentStaff) return;
+  if(!__isSetUp() || !state.currentStaff) return;   /* fix112-setup */
   var on = __debtDailyOn();
   if(on && !isAdmin()) return;                 // kassir kirgan qurilmada egasining eslatmasiga tegmaymiz
   var snd = __notifSoundOn();
@@ -17348,7 +17350,7 @@ function __dailyTick(){
   try{
     pruneAudit();
     pruneCloudAudit();
-    if(!state.setupDone || !state.currentStaff) return;
+    if(!__isSetUp() || !state.currentStaff) return;   /* fix112-setup */
     var mr = document.getElementById('modal-root');
     if(mr && mr.innerHTML.trim()) return;       // sotuv/oyna ochiq paytida bezovta qilmaymiz
     var r1 = document.getElementById('debt-export-root');
