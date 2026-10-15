@@ -2784,7 +2784,7 @@ function renderAuthGate(mode){
       <p class="subtle" style="margin:0 0 12px;font-size:12px;text-align:center;">
         <a href="privacy-policy.html" style="color:var(--accent-dark);">${tr('privacyPolicyLink')}</a>
         &nbsp;·&nbsp;
-        <a href="terms-of-service.html" style="color:var(--accent-dark);">${tr('termsOfServiceLink')}</a>
+        <a href="terms-of-service.html?lang=${state.lang}" data-fix="fix116-terms" style="color:var(--accent-dark);">${tr('termsOfServiceLink')}</a>
       </p>
       <div class="checkbox-row" style="margin-bottom:14px;"><input type="checkbox" id="auth-terms-check"><span style="font-size:13px;">${tr('termsAgree')}</span></div>
     ` : ''}
@@ -2875,7 +2875,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.19';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.20';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -15651,7 +15651,7 @@ function renderSettingsMenu(container){
     <p class="subtle" style="margin:16px 0 0;text-align:center;font-size:12px;">
       <a href="privacy-policy.html" style="color:var(--ink-soft);">${tr('privacyPolicyLink')}</a>
       &nbsp;·&nbsp;
-      <a href="terms-of-service.html" style="color:var(--ink-soft);">${tr('termsOfServiceLink')}</a>
+      <a href="terms-of-service.html?lang=${state.lang}" data-fix="fix116-terms" style="color:var(--ink-soft);">${tr('termsOfServiceLink')}</a>
     </p>
     <p class="subtle" style="margin:6px 0 0;text-align:center;font-size:11px;opacity:0.6;">v${APP_VERSION_NAME}</p>
   `;
