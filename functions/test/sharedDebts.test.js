@@ -247,3 +247,12 @@ test('creditOfSale va pushBody chegaraviy holatlar', function () {
   assert.equal(SD.pushBody('en', 3000, 1000, 'EUR'), 'Your debt decreased: −€2 000. Remaining: €1 000');
   assert.equal(SD.pushBody('uz', 10, 5, 'NOPE'), "Qarzingiz kamaydi: −5 so'm. Qolgan qarz: 5 so'm");
 });
+
+/* fix115-i18n: qozoq / qirg'iz / tojik push matnlari */
+test('pushBody: kk / ky / tg tillarida', function () {
+  assert.equal(SD.pushBody('kk', 0, 150000, 'UZS'), 'Жаңа қарыз жазылды: +150 000 сом. Жалпы қарызыңыз: 150 000 сом');
+  assert.equal(SD.pushBody('ky', 150000, 50000, 'UZS'), 'Карызыңыз азайды: −100 000 сом. Калдык: 50 000 сом');
+  assert.equal(SD.pushBody('tg', 50000, 0, 'UZS'), 'Қарзи шумо кам шуд: −50 000 сум. Қарз пурра пардохт шуд.');
+  assert.equal(SD.pushBody('tg', 0, 5, 'TJS'), 'Қарзи нав сабт шуд: +5 сомонӣ. Қарзи умумии шумо: 5 сомонӣ');
+  assert.equal(SD.pushBody('kk', 0, 7, 'USD'), 'Жаңа қарыз жазылды: +$7. Жалпы қарызыңыз: $7');
+});

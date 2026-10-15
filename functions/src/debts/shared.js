@@ -77,11 +77,11 @@ async function getData(ref) { const s = await ref.get(); return s.exists ? (s.da
 
 /* ---------- push matni (qarzdor tomonga) ---------- */
 const CUR_SYM = {
-  UZS: { uz: "so'm", ru: 'сум', en: 'UZS' }, USD: { uz: '$', ru: '$', en: '$', before: true }, EUR: { uz: '€', ru: '€', en: '€', before: true },
-  RUB: { uz: '₽', ru: '₽', en: '₽' }, KZT: { uz: '₸', ru: '₸', en: '₸' }, KGS: { uz: 'сом', ru: 'сом', en: 'som' }, TJS: { uz: 'смн', ru: 'смн', en: 'TJS' }
+  UZS: { uz: "so'm", ru: 'сум', en: 'UZS', kk: 'сом', ky: 'сом', tg: 'сум' }, USD: { uz: '$', ru: '$', en: '$', before: true }, EUR: { uz: '€', ru: '€', en: '€', before: true },
+  RUB: { uz: '₽', ru: '₽', en: '₽' }, KZT: { uz: '₸', ru: '₸', en: '₸' }, KGS: { uz: 'сом', ru: 'сом', en: 'som' }, TJS: { uz: 'смн', ru: 'смн', en: 'TJS', tg: 'сомонӣ' }
 };
 function money(n, cur, lang) {
-  const c = CUR_SYM[cur] || CUR_SYM.UZS; const sym = c[lang] || c.uz;
+  const c = CUR_SYM[cur] || CUR_SYM.UZS; const sym = c[lang] || ((lang === 'kk' || lang === 'ky' || lang === 'tg') ? c.ru : '') || c.uz;   /* fix115-i18n */
   return c.before ? sym + fmtMoney(n) : fmtMoney(n) + ' ' + sym;
 }
 const PUSH_TEXT = {
@@ -99,6 +99,22 @@ const PUSH_TEXT = {
     up: function (d, t) { return 'New debt recorded: +' + d + '. Your total debt: ' + t; },
     down: function (d, t) { return 'Your debt decreased: −' + d + '. Remaining: ' + t; },
     zero: function (d) { return 'Your debt decreased: −' + d + '. Debt fully paid.'; }
+  },
+  /* fix115-i18n */
+  kk: {
+    up: function (d, t) { return 'Жаңа қарыз жазылды: +' + d + '. Жалпы қарызыңыз: ' + t; },
+    down: function (d, t) { return 'Қарызыңыз азайды: −' + d + '. Қалдық: ' + t; },
+    zero: function (d) { return 'Қарызыңыз азайды: −' + d + '. Қарыз толық өтелді.'; }
+  },
+  ky: {
+    up: function (d, t) { return 'Жаңы карыз жазылды: +' + d + '. Жалпы карызыңыз: ' + t; },
+    down: function (d, t) { return 'Карызыңыз азайды: −' + d + '. Калдык: ' + t; },
+    zero: function (d) { return 'Карызыңыз азайды: −' + d + '. Карыз толук төлөндү.'; }
+  },
+  tg: {
+    up: function (d, t) { return 'Қарзи нав сабт шуд: +' + d + '. Қарзи умумии шумо: ' + t; },
+    down: function (d, t) { return 'Қарзи шумо кам шуд: −' + d + '. Боқимонда: ' + t; },
+    zero: function (d) { return 'Қарзи шумо кам шуд: −' + d + '. Қарз пурра пардохт шуд.'; }
   }
 };
 function pushBody(lang, oldDebt, newDebt, cur) {
