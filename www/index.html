@@ -1662,6 +1662,14 @@ const T = {
   tgLoginNeeded:{uz:"Telegram'ni ulash uchun akkauntga kiring (Sozlamalar → Akkaunt).",ru:"Чтобы подключить Telegram, войдите в аккаунт (Настройки → Аккаунт).",en:"Sign in to your account to connect Telegram (Settings → Account).",kk:"Telegram-ды қосу үшін аккаунтқа кіріңіз (Баптаулар → Аккаунт).",ky:"Telegram'ды туташтыруу үчүн аккаунтка кириңиз (Жөндөөлөр → Аккаунт).",tg:"Барои пайваст кардани Telegram ба аккаунт ворид шавед (Танзимот → Аккаунт)."},
   tgSoon:{uz:"Qaysi xabarlar kelishini (kunlik hisobot, smena yopilishi, kam qolgan tovar, ogohlantirishlar) keyingi yangilanishda shu yerda tanlaysiz. Hozircha bot faqat ulanganini tasdiqlaydi.",ru:"Какие сообщения получать (ежедневный отчёт, закрытие смены, мало товара, предупреждения), вы выберете здесь в следующем обновлении. Пока бот только подтверждает подключение.",en:"You'll choose which messages to get (daily report, shift close, low stock, alerts) here in the next update. For now the bot only confirms the connection.",kk:"Қандай хабарлар келетінін (күнделікті есеп, ауысымның жабылуы, аз қалған тауар, ескертулер) келесі жаңартуда осында таңдайсыз. Әзірге бот тек қосылғанын растайды.",ky:"Кайсы билдирүүлөр келерин (күндөлүк отчёт, сменанын жабылышы, аз калган товар, эскертүүлөр) кийинки жаңыртууда ушул жерден тандайсыз. Азырынча бот туташканын гана ырастайт.",tg:"Кадом паёмҳо ояд (ҳисоботи рӯзона, бастани баст, моли кам, огоҳиҳо) — дар навсозии оянда дар ин ҷо интихоб мекунед. Ҳоло бот танҳо пайвастшавиро тасдиқ мекунад."},
   tgLinkedAt:{uz:"ulangan: {d}",ru:"подключён: {d}",en:"connected: {d}",kk:"қосылған: {d}",ky:"туташкан: {d}",tg:"пайваст: {d}"},
+  /* fix122-stock */
+  stockOutN:{uz:"{n} tugagan",ru:"закончились: {n}",en:"{n} out of stock",kk:"{n} таусылды",ky:"{n} түгөндү",tg:"{n} тамом шуд"},
+  stockLowN:{uz:"{n} kam qolgan",ru:"мало осталось: {n}",en:"{n} low",kk:"{n} аз қалды",ky:"{n} аз калды",tg:"{n} кам монд"},
+  stockExpN:{uz:"{n} muddati yaqin",ru:"срок истекает: {n}",en:"{n} expiring soon",kk:"{n} мерзімі жақын",ky:"{n} мөөнөтү жакын",tg:"{n} мӯҳлаташ наздик"},
+  varOutN:{uz:"{n} ta variant tugagan",ru:"вариантов закончилось: {n}",en:"{n} variants out",kk:"{n} нұсқа таусылды",ky:"{n} вариант түгөндү",tg:"{n} вариант тамом шуд"},
+  varLowN:{uz:"{n} ta variant kam qolgan",ru:"вариантов мало: {n}",en:"{n} variants low",kk:"{n} нұсқа аз қалды",ky:"{n} вариант аз калды",tg:"{n} вариант кам монд"},
+  lowStockZeroHint:{uz:"0 kiritsangiz, faqat tugagan tovarlar haqida ogohlantiradi.",ru:"Если ввести 0, предупреждение будет только о закончившихся товарах.",en:"Enter 0 to warn only about items that are out of stock.",kk:"0 енгізсеңіз, тек таусылған тауарлар туралы ескертеді.",ky:"0 киргизсеңиз, түгөнгөн товарлар жөнүндө гана эскертет.",tg:"Агар 0 ворид кунед, танҳо дар бораи молҳои тамомшуда огоҳ мекунад."},
+  lowStockBadValue:{uz:"Chegara uchun 0 yoki undan katta son kiriting.",ru:"Введите число 0 или больше.",en:"Enter a number 0 or greater.",kk:"0 немесе одан үлкен сан енгізіңіз.",ky:"0 же андан чоң сан киргизиңиз.",tg:"Рақами 0 ё зиёдтар ворид кунед."},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3152,7 +3160,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.24';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.25';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -10337,12 +10345,45 @@ function renderProducts(){
   });
   bindProductFilterChips();
 }
+/* fix122-stock: "kam qolgan" — BITTA umumiy qoida. Hamma ekran shu funksiyalardan foydalanadi (joriy filial bo'yicha).
+   Qoldiq birligi: variantsiz tovar = 1 ta, variantli tovar = har bir variant alohida (Ombor hisobotidagi kabi). */
+function lowStockThresholdValue(){
+  const st = state.settings || {};
+  const v = Number(st.lowStockThreshold);
+  if(!isFinite(v) || v < 0) return 5;
+  if(v === 0 && st.lowStockSetV2 !== true) return 5;   /* eski versiyada bo'sh maydon 0 bo'lib saqlangan, ilova esa 5 deb ishlatgan — o'shandayligicha qoladi */
+  return v;
+}
+function stockQtyOf(p, v){ return Number(v ? v.stock : (p && p.stock)) || 0; }
+function stockStatusQty(q){ q = Number(q) || 0; return q <= 0 ? 'out' : (q <= lowStockThresholdValue() ? 'low' : 'ok'); }
+function stockStatus(p, v){ return stockStatusQty(stockQtyOf(p, v)); }
+function stockUnits(p){
+  if(!p) return [];
+  return (p.variants && p.variants.length) ? p.variants.map(v=>({p, v, qty: stockQtyOf(p, v), status: stockStatus(p, v)})) : [{p, v: null, qty: stockQtyOf(p, null), status: stockStatus(p, null)}];
+}
+function productStockSummary(p){
+  const u = stockUnits(p);
+  const out = u.filter(x=>x.status === 'out').length, low = u.filter(x=>x.status === 'low').length;
+  return {units: u.length, out, low, status: (u.length && out === u.length) ? 'out' : ((out || low) ? 'low' : 'ok'), hasVariants: !!(p && p.variants && p.variants.length)};
+}
+function stockCounts(products){
+  const r = {units: 0, out: 0, low: 0, ok: 0};
+  (products || visibleProducts()).forEach(p=>{ stockUnits(p).forEach(x=>{ r.units++; r[x.status]++; }); });
+  return r;
+}
+function stockCountsText(c, expN){
+  const parts = [];
+  if(c.out) parts.push(tr('stockOutN').split('{n}').join(String(c.out)));
+  if(c.low) parts.push(tr('stockLowN').split('{n}').join(String(c.low)));
+  if(expN) parts.push(tr('stockExpN').split('{n}').join(String(expN)));
+  return parts.join(' · ');
+}
 function productTotalStock(p){ return (p.variants && p.variants.length) ? p.variants.reduce((a,v)=>a+(v.stock||0),0) : (p.stock||0); }
 function productFilterChipsHtml(){
-  const thr = state.settings.lowStockThreshold||5;
   const all = visibleProducts().length;
-  const low = visibleProducts().filter(p=>{ const st=productTotalStock(p); return st>0 && st<=thr; }).length;
-  const out = visibleProducts().filter(p=>productTotalStock(p)<=0).length;
+  const __sc = stockCounts(visibleProducts());   /* fix122-stock: Ombor hisoboti va bosh sahifa bilan bir xil son */
+  const low = __sc.low;
+  const out = __sc.out;
   const f = state.productFilter||'all';
   return [['all',tr('pfAll'),all],['low',tr('pfLow'),low],['out',tr('pfOut'),out]].map(([id,label,n])=>
     `<button class="fav-chip ${f===id?'fav-chip-active':''}" data-pf="${id}">${label} · ${n}</button>`).join('');
@@ -10362,24 +10403,26 @@ function renderProductListItems(){
   const listEl = document.getElementById('product-list');
   if(!listEl) return;
   const q = (state.productSearch||'').toLowerCase();
-  const thr = state.settings.lowStockThreshold||5;
+  const thr = lowStockThresholdValue();   /* fix122-stock */
   const f = state.productFilter||'all';
   const filtered = visibleProducts().filter(p=>p.name.toLowerCase().includes(q)).filter(p=>{
-    const st = productTotalStock(p);
-    if(f==='low') return st>0 && st<=thr;
-    if(f==='out') return st<=0;
+    const __ss = productStockSummary(p);   /* fix122-stock */
+    if(f==='low') return __ss.low > 0;
+    if(f==='out') return __ss.out > 0;
     return true;
   }).sort((a,b)=>a.name.localeCompare(b.name));
   listEl.innerHTML = filtered.length ? filtered.map(p=>{
     const hasVariants = p.variants && p.variants.length;
     const totalStock = hasVariants ? p.variants.reduce((s,v)=>s+v.stock,0) : p.stock;
     const priceLabel = hasVariants ? `${fmt(Math.min(...p.variants.map(v=>v.price)))} ${tr('fromPrice')}` : fmt(p.price);
-    const low = totalStock <= (state.settings.lowStockThreshold||5);
-    const out = totalStock <= 0;
+    const __ss = productStockSummary(p);   /* fix122-stock */
+    const low = __ss.status !== 'ok';
+    const out = __ss.status === 'out';
+    const __vnote = hasVariants ? [__ss.out ? tr('varOutN').split('{n}').join(String(__ss.out)) : '', __ss.low ? tr('varLowN').split('{n}').join(String(__ss.low)) : ''].filter(Boolean).join(' · ') : '';
     return `
     <div class="list-item">
       ${p.image ? `<img src="${p.image}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;">` : `<div style="width:40px;height:40px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:${avatarColorFor(p.name)};color:#fff;font-weight:800;font-size:16px;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div>`}
-      <div class="info"><div class="name">${escapeHtml(p.name)}${hasVariants?` · ${p.variants.length} ${tr('variantsCountSuffix')}`:''}</div><div class="meta">${priceLabel} · <span style="${out?'color:var(--danger);font-weight:700;':(low?'color:var(--warm);font-weight:700;':'')}">${tr('stock')}: ${totalStock} ${unitLabel(p.unit)}</span></div></div>
+      <div class="info"><div class="name">${escapeHtml(p.name)}${hasVariants?` · ${p.variants.length} ${tr('variantsCountSuffix')}`:''}</div><div class="meta">${priceLabel} · <span style="${out?'color:var(--danger);font-weight:700;':(low?'color:var(--warm);font-weight:700;':'')}">${tr('stock')}: ${isFinite(totalStock) ? totalStock : stockUnits(p).reduce((a,x)=>a+x.qty,0)} ${unitLabel(p.unit)}</span>${__vnote ? ` · <span style="color:var(--danger);font-weight:700;">${escapeHtml(__vnote)}</span>` : ''}</div></div>
       <button class="icon-btn" data-act="edit" data-id="${p.id}">${ICONS.edit}</button>
       <button class="icon-btn" data-act="del" data-id="${p.id}">${ICONS.trash}</button>
     </div>
@@ -10940,7 +10983,7 @@ function __invNum(n){ n = Math.round(Number(n) || 0); return n.toLocaleString('e
 function __invQty(n){ n = Number(n) || 0; return (Math.round(n * 1000) / 1000).toLocaleString('en-US', {maximumFractionDigits:3}).replace(/,/g, ' '); }
 function __invData(){
   const DAY = 86400000, now = Date.now();
-  const low = Number(state.settings.lowStockThreshold) || 5;
+  const low = lowStockThresholdValue();   /* fix122-stock */
   const expDays = Number(state.settings.expiryWarningDays) || 7;
   const rows = [], byKey = {};
   visibleProducts().forEach(p=>{
@@ -10966,7 +11009,7 @@ function __invData(){
         name: v ? (p.name + ' — ' + v.name) : (p.name || ''), stock, retail, cost, wh, whSrc, boxP, upb,
         unit: p.unit, cat: (p.category || '').trim(), barcode: String(p.barcode || ''), expStatus, expText,
         sold: 0, rev: 0, last: 0, vel: 0, daysLeft: null, abc: ''};
-      r.status = stock <= 0 ? 'out' : (stock <= low ? 'low' : 'ok');
+      r.status = stockStatusQty(stock);   /* fix122-stock */
       rows.push(r); byKey[r.key] = r;
       if(v && !byKey[p.id]) byKey[p.id + ':*'] = byKey[p.id + ':*'] || r;
     });
@@ -11909,14 +11952,14 @@ function computeDailySummary(){
   });
   var expenses = (state.expenses || []).filter(function(x){ return x && x.category !== 'purchase' && sameDay(x.date); }).reduce(function(a,x){ return a + (Number(x.amount) || 0); }, 0);
   var debtPaid = (state.ledger || []).filter(function(e){ return e && e.type === 'payment' && e.method && sameDay(e.date); }).reduce(function(a,e){ return a + (Number(e.amount) || 0); }, 0);
-  var thr = state.settings.lowStockThreshold || 5;
-  var low = (state.products || []).filter(function(p){ return p && !p.hidden && productTotalStock(p) <= thr; }).length;
+  var __sc = stockCounts(visibleProducts());   /* fix122-stock: joriy filial, har bir variant alohida */
+  var low = __sc.out + __sc.low;
   return {
     count: sales.length, revenue: revenue, cash: cash, card: card, credit: credit, profit: profit,
     expenses: expenses, net: profit - expenses, debtPaid: debtPaid,
     refundCount: refunds.length, refundTotal: refunds.reduce(function(a,x){ return a + (Number(x.total) || 0); }, 0),
     top: Object.keys(prod).map(function(k){ return prod[k]; }).sort(function(a,b){ return b.sum - a.sum; }).slice(0, 3),
-    lowStock: low
+    lowStock: low, stockOut: __sc.out, stockLow: __sc.low
   };
 }
 function dailySummaryHtml(){
@@ -11943,7 +11986,7 @@ function dailySummaryHtml(){
     h += '<div class="subtle" style="margin-top:8px;font-size:12px;">' + tr('dsTop') + '</div>';
     h += d.top.map(function(t, i){ return row((i+1) + '. ' + escapeHtml(String(t.name).slice(0, 40)), fmt(t.sum)); }).join('');
   }
-  if(d.lowStock > 0) h += row(tr('dsLow'), String(d.lowStock), 'var(--danger)');
+  if(d.lowStock > 0) h += row(tr('dsLow'), escapeHtml(stockCountsText({out: d.stockOut || 0, low: d.stockLow || 0}) || String(d.lowStock)), 'var(--danger)');   /* fix122-stock */
   return h + '</div>';
 }
 function checkDailyCreditorExport(){
@@ -14361,11 +14404,8 @@ function reportsMenuItems(){
 }
 
 function renderReportsMenu(container){
-  const threshold = state.settings.lowStockThreshold || 5;
-  const lowStockItems = visibleProducts().filter(p=>{
-    const s = (p.variants && p.variants.length) ? p.variants.reduce((a,v)=>a+v.stock,0) : p.stock;
-    return s <= threshold;
-  });
+  const __sc = stockCounts(visibleProducts());   /* fix122-stock: Ombor hisoboti bilan bir xil */
+  const lowStockItems = {length: __sc.out + __sc.low};
   const now = new Date();
   const expiringCount = visibleProducts().filter(p=>{
     if(!p.expiryDate) return false;
@@ -14375,7 +14415,7 @@ function renderReportsMenu(container){
   const alertCount = lowStockItems.length + expiringCount;
   container.innerHTML = `
     <h2 class="section-title">${ICONS.reports} ${tr('navReports')}</h2>
-    ${alertCount ? `<div class="card alert-soft" style="cursor:pointer;" id="alerts-shortcut"><p style="margin:0;color:var(--danger);font-weight:700;">⚠ ${alertCount} ${tr('lowStockAlert')}</p></div>` : ''}
+    ${alertCount ? `<div class="card alert-soft" style="cursor:pointer;" id="alerts-shortcut"><p style="margin:0;color:var(--danger);font-weight:700;">⚠ ${escapeHtml(stockCountsText(__sc, expiringCount))}</p></div>` : ''}
     ${(()=>{
       const G = {receipts:['sales','receiptIcon','#2563eb'], today:['sales','sale','#16a34a'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
         pnl:['finance','percent','#0f9d8a'], productprofit:['finance','percent','#12a37f'], expenses:['finance','creditCard','#d97706'], payroll:['finance','peopleIcon','#7c5cfc'],
@@ -15263,11 +15303,7 @@ function renderReportsCategory(container, cat){
         inventoryRows.push({p, ...info});
       }
     });
-    const threshold = state.settings.lowStockThreshold || 5;
-    const lowStockItems = state.products.filter(p=>{
-      const s = (p.variants && p.variants.length) ? p.variants.reduce((a,v)=>a+v.stock,0) : p.stock;
-      return s <= threshold;
-    });
+    const lowStockItems = visibleProducts().filter(p=>productStockSummary(p).status !== 'ok');   /* fix122-stock */
     const expiringItems = inventoryRows.filter(r=>r.expiryStatus==='expired' || r.expiryStatus==='soon');
     const alertsHtml = (lowStockItems.length || expiringItems.length) ? `
       <div class="card" style="border:2px solid var(--danger);background:var(--danger-bg);">
@@ -15289,7 +15325,7 @@ function renderReportsCategory(container, cat){
         const rowKey = p.id+p.name;
         return `
         <div class="list-item" data-inv-toggle="${rowKey}" style="cursor:pointer;">
-          <div class="info"><div class="name">${escapeHtml(p.name)}</div><div class="meta"><span style="${p.stock<=(state.settings.lowStockThreshold||5)?'color:var(--danger);font-weight:700;':''}">${tr('stock')}: ${p.stock} ${unitLabel(p.unit)}</span>${expiryStatus?` · <span style="color:${expiryColor};font-weight:700;">${expiryText}</span>`:''}</div></div>
+          <div class="info"><div class="name">${escapeHtml(p.name)}</div><div class="meta"><span style="${productStockSummary(p).status!=='ok'?'color:var(--danger);font-weight:700;':''}">${tr('stock')}: ${p.stock} ${unitLabel(p.unit)}</span>${expiryStatus?` · <span style="color:${expiryColor};font-weight:700;">${expiryText}</span>`:''}</div></div>
           <span class="badge badge-clear">${fmt((p.stock||0)*(p.price||0))}</span>
         </div>
         <div id="inv-details-${rowKey}" style="display:none;margin:-4px 0 8px;padding:10px 12px;background:var(--surface-soft);border-radius:12px;">
@@ -17726,7 +17762,7 @@ function renderSettingsLowStock(container){
     ${settingsBackHeader(tr('lowStockOnlyLabel'))}
     <div class="card">
       <p class="subtle" style="margin:0 0 12px;">${tr('lowStockOnlyHint')}</p>
-      <div class="field"><label class="field-label">${tr('lowStockThreshold')}</label><input type="number" id="s-low-stock" value="${state.settings.lowStockThreshold||5}"></div>
+      <div class="field"><label class="field-label">${tr('lowStockThreshold')}</label><input type="number" id="s-low-stock" min="0" step="any" inputmode="decimal" value="${lowStockThresholdValue()}"><p class="subtle" style="margin:6px 0 0;font-size:12px;">${tr('lowStockZeroHint')}</p></div>
     </div>
     <div class="card" style="margin-top:14px;">
       <div class="checkbox-row"><input type="checkbox" id="s-allow-oversell" ${state.settings.allowOversell!==false?'checked':''}><span>${tr('allowOversellLabel')}</span></div>
@@ -17740,7 +17776,11 @@ function renderSettingsLowStock(container){
   `;
   bindSettingsBack(container);
   document.getElementById('save-lowstock-btn').addEventListener('click', async ()=>{
-    state.settings.lowStockThreshold = parseFloat(document.getElementById('s-low-stock').value) || 0;
+    const __raw = String(document.getElementById('s-low-stock').value || '').trim().replace(',', '.');   /* fix122-stock */
+    const __v = __raw === '' ? NaN : Number(__raw);
+    if(!isFinite(__v) || __v < 0){ showToast(tr('lowStockBadValue')); return; }
+    state.settings.lowStockThreshold = __v;
+    state.settings.lowStockSetV2 = true;   /* shu versiyadan saqlangan: 0 = haqiqatan 0 */
     await saveSettings();
     showToast(tr('savedSuccess'));
   });
@@ -18473,7 +18513,7 @@ var TG_PF_ROWS = [
   {k:'rcpt', ic:'&#128465;', bg:'#FEE2E2', t:'tgPRcpt', s:'tgPRcptSub'}
 ];
 function __tgPfSub(r, p){
-  if(r.k === 'low') return __tgT(r.s, {n: (state.settings && state.settings.lowStockThreshold) || 5});
+  if(r.k === 'low') return __tgT(r.s, {n: lowStockThresholdValue()});   /* fix122-stock */
   if(r.k === 'disc') return __tgT(r.s, {p: (p && p.discPct) || 20});
   return tr(r.s);
 }

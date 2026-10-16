@@ -165,17 +165,28 @@ async function computeDaily(db, bid, day, ctx) {
     top: topArr, branches: (multiBranch(ctx) || brArr.length > 1) ? brArr : []
   };
 }
-/* Ilovadagi bilan bir xil: variantli tovarda variantlar qoldig'i yig'indisi; qoldig'i son bo'lmagan tovar (xizmat) hisobga olinmaydi */
+/* fix122-stock: ilovadagi stockStatus() bilan bir xil qoida — har bir variant alohida; qoldiq <= 0 tugagan, <= chegara kam qolgan;
+   chegara 0 = faqat tugaganlar (eski versiyada saqlangan 0 — avvalgidek 5). */
+function lowThresholdOf(biz) {
+  const v = Number(biz && biz.lowStockThreshold);
+  if (!isFinite(v) || v < 0) return 5;
+  if (v === 0 && !(biz && biz.lowStockSetV2 === true)) return 5;
+  return v;
+}
 async function computeLow(db, bid, ctx) {
   const snap = await db.collection('businesses').doc(bid).collection('products').get();
-  const th = Number(ctx.biz.lowStockThreshold) || 5;
+  const th = lowThresholdOf(ctx.biz);
   const groups = {};
   docsOf(snap).forEach(function (p) {
     if (!p || p.hidden || p._deleted) return;
-    const s = (Array.isArray(p.variants) && p.variants.length) ? p.variants.reduce(function (a, v) { return a + (v ? v.stock : NaN); }, 0) : p.stock;
-    if (typeof s !== 'number' || !isFinite(s) || !(s <= th)) return;
-    const k = p.branchId || 'main';
-    (groups[k] = groups[k] || []).push({ name: String(p.name || '—').slice(0, 80), stock: s, unit: p.unit });
+    const vs = (Array.isArray(p.variants) && p.variants.length) ? p.variants : [null];
+    vs.forEach(function (v) {
+      const q = Number(v ? (v && v.stock) : p.stock) || 0;
+      if (q > th) return;
+      const k = p.branchId || 'main';
+      const nm = v ? (String(p.name || '—') + ' — ' + String((v && v.name) || '')) : String(p.name || '—');
+      (groups[k] = groups[k] || []).push({ name: nm.slice(0, 80), stock: q, unit: p.unit });
+    });
   });
   const arr = Object.keys(groups).map(function (k) {
     return { id: k, name: branchName(ctx, k), items: groups[k].sort(function (a, b) { return (a.stock - b.stock) || a.name.localeCompare(b.name); }) };
@@ -345,4 +356,4 @@ async function handleAction(deps, caller, action, body) {
 }
 
 module.exports = { normPrefs, getPrefs, runTick, handleSaleCreated, handleAuditCreated, handleCatalogWrite, handleAction, readPrefsForStatus,
-  computeDaily, computeLow, sendAll, gate, newClosedShifts, discInfo, DEF, KINDS, WINDOW_MIN, RECENT_MS, ALERTS_PER_HOUR, TESTS_PER_HOUR };
+  computeDaily, computeLow, lowThresholdOf, sendAll, gate, newClosedShifts, discInfo, DEF, KINDS, WINDOW_MIN, RECENT_MS, ALERTS_PER_HOUR, TESTS_PER_HOUR };

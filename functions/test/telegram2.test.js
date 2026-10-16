@@ -172,26 +172,26 @@ test('jadval: oyna 2 soat (server kechiksa ham); o\'chiq bo\'lsa yo\'q; chat yo\
 });
 
 /* ---------- kam qolgan tovarlar ---------- */
-test('kam qolgan: ilovadagi qoida (chegara, variantlar yig\'indisi, xizmat/yashirin hisobga olinmaydi), filiallar, 50 tadan ortig\'i qisqartiriladi', async () => {
+test('kam qolgan: ilovadagi stockStatus() qoidasi (har bir variant alohida, qoldiqsiz = 0), filiallar, 50 tadan ortig\'i qisqartiriladi', async () => {
   const seed = seedBase({
     'businesses/OWNER1': { businessName: 'D', timeZone: 'Asia/Tashkent', lowStockThreshold: 3, branches: [{ id: 'main', name: 'Markaz' }, { id: 'b2', name: 'Yunusobod' }] },
     'businesses/OWNER1/products/a': { name: 'Non', stock: 2, unit: 'dona' },
     'businesses/OWNER1/products/b': { name: 'Guruch', stock: 0, unit: 'kg', branchId: 'b2' },
     'businesses/OWNER1/products/c': { name: 'Ko\'p', stock: 50 },
-    'businesses/OWNER1/products/d': { name: 'Xizmat' },
-    'businesses/OWNER1/products/e': { name: 'Yashirin', stock: 0, hidden: true },
-    'businesses/OWNER1/products/f': { name: 'Futbolka', variants: [{ stock: 1 }, { stock: 1 }] },
-    'businesses/OWNER1/products/g': { name: 'Variant noaniq', variants: [{ stock: 1 }, {}] },
-    'businesses/OWNER1/products/h': { name: 'Chegarada', stock: 3, unit: 'litr' }
+    'businesses/OWNER1/products/d': { name: 'Qoldiqsiz' },
+    'businesses/OWNER1/products/f': { name: 'Futbolka', variants: [{ name: 'M', stock: 0 }, { name: 'L', stock: 2 }, { name: 'XL', stock: 9 }] },
+    'businesses/OWNER1/products/h': { name: 'Chegarada', stock: 3, unit: 'litr' },
+    'businesses/OWNER1/products/m': { name: 'Minus', stock: -4 }
   });
   const d = mk(seed);
   const ctx = { biz: seed['businesses/OWNER1'], lang: 'uz', tz: 'Asia/Tashkent', cur: 'UZS', shop: 'D', branches: seed['businesses/OWNER1'].branches };
   const low = await R.computeLow(d.db, BID, ctx);
   assert.equal(low.threshold, 3);
   const names = low.groups.map(function (g) { return g.name + ':' + g.items.map(function (i) { return i.name; }).join(','); });
-  assert.deepEqual(names, ['Markaz:Futbolka,Non,Chegarada', 'Yunusobod:Guruch']);
+  assert.deepEqual(names, ['Markaz:Minus,Futbolka — M,Qoldiqsiz,Futbolka — L,Non,Chegarada', 'Yunusobod:Guruch']);
   const t = M.lowText('uz', low, { shop: 'D' });
   assert.match(t, /Guruch — 0 kg \(tugagan\)/); assert.match(t, /Non — 2 dona/); assert.match(t, /Chegarada — 3 litr/); assert.match(t, /🏬 <b>Yunusobod<\/b>/);
+  assert.match(t, /Futbolka — M — 0 dona \(tugagan\)/); assert.match(t, /Minus — −4 dona \(tugagan\)/); assert.ok(t.indexOf('XL') === -1);
   const many = { threshold: 5, groups: [{ id: 'main', name: 'M', items: Array.from({ length: 70 }, function (_, i) { return { name: 'T' + i, stock: 1, unit: 'dona' }; }) }] };
   const tm = M.lowText('uz', many, { shop: 'D' });
   assert.match(tm, /yana 20 ta/); assert.ok(tm.length < 4000);
@@ -201,6 +201,17 @@ test('kam qolgan: ilovadagi qoida (chegara, variantlar yig\'indisi, xizmat/yashi
   assert.equal(st.low, 1); assert.equal(st.daily, 0); assert.match(d.tg.sent[0].text, /Kam qolgan tovarlar/);
   const none = await R.computeLow(mk(seedBase()).db, BID, { biz: {}, lang: 'uz', tz: 'Asia/Tashkent', branches: [] });
   assert.equal(none.threshold, 5); assert.match(M.lowText('uz', none, { shop: 'D' }), /Kam qolgan tovar yo'q/);
+});
+test('kam qolgan chegarasi: 0 (yangi versiyada saqlangan) = faqat tugaganlar; eski 0 va noto\'g\'ri qiymat = 5', async () => {
+  assert.equal(R.lowThresholdOf({ lowStockThreshold: 0, lowStockSetV2: true }), 0);
+  assert.equal(R.lowThresholdOf({ lowStockThreshold: 0 }), 5);
+  assert.equal(R.lowThresholdOf({ lowStockThreshold: 24, lowStockSetV2: true }), 24);
+  assert.equal(R.lowThresholdOf({ lowStockThreshold: 2.5 }), 2.5);
+  assert.equal(R.lowThresholdOf({ lowStockThreshold: -1 }), 5); assert.equal(R.lowThresholdOf({ lowStockThreshold: 'x' }), 5); assert.equal(R.lowThresholdOf({}), 5);
+  const seed = seedBase({ 'businesses/OWNER1': { businessName: 'D', timeZone: 'Asia/Tashkent', lowStockThreshold: 0, lowStockSetV2: true },
+    'businesses/OWNER1/products/a': { name: 'Bir', stock: 1 }, 'businesses/OWNER1/products/b': { name: 'Nol', stock: 0 } });
+  const low = await R.computeLow(mk(seed).db, BID, { biz: seed['businesses/OWNER1'], lang: 'uz', tz: 'Asia/Tashkent', branches: [] });
+  assert.deepEqual(low.groups.map(function (g) { return g.items.map(function (i) { return i.name; }); }), [['Nol']]);
 });
 
 /* ---------- katta chegirma ---------- */
