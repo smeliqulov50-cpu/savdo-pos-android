@@ -483,6 +483,129 @@
 
   /* fix96-offline */
   .au-day{font-size:12px;font-weight:800;color:var(--ink-soft);margin:14px 2px 6px;letter-spacing:.3px;}
+  /* fix118-layout */
+  .toggle-opt[data-pt]{white-space:nowrap;}
+  .toggle-opt[data-pt] .pt-ic{flex-shrink:0;}
+  .toggle-group.pt-stack .toggle-opt[data-pt]{flex-direction:column;gap:3px;padding:7px 2px;line-height:1.2;}
+  .toggle-group.pt-grid{flex-wrap:wrap;}
+  .toggle-group.pt-grid .toggle-opt[data-pt]{flex:1 1 40%;white-space:normal;}
+  .toggle-group.tg-tight > .toggle-opt{font-size:11.5px;padding-left:3px;padding-right:3px;letter-spacing:0;}
+  .toggle-group.tg-break > .toggle-opt{overflow-wrap:anywhere;}
+  #takeaway-btn > span{flex-shrink:0;}
+  #staff-list .list-item > .badge{white-space:normal;text-align:center;line-height:1.3;max-width:40%;}
+  body.money-keypad-open .modal-sheet{padding-bottom:calc(270px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px))) !important;}
+  body.money-keypad-open main{padding-bottom:calc(270px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px))) !important;}
+  .tool-chip > span:last-child{min-width:min-content;}
+  .product-name{padding-bottom:2px;}
+  body.cart-bar-on main{padding-bottom:var(--cartbar-space, 170px);}
+  @media (min-width: 700px){
+    main{padding-bottom:calc(100px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));}
+  }
+  /* fix119-inv */
+  .inv-hero{position:relative;border-radius:22px;padding:16px 16px 14px;margin-bottom:12px;color:#fff;background:linear-gradient(135deg,#1F4FB8 0%,#4F46E5 55%,#7C5CFC 100%);box-shadow:0 10px 28px rgba(47,79,200,.28);overflow:hidden;}
+  .inv-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.22),rgba(255,255,255,0) 70%);pointer-events:none;}
+  .inv-seg{position:relative;z-index:1;display:flex;gap:4px;padding:4px;border-radius:14px;background:rgba(255,255,255,.16);margin-bottom:14px;}
+  .inv-seg button{flex:1;min-width:0;border:none;border-radius:11px;padding:10px 6px;font:800 13.5px var(--font-ui);color:rgba(255,255,255,.92);background:transparent;line-height:1.2;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .inv-seg button.on{background:#fff;color:#1F4FB8;box-shadow:0 2px 8px rgba(10,20,60,.18);}
+  .inv-hl{position:relative;z-index:1;font-size:12.5px;font-weight:700;opacity:.85;}
+  .inv-hv{position:relative;z-index:1;font-size:clamp(24px,7.4vw,34px);font-weight:800;letter-spacing:-.6px;line-height:1.15;margin:2px 0 2px;overflow-wrap:anywhere;}
+  .inv-hs{position:relative;z-index:1;font-size:12px;opacity:.8;margin-bottom:12px;}
+  .inv-hg{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .inv-hg > div{background:rgba(255,255,255,.13);border-radius:14px;padding:9px 10px;min-width:0;}
+  .inv-hg span{display:block;font-size:11px;font-weight:700;opacity:.8;line-height:1.25;}
+  .inv-hg b{display:block;font-size:14.5px;font-weight:800;margin-top:2px;overflow-wrap:anywhere;line-height:1.25;}
+  .inv-hg > div.wide{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .inv-hg > div.wide b{margin-top:0;}
+  .inv-split{position:relative;z-index:1;height:8px;border-radius:8px;background:rgba(255,255,255,.22);overflow:hidden;display:flex;margin-top:12px;}
+  .inv-split i{display:block;height:100%;background:rgba(255,255,255,.55);}
+  .inv-split i + i{background:#5EEAD4;}
+  .inv-legend{position:relative;z-index:1;display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;font-size:11px;opacity:.85;}
+  .inv-legend em{font-style:normal;display:inline-flex;align-items:center;gap:5px;}
+  .inv-legend em::before{content:"";width:8px;height:8px;border-radius:3px;background:rgba(255,255,255,.55);}
+  .inv-legend em + em::before{background:#5EEAD4;}
+  .inv-note{font-size:12px;line-height:1.35;color:var(--ink-soft);background:#fff;border:1px solid var(--v4-line, #E3EAF5);border-radius:14px;padding:9px 12px;margin:0 0 10px;display:flex;gap:8px;align-items:flex-start;}
+  .inv-note::before{content:"i";flex-shrink:0;width:18px;height:18px;border-radius:50%;background:var(--accent-bg);color:var(--accent-dark);font:800 11px/18px var(--font-ui);text-align:center;}
+  .inv-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;}
+  .inv-tile{background:#fff;border:1px solid var(--v4-line, #E3EAF5);border-radius:16px;padding:11px 12px;text-align:left;cursor:pointer;font-family:var(--font-ui);color:var(--ink);box-shadow:0 1px 2px rgba(22,35,59,.04);display:flex;align-items:center;gap:10px;min-width:0;-webkit-tap-highlight-color:transparent;}
+  .inv-tile .ic{flex-shrink:0;width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;}
+  .inv-tile .ic svg{width:18px;height:18px;}
+  .inv-tile .tx{min-width:0;}
+  .inv-tile .n, .inv-tile .l{display:block;}
+  .inv-tile .n{font-size:19px;font-weight:800;line-height:1.1;}
+  .inv-tile .l{font-size:11.5px;font-weight:700;color:var(--ink-soft);line-height:1.25;}
+  .inv-tile.on{border-color:currentColor;box-shadow:0 0 0 1.5px currentColor inset, 0 6px 16px rgba(22,35,59,.08);}
+  .inv-tile.t-all{color:#1F4FB8;} .inv-tile.t-all .ic{background:#DCE9FB;}
+  .inv-tile.t-out{color:#C0392B;} .inv-tile.t-out .ic{background:#FBE3E0;}
+  .inv-tile.t-low{color:#B45309;} .inv-tile.t-low .ic{background:#FEF3C7;}
+  .inv-tile.t-exp{color:#7C3AED;} .inv-tile.t-exp .ic{background:#EDE9FE;}
+  .inv-tile .n, .inv-tile .ic{color:inherit;}
+  .inv-tile .l{color:var(--ink-soft);}
+  .inv-card{background:#fff;border:1px solid var(--v4-line, #E3EAF5);border-radius:18px;padding:13px 14px;margin-bottom:10px;box-shadow:0 1px 2px rgba(22,35,59,.04),0 6px 18px rgba(22,35,59,.05);}
+  .inv-ct{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
+  .inv-ct h4{margin:0;font-size:14.5px;font-weight:800;color:var(--ink);line-height:1.25;}
+  .inv-ct small{display:block;margin-top:2px;font-size:11.5px;color:var(--ink-faint);font-weight:600;line-height:1.35;}
+  .inv-link{border:none;background:var(--accent-bg);color:var(--accent-dark);font:800 12px var(--font-ui);border-radius:10px;padding:7px 10px;cursor:pointer;flex-shrink:0;white-space:nowrap;}
+  .inv-li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid #EEF2F8;font-size:13px;}
+  .inv-li:first-of-type{border-top:none;}
+  .inv-li .nm{min-width:0;font-weight:700;color:var(--ink);line-height:1.3;}
+  .inv-li .nm small{display:block;font-weight:600;color:var(--ink-faint);font-size:11.5px;}
+  .inv-pill{flex-shrink:0;font-size:11.5px;font-weight:800;border-radius:999px;padding:4px 9px;white-space:nowrap;}
+  .inv-pill.red{background:#FBE3E0;color:#C0392B;} .inv-pill.amber{background:#FEF3C7;color:#B45309;} .inv-pill.teal{background:#DDF4F2;color:#0F766E;} .inv-pill.gray{background:#EEF2F8;color:var(--ink-soft);}
+  .inv-big{font-size:20px;font-weight:800;color:var(--ink);line-height:1.2;overflow-wrap:anywhere;}
+  .inv-cat{margin:8px 0 0;}
+  .inv-cat .row1{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+  .inv-cat .row1 span:first-child{min-width:0;overflow-wrap:anywhere;}
+  .inv-cat .row1 span:last-child{flex-shrink:0;color:var(--ink-soft);font-weight:700;}
+  .inv-cat .bar{height:8px;border-radius:8px;background:#EEF2F8;overflow:hidden;}
+  .inv-cat .bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#2F6FED,#7C5CFC);}
+  .inv-abc{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .inv-abc > div{border-radius:14px;padding:9px 10px;min-width:0;}
+  .inv-abc b{display:block;font-size:18px;font-weight:800;line-height:1.1;}
+  .inv-abc span{display:block;font-size:11px;font-weight:700;line-height:1.3;margin-top:2px;}
+  .inv-abc .A{background:#DFF3E8;color:#166534;} .inv-abc .B{background:#DCE9FB;color:#1F4FB8;} .inv-abc .C{background:#EEF2F8;color:#51677E;}
+  .inv-tools{display:flex;flex-direction:column;gap:8px;margin:14px 0 8px;}
+  .inv-search{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--v4-line, #E3EAF5);border-radius:14px;padding:0 12px;}
+  .inv-search svg{width:18px;height:18px;color:var(--ink-faint);flex-shrink:0;}
+  .inv-search input{flex:1;min-width:0;border:none;outline:none;background:transparent;font:600 14px var(--font-ui);color:var(--ink);padding:12px 0;}
+  .inv-chips{display:flex;gap:6px;overflow-x:auto;padding:2px 1px 4px;scrollbar-width:none;}
+  .inv-chips::-webkit-scrollbar{display:none;}
+  .inv-chip{flex-shrink:0;border:1px solid var(--v4-line, #E3EAF5);background:#fff;color:var(--ink-soft);font:800 12.5px var(--font-ui);border-radius:999px;padding:8px 12px;cursor:pointer;white-space:nowrap;line-height:1.2;}
+  .inv-chip.on{background:var(--ink);border-color:var(--ink);color:#fff;}
+  .inv-sortrow{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+  .inv-sortrow select{flex:1 1 150px;min-width:0;max-width:100%;border:1px solid var(--v4-line, #E3EAF5);background:#fff;border-radius:12px;padding:8px 10px;font:700 12.5px var(--font-ui);color:var(--ink);}
+  .inv-count{font-size:12px;font-weight:700;color:var(--ink-faint);white-space:nowrap;flex-shrink:0;}
+  .inv-share{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;border:none;background:var(--gradient-brand);color:#fff;font:800 12.5px var(--font-ui);border-radius:12px;padding:9px 12px;cursor:pointer;white-space:nowrap;}
+  .inv-share svg{width:15px;height:15px;}
+  .inv-row{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--v4-line, #E3EAF5);border-radius:16px;padding:11px 12px;margin-bottom:7px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .inv-row .mn{flex:1;min-width:0;}
+  .inv-row .nm{font-size:13.5px;font-weight:800;color:var(--ink);line-height:1.3;overflow-wrap:anywhere;}
+  .inv-row .mt{font-size:11.5px;font-weight:600;color:var(--ink-soft);line-height:1.35;margin-top:2px;}
+  .inv-row .mt .out{color:#C0392B;font-weight:800;} .inv-row .mt .low{color:#B45309;font-weight:800;} .inv-row .mt .exp{color:#7C3AED;font-weight:800;}
+  .inv-row .vl{flex-shrink:0;text-align:right;max-width:46%;}
+  .inv-row .vl b{display:block;font-size:13.5px;font-weight:800;color:var(--ink);line-height:1.25;overflow-wrap:anywhere;}
+  .inv-row .vl small{display:block;font-size:11px;font-weight:600;color:var(--ink-faint);line-height:1.3;}
+  .inv-abcb{display:inline-block;min-width:18px;text-align:center;font-size:10.5px;font-weight:800;border-radius:6px;padding:1px 5px;margin-right:4px;vertical-align:1px;}
+  .inv-abcb.A{background:#DFF3E8;color:#166534;} .inv-abcb.B{background:#DCE9FB;color:#1F4FB8;} .inv-abcb.C{background:#EEF2F8;color:#51677E;}
+  .inv-det{margin:-3px 0 9px;padding:10px 12px;background:var(--surface-soft, #F4F8FD);border-radius:14px;border:1px dashed #D5E0EF;}
+  .inv-det .r{display:flex;justify-content:space-between;gap:12px;padding:4px 0;font-size:12.5px;line-height:1.35;}
+  .inv-det .r span:first-child{color:var(--ink-soft);font-weight:600;min-width:0;}
+  .inv-det .r span:last-child{color:var(--ink);font-weight:800;text-align:right;min-width:0;overflow-wrap:anywhere;}
+  .inv-more{display:block;width:100%;border:1px dashed #C9D6EA;background:#fff;color:var(--accent-dark);font:800 13px var(--font-ui);border-radius:14px;padding:12px;margin-top:4px;cursor:pointer;}
+  .inv-empty{text-align:center;color:var(--ink-faint);font-weight:700;font-size:13px;padding:22px 10px;}
+  .inv-tile .l, .inv-abc span{overflow-wrap:break-word;}
+  @media (max-width: 345px){
+    .inv-tile{padding:10px 8px;gap:7px;} .inv-tile .ic{width:30px;height:30px;} .inv-tile .l{font-size:10.5px;}
+    .inv-abc{gap:6px;} .inv-abc > div{padding:8px 7px;} .inv-abc span{font-size:10px;}
+  }
+  @media (min-width: 700px){
+    .inv-tiles{grid-template-columns:repeat(4,1fr);}
+    .inv-hg{grid-template-columns:repeat(3,1fr);}
+    .inv-hg > div.wide{grid-column:auto;display:block;}
+    .inv-hg > div.wide b{margin-top:2px;}
+    .inv-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;}
+    .inv-cols .inv-card{margin-bottom:0;}
+    .inv-sortrow select{flex:0 1 340px;}
+  }
 </style>
 </head>
 <body>
@@ -1389,6 +1512,59 @@ const T = {
   /* fix117-eye */
   tdShow:{uz:"Summani ko'rsatish",ru:"Показать сумму",en:"Show amount",kk:"Соманы көрсету",ky:"Сумманы көрсөтүү",tg:"Нишон додани маблағ"},
   tdHide:{uz:"Summani yashirish",ru:"Скрыть сумму",en:"Hide amount",kk:"Соманы жасыру",ky:"Сумманы жашыруу",tg:"Пинҳон кардани маблағ"},
+  /* fix119-inv */
+  invRetail:{uz:"Chakana narxda",ru:"По розничной цене",en:"At retail price",kk:"Бөлшек бағада",ky:"Чекене баада",tg:"Бо нархи чакана"},
+  invWholesale:{uz:"Ulgurji narxda",ru:"По оптовой цене",en:"At wholesale price",kk:"Көтерме бағада",ky:"Дүң баада",tg:"Бо нархи яклухт"},
+  invValue:{uz:"Ombor qiymati",ru:"Стоимость склада",en:"Inventory value",kk:"Қойма құны",ky:"Кампанын наркы",tg:"Арзиши анбор"},
+  invCost:{uz:"Tannarx",ru:"Себестоимость",en:"Cost",kk:"Өзіндік құны",ky:"Өздүк наркы",tg:"Арзиши аслӣ"},
+  invProfit:{uz:"Kutilayotgan foyda",ru:"Ожидаемая прибыль",en:"Expected profit",kk:"Күтілетін пайда",ky:"Күтүлгөн пайда",tg:"Фоидаи интизорӣ"},
+  invMarkup:{uz:"Ustama",ru:"Наценка",en:"Markup",kk:"Үстеме",ky:"Үстөк",tg:"Иловаи нарх"},
+  invNoWholesale:{uz:"{n} ta mahsulotda ulgurji narx kiritilmagan — ular chakana narxda hisoblandi.",ru:"У {n} товаров не указана оптовая цена — они посчитаны по розничной.",en:"{n} products have no wholesale price — they are counted at retail price.",kk:"{n} тауардың көтерме бағасы жоқ — олар бөлшек бағамен есептелді.",ky:"{n} товардын дүң баасы жок — алар чекене баа менен эсептелди.",tg:"{n} мол нархи яклухт надорад — онҳо бо нархи чакана ҳисоб шуданд."},
+  invNoCost:{uz:"{n} ta mahsulotda tannarx kiritilmagan — foyda taxminiy.",ru:"У {n} товаров не указана себестоимость — прибыль приблизительная.",en:"{n} products have no cost price — profit is approximate.",kk:"{n} тауардың өзіндік құны көрсетілмеген — пайда шамамен.",ky:"{n} товардын өздүк наркы көрсөтүлгөн эмес — пайда болжолдуу.",tg:"{n} мол арзиши аслӣ надорад — фоида тахминӣ аст."},
+  invAll:{uz:"Mahsulot turi",ru:"Видов товара",en:"Product types",kk:"Тауар түрі",ky:"Товар түрү",tg:"Намуди мол"},
+  invAllChip:{uz:"Hammasi",ru:"Все",en:"All",kk:"Барлығы",ky:"Баары",tg:"Ҳама"},
+  invOut:{uz:"Tugagan",ru:"Закончились",en:"Out of stock",kk:"Таусылған",ky:"Түгөнгөн",tg:"Тамомшуда"},
+  invLow:{uz:"Kam qolgan",ru:"Мало осталось",en:"Low stock",kk:"Аз қалған",ky:"Аз калган",tg:"Кам монда"},
+  invExp:{uz:"Muddati yaqin",ru:"Срок истекает",en:"Expiring",kk:"Мерзімі жақын",ky:"Мөөнөтү жакын",tg:"Мӯҳлаташ наздик"},
+  invIdle:{uz:"Harakatsiz",ru:"Без движения",en:"Not selling",kk:"Қозғалыссыз",ky:"Кыймылсыз",tg:"Бе ҳаракат"},
+  invSoon:{uz:"Tez tugaydi",ru:"Скоро закончатся",en:"Running out soon",kk:"Жақында таусылады",ky:"Жакында түгөнөт",tg:"Ба наздикӣ тамом мешаванд"},
+  invSoonNote:{uz:"Oxirgi {d} kunlik sotuv tezligi bo'yicha",ru:"По скорости продаж за последние {d} дн.",en:"Based on sales speed over the last {d} days",kk:"Соңғы {d} күндік сату жылдамдығы бойынша",ky:"Акыркы {d} күндүк сатуу ылдамдыгы боюнча",tg:"Аз рӯи суръати фурӯш дар {d} рӯзи охир"},
+  invDaysLeft:{uz:"~{d} kunga yetadi",ru:"хватит на ~{d} дн.",en:"~{d} days left",kk:"~{d} күнге жетеді",ky:"~{d} күнгө жетет",tg:"~{d} рӯз басанда аст"},
+  invToday:{uz:"bugun tugaydi",ru:"закончится сегодня",en:"runs out today",kk:"бүгін таусылады",ky:"бүгүн түгөнөт",tg:"имрӯз тамом мешавад"},
+  invOrderQty:{uz:"buyurtma: {n}",ru:"заказать: {n}",en:"order: {n}",kk:"тапсырыс: {n}",ky:"буйрутма: {n}",tg:"фармоиш: {n}"},
+  invOrderNote:{uz:"Buyurtma miqdori — 2 haftalik savdoga yetadigan qilib hisoblangan.",ru:"Количество к заказу рассчитано на 2 недели продаж.",en:"Order quantity covers 2 weeks of sales.",kk:"Тапсырыс мөлшері 2 апталық сатуға есептелген.",ky:"Буйрутманын көлөмү 2 жумалык сатууга эсептелген.",tg:"Миқдори фармоиш барои 2 ҳафтаи фурӯш ҳисоб шудааст."},
+  invIdleTitle:{uz:"{d} kun ichida sotilmagan",ru:"Не продавались {d} дн.",en:"Not sold in {d} days",kk:"{d} күн ішінде сатылмаған",ky:"{d} күн ичинде сатылган жок",tg:"Дар {d} рӯз фурӯхта нашуданд"},
+  invIdleText:{uz:"{n} ta mahsulotda pul muzlab turibdi (tannarxda)",ru:"Заморожено в {n} товарах (по себестоимости)",en:"Tied up in {n} products (at cost)",kk:"{n} тауарда ақша қатып тұр (өзіндік құнмен)",ky:"{n} товардо акча тоңуп турат (өздүк нарк менен)",tg:"Дар {n} мол пул ях карда истодааст (бо арзиши аслӣ)"},
+  invAbcTitle:{uz:"ABC tahlil",ru:"ABC-анализ",en:"ABC analysis",kk:"ABC талдау",ky:"ABC талдоо",tg:"Таҳлили ABC"},
+  invAbcA:{uz:"savdoning 80% ini beradi",ru:"дают 80% выручки",en:"bring 80% of revenue",kk:"түсімнің 80%-ын береді",ky:"түшүмдүн 80% берет",tg:"80%-и даромадро медиҳанд"},
+  invAbcB:{uz:"keyingi 15%",ru:"следующие 15%",en:"next 15%",kk:"келесі 15%",ky:"кийинки 15%",tg:"15%-и навбатӣ"},
+  invAbcC:{uz:"qolgan 5%",ru:"остальные 5%",en:"last 5%",kk:"қалған 5%",ky:"калган 5%",tg:"5%-и боқимонда"},
+  invAbcNote:{uz:"Oxirgi {d} kunlik savdo bo'yicha. A — eng muhim mahsulotlar: ular hech qachon tugab qolmasin.",ru:"По выручке за последние {d} дн. A — самые важные товары: не допускайте, чтобы они заканчивались.",en:"By revenue over the last {d} days. A are your key products: never let them run out.",kk:"Соңғы {d} күндік түсім бойынша. A — ең маңызды тауарлар: олар таусылмасын.",ky:"Акыркы {d} күндүк түшүм боюнча. A — эң маанилүү товарлар: алар түгөнүп калбасын.",tg:"Аз рӯи даромади {d} рӯзи охир. A — моли муҳимтарин: нагузоред тамом шаванд."},
+  invByCat:{uz:"Kategoriyalar bo'yicha",ru:"По категориям",en:"By category",kk:"Санаттар бойынша",ky:"Категориялар боюнча",tg:"Аз рӯи категорияҳо"},
+  invNoCat:{uz:"Kategoriyasiz",ru:"Без категории",en:"Uncategorized",kk:"Санатсыз",ky:"Категориясыз",tg:"Бе категория"},
+  invOthers:{uz:"Boshqalar",ru:"Прочие",en:"Others",kk:"Басқалар",ky:"Башкалар",tg:"Дигарон"},
+  invSearch:{uz:"Mahsulot nomi yoki shtrix-kod",ru:"Название или штрихкод",en:"Product name or barcode",kk:"Тауар атауы не штрихкод",ky:"Товардын аты же штрих-код",tg:"Номи мол ё штрих-код"},
+  invSortValue:{uz:"Qiymati bo'yicha",ru:"По стоимости",en:"By value",kk:"Құны бойынша",ky:"Наркы боюнча",tg:"Аз рӯи арзиш"},
+  invSortStock:{uz:"Qoldig'i kamlari oldin",ru:"Сначала с малым остатком",en:"Lowest stock first",kk:"Қалдығы азы алдымен",ky:"Калдыгы азы алгач",tg:"Аввал бақияи кам"},
+  invSortName:{uz:"Nomi bo'yicha",ru:"По названию",en:"By name",kk:"Атауы бойынша",ky:"Аталышы боюнча",tg:"Аз рӯи ном"},
+  invSortProfit:{uz:"Foydasi bo'yicha",ru:"По прибыли",en:"By profit",kk:"Пайдасы бойынша",ky:"Пайдасы боюнча",tg:"Аз рӯи фоида"},
+  invSortSoon:{uz:"Tez tugaydiganlar oldin",ru:"Сначала скоро заканчивающиеся",en:"Running out first",kk:"Тез таусылатыны алдымен",ky:"Тез түгөнүүчүсү алгач",tg:"Аввал зуд тамомшаванда"},
+  invShown:{uz:"{n} ta",ru:"{n} шт.",en:"{n} items",kk:"{n} дана",ky:"{n} даана",tg:"{n} адад"},
+  invShowMore:{uz:"Yana {n} tasini ko'rsatish",ru:"Показать ещё {n}",en:"Show {n} more",kk:"Тағы {n} көрсету",ky:"Дагы {n} көрсөтүү",tg:"Боз {n} нишон додан"},
+  invSeeAll:{uz:"Ko'rish",ru:"Смотреть",en:"View",kk:"Көру",ky:"Көрүү",tg:"Дидан"},
+  invShare:{uz:"Buyurtma ro'yxati",ru:"Список заказа",en:"Order list",kk:"Тапсырыс тізімі",ky:"Буйрутма тизмеси",tg:"Рӯйхати фармоиш"},
+  invLeft:{uz:"qoldiq",ru:"остаток",en:"stock",kk:"қалдық",ky:"калдык",tg:"бақия"},
+  invLastSold:{uz:"Oxirgi sotuv",ru:"Последняя продажа",en:"Last sold",kk:"Соңғы сату",ky:"Акыркы сатуу",tg:"Фурӯши охирин"},
+  invNever:{uz:"sotilmagan",ru:"не продавался",en:"never sold",kk:"сатылмаған",ky:"сатылган эмес",tg:"фурӯхта нашудааст"},
+  invSoldIn:{uz:"{d} kunda sotildi",ru:"Продано за {d} дн.",en:"Sold in {d} days",kk:"{d} күнде сатылды",ky:"{d} күндө сатылды",tg:"Дар {d} рӯз фурӯхта шуд"},
+  invNotSet:{uz:"kiritilmagan",ru:"не указана",en:"not set",kk:"көрсетілмеген",ky:"көрсөтүлгөн эмес",tg:"ворид нашудааст"},
+  invFromBox:{uz:"blok narxidan",ru:"из цены блока",en:"from box price",kk:"блок бағасынан",ky:"блок баасынан",tg:"аз нархи қуттӣ"},
+  invUnitCost:{uz:"Tannarx (1 birlik)",ru:"Себестоимость (за ед.)",en:"Cost (per unit)",kk:"Өзіндік құны (1 бірлік)",ky:"Өздүк наркы (1 бирдик)",tg:"Арзиши аслӣ (1 адад)"},
+  invRetailPrice:{uz:"Chakana narx",ru:"Розничная цена",en:"Retail price",kk:"Бөлшек баға",ky:"Чекене баа",tg:"Нархи чакана"},
+  invWholesalePrice:{uz:"Ulgurji narx",ru:"Оптовая цена",en:"Wholesale price",kk:"Көтерме баға",ky:"Дүң баа",tg:"Нархи яклухт"},
+  invStockValue:{uz:"Qoldiq qiymati",ru:"Стоимость остатка",en:"Stock value",kk:"Қалдық құны",ky:"Калдыктын наркы",tg:"Арзиши бақия"},
+  invAllGood:{uz:"Hammasi joyida: tugagan yoki kam qolgan mahsulot yo'q.",ru:"Всё в порядке: нет закончившихся и заканчивающихся товаров.",en:"All good: nothing is out of stock or running low.",kk:"Бәрі дұрыс: таусылған не аз қалған тауар жоқ.",ky:"Баары жайында: түгөнгөн же аз калган товар жок.",tg:"Ҳама хуб: моли тамомшуда ё камманда нест."},
+  invNoHistory:{uz:"Sotuv tarixi ko'paygach (kamida 7 kun) bu yerda qachon nima tugashi va qaysi mahsulot sotilmayotgani ko'rsatiladi.",ru:"Когда накопится история продаж (минимум 7 дней), здесь появится прогноз окончания товаров и список товаров без продаж.",en:"Once there are at least 7 days of sales, this will show when products run out and which ones aren't selling.",kk:"Сату тарихы жиналғанда (кемінде 7 күн) мұнда тауарлардың қашан таусылатыны және қайсысы сатылмай жатқаны көрсетіледі.",ky:"Сатуу тарыхы топтолгондо (кеминде 7 күн) бул жерде товарлар качан түгөнөрү жана кайсынысы сатылбай жатканы көрсөтүлөт.",tg:"Вақте таърихи фурӯш ҷамъ шавад (камаш 7 рӯз), дар ин ҷо пешгӯии тамомшавии мол ва рӯйхати моли фурӯхтанашуда пайдо мешавад."},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -2879,7 +3055,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.21';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.22';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -10605,6 +10781,327 @@ document.addEventListener('click', (e)=>{
   __tdSet(!__tdHidden()); __tdApply();
 }, true);
 document.addEventListener('pointerdown', (e)=>{ const b = e.target && e.target.closest ? e.target.closest('[data-td-eye]') : null; if(b) e.preventDefault(); }, true);   // fokusni (klaviaturani) o'g'irlamasin
+/* fix118-layout: tanlov tugmalari joyga qarab moslashadi. To'lov usuli: bir qator -> belgi tepada -> 2 x 2. Boshqalari: sig'masa shrift biroz kichrayadi, baribir sig'masa so'z bo'linadi. Hech qachon ustma-ust tushmaydi. */
+function __tgOver(t){
+  const b = t.getBoundingClientRect(), cs = getComputedStyle(t);
+  const L = b.left + (parseFloat(cs.borderLeftWidth) || 0) + (parseFloat(cs.paddingLeft) || 0) - 0.5;
+  const R = b.right - (parseFloat(cs.borderRightWidth) || 0) - (parseFloat(cs.paddingRight) || 0) + 0.5;
+  const rg = document.createRange(); rg.selectNodeContents(t);
+  for(const r of rg.getClientRects()){ if(r.width > 0.5 && (r.left < L || r.right > R)) return true; }
+  return false;
+}
+function __tgFit(g, tries){
+  const opts = [...g.children].filter(x=>x.classList && x.classList.contains('toggle-opt'));
+  if(!opts.length || !g.isConnected) return;
+  if(!g.getBoundingClientRect().width){ if((tries || 0) < 20) setTimeout(()=>__tgFit(g, (tries || 0) + 1), 150); return; }
+  const bad = ()=>opts.some(__tgOver);
+  g.classList.remove('pt-stack', 'pt-grid', 'tg-tight', 'tg-break');
+  if(!bad()) return;
+  if(opts.some(o=>o.hasAttribute('data-pt'))){
+    g.classList.add('pt-stack'); if(!bad()) return;
+    g.classList.remove('pt-stack'); g.classList.add('pt-grid'); return;
+  }
+  g.classList.add('tg-tight'); if(!bad()) return;
+  g.classList.add('tg-break');
+}
+function __ptFitAll(){ try{ document.querySelectorAll('.toggle-group').forEach(g=>__tgFit(g)); }catch(e){} }
+/* savat paneli (pastdagi "Savat" tugmali panel) ochiq bo'lsa, sahifa oxiri uning ostida qolmasin */
+function __cbSpace(){
+  try{
+    const bar = document.querySelector('#cart-bar-slot .cart-bar');
+    if(!bar){ document.body && document.body.classList.remove('cart-bar-on'); return; }
+    const need = Math.ceil((parseFloat(getComputedStyle(bar).bottom) || 0) + bar.offsetHeight + 14);
+    if(need > 0){ document.documentElement.style.setProperty('--cartbar-space', need + 'px'); document.body.classList.add('cart-bar-on'); }
+  }catch(e){}
+}
+var __ptRaf = 0;
+function __ptSchedule(){ if(__ptRaf) return; __ptRaf = requestAnimationFrame(()=>{ __ptRaf = 0; __ptFitAll(); __cbSpace(); }); }
+try{
+  /* oyna chizilishidan oldin (bir lahza ham ustma-ust ko'rinmasin) */
+  new MutationObserver((muts)=>{
+    let pt = false, cb = false;
+    for(const m of muts){
+      if(m.target && m.target.id === 'cart-bar-slot') cb = true;
+      if(!pt) for(const n of m.addedNodes){
+        if(n.nodeType === 1 && ((n.matches && n.matches('.toggle-group, .toggle-opt')) || (n.querySelector && n.querySelector('.toggle-opt')))){ pt = true; break; }
+      }
+    }
+    if(pt) __ptFitAll();
+    if(cb) __cbSpace();
+  }).observe(document.documentElement, {childList:true, subtree:true});
+  addEventListener('resize', __ptSchedule);
+  addEventListener('orientationchange', ()=>setTimeout(()=>{ __ptFitAll(); __cbSpace(); }, 250));
+  if(document.fonts){ document.fonts.addEventListener && document.fonts.addEventListener('loadingdone', __ptSchedule); document.fonts.ready && document.fonts.ready.then(__ptSchedule); }
+}catch(e){}
+/* fix119-inv: yangi "Ombor hisoboti" — chakana/ulgurji narxda qiymat, foyda, ombor holati, aqlli tahlil. */
+var INV_PRICE_KEY = 'sp_inv_price_v1', __invMemMode = null;
+var __inv = {q:'', sort:'value', filter:'all', limit:60, open:{}};
+function __invMode(){ try{ const v = localStorage.getItem(INV_PRICE_KEY); if(v === 'w' || v === 'r') return v; }catch(e){} return __invMemMode || 'r'; }
+function __invSetMode(m){ __invMemMode = m; try{ localStorage.setItem(INV_PRICE_KEY, m); }catch(e){} }
+function __invT(k, vars){ let t = tr(k); if(vars) Object.keys(vars).forEach(n=>{ t = t.split('{' + n + '}').join(vars[n]); }); return t; }
+function __invNum(n){ n = Math.round(Number(n) || 0); return n.toLocaleString('en-US').replace(/,/g, ' '); }
+function __invQty(n){ n = Number(n) || 0; return (Math.round(n * 1000) / 1000).toLocaleString('en-US', {maximumFractionDigits:3}).replace(/,/g, ' '); }
+function __invData(){
+  const DAY = 86400000, now = Date.now();
+  const low = Number(state.settings.lowStockThreshold) || 5;
+  const expDays = Number(state.settings.expiryWarningDays) || 7;
+  const rows = [], byKey = {};
+  visibleProducts().forEach(p=>{
+    const vs = (p.variants && p.variants.length) ? p.variants : [null];
+    let expStatus = null, expText = '';
+    if(p.expiryDate){
+      const dl = Math.floor((new Date(p.expiryDate) - now) / DAY);
+      if(!isNaN(dl)){
+        if(dl < 0){ expStatus = 'expired'; expText = p.expiryDate + ' · ' + tr('expired'); }
+        else if(dl <= expDays){ expStatus = 'soon'; expText = p.expiryDate + ' · ' + tr('expiringSoon'); }
+        else expText = p.expiryDate;
+      }
+    }
+    vs.forEach(v=>{
+      const stock = Number(v ? v.stock : p.stock) || 0;
+      const retail = Number(v ? v.price : p.price) || 0;
+      const cost = Number(v ? (v.costPrice != null ? v.costPrice : p.costPrice) : p.costPrice) || 0;
+      const whU = Number(v ? v.wholesalePrice : p.wholesalePrice) || 0;
+      const boxP = Number(v ? v.boxPrice : p.boxPrice) || 0, upb = Number(p.unitsPerBox) || 0;
+      let wh = 0, whSrc = '';
+      if(whU > 0){ wh = whU; whSrc = 'unit'; } else if(boxP > 0 && upb > 0){ wh = boxP / upb; whSrc = 'box'; }
+      const r = {key: p.id + (v ? ':' + v.id : ''), pid: p.id, vid: v ? v.id : null, p, v,
+        name: v ? (p.name + ' — ' + v.name) : (p.name || ''), stock, retail, cost, wh, whSrc, boxP, upb,
+        unit: p.unit, cat: (p.category || '').trim(), barcode: String(p.barcode || ''), expStatus, expText,
+        sold: 0, rev: 0, last: 0, vel: 0, daysLeft: null, abc: ''};
+      r.status = stock <= 0 ? 'out' : (stock <= low ? 'low' : 'ok');
+      rows.push(r); byKey[r.key] = r;
+      if(v && !byKey[p.id]) byKey[p.id + ':*'] = byKey[p.id + ':*'] || r;
+    });
+  });
+  // sotuv tarixi (shu filial, qaytarilmaganlar)
+  const br = effectiveBranchId(state.currentBranchId);
+  let first = 0; const W = 30, from = now - W * DAY;
+  (state.sales || []).forEach(s=>{
+    if(!s || s.refunded || effectiveBranchId(s.branchId) !== br) return;
+    const t = new Date(s.date).getTime(); if(isNaN(t)) return;
+    if(!first || t < first) first = t;
+    (s.items || []).forEach(it=>{
+      if(!it) return;
+      const r = byKey[it.productId + (it.variantId ? ':' + it.variantId : '')] || (it.variantId ? null : byKey[it.productId + ':*']);
+      if(!r) return;
+      const units = it.saleMode === 'box' ? (Number(it.qty) || 0) * (Number(it.unitsPerBox) || 1) : (Number(it.qty) || 0);
+      if(t > r.last) r.last = t;
+      if(t >= from){ r.sold += units; r.rev += (Number(it.price) || 0) * (Number(it.qty) || 0); }
+    });
+  });
+  const histDays = first ? Math.min(W, Math.max(1, Math.ceil((now - first) / DAY))) : 0;
+  const hasHist = histDays >= 7;
+  rows.forEach(r=>{
+    if(histDays > 0) r.vel = r.sold / histDays;
+    if(r.vel > 0 && r.stock > 0) r.daysLeft = r.stock / r.vel;
+    r.orderQty = r.vel > 0 ? Math.max(0, Math.ceil(r.vel * 14 - Math.max(0, r.stock))) : 0;
+  });
+  // ABC (savdo tushumi bo'yicha)
+  const sold = rows.filter(r=>r.rev > 0).sort((a,b)=>b.rev - a.rev);
+  const revTot = sold.reduce((a,r)=>a + r.rev, 0);
+  let acc = 0; const abc = {A:0, B:0, C:0};
+  sold.forEach(r=>{ const before = acc; acc += r.rev; const share = revTot > 0 ? before / revTot : 0; r.abc = share < 0.8 ? 'A' : (share < 0.95 ? 'B' : 'C'); abc[r.abc]++; });
+  return {rows, histDays, hasHist, abc, revTot};
+}
+function __invTotals(rows, mode){
+  let vR = 0, vW = 0, c = 0, noWh = 0, noCost = 0;
+  rows.forEach(r=>{
+    const q = Math.max(0, r.stock); if(q <= 0) return;
+    vR += q * r.retail; vW += q * (r.wh > 0 ? r.wh : r.retail); c += q * r.cost;
+    if(!(r.wh > 0)) noWh++;
+    if(!(r.cost > 0)) noCost++;
+  });
+  const v = mode === 'w' ? vW : vR;
+  return {vR, vW, v, c, profit: v - c, markup: c > 0 ? (v - c) / c * 100 : null, noWh, noCost};
+}
+function __invPrice(r, mode){ return mode === 'w' ? (r.wh > 0 ? r.wh : r.retail) : r.retail; }
+function __invDaysTxt(r){ if(r.daysLeft == null) return ''; return r.daysLeft < 1 ? tr('invToday') : __invT('invDaysLeft', {d: Math.floor(r.daysLeft)}); }
+function __invFiltered(D){
+  const q = (__inv.q || '').trim().toLowerCase();
+  let list = D.rows.filter(r=>{
+    const f = __inv.filter;
+    if(f === 'out' && r.status !== 'out') return false;
+    if(f === 'low' && r.status !== 'low') return false;
+    if(f === 'exp' && !r.expStatus) return false;
+    if(f === 'soon' && !(r.daysLeft != null && r.daysLeft <= 7)) return false;
+    if(f === 'idle' && !(D.hasHist && r.stock > 0 && r.sold <= 0)) return false;
+    if(q && r.name.toLowerCase().indexOf(q) === -1 && r.barcode.toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+  const mode = __invMode(), so = __inv.sort;
+  const val = (r)=>Math.max(0, r.stock) * __invPrice(r, mode);
+  if(so === 'value') list.sort((a,b)=>val(b) - val(a) || a.name.localeCompare(b.name));
+  else if(so === 'stock') list.sort((a,b)=>a.stock - b.stock || a.name.localeCompare(b.name));
+  else if(so === 'name') list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(so === 'profit') list.sort((a,b)=>(Math.max(0,b.stock) * (__invPrice(b, mode) - b.cost)) - (Math.max(0,a.stock) * (__invPrice(a, mode) - a.cost)));
+  else if(so === 'soon') list.sort((a,b)=>{ const x = a.daysLeft == null ? (a.stock <= 0 && a.vel > 0 ? -1 : 1e9) : a.daysLeft, y = b.daysLeft == null ? (b.stock <= 0 && b.vel > 0 ? -1 : 1e9) : b.daysLeft; return x - y || a.name.localeCompare(b.name); });
+  return list;
+}
+function __invRowHtml(r, D, mode){
+  const price = __invPrice(r, mode), val = Math.max(0, r.stock) * price;
+  const open = !!__inv.open[r.key];
+  const stTxt = tr('stock') + ': ' + __invQty(r.stock) + ' ' + unitLabel(r.unit);
+  const st = r.status === 'out' ? '<span class="out">' + escapeHtml(stTxt) + '</span>' : (r.status === 'low' ? '<span class="low">' + escapeHtml(stTxt) + '</span>' : escapeHtml(stTxt));
+  const bits = [st];
+  const dt = __invDaysTxt(r); if(dt) bits.push(escapeHtml(dt));
+  if(r.expStatus) bits.push('<span class="exp">' + escapeHtml(r.expText) + '</span>');
+  let h = '<div class="inv-row" data-inv-k="' + escapeHtml(r.key) + '" role="button" aria-expanded="' + (open ? 'true' : 'false') + '">'
+    + '<div class="mn"><div class="nm">' + (r.abc ? '<span class="inv-abcb ' + r.abc + '">' + r.abc + '</span>' : '') + escapeHtml(r.name) + '</div><div class="mt">' + bits.join(' · ') + '</div></div>'
+    + '<div class="vl"><b>' + (r.stock <= 0 && r.orderQty > 0 ? escapeHtml(__invT('invOrderQty', {n: __invQty(r.orderQty) + ' ' + unitLabel(r.unit)})) : fmt(val)) + '</b><small>' + escapeHtml(fmt(price)) + ' / ' + escapeHtml(unitLabel(r.unit)) + '</small></div></div>';
+  if(open){
+    const q = Math.max(0, r.stock);
+    const whTxt = r.wh > 0 ? (fmt(r.wh) + (r.whSrc === 'box' ? ' (' + tr('invFromBox') + ')' : '')) : tr('invNotSet');
+    const prof = q * (price - r.cost);
+    const mk = r.cost > 0 ? ' (' + (price >= r.cost ? '+' : '') + Math.round((price - r.cost) / r.cost * 100) + '%)' : '';
+    const R = (a, b)=>'<div class="r"><span>' + escapeHtml(a) + '</span><span>' + b + '</span></div>';
+    h += '<div class="inv-det">'
+      + R(tr('invUnitCost'), r.cost > 0 ? escapeHtml(fmt(r.cost)) : escapeHtml(tr('invNotSet')))
+      + R(tr('invRetailPrice'), escapeHtml(fmt(r.retail)))
+      + R(tr('invWholesalePrice'), escapeHtml(whTxt))
+      + (r.boxP > 0 && r.upb > 0 ? R((r.p.boxLabel || tr('boxDefaultLabel')) + ' (' + r.upb + ')', escapeHtml(fmt(r.boxP))) : '')
+      + R(tr('invStockValue') + ' · ' + tr('retailModeShort'), escapeHtml(fmt(q * r.retail)))
+      + R(tr('invStockValue') + ' · ' + tr('wholesaleModeShort'), escapeHtml(fmt(q * (r.wh > 0 ? r.wh : r.retail))))
+      + R(tr('invStockValue') + ' · ' + tr('invCost'), escapeHtml(fmt(q * r.cost)))
+      + R(tr('invProfit'), escapeHtml(fmt(prof) + mk))
+      + (D.histDays > 0 ? R(__invT('invSoldIn', {d: D.histDays}), escapeHtml(__invQty(r.sold) + ' ' + unitLabel(r.unit))) : '')
+      + R(tr('invLastSold'), escapeHtml(r.last ? new Date(r.last).toLocaleDateString() : tr('invNever')))
+      + (r.orderQty > 0 ? R(tr('invShare'), escapeHtml(__invT('invOrderQty', {n: __invQty(r.orderQty) + ' ' + unitLabel(r.unit)}))) : '')
+      + (r.p.supplierName ? R(tr('supplierInfo'), escapeHtml(r.p.supplierName + (r.p.supplierPhone ? ' · ' + r.p.supplierPhone : ''))) : '')
+      + (r.expText ? R(tr('expiryDate'), escapeHtml(r.expText)) : '')
+      + '</div>';
+  }
+  return h;
+}
+function __invListHtml(D){
+  const mode = __invMode(), list = __invFiltered(D);
+  const shown = list.slice(0, __inv.limit);
+  let h = shown.length ? shown.map(r=>__invRowHtml(r, D, mode)).join('') : '<div class="inv-empty">' + escapeHtml(tr('noData')) + '</div>';
+  if(list.length > shown.length) h += '<button type="button" class="inv-more" id="inv-more">' + escapeHtml(__invT('invShowMore', {n: Math.min(60, list.length - shown.length)})) + '</button>';
+  return {html: h, count: list.length};
+}
+function __invShareText(D){
+  const list = __invFiltered(D);
+  const shop = state.settings.businessName || 'Savdo Pos';
+  const lines = [shop + ' — ' + tr('invShare') + ' (' + new Date().toLocaleDateString() + ')', ''];
+  const groups = {};
+  list.forEach(r=>{ const k = (r.p.supplierName || '').trim(); (groups[k] = groups[k] || []).push(r); });
+  let n = 0;
+  Object.keys(groups).sort((a,b)=>(a ? 0 : 1) - (b ? 0 : 1) || a.localeCompare(b)).forEach(k=>{
+    if(k) lines.push(tr('supplierInfo') + ': ' + k + (groups[k][0].p.supplierPhone ? ' (' + groups[k][0].p.supplierPhone + ')' : ''));
+    groups[k].forEach(r=>{ n++; lines.push(n + '. ' + r.name + ' — ' + tr('invLeft') + ' ' + __invQty(r.stock) + ' ' + unitLabel(r.unit) + (r.orderQty > 0 ? ', ' + __invT('invOrderQty', {n: __invQty(r.orderQty) + ' ' + unitLabel(r.unit)}) : '')); });
+    lines.push('');
+  });
+  if(list.some(r=>r.orderQty > 0)) lines.push(tr('invOrderNote'));
+  return lines.join('\n').trim();
+}
+async function __invShare(D){
+  const text = __invShareText(D), title = (state.settings.businessName || 'Savdo Pos') + ' — ' + tr('invShare');
+  try{ if(isNativeApp() && await shareTextNative(title, text)) return; }catch(e){}
+  try{ if(navigator.share){ await navigator.share({title, text}); return; } }catch(e){ if(e && e.name === 'AbortError') return; }
+  try{ await navigator.clipboard.writeText(text); showToast(tr('copied')); return; }catch(e){}
+  try{ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast(tr('copied')); }catch(e){}
+}
+function __invRender(container){
+  const D = __invData(), mode = __invMode(), T = __invTotals(D.rows, mode);
+  const cnt = {all: D.rows.length, out: 0, low: 0, exp: 0, soon: 0, idle: 0};
+  let idleCost = 0;
+  D.rows.forEach(r=>{ if(r.status === 'out') cnt.out++; else if(r.status === 'low') cnt.low++; if(r.expStatus) cnt.exp++;
+    if(r.daysLeft != null && r.daysLeft <= 7) cnt.soon++;
+    if(D.hasHist && r.stock > 0 && r.sold <= 0){ cnt.idle++; idleCost += r.stock * r.cost; } });
+  const pr = T.v > 0 ? Math.max(0, Math.min(100, T.c / T.v * 100)) : 0;
+  const other = mode === 'w' ? T.vR : T.vW;
+  const notes = [];
+  if(mode === 'w' && T.noWh > 0) notes.push(__invT('invNoWholesale', {n: T.noWh}));
+  if(T.noCost > 0) notes.push(__invT('invNoCost', {n: T.noCost}));
+  const tile = (f, cls, ic, n, l)=>'<button type="button" class="inv-tile ' + cls + (__inv.filter === f && f !== 'all' ? ' on' : '') + '" data-inv-f="' + f + '" aria-pressed="' + (__inv.filter === f ? 'true' : 'false') + '"><span class="ic">' + ic + '</span><span class="tx"><span class="n">' + __invNum(n) + '</span><span class="l">' + escapeHtml(l) + '</span></span></button>';
+  // tez tugaydiganlar
+  const soonList = D.rows.filter(r=>r.daysLeft != null && r.daysLeft <= 7).sort((a,b)=>a.daysLeft - b.daysLeft).slice(0, 5);
+  const idleList = D.hasHist ? D.rows.filter(r=>r.stock > 0 && r.sold <= 0).sort((a,b)=>b.stock * b.cost - a.stock * a.cost).slice(0, 3) : [];
+  // kategoriyalar
+  const cats = {}; D.rows.forEach(r=>{ const q = Math.max(0, r.stock); if(q <= 0) return; const k = r.cat || ''; cats[k] = (cats[k] || 0) + q * __invPrice(r, mode); });
+  let catArr = Object.keys(cats).map(k=>({k, v: cats[k]})).filter(x=>x.v > 0).sort((a,b)=>b.v - a.v);
+  if(catArr.length > 6){ const rest = catArr.slice(5).reduce((a,x)=>a + x.v, 0); catArr = catArr.slice(0, 5).concat([{k: '\u0000', v: rest}]); }
+  const catMax = catArr.length ? catArr[0].v : 1;
+  let insights = '';
+  if(D.hasHist){
+    insights += '<div class="inv-card"><div class="inv-ct"><div><h4>⏳ ' + escapeHtml(tr('invSoon')) + '</h4><small>' + escapeHtml(__invT('invSoonNote', {d: D.histDays})) + '</small></div>' + (cnt.soon ? '<button type="button" class="inv-link" data-inv-f="soon">' + escapeHtml(tr('invSeeAll')) + '</button>' : '') + '</div>'
+      + (soonList.length ? soonList.map(r=>'<div class="inv-li"><div class="nm">' + escapeHtml(r.name) + '<small>' + escapeHtml(tr('invLeft') + ' ' + __invQty(r.stock) + ' ' + unitLabel(r.unit) + (r.orderQty > 0 ? ' · ' + __invT('invOrderQty', {n: __invQty(r.orderQty)}) : '')) + '</small></div><span class="inv-pill ' + (r.daysLeft < 3 ? 'red' : 'amber') + '">' + escapeHtml(__invDaysTxt(r)) + '</span></div>').join('') : '<div class="inv-li"><div class="nm" style="font-weight:600;color:var(--ink-soft);">' + escapeHtml(tr('invAllGood')) + '</div></div>')
+      + '</div>';
+    insights += '<div class="inv-card"><div class="inv-ct"><div><h4>🧊 ' + escapeHtml(__invT('invIdleTitle', {d: D.histDays})) + '</h4><small>' + escapeHtml(__invT('invIdleText', {n: cnt.idle})) + '</small></div>' + (cnt.idle ? '<button type="button" class="inv-link" data-inv-f="idle">' + escapeHtml(tr('invSeeAll')) + '</button>' : '') + '</div>'
+      + '<div class="inv-big">' + fmt(idleCost) + '</div>'
+      + idleList.map(r=>'<div class="inv-li"><div class="nm">' + escapeHtml(r.name) + '<small>' + escapeHtml(tr('invLastSold') + ': ' + (r.last ? new Date(r.last).toLocaleDateString() : tr('invNever'))) + '</small></div><span class="inv-pill gray">' + escapeHtml(fmt(r.stock * r.cost)) + '</span></div>').join('')
+      + '</div>';
+    if(D.revTot > 0) insights += '<div class="inv-card"><div class="inv-ct"><div><h4>📊 ' + escapeHtml(tr('invAbcTitle')) + '</h4><small>' + escapeHtml(__invT('invAbcNote', {d: D.histDays})) + '</small></div></div>'
+      + '<div class="inv-abc"><div class="A"><b>A · ' + D.abc.A + '</b><span>' + escapeHtml(tr('invAbcA')) + '</span></div><div class="B"><b>B · ' + D.abc.B + '</b><span>' + escapeHtml(tr('invAbcB')) + '</span></div><div class="C"><b>C · ' + D.abc.C + '</b><span>' + escapeHtml(tr('invAbcC')) + '</span></div></div></div>';
+  } else if(D.rows.length){
+    insights += '<p class="inv-note">' + escapeHtml(tr('invNoHistory')) + '</p>';
+  }
+  if(catArr.length > 1) insights += '<div class="inv-card"><div class="inv-ct"><div><h4>🗂 ' + escapeHtml(tr('invByCat')) + '</h4><small>' + escapeHtml(tr(mode === 'w' ? 'invWholesale' : 'invRetail')) + '</small></div></div>'
+    + catArr.map(x=>{ const nm = x.k === '\u0000' ? tr('invOthers') : (x.k || tr('invNoCat')); const pc = T.v > 0 ? Math.round(x.v / T.v * 100) : 0;
+        return '<div class="inv-cat"><div class="row1"><span>' + escapeHtml(nm) + '</span><span>' + escapeHtml(fmt(x.v)) + ' · ' + pc + '%</span></div><div class="bar"><i style="width:' + Math.max(2, x.v / catMax * 100).toFixed(1) + '%"></i></div></div>'; }).join('')
+    + '</div>';
+  const sortOpts = [['value','invSortValue'],['stock','invSortStock'],['soon','invSortSoon'],['profit','invSortProfit'],['name','invSortName']].filter(o=>o[0] !== 'soon' || D.hasHist);
+  const chips = [['all','invAllChip',cnt.all],['out','invOut',cnt.out],['low','invLow',cnt.low]].concat(D.hasHist ? [['soon','invSoon',cnt.soon],['idle','invIdle',cnt.idle]] : []).concat(cnt.exp ? [['exp','invExp',cnt.exp]] : []);
+  if(!chips.some(c=>c[0] === __inv.filter)) __inv.filter = 'all';
+  if(!sortOpts.some(o=>o[0] === __inv.sort)) __inv.sort = 'value';
+  const L = __invListHtml(D);
+  const canShare = ['out','low','soon'].indexOf(__inv.filter) !== -1 && L.count > 0;
+  container.innerHTML = reportsBackHeader(tr('inventoryReport'))
+    + '<div class="inv-hero">'
+    + '<div class="inv-seg" role="group"><button type="button" data-inv-m="r" class="' + (mode === 'r' ? 'on' : '') + '" aria-pressed="' + (mode === 'r') + '">' + escapeHtml(tr('retailModeShort')) + '</button><button type="button" data-inv-m="w" class="' + (mode === 'w' ? 'on' : '') + '" aria-pressed="' + (mode === 'w') + '">' + escapeHtml(tr('wholesaleModeShort')) + '</button></div>'
+    + '<div class="inv-hl">' + escapeHtml(tr('invValue') + ' · ' + tr(mode === 'w' ? 'invWholesale' : 'invRetail').toLowerCase()) + '</div>'
+    + '<div class="inv-hv" id="inv-total">' + fmt(T.v) + '</div>'
+    + '<div class="inv-hs">' + escapeHtml(tr(mode === 'w' ? 'invRetail' : 'invWholesale') + ': ' + fmt(other)) + '</div>'
+    + '<div class="inv-hg"><div><span>' + escapeHtml(tr('invCost')) + '</span><b>' + fmt(T.c) + '</b></div><div><span>' + escapeHtml(tr('invProfit')) + '</span><b>' + fmt(T.profit) + '</b></div>'
+    + '<div class="wide"><span>' + escapeHtml(tr('invMarkup')) + '</span><b>' + (T.markup == null ? '—' : ((T.markup >= 0 ? '+' : '') + Math.round(T.markup) + '%')) + '</b></div></div>'
+    + '<div class="inv-split" aria-hidden="true"><i style="width:' + pr.toFixed(1) + '%"></i><i style="width:' + (100 - pr).toFixed(1) + '%"></i></div>'
+    + '<div class="inv-legend"><em>' + escapeHtml(tr('invCost')) + ' ' + Math.round(pr) + '%</em><em>' + escapeHtml(tr('invProfit')) + ' ' + Math.round(100 - pr) + '%</em></div>'
+    + '</div>'
+    + notes.map(n=>'<p class="inv-note">' + escapeHtml(n) + '</p>').join('')
+    + '<div class="inv-tiles">'
+    + tile('all', 't-all', ICONS.box || '▦', cnt.all, tr('invAll'))
+    + tile('out', 't-out', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>', cnt.out, tr('invOut'))
+    + tile('low', 't-low', '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l6 6 4-4 8 8"/><path d="M21 11v6h-6"/></svg>', cnt.low, tr('invLow'))
+    + tile('exp', 't-exp', ICONS.calendar || '⌛', cnt.exp, tr('invExp'))
+    + '</div>'
+    + (insights ? '<div class="inv-cols">' + insights + '</div>' : '')
+    + '<div class="inv-tools" id="inv-tools">'
+    + '<div class="inv-search">' + (ICONS.search || '') + '<input type="search" id="inv-q" autocomplete="off" placeholder="' + escapeHtml(tr('invSearch')) + '" value="' + escapeHtml(__inv.q) + '"></div>'
+    + '<div class="inv-chips">' + chips.map(c=>'<button type="button" class="inv-chip' + (__inv.filter === c[0] ? ' on' : '') + '" data-inv-f="' + c[0] + '">' + escapeHtml(tr(c[1])) + ' · ' + __invNum(c[2]) + '</button>').join('') + '</div>'
+    + '<div class="inv-sortrow"><select id="inv-sort" aria-label="sort">' + sortOpts.map(o=>'<option value="' + o[0] + '"' + (__inv.sort === o[0] ? ' selected' : '') + '>' + escapeHtml(tr(o[1])) + '</option>').join('') + '</select>'
+    + (canShare ? '<button type="button" class="inv-share" id="inv-share">' + (ICONS.share || '') + escapeHtml(tr('invShare')) + '</button>' : '<span class="inv-count" id="inv-count">' + escapeHtml(__invT('invShown', {n: __invNum(L.count)})) + '</span>') + '</div>'
+    + '</div>'
+    + '<div id="inv-list">' + L.html + '</div>';
+  bindReportsBack();
+  const rerender = (keepScroll)=>{ const sc = document.getElementById('view-container'); const y = sc ? sc.scrollTop : 0; __invRender(container); if(keepScroll && sc) sc.scrollTop = y; };
+  const toList = ()=>{ const t = document.getElementById('inv-tools'); if(t && t.scrollIntoView) try{ t.scrollIntoView({block:'start', behavior:'smooth'}); }catch(e){ t.scrollIntoView(); } };
+  container.querySelectorAll('[data-inv-m]').forEach(b=>b.addEventListener('click', ()=>{ if(__invMode() === b.dataset.invM) return; __invSetMode(b.dataset.invM); rerender(true); }));
+  container.querySelectorAll('[data-inv-f]').forEach(b=>b.addEventListener('click', ()=>{
+    const f = b.dataset.invF; const fromTile = !b.classList.contains('inv-chip');
+    __inv.filter = (__inv.filter === f && fromTile && f !== 'all') ? 'all' : f; __inv.limit = 60;
+    if((f === 'soon' || f === 'out' || f === 'low') && D.hasHist) __inv.sort = 'soon';   /* eng zarurlari tepada */
+    rerender(true); if(fromTile) toList();
+  }));
+  const sel = document.getElementById('inv-sort'); if(sel) sel.addEventListener('change', ()=>{ __inv.sort = sel.value; __inv.limit = 60; const L2 = __invListHtml(D); document.getElementById('inv-list').innerHTML = L2.html; bindList(); });
+  const sh = document.getElementById('inv-share'); if(sh) sh.addEventListener('click', ()=>__invShare(D));
+  const qi = document.getElementById('inv-q');
+  if(qi) qi.addEventListener('input', ()=>{ __inv.q = qi.value; __inv.limit = 60; const L2 = __invListHtml(D); document.getElementById('inv-list').innerHTML = L2.html; const c = document.getElementById('inv-count'); if(c) c.textContent = __invT('invShown', {n: __invNum(L2.count)}); bindList(); });
+  function bindList(){
+    const box = document.getElementById('inv-list'); if(!box || box.__invBound) return; box.__invBound = true;
+    box.addEventListener('click', (e)=>{
+      const more = e.target.closest && e.target.closest('#inv-more');
+      if(more){ __inv.limit += 60; box.innerHTML = __invListHtml(D).html; return; }
+      const row = e.target.closest && e.target.closest('[data-inv-k]'); if(!row || !box.contains(row)) return;
+      const k = row.getAttribute('data-inv-k'); __inv.open[k] = !__inv.open[k];
+      const r = D.rows.find(x=>x.key === k); if(!r) return;
+      const tmp = document.createElement('div'); tmp.innerHTML = __invRowHtml(r, D, __invMode());
+      const next = row.nextElementSibling; if(next && next.classList.contains('inv-det')) next.remove();
+      row.replaceWith(...Array.from(tmp.childNodes));
+    });
+  }
+  bindList();
+}
 function renderCustomers(){
   const container = document.getElementById('view-container');
   const branchCustomers = activeCustomers();
@@ -14644,6 +15141,7 @@ function renderReportsCategory(container, cat){
     return;
   }
   if(cat==='inventory'){
+    if(typeof __invRender === 'function'){ try{ __invRender(container); return; }catch(e){ try{ console.error('fix119-inv', e); }catch(_e){} } }   /* fix119-inv: yangi hisobot; xato bo'lsa pastdagi eski hisobot */
     const now = new Date();
     function expiryInfo(expiryDate){
       let expiryStatus = null, expiryColor = 'var(--ink-faint)', expiryText = tr('noExpiry');
