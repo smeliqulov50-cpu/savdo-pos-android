@@ -190,3 +190,71 @@ exports.sharedDebtBackfill = onSchedule({ schedule: 'every 60 minutes', timeZone
     if (!st.skipped) console.log('sharedDebtBackfill', JSON.stringify(st));
   } catch (e) { console.error('sharedDebtBackfill xatosi', e); }
 });
+
+/* ---------- fix120-tg: Telegram bot — ega uchun hisobotlar (1-bosqich: ulash / uzish) ----------
+   Token faqat Secret Manager'da (TELEGRAM_BOT_TOKEN). Kodda, ilovada va repoda yo'q.
+   Yuklash:  SAVDO_PUSH_ONLY=1 SAVDO_TG=1 firebase deploy --only functions:telegramApi,functions:telegramWebhook
+   Token o'rnatilmagan bo'lsa ikkala funksiya ham hech narsa yubormaydi (bot o'chiq). */
+const __TG = require('./src/telegram/core');
+const { makeTg: __makeTg } = require('./src/telegram/tgApi');
+const __TG_SECRET = (PUSH_ONLY && process.env.SAVDO_TG !== '1') ? null : defineSecret('TELEGRAM_BOT_TOKEN');
+const __tgSecrets = __TG_SECRET ? [__TG_SECRET] : [];
+function __tgToken() {
+  try { const v = __TG_SECRET ? __TG_SECRET.value() : ''; if (v) return String(v).trim(); } catch (e) {}
+  return String(process.env.TELEGRAM_BOT_TOKEN || '').trim();
+}
+let __tgCache = null;
+async function __tgDeps() {
+  const token = __tgToken();
+  const base = { db: __fbAdmin.firestore(), nowMs: nowMs };
+  if (!token) return Object.assign(base, { key: null });
+  if (!__tgCache || __tgCache.token !== token) __tgCache = { token: token, key: __TG.keyFromToken(token), tg: __makeTg(token), botName: '' };
+  if (!__tgCache.botName) {
+    try { const me = await __tgCache.tg('getMe', {}); __tgCache.botName = (me && me.username) || ''; }
+    catch (e) { console.error('telegram getMe xatosi', e && e.message); }
+  }
+  return Object.assign(base, { key: __tgCache.key, tg: __tgCache.tg, botName: __tgCache.botName });
+}
+function __tgProjectId() {
+  try { const c = JSON.parse(process.env.FIREBASE_CONFIG || '{}'); if (c.projectId) return c.projectId; } catch (e) {}
+  return process.env.GCLOUD_PROJECT || process.env.GOOGLE_CLOUD_PROJECT || '';
+}
+function __tgWebhookUrl() { return 'https://us-central1-' + __tgProjectId() + '.cloudfunctions.net/telegramWebhook'; }
+
+/* Ilova: status / link / unlink. Firebase ID token bilan (sharedDebts bilan bir xil tekshiruv). */
+exports.telegramApi = onRequest({ cors: true, secrets: __tgSecrets }, async function (req, res) {
+  try {
+    if (req.method !== 'POST') { res.status(405).json({ ok: false, code: 'method-not-allowed' }); return; }
+    const m = /^Bearer\s+(.+)$/i.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    let decoded;
+    try { decoded = await __fbAdmin.auth().verifyIdToken(m[1]); }
+    catch (e) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    const out = await __TG.handleApi(await __tgDeps(), decoded.uid, req.body || {});
+    res.status(out.status || 200).json(out.body);
+  } catch (e) {
+    console.error('telegramApi xatosi', e && e.message);
+    res.status(500).json({ ok: false, code: 'internal' });
+  }
+});
+
+/* Telegram serveri chaqiradi. Sirli sarlavha (X-Telegram-Bot-Api-Secret-Token) tokendan hisoblanadi — boshqa hech kim yubora olmaydi.
+   GET ?setup=1 — webhook manzilini o'rnatadi (yuklashdan keyin bir marta; qayta chaqirish xavfsiz). */
+exports.telegramWebhook = onRequest({ secrets: __tgSecrets }, async function (req, res) {
+  let deps;
+  try { deps = await __tgDeps(); } catch (e) { console.error('telegramWebhook deps', e && e.message); res.status(200).json({ ok: false }); return; }
+  if (req.method === 'GET') {
+    if (!(req.query && req.query.setup === '1')) { res.status(200).send('ok'); return; }
+    if (!deps.key) { res.status(503).json({ ok: false, code: 'no_token' }); return; }
+    try { const r = await __TG.setupWebhook(deps, __tgWebhookUrl()); res.status(200).json(Object.assign({ ok: true }, r)); }
+    catch (e) { res.status(502).json({ ok: false, code: 'tg_error', message: String((e && e.message) || '').slice(0, 200) }); }
+    return;
+  }
+  if (req.method !== 'POST') { res.status(405).end(); return; }
+  if (!deps.key || req.get('X-Telegram-Bot-Api-Secret-Token') !== __TG.webhookSecret(deps.key)) { res.status(401).end(); return; }
+  try {
+    const r = await __TG.handleUpdate(deps, req.body || {});
+    if (r && (r.linked || r.stopped || r.blocked)) console.log('telegramWebhook', JSON.stringify({ linked: !!r.linked, stopped: r.stopped || 0, blocked: !!r.blocked }));
+  } catch (e) { console.error('telegramWebhook xatosi', e && e.message); }
+  res.status(200).json({ ok: true });   // Telegram qayta-qayta yubormasligi uchun har doim 200
+});

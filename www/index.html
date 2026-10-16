@@ -606,6 +606,37 @@
     .inv-cols .inv-card{margin-bottom:0;}
     .inv-sortrow select{flex:0 1 340px;}
   }
+  /* fix120-tg */
+  .tg-card{padding:14px;margin-bottom:12px;}
+  .tg-hd{display:flex;align-items:center;gap:12px;}
+  .tg-lg{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#2AABEE,#229ED9);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;}
+  .tg-lg svg{width:22px;height:22px;}
+  .tg-ht{flex:1;min-width:0;}
+  .tg-bd{flex-shrink:0;font-size:11.5px;font-weight:800;border-radius:999px;padding:4px 10px;white-space:nowrap;}
+  .tg-bd.on{background:#DCFCE7;color:#166534;} .tg-bd.off{background:#EEF2F8;color:var(--ink-soft);}
+  .tg-body{margin-top:12px;}
+  .tg-msg{font-size:12.5px;color:var(--ink-soft);line-height:1.4;margin:0 0 10px;}
+  .tg-msg.err{color:var(--danger);font-weight:700;}
+  .tg-chat{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);}
+  .tg-chat:first-child{border-top:none;}
+  .tg-av{width:34px;height:34px;border-radius:50%;background:#E0F2FE;color:#0369A1;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .tg-cn{flex:1;min-width:0;}
+  .tg-cn b{display:block;font-size:13.5px;color:var(--ink);overflow-wrap:anywhere;line-height:1.3;}
+  .tg-cn small{display:block;font-size:11.5px;color:var(--ink-faint);line-height:1.35;overflow-wrap:anywhere;}
+  .tg-un{flex-shrink:0;border:1px solid #FECACA;background:#FEF2F2;color:#B91C1C;font:800 12.5px var(--font-ui);border-radius:10px;padding:8px 12px;cursor:pointer;}
+  .tg-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;border-radius:14px;padding:13px 14px;font:800 14px var(--font-ui);color:#fff;background:linear-gradient(135deg,#2AABEE,#229ED9);cursor:pointer;margin-top:4px;}
+  .tg-btn svg{width:18px;height:18px;flex-shrink:0;}
+  .tg-btn[disabled]{opacity:.6;}
+  .tg-btn2{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);background:#fff;color:var(--ink);font:800 12.5px var(--font-ui);border-radius:10px;padding:8px 12px;cursor:pointer;}
+  .tg-link{background:#F0F9FF;border:1px solid #BAE6FD;border-radius:14px;padding:12px;margin:4px 0 10px;}
+  .tg-link p{margin:0 0 8px;font-size:12.5px;line-height:1.4;color:var(--ink);}
+  .tg-code{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#fff;border:1px dashed #7DD3FC;border-radius:12px;padding:9px 10px;margin-bottom:8px;}
+  .tg-code code{flex:1 1 auto;min-width:0;font:800 14px ui-monospace,Menlo,Consolas,monospace;color:#0C4A6E;white-space:nowrap;}
+  .tg-cancel{border:none;background:none;color:var(--ink-soft);font:700 12.5px var(--font-ui);text-decoration:underline;cursor:pointer;padding:6px 0 0;}
+  .tg-wait{font-size:12px;color:#0369A1;font-weight:700;display:flex;align-items:center;gap:6px;}
+  .tg-wait::before{content:"";width:8px;height:8px;border-radius:50%;background:#38BDF8;animation:tgPulse 1.2s infinite;}
+  @keyframes tgPulse{0%,100%{opacity:.25}50%{opacity:1}}
+  .tg-row2{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
 </style>
 </head>
 <body>
@@ -1565,6 +1596,33 @@ const T = {
   invStockValue:{uz:"Qoldiq qiymati",ru:"Стоимость остатка",en:"Stock value",kk:"Қалдық құны",ky:"Калдыктын наркы",tg:"Арзиши бақия"},
   invAllGood:{uz:"Hammasi joyida: tugagan yoki kam qolgan mahsulot yo'q.",ru:"Всё в порядке: нет закончившихся и заканчивающихся товаров.",en:"All good: nothing is out of stock or running low.",kk:"Бәрі дұрыс: таусылған не аз қалған тауар жоқ.",ky:"Баары жайында: түгөнгөн же аз калган товар жок.",tg:"Ҳама хуб: моли тамомшуда ё камманда нест."},
   invNoHistory:{uz:"Sotuv tarixi ko'paygach (kamida 7 kun) bu yerda qachon nima tugashi va qaysi mahsulot sotilmayotgani ko'rsatiladi.",ru:"Когда накопится история продаж (минимум 7 дней), здесь появится прогноз окончания товаров и список товаров без продаж.",en:"Once there are at least 7 days of sales, this will show when products run out and which ones aren't selling.",kk:"Сату тарихы жиналғанда (кемінде 7 күн) мұнда тауарлардың қашан таусылатыны және қайсысы сатылмай жатқаны көрсетіледі.",ky:"Сатуу тарыхы топтолгондо (кеминде 7 күн) бул жерде товарлар качан түгөнөрү жана кайсынысы сатылбай жатканы көрсөтүлөт.",tg:"Вақте таърихи фурӯш ҷамъ шавад (камаш 7 рӯз), дар ин ҷо пешгӯии тамомшавии мол ва рӯйхати моли фурӯхтанашуда пайдо мешавад."},
+  /* fix120-tg */
+  tgTitle:{uz:"Telegram bot",ru:"Telegram-бот",en:"Telegram bot",kk:"Telegram бот",ky:"Telegram бот",tg:"Telegram-бот"},
+  tgSub:{uz:"Do'kon hisobotlari va ogohlantirishlar Telegram'ga keladi",ru:"Отчёты и предупреждения магазина приходят в Telegram",en:"Shop reports and alerts come to Telegram",kk:"Дүкен есептері мен ескертулер Telegram-ға келеді",ky:"Дүкөндүн отчёттору жана эскертүүлөр Telegram'га келет",tg:"Ҳисоботҳо ва огоҳиҳои мағоза ба Telegram меоянд"},
+  tgOn:{uz:"Ulangan",ru:"Подключён",en:"Connected",kk:"Қосылған",ky:"Туташкан",tg:"Пайваст"},
+  tgOff:{uz:"Ulanmagan",ru:"Не подключён",en:"Not connected",kk:"Қосылмаған",ky:"Туташкан эмес",tg:"Пайваст нест"},
+  tgConnect:{uz:"Telegram'ga ulash",ru:"Подключить Telegram",en:"Connect Telegram",kk:"Telegram-ды қосу",ky:"Telegram'ды туташтыруу",tg:"Пайваст кардани Telegram"},
+  tgDisconnect:{uz:"Uzish",ru:"Отключить",en:"Disconnect",kk:"Ажырату",ky:"Ажыратуу",tg:"Ҷудо кардан"},
+  tgDisconnectQ:{uz:"«{name}» Telegram'dan uzilsinmi? Unga endi xabar bormaydi.",ru:"Отключить «{name}»? Сообщения туда больше не будут приходить.",en:"Disconnect “{name}”? Messages will no longer be sent there.",kk:"«{name}» ажыратылсын ба? Оған енді хабар бармайды.",ky:"«{name}» ажыратылсынбы? Ага мындан ары билдирүү барбайт.",tg:"«{name}» ҷудо карда шавад? Дигар ба он ҷо паём намеравад."},
+  tgOpened:{uz:"Telegram ochiladi: botda «Start» (Boshlash) tugmasini bosing.",ru:"Откроется Telegram: нажмите в боте «Start» (Запустить).",en:"Telegram will open: tap “Start” in the bot.",kk:"Telegram ашылады: боттағы «Start» түймесін басыңыз.",ky:"Telegram ачылат: боттогу «Start» баскычын басыңыз.",tg:"Telegram кушода мешавад: дар бот «Start»-ро пахш кунед."},
+  tgOpenWeb:{uz:"«Telegram'ni ochish» tugmasini bosing, so'ng botda «Start» (Boshlash) tugmasini bosing.",ru:"Нажмите «Открыть Telegram», затем в боте нажмите «Start» (Запустить).",en:"Tap “Open Telegram”, then tap “Start” in the bot.",kk:"«Telegram-ды ашу» түймесін басыңыз, содан кейін боттағы «Start» түймесін басыңыз.",ky:"«Telegram'ды ачуу» баскычын басыңыз, андан кийин боттогу «Start» баскычын басыңыз.",tg:"«Кушодани Telegram»-ро пахш кунед, баъд дар бот «Start»-ро пахш кунед."},
+  tgManual:{uz:"Telegram ochilmasa yoki boshqa telefonda ulamoqchi bo'lsangiz: Telegram'da {bot} ni toping va shu xabarni yuboring:",ru:"Если Telegram не открылся или нужно подключить другой телефон: найдите в Telegram {bot} и отправьте это сообщение:",en:"If Telegram didn't open, or to connect another phone: find {bot} in Telegram and send this message:",kk:"Telegram ашылмаса немесе басқа телефонды қосу үшін: Telegram-да {bot} табыңыз да, мына хабарды жіберіңіз:",ky:"Telegram ачылбаса же башка телефонду туташтыруу үчүн: Telegram'да {bot} таап, бул билдирүүнү жөнөтүңүз:",tg:"Агар Telegram кушода нашуд ё телефони дигарро пайваст кардан хоҳед: дар Telegram {bot}-ро ёбед ва ин паёмро фиристед:"},
+  tgCodeValid:{uz:"Kod 15 daqiqa va faqat bir marta amal qiladi.",ru:"Код действует 15 минут и только один раз.",en:"The code works once and for 15 minutes.",kk:"Код 15 минут және тек бір рет жарамды.",ky:"Код 15 мүнөт жана бир гана жолу жарактуу.",tg:"Код 15 дақиқа ва танҳо як маротиба эътибор дорад."},
+  tgCopy:{uz:"Nusxalash",ru:"Копировать",en:"Copy",kk:"Көшіру",ky:"Көчүрүү",tg:"Нусха бардоштан"},
+  tgOpenAgain:{uz:"Telegram'ni ochish",ru:"Открыть Telegram",en:"Open Telegram",kk:"Telegram-ды ашу",ky:"Telegram'ды ачуу",tg:"Кушодани Telegram"},
+  tgWaiting:{uz:"Ulanish kutilmoqda…",ru:"Ожидание подключения…",en:"Waiting for connection…",kk:"Қосылу күтілуде…",ky:"Туташуу күтүлүүдө…",tg:"Интизори пайвастшавӣ…"},
+  tgLinkedToast:{uz:"✅ Telegram ulandi",ru:"✅ Telegram подключён",en:"✅ Telegram connected",kk:"✅ Telegram қосылды",ky:"✅ Telegram туташты",tg:"✅ Telegram пайваст шуд"},
+  tgUnlinkedToast:{uz:"Telegram uzildi",ru:"Telegram отключён",en:"Telegram disconnected",kk:"Telegram ажыратылды",ky:"Telegram ажыратылды",tg:"Telegram ҷудо шуд"},
+  tgChatsCount:{uz:"{n} / {max} ta chat ulangan",ru:"Подключено чатов: {n} из {max}",en:"{n} of {max} chats connected",kk:"{n} / {max} чат қосылған",ky:"{n} / {max} чат туташкан",tg:"{n} аз {max} чат пайваст"},
+  tgLimit:{uz:"3 ta chat ulangan. Yangisini ulash uchun bittasini uzing.",ru:"Подключено 3 чата. Чтобы добавить новый, отключите один.",en:"3 chats are connected. Disconnect one to add another.",kk:"3 чат қосылған. Жаңасын қосу үшін біреуін ажыратыңыз.",ky:"3 чат туташкан. Жаңысын кошуу үчүн бирөөсүн ажыратыңыз.",tg:"3 чат пайваст аст. Барои иловаи нав яктоашро ҷудо кунед."},
+  tgOffline:{uz:"Internet yo'q. Telegram sozlamalari uchun internet kerak.",ru:"Нет интернета. Для настроек Telegram нужен интернет.",en:"No internet. Telegram settings need an internet connection.",kk:"Интернет жоқ. Telegram баптаулары үшін интернет керек.",ky:"Интернет жок. Telegram жөндөөлөрү үчүн интернет керек.",tg:"Интернет нест. Барои танзимоти Telegram интернет лозим аст."},
+  tgError:{uz:"Server bilan bog'lanib bo'lmadi. Qayta urinib ko'ring.",ru:"Не удалось связаться с сервером. Попробуйте ещё раз.",en:"Couldn't reach the server. Please try again.",kk:"Сервермен байланысу мүмкін болмады. Қайталап көріңіз.",ky:"Сервер менен байланышуу мүмкүн болбоду. Кайра аракет кылыңыз.",tg:"Бо сервер пайваст шуда натавонист. Боз кӯшиш кунед."},
+  tgNotReady:{uz:"Bot hali sozlanmagan.",ru:"Бот ещё не настроен.",en:"The bot isn't set up yet.",kk:"Бот әлі бапталмаған.",ky:"Бот азырынча жөндөлгөн эмес.",tg:"Бот ҳанӯз танзим нашудааст."},
+  tgRetry:{uz:"Qayta urinish",ru:"Повторить",en:"Retry",kk:"Қайталау",ky:"Кайталоо",tg:"Такрор"},
+  tgOwnerOnly:{uz:"Telegram'ni faqat do'kon egasi o'z akkauntidan ulay oladi.",ru:"Подключить Telegram может только владелец магазина со своего аккаунта.",en:"Only the shop owner can connect Telegram, from the owner's account.",kk:"Telegram-ды тек дүкен иесі өз аккаунтынан қоса алады.",ky:"Telegram'ды дүкөн ээси гана өз аккаунтунан туташтыра алат.",tg:"Telegram-ро танҳо соҳиби мағоза аз аккаунти худ пайваст карда метавонад."},
+  tgLoginNeeded:{uz:"Telegram'ni ulash uchun akkauntga kiring (Sozlamalar → Akkaunt).",ru:"Чтобы подключить Telegram, войдите в аккаунт (Настройки → Аккаунт).",en:"Sign in to your account to connect Telegram (Settings → Account).",kk:"Telegram-ды қосу үшін аккаунтқа кіріңіз (Баптаулар → Аккаунт).",ky:"Telegram'ды туташтыруу үчүн аккаунтка кириңиз (Жөндөөлөр → Аккаунт).",tg:"Барои пайваст кардани Telegram ба аккаунт ворид шавед (Танзимот → Аккаунт)."},
+  tgSoon:{uz:"Qaysi xabarlar kelishini (kunlik hisobot, smena yopilishi, kam qolgan tovar, ogohlantirishlar) keyingi yangilanishda shu yerda tanlaysiz. Hozircha bot faqat ulanganini tasdiqlaydi.",ru:"Какие сообщения получать (ежедневный отчёт, закрытие смены, мало товара, предупреждения), вы выберете здесь в следующем обновлении. Пока бот только подтверждает подключение.",en:"You'll choose which messages to get (daily report, shift close, low stock, alerts) here in the next update. For now the bot only confirms the connection.",kk:"Қандай хабарлар келетінін (күнделікті есеп, ауысымның жабылуы, аз қалған тауар, ескертулер) келесі жаңартуда осында таңдайсыз. Әзірге бот тек қосылғанын растайды.",ky:"Кайсы билдирүүлөр келерин (күндөлүк отчёт, сменанын жабылышы, аз калган товар, эскертүүлөр) кийинки жаңыртууда ушул жерден тандайсыз. Азырынча бот туташканын гана ырастайт.",tg:"Кадом паёмҳо ояд (ҳисоботи рӯзона, бастани баст, моли кам, огоҳиҳо) — дар навсозии оянда дар ин ҷо интихоб мекунед. Ҳоло бот танҳо пайвастшавиро тасдиқ мекунад."},
+  tgLinkedAt:{uz:"ulangan: {d}",ru:"подключён: {d}",en:"connected: {d}",kk:"қосылған: {d}",ky:"туташкан: {d}",tg:"пайваст: {d}"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3055,7 +3113,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.22';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.23';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -18221,6 +18279,150 @@ function renderSettingsNotifications(container){
   });
 }
 
+/* fix120-tg: Telegram bot — 1-bosqich: ulash / uzish. Token ilovada yo'q; hammasi server (telegramApi) orqali. */
+var TG_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3c.3-1.3-.5-1.8-1.4-1.5L2.9 9.6c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l2.9-14.3zM8.4 12.2l9.6-6c.5-.3.9-.1.5.2l-8.2 7.4-.3 3.4-1.6-5z"/></svg>';
+var __tgS = {busy:false, data:null, err:'', link:null, timer:0, until:0, base:0};
+function __tgOwnerAccount(){ try{ return !!(fbUser && !isStaffAuthSession()); }catch(e){ return false; } }
+function __tgT(k, v){ let t = tr(k); Object.keys(v || {}).forEach(n=>{ t = t.split('{' + n + '}').join(v[n]); }); return t; }
+async function __tgApi(action, payload){
+  if(!fbUser) throw {code: 'login'};
+  if(typeof navigator !== 'undefined' && navigator.onLine === false) throw {code: 'offline'};
+  let token; try{ token = await fbUser.getIdToken(); }catch(e){ throw {code: 'net'}; }
+  const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  const to = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch(e){} }, 20000);
+  try{
+    const resp = await fetch(payFnUrl('telegramApi'), { method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
+      body: JSON.stringify(Object.assign({}, payload || {}, {action: action, lang: state.lang})), signal: ctrl ? ctrl.signal : undefined });
+    let data = null; try{ data = await resp.json(); }catch(e){}
+    if(!data) throw {code: resp.status === 404 ? 'no_server' : 'net'};
+    if(!data.ok) throw {code: data.code || 'internal', status: resp.status};
+    return data;
+  }catch(e){ if(e && e.code) throw e; throw {code: 'net'}; }
+  finally{ clearTimeout(to); }
+}
+function __tgOpen(url){
+  try{ if(isNativeApp()){ window.location.href = url; return; } }catch(e){}
+  try{ const w = window.open(url, '_blank'); if(w) return; }catch(e){}
+  try{ window.location.href = url; }catch(e){}
+}
+async function __tgCopy(text){
+  try{ await navigator.clipboard.writeText(text); showToast(tr('copied')); return; }catch(e){}
+  try{ const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast(tr('copied')); }catch(e){}
+}
+function __tgStopPoll(){ if(__tgS.timer){ clearInterval(__tgS.timer); __tgS.timer = 0; } }
+function __tgRender(){
+  const box = document.getElementById('tg-body'), badge = document.getElementById('tg-badge');
+  if(!box){ __tgStopPoll(); return; }
+  const d = __tgS.data, chats = (d && d.chats) || [], max = (d && d.max) || 3;
+  if(badge){ const on = chats.length > 0; badge.className = 'tg-bd ' + (on ? 'on' : 'off'); badge.textContent = tr(on ? 'tgOn' : 'tgOff'); }
+  let h = '';
+  if(!fbUser){ box.innerHTML = '<p class="tg-msg">' + escapeHtml(tr('tgLoginNeeded')) + '</p>'; return; }
+  if(!__tgOwnerAccount()){ box.innerHTML = '<p class="tg-msg">' + escapeHtml(tr('tgOwnerOnly')) + '</p>'; return; }
+  if(__tgS.busy && !d){ box.innerHTML = '<p class="tg-msg">…</p>'; return; }
+  if(__tgS.err && !d){
+    box.innerHTML = '<p class="tg-msg err">' + escapeHtml(tr(__tgS.err === 'offline' ? 'tgOffline' : 'tgError')) + '</p><button type="button" class="tg-btn2" id="tg-retry">' + escapeHtml(tr('tgRetry')) + '</button>';
+    const rb = document.getElementById('tg-retry'); if(rb) rb.addEventListener('click', ()=>__tgLoad());
+    return;
+  }
+  if(!d) { box.innerHTML = ''; return; }
+  if(!d.configured){ box.innerHTML = '<p class="tg-msg">' + escapeHtml(tr('tgNotReady')) + '</p>'; return; }
+  if(!d.owner){ box.innerHTML = '<p class="tg-msg">' + escapeHtml(tr('tgOwnerOnly')) + '</p>'; return; }
+  if(chats.length){
+    h += '<div>' + chats.map(c=>{
+      const nm = c.name || (c.username ? '@' + c.username : 'Telegram');
+      const sub = [c.username ? '@' + c.username : '', c.at ? __tgT('tgLinkedAt', {d: new Date(c.at).toLocaleDateString()}) : ''].filter(Boolean).join(' · ');
+      return '<div class="tg-chat"><span class="tg-av">' + escapeHtml((nm.replace(/^@/, '')[0] || 'T').toUpperCase()) + '</span><div class="tg-cn"><b>' + escapeHtml(nm) + '</b><small>' + escapeHtml(sub) + '</small></div>'
+        + '<button type="button" class="tg-un" data-tg-un="' + escapeHtml(c.id) + '" data-tg-nm="' + escapeHtml(nm) + '">' + escapeHtml(tr('tgDisconnect')) + '</button></div>';
+    }).join('') + '</div><p class="tg-msg" style="margin-top:6px;">' + escapeHtml(__tgT('tgChatsCount', {n: chats.length, max: max})) + '</p>';
+  }
+  if(__tgS.err) h += '<p class="tg-msg err">' + escapeHtml(tr(__tgS.err === 'offline' ? 'tgOffline' : 'tgError')) + '</p><div class="tg-row2"><button type="button" class="tg-btn2" id="tg-retry">' + escapeHtml(tr('tgRetry')) + '</button></div>';
+  const L = __tgS.link;
+  if(L && L.exp > Date.now()){
+    const bot = '@' + L.bot, cmd = '/start ' + L.code;
+    const nat = (function(){ try{ return isNativeApp(); }catch(e){ return false; } })();
+    h += '<div class="tg-link" id="tg-link"><p>' + escapeHtml(tr(nat ? 'tgOpened' : 'tgOpenWeb')) + '</p>'
+      + '<div class="tg-row2">' + (nat ? '<button type="button" class="tg-btn2" id="tg-open">' + escapeHtml(tr('tgOpenAgain')) + '</button>'
+          : '<a class="tg-btn" id="tg-open" style="text-decoration:none;" href="' + escapeHtml(L.url) + '" target="_blank" rel="noopener">' + TG_SVG + escapeHtml(tr('tgOpenAgain')) + '</a>') + '</div>'
+      + '<p>' + escapeHtml(__tgT('tgManual', {bot: bot})) + '</p>'
+      + '<div class="tg-code"><code id="tg-cmd">' + escapeHtml(cmd) + '</code><button type="button" class="tg-btn2" id="tg-copy">' + escapeHtml(tr('tgCopy')) + '</button></div>'
+      + '<p class="tg-msg" style="margin:0 0 6px;">' + escapeHtml(tr('tgCodeValid')) + '</p>'
+      + '<div class="tg-wait">' + escapeHtml(tr('tgWaiting')) + '</div>'
+      + '<button type="button" class="tg-cancel" id="tg-cancel">' + escapeHtml(tr('cancel')) + '</button></div>';
+  }
+  const pending = !!(L && L.exp > Date.now());
+  if(pending){ /* kod kutilayotganda ikkinchi "ulash" tugmasi ko'rsatilmaydi */ }
+  else if(chats.length < max) h += '<button type="button" class="tg-btn" id="tg-connect"' + (__tgS.busy ? ' disabled' : '') + '>' + TG_SVG + escapeHtml(tr('tgConnect')) + '</button>';
+  else h += '<p class="tg-msg">' + escapeHtml(tr('tgLimit')) + '</p>';
+  h += '<p class="tg-msg" style="margin:10px 0 0;">' + escapeHtml(tr('tgSoon')) + '</p>';
+  box.innerHTML = h;
+  const cb = document.getElementById('tg-connect'); if(cb) cb.addEventListener('click', ()=>__tgConnect());
+  const rb2 = document.getElementById('tg-retry'); if(rb2) rb2.addEventListener('click', ()=>__tgLoad());
+  const ob = document.getElementById('tg-open'); if(ob && L && ob.tagName === 'BUTTON') ob.addEventListener('click', ()=>__tgOpen(L.url));
+  const cp = document.getElementById('tg-copy'); if(cp && L) cp.addEventListener('click', ()=>__tgCopy('/start ' + L.code));
+  const cc = document.getElementById('tg-cancel'); if(cc) cc.addEventListener('click', ()=>{ __tgS.link = null; __tgStopPoll(); __tgRender(); });
+  box.querySelectorAll('[data-tg-un]').forEach(b=>b.addEventListener('click', ()=>{
+    const id = b.getAttribute('data-tg-un'), nm = b.getAttribute('data-tg-nm');
+    confirmDialog(escapeHtml(__tgT('tgDisconnectQ', {name: nm})), ()=>__tgUnlink(id), tr('tgDisconnect'));
+  }));
+}
+async function __tgLoad(silent){
+  if(!silent){ __tgS.busy = true; __tgRender(); }
+  const before = JSON.stringify([__tgS.data, __tgS.err]);
+  try{
+    const prev = __tgS.data ? (__tgS.data.chats || []).length : null;
+    __tgS.data = await __tgApi('status');
+    __tgS.err = '';
+    const now = (__tgS.data.chats || []).length;
+    if(__tgS.link && prev != null && now > __tgS.base){ __tgS.link = null; __tgStopPoll(); showToast(tr('tgLinkedToast')); }
+  }catch(e){ if(!silent) __tgS.err = (e && e.code) || 'net'; }
+  __tgS.busy = false;
+  if(!silent || JSON.stringify([__tgS.data, __tgS.err]) !== before || !__tgS.link) __tgRender();   /* fonda tekshirganda o'zgarish bo'lmasa qayta chizilmaydi (tugma bosilayotganda almashmasin) */
+}
+async function __tgConnect(){
+  if(__tgS.busy) return;
+  __tgS.busy = true; __tgS.err = ''; __tgRender();
+  try{
+    const r = await __tgApi('link');
+    __tgS.link = {code: r.code, url: r.url, bot: r.bot, exp: r.exp > Date.now() ? Math.min(r.exp, Date.now() + 15 * 60000) : Date.now() + 15 * 60000};
+    __tgS.base = __tgS.data ? (__tgS.data.chats || []).length : 0;
+    __tgS.busy = false; __tgRender();
+    try{ if(isNativeApp()) __tgOpen(r.url); }catch(e){}   /* veb (iPhone): brauzer qalqib chiquvchi oynani to'smasligi uchun tugma orqali ochiladi */
+    __tgStopPoll();
+    __tgS.timer = setInterval(()=>{
+      if(!document.getElementById('tg-body') || !__tgS.link || __tgS.link.exp <= Date.now()){ __tgStopPoll(); if(__tgS.link && __tgS.link.exp <= Date.now()){ __tgS.link = null; __tgRender(); } return; }
+      if(document.visibilityState === 'hidden') return;
+      __tgLoad(true);
+    }, 4000);
+  }catch(e){
+    __tgS.busy = false;
+    __tgS.err = (e && e.code === 'offline') ? 'offline' : ((e && e.code === 'limit') ? '' : 'net');
+    if(e && e.code === 'limit'){ await __tgLoad(true); return; }
+    __tgRender();
+  }
+}
+async function __tgUnlink(chatId){
+  __tgS.busy = true; __tgRender();
+  try{ const r = await __tgApi('unlink', {chat: chatId}); if(__tgS.data) __tgS.data.chats = r.chats || []; __tgS.err = ''; showToast(tr('tgUnlinkedToast')); }
+  catch(e){ __tgS.err = (e && e.code === 'offline') ? 'offline' : 'net'; }
+  __tgS.busy = false; __tgRender();
+}
+function __tgMount(container){
+  if(!isAdmin() || document.getElementById('tg-card')) return;
+  const card = document.createElement('div');
+  card.className = 'card tg-card'; card.id = 'tg-card';
+  card.innerHTML = '<div class="tg-hd"><span class="tg-lg">' + TG_SVG + '</span><div class="tg-ht"><div class="nf-ttl">' + escapeHtml(tr('tgTitle')) + '</div><div class="nf-sub">' + escapeHtml(tr('tgSub')) + '</div></div><span class="tg-bd off" id="tg-badge">' + escapeHtml(tr('tgOff')) + '</span></div><div class="tg-body" id="tg-body"></div>';
+  const nf = container.querySelector('.nf-card');
+  if(nf && nf.parentNode) nf.parentNode.insertBefore(card, nf.nextSibling); else container.appendChild(card);
+  __tgS.link = (__tgS.link && __tgS.link.exp > Date.now()) ? __tgS.link : null;
+  __tgRender();
+  if(fbUser && __tgOwnerAccount()) __tgLoad();
+}
+document.addEventListener('visibilitychange', ()=>{ try{ if(document.visibilityState === 'visible' && __tgS.link && document.getElementById('tg-body')) __tgLoad(true); }catch(e){} });
+(function(){
+  if(typeof renderSettingsNotifications !== 'function') return;
+  const __tgOrigNotif = renderSettingsNotifications;
+  renderSettingsNotifications = function(container){ const r = __tgOrigNotif.apply(this, arguments); try{ __tgMount(container); }catch(e){ try{ console.error('fix120-tg', e); }catch(_e){} } return r; };
+})();
 /* fix96-offline: audit 30 kun + oflayn navbat, oflayn ovozli qarz eslatmasi */
 var AUDIT_KEEP_DAYS = 30;
 function __auditCutoffIso(){ return new Date(Date.now() - AUDIT_KEEP_DAYS * 86400000).toISOString(); }
