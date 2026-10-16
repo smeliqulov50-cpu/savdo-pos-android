@@ -84,9 +84,12 @@ async function handleApi(deps, uid, body) {
     const biz = await getData(bizRef);
     const lang = validLang(body.lang);
     if (caller.owner && lang && (!biz || biz.lang !== lang)) await bizRef.set({ lang: lang }, { merge: true });
-    return okBody({ configured: true, owner: caller.owner, bot: deps.botName || '', chats: caller.owner ? validChats(deps.key, caller.bid, biz) : [], max: MAX_CHATS });
+    const out = { configured: true, owner: caller.owner, bot: deps.botName || '', chats: caller.owner ? validChats(deps.key, caller.bid, biz) : [], max: MAX_CHATS };
+    if (caller.owner) out.prefs = await require('./reports').readPrefsForStatus(deps, caller.bid);   /* fix121-tg2 */
+    return okBody(out);
   }
   if (!caller.owner) return errBody(403, 'owner_only');
+  if (action === 'prefs' || action === 'test') return require('./reports').handleAction(deps, caller, action, body);   /* fix121-tg2: xabar sozlamalari, sinov */
   if (action === 'link') {
     const biz = (await getData(bizRef)) || {};
     if (validChats(deps.key, caller.bid, biz).length >= MAX_CHATS) return errBody(409, 'limit');
@@ -221,4 +224,4 @@ async function setupWebhook(deps, url) {
   return { bot: me && me.username, url: info && info.url, pending: info && info.pending_update_count, ok: !!(info && info.url === url) };
 }
 
-module.exports = { handleApi, handleUpdate, setupWebhook, validChats, sigOf, codeHash, normCode, newCode, keyFromToken, webhookSecret, resolveCaller, MAX_CHATS, CODE_TTL_MS, CODES_PER_HOUR, FAILS_PER_HOUR };
+module.exports = { handleApi, handleUpdate, setupWebhook, unbindChatEverywhere, validChats, sigOf, codeHash, normCode, newCode, keyFromToken, webhookSecret, resolveCaller, MAX_CHATS, CODE_TTL_MS, CODES_PER_HOUR, FAILS_PER_HOUR };

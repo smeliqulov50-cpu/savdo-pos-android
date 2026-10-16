@@ -13,7 +13,7 @@ function makeTg(token, fetchImpl) {
         r = await f('https://api.telegram.org/bot' + token + '/' + method, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(params || {}), signal: ctrl ? ctrl.signal : undefined });
         j = await r.json();
       } catch (e) { const er = new Error('tg ' + method + ': ' + hide(e && e.message)); er.network = true; throw er; }
-      if (!j || !j.ok) { const er = new Error('tg ' + method + ': ' + hide((j && j.description) || (r && r.status))); er.tgCode = j && j.error_code; throw er; }
+      if (!j || !j.ok) { const er = new Error('tg ' + method + ': ' + hide((j && j.description) || (r && r.status))); er.tgCode = j && j.error_code; er.retryAfter = j && j.parameters && Number(j.parameters.retry_after) || 0; er.desc = hide((j && j.description) || ''); throw er; }   /* fix121: retryAfter, desc */
       return j.result;
     } finally { clearTimeout(to); }
   };

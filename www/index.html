@@ -637,6 +637,22 @@
   .tg-wait::before{content:"";width:8px;height:8px;border-radius:50%;background:#38BDF8;animation:tgPulse 1.2s infinite;}
   @keyframes tgPulse{0%,100%{opacity:.25}50%{opacity:1}}
   .tg-row2{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+  /* fix121-tg2 */
+  .tg-pf{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;}
+  .tg-pf-h{font-weight:800;font-size:14px;color:var(--ink);}
+  .tg-pf-hint{font-size:12px;color:var(--ink-soft);margin:2px 0 2px;line-height:1.4;}
+  .tg-pr{border-top:1px solid var(--line);}
+  .tg-pf-h + .tg-pf-hint + .tg-pr{border-top:none;}
+  .tg-pr .nf-row{border-top:none;padding:12px 0 6px;}
+  .tg-pr-x{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:0 0 12px 50px;}
+  .tg-pr-x label{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-soft);font-weight:700;white-space:nowrap;}
+  .tg-pr-x input{font:800 14px var(--font-ui);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:6px 9px;background:#fff;min-height:38px;box-sizing:border-box;}
+  .tg-pr-x input[type=number]{width:72px;}
+  .tg-pr:not(.on) .tg-pr-x label{opacity:.55;}
+  .tg-try{margin-left:auto;border:1px solid #BAE6FD;background:#F0F9FF;color:#0369A1;font:800 12.5px var(--font-ui);border-radius:10px;padding:8px 12px;cursor:pointer;min-height:38px;white-space:nowrap;}
+  .tg-try[disabled]{opacity:.55;}
+  .tg-pf-st{font-size:12px;font-weight:700;color:var(--ink-soft);min-height:16px;margin:2px 0 0;line-height:1.35;}
+  .tg-pf-st.err{color:var(--danger);} .tg-pf-st.ok{color:#16A34A;}
 </style>
 </head>
 <body>
@@ -1596,6 +1612,29 @@ const T = {
   invStockValue:{uz:"Qoldiq qiymati",ru:"Стоимость остатка",en:"Stock value",kk:"Қалдық құны",ky:"Калдыктын наркы",tg:"Арзиши бақия"},
   invAllGood:{uz:"Hammasi joyida: tugagan yoki kam qolgan mahsulot yo'q.",ru:"Всё в порядке: нет закончившихся и заканчивающихся товаров.",en:"All good: nothing is out of stock or running low.",kk:"Бәрі дұрыс: таусылған не аз қалған тауар жоқ.",ky:"Баары жайында: түгөнгөн же аз калган товар жок.",tg:"Ҳама хуб: моли тамомшуда ё камманда нест."},
   invNoHistory:{uz:"Sotuv tarixi ko'paygach (kamida 7 kun) bu yerda qachon nima tugashi va qaysi mahsulot sotilmayotgani ko'rsatiladi.",ru:"Когда накопится история продаж (минимум 7 дней), здесь появится прогноз окончания товаров и список товаров без продаж.",en:"Once there are at least 7 days of sales, this will show when products run out and which ones aren't selling.",kk:"Сату тарихы жиналғанда (кемінде 7 күн) мұнда тауарлардың қашан таусылатыны және қайсысы сатылмай жатқаны көрсетіледі.",ky:"Сатуу тарыхы топтолгондо (кеминде 7 күн) бул жерде товарлар качан түгөнөрү жана кайсынысы сатылбай жатканы көрсөтүлөт.",tg:"Вақте таърихи фурӯш ҷамъ шавад (камаш 7 рӯз), дар ин ҷо пешгӯии тамомшавии мол ва рӯйхати моли фурӯхтанашуда пайдо мешавад."},
+  /* fix121-tg2 */
+  tgMsgsTitle:{uz:"Qaysi xabarlar kelsin",ru:"Какие сообщения присылать",en:"Which messages to send",kk:"Қандай хабарлар келсін",ky:"Кайсы билдирүүлөр келсин",tg:"Кадом паёмҳо биёянд"},
+  tgMsgsHint:{uz:"Har birini alohida yoqing. Hammasi o'chiq bo'lsa, bot hech narsa yubormaydi.",ru:"Включайте каждое отдельно. Если всё выключено, бот ничего не присылает.",en:"Turn each one on separately. With everything off, the bot sends nothing.",kk:"Әрқайсысын бөлек қосыңыз. Бәрі өшірулі болса, бот ештеңе жібермейді.",ky:"Ар бирин өзүнчө күйгүзүңүз. Баары өчүк болсо, бот эч нерсе жөнөтпөйт.",tg:"Ҳар якеро алоҳида фаъол кунед. Агар ҳама хомӯш бошад, бот ҳеҷ чиз намефиристад."},
+  tgPDaily:{uz:"Kunlik hisobot",ru:"Отчёт за день",en:"Daily report",kk:"Күндік есеп",ky:"Күндүк отчёт",tg:"Ҳисоботи рӯзона"},
+  tgPDailySub:{uz:"Sotuv, cheklar, foyda, xarajat, naqd/karta/nasiya, ko'p sotilgan 5 mahsulot, filiallar bo'yicha",ru:"Продажи, чеки, прибыль, расходы, наличные/карта/долг, топ-5 товаров, по филиалам",en:"Sales, receipts, profit, expenses, cash/card/credit, top 5 products, per branch",kk:"Сатылым, чектер, пайда, шығын, қолма-қол/карта/несие, көп сатылған 5 тауар, филиалдар бойынша",ky:"Сатуу, чектер, пайда, чыгым, накта/карта/насыя, көп сатылган 5 товар, филиалдар боюнча",tg:"Фурӯш, чекҳо, фоида, хароҷот, нақд/корт/қарз, 5 моли пурфурӯш, аз рӯи филиалҳо"},
+  tgPTime:{uz:"Vaqti",ru:"Время",en:"Time",kk:"Уақыты",ky:"Убактысы",tg:"Вақт"},
+  tgPShift:{uz:"Smena yopilganda",ru:"При закрытии смены",en:"When a shift closes",kk:"Смена жабылғанда",ky:"Смена жабылганда",tg:"Ҳангоми бастани смена"},
+  tgPShiftSub:{uz:"Kassir, smena summasi, kassadagi naqd farqi",ru:"Кассир, сумма смены, разница наличных в кассе",en:"Cashier, shift total, cash difference in the till",kk:"Кассир, смена сомасы, кассадағы қолма-қол айырмасы",ky:"Кассир, сменанын суммасы, кассадагы накта айырма",tg:"Кассир, маблағи смена, фарқи нақд дар кассо"},
+  tgPLow:{uz:"Kam qolgan tovarlar",ru:"Заканчивающиеся товары",en:"Low stock",kk:"Аз қалған тауарлар",ky:"Аз калган товарлар",tg:"Молҳои кам монда"},
+  tgPLowSub:{uz:"Kuniga bir marta. Chegara: {n} (Sozlamalardan)",ru:"Раз в день. Порог: {n} (из настроек)",en:"Once a day. Threshold: {n} (from Settings)",kk:"Күніне бір рет. Шек: {n} (баптаулардан)",ky:"Күнүнө бир жолу. Чек: {n} (жөндөөлөрдөн)",tg:"Рӯзе як бор. Ҳад: {n} (аз танзимот)"},
+  tgPDisc:{uz:"Katta chegirma",ru:"Большая скидка",en:"Large discount",kk:"Үлкен жеңілдік",ky:"Чоң жеңилдик",tg:"Тахфифи калон"},
+  tgPDiscSub:{uz:"Xodim chek summasining {p}% yoki undan ko'p chegirma bersa",ru:"Если сотрудник дал скидку {p}% и больше от суммы чека",en:"When a staff member gives {p}% or more off a receipt",kk:"Қызметкер чек сомасының {p}% немесе одан көп жеңілдік берсе",ky:"Кызматкер чектин суммасынын {p}% же андан көп жеңилдик берсе",tg:"Агар корманд {p}% ё бештар аз маблағи чек тахфиф диҳад"},
+  tgPPct:{uz:"Foiz",ru:"Процент",en:"Percent",kk:"Пайыз",ky:"Пайыз",tg:"Фоиз"},
+  tgPRcpt:{uz:"Chek o'chirilsa yoki qaytarilsa",ru:"Удаление или возврат чека",en:"Receipt deleted or refunded",kk:"Чек жойылса немесе қайтарылса",ky:"Чек өчүрүлсө же кайтарылса",tg:"Нест кардан ё баргардонидани чек"},
+  tgPRcptSub:{uz:"Xodim chekni o'chirsa yoki qaytarsa — darhol",ru:"Сотрудник удалил или вернул чек — сразу",en:"A staff member deletes or refunds a receipt — instantly",kk:"Қызметкер чекті жойса немесе қайтарса — бірден",ky:"Кызматкер чекти өчүрсө же кайтарса — дароо",tg:"Корманд чекро нест кунад ё баргардонад — фавран"},
+  tgAlertNote:{uz:"Xodimning qurilmasida internet bo'lmasa, ogohlantirish internet qaytgach keladi.",ru:"Если у сотрудника нет интернета, предупреждение придёт, когда интернет появится.",en:"If a staff device is offline, the alert arrives once it's back online.",kk:"Қызметкердің құрылғысында интернет болмаса, ескерту интернет қосылғанда келеді.",ky:"Кызматкердин түзмөгүндө интернет болбосо, эскертүү интернет келгенде келет.",tg:"Агар дар дастгоҳи корманд интернет набошад, огоҳӣ баъди пайдо шудани интернет меояд."},
+  tgTry:{uz:"Sinab ko'rish",ru:"Проверить",en:"Try it",kk:"Сынап көру",ky:"Сынап көрүү",tg:"Санҷидан"},
+  tgTrySent:{uz:"Telegram'ga yuborildi",ru:"Отправлено в Telegram",en:"Sent to Telegram",kk:"Telegram-ға жіберілді",ky:"Telegram'га жөнөтүлдү",tg:"Ба Telegram фиристода шуд"},
+  tgTryMany:{uz:"Juda ko'p sinov. 1 soatdan keyin urinib ko'ring.",ru:"Слишком много проверок. Попробуйте через час.",en:"Too many tries. Try again in an hour.",kk:"Тым көп сынақ. Бір сағаттан кейін көріңіз.",ky:"Өтө көп сыноо. Бир сааттан кийин аракет кылыңыз.",tg:"Санҷиш хеле зиёд. Пас аз як соат кӯшиш кунед."},
+  tgSaving:{uz:"Saqlanmoqda…",ru:"Сохранение…",en:"Saving…",kk:"Сақталуда…",ky:"Сакталууда…",tg:"Нигоҳ дошта мешавад…"},
+  tgSaved:{uz:"✓ Saqlandi",ru:"✓ Сохранено",en:"✓ Saved",kk:"✓ Сақталды",ky:"✓ Сакталды",tg:"✓ Нигоҳ дошта шуд"},
+  tgSaveErr:{uz:"Saqlanmadi. Internetni tekshirib, qayta urinib ko'ring.",ru:"Не сохранено. Проверьте интернет и повторите.",en:"Not saved. Check the internet and try again.",kk:"Сақталмады. Интернетті тексеріп, қайталап көріңіз.",ky:"Сакталган жок. Интернетти текшерип, кайра аракет кылыңыз.",tg:"Нигоҳ дошта нашуд. Интернетро санҷед ва боз кӯшиш кунед."},
+  tgNoChatsHint:{uz:"Telegram ulangandan keyin shu yerda qaysi xabarlar kelishini tanlaysiz.",ru:"После подключения Telegram здесь можно выбрать, какие сообщения присылать.",en:"After you connect Telegram, choose here which messages to send.",kk:"Telegram қосылғаннан кейін осында қандай хабарлар келетінін таңдайсыз.",ky:"Telegram туташкандан кийин ушул жерде кайсы билдирүүлөр келерин тандайсыз.",tg:"Пас аз пайваст кардани Telegram дар ин ҷо интихоб мекунед, ки кадом паёмҳо биёянд."},
   /* fix120-tg */
   tgTitle:{uz:"Telegram bot",ru:"Telegram-бот",en:"Telegram bot",kk:"Telegram бот",ky:"Telegram бот",tg:"Telegram-бот"},
   tgSub:{uz:"Do'kon hisobotlari va ogohlantirishlar Telegram'ga keladi",ru:"Отчёты и предупреждения магазина приходят в Telegram",en:"Shop reports and alerts come to Telegram",kk:"Дүкен есептері мен ескертулер Telegram-ға келеді",ky:"Дүкөндүн отчёттору жана эскертүүлөр Telegram'га келет",tg:"Ҳисоботҳо ва огоҳиҳои мағоза ба Telegram меоянд"},
@@ -3113,7 +3152,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.23';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.24';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -18353,8 +18392,9 @@ function __tgRender(){
   if(pending){ /* kod kutilayotganda ikkinchi "ulash" tugmasi ko'rsatilmaydi */ }
   else if(chats.length < max) h += '<button type="button" class="tg-btn" id="tg-connect"' + (__tgS.busy ? ' disabled' : '') + '>' + TG_SVG + escapeHtml(tr('tgConnect')) + '</button>';
   else h += '<p class="tg-msg">' + escapeHtml(tr('tgLimit')) + '</p>';
-  h += '<p class="tg-msg" style="margin:10px 0 0;">' + escapeHtml(tr('tgSoon')) + '</p>';
+  h += (typeof __tgPrefsHtml === 'function') ? __tgPrefsHtml(d, chats) : '<p class="tg-msg" style="margin:10px 0 0;">' + escapeHtml(tr('tgSoon')) + '</p>';   /* fix121-tg2 */
   box.innerHTML = h;
+  try{ if(typeof __tgPrefsBind === 'function') __tgPrefsBind(box); }catch(e){}
   const cb = document.getElementById('tg-connect'); if(cb) cb.addEventListener('click', ()=>__tgConnect());
   const rb2 = document.getElementById('tg-retry'); if(rb2) rb2.addEventListener('click', ()=>__tgLoad());
   const ob = document.getElementById('tg-open'); if(ob && L && ob.tagName === 'BUTTON') ob.addEventListener('click', ()=>__tgOpen(L.url));
@@ -18423,6 +18463,98 @@ document.addEventListener('visibilitychange', ()=>{ try{ if(document.visibilityS
   const __tgOrigNotif = renderSettingsNotifications;
   renderSettingsNotifications = function(container){ const r = __tgOrigNotif.apply(this, arguments); try{ __tgMount(container); }catch(e){ try{ console.error('fix120-tg', e); }catch(_e){} } return r; };
 })();
+/* fix121-tg2: Telegram bot — 2-bosqich: qaysi xabarlar kelsin (har biri alohida; hammasi standart holatda o'chiq) + "Sinab ko'rish". */
+var __tgPf = {saving:false, again:false, timer:0};
+var TG_PF_ROWS = [
+  {k:'daily', ic:'&#128202;', bg:'#E0F2FE', t:'tgPDaily', s:'tgPDailySub', time:'dailyTime', min:'12:00', max:'23:50'},
+  {k:'shift', ic:'&#128274;', bg:'#EDE9FE', t:'tgPShift', s:'tgPShiftSub'},
+  {k:'low', ic:'&#128230;', bg:'#FEF3C7', t:'tgPLow', s:'tgPLowSub', time:'lowTime'},
+  {k:'disc', ic:'&#127991;', bg:'#FCE7F3', t:'tgPDisc', s:'tgPDiscSub', pct:true},
+  {k:'rcpt', ic:'&#128465;', bg:'#FEE2E2', t:'tgPRcpt', s:'tgPRcptSub'}
+];
+function __tgPfSub(r, p){
+  if(r.k === 'low') return __tgT(r.s, {n: (state.settings && state.settings.lowStockThreshold) || 5});
+  if(r.k === 'disc') return __tgT(r.s, {p: (p && p.discPct) || 20});
+  return tr(r.s);
+}
+function __tgPrefsHtml(d, chats){
+  if(!d || !d.prefs) return '<p class="tg-msg" style="margin:10px 0 0;">' + escapeHtml(tr('tgSoon')) + '</p>';
+  if(!chats.length) return '<p class="tg-msg" style="margin:10px 0 0;">' + escapeHtml(tr('tgNoChatsHint')) + '</p>';
+  const p = d.prefs;
+  let h = '<div class="tg-pf" id="tg-pf"><div class="tg-pf-h">' + escapeHtml(tr('tgMsgsTitle')) + '</div><p class="tg-pf-hint">' + escapeHtml(tr('tgMsgsHint')) + '</p>';
+  TG_PF_ROWS.forEach(r=>{
+    const on = p[r.k] === true;
+    h += '<div class="tg-pr' + (on ? ' on' : '') + '" data-tg-row="' + r.k + '"><div class="nf-row"><div class="nf-ic" style="background:' + r.bg + ';">' + r.ic + '</div>'
+      + '<div class="nf-txt"><div class="nf-ttl">' + escapeHtml(tr(r.t)) + '</div><div class="nf-sub" data-tg-sub="' + r.k + '">' + escapeHtml(__tgPfSub(r, p)) + '</div></div>'
+      + '<input type="checkbox" class="nf-sw" data-tg-k="' + r.k + '" aria-label="' + escapeHtml(tr(r.t)) + '"' + (on ? ' checked' : '') + '></div><div class="tg-pr-x">';
+    if(r.time) h += '<label>' + escapeHtml(tr('tgPTime')) + ' <input type="time" data-tg-t="' + r.time + '" value="' + escapeHtml(p[r.time] || '') + '"' + (r.min ? ' min="' + r.min + '"' : '') + (r.max ? ' max="' + r.max + '"' : '') + '></label>';
+    if(r.pct) h += '<label>' + escapeHtml(tr('tgPPct')) + ' <input type="number" inputmode="numeric" min="1" max="90" step="1" data-tg-n="discPct" value="' + escapeHtml(String(p.discPct || 20)) + '"> %</label>';
+    h += '<button type="button" class="tg-try" data-tg-try="' + r.k + '">' + escapeHtml(tr('tgTry')) + '</button></div></div>';
+  });
+  h += '<p class="tg-pf-hint" style="margin-top:2px;">' + escapeHtml(tr('tgAlertNote')) + '</p><div class="tg-pf-st" id="tg-pf-st" aria-live="polite"></div></div>';
+  return h;
+}
+function __tgPfStatus(kind, text){
+  const el = document.getElementById('tg-pf-st'); if(!el) return;
+  el.className = 'tg-pf-st' + (kind ? ' ' + kind : ''); el.textContent = text || '';
+}
+function __tgPfApply(box, p, sent){
+  if(!box || !p) return;
+  /* foydalanuvchi so'rov ketgandan keyin yana o'zgartirgan maydonga tegilmaydi; qolganlari server qaytargan (chegaralangan) qiymatni oladi */
+  const keep = (el, k)=> el === document.activeElement && !(sent && String(el.value) === String(sent[k]));
+  box.querySelectorAll('[data-tg-k]').forEach(el=>{ const k = el.getAttribute('data-tg-k'); if(sent && el.checked !== (sent[k] === true)) return; el.checked = p[k] === true; const row = el.closest('[data-tg-row]'); if(row) row.classList.toggle('on', el.checked); });
+  box.querySelectorAll('[data-tg-t]').forEach(el=>{ const k = el.getAttribute('data-tg-t'); if(p[k] && !keep(el, k)) el.value = p[k]; });
+  const n = box.querySelector('[data-tg-n]'); if(n && p.discPct && !keep(n, 'discPct')) n.value = String(p.discPct);
+  const ds = box.querySelector('[data-tg-sub="disc"]'); if(ds) ds.textContent = __tgPfSub(TG_PF_ROWS[3], p);
+}
+function __tgPfCollect(box){
+  const p = Object.assign({}, (__tgS.data && __tgS.data.prefs) || {});
+  box.querySelectorAll('[data-tg-k]').forEach(el=>{ p[el.getAttribute('data-tg-k')] = !!el.checked; });
+  box.querySelectorAll('[data-tg-t]').forEach(el=>{ if(/^\d{2}:\d{2}$/.test(el.value || '')) p[el.getAttribute('data-tg-t')] = el.value; });
+  const n = box.querySelector('[data-tg-n]');
+  if(n){ const v = parseInt(n.value, 10); if(v >= 1 && v <= 90) p.discPct = v; }
+  return p;
+}
+async function __tgPfSave(){
+  const box = document.getElementById('tg-body'); if(!box || !__tgS.data) return;
+  if(__tgPf.saving){ __tgPf.again = true; return; }
+  __tgPf.saving = true; __tgPf.again = false;
+  __tgPfStatus('', tr('tgSaving'));
+  const want = __tgPfCollect(box);
+  try{
+    const r = await __tgApi('prefs', {prefs: want});
+    if(__tgS.data) __tgS.data.prefs = r.prefs || want;
+    __tgPfApply(document.getElementById('tg-body'), __tgS.data && __tgS.data.prefs, want);
+    __tgPfStatus('ok', tr('tgSaved'));
+  }catch(e){
+    if(!__tgPf.again) __tgPfApply(document.getElementById('tg-body'), __tgS.data && __tgS.data.prefs, want);   /* saqlanmadi — ekranda ham avvalgi holat */
+    __tgPfStatus('err', tr(e && e.code === 'offline' ? 'tgOffline' : 'tgSaveErr'));
+  }
+  __tgPf.saving = false;
+  if(__tgPf.again) __tgPfSave();
+}
+function __tgPfQueue(){ if(__tgPf.timer) clearTimeout(__tgPf.timer); __tgPf.timer = setTimeout(()=>{ __tgPf.timer = 0; __tgPfSave(); }, 350); }
+async function __tgPfTry(btn, kind){
+  if(btn.disabled) return;
+  btn.disabled = true;
+  try{ const r = await __tgApi('test', {kind: kind}); showToast(r && r.sent ? tr('tgTrySent') : tr('tgError')); }
+  catch(e){
+    const c = e && e.code;
+    showToast(tr(c === 'too_many' ? 'tgTryMany' : c === 'offline' ? 'tgOffline' : c === 'no_chats' ? 'tgNoChatsHint' : 'tgError'));
+  }
+  setTimeout(()=>{ try{ btn.disabled = false; }catch(_e){} }, 2500);
+}
+function __tgPrefsBind(box){
+  const pf = box.querySelector('#tg-pf'); if(!pf) return;
+  pf.querySelectorAll('[data-tg-k]').forEach(el=>el.addEventListener('change', ()=>{ const row = el.closest('[data-tg-row]'); if(row) row.classList.toggle('on', el.checked); __tgPfQueue(); }));
+  pf.querySelectorAll('[data-tg-t]').forEach(el=>el.addEventListener('change', ()=>__tgPfQueue()));
+  const n = pf.querySelector('[data-tg-n]');
+  if(n){
+    n.addEventListener('input', ()=>{ const v = parseInt(n.value, 10); const ds = pf.querySelector('[data-tg-sub="disc"]'); if(ds && v >= 1 && v <= 90) ds.textContent = __tgT('tgPDiscSub', {p: v}); });
+    n.addEventListener('change', ()=>{ let v = parseInt(n.value, 10); if(!(v >= 1)) v = (__tgS.data && __tgS.data.prefs && __tgS.data.prefs.discPct) || 20; if(v > 90) v = 90; n.value = String(v); __tgPfQueue(); });
+  }
+  pf.querySelectorAll('[data-tg-try]').forEach(b=>b.addEventListener('click', ()=>__tgPfTry(b, b.getAttribute('data-tg-try'))));
+}
 /* fix96-offline: audit 30 kun + oflayn navbat, oflayn ovozli qarz eslatmasi */
 var AUDIT_KEEP_DAYS = 30;
 function __auditCutoffIso(){ return new Date(Date.now() - AUDIT_KEEP_DAYS * 86400000).toISOString(); }

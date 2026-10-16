@@ -258,3 +258,49 @@ exports.telegramWebhook = onRequest({ secrets: __tgSecrets }, async function (re
   } catch (e) { console.error('telegramWebhook xatosi', e && e.message); }
   res.status(200).json({ ok: true });   // Telegram qayta-qayta yubormasligi uchun har doim 200
 });
+
+/* ---------- fix121-tg2: Telegram bot — 2-bosqich: xabarlar (har biri ilovada alohida yoqiladi; hammasi standart holatda O'CHIQ) ----------
+   Kunlik hisobot, kam qolgan tovarlar (jadval, har 10 daqiqada tekshiradi); smena yopildi, katta chegirma, chek o'chirildi/qaytarildi (darhol).
+   Token bo'lmasa yoki ega yoqmagan bo'lsa hech narsa yuborilmaydi. Mavjud funksiyalarga tegilmaydi.
+   Yuklash: SAVDO_PUSH_ONLY=1 SAVDO_TG=1 firebase deploy --only functions:telegramApi,functions:telegramTick,functions:telegramSaleAlert,functions:telegramAuditAlert,functions:telegramShiftAlert */
+const __TGR = require('./src/telegram/reports');
+const __tgPrefsCache = new Map();
+function __tgDepsLite() {
+  const token = __tgToken();
+  const base = { db: __fbAdmin.firestore(), nowMs: nowMs, cache: __tgPrefsCache, gapMs: 40 };
+  if (!token) return Object.assign(base, { key: null });
+  if (!__tgCache || __tgCache.token !== token) __tgCache = { token: token, key: __TG.keyFromToken(token), tg: __makeTg(token), botName: '' };
+  return Object.assign(base, { key: __tgCache.key, tg: __tgCache.tg });
+}
+exports.telegramTick = onSchedule({ schedule: 'every 10 minutes', timeZone: 'Asia/Tashkent', timeoutSeconds: 300, secrets: __tgSecrets }, async function () {
+  try {
+    const st = await __TGR.runTick(__tgDepsLite(), new Date());
+    if (st.daily || st.low || st.errors) console.log('telegramTick', JSON.stringify(st));
+  } catch (e) { console.error('telegramTick xatosi', e && e.message); }
+});
+exports.telegramSaleAlert = onDocumentCreated({ document: 'businesses/{bizId}/sales/{saleId}', secrets: __tgSecrets }, async function (event) {
+  const snap = event.data;
+  if (!snap) return;
+  try {
+    const r = await __TGR.handleSaleCreated(__tgDepsLite(), event.params.bizId, event.params.saleId, snap.data());
+    if (r && r.alert) console.log('telegramSaleAlert', JSON.stringify(r));
+  } catch (e) { console.error('telegramSaleAlert xatosi', e && e.message); }
+});
+exports.telegramAuditAlert = onDocumentCreated({ document: 'businesses/{bizId}/audit/{auditId}', secrets: __tgSecrets }, async function (event) {
+  const snap = event.data;
+  if (!snap) return;
+  try {
+    const r = await __TGR.handleAuditCreated(__tgDepsLite(), event.params.bizId, event.params.auditId, snap.data());
+    if (r && r.alert) console.log('telegramAuditAlert', JSON.stringify(r));
+  } catch (e) { console.error('telegramAuditAlert xatosi', e && e.message); }
+});
+exports.telegramShiftAlert = onDocumentWritten({ document: 'businesses/{bizId}/meta/catalog', secrets: __tgSecrets }, async function (event) {
+  const ch = event.data;
+  if (!ch) return;
+  try {
+    const before = ch.before && ch.before.exists ? ch.before.data() : null;
+    const after = ch.after && ch.after.exists ? ch.after.data() : null;
+    const r = await __TGR.handleCatalogWrite(__tgDepsLite(), event.params.bizId, before, after);
+    if (r && r.alert) console.log('telegramShiftAlert', JSON.stringify(r));
+  } catch (e) { console.error('telegramShiftAlert xatosi', e && e.message); }
+});
