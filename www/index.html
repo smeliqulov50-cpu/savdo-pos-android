@@ -767,6 +767,15 @@
   .pu-sugg:empty{display:none;}
   .tool-row.tr-compact .tool-chip.tc-noic .tool-ic{display:none;}
   .tool-row.tr-compact .tool-chip.tc-sm > span:last-child{font-size:10.5px;letter-spacing:-.1px;}
+  /* fix133-pur */
+  .pu-h{cursor:pointer;padding:10px 12px;margin-bottom:8px;}
+  .pu-h .t{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+  .pu-h .t b{min-width:0;} .pu-h .t strong{white-space:nowrap;}
+  .pu-tag{display:inline-block;padding:1px 8px;border-radius:999px;background:#fff1e0;color:#9a4b00;font-size:11px;font-weight:800;margin-left:6px;}
+  .pu-line{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);font-size:13px;}
+  .pu-line > span:first-child{min-width:0;flex:1;} .pu-line b{white-space:nowrap;}
+  .pu-ret-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);}
+  .pu-ret-row .n{flex:1;min-width:0;font-size:13px;} .pu-ret-row input{width:84px;text-align:center;font-weight:700;padding:8px 6px;}
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -2022,6 +2031,23 @@ const T = {
   fsLost:{uz:"Bulut bilan aloqa uzildi. Ma'lumotlaringiz saqlangan — ilova o'zi qayta ulanadi.",ru:"Связь с облаком прервалась. Данные сохранены — приложение переподключится само.",en:"Cloud connection dropped. Your data is saved — the app will reconnect by itself.",kk:"Бұлтпен байланыс үзілді. Деректер сақталған — қолданба өзі қайта қосылады.",ky:"Булут менен байланыш үзүлдү. Маалыматтар сакталган — тиркеме өзү кайра туташат.",tg:"Пайваст бо абр қатъ шуд. Маълумот нигоҳ дошта шуд — барнома худаш дубора пайваст мешавад."},
   fsLostWait:{uz:"Bulut bilan aloqa uzildi. Ma'lumotlaringiz saqlangan. Qulay paytda \"Qayta ulash\" ni bosing.",ru:"Связь с облаком прервалась. Данные сохранены. Нажмите «Переподключить», когда будет удобно.",en:"Cloud connection dropped. Your data is saved. Tap \"Reconnect\" when convenient.",kk:"Бұлтпен байланыс үзілді. Деректер сақталған. Ыңғайлы кезде «Қайта қосу» басыңыз.",ky:"Булут менен байланыш үзүлдү. Маалыматтар сакталган. Ыңгайлуу учурда «Кайра туташуу» басыңыз.",tg:"Пайваст бо абр қатъ шуд. Маълумот нигоҳ дошта шуд. Вақти қулай «Дубора пайваст» -ро пахш кунед."},
   fsReconnect:{uz:"Qayta ulash",ru:"Переподключить",en:"Reconnect",kk:"Қайта қосу",ky:"Кайра туташуу",tg:"Дубора пайваст"},
+  /* fix133-pur */
+  puHistSearch:{uz:"Hujjat №, yetkazib beruvchi, tovar",ru:"№ документа, поставщик, товар",en:"Doc no., supplier, product",kk:"Құжат №, жеткізуші, тауар",ky:"Документ №, жеткирүүчү, товар",tg:"№ ҳуҷҷат, таъминкунанда, мол"},
+  puDoc:{uz:"Hujjat",ru:"Документ",en:"Document",kk:"Құжат",ky:"Документ",tg:"Ҳуҷҷат"},
+  puReturnBtn:{uz:"Yetkazib beruvchiga qaytarish",ru:"Вернуть поставщику",en:"Return to supplier",kk:"Жеткізушіге қайтару",ky:"Жеткирүүчүгө кайтаруу",tg:"Ба таъминкунанда баргардонидан"},
+  puReturnAll:{uz:"Hammasini qaytarish",ru:"Вернуть всё",en:"Return all",kk:"Барлығын қайтару",ky:"Баарын кайтаруу",tg:"Ҳамаро баргардонидан"},
+  puReturned:{uz:"Qaytarilgan",ru:"Возвращено",en:"Returned",kk:"Қайтарылған",ky:"Кайтарылган",tg:"Баргардонида"},
+  puRecv:{uz:"Kelgan",ru:"Получено",en:"Received",kk:"Келген",ky:"Келген",tg:"Қабулшуда"},
+  puRetQtyBad:{uz:"Qaytariladigan son kelgan sondan oshmasin",ru:"Количество возврата не больше полученного",en:"Return quantity cannot exceed what was received",kk:"Қайтару саны келгеннен аспасын",ky:"Кайтаруу саны келгенден ашпасын",tg:"Миқдори баргардонӣ аз қабулшуда зиёд набошад"},
+  puRetStockBad:{uz:"{name}: omborda faqat {n} bor",ru:"{name}: на складе только {n}",en:"{name}: only {n} in stock",kk:"{name}: қоймада тек {n} бар",ky:"{name}: кампада болгону {n} бар",tg:"{name}: дар анбор танҳо {n} аст"},
+  puRetNone:{uz:"Qaytarish uchun son kiriting",ru:"Укажите количество для возврата",en:"Enter a quantity to return",kk:"Қайтару үшін сан енгізіңіз",ky:"Кайтаруу үчүн сан киргизиңиз",tg:"Барои баргардонӣ миқдор ворид кунед"},
+  puRetMoneyCredit:{uz:"Yetkazib beruvchiga qarzingiz {sum} ga kamayadi",ru:"Ваш долг поставщику уменьшится на {sum}",en:"Your debt to the supplier goes down by {sum}",kk:"Жеткізушіге қарызыңыз {sum} азаяды",ky:"Жеткирүүчүгө карызыңыз {sum} азаят",tg:"Қарзи шумо ба таъминкунанда {sum} кам мешавад"},
+  puRetMoneyCash:{uz:"{sum} kassaga qaytgan pul sifatida yoziladi",ru:"{sum} будет записано как возврат денег в кассу",en:"{sum} is recorded as money back to the till",kk:"{sum} кассаға қайтқан ақша ретінде жазылады",ky:"{sum} кассага кайткан акча катары жазылат",tg:"{sum} ҳамчун пули ба касса баргашта сабт мешавад"},
+  puRetMoneyBank:{uz:"{sum} karta/bankka qaytgan pul sifatida yoziladi",ru:"{sum} будет записано как возврат на карту/счёт",en:"{sum} is recorded as money back to card/bank",kk:"{sum} карта/банкке қайтқан ақша ретінде жазылады",ky:"{sum} карта/банкка кайткан акча катары жазылат",tg:"{sum} ҳамчун пули ба корт/бонк баргашта сабт мешавад"},
+  puRetDone:{uz:"Qaytarildi: {sum}",ru:"Возвращено: {sum}",en:"Returned: {sum}",kk:"Қайтарылды: {sum}",ky:"Кайтарылды: {sum}",tg:"Баргардонида шуд: {sum}"},
+  puRetNoteW:{uz:"Qaytarish",ru:"Возврат",en:"Return",kk:"Қайтару",ky:"Кайтаруу",tg:"Баргардонӣ"},
+  puRetDeleted:{uz:"Mahsulot o'chirilgan — qaytarib bo'lmaydi",ru:"Товар удалён — вернуть нельзя",en:"Product deleted — cannot be returned",kk:"Тауар жойылған — қайтару мүмкін емес",ky:"Товар өчүрүлгөн — кайтаруу мүмкүн эмес",tg:"Мол ҳазф шудааст — баргардонидан мумкин нест"},
+  puNoHist:{uz:"Kirim topilmadi",ru:"Приход не найден",en:"No goods-in found",kk:"Кіріс табылмады",ky:"Кирим табылган жок",tg:"Воридот ёфт нашуд"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3504,6 +3530,7 @@ function visitsCol(){ return businessDocRef().collection('visits'); }
 function creditorsCol(){ return businessDocRef().collection('creditors'); }
 function creditorLedgerCol(){ return businessDocRef().collection('creditorLedger'); }
 function kitchenStationsCol(){ return businessDocRef().collection('kitchenStations'); }
+function purchasesCol(){ return businessDocRef().collection('purchases'); }   /* fix133-pur */
 function productsCol(){ return businessDocRef().collection('products'); }
 function customersCol(){ return businessDocRef().collection('customers'); }
 
@@ -3512,7 +3539,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.31';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.32';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -4115,6 +4142,7 @@ function startLiveListeners(){
   watchArrayCollection(creditorsCol(), 'creditors', 'creditor');
   watchArrayCollection(creditorLedgerCol(), 'creditorLedger', 'creditorLedger');
   watchArrayCollection(kitchenStationsCol(), 'kitchenStations', 'kitchenStation');
+  try{ __puWatch(); }catch(e){}   /* fix133-pur */
 
   // catalog doc: staff + shifts (small, still synced as merge:true fields
   // rather than their own subcollections — see syncStaffDoc/syncShiftsDoc)
@@ -4294,6 +4322,10 @@ async function __retryOneItem(item){
       } else if(String(item.kind).indexOf('del:')===0){ /* fix72 */
         const _dc = {sale:salesCol, expense:expensesCol, table:tablesCol, visit:visitsCol, creditor:creditorsCol, kitchenStation:kitchenStationsCol}[item.kind.slice(4)];
         if(_dc) await _dc().doc(item.id).delete();
+      } else if(item.kind==='purchase'){   /* fix133-pur */
+        const pd = (state.purchases||[]).find(x=>x.id===item.id);
+        if(!pd || __puCloudOff()){ clearPendingSync(item.kind, item.id); return; }
+        await purchasesCol().doc(pd.id).set(sanitizeForFirestore(pd));
       } else if(item.kind==='kitchenStation'){
         const ks = state.kitchenStations.find(x=>x.id===item.id);
         if(!ks){ clearPendingSync(item.kind, item.id); return; }
@@ -4307,6 +4339,7 @@ async function __retryOneItem(item){
       // specifically, also surface WHY, so the diagnostic in Business
       // Info settings shows the real reason instead of nothing.
       if(item.kind==='settings') state.__lastSettingsSyncError = (e && e.message) ? e.message : String(e);
+      if(item.kind==='purchase' && /permission|insufficient/i.test(String((e && (e.code || e.message)) || ''))){ __puCloudOffSet(); clearPendingSync(item.kind, item.id); return; }   /* fix133-pur: bulut ruxsat bermasa — telefonda qoladi, navbat to'lib qolmaydi */
       pendingSyncLastErrors[item.kind+':'+item.id] = (e && e.message) ? e.message : String(e);
     }
 }
@@ -15075,7 +15108,7 @@ function renderReportsCategory(container, cat){
               <div class="meta"><span style="color:${expenseCategoryColor(x.category)};font-weight:700;">${expenseCategoryLabel(x.category)}</span> · ${fmtDateTime(x.date)}${x.staffName ? ' · '+icI('user')+' '+escapeHtml(x.staffName) : ''}</div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <strong style="color:var(--danger);">-${fmt(x.amount)}</strong>
+              <strong style="color:${x.amount < 0 ? 'var(--teal)' : 'var(--danger)'};">${x.amount < 0 ? '+' + fmt(-x.amount) : '-' + fmt(x.amount)}</strong>
               <button class="icon-btn" data-del-expense="${x.id}" hidden aria-hidden="true">${ICONS.trash}</button>
             </div>
           </div>
@@ -15400,8 +15433,8 @@ function renderReportsCategory(container, cat){
 
   if(cat==='audit'){
     if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
-    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount'};
-    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)'};
+    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount', purchaseReturn:'puReturnBtn'};
+    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)', purchaseReturn:'var(--warm)'};
     container.innerHTML = `${reportsBackHeader(tr('auditReport'))}<p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('auditHint')}</p>
       <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
       <div id="audit-list"><div class="empty-state">${R3_ON ? tr('r4Loading') : '…'}</div></div>`;
@@ -15690,7 +15723,7 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='stockmoves'){
-    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount')}[r] || r);
+    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount'), supplierReturn:tr('puReturnBtn')}[r] || r);
     const reasonColor = (r)=>({sale:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)', count:'var(--warm)'}[r] || 'var(--ink)');
     container.innerHTML = `
       ${reportsBackHeader(tr('stockMovesReport'))}
@@ -15829,7 +15862,7 @@ function renderPurchase(){
     <div class="checkbox-row"><input type="checkbox" id="pu-update-cost" ${purchaseDraft.updateCost?'checked':''}><span>${tr('puUpdateCost')}</span></div>
     <div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin:8px 0 12px;"><strong>${tr('puTotal')}</strong><strong id="pu-total">${fmt(purchaseTotal())}</strong></div>
     <button class="btn btn-primary btn-block" id="pu-apply" ${purchaseDraft.items.length?'':'disabled'}>${tr('puApply')}</button>
-    ${recent.length ? `<h3 class="sub-title" style="margin-top:18px;">${tr('puHistory')}</h3>${recent.map(x=>`
+    ${__puHistSlot()}${(recent.length && !window.__puHistOk) ? `<h3 class="sub-title" style="margin-top:18px;">${tr('puHistory')}</h3>${recent.map(x=>`
       <div class="card" style="padding:10px 12px;margin-bottom:8px;">
         <div class="row"><div style="min-width:0;"><div style="font-weight:800;">${escapeHtml(x.supplier||'—')}</div><div class="subtle" style="font-size:11.5px;">${fmtDateTime(x.date)} &middot; ${tr('puItemsCount').replace('{n}', x.items.length)}${x.staffName?(' &middot; '+escapeHtml(x.staffName)):''}${x.note?(' &middot; '+escapeHtml(x.note)):''}</div></div><strong style="white-space:nowrap;">${fmt(x.total)}</strong></div>
         <div class="subtle" style="font-size:12px;margin-top:4px;">${x.items.map(it=>escapeHtml(it.name)+' ×'+it.qty).join(', ')}</div>
@@ -15837,6 +15870,7 @@ function renderPurchase(){
   document.getElementById('pu-back-btn').addEventListener('click', ()=>{ state.view='products'; renderAll(); });
   document.getElementById('pu-supplier').addEventListener('input', (e)=>{ purchaseDraft.supplier = e.target.value; });
   try{ __puSuggBind(suppliers); }catch(e){}   /* fix132-fs: brauzerning taklif qutisi o'rniga */
+  try{ __puHistBind(container); }catch(e){}   /* fix133-pur */
   document.getElementById('pu-note').addEventListener('input', (e)=>{ purchaseDraft.note = e.target.value; });
   document.getElementById('pu-update-cost').addEventListener('change', (e)=>{ purchaseDraft.updateCost = e.target.checked; });
   container.querySelectorAll('[data-pu-pay]').forEach(el=>el.addEventListener('click', ()=>{ purchaseDraft.payMode = el.dataset.puPay; container.querySelectorAll('[data-pu-pay]').forEach(x=>x.classList.toggle('active', x===el)); }));
@@ -15897,7 +15931,7 @@ function applyPurchase(){
     if(doc.supplier && !p.supplierName) p.supplierName = doc.supplier;
   });
   saveProducts();
-  state.purchases = (state.purchases||[]); state.purchases.push(doc); savePurchases();
+  state.purchases = (state.purchases||[]); state.purchases.push(doc); savePurchases(); try{ addPurchaseDoc(doc); }catch(e){}   /* fix133-pur */
   purchaseDraft = {supplier:'', note:'', items:[], updateCost:true, payMode:'cash'};
   showToast(tr('puApplied')+': '+fmt(doc.total));
   renderPurchase();
@@ -18968,7 +19002,7 @@ function __openExpenseSheet(id){
   const x = (state.expenses || []).find(e=>e.id === id); if(!x) return;
   const row = (k, v)=>v ? '<div class="row" style="padding:6px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);"><span class="subtle">' + escapeHtml(k) + '</span><span style="text-align:right;">' + v + '</span></div>' : '';
   openModal('<div class="modal-title">' + escapeHtml(tr('dzExpense')) + '</div>'
-    + '<div style="font-size:26px;font-weight:800;color:var(--danger);margin:2px 0 10px;">-' + escapeHtml(fmt(x.amount)) + '</div>'
+    + '<div style="font-size:26px;font-weight:800;color:' + (x.amount < 0 ? 'var(--teal)' : 'var(--danger)') + ';margin:2px 0 10px;">' + (x.amount < 0 ? '+' + escapeHtml(fmt(-x.amount)) : '-' + escapeHtml(fmt(x.amount))) + '</div>'
     + row(tr('categoryLabel'), '<span style="color:' + expenseCategoryColor(x.category) + ';font-weight:700;">' + escapeHtml(expenseCategoryLabel(x.category)) + '</span>')
     + row(tr('dateTime'), escapeHtml(fmtDateTime(x.date)))
     + row(tr('cashier'), x.staffName ? escapeHtml(x.staffName) : '')
@@ -19599,7 +19633,7 @@ function __r4Expenses(container, historyCutoff){
               <div class="meta"><span style="color:${expenseCategoryColor(x.category)};font-weight:700;">${expenseCategoryLabel(x.category)}</span> · ${fmtDateTime(x.date)}${x.staffName ? ' · '+icI('user')+' '+escapeHtml(x.staffName) : ''}</div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
-              <strong style="color:var(--danger);white-space:nowrap;">-${fmt(x.amount)}</strong>
+              <strong style="color:${x.amount < 0 ? 'var(--teal)' : 'var(--danger)'};white-space:nowrap;">${x.amount < 0 ? '+' + fmt(-x.amount) : '-' + fmt(x.amount)}</strong>
               <button class="icon-btn" data-del-expense="${x.id}" hidden aria-hidden="true">${ICONS.trash}</button>
             </div>
           </div>`; }).join('');
@@ -19696,7 +19730,7 @@ function __r4Staff(container, ranked, commissionPct){
   if(eb) eb.addEventListener('click', ()=>{ state.__r4FocusComm = true; state.reportsCategory = null; state.view = 'settings'; state.settingsCategory = 'staffrules'; renderAll(); });
 }
 /* ---- 3.14 Ombor harakati ---- */
-var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']]];
+var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete', 'supplierReturn']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']]];
 function __r4SmOk(m){ const g = SM_GROUPS.find(x=>x[0] === (state.__r4SmG || '')); return !g || !g[2] || g[2].indexOf(m.reason) >= 0; }
 function __r4SmChips(container, renderList){
   const s = document.getElementById('sm-search'); if(!s) return;
@@ -19716,7 +19750,7 @@ function __r4SmEmpty(){
   if(e && (state.__r4SmG || (document.getElementById('sm-search') || {}).value)) e.textContent = tr('r4FilterEmpty');
 }
 /* ---- 3.15 Audit ---- */
-var AU_GROUPS = [['', 'r3PAll', null], ['del', 'r4AuDelete', ['customerDelete', 'productDelete', 'saleDelete', 'expenseDelete', 'staffDelete']], ['price', 'r4AuPrice', ['priceChange', 'saleEdit', 'stockCount']], ['money', 'r4AuMoney', ['saleRefund', 'debtPayment', 'debtManual', 'customerRestore']], ['login', 'r4AuLogin', ['login']]];
+var AU_GROUPS = [['', 'r3PAll', null], ['del', 'r4AuDelete', ['customerDelete', 'productDelete', 'saleDelete', 'expenseDelete', 'staffDelete']], ['price', 'r4AuPrice', ['priceChange', 'saleEdit', 'stockCount']], ['money', 'r4AuMoney', ['saleRefund', 'debtPayment', 'debtManual', 'customerRestore', 'purchaseReturn']], ['login', 'r4AuLogin', ['login']]];
 function __r4AuOk(a){
   const g = AU_GROUPS.find(x=>x[0] === (state.__r4AuG || ''));
   if(g && g[2] && g[2].indexOf(a.action) < 0) return false;
@@ -19840,6 +19874,161 @@ function __tcFit(){
     if(over()) c.classList.add('tc-noic');
     if(over()) c.classList.add('tc-sm');
   });
+}
+
+/* fix133-pur: kirim hujjatlari — bulut, tarix, qaytarish */
+var PU_OFF_KEY = 'sp_pu_cloud_off_v1';
+function __puCloudOff(){ try{ return localStorage.getItem(PU_OFF_KEY) === '1'; }catch(e){ return false; } }
+function __puCloudOffSet(){ try{ localStorage.setItem(PU_OFF_KEY, '1'); }catch(e){} }
+function addPurchaseDoc(doc){
+  if(!doc || __puCloudOff()) return; queuePendingSync('purchase', doc.id); if(!fbUser || !fbDb) return;
+  try{
+    purchasesCol().doc(doc.id).set(sanitizeForFirestore(doc))
+      .then(()=>clearPendingSync('purchase', doc.id))
+      .catch((e)=>{ if(/permission|insufficient/i.test(String((e && (e.code || e.message)) || ''))){ __puCloudOffSet(); clearPendingSync('purchase', doc.id); } else queuePendingSync('purchase', doc.id); });
+  }catch(e){ queuePendingSync('purchase', doc.id); }
+}
+/* Bulut va telefon birlashtiriladi: hech bir kirim o'chirilmaydi; telefonda bo'lib bulutda yo'qlari yuboriladi */
+function __puWatch(){
+  if(__puCloudOff()) return;
+  let first = true;
+  const unsub = purchasesCol().onSnapshot(snap=>{
+    const cloud = snap.docs.map(d=>d.data()).filter(x=>x && x.id), byId = {};
+    cloud.forEach(x=>{ byId[x.id] = x; });
+    const pending = new Set(pendingSyncQueue.filter(q=>q.kind === 'purchase').map(q=>q.id));
+    const local = state.purchases || [], out = [];
+    local.forEach(x=>{ if(!x || !x.id) return; if(byId[x.id] && !pending.has(x.id)){ out.push(byId[x.id]); delete byId[x.id]; } else { out.push(x); if(byId[x.id]) delete byId[x.id]; else if(first && !pending.has(x.id)) addPurchaseDoc(x); } });
+    Object.keys(byId).forEach(k=>out.push(byId[k]));
+    out.sort((a, b)=>String(a.date).localeCompare(String(b.date)));
+    first = false;
+    state.purchases = out; savePurchases();
+    if(state.view === 'purchase' && !document.getElementById('modal-root').children.length && !(document.activeElement && /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName))) { try{ const l = document.getElementById('pu-h-list'); if(l) __puHistDraw(); }catch(e){} }
+  }, (e)=>{ if(/permission|insufficient/i.test(String((e && (e.code || e.message)) || ''))) __puCloudOffSet(); });
+  liveListenerUnsubs.push(unsub);
+}
+function __puBranchList(){ return (state.purchases||[]).filter(x=>effectiveBranchId(x.branchId)===effectiveBranchId(state.currentBranchId)).slice().sort((a, b)=>String(b.date).localeCompare(String(a.date))); }
+function __puPayLabel(m){ return tr(m === 'credit' ? 'puPayCredit' : (m === 'bank' ? 'puPayBank' : 'puPayCash')); }
+function __puRetSum(d){ return (d.returns || []).reduce((a, r)=>a + (r.total || 0), 0); }
+var __puH = {q: '', lim: 30};
+function __puHistSlot(){
+  try{
+    window.__puHistOk = true;
+    return `<h3 class="sub-title" style="margin-top:18px;">${tr('puHistory')}</h3>
+      <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="pu-h-q" placeholder="${escapeHtml(tr('puHistSearch'))}" value="${escapeHtml(__puH.q)}"></div>
+      <div id="pu-h-list"></div><div id="pu-h-more"></div>`;
+  }catch(e){ window.__puHistOk = false; return ''; }
+}
+function __puHistDraw(){
+  const box = document.getElementById('pu-h-list'); if(!box) return;
+  const q = __puH.q.trim().toLowerCase();
+  const all = __puBranchList().filter(d=>!q || String(d.note || '').toLowerCase().indexOf(q) >= 0 || String(d.supplier || '').toLowerCase().indexOf(q) >= 0 || (d.items || []).some(it=>String(it.name || '').toLowerCase().indexOf(q) >= 0));
+  const list = all.slice(0, __puH.lim);
+  box.innerHTML = list.length ? list.map(d=>{ const rs = __puRetSum(d); return `<div class="card pu-h" data-pu-open="${escapeHtml(d.id)}">
+      <div class="t"><b>${escapeHtml(d.supplier || '—')}${rs ? `<span class="pu-tag">${escapeHtml(tr('puReturned'))}: ${escapeHtml(fmt(rs))}</span>` : ''}</b><strong>${fmt(d.total || 0)}</strong></div>
+      ${d.note ? `<div style="font-size:12.5px;font-weight:700;margin-top:2px;">${escapeHtml(tr('puDoc'))}: ${escapeHtml(d.note)}</div>` : ''}
+      <div class="subtle" style="font-size:11.5px;margin-top:2px;">${escapeHtml(fmtDateTime(d.date))} · ${escapeHtml(tr('puItemsCount').replace('{n}', (d.items || []).length))} · ${escapeHtml(__puPayLabel(d.payMode))}</div>
+    </div>`; }).join('') : `<div class="empty-state">${escapeHtml(tr(q ? 'puNoHist' : 'noData'))}</div>`;
+  const more = document.getElementById('pu-h-more');
+  if(more){ more.innerHTML = all.length > list.length ? `<button class="btn btn-outline btn-block" id="pu-h-more-btn">${tr('loadMoreReceiptsBtn')}</button>` : ''; const b = document.getElementById('pu-h-more-btn'); if(b) b.addEventListener('click', ()=>{ __puH.lim += 30; __puHistDraw(); }); }
+}
+function __puHistBind(container){
+  const q = document.getElementById('pu-h-q'); if(!q) return;
+  q.addEventListener('input', ()=>{ __puH.q = q.value; __puH.lim = 30; __puHistDraw(); });
+  const box = document.getElementById('pu-h-list');
+  box.addEventListener('click', (e)=>{ const c = e.target.closest && e.target.closest('[data-pu-open]'); if(c) __puOpen(c.getAttribute('data-pu-open')); });
+  __puHistDraw();
+}
+function __puOpen(id){
+  const d = (state.purchases || []).find(x=>x.id === id); if(!d) return;
+  const left = (it)=>Math.max(0, (Number(it.qty) || 0) - (Number(it.returnedQty) || 0));
+  const canRet = (d.items || []).some(it=>left(it) > 0);
+  openModal(`<div class="modal-title">${escapeHtml(d.supplier || tr('puTitle'))}</div>
+    ${d.note ? `<div style="font-weight:800;margin:-4px 0 6px;">${escapeHtml(tr('puDoc'))}: ${escapeHtml(d.note)}</div>` : ''}
+    <div class="subtle" style="font-size:12.5px;margin-bottom:10px;">${escapeHtml(fmtDateTime(d.date))} · ${escapeHtml(__puPayLabel(d.payMode))}${d.staffName ? ' · ' + escapeHtml(d.staffName) : ''}</div>
+    ${(d.items || []).map(it=>`<div class="pu-line"><span>${escapeHtml(it.name)}<br><small class="subtle">${it.qty} × ${escapeHtml(fmt(it.cost))}${it.returnedQty ? ` · <b style="color:var(--warm);">${escapeHtml(tr('puReturned'))}: ${it.returnedQty}</b>` : ''}</small></span><b>${fmt((Number(it.qty) || 0) * (Number(it.cost) || 0))}</b></div>`).join('')}
+    <div class="pu-line" style="border-bottom:none;font-weight:800;"><span>${tr('puTotal')}</span><b>${fmt(d.total || 0)}</b></div>
+    ${(d.returns || []).length ? `<h4 style="margin:12px 0 4px;font-size:13px;">${escapeHtml(tr('puReturned'))}</h4>${d.returns.map(r=>`<div class="pu-line"><span>${escapeHtml(fmtDateTime(r.date))}${r.note ? ' · ' + escapeHtml(r.note) : ''}<br><small class="subtle">${r.items.map(x=>escapeHtml(x.name) + ' ×' + x.qty).join(', ')}</small></span><b style="color:var(--warm);">−${fmt(r.total || 0)}</b></div>`).join('')}` : ''}
+    ${canRet ? `<button class="btn btn-outline btn-block" id="pu-ret-open" style="margin-top:14px;color:var(--warm);border-color:var(--warm);">${ICONS.arrowLeft} ${escapeHtml(tr('puReturnBtn'))}</button>` : ''}
+  `);
+  const b = document.getElementById('pu-ret-open'); if(b) b.addEventListener('click', ()=>{ closeModal(); __puReturnForm(id); });
+}
+function __puCur(it){
+  const p = state.products.find(x=>x.id === it.productId); if(!p) return null;
+  const v = it.variantId ? getVariant(p, it.variantId) : null;
+  if(it.variantId && !v) return null;
+  return {p, v, stock: v ? (Number(v.stock) || 0) : (Number(p.stock) || 0)};
+}
+function __puReturnForm(id){
+  const d = (state.purchases || []).find(x=>x.id === id); if(!d) return;
+  const left = (it)=>Math.max(0, (Number(it.qty) || 0) - (Number(it.returnedQty) || 0));
+  const rows = (d.items || []).map((it, i)=>({it, i, left: left(it), cur: __puCur(it)})).filter(r=>r.left > 0);
+  const moneyKey = d.payMode === 'credit' ? 'puRetMoneyCredit' : (d.payMode === 'bank' ? 'puRetMoneyBank' : 'puRetMoneyCash');
+  openModal(`<div class="modal-title">${escapeHtml(tr('puReturnBtn'))}</div>
+    <div class="subtle" style="font-size:12.5px;margin:-4px 0 8px;">${escapeHtml(d.supplier || '—')}${d.note ? ' · ' + escapeHtml(tr('puDoc')) + ': ' + escapeHtml(d.note) : ''}</div>
+    ${rows.map(r=>`<div class="pu-ret-row"><div class="n"><b>${escapeHtml(r.it.name)}</b><br><small class="subtle">${escapeHtml(tr('puRecv'))}: ${r.it.qty}${r.it.returnedQty ? ' · ' + escapeHtml(tr('puReturned')) + ': ' + r.it.returnedQty : ''}${r.cur ? ' · ' + escapeHtml(tr('stock')) + ': ' + r.cur.stock : ''}</small>${r.cur ? '' : `<br><small style="color:var(--danger);">${escapeHtml(tr('puRetDeleted'))}</small>`}</div>
+      <input type="number" inputmode="decimal" min="0" max="${r.left}" step="any" data-pu-rq="${r.i}" value="" placeholder="0" ${r.cur ? '' : 'disabled'}></div>`).join('')}
+    <button type="button" class="btn btn-ghost btn-sm" id="pu-ret-all" style="margin-top:8px;">${escapeHtml(tr('puReturnAll'))}</button>
+    <div class="field" style="margin-top:10px;"><label class="field-label">${escapeHtml(tr('r4ReasonQ'))}</label><input type="text" id="pu-ret-note"></div>
+    <div class="pu-line" style="border-bottom:none;font-weight:800;"><span>${tr('puTotal')}</span><b id="pu-ret-sum">${fmt(0)}</b></div>
+    <p class="subtle" id="pu-ret-money" style="margin:0 0 10px;font-size:12px;"></p>
+    <div id="pu-ret-err" class="error-text"></div>
+    <div class="btn-row"><button class="btn btn-outline" type="button" id="pu-ret-cancel">${tr('cancel')}</button><button class="btn btn-danger" type="button" id="pu-ret-ok">${escapeHtml(tr('puReturnBtn'))}</button></div>`);
+  const qs = ()=>Array.prototype.slice.call(document.querySelectorAll('[data-pu-rq]'));
+  const val = (inp)=>{ const v = parseFloat(String(inp.value || '').replace(',', '.')); return isFinite(v) && v > 0 ? v : 0; };
+  const upd = ()=>{ const sum = qs().reduce((a, inp)=>a + val(inp) * (Number(d.items[+inp.dataset.puRq].cost) || 0), 0); document.getElementById('pu-ret-sum').textContent = fmt(sum); document.getElementById('pu-ret-money').textContent = sum > 0 ? tr(moneyKey).replace('{sum}', fmt(sum)) : ''; };
+  qs().forEach(inp=>inp.addEventListener('input', upd));
+  document.getElementById('pu-ret-all').addEventListener('click', ()=>{ rows.forEach(r=>{ const inp = document.querySelector('[data-pu-rq="' + r.i + '"]'); if(inp && !inp.disabled) inp.value = String(r.left); }); upd(); });
+  document.getElementById('pu-ret-cancel').addEventListener('click', ()=>closeModal());
+  document.getElementById('pu-ret-ok').addEventListener('click', (ev)=>{
+    const btn = ev.currentTarget; if(btn.disabled) return;
+    const err = document.getElementById('pu-ret-err'); err.textContent = '';
+    const lines = [];
+    for(const inp of qs()){
+      const q = val(inp); if(!q) continue;
+      const r = rows.find(x=>x.i === +inp.dataset.puRq); if(!r || !r.cur) continue;
+      if(q > r.left + 1e-9){ err.textContent = tr('puRetQtyBad'); return; }
+      if(q > r.cur.stock + 1e-9){ err.textContent = tr('puRetStockBad').replace('{name}', r.it.name).replace('{n}', r.cur.stock); return; }
+      lines.push({r, q});
+    }
+    if(!lines.length){ err.textContent = tr('puRetNone'); return; }
+    btn.disabled = true;
+    __puApplyReturn(d, lines, String(document.getElementById('pu-ret-note').value || '').trim());
+  });
+}
+function __puApplyReturn(d, lines, note){
+  const now = new Date().toISOString();
+  const ret = {id: uid(), date: now, note, staffName: state.currentStaff ? state.currentStaff.name : '', items: [], total: 0};
+  lines.forEach(({r, q})=>{
+    stockChange(r.cur.p, r.cur.v, -q, 'supplierReturn', d.id);
+    r.it.returnedQty = Math.round(((Number(r.it.returnedQty) || 0) + q) * 1000) / 1000;
+    ret.items.push({productId: r.it.productId, variantId: r.it.variantId || null, name: r.it.name, qty: q, cost: Number(r.it.cost) || 0});
+    ret.total += q * (Number(r.it.cost) || 0);
+  });
+  const amt = ret.total, label = tr('puRetNoteW') + (d.note ? ' · ' + tr('puDoc') + ' ' + d.note : '') + (note ? ' · ' + note : '');
+  if(amt > 0){
+    if(d.payMode === 'credit'){
+      const le = (state.creditorLedger || []).find(e=>e && e.purchaseId === d.id && e.type === 'debt');
+      let cr = le ? state.creditors.find(c=>c.id === le.creditorId) : null;
+      if(!cr) cr = state.creditors.find(c=>(c.name || '').trim().toLowerCase() === String(d.supplier || '').trim().toLowerCase());
+      if(cr){
+        const entry = {id: uid(), creditorId: cr.id, type: 'payment', amount: amt, note: label, date: now, staffName: ret.staffName, purchaseId: d.id, purchaseReturn: true};
+        state.creditorLedger.push(entry);
+        cr.debt = applyCreditorTransaction(cr.debt, 'payment', amt);
+        saveCreditors(); saveCreditorLedger(); addCreditorDoc(cr); addCreditorLedgerDoc(entry);
+        ret.creditorEntryId = entry.id;
+      }
+    } else {
+      const ex = {id: uid(), date: now, category: 'purchase', amount: -amt, note: (d.supplier ? d.supplier + ' · ' : '') + label, branchId: state.currentBranchId, staffId: state.currentStaff ? state.currentStaff.id : null, staffName: ret.staffName, paidFrom: d.payMode === 'bank' ? 'other' : 'cash', shiftId: state.currentShift ? state.currentShift.id : null, purchaseId: d.id, purchaseReturn: true};
+      state.expenses.push(ex); saveExpenses(); addExpenseDoc(ex);
+      ret.expenseId = ex.id;
+    }
+  }
+  d.returns = (d.returns || []).concat([ret]);
+  saveProducts(); savePurchases(); addPurchaseDoc(d);
+  try{ auditLog('purchaseReturn', `${d.supplier || '—'} — ${fmt(amt)}${d.note ? ' · ' + tr('puDoc') + ' ' + d.note : ''}${note ? ' · ' + note : ''}`, {purchaseId: d.id}); }catch(e){}
+  closeModal();
+  showToast(tr('puRetDone').replace('{sum}', fmt(amt)));
+  if(state.view === 'purchase') renderPurchase(); else renderAll();
 }
 
 /* --- Online catalog --- */
