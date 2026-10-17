@@ -781,6 +781,23 @@
   .er-pay-row label{flex:0 0 38%;font-size:13px;font-weight:700;color:var(--ink-soft);}
   .er-pay-row input{flex:1;min-width:0;text-align:right;font-weight:700;}
   #er-pay-left{font-size:12.5px;font-weight:800;margin:2px 0 6px;}
+  /* fix135-sup */
+  .so-st{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap;}
+  .so-st.draft{background:#eef2f9;color:var(--ink-soft);} .so-st.sent{background:#e8f0ff;color:#1f4fb8;} .so-st.partial{background:#fff1e0;color:#9a4b00;}
+  .so-st.received{background:#e7f6ef;color:#12805c;} .so-st.cancelled{background:#fdecec;color:var(--danger);}
+  .so-card{cursor:pointer;padding:11px 13px;margin-bottom:8px;}
+  .so-card .t{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;} .so-card .t b{min-width:0;}
+  .so-line{padding:9px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);}
+  .so-line .h{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;font-size:13.5px;font-weight:700;}
+  .so-line .h span{min-width:0;}
+  .so-line .g{display:grid;grid-template-columns:1fr 1.3fr auto;gap:8px;align-items:end;margin-top:6px;}
+  .so-line .g input{text-align:center;font-weight:700;padding:8px 6px;}
+  .so-line .g .sum{font-weight:800;white-space:nowrap;padding-bottom:9px;font-size:13px;}
+  .so-acts{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+  .so-banner{background:#e8f0ff;border:1px solid #c9d8ff;color:#1f4fb8;border-radius:14px;padding:10px 12px;font-size:12.5px;font-weight:700;margin:0 0 10px;display:flex;gap:10px;align-items:center;}
+  .so-banner span{flex:1;min-width:0;} .so-banner button{flex-shrink:0;border:none;background:#fff;color:#1f4fb8;border-radius:10px;padding:6px 10px;font:inherit;font-size:12px;font-weight:800;cursor:pointer;}
+  .sr-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);}
+  .sr-row .n{flex:1;min-width:0;font-size:13px;} .sr-row input{width:76px;text-align:center;font-weight:700;padding:8px 6px;}
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -2065,6 +2082,59 @@ const T = {
   erPayAuto:{uz:"Qayta taqsimlash",ru:"Распределить заново",en:"Re-allocate",kk:"Қайта бөлу",ky:"Кайра бөлүштүрүү",tg:"Аз нав тақсим кардан"},
   erPayBad:{uz:"To'lovlar jami chek jamiga teng bo'lishi kerak",ru:"Сумма оплат должна равняться итогу чека",en:"Payments must add up to the receipt total",kk:"Төлемдер жиынтығы чек жиынтығына тең болуы керек",ky:"Төлөмдөрдүн жыйынтыгы чектин жыйынтыгына барабар болушу керек",tg:"Ҳамагии пардохтҳо бояд ба ҳамагии чек баробар бошад"},
   erDebtLine:{uz:"Shu chek bo'yicha mijoz qarzi: {a} → {b}",ru:"Долг клиента по этому чеку: {a} → {b}",en:"Customer debt for this receipt: {a} → {b}",kk:"Осы чек бойынша клиент қарызы: {a} → {b}",ky:"Ушул чек боюнча кардардын карызы: {a} → {b}",tg:"Қарзи мизоҷ аз рӯи ин чек: {a} → {b}"},
+  /* fix135-sup */
+  soMenu:{uz:"Ta'minotchilar",ru:"Поставщики",en:"Suppliers",kk:"Жеткізушілер",ky:"Жеткирүүчүлөр",tg:"Таъминкунандагон"},
+  soOrders:{uz:"Buyurtmalar",ru:"Заказы",en:"Orders",kk:"Тапсырыстар",ky:"Буйрутмалар",tg:"Фармоишҳо"},
+  soReturns:{uz:"Qaytarishlar",ru:"Возвраты",en:"Returns",kk:"Қайтарулар",ky:"Кайтаруулар",tg:"Баргардониҳо"},
+  soNew:{uz:"Yangi buyurtma",ru:"Новый заказ",en:"New order",kk:"Жаңа тапсырыс",ky:"Жаңы буйрутма",tg:"Фармоиши нав"},
+  soOrderN:{uz:"Buyurtma {n}",ru:"Заказ {n}",en:"Order {n}",kk:"Тапсырыс {n}",ky:"Буйрутма {n}",tg:"Фармоиш {n}"},
+  soStDraft:{uz:"Qoralama",ru:"Черновик",en:"Draft",kk:"Жоба",ky:"Долбоор",tg:"Сиёҳнавис"},
+  soStSent:{uz:"Yuborildi",ru:"Отправлен",en:"Sent",kk:"Жіберілді",ky:"Жөнөтүлдү",tg:"Фиристода шуд"},
+  soStPartial:{uz:"Qisman qabul qilindi",ru:"Частично принят",en:"Partly received",kk:"Ішінара қабылданды",ky:"Жарым-жартылай кабыл алынды",tg:"Қисман қабул шуд"},
+  soStReceived:{uz:"Qabul qilindi",ru:"Принят",en:"Received",kk:"Қабылданды",ky:"Кабыл алынды",tg:"Қабул шуд"},
+  soStCancelled:{uz:"Bekor qilindi",ru:"Отменён",en:"Cancelled",kk:"Бас тартылды",ky:"Жокко чыгарылды",tg:"Бекор шуд"},
+  soSupplier:{uz:"Ta'minotchi",ru:"Поставщик",en:"Supplier",kk:"Жеткізуші",ky:"Жеткирүүчү",tg:"Таъминкунанда"},
+  soNeedSupplier:{uz:"Ta'minotchini kiriting",ru:"Укажите поставщика",en:"Enter the supplier",kk:"Жеткізушіні енгізіңіз",ky:"Жеткирүүчүнү киргизиңиз",tg:"Таъминкунандаро ворид кунед"},
+  soNeedItems:{uz:"Kamida bitta tovar qo'shing",ru:"Добавьте хотя бы один товар",en:"Add at least one item",kk:"Кемінде бір тауар қосыңыз",ky:"Жок дегенде бир товар кошуңуз",tg:"Ақаллан як мол илова кунед"},
+  soFillLow:{uz:"Kam qolganlardan to'ldirish",ru:"Добавить из заканчивающихся",en:"Fill from low stock",kk:"Аз қалғандардан толтыру",ky:"Аз калгандардан толтуруу",tg:"Аз молҳои камшуда пур кардан"},
+  soFillNone:{uz:"Bu ta'minotchining kam qolgan tovari yo'q",ru:"У этого поставщика нет заканчивающихся товаров",en:"No low-stock items from this supplier",kk:"Бұл жеткізушінің аз қалған тауары жоқ",ky:"Бул жеткирүүчүнүн аз калган товары жок",tg:"Ин таъминкунанда моли камшуда надорад"},
+  soFilled:{uz:"{n} ta tovar qo'shildi",ru:"Добавлено товаров: {n}",en:"{n} items added",kk:"{n} тауар қосылды",ky:"{n} товар кошулду",tg:"{n} мол илова шуд"},
+  soExpCost:{uz:"Kutilgan narx",ru:"Ожидаемая цена",en:"Expected price",kk:"Күтілетін баға",ky:"Күтүлгөн баа",tg:"Нархи интизорӣ"},
+  soSend:{uz:"Yuborish",ru:"Отправить",en:"Send",kk:"Жіберу",ky:"Жөнөтүү",tg:"Фиристодан"},
+  soShare:{uz:"Ulashish",ru:"Поделиться",en:"Share",kk:"Бөлісу",ky:"Бөлүшүү",tg:"Мубодила"},
+  soOtherApp:{uz:"Boshqa ilova",ru:"Другое приложение",en:"Other app",kk:"Басқа қолданба",ky:"Башка тиркеме",tg:"Барномаи дигар"},
+  soReceive:{uz:"Qabul qilish",ru:"Принять",en:"Receive",kk:"Қабылдау",ky:"Кабыл алуу",tg:"Қабул кардан"},
+  soFinish:{uz:"Yakunlash (qolgani kelmaydi)",ru:"Завершить (остаток не придёт)",en:"Close (rest will not come)",kk:"Аяқтау (қалғаны келмейді)",ky:"Бүтүрүү (калганы келбейт)",tg:"Анҷом (боқимонда намеояд)"},
+  soCancel:{uz:"Buyurtmani bekor qilish",ru:"Отменить заказ",en:"Cancel order",kk:"Тапсырыстан бас тарту",ky:"Буйрутманы жокко чыгаруу",tg:"Бекор кардани фармоиш"},
+  soCancelQ:{uz:"Buyurtma bekor qilinsinmi? Kelgan tovarlar o'z joyida qoladi.",ru:"Отменить заказ? Уже полученные товары останутся.",en:"Cancel the order? Items already received stay.",kk:"Тапсырыстан бас тартасыз ба? Келген тауарлар қалады.",ky:"Буйрутма жокко чыгарылсынбы? Келген товарлар калат.",tg:"Фармоиш бекор шавад? Моли қабулшуда мемонад."},
+  soDelete:{uz:"Qoralamani o'chirish",ru:"Удалить черновик",en:"Delete draft",kk:"Жобаны жою",ky:"Долбоорду өчүрүү",tg:"Ҳазфи сиёҳнавис"},
+  soDeleteQ:{uz:"Qoralama o'chirilsinmi?",ru:"Удалить черновик?",en:"Delete this draft?",kk:"Жоба жойылсын ба?",ky:"Долбоор өчүрүлсүнбү?",tg:"Сиёҳнавис ҳазф шавад?"},
+  soRecvBanner:{uz:"Buyurtma {n} bo'yicha qabul. Haqiqatda kelgan son va narxni kiriting.",ru:"Приём по заказу {n}. Укажите фактическое количество и цену.",en:"Receiving order {n}. Enter the actual quantity and price.",kk:"{n} тапсырысы бойынша қабылдау. Нақты сан мен бағаны енгізіңіз.",ky:"{n} буйрутмасы боюнча кабыл алуу. Чыныгы сан жана бааны киргизиңиз.",tg:"Қабул аз рӯи фармоиши {n}. Миқдор ва нархи воқеиро ворид кунед."},
+  soUnlink:{uz:"Buyurtmadan ajratish",ru:"Отвязать от заказа",en:"Unlink from order",kk:"Тапсырыстан ажырату",ky:"Буйрутмадан ажыратуу",tg:"Аз фармоиш ҷудо кардан"},
+  soRecvd:{uz:"Keldi: {a} / {b}",ru:"Получено: {a} / {b}",en:"Received: {a} / {b}",kk:"Келді: {a} / {b}",ky:"Келди: {a} / {b}",tg:"Қабул: {a} / {b}"},
+  soLinked:{uz:"Shu buyurtma bo'yicha kirimlar",ru:"Приходы по этому заказу",en:"Goods-in for this order",kk:"Осы тапсырыс бойынша кірістер",ky:"Ушул буйрутма боюнча кирүүлөр",tg:"Воридот аз рӯи ин фармоиш"},
+  soReceiveNote:{uz:"Buyurtma {n}",ru:"Заказ {n}",en:"Order {n}",kk:"Тапсырыс {n}",ky:"Буйрутма {n}",tg:"Фармоиш {n}"},
+  soNoPerm:{uz:"Bu bo'limga ruxsatingiz yo'q",ru:"Нет доступа к этому разделу",en:"You have no access to this section",kk:"Бұл бөлімге рұқсатыңыз жоқ",ky:"Бул бөлүмгө уруксатыңыз жок",tg:"Ба ин бахш дастрасӣ надоред"},
+  permSupply:{uz:"Ta'minotchilar: buyurtma va qaytarish",ru:"Поставщики: заказы и возвраты",en:"Suppliers: orders and returns",kk:"Жеткізушілер: тапсырыс және қайтару",ky:"Жеткирүүчүлөр: буйрутма жана кайтаруу",tg:"Таъминкунандагон: фармоиш ва баргардонӣ"},
+  srNew:{uz:"Ta'minotchiga qaytarish",ru:"Возврат поставщику",en:"Return to supplier",kk:"Жеткізушіге қайтару",ky:"Жеткирүүчүгө кайтаруу",tg:"Баргардонӣ ба таъминкунанда"},
+  srReason:{uz:"Sabab",ru:"Причина",en:"Reason",kk:"Себеп",ky:"Себеп",tg:"Сабаб"},
+  srRsBad:{uz:"Yaroqsiz",ru:"Брак",en:"Defective",kk:"Жарамсыз",ky:"Жараксыз",tg:"Корношоям"},
+  srRsExp:{uz:"Muddati o'tgan",ru:"Просрочен",en:"Expired",kk:"Мерзімі өткен",ky:"Мөөнөтү өткөн",tg:"Мӯҳлаташ гузашта"},
+  srRsExtra:{uz:"Ortiqcha",ru:"Излишек",en:"Surplus",kk:"Артық",ky:"Ашыкча",tg:"Зиёдатӣ"},
+  srMoney:{uz:"Pul",ru:"Деньги",en:"Money",kk:"Ақша",ky:"Акча",tg:"Пул"},
+  srMoneyDebt:{uz:"Qarzdan ayirish",ru:"Списать с долга",en:"Deduct from debt",kk:"Қарыздан шегеру",ky:"Карыздан кемитүү",tg:"Аз қарз кам кардан"},
+  srMoneyCash:{uz:"Pul qaytdi (kassaga)",ru:"Деньги вернули (в кассу)",en:"Money back (to till)",kk:"Ақша қайтты (кассаға)",ky:"Акча кайтты (кассага)",tg:"Пул баргашт (ба касса)"},
+  srMoneyBank:{uz:"Pul qaytdi (karta/bank)",ru:"Деньги вернули (карта/счёт)",en:"Money back (card/bank)",kk:"Ақша қайтты (карта/банк)",ky:"Акча кайтты (карта/банк)",tg:"Пул баргашт (корт/бонк)"},
+  srDebtNow:{uz:"Hozirgi qarzingiz: {sum}",ru:"Ваш текущий долг: {sum}",en:"Your current debt: {sum}",kk:"Қазіргі қарызыңыз: {sum}",ky:"Учурдагы карызыңыз: {sum}",tg:"Қарзи ҳозираи шумо: {sum}"},
+  srEmpty:{uz:"Hali qaytarish yo'q",ru:"Возвратов пока нет",en:"No returns yet",kk:"Әзірге қайтару жоқ",ky:"Азырынча кайтаруу жок",tg:"Ҳоло баргардонӣ нест"},
+  srFromDoc:{uz:"Kirim hujjati bo'yicha",ru:"По документу прихода",en:"From goods-in document",kk:"Кіріс құжаты бойынша",ky:"Кирим документи боюнча",tg:"Аз рӯи ҳуҷҷати ворид"},
+  supDebt:{uz:"Qarz",ru:"Долг",en:"Debt",kk:"Қарыз",ky:"Карыз",tg:"Қарз"},
+  supBought:{uz:"Kirim",ru:"Приход",en:"Goods-in",kk:"Кіріс",ky:"Кирим",tg:"Ворид"},
+  supOpenOrders:{uz:"Ochiq buyurtma",ru:"Открытых заказов",en:"Open orders",kk:"Ашық тапсырыс",ky:"Ачык буйрутма",tg:"Фармоиши кушода"},
+  supHistory:{uz:"Tarix",ru:"История",en:"History",kk:"Тарих",ky:"Тарых",tg:"Таърих"},
+  supPaid:{uz:"To'lov",ru:"Оплата",en:"Payment",kk:"Төлем",ky:"Төлөм",tg:"Пардохт"},
+  supTookDebt:{uz:"Qarz yozildi",ru:"Записан долг",en:"Debt recorded",kk:"Қарыз жазылды",ky:"Карыз жазылды",tg:"Қарз сабт шуд"},
+  supNone:{uz:"Ta'minotchilar yo'q",ru:"Поставщиков нет",en:"No suppliers",kk:"Жеткізушілер жоқ",ky:"Жеткирүүчүлөр жок",tg:"Таъминкунандагон нест"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3047,6 +3117,7 @@ async function loadAll(){
   state.audit = (await storGet(STORAGE_KEYS.audit)) || [];
   try{ pruneAudit(); }catch(e){} /* fix96 */
   state.purchases = (await storGet(STORAGE_KEYS.purchases)) || [];
+  try{ for(const __k of Object.keys(__gcK())){ const __g = __gcK()[__k]; state[__g.key] = (await storGet(__g.store)) || []; } }catch(e){}   /* fix135-sup */
   state.subCloudCheck = (await storGet(STORAGE_KEYS.subCloudCheck)) || 0;
   state.stockMoves = (await storGet(STORAGE_KEYS.stockMoves)) || [];
   state.heldCarts = (await storGet(STORAGE_KEYS.heldCarts)) || [];
@@ -3556,7 +3627,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.33';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.34';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -4160,6 +4231,7 @@ function startLiveListeners(){
   watchArrayCollection(creditorLedgerCol(), 'creditorLedger', 'creditorLedger');
   watchArrayCollection(kitchenStationsCol(), 'kitchenStations', 'kitchenStation');
   try{ __puWatch(); }catch(e){}   /* fix133-pur */
+  try{ Object.keys(__gcK()).forEach(k=>__gcWatch(k)); }catch(e){}   /* fix135-sup */
 
   // catalog doc: staff + shifts (small, still synced as merge:true fields
   // rather than their own subcollections — see syncStaffDoc/syncShiftsDoc)
@@ -4339,6 +4411,10 @@ async function __retryOneItem(item){
       } else if(String(item.kind).indexOf('del:')===0){ /* fix72 */
         const _dc = {sale:salesCol, expense:expensesCol, table:tablesCol, visit:visitsCol, creditor:creditorsCol, kitchenStation:kitchenStationsCol}[item.kind.slice(4)];
         if(_dc) await _dc().doc(item.id).delete();
+      } else if(__gcK()[item.kind]){   /* fix135-sup: buyurtma, qaytarish (va keyingi hujjatlar) */
+        const __g = __gcK()[item.kind], gd = (state[__g.key]||[]).find(x=>x.id===item.id);
+        if(!gd || __gcOff(item.kind)){ clearPendingSync(item.kind, item.id); return; }
+        await businessDocRef().collection(__g.col).doc(gd.id).set(sanitizeForFirestore(gd));
       } else if(item.kind==='purchase'){   /* fix133-pur */
         const pd = (state.purchases||[]).find(x=>x.id===item.id);
         if(!pd || __puCloudOff()){ clearPendingSync(item.kind, item.id); return; }
@@ -4356,6 +4432,7 @@ async function __retryOneItem(item){
       // specifically, also surface WHY, so the diagnostic in Business
       // Info settings shows the real reason instead of nothing.
       if(item.kind==='settings') state.__lastSettingsSyncError = (e && e.message) ? e.message : String(e);
+      if(__gcK()[item.kind] && /permission|insufficient/i.test(String((e && (e.code || e.message)) || ''))){ __gcOffSet(item.kind); clearPendingSync(item.kind, item.id); return; }   /* fix135-sup */
       if(item.kind==='purchase' && /permission|insufficient/i.test(String((e && (e.code || e.message)) || ''))){ __puCloudOffSet(); clearPendingSync(item.kind, item.id); return; }   /* fix133-pur: bulut ruxsat bermasa — telefonda qoladi, navbat to'lib qolmaydi */
       pendingSyncLastErrors[item.kind+':'+item.id] = (e && e.message) ? e.message : String(e);
     }
@@ -10743,7 +10820,7 @@ function renderProducts(){
   document.getElementById('import-export-btn').addEventListener('click', openImportExportModal);
   document.getElementById('labels-btn').addEventListener('click', openLabelsModal);
   document.getElementById('products-more-btn').addEventListener('click', ()=>__actSheet(tr('dzMore'), [   /* fix128-main */
-    {icon: ICONS.barcode, label: tr('toolLabels'), sel: '#labels-btn'}, {icon: ICONS.cloud, label: tr('ieTitle'), sel: '#import-export-btn'}, {icon: ICONS.share, label: tr('toolPdf'), sel: '#export-products-btn'}]));
+    {icon: ICONS.barcode, label: tr('toolLabels'), sel: '#labels-btn'}, {icon: ICONS.cloud, label: tr('ieTitle'), sel: '#import-export-btn'}, {icon: ICONS.share, label: tr('toolPdf'), sel: '#export-products-btn'}].concat(__moreExtra())));
   const puBtn = document.getElementById('purchase-btn');
   if(puBtn) puBtn.addEventListener('click', ()=>{ state.view = 'purchase'; renderAll(); });
   const stBtn = document.getElementById('stocktake-btn');
@@ -14873,7 +14950,7 @@ function reportsMenuItems(){
     {id:'staff', label:tr('staffReportSection')},
     {id:'inventory', label:tr('inventoryReport')},
     {id:'stockmoves', label:tr('stockMovesReport')}
-  ];
+  ].concat(canSupply() ? [{id:'suppliers', label:tr('soMenu')}] : []);   /* fix135-sup */
   // Deliberately admin-only, not gated by the general 'reports' permission
   // a cashier might also hold for legitimate reasons (checking top
   // products, etc.) — this specific list exists so the OWNER can see who
@@ -14910,7 +14987,7 @@ function renderReportsMenu(container){
     ${(()=>{
       const G = {receipts:['sales','receiptIcon','#2563eb'], today:['sales','sale','#16a34a'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
         pnl:['finance','percent','#0f9d8a'], productprofit:['finance','percent','#12a37f'], expenses:['finance','creditCard','#d97706'], payroll:['finance','peopleIcon','#7c5cfc'], mydebts:['finance','book','#c2410c'],
-        inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], products:['sales','products','#0891b2'],
+        inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], suppliers:['stock','truck','#0f766e'], products:['sales','products','#0891b2'],
         customers:['people','customers','#8b5cf6'], staff:['people','peopleIcon','#a855f7'], branches:['people','mapPin','#6366f1'],
         audit:['control','target','#475569']};
       const order = [['sales','rgSales'],['finance','rgFinance'],['stock','rgStock'],['people','rgPeople'],['control','rgControl']];
@@ -14937,6 +15014,7 @@ function renderReportsMenu(container){
   container.querySelectorAll('[data-cat]').forEach(el=>{
     el.addEventListener('click', ()=>{
       if(el.dataset.cat === 'receipts'){ state.view = 'receipts'; renderAll(); return; }
+      if(el.dataset.cat === 'suppliers'){ state.__soTab = 'suppliers'; state.__soEdit = null; state.__soFrom = 'reports'; state.reportsCategory = null; state.view = 'supply'; renderAll(); return; }   /* fix135-sup */
       if(el.dataset.cat === 'mydebts'){ state.__mdFrom = 'reports'; state.reportsCategory = null; state.view = 'myDebts'; renderAll(); return; }   /* fix128-main */
       state.reportsCategory = el.dataset.cat; renderReports();
     });
@@ -15873,7 +15951,7 @@ function renderPurchase(){
   const suppliers = [...new Set(visibleProducts().map(p=>p.supplierName).filter(Boolean).concat((state.creditors||[]).map(c=>c.name).filter(Boolean)))];
   const recent = (state.purchases||[]).filter(x=>effectiveBranchId(x.branchId)===effectiveBranchId(state.currentBranchId)).slice().reverse().slice(0, 30);
   container.innerHTML = `
-    <div class="back-row"><button id="pu-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('puTitle')}</span></div>
+    <div class="back-row"><button id="pu-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('puTitle')}</span></div>${__soBanner()}
     <div class="card" style="padding:12px 14px;margin-bottom:10px;">
       <div class="field"><label class="field-label">${tr('puSupplier')}</label><input type="text" id="pu-supplier" autocomplete="off" value="${escapeHtml(purchaseDraft.supplier)}"><div class="pu-sugg" id="pu-sugg"></div><datalist id="pu-supplier-list">${suppliers.map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
       <div class="field"><label class="field-label">${tr('puNote')}</label><input type="text" id="pu-note" value="${escapeHtml(purchaseDraft.note)}"></div>
@@ -15903,6 +15981,7 @@ function renderPurchase(){
   document.getElementById('pu-supplier').addEventListener('input', (e)=>{ purchaseDraft.supplier = e.target.value; });
   try{ __puSuggBind(suppliers); }catch(e){}   /* fix132-fs: brauzerning taklif qutisi o'rniga */
   try{ __puHistBind(container); }catch(e){}   /* fix133-pur */
+  try{ const __sb = document.getElementById('pu-so-unlink'); if(__sb) __sb.addEventListener('click', ()=>{ delete purchaseDraft.orderId; renderPurchase(); }); }catch(e){}   /* fix135-sup */
   document.getElementById('pu-note').addEventListener('input', (e)=>{ purchaseDraft.note = e.target.value; });
   document.getElementById('pu-update-cost').addEventListener('change', (e)=>{ purchaseDraft.updateCost = e.target.checked; });
   container.querySelectorAll('[data-pu-pay]').forEach(el=>el.addEventListener('click', ()=>{ purchaseDraft.payMode = el.dataset.puPay; container.querySelectorAll('[data-pu-pay]').forEach(x=>x.classList.toggle('active', x===el)); }));
@@ -15936,6 +16015,7 @@ function openPurchasePicker(){
   setTimeout(()=>document.getElementById('pu-pick-search').focus(), 60);
 }
 function applyPurchase(){
+  const __soId = purchaseDraft.orderId || null;   /* fix135-sup */
   const items = purchaseDraft.items.filter(it=>(parseFloat(it.qty)||0) > 0 && state.products.some(x=>x.id===it.productId));
   if(!items.length){ showToast(tr('puEmpty')); return; }
   const payMode = purchaseDraft.payMode || 'cash';
@@ -15963,7 +16043,9 @@ function applyPurchase(){
     if(doc.supplier && !p.supplierName) p.supplierName = doc.supplier;
   });
   saveProducts();
+  if(__soId) doc.orderId = __soId;   /* fix135-sup */
   state.purchases = (state.purchases||[]); state.purchases.push(doc); savePurchases(); try{ addPurchaseDoc(doc); }catch(e){}   /* fix133-pur */
+  if(__soId){ try{ __soAfterReceive(__soId, doc); }catch(e){ console.error('fix135 recv', e); } }
   purchaseDraft = {supplier:'', note:'', items:[], updateCost:true, payMode:'cash'};
   showToast(tr('puApplied')+': '+fmt(doc.total));
   renderPurchase();
@@ -20181,6 +20263,442 @@ function __erPayApply(sale, d, oldTotal, newTotal){
   return true;
 }
 
+/* fix135-sup: ta'minotchilar — buyurtma, qaytarish, hisobot */
+/* Umumiy hujjat kolleksiyalari: telefonda saqlanadi, bulutga yuboriladi, bulut bilan birlashtiriladi (hech biri o'chirilmaydi) */
+function __gcK(){
+  return window.__GCK || (window.__GCK = {
+    supplyOrder: {col: 'supplyOrders', key: 'supplyOrders', store: 'sardor_supply_orders_v1'},
+    supplyReturn: {col: 'supplyReturns', key: 'supplyReturns', store: 'sardor_supply_returns_v1'}
+  });
+}
+function __gcOff(kind){ try{ return localStorage.getItem('sp_gc_off_' + kind) === '1'; }catch(e){ return false; } }
+function __gcOffSet(kind){ try{ localStorage.setItem('sp_gc_off_' + kind, '1'); }catch(e){} }
+function __gcPerm(e){ return /permission|insufficient/i.test(String((e && (e.code || e.message)) || '')); }
+function __gcSave(kind){ const g = __gcK()[kind]; if(g) storSet(g.store, (state[g.key] || []).slice(-1500)); }
+function __gcPush(kind, doc){
+  const g = __gcK()[kind]; if(!g || !doc) return;
+  doc.updatedAt = new Date().toISOString();
+  __gcSave(kind);
+  if(__gcOff(kind)) return;
+  queuePendingSync(kind, doc.id); if(!fbUser || !fbDb) return;
+  try{
+    businessDocRef().collection(g.col).doc(doc.id).set(sanitizeForFirestore(doc))
+      .then(()=>clearPendingSync(kind, doc.id))
+      .catch((e)=>{ if(__gcPerm(e)){ __gcOffSet(kind); clearPendingSync(kind, doc.id); } else queuePendingSync(kind, doc.id); });
+  }catch(e){ queuePendingSync(kind, doc.id); }
+}
+var __gcTimers = {};
+function __gcPushSoon(kind, doc){ __gcSave(kind); clearTimeout(__gcTimers[doc.id]); __gcTimers[doc.id] = setTimeout(()=>__gcPush(kind, doc), 1200); }
+function __gcWatch(kind){
+  const g = __gcK()[kind]; if(!g || __gcOff(kind)) return;
+  let first = true;
+  const unsub = businessDocRef().collection(g.col).onSnapshot(snap=>{
+    const byId = {}; snap.docs.map(d=>d.data()).filter(x=>x && x.id).forEach(x=>{ byId[x.id] = x; });
+    const pending = new Set(pendingSyncQueue.filter(q=>q.kind === kind).map(q=>q.id));
+    const out = [];
+    (state[g.key] || []).forEach(x=>{
+      if(!x || !x.id) return;
+      const c = byId[x.id];
+      if(c && !pending.has(x.id) && String(c.updatedAt || '') >= String(x.updatedAt || '')) out.push(c);
+      else { out.push(x); if(first && !pending.has(x.id) && (!c || String(x.updatedAt || '') > String(c.updatedAt || ''))) __gcPush(kind, x); }
+      delete byId[x.id];
+    });
+    Object.keys(byId).forEach(k=>out.push(byId[k]));
+    first = false;
+    state[g.key] = out; __gcSave(kind);
+    try{
+      const busy = document.getElementById('modal-root').children.length || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
+      if(state.view === 'supply' && !busy) renderSupply();
+    }catch(e){}
+  }, (e)=>{ if(__gcPerm(e)) __gcOffSet(kind); });
+  liveListenerUnsubs.push(unsub);
+}
+
+function canSupply(){ return isAdmin() || hasPerm('supply'); }
+var MORE_EXTRA = [];
+function __moreExtra(){ return MORE_EXTRA.map(f=>{ try{ return f(); }catch(e){ return null; } }).filter(Boolean); }
+MORE_EXTRA.push(()=>canSupply() ? {icon: ICONS.truck, label: tr('soMenu'), fn: ()=>{ state.__soTab = 'orders'; state.__soEdit = null; state.__soFrom = 'products'; state.view = 'supply'; renderAll(); }} : null);
+
+var SO_ST = {draft: 'soStDraft', sent: 'soStSent', partial: 'soStPartial', received: 'soStReceived', cancelled: 'soStCancelled'};
+function __soNorm(n){ return String(n || '').trim().toLowerCase(); }
+function __soBr(x){ return effectiveBranchId(x.branchId) === effectiveBranchId(state.currentBranchId); }
+function __soOrders(){ return (state.supplyOrders || []).filter(o=>o && !o.deleted && __soBr(o)).sort((a, b)=>String(b.createdAt).localeCompare(String(a.createdAt))); }
+function __soFind(id){ return (state.supplyOrders || []).find(o=>o && o.id === id); }
+function __soCreditor(name){ const n = __soNorm(name); return n ? (state.creditors || []).find(c=>__soNorm(c.name) === n) : null; }
+function __soSuppliers(){
+  const seen = {}, out = [];
+  const add = (n)=>{ const k = __soNorm(n); if(k && !seen[k]){ seen[k] = 1; out.push(String(n).trim()); } };
+  (state.creditors || []).forEach(c=>add(c.name));
+  (state.purchases || []).forEach(d=>add(d.supplier));
+  (state.supplyOrders || []).forEach(o=>o && !o.deleted && add(o.supplier));
+  (state.supplyReturns || []).forEach(r=>r && add(r.supplier));
+  visibleProducts().forEach(p=>add(p.supplierName));
+  return out.sort((a, b)=>a.localeCompare(b));
+}
+function __soTotal(o){ return (o.items || []).reduce((a, l)=>a + (Number(l.qty) || 0) * (Number(l.cost) || 0), 0); }
+function __soNum(){
+  let mx = 0; (state.supplyOrders || []).forEach(o=>{ const m = /(\d+)\s*$/.exec(String(o && o.num || '')); if(m) mx = Math.max(mx, +m[1]); });
+  return 'SO-' + String(mx + 1).padStart(4, '0');
+}
+function __soStatus(o, st){ o.status = st; (o.history = o.history || []).push({st, date: new Date().toISOString(), by: state.currentStaff ? state.currentStaff.name : ''}); }
+function __soNew(){
+  const o = {id: uid(), num: __soNum(), supplier: '', note: '', items: [], status: 'draft', branchId: state.currentBranchId, createdAt: new Date().toISOString(), staffName: state.currentStaff ? state.currentStaff.name : '', history: []};
+  __soStatus(o, 'draft');
+  (state.supplyOrders = state.supplyOrders || []).push(o); __gcPush('supplyOrder', o);
+  return o;
+}
+function __soLineName(p, v){ return (p ? p.name : '') + (v ? ' ' + v.name : ''); }
+function __soCost(p, v){ return Math.round((v && (Number(v.cost) || Number(v.costPrice))) || Number(p && p.costPrice) || 0); }
+function __soNeedQty(p, v){
+  const st = Math.max(0, Number(stockQtyOf(p, v)) || 0), T = stockThresholdOf(p, v);
+  let vel = T.vel || 0;
+  if(!vel){ const V = __stockVel(), b = effectiveBranchId(p.branchId), hd = V.hist[b] || 0; if(hd > 0){ let u = V.sold[b + '|' + p.id + (v ? ':' + v.id : '')] || 0; if(v && p.variants && p.variants[0] === v) u += (V.sold[b + '|' + p.id] || 0); vel = u / hd; } }
+  const q = vel > 0 ? Math.ceil(vel * 14 - st) : Math.ceil((Number(T.thr) || 0) * 2 - st);
+  return Math.max(1, q);
+}
+function __soFillLow(o){
+  const n = __soNorm(o.supplier); let added = 0;
+  visibleProducts().filter(p=>__soNorm(p.supplierName) === n).forEach(p=>{
+    const units = (p.variants && p.variants.length) ? p.variants.map(v=>({p, v})) : [{p, v: null}];
+    units.forEach(({p, v})=>{
+      const s = stockStatus(p, v); if(s !== 'low' && s !== 'out') return;
+      if((o.items || []).some(l=>l.productId === p.id && (l.variantId || null) === (v ? v.id : null))) return;
+      o.items.push({productId: p.id, variantId: v ? v.id : null, name: __soLineName(p, v), unit: p.unit || '', qty: __soNeedQty(p, v), cost: __soCost(p, v)});
+      added++;
+    });
+  });
+  return added;
+}
+function __soStBadge(st){ return '<span class="so-st ' + st + '">' + escapeHtml(tr(SO_ST[st] || 'soStDraft')) + '</span>'; }
+
+function renderSupply(){
+  const c = document.getElementById('view-container'); if(!c) return;
+  const backTo = ()=>{ state.view = state.__soFrom === 'reports' ? 'reports' : 'products'; state.__soFrom = null; state.__soEdit = null; renderAll(); };
+  if(!canSupply()){
+    c.innerHTML = `<div class="back-row"><button id="so-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('soMenu')}</span></div><div class="empty-state">${escapeHtml(tr('soNoPerm'))}</div>`;
+    document.getElementById('so-back').addEventListener('click', backTo); return;
+  }
+  if(state.__soEdit){ const o = __soFind(state.__soEdit); if(o && !o.deleted){ __soEditor(c, o); return; } state.__soEdit = null; }
+  const tab = state.__soTab || 'orders';
+  c.innerHTML = `<div class="back-row"><button id="so-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('soMenu')}</span></div>
+    <div class="toggle-group" style="margin-bottom:12px;">${[['orders', 'soOrders'], ['returns', 'soReturns'], ['suppliers', 'soMenu']].map(x=>`<div class="toggle-opt ${tab === x[0] ? 'active' : ''}" data-so-tab="${x[0]}">${escapeHtml(tr(x[1]))}</div>`).join('')}</div>
+    <div id="so-body"></div>`;
+  document.getElementById('so-back').addEventListener('click', backTo);
+  c.querySelectorAll('[data-so-tab]').forEach(b=>b.addEventListener('click', ()=>{ state.__soTab = b.dataset.soTab; renderSupply(); }));
+  const body = document.getElementById('so-body');
+  if(tab === 'returns') __srTab(body); else if(tab === 'suppliers') __supTab(body); else __soOrdersTab(body);
+}
+function __soOrdersTab(body){
+  const F = state.__soSt || '';
+  const all = __soOrders(), list = all.filter(o=>!F || o.status === F);
+  body.innerHTML = `<button class="btn btn-accent btn-block" id="so-new" style="margin-bottom:10px;">${ICONS.plus} ${escapeHtml(tr('soNew'))}</button>
+    <div class="r3-chips">${[['', tr('r3PAll')]].concat(Object.keys(SO_ST).filter(k=>all.some(o=>o.status === k)).map(k=>[k, tr(SO_ST[k])])).map(x=>__r3Chip('data-so-st', x[0], x[1], F === x[0])).join('')}</div>
+    <div id="so-list">${list.length ? list.map(o=>{ const q = (o.items || []).reduce((a, l)=>a + (Number(l.qty) || 0), 0), r = (o.items || []).reduce((a, l)=>a + (Number(l.recvQty) || 0), 0);
+      return `<div class="card so-card" data-so-open="${escapeHtml(o.id)}"><div class="t"><b>${escapeHtml(o.num)} · ${escapeHtml(o.supplier || '—')}</b>${__soStBadge(o.status)}</div>
+        <div class="subtle" style="font-size:12px;margin-top:3px;">${escapeHtml(fmtDateTime(o.createdAt))} · ${escapeHtml(tr('puItemsCount').replace('{n}', (o.items || []).length))}${__soTotal(o) ? ' · ' + escapeHtml(fmt(__soTotal(o))) : ''}</div>
+        ${(o.status === 'partial' || o.status === 'received') ? `<div class="r4-prog"><i style="width:${q > 0 ? Math.min(100, r / q * 100).toFixed(1) : 100}%;"></i></div>` : ''}</div>`; }).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>`;
+  document.getElementById('so-new').addEventListener('click', ()=>{ const o = __soNew(); state.__soEdit = o.id; renderSupply(); });
+  body.querySelectorAll('[data-so-st]').forEach(b=>b.addEventListener('click', ()=>{ state.__soSt = b.dataset.soSt; renderSupply(); }));
+  body.querySelectorAll('[data-so-open]').forEach(b=>b.addEventListener('click', ()=>{ state.__soEdit = b.dataset.soOpen; renderSupply(); }));
+}
+function __soSuggBind(inpId, boxId, onPick){
+  const inp = document.getElementById(inpId), box = document.getElementById(boxId); if(!inp || !box) return;
+  const all = __soSuppliers();
+  const draw = ()=>{ const q = __soNorm(inp.value); const list = all.filter(n=>__soNorm(n) !== q && (!q || __soNorm(n).indexOf(q) >= 0)).slice(0, 8);
+    box.innerHTML = (document.activeElement === inp || q) ? list.map(n=>'<button type="button" class="r3-chip" data-sg="' + escapeHtml(n) + '">' + escapeHtml(n) + '</button>').join('') : ''; };
+  box.addEventListener('pointerdown', (e)=>{ if(e.target.closest && e.target.closest('[data-sg]')) e.preventDefault(); });
+  box.addEventListener('click', (e)=>{ const b = e.target.closest && e.target.closest('[data-sg]'); if(!b) return; inp.value = b.getAttribute('data-sg'); box.innerHTML = ''; onPick(inp.value); try{ inp.blur(); }catch(_e){} });
+  inp.addEventListener('input', draw); inp.addEventListener('focus', draw);
+  inp.addEventListener('blur', ()=>setTimeout(()=>{ if(document.activeElement !== inp) box.innerHTML = ''; }, 150));
+}
+function __soPicker(onPick){
+  openModal(`<div class="modal-title">${tr('puPick')}</div>
+    <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="so-pick-q" placeholder="${tr('search')}"></div>
+    <div id="so-pick-list" style="max-height:55vh;overflow:auto;"></div>`);
+  const rows = stocktakeRows();
+  const draw = ()=>{
+    const q = (document.getElementById('so-pick-q').value || '').toLowerCase();
+    const list = rows.filter(r=>!q || r.name.toLowerCase().includes(q) || String(r.p.barcode || '').includes(q)).slice(0, 60);
+    document.getElementById('so-pick-list').innerHTML = list.map(r=>`<div class="list-item" style="cursor:pointer;padding:10px 12px 10px 16px;" data-so-pick="${escapeHtml(r.key)}"><div class="info"><div class="name">${escapeHtml(r.name)}</div><div class="meta">${tr('stock')}: ${r.stock}${r.p.supplierName ? ' · ' + escapeHtml(r.p.supplierName) : ''}</div></div></div>`).join('') || `<div class="empty-state">${tr('noData')}</div>`;
+    document.querySelectorAll('[data-so-pick]').forEach(el=>el.addEventListener('click', ()=>{ const r = rows.find(x=>x.key === el.dataset.soPick); if(r){ closeModal(); onPick(r.p, r.v); } }));
+  };
+  document.getElementById('so-pick-q').addEventListener('input', draw); draw();
+}
+function __soEditor(c, o){
+  const draft = o.status === 'draft', open = o.status === 'sent' || o.status === 'partial';
+  const linked = (state.purchases || []).filter(d=>d.orderId === o.id);
+  const lines = (o.items || []).map((l, i)=>draft ? `<div class="so-line"><div class="h"><span>${escapeHtml(l.name)}</span><button class="icon-btn" data-so-rm="${i}" style="color:var(--danger);flex-shrink:0;">${ICONS.trash}</button></div>
+      <div class="g"><div><label class="field-label">${tr('puQty')}</label><input type="number" inputmode="decimal" data-so-q="${i}" value="${l.qty}"></div>
+      <div><label class="field-label">${escapeHtml(tr('soExpCost'))}</label><input type="text" inputmode="numeric" data-money data-so-c="${i}" value="${l.cost ? formatMoneyInputValue(l.cost) : ''}" placeholder="0"></div>
+      <div class="sum" data-so-s="${i}">${fmt((Number(l.qty) || 0) * (Number(l.cost) || 0))}</div></div></div>`
+    : `<div class="so-line"><div class="h"><span>${escapeHtml(l.name)}</span><b>${fmt((Number(l.qty) || 0) * (Number(l.cost) || 0))}</b></div>
+      <div class="subtle" style="font-size:12px;margin-top:3px;">${l.qty} × ${escapeHtml(fmt(l.cost || 0))}${o.status !== 'draft' ? ' · <b style="color:' + ((l.recvQty || 0) >= (l.qty || 0) ? 'var(--teal)' : 'var(--warm)') + ';">' + escapeHtml(tr('soRecvd').replace('{a}', l.recvQty || 0).replace('{b}', l.qty || 0)) + '</b>' : ''}</div></div>`).join('');
+  c.innerHTML = `<div class="back-row"><button id="so-ed-back">${ICONS.arrowLeft}</button><span class="t-title">${escapeHtml(tr('soOrderN').replace('{n}', o.num))}</span></div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-4px 0 10px;">${__soStBadge(o.status)}<span class="subtle" style="font-size:12px;">${escapeHtml(fmtDateTime(o.createdAt))}${o.staffName ? ' · ' + escapeHtml(o.staffName) : ''}</span></div>
+    ${draft ? `<div class="card" style="padding:12px 14px;margin-bottom:10px;">
+      <div class="field"><label class="field-label">${escapeHtml(tr('soSupplier'))}</label><input type="text" id="so-sup" autocomplete="off" value="${escapeHtml(o.supplier || '')}"><div class="pu-sugg" id="so-sugg"></div></div>
+      <div class="field" style="margin-bottom:0;"><label class="field-label">${tr('puNote')}</label><input type="text" id="so-note" value="${escapeHtml(o.note || '')}"></div></div>`
+    : `<div class="card" style="padding:12px 14px;margin-bottom:10px;"><div style="font-weight:800;">${escapeHtml(o.supplier || '—')}</div>${o.note ? `<div class="subtle" style="font-size:12.5px;margin-top:2px;">${escapeHtml(o.note)}</div>` : ''}</div>`}
+    <div class="card" style="padding:4px 14px 10px;margin-bottom:10px;">${lines || `<div class="empty-state">${escapeHtml(tr('soNeedItems'))}</div>`}
+      <div class="row" style="padding-top:10px;font-weight:800;"><span>${tr('total')}</span><span id="so-total">${fmt(__soTotal(o))}</span></div></div>
+    ${draft ? `<div class="btn-row" style="margin-bottom:6px;"><button class="btn btn-outline" id="so-add">${ICONS.plus} ${tr('puAddItem').replace(/^\+\s*/, '')}</button><button class="btn btn-outline" id="so-fill">${escapeHtml(tr('soFillLow'))}</button></div>` : ''}
+    <div id="so-err" class="error-text"></div>
+    <div class="so-acts">
+      ${draft ? `<button class="btn btn-primary btn-block" id="so-send">${escapeHtml(tr('soSend'))}</button>` : ''}
+      ${open ? `<button class="btn btn-primary btn-block" id="so-recv">${escapeHtml(tr('soReceive'))}</button>` : ''}
+      <button class="btn btn-outline btn-block" id="so-share">${ICONS.share} ${escapeHtml(tr('soShare'))}</button>
+      ${o.status === 'partial' ? `<button class="btn btn-outline btn-block" id="so-finish">${escapeHtml(tr('soFinish'))}</button>` : ''}
+      ${open ? `<button class="btn btn-outline btn-block" id="so-cancel" style="color:var(--danger);border-color:var(--danger);">${escapeHtml(tr('soCancel'))}</button>` : ''}
+    </div>
+    ${linked.length ? `<h3 class="sub-title" style="margin-top:16px;">${escapeHtml(tr('soLinked'))}</h3>${linked.map(d=>`<div class="card pu-h" data-pu-open="${escapeHtml(d.id)}"><div class="t"><b>${escapeHtml(fmtDateTime(d.date))}</b><strong>${fmt(d.total || 0)}</strong></div><div class="subtle" style="font-size:11.5px;">${escapeHtml(tr('puItemsCount').replace('{n}', (d.items || []).length))} · ${escapeHtml(__puPayLabel(d.payMode))}</div></div>`).join('')}` : ''}
+    ${draft ? `<div style="margin-top:22px;">${dangerZoneHtml(tr('soDelete'), '', 'so-del')}</div>` : ''}`;
+  const rerender = ()=>renderSupply();
+  document.getElementById('so-ed-back').addEventListener('click', ()=>{ state.__soEdit = null; renderSupply(); });
+  if(draft){
+    __soSuggBind('so-sup', 'so-sugg', (v)=>{ o.supplier = v; __gcPushSoon('supplyOrder', o); });
+    document.getElementById('so-sup').addEventListener('input', (e)=>{ o.supplier = e.target.value; __gcPushSoon('supplyOrder', o); });
+    document.getElementById('so-note').addEventListener('input', (e)=>{ o.note = e.target.value; __gcPushSoon('supplyOrder', o); });
+    const upd = (i)=>{ const l = o.items[i]; const el = c.querySelector('[data-so-s="' + i + '"]'); if(el) el.textContent = fmt((Number(l.qty) || 0) * (Number(l.cost) || 0)); document.getElementById('so-total').textContent = fmt(__soTotal(o)); __gcPushSoon('supplyOrder', o); };
+    c.querySelectorAll('[data-so-q]').forEach(inp=>inp.addEventListener('input', ()=>{ const i = +inp.dataset.soQ; o.items[i].qty = parseFloat(String(inp.value).replace(',', '.')) || 0; upd(i); }));
+    c.querySelectorAll('[data-so-c]').forEach(inp=>{ try{ attachMoneyInputFormatting(inp); }catch(e){} inp.addEventListener('input', ()=>{ const i = +inp.dataset.soC; const v = parseMoneyInput(inp.value); o.items[i].cost = isNaN(v) ? 0 : v; upd(i); }); });
+    c.querySelectorAll('[data-so-rm]').forEach(b=>b.addEventListener('click', ()=>{ o.items.splice(+b.dataset.soRm, 1); __gcPush('supplyOrder', o); rerender(); }));
+    document.getElementById('so-add').addEventListener('click', ()=>__soPicker((p, v)=>{
+      const ex = o.items.find(l=>l.productId === p.id && (l.variantId || null) === (v ? v.id : null));
+      if(ex) ex.qty = (Number(ex.qty) || 0) + 1; else o.items.push({productId: p.id, variantId: v ? v.id : null, name: __soLineName(p, v), unit: p.unit || '', qty: 1, cost: __soCost(p, v)});
+      if(!o.supplier && p.supplierName) o.supplier = p.supplierName;
+      __gcPush('supplyOrder', o); rerender();
+    }));
+    document.getElementById('so-fill').addEventListener('click', ()=>{
+      if(!String(o.supplier || '').trim()){ document.getElementById('so-err').textContent = tr('soNeedSupplier'); return; }
+      const n = __soFillLow(o); __gcPush('supplyOrder', o); showToast(n ? tr('soFilled').replace('{n}', n) : tr('soFillNone')); rerender();
+    });
+    document.getElementById('so-send').addEventListener('click', ()=>{
+      const err = document.getElementById('so-err');
+      if(!String(o.supplier || '').trim()){ err.textContent = tr('soNeedSupplier'); return; }
+      o.items = o.items.filter(l=>(Number(l.qty) || 0) > 0);
+      if(!o.items.length){ err.textContent = tr('soNeedItems'); rerender(); return; }
+      o.supplier = String(o.supplier).trim(); __soStatus(o, 'sent'); o.sentAt = new Date().toISOString(); __gcPush('supplyOrder', o); rerender(); __soShare(o);
+    });
+    const del = document.getElementById('so-del');
+    if(del) del.addEventListener('click', ()=>confirmDialog(tr('soDeleteQ'), ()=>{ o.deleted = true; __gcPush('supplyOrder', o); state.__soEdit = null; renderSupply(); }, tr('delete')));
+  }
+  document.getElementById('so-share').addEventListener('click', ()=>__soShare(o));
+  const rv = document.getElementById('so-recv');
+  if(rv) rv.addEventListener('click', ()=>{
+    const left = o.items.map(l=>({l, q: Math.max(0, (Number(l.qty) || 0) - (Number(l.recvQty) || 0))})).filter(x=>x.q > 0 && state.products.some(p=>p.id === x.l.productId));
+    const cr = __soCreditor(o.supplier);
+    purchaseDraft = {supplier: o.supplier, note: tr('soReceiveNote').replace('{n}', o.num), items: left.map(x=>({productId: x.l.productId, variantId: x.l.variantId || null, name: x.l.name, qty: x.q, cost: Number(x.l.cost) || 0})), updateCost: true, payMode: cr ? 'credit' : 'cash', orderId: o.id};
+    state.view = 'purchase'; renderAll();
+  });
+  const fin = document.getElementById('so-finish');
+  if(fin) fin.addEventListener('click', ()=>{ __soStatus(o, 'received'); __gcPush('supplyOrder', o); rerender(); });
+  const cn = document.getElementById('so-cancel');
+  if(cn) cn.addEventListener('click', ()=>confirmDialog(tr('soCancelQ'), ()=>{ __soStatus(o, 'cancelled'); __gcPush('supplyOrder', o); rerender(); }, tr('soCancel')));
+  c.querySelectorAll('[data-pu-open]').forEach(b=>b.addEventListener('click', ()=>__puOpen(b.dataset.puOpen)));
+}
+/* Kirim tugagach: kelgan son buyurtmaga yoziladi, holat yangilanadi */
+function __soAfterReceive(id, doc){
+  const o = __soFind(id); if(!o) return;
+  (doc.items || []).forEach(it=>{
+    let l = o.items.find(x=>x.productId === it.productId && (x.variantId || null) === (it.variantId || null));
+    if(!l){ l = {productId: it.productId, variantId: it.variantId || null, name: it.name, qty: 0, cost: it.cost, extra: true}; o.items.push(l); }
+    l.recvQty = Math.round(((Number(l.recvQty) || 0) + (Number(it.qty) || 0)) * 1000) / 1000;
+    l.recvCost = Number(it.cost) || 0;
+  });
+  o.receipts = (o.receipts || []).concat([doc.id]);
+  __soStatus(o, o.items.every(l=>(Number(l.recvQty) || 0) >= (Number(l.qty) || 0)) ? 'received' : 'partial');
+  __gcPush('supplyOrder', o);
+  setTimeout(()=>{ state.view = 'supply'; state.__soTab = 'orders'; state.__soEdit = id; renderAll(); }, 0);
+}
+function __soBanner(){
+  try{
+    const id = purchaseDraft && purchaseDraft.orderId; if(!id) return '';
+    const o = __soFind(id); if(!o) return '';
+    return '<div class="so-banner"><span>' + escapeHtml(tr('soRecvBanner').replace('{n}', o.num)) + '</span><button type="button" id="pu-so-unlink">' + escapeHtml(tr('soUnlink')) + '</button></div>';
+  }catch(e){ return ''; }
+}
+/* Ulashish */
+function __soText(o){
+  const L = [state.settings.businessName || 'Savdo Pos', tr('soOrderN').replace('{n}', o.num), tr('soSupplier') + ': ' + (o.supplier || '—'), fmtDateTime(o.sentAt || o.createdAt), '------------------------------'];
+  (o.items || []).forEach((l, i)=>{ L.push((i + 1) + '. ' + l.name + ' — ' + l.qty + (l.unit ? ' ' + unitLabel(l.unit) : '') + ((Number(l.cost) || 0) ? ' × ' + fmt(l.cost) : '')); });
+  L.push('------------------------------');
+  if(__soTotal(o)) L.push(tr('total') + ': ' + fmt(__soTotal(o)));
+  if(o.note) L.push(o.note);
+  return L.join('\n');
+}
+function __soPdf(o){
+  if(typeof window.jspdf === 'undefined'){ showToast(tr('pdfLibFailed')); return; }
+  const { jsPDF } = window.jspdf; const doc = new jsPDF({unit: 'pt', format: 'a4'});
+  const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), mx = 40; let y = 50;
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(31, 79, 184); doc.text(state.settings.businessName || 'Savdo Pos', W / 2, y, {align: 'center'}); y += 20;
+  doc.setFontSize(13); doc.setTextColor(20, 30, 50); doc.text(tr('soOrderN').replace('{n}', o.num), W / 2, y, {align: 'center'}); y += 16;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(90, 90, 90);
+  doc.text(tr('soSupplier') + ': ' + (o.supplier || '-'), mx, y); doc.text(new Date(o.sentAt || o.createdAt).toLocaleString(), W - mx, y, {align: 'right'}); y += 14;
+  doc.setDrawColor(31, 79, 184); doc.setLineWidth(1.2); doc.line(mx, y, W - mx, y); y += 20;
+  const X = [mx, mx + 24, W - mx - 190, W - mx - 100, W - mx];
+  const head = ()=>{ doc.setFillColor(31, 79, 184); doc.rect(mx, y - 13, W - mx * 2, 20, 'F'); doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(255, 255, 255);
+    doc.text('#', X[0] + 4, y); doc.text(tr('productName') || 'Name', X[1], y); doc.text(tr('puQty'), X[2], y, {align: 'right'}); doc.text(tr('soExpCost'), X[3], y, {align: 'right'}); doc.text(tr('total'), X[4] - 4, y, {align: 'right'}); y += 20; };
+  head(); doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+  (o.items || []).forEach((l, i)=>{
+    if(y > H - 80){ doc.addPage(); y = 50; head(); doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); }
+    if(i % 2 === 0){ doc.setFillColor(247, 250, 253); doc.rect(mx, y - 12, W - mx * 2, 18, 'F'); }
+    doc.setTextColor(40, 50, 65);
+    doc.text(String(i + 1), X[0] + 4, y); doc.text(String(l.name).slice(0, 60), X[1], y);
+    doc.text(String(l.qty) + (l.unit ? ' ' + unitLabel(l.unit) : ''), X[2], y, {align: 'right'});
+    doc.text((Number(l.cost) || 0) ? fmt(l.cost) : '-', X[3], y, {align: 'right'});
+    doc.text((Number(l.cost) || 0) ? fmt(l.qty * l.cost) : '-', X[4] - 4, y, {align: 'right'}); y += 18;
+  });
+  y += 8; doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(20, 30, 50);
+  if(__soTotal(o)) doc.text(tr('total') + ': ' + fmt(__soTotal(o)), W - mx, y, {align: 'right'});
+  if(o.note){ y += 18; doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5); doc.text(String(o.note).slice(0, 120), mx, y); }
+  return sharePdfBlob(doc, 'buyurtma-' + o.num + '.pdf', tr('soOrderN').replace('{n}', o.num));
+}
+function __soShare(o){
+  const text = __soText(o), cr = __soCreditor(o.supplier), ph = cr && cr.phone ? String(cr.phone).replace(/\D/g, '') : '';
+  __actSheet(tr('soShare'), [
+    {icon: ICONS.share, label: 'PDF', fn: ()=>__soPdf(o)},
+    {icon: ICONS.bot || ICONS.share, label: 'Telegram', fn: ()=>openExternalUrl('https://t.me/share/url?url=&text=' + encodeURIComponent(text))},
+    {icon: ICONS.phone || ICONS.share, label: 'WhatsApp', fn: ()=>openExternalUrl('https://wa.me/' + (ph.length >= 9 ? ph : '') + '?text=' + encodeURIComponent(text))},
+    {icon: ICONS.share, label: tr('soOtherApp'), fn: async ()=>{ try{ if(isNativeApp() && await shareTextNative(tr('soOrderN').replace('{n}', o.num), text)) return; if(navigator.share){ await navigator.share({title: o.num, text}); return; } }catch(e){ if(e && e.name === 'AbortError') return; } try{ await navigator.clipboard.writeText(text); }catch(e){} showToast(tr('shareNotSupported')); }}
+  ]);
+}
+
+/* ---- Hujjatsiz qaytarish ---- */
+var SR_RS = [['bad', 'srRsBad'], ['exp', 'srRsExp'], ['extra', 'srRsExtra'], ['other', 'r4RsOther']];
+var SR_MONEY = {debt: 'srMoneyDebt', cash: 'srMoneyCash', bank: 'srMoneyBank'};
+function __srAll(){
+  const a = (state.supplyReturns || []).filter(r=>r && !r.deleted && __soBr(r)).map(r=>Object.assign({kind: 'free'}, r));
+  (state.purchases || []).filter(__soBr).forEach(d=>(d.returns || []).forEach(r=>a.push({kind: 'doc', id: r.id, date: r.date, supplier: d.supplier, items: r.items, total: r.total, note: r.note, money: d.payMode === 'credit' ? 'debt' : (d.payMode === 'bank' ? 'bank' : 'cash'), docId: d.id, docNote: d.note})));
+  return a.sort((x, y)=>String(y.date).localeCompare(String(x.date)));
+}
+function __srTab(body){
+  const list = __srAll();
+  body.innerHTML = `<button class="btn btn-accent btn-block" id="sr-new" style="margin-bottom:10px;">${ICONS.arrowLeft} ${escapeHtml(tr('srNew'))}</button>
+    <div>${list.length ? list.map(r=>{ const rs = SR_RS.find(x=>x[0] === r.reason); return `<div class="card so-card" ${r.kind === 'doc' ? `data-pu-open="${escapeHtml(r.docId)}"` : ''}>
+      <div class="t"><b>${escapeHtml(r.supplier || '—')}</b><strong style="color:var(--warm);">−${fmt(r.total || 0)}</strong></div>
+      <div class="subtle" style="font-size:12px;margin-top:2px;">${escapeHtml(fmtDateTime(r.date))} · ${escapeHtml(tr(SR_MONEY[r.money] || 'srMoneyCash'))}${rs ? ' · ' + escapeHtml(tr(rs[1])) : ''}${r.kind === 'doc' ? ' · ' + escapeHtml(tr('srFromDoc')) + (r.docNote ? ' ' + escapeHtml(r.docNote) : '') : ''}</div>
+      <div class="subtle" style="font-size:12px;margin-top:2px;">${(r.items || []).map(x=>escapeHtml(x.name) + ' ×' + x.qty).join(', ')}${r.note ? ' · ' + escapeHtml(r.note) : ''}</div></div>`; }).join('') : `<div class="empty-state">${escapeHtml(tr('srEmpty'))}</div>`}</div>`;
+  document.getElementById('sr-new').addEventListener('click', ()=>{ window.__sr = {supplier: '', items: [], reason: '', note: '', money: ''}; __srForm(); });
+  body.querySelectorAll('[data-pu-open]').forEach(b=>b.addEventListener('click', ()=>__puOpen(b.dataset.puOpen)));
+}
+function __srMoneyDefault(S){ const cr = __soCreditor(S.supplier); return (cr && (cr.debt || 0) > 0) ? 'debt' : 'cash'; }
+function __srForm(){
+  const S = window.__sr; if(!S) return;
+  const rows = S.items.map((l, i)=>{ const p = state.products.find(x=>x.id === l.productId), v = p && l.variantId ? getVariant(p, l.variantId) : null; const st = p ? (Number(v ? v.stock : p.stock) || 0) : 0;
+    return `<div class="sr-row"><div class="n"><b>${escapeHtml(l.name)}</b><br><small class="subtle">${tr('stock')}: ${st} · ${escapeHtml(fmt(l.cost || 0))}</small></div><input type="number" inputmode="decimal" data-sr-q="${i}" value="${l.qty || ''}" placeholder="0"><button class="icon-btn" data-sr-rm="${i}" style="color:var(--danger);">${ICONS.trash}</button></div>`; }).join('');
+  openModal(`<div class="modal-title">${escapeHtml(tr('srNew'))}</div>
+    <div class="field"><label class="field-label">${escapeHtml(tr('soSupplier'))}</label><input type="text" id="sr-sup" autocomplete="off" value="${escapeHtml(S.supplier)}"><div class="pu-sugg" id="sr-sugg"></div></div>
+    ${rows}
+    <button type="button" class="btn btn-outline btn-block" id="sr-add" style="margin:10px 0;">${ICONS.plus} ${tr('puAddItem').replace(/^\+\s*/, '')}</button>
+    <label class="field-label">${escapeHtml(tr('srReason'))}</label>
+    <div class="r3-chips">${SR_RS.map(x=>__r3Chip('data-sr-rs', x[0], tr(x[1]), S.reason === x[0])).join('')}</div>
+    <div class="field"><input type="text" id="sr-note" placeholder="${escapeHtml(tr('r4ReasonQ'))}" value="${escapeHtml(S.note)}"></div>
+    <label class="field-label">${escapeHtml(tr('srMoney'))}</label>
+    <div id="sr-money">${__srMoneyHtml(S)}</div>
+    <div class="pu-line" style="border-bottom:none;font-weight:800;"><span>${tr('total')}</span><b id="sr-sum">${fmt(S.items.reduce((a, l)=>a + (Number(l.qty) || 0) * (Number(l.cost) || 0), 0))}</b></div>
+    <div id="sr-err" class="error-text"></div>
+    <div class="btn-row"><button class="btn btn-outline" type="button" id="sr-cancel">${tr('cancel')}</button><button class="btn btn-danger" type="button" id="sr-ok">${escapeHtml(tr('srNew'))}</button></div>`);
+  const sum = ()=>{ const el = document.getElementById('sr-sum'); if(el) el.textContent = fmt(S.items.reduce((a, l)=>a + (Number(l.qty) || 0) * (Number(l.cost) || 0), 0)); };
+  const money = ()=>{ const box = document.getElementById('sr-money'); if(!box) return; S.money = ''; box.innerHTML = __srMoneyHtml(S); __srMoneyBind(S); };   /* to'liq qayta chizilmaydi — bosish yo'qolmasin */
+  __soSuggBind('sr-sup', 'sr-sugg', (v)=>{ S.supplier = v; money(); });
+  document.getElementById('sr-sup').addEventListener('change', (e)=>{ S.supplier = e.target.value; money(); });
+  document.getElementById('sr-sup').addEventListener('input', (e)=>{ S.supplier = e.target.value; });
+  document.getElementById('sr-note').addEventListener('input', (e)=>{ S.note = e.target.value; });
+  document.querySelectorAll('[data-sr-q]').forEach(inp=>inp.addEventListener('input', ()=>{ S.items[+inp.dataset.srQ].qty = parseFloat(String(inp.value).replace(',', '.')) || 0; sum(); const e = document.getElementById('sr-err'); if(e) e.textContent = ''; }));
+  document.querySelectorAll('[data-sr-rm]').forEach(b=>b.addEventListener('click', ()=>{ S.items.splice(+b.dataset.srRm, 1); __srForm(); }));
+  document.querySelectorAll('[data-sr-rs]').forEach(b=>b.addEventListener('click', ()=>{ S.reason = S.reason === b.dataset.srRs ? '' : b.dataset.srRs; document.querySelectorAll('[data-sr-rs]').forEach(x=>x.classList.toggle('on', x.dataset.srRs === S.reason)); }));
+  __srMoneyBind(S);
+  document.getElementById('sr-add').addEventListener('click', ()=>__soPicker((p, v)=>{
+    if(!S.items.some(l=>l.productId === p.id && (l.variantId || null) === (v ? v.id : null))) S.items.push({productId: p.id, variantId: v ? v.id : null, name: __soLineName(p, v), qty: 1, cost: __soCost(p, v)});
+    if(!S.supplier && p.supplierName) S.supplier = p.supplierName;
+    __srForm();
+  }));
+  document.getElementById('sr-cancel').addEventListener('click', ()=>{ window.__sr = null; closeModal(); });
+  document.getElementById('sr-ok').addEventListener('click', (ev)=>{
+    const err = document.getElementById('sr-err'); err.textContent = '';
+    S.supplier = String(document.getElementById('sr-sup').value || '').trim();
+    if(!S.supplier){ err.textContent = tr('soNeedSupplier'); return; }
+    const lines = S.items.filter(l=>(Number(l.qty) || 0) > 0);
+    if(!lines.length){ err.textContent = tr('puRetNone'); return; }
+    for(const l of lines){
+      const p = state.products.find(x=>x.id === l.productId), v = p && l.variantId ? getVariant(p, l.variantId) : null;
+      if(!p || (l.variantId && !v)){ err.textContent = tr('puRetDeleted'); return; }
+      const st = Number(v ? v.stock : p.stock) || 0;
+      if(l.qty > st + 1e-9){ err.textContent = tr('puRetStockBad').replace('{name}', l.name).replace('{n}', st); return; }
+    }
+    const c2 = __soCreditor(S.supplier);
+    if(S.money === 'debt' && !(c2 && (c2.debt || 0) > 0)) S.money = 'cash';
+    ev.currentTarget.disabled = true;
+    __srApply(S, lines, c2);
+  });
+}
+function __srMoneyHtml(S){
+  const cr = __soCreditor(S.supplier), canDebt = !!(cr && (cr.debt || 0) > 0);
+  if(!S.money || (S.money === 'debt' && !canDebt)) S.money = canDebt ? 'debt' : 'cash';
+  return '<div class="r3-chips">' + Object.keys(SR_MONEY).filter(k=>k !== 'debt' || canDebt).map(k=>__r3Chip('data-sr-m', k, tr(SR_MONEY[k]), S.money === k)).join('') + '</div>'
+    + (cr ? '<p class="subtle" style="font-size:12px;margin:0 0 8px;">' + escapeHtml(tr('srDebtNow').replace('{sum}', fmt(cr.debt || 0))) + '</p>' : '');
+}
+function __srMoneyBind(S){
+  document.querySelectorAll('[data-sr-m]').forEach(b=>b.addEventListener('click', ()=>{ S.money = b.dataset.srM; document.querySelectorAll('[data-sr-m]').forEach(x=>x.classList.toggle('on', x === b)); }));
+}
+function __srApply(S, lines, cr){
+  const now = new Date().toISOString(), who = state.currentStaff ? state.currentStaff.name : '';
+  const rs = SR_RS.find(x=>x[0] === S.reason);
+  const ret = {id: uid(), date: now, supplier: S.supplier, branchId: state.currentBranchId, reason: S.reason || '', note: S.note || '', money: S.money, staffName: who, items: [], total: 0};
+  lines.forEach(l=>{
+    const p = state.products.find(x=>x.id === l.productId), v = l.variantId ? getVariant(p, l.variantId) : null;
+    stockChange(p, v, -l.qty, 'supplierReturn', ret.id);
+    ret.items.push({productId: l.productId, variantId: l.variantId || null, name: l.name, qty: l.qty, cost: Number(l.cost) || 0});
+    ret.total += l.qty * (Number(l.cost) || 0);
+  });
+  const label = tr('puRetNoteW') + (rs ? ' · ' + tr(rs[1]) : '') + (S.note ? ' · ' + S.note : '');
+  if(ret.total > 0){
+    if(S.money === 'debt' && cr){
+      const entry = {id: uid(), creditorId: cr.id, type: 'payment', amount: ret.total, note: label, date: now, staffName: who, supplyReturnId: ret.id, purchaseReturn: true};
+      state.creditorLedger.push(entry); cr.debt = applyCreditorTransaction(cr.debt, 'payment', ret.total);
+      saveCreditors(); saveCreditorLedger(); addCreditorDoc(cr); addCreditorLedgerDoc(entry);
+      ret.creditorEntryId = entry.id;
+    } else {
+      const ex = {id: uid(), date: now, category: 'purchase', amount: -ret.total, note: S.supplier + ' · ' + label, branchId: state.currentBranchId, staffId: state.currentStaff ? state.currentStaff.id : null, staffName: who, paidFrom: S.money === 'bank' ? 'other' : 'cash', shiftId: state.currentShift ? state.currentShift.id : null, supplyReturnId: ret.id, purchaseReturn: true};
+      state.expenses.push(ex); saveExpenses(); addExpenseDoc(ex); ret.expenseId = ex.id;
+    }
+  }
+  (state.supplyReturns = state.supplyReturns || []).push(ret); __gcPush('supplyReturn', ret);
+  saveProducts();
+  try{ auditLog('purchaseReturn', `${S.supplier} — ${fmt(ret.total)}${rs ? ' · ' + tr(rs[1]) : ''}${S.note ? ' · ' + S.note : ''}`, {supplyReturnId: ret.id}); }catch(e){}
+  window.__sr = null; closeModal();
+  showToast(tr('puRetDone').replace('{sum}', fmt(ret.total)));
+  if(state.view === 'supply') renderSupply();
+}
+
+/* ---- Ta'minotchilar hisoboti ---- */
+function __supStats(name){
+  const n = __soNorm(name), cr = __soCreditor(name);
+  const pur = (state.purchases || []).filter(d=>__soBr(d) && __soNorm(d.supplier) === n);
+  const ord = __soOrders().filter(o=>__soNorm(o.supplier) === n);
+  const rets = __srAll().filter(r=>__soNorm(r.supplier) === n);
+  return {cr, pur, ord, rets, bought: pur.reduce((a, d)=>a + (d.total || 0), 0), returned: rets.reduce((a, r)=>a + (r.total || 0), 0), open: ord.filter(o=>o.status === 'sent' || o.status === 'partial').length};
+}
+function __supTab(body){
+  const sups = __soSuppliers();
+  body.innerHTML = sups.length ? sups.map(nm=>{ const S = __supStats(nm); return `<div class="card so-card" data-sup="${escapeHtml(nm)}">
+      <div class="t"><b>${escapeHtml(nm)}</b>${S.cr ? `<strong style="color:${(S.cr.debt || 0) > 0 ? 'var(--danger)' : 'var(--teal)'};">${fmt(S.cr.debt || 0)}</strong>` : ''}</div>
+      <div class="subtle" style="font-size:12px;margin-top:3px;">${escapeHtml(tr('supBought'))}: ${escapeHtml(fmt(S.bought))}${S.returned ? ' · ' + escapeHtml(tr('soReturns')) + ': ' + escapeHtml(fmt(S.returned)) : ''}${S.open ? ' · ' + escapeHtml(tr('supOpenOrders')) + ': ' + S.open : ''}</div></div>`; }).join('') : `<div class="empty-state">${escapeHtml(tr('supNone'))}</div>`;
+  body.querySelectorAll('[data-sup]').forEach(b=>b.addEventListener('click', ()=>__supDetail(b.getAttribute('data-sup'))));
+}
+function __supDetail(name){
+  const S = __supStats(name), ev = [];
+  S.ord.forEach(o=>ev.push({d: o.createdAt, t: tr('soOrderN').replace('{n}', o.num) + ' · ' + tr(SO_ST[o.status] || 'soStDraft'), a: __soTotal(o), c: 'var(--ink)', s: ''}));
+  S.pur.forEach(d=>ev.push({d: d.date, t: tr('supBought') + ' · ' + __puPayLabel(d.payMode) + (d.note ? ' · ' + d.note : ''), a: d.total || 0, c: 'var(--ink)', s: '+'}));
+  S.rets.forEach(r=>ev.push({d: r.date, t: tr('soReturns') + ' · ' + tr(SR_MONEY[r.money] || 'srMoneyCash'), a: r.total || 0, c: 'var(--warm)', s: '−'}));
+  if(S.cr) (state.creditorLedger || []).filter(e=>e && e.creditorId === S.cr.id).forEach(e=>ev.push({d: e.date, t: (e.type === 'debt' ? tr('supTookDebt') : tr('supPaid')) + (e.note ? ' · ' + e.note : ''), a: e.amount || 0, c: e.type === 'debt' ? 'var(--danger)' : 'var(--teal)', s: e.type === 'debt' ? '+' : '−', debt: true}));
+  ev.sort((x, y)=>String(y.d).localeCompare(String(x.d)));
+  openModal(`<div class="modal-title">${escapeHtml(name)}</div>
+    ${__r3Kpi([[tr('supDebt'), fmt(S.cr ? (S.cr.debt || 0) : 0), S.cr && (S.cr.debt || 0) > 0 ? 'var(--danger)' : ''], [tr('supBought'), fmt(S.bought)], [tr('soReturns'), fmt(S.returned)]])}
+    <h4 style="margin:6px 0 4px;font-size:13px;">${escapeHtml(tr('supHistory'))}</h4>
+    ${ev.length ? ev.slice(0, 150).map(e=>`<div class="pu-line"><span>${escapeHtml(e.t)}<br><small class="subtle">${escapeHtml(fmtDateTime(e.d))}${e.debt ? ' · ' + escapeHtml(tr('supDebt')) : ''}</small></span><b style="color:${e.c};">${e.s}${fmt(e.a)}</b></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`}`);
+}
+
 /* --- Online catalog --- */
 const ONLINE_SHOP_BASE = 'https://savdo-pos.pages.dev/s/';
 function onlineShopCfg(){ return state.settings.onlineShop || {enabled:false, slug:'', telegram:'', whatsapp:'', showOut:false, lang:'', lastPublishedAt:null}; }
@@ -21246,6 +21764,7 @@ function openStaffForm(staffId){
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-editreceipt" ${perms.editReceipt?'checked':''}><span>${tr('permEditReceipt')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-expense" ${perms.expense?'checked':''}><span>${tr('permExpense')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-mydebts" ${perms.myDebts?'checked':''}><span>${tr('permMyDebts')}</span></div>
+      <div class="checkbox-row"><input type="checkbox" id="sf-perm-supply" ${perms.supply?'checked':''}><span>${tr('permSupply')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-printer" ${perms.printerSetup!==false?'checked':''}><span>${tr('permPrinterSetup')}</span></div>
       ${canGrantAdmin ? `
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-settings" ${perms.settings?'checked':''}><span>${tr('settingsPerm')}</span></div>
@@ -21331,6 +21850,7 @@ function openStaffForm(staffId){
       sellOnCredit: document.getElementById('sf-perm-creditsell').checked,
       editReceipt: document.getElementById('sf-perm-editreceipt').checked,
       myDebts: document.getElementById('sf-perm-mydebts').checked,
+      supply: !!(document.getElementById('sf-perm-supply') && document.getElementById('sf-perm-supply').checked),   /* fix135-sup */
       expense: document.getElementById('sf-perm-expense').checked,
       settings: settingsEl ? settingsEl.checked : (perms.settings||false),
       staffManage: staffManageEl ? staffManageEl.checked : (perms.staffManage||false),
@@ -21532,6 +22052,7 @@ function renderAll(){
   else if(state.view==='superadmin') renderSuperAdmin();
   else if(state.view==='stocktake') renderStocktake();
   else if(state.view==='purchase') renderPurchase();
+  else if(state.view==='supply') renderSupply();   /* fix135-sup */
   if(warningHtml) container.insertAdjacentHTML('afterbegin', warningHtml);
   const syncBannerHtml = pendingSyncBannerHtml();
   if(syncBannerHtml){
