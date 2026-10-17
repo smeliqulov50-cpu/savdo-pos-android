@@ -755,6 +755,18 @@
   .r4-home button{all:unset;box-sizing:border-box;cursor:pointer;background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:16px;padding:12px;min-width:0;display:flex;flex-direction:column;gap:4px;box-shadow:0 1px 2px rgba(22,35,59,.04),0 4px 14px rgba(22,35,59,.05);}
   .r4-home .l{font-size:12px;color:var(--ink-soft);font-weight:700;} .r4-home .v{font-size:18px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   @media (max-width:520px){ .r4-home{grid-template-columns:repeat(2,minmax(0,1fr));} .r4-home button:first-child{grid-column:1/-1;} .r4-home button:first-child .v{font-size:22px;} }
+  /* fix131-set: menyuda oxirgi yolg'iz kartochka butun qatorga */
+  .s4-sub{font-size:11.5px;color:var(--ink-soft);font-weight:500;margin-top:2px;line-height:1.3;}
+  #br-add-form{margin-top:14px;}
+  .settings-menu-grid > .list-item{min-width:0;}
+  /* fix132-fs */
+  #fs-bar{position:fixed;left:12px;right:12px;top:calc(10px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px)));z-index:99995;display:flex;align-items:center;gap:10px;background:#fff8e6;border:1px solid #f3d38b;color:#7a5200;border-radius:14px;padding:10px 12px;font-size:13px;font-weight:600;box-shadow:0 8px 22px rgba(22,35,59,.14);max-width:620px;margin:0 auto;}
+  #fs-bar span{flex:1;min-width:0;line-height:1.35;}
+  #fs-bar button{flex-shrink:0;border:none;border-radius:10px;background:#7a5200;color:#fff;font:inherit;font-weight:800;padding:8px 12px;cursor:pointer;}
+  .pu-sugg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .pu-sugg:empty{display:none;}
+  .tool-row.tr-compact .tool-chip.tc-noic .tool-ic{display:none;}
+  .tool-row.tr-compact .tool-chip.tc-sm > span:last-child{font-size:10.5px;letter-spacing:-.1px;}
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -836,6 +848,12 @@ window.addEventListener("unhandledrejection", function(e) {
   showFatalError(msg);
 });
 function showFatalError(msg) {
+  /* fix132-fs: Firestore kutubxonasining ichki xatosi — ilova xatosi emas; qizil oyna o'rniga o'zini tiklash */
+  if (/FIRESTORE \([0-9.]+\) INTERNAL ASSERTION FAILED|AsyncQueue is already failed/i.test(String(msg || ""))) {
+    window.__fsBroken = String(msg);
+    try { if (typeof window.__fsRecover === "function") window.__fsRecover(String(msg)); } catch (e) {}
+    return;
+  }
   var box = document.getElementById("fatal-error-box");
   if (!box) {
     box = document.createElement("div");
@@ -1996,6 +2014,14 @@ const T = {
   r4FilterEmpty:{uz:"Bu filtr bo'yicha yozuv yo'q",ru:"Нет записей по этому фильтру",en:"No entries for this filter",kk:"Бұл сүзгі бойынша жазба жоқ",ky:"Бул чыпка боюнча жазуу жок",tg:"Барои ин филтр сабт нест"},
   r4Loading:{uz:"Yuklanmoqda…",ru:"Загрузка…",en:"Loading…",kk:"Жүктелуде…",ky:"Жүктөлүүдө…",tg:"Боргирӣ…"},
   r4Moves:{uz:"{n} ta harakat",ru:"Движений: {n}",en:"{n} moves",kk:"{n} қозғалыс",ky:"{n} кыймыл",tg:"{n} ҳаракат"},
+  /* fix131-set */
+  s4CatalogSub:{uz:"Mijozlar telefondan buyurtma beradigan do'kon sahifangiz",ru:"Страница вашего магазина: клиенты заказывают с телефона",en:"Your shop page where customers order from their phone",kk:"Клиенттер телефоннан тапсырыс беретін дүкен бетіңіз",ky:"Кардарлар телефондон буюртма берген дүкөн барагыңыз",tg:"Саҳифаи мағозаи шумо: мизоҷон аз телефон фармоиш медиҳанд"},
+  s4WebsiteSub:{uz:"Savdo Pos veb versiyasi: iPhone va kompyuterda ishlatish uchun",ru:"Веб-версия Savdo Pos: для iPhone и компьютера",en:"Savdo Pos web version: for iPhone and computers",kk:"Savdo Pos веб-нұсқасы: iPhone мен компьютерге",ky:"Savdo Pos веб-версиясы: iPhone жана компьютер үчүн",tg:"Версияи веби Savdo Pos: барои iPhone ва компютер"},
+  s4AddBranchHint:{uz:"Yangi do'kon yoki ombor qo'shish",ru:"Добавить новый магазин или склад",en:"Add a new shop or warehouse",kk:"Жаңа дүкен немесе қойма қосу",ky:"Жаңы дүкөн же кампа кошуу",tg:"Илова кардани мағоза ё анбори нав"},
+  /* fix132-fs */
+  fsLost:{uz:"Bulut bilan aloqa uzildi. Ma'lumotlaringiz saqlangan — ilova o'zi qayta ulanadi.",ru:"Связь с облаком прервалась. Данные сохранены — приложение переподключится само.",en:"Cloud connection dropped. Your data is saved — the app will reconnect by itself.",kk:"Бұлтпен байланыс үзілді. Деректер сақталған — қолданба өзі қайта қосылады.",ky:"Булут менен байланыш үзүлдү. Маалыматтар сакталган — тиркеме өзү кайра туташат.",tg:"Пайваст бо абр қатъ шуд. Маълумот нигоҳ дошта шуд — барнома худаш дубора пайваст мешавад."},
+  fsLostWait:{uz:"Bulut bilan aloqa uzildi. Ma'lumotlaringiz saqlangan. Qulay paytda \"Qayta ulash\" ni bosing.",ru:"Связь с облаком прервалась. Данные сохранены. Нажмите «Переподключить», когда будет удобно.",en:"Cloud connection dropped. Your data is saved. Tap \"Reconnect\" when convenient.",kk:"Бұлтпен байланыс үзілді. Деректер сақталған. Ыңғайлы кезде «Қайта қосу» басыңыз.",ky:"Булут менен байланыш үзүлдү. Маалыматтар сакталган. Ыңгайлуу учурда «Кайра туташуу» басыңыз.",tg:"Пайваст бо абр қатъ шуд. Маълумот нигоҳ дошта шуд. Вақти қулай «Дубора пайваст» -ро пахш кунед."},
+  fsReconnect:{uz:"Qayta ulash",ru:"Переподключить",en:"Reconnect",kk:"Қайта қосу",ky:"Кайра туташуу",tg:"Дубора пайваст"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3486,7 +3512,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.30';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.31';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -14842,6 +14868,7 @@ function renderReportsMenu(container){
     ${historyWindowDays() ? `<p class="subtle" style="margin-top:12px;font-size:12px;">${tr('historyWindowNote').replace('{days}', historyWindowDays())}</p>` : ''}
   `;
   if(R3_ON){ try{ __r4Home(container); }catch(e){ console.error('fix130 home', e); } }   /* fix130-rep2 */
+  try{ __s4Span(container); }catch(e){}   /* fix131-set */
   container.querySelectorAll('[data-cat]').forEach(el=>{
     el.addEventListener('click', ()=>{
       if(el.dataset.cat === 'receipts'){ state.view = 'receipts'; renderAll(); return; }
@@ -15783,7 +15810,7 @@ function renderPurchase(){
   container.innerHTML = `
     <div class="back-row"><button id="pu-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('puTitle')}</span></div>
     <div class="card" style="padding:12px 14px;margin-bottom:10px;">
-      <div class="field"><label class="field-label">${tr('puSupplier')}</label><input type="text" id="pu-supplier" list="pu-supplier-list" value="${escapeHtml(purchaseDraft.supplier)}"><datalist id="pu-supplier-list">${suppliers.map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
+      <div class="field"><label class="field-label">${tr('puSupplier')}</label><input type="text" id="pu-supplier" autocomplete="off" value="${escapeHtml(purchaseDraft.supplier)}"><div class="pu-sugg" id="pu-sugg"></div><datalist id="pu-supplier-list">${suppliers.map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
       <div class="field"><label class="field-label">${tr('puNote')}</label><input type="text" id="pu-note" value="${escapeHtml(purchaseDraft.note)}"></div>
     </div>
     <div id="pu-items">${purchaseDraft.items.length ? purchaseDraft.items.map((it,i)=>`
@@ -15809,6 +15836,7 @@ function renderPurchase(){
       </div>`).join('')}` : ''}`;
   document.getElementById('pu-back-btn').addEventListener('click', ()=>{ state.view='products'; renderAll(); });
   document.getElementById('pu-supplier').addEventListener('input', (e)=>{ purchaseDraft.supplier = e.target.value; });
+  try{ __puSuggBind(suppliers); }catch(e){}   /* fix132-fs: brauzerning taklif qutisi o'rniga */
   document.getElementById('pu-note').addEventListener('input', (e)=>{ purchaseDraft.note = e.target.value; });
   document.getElementById('pu-update-cost').addEventListener('change', (e)=>{ purchaseDraft.updateCost = e.target.checked; });
   container.querySelectorAll('[data-pu-pay]').forEach(el=>el.addEventListener('click', ()=>{ purchaseDraft.payMode = el.dataset.puPay; container.querySelectorAll('[data-pu-pay]').forEach(x=>x.classList.toggle('active', x===el)); }));
@@ -16717,7 +16745,7 @@ function renderSettingsMenu(container){
         <div class="list-item" data-cat="${it.id}" style="cursor:pointer;">
           <div class="info" style="display:flex;align-items:center;gap:12px;flex-direction:row;">
             <span style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;background:${it.color};color:#fff;flex-shrink:0;">${it.icon}</span>
-            <div class="name">${it.label}</div>
+            <div style="min-width:0;"><div class="name">${it.label}${it.id === 'website' ? ' ↗' : ''}</div>${S4_SUB[it.id] ? `<div class="s4-sub">${tr(S4_SUB[it.id])}</div>` : ''}</div>
           </div>
           <span class="subtle">›</span>
         </div>
@@ -16734,6 +16762,7 @@ function renderSettingsMenu(container){
     </p>
     <p class="subtle" style="margin:6px 0 0;text-align:center;font-size:11px;opacity:0.6;">v${APP_VERSION_NAME}</p>
   `;
+  try{ __s4Span(container); }catch(e){}   /* fix131-set */
   container.querySelectorAll('[data-cat]').forEach(el=>{
     el.addEventListener('click', ()=>{
       if(el.dataset.cat === 'superadmin'){ openSuperAdminGate(); return; } /* fix79 */
@@ -16948,7 +16977,10 @@ function renderSettingsBranches(container){
         </div>
       </div>
     `;}).join('')}</div>
-    <div class="field" style="margin-top:16px;">
+    <button class="btn btn-accent btn-block" id="br-add-open" style="margin-top:14px;">${ICONS.plus} ${tr('addBranch')}</button>
+    <div class="card" id="br-add-form" hidden>   <!-- fix131-set: forma faqat "Filial qo'shish" bosilganda -->
+    <p class="subtle" style="margin:0 0 10px;">${tr('s4AddBranchHint')}</p>
+    <div class="field">
       <label class="field-label">${tr('branchNameLabel')}</label>
       <input type="text" id="new-branch-name" placeholder="${tr('branchNamePlaceholder')}">
     </div>
@@ -16961,9 +16993,15 @@ function renderSettingsBranches(container){
       <p class="subtle" style="margin:6px 0 0;">${tr('copyProductsHint')}</p>
     </div>
     ` : ''}
-    <button class="btn btn-accent" id="add-branch-btn">${ICONS.plus} ${tr('addBranch')}</button>
+    <div class="btn-row"><button class="btn btn-outline" id="br-add-cancel" type="button">${tr('cancel')}</button><button class="btn btn-accent" id="add-branch-btn">${ICONS.plus} ${tr('addBranch')}</button></div>
+    </div>
   `;
   bindSettingsBack(container);
+  { const ob = document.getElementById('br-add-open'), fm = document.getElementById('br-add-form'), cb = document.getElementById('br-add-cancel');   /* fix131-set */
+    if(ob && fm){
+      ob.addEventListener('click', ()=>{ fm.hidden = false; ob.hidden = true; const i = document.getElementById('new-branch-name'); if(i){ try{ i.focus(); }catch(e){} } });
+      if(cb) cb.addEventListener('click', ()=>{ fm.hidden = true; ob.hidden = false; const i = document.getElementById('new-branch-name'); if(i) i.value = ''; const e = document.getElementById('branches-error'); if(e) e.textContent = ''; });
+    } }
 
   const copyCheck = document.getElementById('new-branch-copy-check');
   if(copyCheck) copyCheck.addEventListener('change', ()=>{
@@ -17119,13 +17157,9 @@ function renderSettingsAccount(container){
       </div>
       <button class="btn btn-outline btn-block" id="open-change-email-btn">${tr('changeEmailBtn')}</button>
     </div>
-    <div class="card" style="border:1px solid rgba(198,40,40,.25);">
-      <div style="font-weight:800;color:#c62828;margin-bottom:6px;">${tr('delAccTitle')}</div>
-      <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('delAccHint')}</p>
-      <button class="btn btn-outline btn-red btn-block" id="open-delete-account-btn">${tr('delAccTitle')}</button>
-    </div>
-    <button class="btn btn-ghost btn-block" id="account-page-signout-btn" style="margin-top:4px;">${tr('authLogout')}</button>
-  `;
+    <button class="btn btn-outline btn-block" id="account-page-signout-btn" style="margin-top:4px;">${ICONS.logout} ${tr('authLogout')}</button>
+    <div style="margin-top:28px;">${dangerZoneHtml(tr('delAccTitle'), tr('delAccHint'), 'open-delete-account-btn')}</div>
+  `;   /* fix131-set: email → Chiqish → Xavfli amallar */
   bindSettingsBack(container);
   document.getElementById('account-page-signout-btn').addEventListener('click', ()=>confirmDialog(tr('authLogout')+'?', ()=>{ fbAuth.signOut(); }, tr('authLogout')));
   document.getElementById('open-delete-account-btn').addEventListener('click', openDeleteAccountModal);
@@ -18904,7 +18938,7 @@ function __esScan(root){
 if(!window.__dsObs){
   try{
     let raf = 0;
-    const run = ()=>{ raf = 0; __esScan(document); __fitStats(document.getElementById('view-container')); const mr = document.getElementById('modal-root'); if(mr) __fitStats(mr); };
+    const run = ()=>{ raf = 0; __esScan(document); __fitStats(document.getElementById('view-container')); try{ __tcFit(); }catch(e){} const mr = document.getElementById('modal-root'); if(mr) __fitStats(mr); };
     window.__dsObs = new MutationObserver(()=>{ if(!raf) raf = requestAnimationFrame(run); });
     const go = ()=>{ ['view-container', 'modal-root'].forEach(id=>{ const n = document.getElementById(id); if(n) window.__dsObs.observe(n, {childList: true, subtree: true}); }); run(); };
     if(document.getElementById('view-container')) go(); else document.addEventListener('DOMContentLoaded', go);
@@ -19716,6 +19750,96 @@ function __r4Home(container){
     + '<button type="button" data-r4home="1"><span class="l">' + escapeHtml(tr('dsReceiptsCount')) + '</span><span class="v">' + ts.length + '</span></button>';
   h2.insertAdjacentElement('afterend', box);
   box.querySelectorAll('[data-r4home]').forEach(b=>b.addEventListener('click', ()=>{ state.reportsCategory = 'today'; renderReports(); }));
+}
+
+/* fix131-set: sozlamalar menyusidagi izohlar */
+var S4_SUB = {catalog: 's4CatalogSub', website: 's4WebsiteSub'};
+/* Menyu katakchalari: oxirgi qator to'liq to'lsin (yolg'iz kartochka butun qatorni, ikkitasi yarmini egallaydi) */
+function __s4Span(root){
+  (root || document).querySelectorAll('.settings-menu-grid').forEach(g=>{
+    const it = Array.prototype.slice.call(g.children); it.forEach(x=>{ x.style.gridColumn = ''; });
+    const cs = getComputedStyle(g), cols = (cs.gridTemplateColumns || '').split(' ').filter(Boolean).length;
+    if(cs.display !== 'grid' || cols < 2) return;
+    const rem = it.length % cols; if(!rem) return;
+    const last = it.slice(it.length - rem), base = Math.floor(cols / rem), extra = cols - base * rem;
+    last.forEach((x, i)=>{ x.style.gridColumn = 'span ' + (base + (i === last.length - 1 ? extra : 0)); });
+  });
+}
+if(!window.__s4Bound){
+  window.__s4Bound = true;
+  let t = 0;
+  window.addEventListener('resize', ()=>{ clearTimeout(t); t = setTimeout(()=>{ try{ __s4Span(document.getElementById('view-container')); }catch(e){} }, 150); });
+}
+
+/* fix132-fs: Firestore ichki xatosidan keyin o'zini tiklash */
+var FS_LOG_KEY = 'sp_fs_crash_v1', FS_RL_KEY = 'sp_fs_reload_v1';
+function __fsLog(msg){ try{ const a = JSON.parse(localStorage.getItem(FS_LOG_KEY) || '[]'); a.push({t: new Date().toISOString(), m: String(msg).slice(0, 160), v: APP_VERSION_NAME}); localStorage.setItem(FS_LOG_KEY, JSON.stringify(a.slice(-10))); }catch(e){} }
+function __fsReloadsRecent(){ try{ const a = JSON.parse(sessionStorage.getItem(FS_RL_KEY) || '[]'); return a.filter(t=>Date.now() - t < 10 * 60000); }catch(e){ return []; } }
+function __fsSafe(){
+  try{
+    const mr = document.getElementById('modal-root'); if(mr && mr.children.length) return false;
+    const ae = document.activeElement; if(ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return false;
+    if(['purchase', 'stocktake'].indexOf(state.view) >= 0) return false;
+    if(typeof __ssPend !== 'undefined' && Object.keys(__ssPend).length) return false;
+    if(document.getElementById('dp-layer') && document.getElementById('dp-layer').children.length) return false;
+    return true;
+  }catch(e){ return false; }
+}
+/* kutayotgan yozuvlar qurilma xotirasiga (IndexedDB) yozib bo'lingach qaytadi — yozuv tugamay qayta yuklanmaydi */
+function __fsFlush(){
+  const ps = [];
+  try{ if(typeof __ssFlushAll === 'function') __ssFlushAll(false); }catch(e){}
+  try{ Object.keys(__storSoonTimers).forEach(k=>{ if(__storSoonTimers[k]){ clearTimeout(__storSoonTimers[k]); __storSoonTimers[k] = null; ps.push(storSet(STORAGE_KEYS[k], state[k])); } }); }catch(e){}
+  try{ ['sales', 'expenses', 'ledger', 'creditors', 'creditorLedger', 'purchases', 'stockMoves'].forEach(k=>{ if(STORAGE_KEYS[k] && state[k]) ps.push(storSet(STORAGE_KEYS[k], state[k])); }); }catch(e){}
+  return Promise.race([Promise.all(ps.map(x=>Promise.resolve(x).catch(()=>{}))), new Promise(r=>setTimeout(r, 4000))]);
+}
+function __fsDoReload(){ location.reload(); }
+var __fsGoing = false;
+function __fsReload(){
+  if(__fsGoing) return; __fsGoing = true;
+  try{ const a = __fsReloadsRecent(); a.push(Date.now()); sessionStorage.setItem(FS_RL_KEY, JSON.stringify(a)); }catch(e){}
+  __fsFlush().then(()=>{ __fsGoing = false; __fsDoReload(); });
+}
+function __fsBar(auto){
+  let b = document.getElementById('fs-bar');
+  if(!b){ b = document.createElement('div'); b.id = 'fs-bar'; b.setAttribute('role', 'status'); document.body.appendChild(b); }
+  b.innerHTML = '<span>' + escapeHtml(tr(auto ? 'fsLost' : 'fsLostWait')) + '</span><button type="button" id="fs-bar-btn">' + escapeHtml(tr('fsReconnect')) + '</button>';
+  document.getElementById('fs-bar-btn').addEventListener('click', ()=>{ const mr = document.getElementById('modal-root'); if(mr && mr.children.length){ try{ closeModal(); }catch(e){} } __fsReload(); });
+}
+var __fsTimer = 0;
+window.__fsRecover = function(msg){
+  if(window.__fsRecovering) return; window.__fsRecovering = true;
+  __fsLog(msg);
+  const auto = __fsReloadsRecent().length < 2;   /* 10 daqiqada 2 martadan ko'p bo'lsa — faqat tugma */
+  __fsBar(auto);
+  if(!auto) return;
+  const t0 = Date.now();
+  __fsTimer = setInterval(()=>{ if(Date.now() - t0 < 1500) return; if(__fsSafe()){ clearInterval(__fsTimer); __fsReload(); } }, 1000);
+};
+if(window.__fsBroken) setTimeout(()=>{ try{ window.__fsRecover(window.__fsBroken); }catch(e){} }, 0);
+
+/* Kirim: yetkazib beruvchi takliflari (brauzerning datalist qutisi o'rniga) */
+function __puSuggBind(suppliers){
+  const inp = document.getElementById('pu-supplier'), box = document.getElementById('pu-sugg'); if(!inp || !box) return;
+  const draw = ()=>{
+    const q = String(inp.value || '').trim().toLowerCase();
+    const list = suppliers.filter(n=>n && n.toLowerCase() !== q && (!q || n.toLowerCase().indexOf(q) >= 0)).slice(0, 8);
+    box.innerHTML = document.activeElement === inp || q ? list.map(n=>'<button type="button" class="r3-chip" data-pu-sg="' + escapeHtml(n) + '">' + escapeHtml(n) + '</button>').join('') : '';
+  };
+  box.addEventListener('pointerdown', (e)=>{ if(e.target.closest && e.target.closest('[data-pu-sg]')) e.preventDefault(); });
+  box.addEventListener('click', (e)=>{ const b = e.target.closest && e.target.closest('[data-pu-sg]'); if(!b) return; inp.value = b.getAttribute('data-pu-sg'); purchaseDraft.supplier = inp.value; box.innerHTML = ''; try{ inp.blur(); }catch(_e){} });
+  inp.addEventListener('input', draw); inp.addEventListener('focus', draw);
+  inp.addEventListener('blur', ()=>setTimeout(()=>{ if(document.activeElement !== inp) box.innerHTML = ''; }, 150));
+}
+/* Asboblar qatori: matn sig'masa avval ikonka yashirinadi, keyin shrift kichrayadi */
+function __tcFit(){
+  document.querySelectorAll('.tool-row.tr-compact .tool-chip').forEach(c=>{
+    c.classList.remove('tc-noic', 'tc-sm');
+    const sp = c.querySelector('span:last-child'); if(!sp || !c.clientWidth) return;
+    const over = ()=>sp.scrollWidth > sp.clientWidth + 1 || c.scrollWidth > c.clientWidth + 1;
+    if(over()) c.classList.add('tc-noic');
+    if(over()) c.classList.add('tc-sm');
+  });
 }
 
 /* --- Online catalog --- */
