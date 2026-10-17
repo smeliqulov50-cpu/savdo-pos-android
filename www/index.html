@@ -798,6 +798,12 @@
   .so-banner span{flex:1;min-width:0;} .so-banner button{flex-shrink:0;border:none;background:#fff;color:#1f4fb8;border-radius:10px;padding:6px 10px;font:inherit;font-size:12px;font-weight:800;cursor:pointer;}
   .sr-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);}
   .sr-row .n{flex:1;min-width:0;font-size:13px;} .sr-row input{width:76px;text-align:center;font-weight:700;padding:8px 6px;}
+  /* fix136-trf */
+  .tr-dir{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13.5px;min-width:0;}
+  .tr-dir span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .tr-row{padding:9px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);}
+  .tr-row .h{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:700;} .tr-row .h span{min-width:0;}
+  .tr-row .g{display:flex;gap:8px;align-items:center;margin-top:6px;} .tr-row .g input{width:96px;text-align:center;font-weight:700;padding:8px 6px;} .tr-row .g select{width:auto;}
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -2135,6 +2141,37 @@ const T = {
   supPaid:{uz:"To'lov",ru:"Оплата",en:"Payment",kk:"Төлем",ky:"Төлөм",tg:"Пардохт"},
   supTookDebt:{uz:"Qarz yozildi",ru:"Записан долг",en:"Debt recorded",kk:"Қарыз жазылды",ky:"Карыз жазылды",tg:"Қарз сабт шуд"},
   supNone:{uz:"Ta'minotchilar yo'q",ru:"Поставщиков нет",en:"No suppliers",kk:"Жеткізушілер жоқ",ky:"Жеткирүүчүлөр жок",tg:"Таъминкунандагон нест"},
+  /* fix136-trf */
+  trMenu:{uz:"Filiallararo ko'chirish",ru:"Перемещение между филиалами",en:"Transfer between branches",kk:"Филиалдар арасында ауыстыру",ky:"Филиалдар ортосунда которуу",tg:"Интиқол байни филиалҳо"},
+  permTransfer:{uz:"Filiallararo ko'chirish",ru:"Перемещение между филиалами",en:"Transfer between branches",kk:"Филиалдар арасында ауыстыру",ky:"Филиалдар ортосунда которуу",tg:"Интиқол байни филиалҳо"},
+  trNew:{uz:"Yangi ko'chirish",ru:"Новое перемещение",en:"New transfer",kk:"Жаңа ауыстыру",ky:"Жаңы которуу",tg:"Интиқоли нав"},
+  trN:{uz:"Ko'chirish {n}",ru:"Перемещение {n}",en:"Transfer {n}",kk:"Ауыстыру {n}",ky:"Которуу {n}",tg:"Интиқол {n}"},
+  trIncoming:{uz:"Kelayotgan",ru:"Входящие",en:"Incoming",kk:"Келе жатқан",ky:"Келе жаткан",tg:"Воридшаванда"},
+  trOutgoing:{uz:"Yuborilgan",ru:"Отправленные",en:"Sent",kk:"Жіберілген",ky:"Жөнөтүлгөн",tg:"Фиристодашуда"},
+  trFrom:{uz:"Qayerdan",ru:"Откуда",en:"From",kk:"Қайдан",ky:"Кайдан",tg:"Аз куҷо"},
+  trTo:{uz:"Qayerga",ru:"Куда",en:"To",kk:"Қайда",ky:"Кайда",tg:"Ба куҷо"},
+  trNeedTo:{uz:"Qaysi filialga ekanini tanlang",ru:"Выберите филиал-получатель",en:"Choose the receiving branch",kk:"Қабылдаушы филиалды таңдаңыз",ky:"Кабыл алуучу филиалды тандаңыз",tg:"Филиали қабулкунандаро интихоб кунед"},
+  trSend:{uz:"Jo'natish",ru:"Отправить",en:"Send",kk:"Жіберу",ky:"Жөнөтүү",tg:"Фиристодан"},
+  trSendQ:{uz:"{n} ta tovar \u00ab{b}\u00bb filialiga jo'natilsinmi? Bu filialda qoldiq darhol kamayadi.",ru:"Отправить товаров: {n} в филиал \u00ab{b}\u00bb? Остаток в этом филиале уменьшится сразу.",en:"Send {n} items to \u00ab{b}\u00bb? Stock in this branch goes down right away.",kk:"{n} тауар \u00ab{b}\u00bb филиалына жіберілсін бе? Бұл филиалда қалдық бірден азаяды.",ky:"{n} товар \u00ab{b}\u00bb филиалына жөнөтүлсүнбү? Бул филиалда калдык дароо азаят.",tg:"{n} мол ба филиали \u00ab{b}\u00bb фиристода шавад? Бақия дар ин филиал фавран кам мешавад."},
+  trSentQty:{uz:"Jo'natildi: {n}",ru:"Отправлено: {n}",en:"Sent: {n}",kk:"Жіберілді: {n}",ky:"Жөнөтүлдү: {n}",tg:"Фиристода: {n}"},
+  trRecvQty:{uz:"Keldi",ru:"Получено",en:"Received",kk:"Келді",ky:"Келди",tg:"Қабул шуд"},
+  trShort:{uz:"Kamomad: {n}",ru:"Недостача: {n}",en:"Shortage: {n}",kk:"Кемшілік: {n}",ky:"Жетишпестик: {n}",tg:"Камомад: {n}"},
+  trShortTotal:{uz:"Kamomad (tannarxda): {sum}",ru:"Недостача (по себестоимости): {sum}",en:"Shortage (at cost): {sum}",kk:"Кемшілік (өзіндік құнмен): {sum}",ky:"Жетишпестик (өздүк нарк менен): {sum}",tg:"Камомад (бо арзиши аслӣ): {sum}"},
+  trRecvMore:{uz:"Kelgan son jo'natilgandan ko'p bo'lmasin",ru:"Получено не может быть больше отправленного",en:"Received cannot exceed what was sent",kk:"Келген сан жіберілгеннен аспасын",ky:"Келген сан жөнөтүлгөндөн ашпасын",tg:"Миқдори қабулшуда аз фиристодашуда зиёд набошад"},
+  trCancel:{uz:"Ko'chirishni bekor qilish",ru:"Отменить перемещение",en:"Cancel transfer",kk:"Ауыстырудан бас тарту",ky:"Которууну жокко чыгаруу",tg:"Бекор кардани интиқол"},
+  trCancelQ:{uz:"Ko'chirish bekor qilinsinmi? Tovar jo'natgan filialga qaytadi.",ru:"Отменить перемещение? Товар вернётся в филиал-отправитель.",en:"Cancel the transfer? Goods return to the sending branch.",kk:"Ауыстырудан бас тартасыз ба? Тауар жіберуші филиалға қайтады.",ky:"Которуу жокко чыгарылсынбы? Товар жөнөткөн филиалга кайтат.",tg:"Интиқол бекор шавад? Мол ба филиали фиристанда бармегардад."},
+  trWillCreate:{uz:"Bu filialda yo'q — avtomatik yaratiladi",ru:"В этом филиале нет — будет создан",en:"Not in this branch — will be created",kk:"Бұл филиалда жоқ — автоматты жасалады",ky:"Бул филиалда жок — автоматтык түзүлөт",tg:"Дар ин филиал нест — худкор сохта мешавад"},
+  trWaitOther:{uz:"Qabul qilish uchun \u00ab{b}\u00bb filialiga o'ting",ru:"Для приёма перейдите в филиал \u00ab{b}\u00bb",en:"Switch to \u00ab{b}\u00bb to receive",kk:"Қабылдау үшін \u00ab{b}\u00bb филиалына өтіңіз",ky:"Кабыл алуу үчүн \u00ab{b}\u00bb филиалына өтүңүз",tg:"Барои қабул ба филиали \u00ab{b}\u00bb гузаред"},
+  trGoBranch:{uz:"Shu filialga o'tish",ru:"Перейти в этот филиал",en:"Switch to this branch",kk:"Осы филиалға өту",ky:"Ушул филиалга өтүү",tg:"Ба ин филиал гузаштан"},
+  trMoveOut:{uz:"Filialga ko'chirildi",ru:"Перемещено в филиал",en:"Moved to branch",kk:"Филиалға ауыстырылды",ky:"Филиалга которулду",tg:"Ба филиал интиқол шуд"},
+  trMoveIn:{uz:"Filialdan keldi",ru:"Получено из филиала",en:"Received from branch",kk:"Филиалдан келді",ky:"Филиалдан келди",tg:"Аз филиал омад"},
+  trMoveBack:{uz:"Ko'chirish bekor qilindi",ru:"Перемещение отменено",en:"Transfer cancelled",kk:"Ауыстыру тоқтатылды",ky:"Которуу жокко чыгарылды",tg:"Интиқол бекор шуд"},
+  trAuSend:{uz:"Ko'chirish jo'natildi",ru:"Перемещение отправлено",en:"Transfer sent",kk:"Ауыстыру жіберілді",ky:"Которуу жөнөтүлдү",tg:"Интиқол фиристода шуд"},
+  trAuRecv:{uz:"Ko'chirish qabul qilindi",ru:"Перемещение принято",en:"Transfer received",kk:"Ауыстыру қабылданды",ky:"Которуу кабыл алынды",tg:"Интиқол қабул шуд"},
+  trOneBranch:{uz:"Ko'chirish uchun kamida 2 filial kerak (Sozlamalar → Filiallar)",ru:"Нужно минимум 2 филиала (Настройки → Филиалы)",en:"You need at least 2 branches (Settings → Branches)",kk:"Кемінде 2 филиал керек (Баптаулар → Филиалдар)",ky:"Жок дегенде 2 филиал керек (Жөндөөлөр → Филиалдар)",tg:"Ақаллан 2 филиал лозим (Танзимот → Филиалҳо)"},
+  trBox:{uz:"quti",ru:"кор.",en:"box",kk:"қорап",ky:"куту",tg:"қуттӣ"},
+  trNote:{uz:"Izoh",ru:"Комментарий",en:"Note",kk:"Ескерту",ky:"Эскертүү",tg:"Эзоҳ"},
+  trUnitPc:{uz:"dona",ru:"шт",en:"pcs",kk:"дана",ky:"даана",tg:"дона"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3627,7 +3664,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.34';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.35';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -15543,8 +15580,8 @@ function renderReportsCategory(container, cat){
 
   if(cat==='audit'){
     if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
-    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount', purchaseReturn:'puReturnBtn'};
-    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)', purchaseReturn:'var(--warm)'};
+    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount', purchaseReturn:'puReturnBtn', transferSend:'trAuSend', transferReceive:'trAuRecv', transferCancel:'trMoveBack'};
+    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)', purchaseReturn:'var(--warm)', transferSend:'var(--accent-dark)', transferReceive:'var(--teal)', transferCancel:'var(--warm)'};
     container.innerHTML = `${reportsBackHeader(tr('auditReport'))}<p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('auditHint')}</p>
       <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
       <div id="audit-list"><div class="empty-state">${R3_ON ? tr('r4Loading') : '…'}</div></div>`;
@@ -15833,8 +15870,8 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='stockmoves'){
-    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount'), supplierReturn:tr('puReturnBtn')}[r] || r);
-    const reasonColor = (r)=>({sale:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)', count:'var(--warm)'}[r] || 'var(--ink)');
+    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount'), supplierReturn:tr('puReturnBtn'), transferOut:tr('trMoveOut'), transferIn:tr('trMoveIn'), transferBack:tr('trMoveBack')}[r] || r);
+    const reasonColor = (r)=>({sale:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)', count:'var(--warm)', transferOut:'var(--accent-dark)', transferIn:'var(--teal)', transferBack:'var(--warm)'}[r] || 'var(--ink)');
     container.innerHTML = `
       ${reportsBackHeader(tr('stockMovesReport'))}
       <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('smHint')}</p>
@@ -19844,7 +19881,7 @@ function __r4Staff(container, ranked, commissionPct){
   if(eb) eb.addEventListener('click', ()=>{ state.__r4FocusComm = true; state.reportsCategory = null; state.view = 'settings'; state.settingsCategory = 'staffrules'; renderAll(); });
 }
 /* ---- 3.14 Ombor harakati ---- */
-var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete', 'supplierReturn']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']]];
+var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete', 'supplierReturn']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']], ['transfer', 'trMenu', ['transferOut', 'transferIn', 'transferBack']]];
 function __r4SmOk(m){ const g = SM_GROUPS.find(x=>x[0] === (state.__r4SmG || '')); return !g || !g[2] || g[2].indexOf(m.reason) >= 0; }
 function __r4SmChips(container, renderList){
   const s = document.getElementById('sm-search'); if(!s) return;
@@ -20309,6 +20346,7 @@ function __gcWatch(kind){
     try{
       const busy = document.getElementById('modal-root').children.length || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
       if(state.view === 'supply' && !busy) renderSupply();
+      else if(state.view === 'transfer' && !busy) renderTransfer();   /* fix136-trf */
     }catch(e){}
   }, (e)=>{ if(__gcPerm(e)) __gcOffSet(kind); });
   liveListenerUnsubs.push(unsub);
@@ -20697,6 +20735,250 @@ function __supDetail(name){
     ${__r3Kpi([[tr('supDebt'), fmt(S.cr ? (S.cr.debt || 0) : 0), S.cr && (S.cr.debt || 0) > 0 ? 'var(--danger)' : ''], [tr('supBought'), fmt(S.bought)], [tr('soReturns'), fmt(S.returned)]])}
     <h4 style="margin:6px 0 4px;font-size:13px;">${escapeHtml(tr('supHistory'))}</h4>
     ${ev.length ? ev.slice(0, 150).map(e=>`<div class="pu-line"><span>${escapeHtml(e.t)}<br><small class="subtle">${escapeHtml(fmtDateTime(e.d))}${e.debt ? ' · ' + escapeHtml(tr('supDebt')) : ''}</small></span><b style="color:${e.c};">${e.s}${fmt(e.a)}</b></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`}`);
+}
+
+/* fix136-trf: filiallararo ko'chirish */
+__gcK().transfer = {col: 'transfers', key: 'transfers', store: 'sardor_transfers_v1'};
+function canTransfer(){ return (isAdmin() || hasPerm('transfer')) && branchList().length > 1; }
+function __trAll(){ return (state.transfers || []).filter(t=>t && !t.deleted); }
+function __trFind(id){ return (state.transfers || []).find(t=>t && t.id === id); }
+function __trCur(){ return effectiveBranchId(state.currentBranchId); }
+function __trIncoming(){ const b = __trCur(); return __trAll().filter(t=>t.status === 'sent' && effectiveBranchId(t.toBranchId) === b); }
+MORE_EXTRA.push(()=>{
+  if(!canTransfer()) return null;
+  const n = __trIncoming().length;
+  return {icon: ICONS.truck, label: tr('trMenu') + (n ? ' (' + n + ')' : ''), fn: ()=>{ state.__trTab = n ? 'in' : 'out'; state.__trEdit = null; state.view = 'transfer'; renderAll(); }};
+});
+function __trNum(){
+  let mx = 0; (state.transfers || []).forEach(t=>{ const m = /(\d+)\s*$/.exec(String(t && t.num || '')); if(m) mx = Math.max(mx, +m[1]); });
+  return 'TR-' + String(mx + 1).padStart(4, '0');
+}
+function __trStatus(t, st){ t.status = st; (t.history = t.history || []).push({st, date: new Date().toISOString(), by: state.currentStaff ? state.currentStaff.name : '', branchId: __trCur()}); }
+function __trNew(){
+  const t = {id: uid(), num: __trNum(), fromBranchId: __trCur(), toBranchId: '', note: '', items: [], status: 'draft', createdAt: new Date().toISOString(), staffName: state.currentStaff ? state.currentStaff.name : '', history: []};
+  __trStatus(t, 'draft');
+  (state.transfers = state.transfers || []).push(t); __gcPush('transfer', t);
+  return t;
+}
+function __trUpb(p){ return Number(p && p.unitsPerBox) > 0 ? Number(p.unitsPerBox) : 0; }
+function __trQtyTxt(q, unit){ return __trQ(q) + ' ' + (unit || tr('trUnitPc')); }
+function __trQ(q){ q = Number(q) || 0; return String(Math.round(q * 1000) / 1000).replace('.', ','); }
+function __trLineQty(l){ const n = Number(l.n) || 0; return l.mode === 'box' && Number(l.upb) > 0 ? n * Number(l.upb) : n; }
+/* Snapshot: manba mahsulot o'chirilgan bo'lsa ham qabul qiluvchida yaratish uchun */
+function __trSnap(p, v){
+  const S = {name: p.name, price: Number(p.price) || 0, costPrice: Number(p.costPrice) || 0, barcode: p.barcode || '', category: p.category || '', unit: p.unit || '', wholesalePrice: Number(p.wholesalePrice) || 0, supplierName: p.supplierName || '', unitsPerBox: Number(p.unitsPerBox) || 0, boxPrice: Number(p.boxPrice) || 0, boxLabel: p.boxLabel || ''};
+  if(v) S.v = {name: v.name, price: Number(v.price) || 0, wholesalePrice: Number(v.wholesalePrice) || 0, boxPrice: Number(v.boxPrice) || 0, costPrice: Number(v.costPrice || v.cost) || 0};
+  return S;
+}
+function __trNorm(x){ return String(x || '').trim().toLowerCase().replace(/\s+/g, ' '); }
+/* Qabul qiluvchi filialdagi mos mahsulot: avval shtrix-kod, keyin nom; variant — nomi bo'yicha */
+function __trMatch(l, toB){
+  const S = l.snap || {}, del = deletedProductIds();
+  const list = state.products.filter(p=>p && !del.has(p.id) && effectiveBranchId(p.branchId) === toB);
+  let p = null;
+  if(S.barcode) p = list.find(x=>String(x.barcode || '').trim() && String(x.barcode).trim() === String(S.barcode).trim()) || null;
+  if(!p) p = list.find(x=>__trNorm(x.name) === __trNorm(S.name)) || null;
+  let v = null;
+  if(p && S.v) v = (p.variants || []).find(x=>__trNorm(x.name) === __trNorm(S.v.name)) || null;
+  return {p, v};
+}
+function __trEnsure(l, toB){
+  const m = __trMatch(l, toB); const S = l.snap || {};
+  if(m.p && (!S.v || m.v)) return m;
+  if(m.p && S.v){
+    const nv = {id: uid(), name: S.v.name, price: S.v.price, stock: 0, wholesalePrice: S.v.wholesalePrice, boxPrice: S.v.boxPrice};
+    if(S.v.costPrice) nv.costPrice = S.v.costPrice;
+    (m.p.variants = m.p.variants || []).push(nv);
+    return {p: m.p, v: nv, created: 'variant'};
+  }
+  const src = state.products.find(x=>x && x.id === l.productId);
+  let np;
+  if(src){
+    np = JSON.parse(JSON.stringify(src));
+    np.stock = 0; delete np.batches; delete np.expiryDate;
+    if(np.variants) np.variants.forEach(v=>{ v.__src = v.id; v.id = uid(); v.stock = 0; });
+  } else {
+    np = {name: S.name, price: S.price, costPrice: S.costPrice, stock: 0, unit: S.unit || 'dona', category: S.category, barcode: S.barcode, wholesalePrice: S.wholesalePrice, supplierName: S.supplierName, unitsPerBox: S.unitsPerBox, boxPrice: S.boxPrice, boxLabel: S.boxLabel, variants: []};
+    if(S.v) np.variants.push({id: uid(), name: S.v.name, price: S.v.price, stock: 0, wholesalePrice: S.v.wholesalePrice, boxPrice: S.v.boxPrice});
+  }
+  np.id = uid(); np.branchId = toB;
+  let nv = null;
+  if(S.v){
+    nv = (np.variants || []).find(x=>x.__src === l.variantId) || (np.variants || []).find(x=>__trNorm(x.name) === __trNorm(S.v.name)) || null;
+    if(!nv){ nv = {id: uid(), name: S.v.name, price: S.v.price, stock: 0, wholesalePrice: S.v.wholesalePrice, boxPrice: S.v.boxPrice}; (np.variants = np.variants || []).push(nv); }
+  }
+  (np.variants || []).forEach(v=>{ delete v.__src; });
+  state.products.push(np);
+  return {p: np, v: nv, created: 'product'};
+}
+
+function renderTransfer(){
+  const c = document.getElementById('view-container'); if(!c) return;
+  const backTo = ()=>{ state.view = 'products'; state.__trEdit = null; renderAll(); };
+  if(!canTransfer()){
+    c.innerHTML = `<div class="back-row"><button id="tr-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('trMenu')}</span></div><div class="empty-state">${escapeHtml(tr((isAdmin() || hasPerm('transfer')) ? 'trOneBranch' : 'soNoPerm'))}</div>`;
+    document.getElementById('tr-back').addEventListener('click', backTo); return;
+  }
+  if(state.__trEdit){ const t = __trFind(state.__trEdit); if(t && !t.deleted){ __trEditor(c, t); return; } state.__trEdit = null; }
+  const tab = state.__trTab || 'out', b = __trCur();
+  const inc = __trIncoming();
+  c.innerHTML = `<div class="back-row"><button id="tr-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('trMenu')}</span></div>
+    <div class="subtle" style="font-size:12.5px;margin:-4px 0 10px;">${escapeHtml(branchName(b))}</div>
+    <div class="toggle-group" style="margin-bottom:12px;">${[['in', tr('trIncoming') + (inc.length ? ' (' + inc.length + ')' : '')], ['out', tr('trOutgoing')], ['hist', tr('supHistory')]].map(x=>`<div class="toggle-opt ${tab === x[0] ? 'active' : ''}" data-tr-tab="${x[0]}">${escapeHtml(x[1])}</div>`).join('')}</div>
+    <div id="tr-body"></div>`;
+  document.getElementById('tr-back').addEventListener('click', backTo);
+  c.querySelectorAll('[data-tr-tab]').forEach(x=>x.addEventListener('click', ()=>{ state.__trTab = x.dataset.trTab; renderTransfer(); }));
+  const body = document.getElementById('tr-body');
+  let list;
+  if(tab === 'in') list = inc;
+  else if(tab === 'hist') list = __trAll().filter(t=>(t.status === 'received' || t.status === 'cancelled') && (effectiveBranchId(t.fromBranchId) === b || effectiveBranchId(t.toBranchId) === b));
+  else list = __trAll().filter(t=>effectiveBranchId(t.fromBranchId) === b && (t.status === 'draft' || t.status === 'sent'));
+  list = list.slice().sort((x, y)=>String(y.createdAt).localeCompare(String(x.createdAt)));
+  body.innerHTML = (tab === 'out' ? `<button class="btn btn-accent btn-block" id="tr-new" style="margin-bottom:10px;">${ICONS.plus} ${escapeHtml(tr('trNew'))}</button>` : '') +
+    (list.length ? list.map(t=>{
+      return `<div class="card so-card" data-tr-open="${escapeHtml(t.id)}"><div class="t"><b>${escapeHtml(t.num)}</b>${__soStBadge(t.status)}</div>
+        <div class="tr-dir" style="margin-top:4px;"><span>${escapeHtml(branchName(t.fromBranchId))}</span>→<span>${escapeHtml(t.toBranchId ? branchName(t.toBranchId) : '—')}</span></div>
+        <div class="subtle" style="font-size:12px;margin-top:3px;">${escapeHtml(fmtDateTime(t.sentAt || t.createdAt))} · ${escapeHtml(tr('puItemsCount').replace('{n}', (t.items || []).length))}${Number(t.shortQty) > 0 ? ' · <b style="color:var(--danger);">' + escapeHtml(tr('trShort').replace('{n}', __trQ(t.shortQty))) + '</b>' : ''}</div></div>`;
+    }).join('') : `<div class="empty-state">${tr('noData')}</div>`);
+  const nb = document.getElementById('tr-new');
+  if(nb) nb.addEventListener('click', ()=>{ const t = __trNew(); state.__trEdit = t.id; renderTransfer(); });
+  body.querySelectorAll('[data-tr-open]').forEach(x=>x.addEventListener('click', ()=>{ state.__trEdit = x.dataset.trOpen; renderTransfer(); }));
+}
+
+function __trEditor(c, t){
+  const b = __trCur(), isFrom = effectiveBranchId(t.fromBranchId) === b, isTo = effectiveBranchId(t.toBranchId) === b;
+  const draft = t.status === 'draft' && isFrom;
+  const others = branchList().filter(x=>effectiveBranchId(x.id) !== effectiveBranchId(t.fromBranchId));
+  const lineHtml = (l, i)=>{
+    const p = state.products.find(x=>x.id === l.productId), v = p && l.variantId ? getVariant(p, l.variantId) : null;
+    if(draft){
+      const st = p ? stockQtyOf(p, v) : 0, upb = __trUpb(p);
+      return `<div class="tr-row"><div class="h"><span>${escapeHtml(l.name)}</span><button class="icon-btn" data-tr-rm="${i}" style="color:var(--danger);">${ICONS.trash}</button></div>
+        <div class="subtle" style="font-size:12px;">${tr('stock')}: ${escapeHtml(__trQtyTxt(st, p && p.unit))}${upb ? ' · 1 ' + escapeHtml((p.boxLabel || tr('trBox'))) + ' = ' + upb : ''}</div>
+        <div class="g"><input type="number" inputmode="decimal" data-tr-n="${i}" value="${l.n || ''}" placeholder="0">
+        ${upb ? `<select data-tr-mode="${i}"><option value="unit" ${l.mode !== 'box' ? 'selected' : ''}>${escapeHtml(p.unit || tr('trUnitPc'))}</option><option value="box" ${l.mode === 'box' ? 'selected' : ''}>${escapeHtml(p.boxLabel || tr('trBox'))}</option></select>` : ''}
+        <span class="subtle" data-tr-u="${i}" style="font-size:12px;">${l.mode === 'box' && upb ? '= ' + escapeHtml(__trQtyTxt(__trLineQty(l), p.unit)) : ''}</span></div></div>`;
+    }
+    const sent = Number(l.qty) || 0;
+    const recvd = t.status === 'received' ? (Number(l.recvQty) || 0) : null;
+    let extra = '';
+    if(t.status === 'sent' && isTo && canTransfer()){
+      const m = __trMatch(l, b);
+      extra = `<div class="g"><span class="subtle" style="font-size:12px;">${tr('trRecvQty')}</span><input type="number" inputmode="decimal" data-tr-r="${i}" value="${state.__trRecv && state.__trRecv[i] != null ? state.__trRecv[i] : sent}"></div>` +
+        ((!m.p || (l.snap && l.snap.v && !m.v)) ? `<div class="subtle" style="font-size:12px;color:var(--accent-dark);margin-top:4px;">${escapeHtml(tr('trWillCreate'))}</div>` : '');
+    }
+    const short = recvd != null ? Math.max(0, sent - recvd) : 0;
+    return `<div class="tr-row"><div class="h"><span>${escapeHtml(l.name)}</span><span>${escapeHtml(tr('trSentQty').replace('{n}', __trQtyTxt(sent, l.unit)))}</span></div>
+      ${l.mode === 'box' && Number(l.upb) > 0 ? `<div class="subtle" style="font-size:12px;">${escapeHtml(__trQ(l.n))} ${escapeHtml(l.boxLabel || tr('trBox'))} × ${l.upb}</div>` : ''}
+      ${recvd != null ? `<div class="subtle" style="font-size:12px;">${escapeHtml(tr('trRecvQty'))}: <b style="color:var(--teal);">${escapeHtml(__trQ(recvd))}</b>${short > 0 ? ' · <b style="color:var(--danger);">' + escapeHtml(tr('trShort').replace('{n}', __trQ(short))) + '</b>' : ''}</div>` : ''}${extra}</div>`;
+  };
+  const toName = t.toBranchId ? branchName(t.toBranchId) : '';
+  c.innerHTML = `<div class="back-row"><button id="tr-ed-back">${ICONS.arrowLeft}</button><span class="t-title">${escapeHtml(tr('trN').replace('{n}', t.num))}</span></div>
+    <div style="display:flex;gap:8px;align-items:center;margin:-4px 0 10px;flex-wrap:wrap;">${__soStBadge(t.status)}<span class="subtle" style="font-size:12px;">${escapeHtml(fmtDateTime(t.sentAt || t.createdAt))}${t.staffName ? ' · ' + escapeHtml(t.staffName) : ''}</span></div>
+    <div class="card" style="padding:12px 14px;">
+      <label class="subtle" style="font-size:12px;">${tr('trFrom')}</label><div style="font-weight:800;margin-bottom:8px;">${escapeHtml(branchName(t.fromBranchId))}</div>
+      <label class="subtle" style="font-size:12px;">${tr('trTo')}</label>
+      ${draft ? `<select id="tr-to"><option value="">—</option>${others.map(x=>`<option value="${escapeHtml(x.id)}" ${effectiveBranchId(t.toBranchId) === effectiveBranchId(x.id) && t.toBranchId ? 'selected' : ''}>${escapeHtml(x.name)}</option>`).join('')}</select>` : `<div style="font-weight:800;">${escapeHtml(toName || '—')}</div>`}
+      ${draft ? `<div class="field" style="margin:10px 0 0;"><label class="field-label">${tr('trNote')}</label><input type="text" id="tr-note" value="${escapeHtml(t.note || '')}"></div>` : ''}
+    </div>
+    <div class="card" style="padding:6px 14px;">${(t.items || []).map(lineHtml).join('') || `<div class="empty-state" style="padding:14px 0;">${tr('soNeedItems')}</div>`}</div>
+    ${draft ? `<button class="btn btn-outline btn-block" id="tr-add" style="margin-bottom:10px;">${escapeHtml(tr('puAddItem'))}</button>
+      <div id="tr-err" class="error-text"></div>
+      <button class="btn btn-accent btn-block" id="tr-send">${escapeHtml(tr('trSend'))}</button>
+      <div style="margin-top:22px;">${dangerZoneHtml(tr('soDelete'), '', 'tr-del')}</div>`
+    : `${t.note ? `<div class="card" style="padding:10px 14px;font-size:13px;">${escapeHtml(t.note)}</div>` : ''}
+      ${t.status === 'received' && Number(t.shortValue) > 0 ? `<div class="card" style="padding:10px 14px;font-size:13px;color:var(--danger);font-weight:700;">${escapeHtml(tr('trShortTotal').replace('{sum}', fmt(t.shortValue)))}</div>` : ''}
+      ${t.status === 'sent' && isTo && canTransfer() ? `<div id="tr-err" class="error-text"></div><button class="btn btn-accent btn-block" id="tr-recv">${escapeHtml(tr('soReceive'))}</button>` : ''}
+      ${t.status === 'sent' && !isTo ? `<div class="card" style="padding:10px 14px;font-size:13px;">${escapeHtml(tr('trWaitOther').replace('{b}', toName))}${isAdmin() ? `<button class="btn btn-outline btn-block" id="tr-go" style="margin-top:8px;">${escapeHtml(tr('trGoBranch'))}</button>` : ''}</div>` : ''}
+      ${t.status === 'sent' && isFrom ? `<button class="btn btn-outline btn-block" id="tr-cancel" style="margin-top:12px;color:var(--danger);border-color:var(--danger);">${escapeHtml(tr('trCancel'))}</button>` : ''}`}`;
+  document.getElementById('tr-ed-back').addEventListener('click', ()=>{ state.__trEdit = null; state.__trRecv = null; renderTransfer(); });
+  if(draft){
+    const save = ()=>{ __gcPushSoon('transfer', t); };
+    const sel = document.getElementById('tr-to');
+    sel.addEventListener('change', ()=>{ t.toBranchId = sel.value; save(); });
+    document.getElementById('tr-note').addEventListener('input', (e)=>{ t.note = e.target.value; save(); });
+    c.querySelectorAll('[data-tr-n]').forEach(inp=>inp.addEventListener('input', ()=>{
+      const i = +inp.dataset.trN, l = t.items[i]; l.n = parseFloat(String(inp.value).replace(',', '.')) || 0; l.qty = __trLineQty(l);
+      const u = c.querySelector('[data-tr-u="' + i + '"]'); const p = state.products.find(x=>x.id === l.productId);
+      if(u) u.textContent = l.mode === 'box' && Number(l.upb) > 0 ? '= ' + __trQtyTxt(l.qty, p && p.unit) : '';
+      const e = document.getElementById('tr-err'); if(e) e.textContent = ''; save();
+    }));
+    c.querySelectorAll('[data-tr-mode]').forEach(s=>s.addEventListener('change', ()=>{ const l = t.items[+s.dataset.trMode]; l.mode = s.value; l.qty = __trLineQty(l); save(); __trEditor(c, t); }));
+    c.querySelectorAll('[data-tr-rm]').forEach(x=>x.addEventListener('click', ()=>{ t.items.splice(+x.dataset.trRm, 1); save(); __trEditor(c, t); }));
+    document.getElementById('tr-add').addEventListener('click', ()=>__soPicker((p, v)=>{
+      if(!t.items.some(l=>l.productId === p.id && (l.variantId || null) === (v ? v.id : null))){
+        const upb = __trUpb(p);
+        t.items.push({productId: p.id, variantId: v ? v.id : null, name: __soLineName(p, v), unit: p.unit || '', mode: 'unit', n: 1, qty: 1, upb: upb || 0, boxLabel: p.boxLabel || '', cost: __soCost(p, v), snap: __trSnap(p, v)});
+      }
+      save(); __trEditor(c, t);
+    }));
+    document.getElementById('tr-del').addEventListener('click', ()=>{
+      confirmDialog(tr('soDeleteQ'), ()=>{ t.deleted = true; __gcPush('transfer', t); state.__trEdit = null; renderTransfer(); }, tr('delete'));
+    });
+    document.getElementById('tr-send').addEventListener('click', ()=>{
+      const err = document.getElementById('tr-err'); err.textContent = '';
+      if(!t.toBranchId){ err.textContent = tr('trNeedTo'); return; }
+      const lines = t.items.filter(l=>(Number(l.qty) || 0) > 0);
+      if(!lines.length){ err.textContent = tr('soNeedItems'); return; }
+      for(const l of lines){
+        const p = state.products.find(x=>x.id === l.productId), v = p && l.variantId ? getVariant(p, l.variantId) : null;
+        if(!p || (l.variantId && !v)){ err.textContent = tr('puRetDeleted'); return; }
+        const st = stockQtyOf(p, v);
+        if(l.qty > st + 1e-9){ err.textContent = tr('puRetStockBad').replace('{name}', l.name).replace('{n}', __trQ(st)); return; }
+      }
+      const n = lines.reduce((a, l)=>a + l.qty, 0);
+      confirmDialog(tr('trSendQ').replace('{n}', __trQ(n)).replace('{b}', escapeHtml(branchName(t.toBranchId))), ()=>{
+        if(t.status !== 'draft') return;
+        t.items = lines;
+        lines.forEach(l=>{ const p = state.products.find(x=>x.id === l.productId), v = p && l.variantId ? getVariant(p, l.variantId) : null; l.snap = __trSnap(p, v); l.cost = __soCost(p, v); stockChange(p, v, -l.qty, 'transferOut', t.id); });
+        saveProducts();
+        t.sentAt = new Date().toISOString(); __trStatus(t, 'sent'); __gcPush('transfer', t);
+        try{ auditLog('transferSend', `${t.num}: ${branchName(t.fromBranchId)} → ${branchName(t.toBranchId)} · ${lines.length} · ${__trQ(n)}`, {transferId: t.id}); }catch(e){}
+        showToast(tr('soStSent')); renderTransfer();
+      }, tr('trSend'));
+    });
+    return;
+  }
+  const go = document.getElementById('tr-go');
+  if(go) go.addEventListener('click', ()=>{ state.currentBranchId = t.toBranchId; state.__trTab = 'in'; renderAll(); });
+  c.querySelectorAll('[data-tr-r]').forEach(inp=>inp.addEventListener('input', ()=>{ (state.__trRecv = state.__trRecv || {})[+inp.dataset.trR] = inp.value; const e = document.getElementById('tr-err'); if(e) e.textContent = ''; }));
+  const rb = document.getElementById('tr-recv');
+  if(rb) rb.addEventListener('click', ()=>{
+    const err = document.getElementById('tr-err'); err.textContent = '';
+    const R = t.items.map((l, i)=>{ const el = c.querySelector('[data-tr-r="' + i + '"]'); return el ? parseFloat(String(el.value).replace(',', '.')) : (Number(l.qty) || 0); });
+    for(let i = 0; i < R.length; i++){
+      if(!(R[i] >= 0)){ err.textContent = tr('fillFields'); return; }
+      if(R[i] > (Number(t.items[i].qty) || 0) + 1e-9){ err.textContent = tr('trRecvMore') + ': ' + t.items[i].name; return; }
+    }
+    const toB = __trCur();
+    if(t.status !== 'sent' || effectiveBranchId(t.toBranchId) !== toB) return;
+    let shortQ = 0, shortV = 0, created = 0;
+    t.items.forEach((l, i)=>{
+      const r = R[i]; l.recvQty = r;
+      const sh = Math.max(0, (Number(l.qty) || 0) - r); shortQ += sh; shortV += sh * (Number(l.cost) || 0);
+      if(r > 0){
+        const m = __trEnsure(l, toB); if(m.created) created++;
+        if(m.p && !(Number(m.v ? (m.v.costPrice || m.v.cost) : m.p.costPrice) > 0) && Number(l.cost) > 0){ if(m.v) m.v.costPrice = l.cost; else m.p.costPrice = l.cost; }
+        l.toProductId = m.p.id; l.toVariantId = m.v ? m.v.id : null;
+        stockChange(m.p, m.v, r, 'transferIn', t.id);
+      }
+    });
+    saveProducts();
+    t.shortQty = Math.round(shortQ * 1000) / 1000; t.shortValue = Math.round(shortV);
+    t.receivedAt = new Date().toISOString(); t.recvStaffName = state.currentStaff ? state.currentStaff.name : '';
+    __trStatus(t, 'received'); __gcPush('transfer', t); state.__trRecv = null;
+    try{ auditLog('transferReceive', `${t.num}: ${branchName(t.fromBranchId)} → ${branchName(t.toBranchId)}${shortQ > 0 ? ' · ' + tr('trShort').replace('{n}', __trQ(shortQ)) + ' (' + fmt(shortV) + ')' : ''}`, {transferId: t.id}); }catch(e){}
+    showToast(tr('soStReceived')); __trEditor(c, t);
+  });
+  const cb = document.getElementById('tr-cancel');
+  if(cb) cb.addEventListener('click', ()=>confirmDialog(tr('trCancelQ'), ()=>{
+    if(t.status !== 'sent') return;
+    t.items.forEach(l=>{ const p = state.products.find(x=>x.id === l.productId), v = p && l.variantId ? getVariant(p, l.variantId) : null; if(p && (!l.variantId || v)) stockChange(p, v, Number(l.qty) || 0, 'transferBack', t.id); });
+    saveProducts();
+    __trStatus(t, 'cancelled'); __gcPush('transfer', t);
+    try{ auditLog('transferCancel', `${t.num}: ${branchName(t.fromBranchId)} → ${branchName(t.toBranchId)}`, {transferId: t.id}); }catch(e){}
+    __trEditor(c, t);
+  }, tr('trCancel')));
 }
 
 /* --- Online catalog --- */
@@ -21765,6 +22047,7 @@ function openStaffForm(staffId){
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-expense" ${perms.expense?'checked':''}><span>${tr('permExpense')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-mydebts" ${perms.myDebts?'checked':''}><span>${tr('permMyDebts')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-supply" ${perms.supply?'checked':''}><span>${tr('permSupply')}</span></div>
+      <div class="checkbox-row"><input type="checkbox" id="sf-perm-transfer" ${perms.transfer?'checked':''}><span>${tr('permTransfer')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-printer" ${perms.printerSetup!==false?'checked':''}><span>${tr('permPrinterSetup')}</span></div>
       ${canGrantAdmin ? `
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-settings" ${perms.settings?'checked':''}><span>${tr('settingsPerm')}</span></div>
@@ -21851,6 +22134,7 @@ function openStaffForm(staffId){
       editReceipt: document.getElementById('sf-perm-editreceipt').checked,
       myDebts: document.getElementById('sf-perm-mydebts').checked,
       supply: !!(document.getElementById('sf-perm-supply') && document.getElementById('sf-perm-supply').checked),   /* fix135-sup */
+      transfer: !!(document.getElementById('sf-perm-transfer') && document.getElementById('sf-perm-transfer').checked),   /* fix136-trf */
       expense: document.getElementById('sf-perm-expense').checked,
       settings: settingsEl ? settingsEl.checked : (perms.settings||false),
       staffManage: staffManageEl ? staffManageEl.checked : (perms.staffManage||false),
@@ -22053,6 +22337,7 @@ function renderAll(){
   else if(state.view==='stocktake') renderStocktake();
   else if(state.view==='purchase') renderPurchase();
   else if(state.view==='supply') renderSupply();   /* fix135-sup */
+  else if(state.view==='transfer') renderTransfer();   /* fix136-trf */
   if(warningHtml) container.insertAdjacentHTML('afterbegin', warningHtml);
   const syncBannerHtml = pendingSyncBannerHtml();
   if(syncBannerHtml){
