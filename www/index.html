@@ -776,6 +776,11 @@
   .pu-line > span:first-child{min-width:0;flex:1;} .pu-line b{white-space:nowrap;}
   .pu-ret-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);}
   .pu-ret-row .n{flex:1;min-width:0;font-size:13px;} .pu-ret-row input{width:84px;text-align:center;font-weight:700;padding:8px 6px;}
+  /* fix134-er */
+  .er-pay-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .er-pay-row label{flex:0 0 38%;font-size:13px;font-weight:700;color:var(--ink-soft);}
+  .er-pay-row input{flex:1;min-width:0;text-align:right;font-weight:700;}
+  #er-pay-left{font-size:12.5px;font-weight:800;margin:2px 0 6px;}
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -2048,6 +2053,18 @@ const T = {
   puRetNoteW:{uz:"Qaytarish",ru:"Возврат",en:"Return",kk:"Қайтару",ky:"Кайтаруу",tg:"Баргардонӣ"},
   puRetDeleted:{uz:"Mahsulot o'chirilgan — qaytarib bo'lmaydi",ru:"Товар удалён — вернуть нельзя",en:"Product deleted — cannot be returned",kk:"Тауар жойылған — қайтару мүмкін емес",ky:"Товар өчүрүлгөн — кайтаруу мүмкүн эмес",tg:"Мол ҳазф шудааст — баргардонидан мумкин нест"},
   puNoHist:{uz:"Kirim topilmadi",ru:"Приход не найден",en:"No goods-in found",kk:"Кіріс табылмады",ky:"Кирим табылган жок",tg:"Воридот ёфт нашуд"},
+  /* fix134-er */
+  genderLabel:{uz:"Jinsi",ru:"Пол",en:"Gender",kk:"Жынысы",ky:"Жынысы",tg:"Ҷинс"},
+  genderNone:{uz:"Ko'rsatilmagan",ru:"Не указан",en:"Not specified",kk:"Көрсетілмеген",ky:"Көрсөтүлгөн эмес",tg:"Нишон дода нашудааст"},
+  genderM:{uz:"Erkak",ru:"Мужской",en:"Male",kk:"Ер",ky:"Эркек",tg:"Мард"},
+  genderF:{uz:"Ayol",ru:"Женский",en:"Female",kk:"Әйел",ky:"Аял",tg:"Зан"},
+  erPayTitle:{uz:"To'lov usullari",ru:"Способы оплаты",en:"Payment methods",kk:"Төлем тәсілдері",ky:"Төлөм ыкмалары",tg:"Усулҳои пардохт"},
+  erPayLeft:{uz:"Taqsimlanmagan: {sum}",ru:"Не распределено: {sum}",en:"Not allocated: {sum}",kk:"Бөлінбеген: {sum}",ky:"Бөлүштүрүлбөгөн: {sum}",tg:"Тақсимнашуда: {sum}"},
+  erPayOver:{uz:"Ortiqcha: {sum}",ru:"Лишнее: {sum}",en:"Over by: {sum}",kk:"Артық: {sum}",ky:"Ашыкча: {sum}",tg:"Зиёдатӣ: {sum}"},
+  erPayOk:{uz:"Jami chek bilan teng",ru:"Совпадает с итогом чека",en:"Matches the receipt total",kk:"Чек жиынтығымен тең",ky:"Чектин жыйынтыгы менен барабар",tg:"Бо ҳамагии чек баробар"},
+  erPayAuto:{uz:"Qayta taqsimlash",ru:"Распределить заново",en:"Re-allocate",kk:"Қайта бөлу",ky:"Кайра бөлүштүрүү",tg:"Аз нав тақсим кардан"},
+  erPayBad:{uz:"To'lovlar jami chek jamiga teng bo'lishi kerak",ru:"Сумма оплат должна равняться итогу чека",en:"Payments must add up to the receipt total",kk:"Төлемдер жиынтығы чек жиынтығына тең болуы керек",ky:"Төлөмдөрдүн жыйынтыгы чектин жыйынтыгына барабар болушу керек",tg:"Ҳамагии пардохтҳо бояд ба ҳамагии чек баробар бошад"},
+  erDebtLine:{uz:"Shu chek bo'yicha mijoz qarzi: {a} → {b}",ru:"Долг клиента по этому чеку: {a} → {b}",en:"Customer debt for this receipt: {a} → {b}",kk:"Осы чек бойынша клиент қарызы: {a} → {b}",ky:"Ушул чек боюнча кардардын карызы: {a} → {b}",tg:"Қарзи мизоҷ аз рӯи ин чек: {a} → {b}"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3539,7 +3556,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.32';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.33';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6847,6 +6864,7 @@ function openCustomerHub(opts){
         + '<input type="text" id="ch-n-name" placeholder="' + tr('customerName') + '" value="' + escapeHtml(pn) + '" autocomplete="off">'
         + '<input type="text" id="ch-n-phone" inputmode="tel" placeholder="+998 90 123 45 67" value="' + escapeHtml(pp) + '" autocomplete="off">'
         + (H.showMore ? '<input type="text" id="ch-n-addr" placeholder="' + tr('customerAddress') + '" autocomplete="off">'
+            + '<select id="ch-n-gender" aria-label="' + tr('genderLabel') + '">' + __genderOpts('', true) + '</select>'
             + (__chCanLimit() ? '<input type="text" inputmode="numeric" id="ch-n-limit" placeholder="' + tr('creditLimitSection') + '">' : '') : '')
         + '<div id="ch-n-err" class="error-text"></div>'
         + '<div class="ch-newrow"><button type="button" class="ch-link" id="ch-n-more">' + (H.showMore ? '&#9652; ' : '&#9662; ') + tr('chMore') + '</button>'
@@ -6904,6 +6922,7 @@ function openCustomerHub(opts){
         }
         var c = { id: uid(), branchId: state.currentBranchId, name: name, phone: phone, address: '', debt: 0, bonusBalance: 0, createdAt: new Date().toISOString() };
         var ad = document.getElementById('ch-n-addr'); if(ad) c.address = ad.value.trim();
+        var gd = document.getElementById('ch-n-gender'); if(gd && (gd.value === 'm' || gd.value === 'f')) c.gender = gd.value;   /* fix134-er */
         var lm = document.getElementById('ch-n-limit'); if(lm && __chCanLimit()){ var lv = parseMoneyInput(lm.value); if(!isNaN(lv) && lv > 0) c.creditLimit = lv; }
         state.customers.push(c); saveCustomers();
         finish(c.id);
@@ -8714,14 +8733,14 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     // worth X" and "paid Y of it right away" as the two things that
     // actually happened, not one pre-netted number that hides the split.
     __spDebtSet(cust, (cust.debt||0) + total); /* fix78 */
-    const saleLedgerEntry = {id:uid(), customerId, type:'sale', amount:total, date:new Date().toISOString(), note:'', staffName: state.currentStaff ? state.currentStaff.name : ''};
+    const saleLedgerEntry = {id:uid(), customerId, type:'sale', amount:total, date:new Date().toISOString(), note:'', staffName: state.currentStaff ? state.currentStaff.name : '', saleId: sale.id};   /* fix134-er: saleId */
     state.ledger.push(saleLedgerEntry);
     addLedgerDoc(saleLedgerEntry);
     const paidNow = total - creditAmount;
     if(paidNow > 0){
       __spDebtSet(cust, Math.max(0, cust.debt - paidNow)); /* fix78 */
       const methodLabel = __mixF ? __mixF.parts.filter(p=>p.method!=='credit').map(p=>paymentTypeLabel(p.method)).join(' + ') : paymentTypeLabel(hasSplit ? (paymentType==='credit' ? splitMethodUsed : paymentType) : paymentType);   /* fix110-mixpay */
-      const paymentLedgerEntry = {id:uid(), customerId, type:'payment', amount:paidNow, date:new Date().toISOString(), note: (__mixF ? tr('mixPay') : tr('splitPaymentToggle'))+' ('+methodLabel+')'+(sale.receiptNumber?(' №'+sale.receiptNumber):''), staffName: state.currentStaff ? state.currentStaff.name : ''};
+      const paymentLedgerEntry = {id:uid(), customerId, saleId: sale.id, type:'payment', amount:paidNow, date:new Date().toISOString(), note: (__mixF ? tr('mixPay') : tr('splitPaymentToggle'))+' ('+methodLabel+')'+(sale.receiptNumber?(' №'+sale.receiptNumber):''), staffName: state.currentStaff ? state.currentStaff.name : ''};
       state.ledger.push(paymentLedgerEntry);
       addLedgerDoc(paymentLedgerEntry);
     }
@@ -13179,6 +13198,7 @@ function openCustomerForm(){
     <div class="field"><label class="field-label">${tr('customerName')}</label><input type="text" id="cf-name"></div>
     <div class="field"><label class="field-label">${tr('phone')}</label><input type="text" id="cf-phone" placeholder="+998901234567"></div>
     <div class="field"><label class="field-label">${tr('customerAddress')}</label><input type="text" id="cf-address"></div>
+    <div class="field"><label class="field-label">${tr('genderLabel')}</label><select id="cf-gender">${__genderOpts('')}</select></div>
     <div id="cf-error" class="error-text"></div>
     <button class="btn btn-primary" id="cf-save-btn">${tr('save')}</button>
   `);
@@ -13187,7 +13207,9 @@ function openCustomerForm(){
     const phone = document.getElementById('cf-phone').value.trim();
     const address = document.getElementById('cf-address').value.trim();
     if(!name){ document.getElementById('cf-error').textContent = tr('needCustomerName'); return; }
-    state.customers.push({id:uid(), branchId: state.currentBranchId, name, phone, address, debt:0, bonusBalance:0});
+    const __nc = {id:uid(), branchId: state.currentBranchId, name, phone, address, debt:0, bonusBalance:0};
+    { const __g = (document.getElementById('cf-gender') || {}).value; if(__g === 'm' || __g === 'f') __nc.gender = __g; }   /* fix134-er */
+    state.customers.push(__nc);
     saveCustomers(); closeModal(); renderAll();
   });
 }
@@ -13641,6 +13663,7 @@ function renderEditReceiptModal(){
   const d = editReceiptDraft;
   const sale = state.sales.find(s=>s.id===d.saleId);
   if(!sale || !d){ closeModal(); return; }
+  try{ __erPayPrep(d, sale); }catch(e){ d.pay = null; }   /* fix134-er */
   openModal(`
     <div class="modal-title">${tr('editReceiptTitle')}</div>
     <div class="subtle" style="margin-bottom:12px;">${sale.receiptNumber?('№'+sale.receiptNumber+' · '):''}${fmtDateTime(sale.date)}</div>
@@ -13670,6 +13693,7 @@ function renderEditReceiptModal(){
       ${(state.settings.restaurantMode || d.serviceChargePercent) ? `<div class="field" style="margin-bottom:0;"><label class="field-label">${tr('serviceCharge')} (%)</label><input type="text" inputmode="decimal" id="er-svc" value="${d.serviceChargePercent || ''}" placeholder="0"></div>` : ''}
     </div>
     <div class="card" style="margin-bottom:14px;" id="er-summary">${__erSummaryHtml()}</div>
+    ${__erPayHtml(d, sale)}
     <div id="er-error" class="error-text"></div>
     <div class="btn-row">
       <button class="btn btn-outline" id="er-cancel-btn">${tr('cancel')}</button>
@@ -13708,6 +13732,7 @@ function renderEditReceiptModal(){
     });
   });
   document.getElementById('er-save-btn').addEventListener('click', erConfirmAndSave); /* fix84 */
+  try{ __erPayBind(d, sale); }catch(e){}   /* fix134-er */
   { /* fix82 */
     const _num = (v)=>{ const n = parseFloat(String(v||'').replace(/\s/g,'').replace(',', '.')); return isNaN(n) ? 0 : n; };
     const _upd = ()=>{
@@ -13716,6 +13741,7 @@ function renderEditReceiptModal(){
       if(dv && dt){ d.discountType = dt.value === 'percent' ? 'percent' : 'amount'; let v = d.discountType === 'percent' ? _num(dv.value) : parseMoneyInput(dv.value); if(isNaN(v) || v < 0) v = 0; if(d.discountType === 'percent' && v > 100) v = 100; d.discountValue = v; }
       const sv = document.getElementById('er-svc'); if(sv){ let v = _num(sv.value); if(v < 0) v = 0; if(v > 100) v = 100; d.serviceChargePercent = v; }
       const sm = document.getElementById('er-summary'); if(sm) sm.innerHTML = __erSummaryHtml();
+      try{ __erPayRefresh(); }catch(e){}   /* fix134-er */
     };
     attachMoneyInputsById('er-delivery');
     ['er-delivery','er-disc-val','er-svc'].forEach(id=>{ const el = document.getElementById(id); if(el) el.addEventListener('input', _upd); });
@@ -13919,6 +13945,7 @@ function openErProductPickerLegacy(restoreScroll){
 function erConfirmAndSave(){
   if(!editReceiptDraft) return;
   if(!editReceiptDraft.items.length){ showToast(tr('cannotEditEmptyReceipt')); return; }
+  if(!__erPayOk()){ const __ee = document.getElementById('er-error'); if(__ee) __ee.textContent = tr('erPayBad'); showToast(tr('erPayBad')); return; }   /* fix134-er */
   var d = editReceiptDraft;
   openModal('<p style="font-size:14px;margin:0 0 16px;">' + tr('erSaveConfirm') + '</p>'
     + '<div class="btn-row">'
@@ -14398,7 +14425,9 @@ function saveEditedReceipt(){
   // the edit — added or removed items — flows entirely into the credit
   // slice, whether or not credit was the PRIMARY method.
   const creditInvolvedInSale = (sale.splitPayments && sale.splitPayments.some(p=>p.method==='credit')) || sale.paymentType === 'credit';
-  if(creditInvolvedInSale && sale.customerId && diff !== 0){
+  let __erDone = false;
+  try{ __erDone = __erPayApply(sale, d, oldTotal, newTotal); }catch(e){ console.error('fix134 er', e); __erDone = false; }   /* fix134-er: qarz yozuvlari qayta yoziladi */
+  if(!__erDone && creditInvolvedInSale && sale.customerId && diff !== 0){
     const cust = state.customers.find(c=>c.id===sale.customerId);
     if(cust){
       __spDebtSet(cust, Math.max(0, (cust.debt||0) + diff)); /* fix78 */
@@ -14416,7 +14445,7 @@ function saveEditedReceipt(){
   // original (now-stale) credit amount instead of what it actually grew
   // or shrank to here, refunding the wrong amount from the customer's
   // debt.
-  if(diff !== 0 && sale.splitPayments){
+  if(!__erDone && diff !== 0 && sale.splitPayments){
     const creditEntry = sale.splitPayments.find(p=>p.method==='credit');
     if(creditEntry) creditEntry.amount = Math.max(0, creditEntry.amount + diff);
     else if(sale.splitPayments.length){ /* fix82 */
@@ -14460,6 +14489,7 @@ function openCustomerDetail(customerId){
       <div class="cust-ava">${escapeHtml((cust.name||'?').trim().charAt(0).toUpperCase())}</div>
       <div style="min-width:0;">
         <div class="cust-name">${escapeHtml(cust.name)}</div>
+        ${cust.gender === 'm' || cust.gender === 'f' ? `<div class="subtle" style="font-size:12px;">${tr('genderLabel')}: ${tr(cust.gender === 'm' ? 'genderM' : 'genderF')}</div>` : ''}
         ${cust.phone ? `<div class="subtle" style="font-size:13px;">${escapeHtml(cust.phone)}</div>` : ''}
         ${cust.address ? `<div class="subtle" style="font-size:12px;">${tr('customerAddress')}: ${escapeHtml(cust.address)}</div>` : ''}
       </div>
@@ -14658,6 +14688,7 @@ function openCustomerEditForm(customerId){
     <div class="field"><label class="field-label">${tr('customerName')}</label><input type="text" id="ce-name" value="${escapeHtml(cust.name)}"></div>
     <div class="field"><label class="field-label">${tr('phone')}</label><input type="text" id="ce-phone" value="${escapeHtml(cust.phone||'')}"></div>
     <div class="field"><label class="field-label">${tr('customerAddress')}</label><input type="text" id="ce-address" value="${escapeHtml(cust.address||'')}"></div>
+    <div class="field"><label class="field-label">${tr('genderLabel')}</label><select id="ce-gender">${__genderOpts(cust.gender)}</select></div>
     ${canEditLimit ? `
       <div class="field"><label class="field-label">${tr('customCreditLimit')}</label><input type="text" inputmode="numeric" id="ce-credit-limit" value="${cust.creditLimit?formatMoneyInputValue(cust.creditLimit):''}"></div>
     ` : `
@@ -14676,6 +14707,7 @@ function openCustomerEditForm(customerId){
     cust.name = name;
     cust.phone = document.getElementById('ce-phone').value.trim();
     cust.address = document.getElementById('ce-address').value.trim();
+    { const __g = (document.getElementById('ce-gender') || {}).value; if(__g === 'm' || __g === 'f') cust.gender = __g; else delete cust.gender; }   /* fix134-er */
     if(canEditLimit){
       cust.creditLimit = parseMoneyInput(document.getElementById('ce-credit-limit').value) || 0;
     }
@@ -20029,6 +20061,124 @@ function __puApplyReturn(d, lines, note){
   closeModal();
   showToast(tr('puRetDone').replace('{sum}', fmt(amt)));
   if(state.view === 'purchase') renderPurchase(); else renderAll();
+}
+
+/* fix134-er: mijoz jinsi */
+function __genderOpts(v, placeholder){
+  return '<option value="">' + escapeHtml(placeholder ? tr('genderLabel') + ': ' + tr('genderNone') : tr('genderNone')) + '</option>'
+    + '<option value="m"' + (v === 'm' ? ' selected' : '') + '>' + escapeHtml(tr('genderM')) + '</option>'
+    + '<option value="f"' + (v === 'f' ? ' selected' : '') + '>' + escapeHtml(tr('genderF')) + '</option>';
+}
+/* fix134-er: aralash to'lovli chek tahriri */
+function __erPayPrep(d, sale){
+  if(d.pay !== undefined) return;
+  const split = sale.splitPayments && sale.splitPayments.length >= 2;
+  if(!split){ d.pay = null; return; }
+  const b = salePaymentBreakdown(sale);
+  d.pay = {cash: Math.round(b.cash || 0), card: Math.round(b.card || 0), credit: Math.round(b.credit || 0)};
+  d.payCredit = !!sale.customerId;   /* nasiya faqat mijoz bo'lsa */
+  d.payOrigCredit = d.pay.credit;
+  d.payOrig = {cash: d.pay.cash, card: d.pay.card, credit: d.pay.credit};
+  d.payTouched = false;
+}
+function __erPaySum(p){ return (p.cash || 0) + (p.card || 0) + (p.credit || 0); }
+function __erPayAutoFill(d){
+  const p = d.pay; if(!p) return;
+  const total = editReceiptTotal();
+  let diff = total - __erPaySum(p);
+  if(!diff) return;
+  const order = [];
+  if(d.payCredit && (p.credit > 0 || d.payOrigCredit > 0)) order.push('credit');
+  ['cash', 'card', 'credit'].filter(k=>order.indexOf(k) < 0 && (k !== 'credit' || d.payCredit)).sort((a, b)=>(p[b] || 0) - (p[a] || 0)).forEach(k=>order.push(k));
+  for(const k of order){ if(!diff) break; const na = Math.max(0, (p[k] || 0) + diff); diff -= (na - (p[k] || 0)); p[k] = na; }
+}
+function __erPayHtml(d, sale){
+  if(!d.pay) return '';
+  if(!d.payTouched) __erPayAutoFill(d);
+  const row = (k, l)=>`<div class="er-pay-row"><label for="er-p-${k}">${escapeHtml(l)}</label><input type="text" inputmode="numeric" id="er-p-${k}" data-er-p="${k}" value="${d.pay[k] ? formatMoneyInputValue(d.pay[k]) : ''}" placeholder="0"></div>`;
+  return `<div class="card" id="er-pay" style="margin-bottom:14px;padding:10px 12px;">
+      <div style="font-weight:800;margin-bottom:8px;">${escapeHtml(tr('erPayTitle'))}</div>
+      ${row('cash', tr('cashLabel'))}${row('card', tr('cardLabel'))}${d.payCredit ? row('credit', tr('creditLabel')) : ''}
+      <div id="er-pay-left"></div>
+      <div class="subtle" id="er-pay-debt" style="font-size:12px;margin-bottom:6px;"></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="er-pay-auto">${escapeHtml(tr('erPayAuto'))}</button>
+    </div>`;
+}
+function __erPayLabels(){
+  const d = editReceiptDraft; if(!d || !d.pay) return;
+  const left = editReceiptTotal() - __erPaySum(d.pay), el = document.getElementById('er-pay-left');
+  if(el){ el.textContent = left === 0 ? tr('erPayOk') : tr(left > 0 ? 'erPayLeft' : 'erPayOver').replace('{sum}', fmt(Math.abs(left))); el.style.color = left === 0 ? 'var(--teal)' : 'var(--danger)'; }
+  const db = document.getElementById('er-pay-debt');
+  if(db) db.textContent = (d.payCredit && (d.payOrigCredit || d.pay.credit)) ? tr('erDebtLine').replace('{a}', fmt(d.payOrigCredit || 0)).replace('{b}', fmt(d.pay.credit || 0)) : '';
+}
+function __erPayRefresh(){
+  const d = editReceiptDraft; if(!d || !d.pay) return;
+  if(!d.payTouched) __erPayAutoFill(d);
+  ['cash', 'card', 'credit'].forEach(k=>{ const i = document.getElementById('er-p-' + k); if(i && document.activeElement !== i) i.value = d.pay[k] ? formatMoneyInputValue(d.pay[k]) : ''; });
+  __erPayLabels();
+}
+function __erPayBind(d, sale){
+  if(!d.pay) return;
+  document.querySelectorAll('[data-er-p]').forEach(inp=>{
+    try{ attachMoneyInputFormatting(inp); }catch(e){}
+    inp.addEventListener('input', ()=>{ const v = parseMoneyInput(inp.value); d.pay[inp.dataset.erP] = (isNaN(v) || v < 0) ? 0 : Math.round(v); d.payTouched = true; __erPayLabels(); });
+  });
+  const a = document.getElementById('er-pay-auto');
+  if(a) a.addEventListener('click', ()=>{ d.payTouched = false; d.pay = Object.assign({}, d.payOrig); __erPayAutoFill(d); __erPayRefresh(); });   /* asl qismlardan, farq nasiyaga (yoki eng katta qismga) */
+  __erPayLabels();
+}
+function __erPayOk(){
+  const d = editReceiptDraft; if(!d || !d.pay) return true;
+  return Math.round(__erPaySum(d.pay)) === Math.round(editReceiptTotal());
+}
+/* Saqlash: to'lov qismlari va mijozning shu chekdagi qarz yozuvlari qayta yoziladi (qo'shimcha qator yo'q).
+   true qaytarsa — eski "farqni qo'shish" kodi ishlamaydi. */
+function __erPayApply(sale, d, oldTotal, newTotal){
+  const split = !!d.pay;
+  const pureCredit = !split && sale.paymentType === 'credit' && !(sale.splitPayments && sale.splitPayments.length);
+  if(!split && !pureCredit) return false;
+  const ob = salePaymentBreakdown(sale);
+  const oldCredit = Math.round(ob.credit || 0);
+  const nb = split ? {cash: d.pay.cash || 0, card: d.pay.card || 0, credit: d.payCredit ? (d.pay.credit || 0) : 0} : {cash: 0, card: 0, credit: newTotal};
+  if(split && Math.round(nb.cash + nb.card + nb.credit) !== Math.round(newTotal)) return false;
+  const newCredit = Math.round(nb.credit || 0);
+  if((oldCredit > 0 || newCredit > 0) && sale.customerId){
+    const cust = state.customers.find(c=>c.id === sale.customerId);
+    if(!cust) return false;
+    const near = (e)=>Math.abs(new Date(e.date).getTime() - new Date(sale.date).getTime()) <= 10 * 60000;
+    const L = (state.ledger || []).filter(e=>e && e.customerId === sale.customerId);
+    const totals = [oldTotal, sale.originalTotal].filter(x=>x != null);
+    let se = L.find(e=>e.type === 'sale' && e.saleId === sale.id) || (oldCredit > 0 ? L.find(e=>e.type === 'sale' && !e.saleId && near(e) && totals.indexOf(e.amount) >= 0) : null);
+    let pe = L.find(e=>e.type === 'payment' && e.saleId === sale.id) || (se && !se.saleId ? L.find(e=>e.type === 'payment' && !e.saleId && near(e) && sale.receiptNumber && String(e.note || '').indexOf('№' + sale.receiptNumber) >= 0) : null);
+    const now = new Date().toISOString(), who = state.currentStaff ? state.currentStaff.name : '';
+    const changed = [];
+    if(se || oldCredit === 0){
+      if(newCredit > 0 || se){
+        const paidNow = Math.max(0, newTotal - newCredit);
+        if(!se){ se = {id: uid(), customerId: sale.customerId, type: 'sale', amount: newTotal, date: sale.date, note: '', staffName: who, saleId: sale.id}; state.ledger.push(se); }
+        else { se.amount = newTotal; se.saleId = sale.id; se.editedAt = now; }
+        changed.push(se);
+        if(paidNow > 0 || pe){
+          if(!pe){ pe = {id: uid(), customerId: sale.customerId, saleId: sale.id, type: 'payment', amount: paidNow, date: sale.date, note: tr('mixPay') + (sale.receiptNumber ? (' №' + sale.receiptNumber) : ''), staffName: who}; state.ledger.push(pe); }
+          else { pe.amount = paidNow; pe.saleId = sale.id; pe.editedAt = now; }
+          changed.push(pe);
+        }
+      }
+    } else {
+      /* eski chek, asl yozuv topilmadi — bitta tuzatish qatori (avvalgidek) */
+      const dlt = newCredit - oldCredit;
+      if(dlt !== 0){ const ce = {id: uid(), customerId: sale.customerId, type: dlt > 0 ? 'sale' : 'payment', amount: Math.abs(dlt), date: now, note: tr('receiptEditedLabel') + (sale.receiptNumber ? (' №' + sale.receiptNumber) : ''), staffName: who, saleId: sale.id}; state.ledger.push(ce); changed.push(ce); }
+    }
+    if(newCredit !== oldCredit) __spDebtSet(cust, Math.max(0, (cust.debt || 0) + (newCredit - oldCredit)));
+    changed.forEach(e=>{ try{ addLedgerDoc(e); }catch(_e){} });
+    saveCustomers(); saveLedger();
+  }
+  if(split){
+    const parts = ['cash', 'card', 'credit'].filter(k=>(nb[k] || 0) > 0).map(k=>({method: k, amount: Math.round(nb[k])}));
+    if(parts.length >= 2){ sale.splitPayments = parts; sale.paymentType = parts.slice().sort((a, b)=>b.amount - a.amount)[0].method; }
+    else { sale.splitPayments = null; sale.paymentType = parts.length ? parts[0].method : sale.paymentType; }
+  }
+  return true;
 }
 
 /* --- Online catalog --- */
