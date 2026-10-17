@@ -58,7 +58,8 @@ async function loadCtx(deps, bid) {
   return {
     biz: b, chats: deps.key ? core.validChats(deps.key, bid, tb) : [], lang: M.lg(tb && tb.lang),
     tz: DR.validTz(b.timeZone) ? b.timeZone : DEFAULT_TZ, cur: b.currency || 'UZS', shop: shopNameOf(b),
-    branches: Array.isArray(b.branches) ? b.branches.filter(function (x) { return x && x.id; }) : []
+    branches: Array.isArray(b.branches) ? b.branches.filter(function (x) { return x && x.id; }) : [],
+    now: typeof deps.nowMs === 'function' ? deps.nowMs() : Date.now()   /* fix124-smart: avtomatik "kam qolgan" uchun */
   };
 }
 function multiBranch(ctx) { return ctx.branches.length > 1; }
@@ -173,16 +174,67 @@ function lowThresholdOf(biz) {
   if (v === 0 && !(biz && biz.lowStockSetV2 === true)) return 5;
   return v;
 }
+/* fix124-smart: aqlli chegara — ilovadagi stockThresholdOf() bilan bir xil formula.
+   Ustuvorlik: tovarning o'z minimumi (minStock) -> avtomatik (oxirgi 30 kun savdosi, N kunga yetmasa) -> bir xil son.
+   Savdo tarixi 7 kundan kam yoki tovar sotilmagan bo'lsa — bir xil son. */
+const SV_W = 30, SV_DAY = 86400000;
+function lowModeOf(biz) { return (biz && biz.lowStockMode === 'auto') ? 'auto' : 'fixed'; }
+function lowAutoDaysOf(biz) { const d = Number(biz && biz.lowStockAutoDays); return (isFinite(d) && d >= 1 && d <= 60) ? d : 3; }
+function minStockOf(p) { if (!p || p.minStock === null || p.minStock === undefined || p.minStock === '') return null; const v = Number(p.minStock); return (isFinite(v) && v >= 0) ? v : null; }
+function salesVel(sales, olderExists, now) {
+  const from = now - SV_W * SV_DAY, first = {}, sold = {};
+  sales.forEach(function (s) {
+    if (!s) return;
+    const t = Date.parse(s.date); if (!isFinite(t) || t < from) return;
+    if (s.refunded) return;
+    const b = s.branchId || 'main';
+    if (!first[b] || t < first[b]) first[b] = t;
+    (Array.isArray(s.items) ? s.items : []).forEach(function (it) {
+      if (!it || !it.productId) return;
+      const units = it.saleMode === 'box' ? (Number(it.qty) || 0) * (Number(it.unitsPerBox) || 1) : (Number(it.qty) || 0);
+      const k = b + '|' + it.productId + (it.variantId ? ':' + it.variantId : '');
+      sold[k] = (sold[k] || 0) + units;
+    });
+  });
+  const hist = {};
+  Object.keys(first).forEach(function (b) {
+    const f = first[b];
+    hist[b] = (olderExists && f - from <= 7 * SV_DAY) ? SV_W : Math.min(SV_W, Math.max(1, Math.ceil((now - f) / SV_DAY)));
+  });
+  return { sold: sold, hist: hist };
+}
+function unitThreshold(p, v, idx, mode, days, fixed, V) {
+  const m = minStockOf(p);
+  if (m !== null) return m;
+  if (mode === 'auto' && V) {
+    const b = p.branchId || 'main', hd = V.hist[b] || 0;
+    if (hd >= 7) {
+      let u = V.sold[b + '|' + p.id + (v ? ':' + v.id : '')] || 0;
+      if (v && idx === 0) u += (V.sold[b + '|' + p.id] || 0);
+      const vel = u / hd;
+      if (vel > 0) return vel * days;
+    }
+  }
+  return fixed;
+}
 async function computeLow(db, bid, ctx) {
-  const snap = await db.collection('businesses').doc(bid).collection('products').get();
-  const th = lowThresholdOf(ctx.biz);
+  const ref = db.collection('businesses').doc(bid);
+  const snap = await ref.collection('products').get();
+  const th = lowThresholdOf(ctx.biz), mode = lowModeOf(ctx.biz), days = lowAutoDaysOf(ctx.biz);
+  let V = null;
+  if (mode === 'auto') {
+    const now = typeof ctx.now === 'number' ? ctx.now : Date.now();
+    const fromIso = new Date(now - SV_W * SV_DAY).toISOString();
+    const res = await Promise.all([ref.collection('sales').where('date', '>=', fromIso).get(), ref.collection('sales').where('date', '<', fromIso).limit(1).get()]);
+    V = salesVel(docsOf(res[0]), docsOf(res[1]).length > 0, now);
+  }
   const groups = {};
-  docsOf(snap).forEach(function (p) {
+  (snap && snap.docs ? snap.docs : []).map(function (d) { const x = d.data() || {}; return x.id ? x : Object.assign({ id: d.id }, x); }).forEach(function (p) {
     if (!p || p.hidden || p._deleted) return;
     const vs = (Array.isArray(p.variants) && p.variants.length) ? p.variants : [null];
-    vs.forEach(function (v) {
+    vs.forEach(function (v, idx) {
       const q = Number(v ? (v && v.stock) : p.stock) || 0;
-      if (q > th) return;
+      if (q > 0 && q > unitThreshold(p, v, idx, mode, days, th, V)) return;
       const k = p.branchId || 'main';
       const nm = v ? (String(p.name || '—') + ' — ' + String((v && v.name) || '')) : String(p.name || '—');
       (groups[k] = groups[k] || []).push({ name: nm.slice(0, 80), stock: q, unit: p.unit });
@@ -191,7 +243,7 @@ async function computeLow(db, bid, ctx) {
   const arr = Object.keys(groups).map(function (k) {
     return { id: k, name: branchName(ctx, k), items: groups[k].sort(function (a, b) { return (a.stock - b.stock) || a.name.localeCompare(b.name); }) };
   }).sort(function (a, b) { return a.id === 'main' ? -1 : b.id === 'main' ? 1 : a.name.localeCompare(b.name); });
-  return { threshold: th, groups: arr, multiBranch: multiBranch(ctx) };
+  return { threshold: th, mode: mode, autoDays: days, groups: arr, multiBranch: multiBranch(ctx) };
 }
 function shiftCtx(ctx, sh, extra) {
   const o = Object.assign({ shop: ctx.shop, cur: ctx.cur }, extra || {});
@@ -356,4 +408,4 @@ async function handleAction(deps, caller, action, body) {
 }
 
 module.exports = { normPrefs, getPrefs, runTick, handleSaleCreated, handleAuditCreated, handleCatalogWrite, handleAction, readPrefsForStatus,
-  computeDaily, computeLow, lowThresholdOf, sendAll, gate, newClosedShifts, discInfo, DEF, KINDS, WINDOW_MIN, RECENT_MS, ALERTS_PER_HOUR, TESTS_PER_HOUR };
+  computeDaily, computeLow, lowThresholdOf, lowModeOf, lowAutoDaysOf, minStockOf, salesVel, sendAll, gate, newClosedShifts, discInfo, DEF, KINDS, WINDOW_MIN, RECENT_MS, ALERTS_PER_HOUR, TESTS_PER_HOUR };

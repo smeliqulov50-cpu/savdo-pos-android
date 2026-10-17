@@ -1682,6 +1682,34 @@ const T = {
   ssStaffEachHint:{uz:"Har bir xodimning shaxsiy ruxsatlari (chegirma, qaytarish, qarzga sotish, xarajat va boshqalar) Xodimlar bo'limida — xodimni ochib o'zgartiriladi.",ru:"Личные права каждого сотрудника (скидка, возврат, продажа в долг, расходы и др.) меняются в разделе «Сотрудники» — откройте сотрудника.",en:"Each staff member's own permissions (discount, refund, sell on credit, expenses and more) are changed in Staff — open the staff member.",kk:"Әр қызметкердің жеке рұқсаттары (жеңілдік, қайтару, қарызға сату, шығын және т.б.) «Қызметкерлер» бөлімінде — қызметкерді ашып өзгертіледі.",ky:"Ар бир кызматкердин жеке уруксаттары (арзандатуу, кайтаруу, карызга сатуу, чыгым жана башкалар) «Кызматкерлер» бөлүмүндө — кызматкерди ачып өзгөртүлөт.",tg:"Иҷозатҳои шахсии ҳар корманд (тахфиф, баргардонӣ, фурӯш ба қарз, хароҷот ва ғайра) дар бахши «Кормандон» — кормандро кушода иваз карда мешаванд."},
   ssSaveFail:{uz:"Saqlab bo'lmadi. Qayta urinib ko'ring.",ru:"Не удалось сохранить. Попробуйте ещё раз.",en:"Could not save. Please try again.",kk:"Сақтау мүмкін болмады. Қайта көріңіз.",ky:"Сактоо мүмкүн болгон жок. Кайра аракет кылыңыз.",tg:"Захира нашуд. Бори дигар кӯшиш кунед."},
   ssOpenStaff:{uz:"Xodimlarga o'tish",ru:"Перейти к сотрудникам",en:"Go to Staff",kk:"Қызметкерлерге өту",ky:"Кызматкерлерге өтүү",tg:"Ба кормандон гузаштан"},
+  /* fix124-smart */
+  lsModeLabel:{uz:"Qanday hisoblansin",ru:"Как считать",en:"How to calculate",kk:"Қалай есептелсін",ky:"Кантип эсептелсин",tg:"Чӣ тавр ҳисоб карда шавад"},
+  lsModeFixed:{uz:"Bir xil son",ru:"Одно число",en:"Same number",kk:"Бірдей сан",ky:"Бирдей сан",tg:"Як рақам"},
+  lsModeAuto:{uz:"Avtomatik",ru:"Автоматически",en:"Automatic",kk:"Автоматты",ky:"Автоматтык",tg:"Худкор"},
+  lsAutoDays:{uz:"Necha kunlik savdoga yetmasa",ru:"Если не хватит на столько дней продаж",en:"Warn if stock won't last this many days",kk:"Неше күндік сатуға жетпесе",ky:"Канча күндүк сатууга жетпесе",tg:"Агар ба фурӯши чанд рӯз нарасад"},
+  lsAutoHint:{uz:"Har bir tovar (variant) o'zining oxirgi 30 kunlik o'rtacha savdosiga qarab tekshiriladi: qoldig'i shuncha kunga yetmasa — kam qolgan. Masalan, kuniga 4 ta sotiladigan tovar 3 kun uchun 12 tadan kam qolsa ogohlantiradi.",ru:"Каждый товар (вариант) проверяется по своим средним продажам за последние 30 дней: если остатка не хватит на столько дней — «мало осталось». Например, товар, который продаётся по 4 шт. в день, при 3 днях будет отмечен, когда останется меньше 12.",en:"Each item (variant) is checked against its own average sales over the last 30 days: if stock won't last this many days, it is low. For example, an item selling 4 a day is flagged at 3 days when fewer than 12 are left.",kk:"Әр тауар (нұсқа) соңғы 30 күндегі орташа сатуына қарай тексеріледі: қалдығы сонша күнге жетпесе — аз қалды. Мысалы, күніне 4 дана сатылатын тауар 3 күнге 12-ден аз қалса ескертеді.",ky:"Ар бир товар (вариант) акыркы 30 күндөгү орточо сатуусуна карап текшерилет: калдыгы ошончо күнгө жетпесе — аз калды. Мисалы, күнүнө 4 даана сатылган товар 3 күн үчүн 12ден аз калса эскертет.",tg:"Ҳар мол (вариант) аз рӯи фурӯши миёнаи 30 рӯзи охираш санҷида мешавад: агар бақия ба ҳамин қадар рӯз нарасад — кам монд. Масалан, моле, ки рӯзе 4 адад фурӯхта мешавад, барои 3 рӯз ҳангоми аз 12 кам мондан огоҳ мекунад."},
+  lsFbLabel:{uz:"Sotilmagan yoki tarixi qisqa tovarlar uchun chegara (dona/kg)",ru:"Порог для товаров без продаж или с короткой историей (шт/кг)",en:"Threshold for items with no sales or short history (pcs/kg)",kk:"Сатылмаған немесе тарихы қысқа тауарлар шегі (дана/кг)",ky:"Сатылбаган же тарыхы кыска товарлар үчүн чек (даана/кг)",tg:"Ҳадд барои молҳои нафурӯхта ё бо таърихи кӯтоҳ (адад/кг)"},
+  lsFbHint:{uz:"Savdo tarixi 7 kundan kam bo'lsa yoki tovar oxirgi 30 kunda sotilmagan bo'lsa, shu son ishlatiladi.",ru:"Используется, если история продаж меньше 7 дней или товар не продавался последние 30 дней.",en:"Used when sales history is shorter than 7 days or the item hasn't sold in the last 30 days.",kk:"Сату тарихы 7 күннен аз болса немесе тауар соңғы 30 күнде сатылмаса, осы сан қолданылады.",ky:"Сатуу тарыхы 7 күндөн аз болсо же товар акыркы 30 күндө сатылбаса, ушул сан колдонулат.",tg:"Агар таърихи фурӯш аз 7 рӯз кам бошад ё мол дар 30 рӯзи охир фурӯхта нашуда бошад, ҳамин рақам истифода мешавад."},
+  lsHistShort:{uz:"Savdo tarixi hali {n} kun (7 kundan kam) — hozircha hamma tovarga chegara soni ishlatilyapti.",ru:"История продаж пока {n} дн. (меньше 7) — сейчас для всех товаров используется порог.",en:"Sales history is only {n} days so far (less than 7) — the threshold number is used for all items for now.",kk:"Сату тарихы әзірге {n} күн (7-ден аз) — қазір барлық тауарға шек саны қолданылады.",ky:"Сатуу тарыхы азырынча {n} күн (7ден аз) — азыр бардык товарга чек саны колдонулат.",tg:"Таърихи фурӯш ҳоло {n} рӯз (аз 7 кам) — ҳоло барои ҳамаи молҳо рақами ҳадд истифода мешавад."},
+  lsMinHint:{uz:"Tovarga alohida minimum tovar formasida beriladi va har doim shu qoidadan ustun turadi.",ru:"Отдельный минимум для товара задаётся в карточке товара и всегда важнее этого правила.",en:"A per-item minimum is set in the item form and always overrides this rule.",kk:"Тауарға жеке минимум тауар формасында беріледі және әрқашан осы ережеден басым.",ky:"Товарга өзүнчө минимум товар формасында берилет жана ар дайым бул эрежеден үстөм.",tg:"Ҳадди ақалли алоҳида дар формаи мол дода мешавад ва ҳамеша аз ин қоида болотар аст."},
+  lsMinCount:{uz:"Hozir {n} ta tovarda alohida minimum bor.",ru:"Сейчас отдельный минимум у {n} товаров.",en:"{n} items have their own minimum now.",kk:"Қазір {n} тауарда жеке минимум бар.",ky:"Азыр {n} товарда өзүнчө минимум бар.",tg:"Ҳоло {n} мол ҳадди ақалли алоҳида дорад."},
+  lsAutoDaysBad:{uz:"1 dan 60 gacha son kiriting. Saqlanmadi.",ru:"Введите число от 1 до 60. Не сохранено.",en:"Enter a number from 1 to 60. Not saved.",kk:"1-ден 60-қа дейін сан енгізіңіз. Сақталмады.",ky:"1ден 60ка чейин сан киргизиңиз. Сакталган жок.",tg:"Рақами аз 1 то 60 ворид кунед. Захира нашуд."},
+  exNow:{uz:"Hozir:",ru:"Сейчас:",en:"Now:",kk:"Қазір:",ky:"Азыр:",tg:"Ҳоло:"},
+  exStockOk:{uz:"Hozir hamma tovar yetarli ✓",ru:"Сейчас всех товаров достаточно ✓",en:"All items are sufficiently stocked now ✓",kk:"Қазір барлық тауар жеткілікті ✓",ky:"Азыр бардык товар жетиштүү ✓",tg:"Ҳоло ҳамаи молҳо кофӣ ✓"},
+  exExpSoonN:{uz:"{n} ta tovarning muddati yaqin",ru:"срок истекает у {n} товаров",en:"{n} items expiring soon",kk:"{n} тауардың мерзімі жақын",ky:"{n} товардын мөөнөтү жакын",tg:"мӯҳлати {n} мол наздик аст"},
+  exExpiredN:{uz:"{n} tasining muddati o'tgan",ru:"просрочено: {n}",en:"{n} expired",kk:"{n} мерзімі өткен",ky:"{n} мөөнөтү өткөн",tg:"{n} мӯҳлаташ гузаштааст"},
+  exExpOk:{uz:"Hozir muddati yaqin tovar yo'q ✓",ru:"Сейчас нет товаров с истекающим сроком ✓",en:"No items expiring soon ✓",kk:"Қазір мерзімі жақын тауар жоқ ✓",ky:"Азыр мөөнөтү жакын товар жок ✓",tg:"Ҳоло моли мӯҳлаташ наздик нест ✓"},
+  exMinusN:{uz:"{n} ta tovar minusda (−)",ru:"{n} товаров в минусе (−)",en:"{n} items below zero (−)",kk:"{n} тауар минуста (−)",ky:"{n} товар минуста (−)",tg:"{n} мол дар минус (−)"},
+  exMinusOk:{uz:"Hozir minusdagi tovar yo'q ✓",ru:"Сейчас нет товаров в минусе ✓",en:"No items below zero ✓",kk:"Қазір минустағы тауар жоқ ✓",ky:"Азыр минустагы товар жок ✓",tg:"Ҳоло моли дар минус нест ✓"},
+  exOverLimitN:{uz:"{n} ta mijoz limitdan oshgan",ru:"{n} клиентов превысили лимит",en:"{n} customers over the limit",kk:"{n} клиент лимиттен асқан",ky:"{n} кардар чектен ашкан",tg:"{n} мизоҷ аз ҳадд гузаштааст"},
+  exOldDebtN:{uz:"{n} ta mijozda eski qarz",ru:"старый долг у {n} клиентов",en:"{n} customers with old debt",kk:"{n} клиентте ескі қарыз",ky:"{n} кардарда эски карыз",tg:"{n} мизоҷ қарзи кӯҳна дорад"},
+  exCreditOk:{uz:"Hozir limitdan oshgan yoki eski qarzli mijoz yo'q ✓",ru:"Сейчас нет клиентов сверх лимита или со старым долгом ✓",en:"No customers over the limit or with old debt ✓",kk:"Қазір лимиттен асқан немесе ескі қарызы бар клиент жоқ ✓",ky:"Азыр чектен ашкан же эски карызы бар кардар жок ✓",tg:"Ҳоло мизоҷи аз ҳадд гузашта ё бо қарзи кӯҳна нест ✓"},
+  exCreditTitle:{uz:"Limitdan oshgan va eski qarzli mijozlar",ru:"Клиенты сверх лимита и со старым долгом",en:"Customers over the limit or with old debt",kk:"Лимиттен асқан және ескі қарызы бар клиенттер",ky:"Чектен ашкан жана эски карызы бар кардарлар",tg:"Мизоҷони аз ҳадд гузашта ва бо қарзи кӯҳна"},
+  exLimitWord:{uz:"limit",ru:"лимит",en:"limit",kk:"лимит",ky:"чек",tg:"ҳадд"},
+  pfMinStock:{uz:"Kam qolgan minimumi (ixtiyoriy)",ru:"Минимум «мало осталось» (необязательно)",en:"Low-stock minimum (optional)",kk:"«Аз қалды» минимумы (міндетті емес)",ky:"«Аз калды» минимуму (милдеттүү эмес)",tg:"Ҳадди ақалли «кам монд» (ихтиёрӣ)"},
+  pfMinStockHint:{uz:"Qoldiq shu songa tushsa \"kam qolgan\" deyiladi. Bo'sh qoldirsangiz, Sozlamalardagi umumiy qoida ishlaydi. Variantli tovarda har bir variantga qo'llanadi.",ru:"Когда остаток опустится до этого числа, товар считается «мало осталось». Если оставить пустым, работает общее правило из Настроек. Для товара с вариантами — для каждого варианта.",en:"When stock drops to this number, the item is low. Leave empty to use the general rule from Settings. For items with variants it applies to each variant.",kk:"Қалдық осы санға түссе, «аз қалды» деп есептеледі. Бос қалдырсаңыз, Баптаулардағы жалпы ереже жұмыс істейді. Нұсқалы тауарда әр нұсқаға қолданылады.",ky:"Калдык ушул санга түшсө, «аз калды» деп эсептелет. Бош калтырсаңыз, Жөндөөлөрдөгү жалпы эреже иштейт. Варианттуу товардa ар бир вариантка колдонулат.",tg:"Вақте бақия то ин рақам фурояд, мол «кам монд» ҳисоб мешавад. Агар холӣ монед, қоидаи умумии Танзимот кор мекунад. Барои моли вариантдор — ба ҳар вариант."},
+  pfMinStockBad:{uz:"Minimum uchun 0 yoki undan katta son kiriting.",ru:"Для минимума введите число 0 или больше.",en:"Enter 0 or a greater number for the minimum.",kk:"Минимум үшін 0 немесе одан үлкен сан енгізіңіз.",ky:"Минимум үчүн 0 же андан чоң сан киргизиңиз.",tg:"Барои ҳадди ақал рақами 0 ё зиёдтар ворид кунед."},
+  tgPLowSubAuto:{uz:"Kuniga bir marta. Avtomatik: {d} kunlik savdoga yetmasa (Sozlamalardan)",ru:"Раз в день. Автоматически: не хватит на {d} дн. продаж (из настроек)",en:"Once a day. Automatic: won't last {d} days of sales (from Settings)",kk:"Күніне бір рет. Автоматты: {d} күндік сатуға жетпесе (баптаулардан)",ky:"Күнүнө бир жолу. Автоматтык: {d} күндүк сатууга жетпесе (жөндөөлөрдөн)",tg:"Рӯзе як бор. Худкор: ба фурӯши {d} рӯз нарасад (аз танзимот)"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3172,7 +3200,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.26';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.27';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -10368,7 +10396,56 @@ function lowStockThresholdValue(){
 }
 function stockQtyOf(p, v){ return Number(v ? v.stock : (p && p.stock)) || 0; }
 function stockStatusQty(q){ q = Number(q) || 0; return q <= 0 ? 'out' : (q <= lowStockThresholdValue() ? 'low' : 'ok'); }
-function stockStatus(p, v){ return stockStatusQty(stockQtyOf(p, v)); }
+function stockStatus(p, v){ const q = stockQtyOf(p, v); if(q <= 0) return 'out'; return q <= stockThresholdOf(p, v).thr ? 'low' : 'ok'; }   /* fix124-smart */
+/* fix124-smart: aqlli chegara. Ustuvorlik: tovarning o'z minimumi -> avtomatik (oxirgi 30 kun savdosi) -> bir xil son.
+   Serverdagi Telegram ro'yxati (reports.js computeLow) xuddi shu formulani ishlatadi. */
+function lowStockMode(){ return (state.settings && state.settings.lowStockMode === 'auto') ? 'auto' : 'fixed'; }
+function lowStockAutoDays(){ const d = Number(state.settings && state.settings.lowStockAutoDays); return (isFinite(d) && d >= 1 && d <= 60) ? d : 3; }
+function productMinStock(p){ if(!p || p.minStock === null || p.minStock === undefined || p.minStock === '') return null; const v = Number(p.minStock); return (isFinite(v) && v >= 0) ? v : null; }
+let __svMemo = null;
+function __stockVel(){
+  const sales = state.sales || [], now = Date.now();
+  const key = sales.length + '|' + Math.floor(now / 30000);
+  if(__svMemo && __svMemo.key === key) return __svMemo;
+  const DAY = 86400000, W = 30, from = now - W * DAY;
+  let older = false; const first = {}, sold = {};
+  sales.forEach(s=>{
+    if(!s) return;
+    const t = new Date(s.date).getTime(); if(isNaN(t)) return;
+    if(t < from){ older = true; return; }
+    if(s.refunded) return;
+    const b = effectiveBranchId(s.branchId);
+    if(!first[b] || t < first[b]) first[b] = t;
+    (s.items || []).forEach(it=>{
+      if(!it || !it.productId) return;
+      const units = it.saleMode === 'box' ? (Number(it.qty) || 0) * (Number(it.unitsPerBox) || 1) : (Number(it.qty) || 0);
+      const k = b + '|' + it.productId + (it.variantId ? ':' + it.variantId : '');
+      sold[k] = (sold[k] || 0) + units;
+    });
+  });
+  const hist = {};
+  Object.keys(first).forEach(b=>{
+    const f = first[b];
+    hist[b] = (older && f - from <= 7 * DAY) ? W : Math.min(W, Math.max(1, Math.ceil((now - f) / DAY)));
+  });
+  __svMemo = {key, sold, hist};
+  return __svMemo;
+}
+function stockHistDays(branchId){ return __stockVel().hist[effectiveBranchId(branchId)] || 0; }
+function stockThresholdOf(p, v){
+  const m = productMinStock(p);
+  if(m !== null) return {thr: m, src: 'min'};
+  if(lowStockMode() === 'auto' && p){
+    const V = __stockVel(), b = effectiveBranchId(p.branchId), hd = V.hist[b] || 0;
+    if(hd >= 7){
+      let u = V.sold[b + '|' + p.id + (v ? ':' + v.id : '')] || 0;
+      if(v && p.variants && p.variants[0] === v) u += (V.sold[b + '|' + p.id] || 0);   /* variantsiz yozilgan eski cheklar 1-variantga (Ombor hisobotidagi kabi) */
+      const vel = u / hd;
+      if(vel > 0) return {thr: vel * lowStockAutoDays(), src: 'auto', vel};
+    }
+  }
+  return {thr: lowStockThresholdValue(), src: 'fixed'};
+}
 function stockUnits(p){
   if(!p) return [];
   return (p.variants && p.variants.length) ? p.variants.map(v=>({p, v, qty: stockQtyOf(p, v), status: stockStatus(p, v)})) : [{p, v: null, qty: stockQtyOf(p, null), status: stockStatus(p, null)}];
@@ -10502,6 +10579,7 @@ function openProductForm(productId, draft){
     <div class="field"><label class="field-label">${tr('unit')}</label>
       <select id="pf-unit">${['dona','kg','litr','paket'].map(u=>`<option value="${u}" ${d.unit===u?'selected':''}>${unitLabel(u)}</option>`).join('')}</select>
     </div>
+    <div class="field"><label class="field-label">${tr('pfMinStock')}</label><input type="number" id="pf-min-stock" min="0" step="any" inputmode="decimal" value="${(d.minStock!==undefined && d.minStock!==null && d.minStock!=='') ? escapeHtml(String(d.minStock)) : ''}"><p class="subtle" style="margin:6px 0 0;font-size:12px;">${tr('pfMinStockHint')}</p></div>
     <div class="field">
       <label class="field-label">${tr('categoryLabel')}</label>
       <input type="text" id="pf-category" list="pf-category-list" value="${escapeHtml(d.category||'')}" placeholder="${tr('categoryPlaceholder')}">
@@ -10661,6 +10739,7 @@ function openProductForm(productId, draft){
       supplierName: document.getElementById('pf-supplier-name').value,
       supplierPhone: document.getElementById('pf-supplier-phone').value,
       expiryDate: document.getElementById('pf-expiry').value,
+      minStock: document.getElementById('pf-min-stock') ? document.getElementById('pf-min-stock').value : undefined,   /* fix124-smart */
       showInCatalog: document.getElementById('pf-catalog-visible').checked,
       quickAccess: document.getElementById('pf-quick-access').checked,
       variants,
@@ -10744,6 +10823,10 @@ function openProductForm(productId, draft){
     if(variants.length===0 && stock < 0){ errEl.textContent = tr('fillFields'); return; }
     const data = {name, price: price||0, stock: stock||0, unit, category, image:currentImage, barcode, costPrice, supplierName, supplierPhone, expiryDate: finalExpiryDate, showInCatalog, quickAccess, kitchenPrint, kitchenStationId, wholesalePrice, unitsPerBox, boxPrice, boxLabel, variants};
     if(batches) data.batches = batches;
+    { const __mEl = document.getElementById('pf-min-stock');   /* fix124-smart: bo'sh = umumiy qoida */
+      if(__mEl){ const __mr = String(__mEl.value || '').trim().replace(',', '.');
+        if(__mr === '') data.minStock = null;
+        else { const __mv = Number(__mr); if(!isFinite(__mv) || __mv < 0){ errEl.textContent = tr('pfMinStockBad'); return; } data.minStock = __mv; } } }
     const __prevStock = editing ? productTotalStock(editing) : 0;
     const __addQtyEl = document.getElementById('pf-add-stock');
     const __addQty = __addQtyEl ? (parseFloat(__addQtyEl.value)||0) : 0;
@@ -11021,7 +11104,7 @@ function __invData(){
         name: v ? (p.name + ' — ' + v.name) : (p.name || ''), stock, retail, cost, wh, whSrc, boxP, upb,
         unit: p.unit, cat: (p.category || '').trim(), barcode: String(p.barcode || ''), expStatus, expText,
         sold: 0, rev: 0, last: 0, vel: 0, daysLeft: null, abc: ''};
-      r.status = stockStatusQty(stock);   /* fix122-stock */
+      r.status = stockStatus(p, v);   /* fix122-stock, fix124-smart: tovar minimumi va avtomatik rejim ham hisobga olinadi */
       rows.push(r); byKey[r.key] = r;
       if(v && !byKey[p.id]) byKey[p.id + ':*'] = byKey[p.id + ':*'] || r;
     });
@@ -17848,6 +17931,7 @@ function __ssSave(){
 }
 function __ssFlushAll(leaving){ Object.keys(__ssPend).forEach(k=>{ const f = __ssPend[k]; delete __ssPend[k]; try{ f(leaving); }catch(e){} }); }
 function __ssTick(key){
+  try{ __ssExRefresh(); }catch(e){}   /* fix124-smart */
   document.querySelectorAll('[data-ss-ok="' + key + '"]').forEach(el=>{
     el.textContent = ' ' + tr('ssSaved'); el.style.opacity = '1';
     clearTimeout(el.__t); el.__t = setTimeout(()=>{ el.style.opacity = '0'; }, 2500);
@@ -17912,18 +17996,102 @@ if(!window.__ssVisBound){
   window.addEventListener('pagehide', ()=>__ssFlushAll(false));
 }
 
-/* Ombor va ogohlantirishlar */
+/* Ombor va ogohlantirishlar (fix124-smart: avtomatik rejim + jonli misollar) */
+function __ssExBox(id){ return `<div data-ss-ex="${id}" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:var(--surface-soft);font-size:13px;line-height:1.45;"></div>`; }
+function __ssGo(label, act){ return `<button type="button" data-ss-go="${act}" style="background:none;border:0;padding:2px 0;font:inherit;font-weight:700;color:var(--accent);cursor:pointer;text-align:left;">${escapeHtml(label)} ›</button>`; }
+function __ssCanRep(){ return isAdmin() || hasPerm('reports'); }
+function __ssExpCounts(){
+  const DAY = 86400000, now = Date.now(), ed = Number(state.settings.expiryWarningDays) || 7; let soon = 0, gone = 0;
+  visibleProducts().forEach(p=>{ if(!p.expiryDate) return; const dl = Math.floor((new Date(p.expiryDate) - now) / DAY); if(isNaN(dl)) return; if(dl < 0) gone++; else if(dl <= ed) soon++; });
+  return {soon, gone};
+}
+function __ssCreditList(){
+  return visibleCustomers().filter(c=>c && !c.hidden && (Number(c.debt) || 0) > 0).map(c=>{ const lim = __chLimitOf(c); return {c, over: lim > 0 && c.debt > lim, old: isOldDebt(c), lim}; }).filter(x=>x.over || x.old);
+}
+function __ssExHtml(id){
+  const T = (k, n)=>tr(k).split('{n}').join(String(n)), canR = __ssCanRep();
+  const line = (parts)=>`<span class="subtle">${tr('exNow')}</span> ` + parts.join(' <span class="subtle">·</span> ');
+  if(id === 'low'){
+    const c = stockCounts(visibleProducts());
+    if(!c.out && !c.low) return `<span style="color:var(--success);font-weight:600;">${tr('exStockOk')}</span>`;
+    const pp = [];
+    if(c.out) pp.push(canR ? __ssGo(T('stockOutN', c.out), 'inv:out') : `<b style="color:var(--danger);">${escapeHtml(T('stockOutN', c.out))}</b>`);
+    if(c.low) pp.push(canR ? __ssGo(T('stockLowN', c.low), 'inv:low') : `<b style="color:var(--warm);">${escapeHtml(T('stockLowN', c.low))}</b>`);
+    return line(pp);
+  }
+  if(id === 'exp'){
+    const e = __ssExpCounts();
+    if(!e.soon && !e.gone) return `<span style="color:var(--success);font-weight:600;">${tr('exExpOk')}</span>`;
+    const pp = [];
+    if(e.soon) pp.push(canR ? __ssGo(T('exExpSoonN', e.soon), 'inv:exp') : `<b style="color:var(--warm);">${escapeHtml(T('exExpSoonN', e.soon))}</b>`);
+    if(e.gone) pp.push(canR ? __ssGo(T('exExpiredN', e.gone), 'inv:exp') : `<b style="color:var(--danger);">${escapeHtml(T('exExpiredN', e.gone))}</b>`);
+    return line(pp);
+  }
+  if(id === 'minus'){
+    let n = 0; visibleProducts().forEach(p=>{ stockUnits(p).forEach(u=>{ if(u.qty < 0) n++; }); });
+    if(!n) return `<span style="color:var(--success);font-weight:600;">${tr('exMinusOk')}</span>`;
+    return line([canR ? __ssGo(T('exMinusN', n), 'inv:minus') : `<b style="color:var(--danger);">${escapeHtml(T('exMinusN', n))}</b>`]);
+  }
+  if(id === 'credit'){
+    const L = __ssCreditList(), over = L.filter(x=>x.over).length, old = L.filter(x=>x.old).length;
+    if(!L.length) return `<span style="color:var(--success);font-weight:600;">${tr('exCreditOk')}</span>`;
+    const canC = isAdmin() || hasPerm('customers'), pp = [];
+    if(over) pp.push(canC ? __ssGo(T('exOverLimitN', over), 'cust:over') : `<b style="color:var(--danger);">${escapeHtml(T('exOverLimitN', over))}</b>`);
+    if(old) pp.push(canC ? __ssGo(T('exOldDebtN', old), 'cust:old') : `<b style="color:var(--danger);">${escapeHtml(T('exOldDebtN', old))}</b>`);
+    return line(pp);
+  }
+  return '';
+}
+function __ssExRefresh(){
+  document.querySelectorAll('[data-ss-ex]').forEach(el=>{ el.innerHTML = __ssExHtml(el.dataset.ssEx); });
+  const mc = document.getElementById('ss-min-count'); if(mc){ const n = visibleProducts().filter(p=>productMinStock(p) !== null).length; mc.textContent = n ? tr('lsMinCount').split('{n}').join(String(n)) : ''; mc.style.display = n ? '' : 'none'; }
+  const hs = document.getElementById('ss-hist-short'); if(hs){ const hd = stockHistDays(state.currentBranchId); const show = lowStockMode() === 'auto' && hd < 7; hs.textContent = show ? tr('lsHistShort').split('{n}').join(String(hd)) : ''; hs.style.display = show ? '' : 'none'; }
+}
+function __ssOpenCreditList(kind){
+  const L = __ssCreditList().filter(x=>kind === 'over' ? x.over : x.old).sort((a,b)=>b.c.debt - a.c.debt);
+  openModal(`
+    <div class="back-row"><button onclick="closeModal()">${ICONS.arrowLeft}</button><span class="t-title">${tr('exCreditTitle')}</span></div>
+    ${L.map(x=>`<div class="list-item" data-ss-cust="${x.c.id}" style="cursor:pointer;"><div class="info"><div class="name">${escapeHtml(x.c.name || '')}</div><div class="meta">${escapeHtml(x.c.phone || '')}${x.lim > 0 ? ' · ' + tr('exLimitWord') + ' ' + fmt(x.lim) : ''}${x.old ? ' · <span style="color:var(--danger);font-weight:700;">' + tr('oldDebtLabel') + '</span>' : ''}</div></div><span class="badge badge-debt">${fmt(x.c.debt)}</span></div>`).join('') || `<div class="empty-state">${tr('noData')}</div>`}
+  `);
+  document.querySelectorAll('[data-ss-cust]').forEach(el=>el.addEventListener('click', ()=>{ closeModal(); openCustomerDetail(el.dataset.ssCust); }));
+}
+function __ssBindGo(container){
+  container.querySelectorAll('[data-ss-ex]').forEach(box=>box.addEventListener('click', (e)=>{   /* har bir sahifa chizilganda yangi element — tinglovchi to'planmaydi */
+    const b = e.target && e.target.closest ? e.target.closest('[data-ss-go]') : null; if(!b || !box.contains(b)) return;
+    const a = b.dataset.ssGo;
+    __ssFlushAll(true);
+    if(a.indexOf('cust:') === 0){ __ssOpenCreditList(a.slice(5)); return; }
+    const f = a.slice(4);
+    __inv.filter = f === 'minus' ? 'out' : f; __inv.limit = 60; __inv.q = '';
+    if(f === 'minus') __inv.sort = 'stock';
+    state.view = 'reports'; state.reportsCategory = 'inventory'; state.settingsCategory = null;
+    renderAll();
+  }));
+}
 function renderSettingsStockAlerts(container){
+  const auto = lowStockMode() === 'auto';
   __ssPage(container, tr('ssStockSection'), `
     <div class="card" id="ss-low">
       <h3 class="sub-title" style="margin:0 0 6px;">${tr('lowStockOnlyLabel')}</h3>
       <p class="subtle" style="margin:0 0 12px;">${tr('lowStockOnlyHint')}</p>
-      <div class="field">${__ssLbl('low', tr('lowStockThreshold'))}<input type="number" id="s-low-stock" min="0" step="any" inputmode="decimal" value="${lowStockThresholdValue()}">${__ssErr('low')}<p class="subtle" style="margin:6px 0 0;font-size:12px;">${tr('lowStockZeroHint')}</p></div>
+      <label class="field-label">${tr('lsModeLabel')} ${__ssOk('mode')}</label>
+      <div class="toggle-group" id="ss-mode" style="margin-top:6px;">
+        <div class="toggle-opt ${auto ? '' : 'active'}" data-ss-mode="fixed">${tr('lsModeFixed')}</div>
+        <div class="toggle-opt ${auto ? 'active' : ''}" data-ss-mode="auto">${tr('lsModeAuto')}</div>
+      </div>
+      <div id="ss-auto-box" style="${auto ? '' : 'display:none;'}">
+        <div class="field">${__ssLbl('adays', tr('lsAutoDays'))}<input type="number" id="s-auto-days" min="1" max="60" step="1" inputmode="numeric" value="${lowStockAutoDays()}">${__ssErr('adays')}<p class="subtle" style="margin:6px 0 0;font-size:12px;">${tr('lsAutoHint')}</p></div>
+        <p id="ss-hist-short" style="display:none;margin:0 0 12px;font-size:12.5px;color:var(--warm);font-weight:600;"></p>
+      </div>
+      <div class="field"><label class="field-label"><span id="ss-low-lbl">${auto ? tr('lsFbLabel') : tr('lowStockThreshold')}</span> ${__ssOk('low')}</label><input type="number" id="s-low-stock" min="0" step="any" inputmode="decimal" value="${lowStockThresholdValue()}">${__ssErr('low')}<p class="subtle" id="ss-low-hint" style="margin:6px 0 0;font-size:12px;">${auto ? tr('lsFbHint') + ' ' : ''}${tr('lowStockZeroHint')}</p></div>
+      <p class="subtle" style="margin:0;font-size:12px;">${tr('lsMinHint')} <span id="ss-min-count"></span></p>
+      ${__ssExBox('low')}
     </div>
     <div class="card" id="ss-exp" style="margin-top:14px;">
       <h3 class="sub-title" style="margin:0 0 6px;">${tr('expiryOnlyLabel')}</h3>
       <p class="subtle" style="margin:0 0 12px;">${tr('expiryOnlyHint')}</p>
       <div class="field">${__ssLbl('exp', tr('expiryWarningDaysLabel'))}<input type="number" id="s-expiry-days" min="1" step="any" inputmode="decimal" value="${state.settings.expiryWarningDays||7}">${__ssErr('exp')}</div>
+      ${__ssExBox('exp')}
     </div>
   `);
   __ssBindField('low', 's-low-stock', {
@@ -17931,11 +18099,29 @@ function renderSettingsStockAlerts(container){
     same: v=>(v === lowStockThresholdValue() && state.settings.lowStockSetV2 === true),
     apply: v=>{ state.settings.lowStockThreshold = v; state.settings.lowStockSetV2 = true; }   /* fix122 qoidasi: shu versiyadan saqlangan 0 = haqiqatan 0 */
   });
+  __ssBindField('adays', 's-auto-days', {
+    read: raw=>{ const v = __ssNum(raw); return (isFinite(v) && v >= 1 && v <= 60) ? {ok: true, v} : {ok: false, msg: tr('lsAutoDaysBad')}; },
+    same: v=>(v === lowStockAutoDays() && state.settings.lowStockAutoDays !== undefined),
+    apply: v=>{ state.settings.lowStockAutoDays = v; }
+  });
   __ssBindField('exp', 's-expiry-days', {
     read: raw=>{ const v = __ssNum(raw); return (isFinite(v) && v >= 1) ? {ok: true, v} : {ok: false, msg: tr('ssMinOne')}; },
     same: v=>v === Number(state.settings.expiryWarningDays || 7),
     apply: v=>{ state.settings.expiryWarningDays = v; }
   });
+  container.querySelectorAll('[data-ss-mode]').forEach(b=>b.addEventListener('click', async ()=>{
+    const m = b.dataset.ssMode; if(m === lowStockMode()) return;
+    state.settings.lowStockMode = m;
+    if(m === 'auto' && state.settings.lowStockAutoDays === undefined) state.settings.lowStockAutoDays = 3;
+    container.querySelectorAll('[data-ss-mode]').forEach(x=>x.classList.toggle('active', x.dataset.ssMode === m));
+    const on = m === 'auto';
+    document.getElementById('ss-auto-box').style.display = on ? '' : 'none';
+    document.getElementById('ss-low-lbl').textContent = on ? tr('lsFbLabel') : tr('lowStockThreshold');
+    document.getElementById('ss-low-hint').textContent = (on ? tr('lsFbHint') + ' ' : '') + tr('lowStockZeroHint');
+    const ok = await __ssSave(); if(ok) __ssTick('mode'); else showToast(tr('ssSaveFail'));
+  }));
+  __ssBindGo(container);
+  __ssExRefresh();
   __ssFocusCard();
 }
 
@@ -17947,12 +18133,14 @@ function renderSettingsSaleRules(container){
     <div class="card" id="ss-oversell">
       ${__ssChk('oversell', 's-allow-oversell', state.settings.allowOversell !== false, tr('allowOversellLabel'))}
       <p class="subtle" style="margin:6px 0 0;">${tr('allowOversellHint')}</p>
+      ${__ssExBox('minus')}
     </div>
     <div class="card" id="ss-credit" style="margin-top:14px;">
       <h3 class="sub-title" style="margin:0 0 6px;">${tr('creditLimitSection')}</h3>
       <p class="subtle" style="margin:0 0 12px;">${tr('creditLimitHint')}</p>
       <div class="field">${__ssLbl('climit', tr('defaultCreditLimit'))}<input type="text" inputmode="numeric" id="s-credit-limit" value="${formatMoneyInputValue(state.settings.defaultCreditLimit||0)}">${__ssErr('climit')}</div>
       <div class="field">${__ssLbl('olddebt', tr('oldDebtDaysLabel'))}<input type="number" id="s-old-debt-days" min="1" step="any" inputmode="decimal" value="${state.settings.oldDebtDays||30}">${__ssErr('olddebt')}</div>
+      ${__ssExBox('credit')}
     </div>
     <div class="card" id="ss-charges" style="margin-top:14px;">
       <h3 class="sub-title" style="margin:0 0 6px;">${tr('additionalChargesSection')}</h3>
@@ -17985,6 +18173,7 @@ function renderSettingsSaleRules(container){
   __ssBindField('dfp', 's-df-presets', listCfg('dfp', ()=>state.settings.deliveryFeePresets, v=>{ state.settings.deliveryFeePresets = v; state.settings.defaultDeliveryFee = v[0] || 0; }));
   __ssBindCheck('scon', 's-sc-default-on', v=>{ state.settings.serviceChargeDefaultOn = v; });
   __ssBindCheck('dfon', 's-df-default-on', v=>{ state.settings.deliveryFeeDefaultOn = v; });
+  __ssBindGo(container); __ssExRefresh();   /* fix124-smart */
   __ssFocusCard();
 }
 
@@ -18708,7 +18897,7 @@ var TG_PF_ROWS = [
   {k:'rcpt', ic:'&#128465;', bg:'#FEE2E2', t:'tgPRcpt', s:'tgPRcptSub'}
 ];
 function __tgPfSub(r, p){
-  if(r.k === 'low') return __tgT(r.s, {n: lowStockThresholdValue()});   /* fix122-stock */
+  if(r.k === 'low') return lowStockMode() === 'auto' ? __tgT('tgPLowSubAuto', {d: lowStockAutoDays()}) : __tgT(r.s, {n: lowStockThresholdValue()});   /* fix122-stock, fix124-smart */
   if(r.k === 'disc') return __tgT(r.s, {p: (p && p.discPct) || 20});
   return tr(r.s);
 }

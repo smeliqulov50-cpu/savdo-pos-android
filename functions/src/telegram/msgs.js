@@ -10,7 +10,7 @@ const L = {
     top: "Ko'p sotilgan mahsulotlar", branches: 'Filiallar', noSales: "Bugun hali savdo bo'lmadi.",
     shiftClosed: 'Smena yopildi', autoClosed: 'avtomatik yopildi', cashier: 'Kassir', branch: 'Filial', total: 'Jami', discounts: 'Chegirmalar',
     expected: "Kassada bo'lishi kerak", counted: 'Sanab kiritildi', diff: 'Farq', diffNone: "Farq yo'q", short: 'kam', over: 'ortiqcha',
-    low: 'Kam qolgan tovarlar', threshold: 'Kam qoldi chegarasi', out: 'tugagan', more: '… yana {n} ta', lowNone: "Kam qolgan tovar yo'q 👍",
+    low: 'Kam qolgan tovarlar', threshold: 'Kam qoldi chegarasi', autoRule: 'Qoida: {d} kunlik savdoga yetmasa', thresholdFb: 'Sotilmagan tovarlar uchun chegara', out: 'tugagan', more: '… yana {n} ta', lowNone: "Kam qolgan tovar yo'q 👍",
     disc: 'Katta chegirma', receipt: 'Chek', discount: 'Chegirma', sum: 'Chek summasi',
     del: "Chek o'chirildi", refund: 'Chek qaytarildi', by: 'Kim',
     testNote: "🧪 Sinov xabari: haqiqiy xabar shunday ko'rinadi.", testData: "🧪 Sinov: hozirgacha bo'lgan haqiqiy ma'lumot.",
@@ -22,7 +22,7 @@ const L = {
     top: 'Популярные товары', branches: 'Филиалы', noSales: 'Сегодня продаж пока не было.',
     shiftClosed: 'Смена закрыта', autoClosed: 'закрыта автоматически', cashier: 'Кассир', branch: 'Филиал', total: 'Итого', discounts: 'Скидки',
     expected: 'Должно быть в кассе', counted: 'Пересчитано', diff: 'Разница', diffNone: 'Разницы нет', short: 'недостача', over: 'излишек',
-    low: 'Заканчивающиеся товары', threshold: 'Порог «мало осталось»', out: 'закончился', more: '… ещё {n}', lowNone: 'Заканчивающихся товаров нет 👍',
+    low: 'Заканчивающиеся товары', threshold: 'Порог «мало осталось»', autoRule: 'Правило: не хватит на {d} дн. продаж', thresholdFb: 'Порог для товаров без продаж', out: 'закончился', more: '… ещё {n}', lowNone: 'Заканчивающихся товаров нет 👍',
     disc: 'Большая скидка', receipt: 'Чек', discount: 'Скидка', sum: 'Сумма чека',
     del: 'Чек удалён', refund: 'Возврат чека', by: 'Кто',
     testNote: '🧪 Тестовое сообщение: так будет выглядеть настоящее.', testData: '🧪 Тест: реальные данные на текущий момент.',
@@ -34,7 +34,7 @@ const L = {
     top: 'Top products', branches: 'Branches', noSales: 'No sales yet today.',
     shiftClosed: 'Shift closed', autoClosed: 'closed automatically', cashier: 'Cashier', branch: 'Branch', total: 'Total', discounts: 'Discounts',
     expected: 'Expected cash', counted: 'Counted', diff: 'Difference', diffNone: 'No difference', short: 'short', over: 'over',
-    low: 'Low stock', threshold: 'Low stock threshold', out: 'out of stock', more: '… {n} more', lowNone: 'Nothing is running low 👍',
+    low: 'Low stock', threshold: 'Low stock threshold', autoRule: "Rule: won't last {d} days of sales", thresholdFb: 'Threshold for items with no sales', out: 'out of stock', more: '… {n} more', lowNone: 'Nothing is running low 👍',
     disc: 'Large discount', receipt: 'Receipt', discount: 'Discount', sum: 'Receipt total',
     del: 'Receipt deleted', refund: 'Receipt refunded', by: 'By',
     testNote: '🧪 Test message: this is how the real one will look.', testData: '🧪 Test: real data so far.',
@@ -46,7 +46,7 @@ const L = {
     top: 'Көп сатылған тауарлар', branches: 'Филиалдар', noSales: 'Бүгін әзірге сатылым болған жоқ.',
     shiftClosed: 'Смена жабылды', autoClosed: 'автоматты түрде жабылды', cashier: 'Кассир', branch: 'Филиал', total: 'Барлығы', discounts: 'Жеңілдіктер',
     expected: 'Кассада болуы керек', counted: 'Саналды', diff: 'Айырма', diffNone: 'Айырма жоқ', short: 'кем', over: 'артық',
-    low: 'Аз қалған тауарлар', threshold: 'Аз қалды шегі', out: 'таусылды', more: '… тағы {n}', lowNone: 'Аз қалған тауар жоқ 👍',
+    low: 'Аз қалған тауарлар', threshold: 'Аз қалды шегі', autoRule: 'Ереже: {d} күндік сатуға жетпесе', thresholdFb: 'Сатылмаған тауарлар шегі', out: 'таусылды', more: '… тағы {n}', lowNone: 'Аз қалған тауар жоқ 👍',
     disc: 'Үлкен жеңілдік', receipt: 'Чек', discount: 'Жеңілдік', sum: 'Чек сомасы',
     del: 'Чек жойылды', refund: 'Чек қайтарылды', by: 'Кім',
     testNote: '🧪 Сынақ хабары: нақты хабар осылай көрінеді.', testData: '🧪 Сынақ: қазіргі сәттегі нақты деректер.',
@@ -58,7 +58,7 @@ const L = {
     top: 'Көп сатылган товарлар', branches: 'Филиалдар', noSales: 'Бүгүн азырынча сатуу болгон жок.',
     shiftClosed: 'Смена жабылды', autoClosed: 'автоматтык түрдө жабылды', cashier: 'Кассир', branch: 'Филиал', total: 'Бардыгы', discounts: 'Жеңилдиктер',
     expected: 'Кассада болушу керек', counted: 'Саналды', diff: 'Айырма', diffNone: 'Айырма жок', short: 'кем', over: 'ашык',
-    low: 'Аз калган товарлар', threshold: 'Аз калды чеги', out: 'түгөндү', more: '… дагы {n}', lowNone: 'Аз калган товар жок 👍',
+    low: 'Аз калган товарлар', threshold: 'Аз калды чеги', autoRule: 'Эреже: {d} күндүк сатууга жетпесе', thresholdFb: 'Сатылбаган товарлар үчүн чек', out: 'түгөндү', more: '… дагы {n}', lowNone: 'Аз калган товар жок 👍',
     disc: 'Чоң жеңилдик', receipt: 'Чек', discount: 'Жеңилдик', sum: 'Чектин суммасы',
     del: 'Чек өчүрүлдү', refund: 'Чек кайтарылды', by: 'Ким',
     testNote: '🧪 Сыноо билдирүүсү: чыныгы билдирүү ушундай көрүнөт.', testData: '🧪 Сыноо: азыркы учурдагы чыныгы маалымат.',
@@ -70,7 +70,7 @@ const L = {
     top: 'Молҳои пурфурӯш', branches: 'Филиалҳо', noSales: 'Имрӯз ҳоло фурӯш набуд.',
     shiftClosed: 'Смена баста шуд', autoClosed: 'худкор баста шуд', cashier: 'Кассир', branch: 'Филиал', total: 'Ҳамагӣ', discounts: 'Тахфифҳо',
     expected: 'Бояд дар кассо бошад', counted: 'Шумурда шуд', diff: 'Фарқ', diffNone: 'Фарқ нест', short: 'кам', over: 'зиёдатӣ',
-    low: 'Молҳои кам монда', threshold: 'Ҳадди «кам монд»', out: 'тамом шуд', more: '… боз {n}', lowNone: 'Моли кам монда нест 👍',
+    low: 'Молҳои кам монда', threshold: 'Ҳадди «кам монд»', autoRule: 'Қоида: ба фурӯши {d} рӯз нарасад', thresholdFb: 'Ҳадд барои молҳои нафурӯхта', out: 'тамом шуд', more: '… боз {n}', lowNone: 'Моли кам монда нест 👍',
     disc: 'Тахфифи калон', receipt: 'Чек', discount: 'Тахфиф', sum: 'Маблағи чек',
     del: 'Чек нест карда шуд', refund: 'Чек баргардонида шуд', by: 'Кӣ',
     testNote: '🧪 Паёми санҷишӣ: паёми воқеӣ ҳамин тавр менамояд.', testData: '🧪 Санҷиш: маълумоти воқеӣ то ҳозир.',
@@ -174,7 +174,10 @@ const LOW_MAX = 50;
 function lowText(lang, data, ctx) {
   const w = W(lang);
   const lines = [head('📦', w.low, ctx.shop)];
-  lines.push(esc(w.threshold) + ': ≤ ' + qty(data.threshold));
+  if (data.mode === 'auto') {   /* fix124-smart */
+    lines.push(esc(tpl(w.autoRule, { d: qty(data.autoDays) })));
+    lines.push(esc(w.thresholdFb) + ': ≤ ' + qty(data.threshold));
+  } else lines.push(esc(w.threshold) + ': ≤ ' + qty(data.threshold));
   if (!data.groups.length) { lines.push(''); lines.push(esc(w.lowNone)); }
   let shown = 0, total = 0;
   data.groups.forEach(function (g) { total += g.items.length; });
