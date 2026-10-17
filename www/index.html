@@ -697,6 +697,64 @@
     #side-cart .sc-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;text-align:center;color:var(--ink-soft);}
     #side-cart .sc-empty svg{width:28px;height:28px;color:var(--accent);}
   }
+  /* fix129-rep1: hisobotlar */
+  .r3-chips{display:flex;flex-wrap:wrap;gap:6px;padding:1px 1px 3px;margin:0 0 8px;}
+  .r3-chips::-webkit-scrollbar{display:none;}
+  .r3-chip{flex-shrink:0;border:1px solid var(--v4-line, #e6ebf3);background:#fff;color:var(--ink-soft);border-radius:999px;padding:7px 13px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;line-height:1.2;}
+  .r3-chip.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .r3-sel{flex-shrink:0;border:1px solid var(--v4-line, #e6ebf3);background:#fff;color:var(--ink);border-radius:999px;padding:6px 10px;font:inherit;font-size:12.5px;font-weight:700;max-width:180px;}
+  .r3-sum{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:16px;padding:12px 14px;margin:2px 0 4px;}
+  .r3-sum .l{font-size:12px;color:var(--ink-soft);font-weight:700;} .r3-sum .v{font-size:20px;font-weight:800;color:var(--ink);white-space:nowrap;}
+  .r3-sum .r{text-align:right;font-size:12.5px;color:var(--ink-soft);font-weight:700;}
+  .r3-hint{font-size:11.5px;color:var(--ink-faint);margin:0 2px 6px;}
+  .r3-dayh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:16px 2px 8px;font-size:13px;color:var(--ink);}
+  .r3-dayh b{font-weight:800;min-width:0;} .r3-dayh span{color:var(--ink-soft);font-weight:700;white-space:nowrap;font-size:12.5px;}
+  .r3-hero{background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(22,35,59,.04),0 4px 14px rgba(22,35,59,.05);}
+  .r3-hero .h-l{font-size:12.5px;color:var(--ink-soft);font-weight:700;}
+  .r3-hero .h-v{font-size:30px;font-weight:800;color:var(--ink);line-height:1.15;margin:4px 0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .r3-hero .h-n{font-size:12.5px;color:var(--ink-soft);font-weight:700;margin-bottom:8px;}
+  .r3-cmp{display:flex;flex-direction:column;gap:6px;}
+  .r3-cmp > div{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);}
+  .r3-delta{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;}
+  .r3-delta.up{background:#e7f6ef;color:#12805c;} .r3-delta.down{background:#fdecec;color:var(--danger);} .r3-delta.flat{background:#eef2f9;color:var(--ink-soft);}
+  .r3-kpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+  .r3-kpi .stat-card{padding:12px 10px;} .r3-kpi .stat-value{font-size:17px;white-space:nowrap;}
+  .r3-kpi.k2{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .r3-box{background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:16px;padding:12px 14px;margin-bottom:12px;}
+  .r3-box h4{margin:0 0 8px;font-size:13px;font-weight:800;color:var(--ink);}
+  .r3-bar{display:flex;height:12px;border-radius:999px;overflow:hidden;background:#eef2f9;margin:4px 0 10px;}
+  .r3-bar i{display:block;height:100%;min-width:0;}
+  .r3-leg{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;}
+  .r3-leg .dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+  .r3-leg .n{flex:1;min-width:0;color:var(--ink-soft);} .r3-leg .a{font-weight:800;white-space:nowrap;} .r3-leg .p{width:42px;text-align:right;color:var(--ink-faint);font-size:12px;white-space:nowrap;}
+  .r3-pl .row{padding:6px 0;gap:10px;} .r3-pl .row span:first-child{flex:1;min-width:0;}
+  .r3-pl .row strong{white-space:nowrap;}
+  .r3-pl .tot{border-top:1px solid var(--v4-line, #e6ebf3);margin-top:4px;padding-top:9px;font-weight:800;}
+  .r3-mini{height:5px;border-radius:999px;background:#eef2f9;margin:6px 0 3px;overflow:hidden;max-width:260px;}
+  .r3-mini i{display:block;height:100%;background:var(--accent);border-radius:999px;}
+  .r3-tag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:800;vertical-align:middle;}
+  .r3-tag.best{background:#e7f6ef;color:#12805c;} .r3-tag.worst{background:#fdecec;color:var(--danger);}
+  .r3-cols{max-width:760px;}
+  .r3-range-row > .field{flex:1 1 0;min-width:0;}
+  @media (max-width:420px){ .r3-hero .h-v{font-size:26px;} .r3-kpi .stat-value{font-size:15px;} .r3-kpi .stat-card{padding:11px 8px;} }
+  @media (max-width:400px){ .r3-kpi{grid-template-columns:repeat(2,minmax(0,1fr));} .r3-kpi > .stat-card:nth-child(3):last-child{grid-column:1/-1;} }
+  /* fix130-rep2: hisobotlar 2-qism */
+  .r4-abc{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 5px;border-radius:6px;font-size:11px;font-weight:800;margin-right:6px;vertical-align:1px;}
+  .r4-abc.a{background:#e7f6ef;color:#12805c;} .r4-abc.b{background:#e8f0ff;color:#1f4fb8;} .r4-abc.c{background:#eef2f9;color:var(--ink-soft);}
+  .r4-share{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;}
+  .r4-share .n{flex:0 0 38%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
+  .r4-share .b{flex:1;height:8px;border-radius:999px;background:#eef2f9;overflow:hidden;min-width:30px;} .r4-share .b i{display:block;height:100%;border-radius:999px;}
+  .r4-share .a{white-space:nowrap;font-weight:800;} .r4-share .p{width:38px;text-align:right;color:var(--ink-faint);font-size:12px;white-space:nowrap;}
+  .r4-warn{border-color:#f6c9c9 !important;background:#fff8f8 !important;}
+  .r4-warn h4{color:var(--danger);}
+  .r4-line{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:13px;border-bottom:1px solid var(--v4-line, #e6ebf3);}
+  .r4-line:last-child{border-bottom:none;} .r4-line span:first-child{min-width:0;flex:1;} .r4-line b{white-space:nowrap;}
+  .r4-prog{height:6px;border-radius:999px;background:#eef2f9;overflow:hidden;margin:8px 0 4px;} .r4-prog i{display:block;height:100%;background:var(--teal);border-radius:999px;}
+  .rf-reasons{margin:-6px 0 14px;} .rf-reasons .rf-q{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
+  .r4-home{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 14px;}
+  .r4-home button{all:unset;box-sizing:border-box;cursor:pointer;background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:16px;padding:12px;min-width:0;display:flex;flex-direction:column;gap:4px;box-shadow:0 1px 2px rgba(22,35,59,.04),0 4px 14px rgba(22,35,59,.05);}
+  .r4-home .l{font-size:12px;color:var(--ink-soft);font-weight:700;} .r4-home .v{font-size:18px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  @media (max-width:520px){ .r4-home{grid-template-columns:repeat(2,minmax(0,1fr));} .r4-home button:first-child{grid-column:1/-1;} .r4-home button:first-child .v{font-size:22px;} }
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -1859,6 +1917,85 @@ const T = {
   scEmpty:{uz:"Savat bo'sh",ru:"Корзина пуста",en:"Cart is empty",kk:"Себет бос",ky:"Себет бош",tg:"Сабад холӣ"},
   scEmptySub:{uz:"Tovarni bosing — shu yerga tushadi.",ru:"Нажмите на товар — он появится здесь.",en:"Tap a product — it appears here.",kk:"Тауарды басыңыз — осында түседі.",ky:"Товарды басыңыз — ушул жерге түшөт.",tg:"Ба мол пахш кунед — ин ҷо пайдо мешавад."},
   scDetails:{uz:"Batafsil",ru:"Подробнее",en:"Details",kk:"Толығырақ",ky:"Толугураак",tg:"Муфассал"},
+  /* fix129-rep1 */
+  r3PToday:{uz:"Bugun",ru:"Сегодня",en:"Today",kk:"Бүгін",ky:"Бүгүн",tg:"Имрӯз"},
+  r3PYest:{uz:"Kecha",ru:"Вчера",en:"Yesterday",kk:"Кеше",ky:"Кечээ",tg:"Дирӯз"},
+  r3P7:{uz:"7 kun",ru:"7 дней",en:"7 days",kk:"7 күн",ky:"7 күн",tg:"7 рӯз"},
+  r3P30:{uz:"30 kun",ru:"30 дней",en:"30 days",kk:"30 күн",ky:"30 күн",tg:"30 рӯз"},
+  r3PAll:{uz:"Hammasi",ru:"Все",en:"All",kk:"Барлығы",ky:"Баары",tg:"Ҳама"},
+  r3PWeek:{uz:"Hafta",ru:"Неделя",en:"Week",kk:"Апта",ky:"Жума",tg:"Ҳафта"},
+  r3PMonth:{uz:"Oy",ru:"Месяц",en:"Month",kk:"Ай",ky:"Ай",tg:"Моҳ"},
+  r3PYear:{uz:"Yil",ru:"Год",en:"Year",kk:"Жыл",ky:"Жыл",tg:"Сол"},
+  r3PLastWeek:{uz:"O'tgan hafta",ru:"Прошлая неделя",en:"Last week",kk:"Өткен апта",ky:"Өткөн жума",tg:"Ҳафтаи гузашта"},
+  r3PLastMonth:{uz:"O'tgan oy",ru:"Прошлый месяц",en:"Last month",kk:"Өткен ай",ky:"Өткөн ай",tg:"Моҳи гузашта"},
+  r3AllCashiers:{uz:"Barcha kassirlar",ru:"Все кассиры",en:"All cashiers",kk:"Барлық кассирлер",ky:"Бардык кассирлер",tg:"Ҳамаи кассирҳо"},
+  r3AllPay:{uz:"Barcha to'lovlar",ru:"Все оплаты",en:"All payments",kk:"Барлық төлемдер",ky:"Бардык төлөмдөр",tg:"Ҳамаи пардохтҳо"},
+  r3RcSum:{uz:"{n} ta chek",ru:"Чеков: {n}",en:"{n} receipts",kk:"{n} чек",ky:"{n} чек",tg:"{n} чек"},
+  r3RcRef:{uz:"qaytarilgan: {n}",ru:"возвратов: {n}",en:"refunded: {n}",kk:"қайтарылған: {n}",ky:"кайтарылган: {n}",tg:"баргардонида: {n}"},
+  r3RcTotalHint:{uz:"Qaytarilgan cheklar jamiga kirmaydi",ru:"Возвращённые чеки не входят в итог",en:"Refunded receipts are not included in the total",kk:"Қайтарылған чектер жиынтыққа кірмейді",ky:"Кайтарылган чектер жыйынтыкка кирбейт",tg:"Чекҳои баргардонида ба ҳамагӣ дохил намешаванд"},
+  r3VsYest:{uz:"Kecha shu vaqtgacha",ru:"Вчера к этому времени",en:"Yesterday by this time",kk:"Кеше осы уақытқа дейін",ky:"Кечээ ушул убакытка чейин",tg:"Дирӯз то ҳамин вақт"},
+  r3VsWeekAgo:{uz:"Bir hafta oldin shu vaqtgacha",ru:"Неделю назад к этому времени",en:"A week ago by this time",kk:"Бір апта бұрын осы уақытқа дейін",ky:"Бир жума мурун ушул убакытка чейин",tg:"Як ҳафта пеш то ҳамин вақт"},
+  r3VsPrevW:{uz:"O'tgan hafta shu vaqtgacha",ru:"Прошлая неделя к этому времени",en:"Last week by this time",kk:"Өткен апта осы уақытқа дейін",ky:"Өткөн жума ушул убакытка чейин",tg:"Ҳафтаи гузашта то ҳамин вақт"},
+  r3VsPrevM:{uz:"O'tgan oy shu kungacha",ru:"Прошлый месяц к этому дню",en:"Last month by this day",kk:"Өткен ай осы күнге дейін",ky:"Өткөн ай ушул күнгө чейин",tg:"Моҳи гузашта то ҳамин рӯз"},
+  r3VsPrevY:{uz:"O'tgan yil shu kungacha",ru:"Прошлый год к этому дню",en:"Last year by this day",kk:"Өткен жыл осы күнге дейін",ky:"Өткөн жыл ушул күнгө чейин",tg:"Соли гузашта то ҳамин рӯз"},
+  r3Profit:{uz:"Foyda",ru:"Прибыль",en:"Profit",kk:"Пайда",ky:"Пайда",tg:"Фоида"},
+  r3AvgCheck:{uz:"O'rtacha chek",ru:"Средний чек",en:"Average check",kk:"Орташа чек",ky:"Орточо чек",tg:"Чеки миёна"},
+  r3PayMix:{uz:"To'lov turlari",ru:"Способы оплаты",en:"Payment methods",kk:"Төлем түрлері",ky:"Төлөм түрлөрү",tg:"Намудҳои пардохт"},
+  r3ProfitTitle:{uz:"Foyda va sof foyda",ru:"Прибыль и чистая прибыль",en:"Profit and net profit",kk:"Пайда және таза пайда",ky:"Пайда жана таза пайда",tg:"Фоида ва фоидаи соф"},
+  r3Gross:{uz:"Foyda (sotuv − tannarx)",ru:"Прибыль (продажи − себестоимость)",en:"Profit (sales − cost)",kk:"Пайда (сату − өзіндік құн)",ky:"Пайда (сатуу − өздүк нарк)",tg:"Фоида (фурӯш − арзиши аслӣ)"},
+  r3NetHint:{uz:"Sof foyda = foyda − xarajatlar. Tovar xaridi xarajatga kirmaydi.",ru:"Чистая прибыль = прибыль − расходы. Закупка товара в расходы не входит.",en:"Net profit = profit − expenses. Stock purchases are not counted as expenses.",kk:"Таза пайда = пайда − шығындар. Тауар сатып алу шығынға кірмейді.",ky:"Таза пайда = пайда − чыгымдар. Товар сатып алуу чыгымга кирбейт.",tg:"Фоидаи соф = фоида − хароҷот. Хариди мол ба хароҷот дохил намешавад."},
+  r3DebtsRefunds:{uz:"Qarz va qaytarish",ru:"Долги и возвраты",en:"Debts and refunds",kk:"Қарыз және қайтару",ky:"Карыз жана кайтаруу",tg:"Қарз ва баргардонӣ"},
+  r3ByHour:{uz:"Soatlar bo'yicha",ru:"По часам",en:"By hour",kk:"Сағат бойынша",ky:"Саат боюнча",tg:"Аз рӯи соат"},
+  r3Peak:{uz:"Eng gavjum vaqt: {h}",ru:"Пик продаж: {h}",en:"Busiest hour: {h}",kk:"Ең қызу уақыт: {h}",ky:"Эң кызуу убакыт: {h}",tg:"Вақти серодам: {h}"},
+  r3StockNow:{uz:"Ombordagi tovar",ru:"Товар на складе",en:"Stock on hand",kk:"Қоймадағы тауар",ky:"Кампадагы товар",tg:"Моли анбор"},
+  r3ByDay:{uz:"Kunlar bo'yicha",ru:"По дням",en:"By day",kk:"Күн бойынша",ky:"Күн боюнча",tg:"Аз рӯи рӯз"},
+  r3DayAvg:{uz:"Kunlik o'rtacha",ru:"В среднем за день",en:"Daily average",kk:"Күндік орташа",ky:"Күндүк орточо",tg:"Миёнаи рӯзона"},
+  r3Best:{uz:"Eng yaxshi kun",ru:"Лучший день",en:"Best day",kk:"Ең жақсы күн",ky:"Эң жакшы күн",tg:"Беҳтарин рӯз"},
+  r3Worst:{uz:"Eng past kun",ru:"Худший день",en:"Lowest day",kk:"Ең төмен күн",ky:"Эң төмөн күн",tg:"Пасттарин рӯз"},
+  r3AvgLine:{uz:"o'rtacha",ru:"среднее",en:"average",kk:"орташа",ky:"орточо",tg:"миёна"},
+  r3DaysNote:{uz:"Savdo bo'lgan oxirgi {n} kun",ru:"Последние {n} дн. с продажами",en:"Last {n} days with sales",kk:"Сауда болған соңғы {n} күн",ky:"Соода болгон акыркы {n} күн",tg:"{n} рӯзи охир бо фурӯш"},
+  r3NDays:{uz:"{n} kun",ru:"{n} дн.",en:"{n} days",kk:"{n} күн",ky:"{n} күн",tg:"{n} рӯз"},
+  r3NoCmp:{uz:"solishtirish uchun ma'lumot yo'q",ru:"нет данных для сравнения",en:"nothing to compare with",kk:"салыстыруға дерек жоқ",ky:"салыштырууга маалымат жок",tg:"барои муқоиса маълумот нест"},
+  /* fix130-rep2 */
+  r4Qty:{uz:"Soni",ru:"Кол-во",en:"Qty",kk:"Саны",ky:"Саны",tg:"Миқдор"},
+  r4Sum:{uz:"Summa",ru:"Сумма",en:"Revenue",kk:"Сома",ky:"Сумма",tg:"Маблағ"},
+  r4ShowAll:{uz:"Hammasini ko'rsatish ({n})",ru:"Показать все ({n})",en:"Show all ({n})",kk:"Барлығын көрсету ({n})",ky:"Баарын көрсөтүү ({n})",tg:"Ҳамаро нишон додан ({n})"},
+  r4AbcHint:{uz:"A — jamining 80% ini beradigan tovarlar, B — keyingi 15%, C — qolgan 5%.",ru:"A — товары, дающие 80% итога, B — следующие 15%, C — остальные 5%.",en:"A — items making 80% of the total, B — the next 15%, C — the remaining 5%.",kk:"A — жиынтықтың 80%-ын беретін тауарлар, B — келесі 15%, C — қалған 5%.",ky:"A — жыйынтыктын 80%ын берген товарлар, B — кийинки 15%, C — калган 5%.",tg:"A — молҳое, ки 80%-и ҳамагиро медиҳанд, B — 15%-и навбатӣ, C — 5%-и боқимонда."},
+  r4Loss:{uz:"Zararga sotilgan tovarlar",ru:"Товары, проданные в убыток",en:"Items sold at a loss",kk:"Шығынға сатылған тауарлар",ky:"Чыгым менен сатылган товарлар",tg:"Молҳои бо зарар фурӯхташуда"},
+  r4LowMargin:{uz:"Eng past marja",ru:"Самая низкая маржа",en:"Lowest margin",kk:"Ең төмен маржа",ky:"Эң төмөн маржа",tg:"Пасттарин фоиданокӣ"},
+  r4SortProfit:{uz:"Foyda bo'yicha",ru:"По прибыли",en:"By profit",kk:"Пайда бойынша",ky:"Пайда боюнча",tg:"Аз рӯи фоида"},
+  r4SortMargin:{uz:"Marja bo'yicha",ru:"По марже",en:"By margin",kk:"Маржа бойынша",ky:"Маржа боюнча",tg:"Аз рӯи фоиданокӣ"},
+  r4RefRate:{uz:"Savdoning {p}% i qaytarilgan",ru:"Возвращено {p}% продаж",en:"{p}% of sales refunded",kk:"Сауданың {p}%-ы қайтарылды",ky:"Сооданын {p}% кайтарылды",tg:"{p}%-и фурӯш баргардонида шуд"},
+  r4ByStaff:{uz:"Xodimlar bo'yicha",ru:"По сотрудникам",en:"By staff",kk:"Қызметкерлер бойынша",ky:"Кызматкерлер боюнча",tg:"Аз рӯи кормандон"},
+  r4OwnRefunds:{uz:"o'z chekini: {n}",ru:"свои чеки: {n}",en:"own receipts: {n}",kk:"өз чегін: {n}",ky:"өз чегин: {n}",tg:"чеки худ: {n}"},
+  r4Reasons:{uz:"Sabablar",ru:"Причины",en:"Reasons",kk:"Себептер",ky:"Себептер",tg:"Сабабҳо"},
+  r4NoReason:{uz:"Sabab ko'rsatilmagan",ru:"Причина не указана",en:"No reason given",kk:"Себеп көрсетілмеген",ky:"Себеп көрсөтүлгөн эмес",tg:"Сабаб нишон дода нашудааст"},
+  r4RsDefect:{uz:"Sifatsiz yoki buzuq",ru:"Брак или повреждение",en:"Defective or damaged",kk:"Сапасыз немесе бүлінген",ky:"Сапатсыз же бузук",tg:"Бесифат ё вайрон"},
+  r4RsMind:{uz:"Mijoz fikrini o'zgartirdi",ru:"Клиент передумал",en:"Customer changed their mind",kk:"Клиент ойын өзгертті",ky:"Кардар оюн өзгөрттү",tg:"Мизоҷ фикрашро дигар кард"},
+  r4RsMistake:{uz:"Chek xato urilgan",ru:"Ошибка в чеке",en:"Receipt entered by mistake",kk:"Чек қате соғылған",ky:"Чек ката урулган",tg:"Чек хато зада шуд"},
+  r4RsOther:{uz:"Boshqa",ru:"Другое",en:"Other",kk:"Басқа",ky:"Башка",tg:"Дигар"},
+  r4ReasonQ:{uz:"Sabab (ixtiyoriy)",ru:"Причина (необязательно)",en:"Reason (optional)",kk:"Себеп (міндетті емес)",ky:"Себеп (милдеттүү эмес)",tg:"Сабаб (ихтиёрӣ)"},
+  r4ReasonNote:{uz:"Sabab faqat shu yangilanishdan keyingi qaytarishlarda yoziladi.",ru:"Причина записывается только для возвратов после этого обновления.",en:"Reasons are recorded only for refunds made after this update.",kk:"Себеп тек осы жаңартудан кейінгі қайтаруларда жазылады.",ky:"Себеп ушул жаңыртуудан кийинки кайтарууларда гана жазылат.",tg:"Сабаб танҳо барои баргардониҳои пас аз ҳамин навсозӣ сабт мешавад."},
+  r4ExpCount:{uz:"{n} ta xarajat",ru:"Расходов: {n}",en:"{n} expenses",kk:"{n} шығын",ky:"{n} чыгым",tg:"{n} хароҷот"},
+  r4ThisMonth:{uz:"Bu oy",ru:"Этот месяц",en:"This month",kk:"Осы ай",ky:"Бул ай",tg:"Ҳамин моҳ"},
+  r4CatShare:{uz:"Turkumlar ulushi",ru:"Доля категорий",en:"Category share",kk:"Санаттар үлесі",ky:"Категориялардын үлүшү",tg:"Ҳиссаи категорияҳо"},
+  r4Unusual:{uz:"Odatdagidan katta xarajatlar",ru:"Необычно крупные расходы",en:"Unusually large expenses",kk:"Әдеттегіден үлкен шығындар",ky:"Адаттагыдан чоң чыгымдар",tg:"Хароҷоти аз маъмул калон"},
+  r4UnusualX:{uz:"odatdagidan {x} barobar ko'p",ru:"в {x} раза больше обычного",en:"{x}× the usual",kk:"әдеттегіден {x} есе көп",ky:"адаттагыдан {x} эсе көп",tg:"{x} баробар зиёд аз маъмул"},
+  r4Visits:{uz:"{n} marta xarid",ru:"Покупок: {n}",en:"{n} purchases",kk:"{n} рет сатып алу",ky:"{n} жолу сатып алуу",tg:"{n} бор харид"},
+  r4LastBuy:{uz:"Oxirgi xarid: {d}",ru:"Последняя покупка: {d}",en:"Last purchase: {d}",kk:"Соңғы сатып алу: {d}",ky:"Акыркы сатып алуу: {d}",tg:"Хариди охирин: {d}"},
+  r4Buyers:{uz:"Xaridorlar",ru:"Покупатели",en:"Customers",kk:"Сатып алушылар",ky:"Сатып алуучулар",tg:"Харидорон"},
+  r4ShareTotal:{uz:"Jami savdoning {p}%",ru:"{p}% от всех продаж",en:"{p}% of all sales",kk:"Барлық сауданың {p}%",ky:"Бардык сооданын {p}%",tg:"{p}%-и ҳамаи фурӯш"},
+  r4CommEdit:{uz:"Sozlamalarda o'zgartirish",ru:"Изменить в настройках",en:"Change in Settings",kk:"Баптауларда өзгерту",ky:"Жөндөөлөрдө өзгөртүү",tg:"Дар танзимот иваз кардан"},
+  r4CommBad:{uz:"0 dan 100 gacha son kiriting",ru:"Введите число от 0 до 100",en:"Enter a number from 0 to 100",kk:"0-ден 100-ге дейін сан енгізіңіз",ky:"0дөн 100гө чейин сан киргизиңиз",tg:"Рақам аз 0 то 100 ворид кунед"},
+  r4CommTitle:{uz:"Sotuvdan ish haqi",ru:"Зарплата от продаж",en:"Pay from sales",kk:"Сатудан жалақы",ky:"Сатуудан эмгек акы",tg:"Музд аз фурӯш"},
+  r4AuDelete:{uz:"O'chirishlar",ru:"Удаления",en:"Deletions",kk:"Жоюлар",ky:"Өчүрүүлөр",tg:"Ҳазфҳо"},
+  r4AuPrice:{uz:"Narx va tahrir",ru:"Цены и правки",en:"Prices and edits",kk:"Баға және түзету",ky:"Баа жана оңдоо",tg:"Нарх ва таҳрир"},
+  r4AuMoney:{uz:"Qaytarish va qarz",ru:"Возвраты и долги",en:"Refunds and debts",kk:"Қайтару және қарыз",ky:"Кайтаруу жана карыз",tg:"Баргардонӣ ва қарз"},
+  r4AuLogin:{uz:"Kirishlar",ru:"Входы",en:"Logins",kk:"Кірулер",ky:"Кирүүлөр",tg:"Воридшавиҳо"},
+  r4AllStaff:{uz:"Barcha xodimlar",ru:"Все сотрудники",en:"All staff",kk:"Барлық қызметкерлер",ky:"Бардык кызматкерлер",tg:"Ҳамаи кормандон"},
+  r4FilterEmpty:{uz:"Bu filtr bo'yicha yozuv yo'q",ru:"Нет записей по этому фильтру",en:"No entries for this filter",kk:"Бұл сүзгі бойынша жазба жоқ",ky:"Бул чыпка боюнча жазуу жок",tg:"Барои ин филтр сабт нест"},
+  r4Loading:{uz:"Yuklanmoqda…",ru:"Загрузка…",en:"Loading…",kk:"Жүктелуде…",ky:"Жүктөлүүдө…",tg:"Боргирӣ…"},
+  r4Moves:{uz:"{n} ta harakat",ru:"Движений: {n}",en:"{n} moves",kk:"{n} қозғалыс",ky:"{n} кыймыл",tg:"{n} ҳаракат"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3349,7 +3486,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.29';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.30';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -11002,6 +11139,7 @@ function openProductForm(productId, draft){
 /* ---------- CUSTOMERS VIEW ---------- */
 function renderReceiptsList(){
   const container = document.getElementById('view-container');
+  if(typeof R3_ON !== 'undefined' && R3_ON){ try{ __r3Receipts(container, 'view'); return; }catch(e){ console.error('fix129 receipts', e); } }   /* fix129-rep1 */
   // Same branch-scoping as every other list in the app (this older entry
   // point — reached via the header's quick receipts icon rather than
   // through Reports — had been missed when branches were introduced, so
@@ -13269,7 +13407,9 @@ function refundSale(saleId, afterDone){
   if(sale.refunded){ showToast(tr('alreadyRefunded')); return; }
   if(!canRefund()){ showToast(tr('noPermRefund')); return; }
   if(!isWithinRefundWindow(sale)){ showToast(tr('refundWindowExpired')); return; }
+  __rfPicked = ''; try{ setTimeout(__rfInject, 0); }catch(e){}   /* fix130-rep2: ixtiyoriy sabab */
   confirmDialog(tr('refundConfirm'), ()=>{
+    const __rr = __rfPicked; __rfPicked = '';
     const __reason = 'refund';
     sale.items.forEach(it=>{
       const p = state.products.find(pr=>pr.id===it.productId);
@@ -13330,6 +13470,7 @@ function refundSale(saleId, afterDone){
     auditLog('saleRefund', `№ ${sale.receiptNumber||sale.id} — ${fmt(sale.total)}`, {saleId: sale.id});
     sale.refundedAt = new Date().toISOString();
     sale.refundedBy = state.currentStaff ? state.currentStaff.name : '';
+    if(__rr) sale.refundReason = __rr;   /* fix130-rep2 */
     sale.refundShiftId = state.currentShift ? state.currentShift.id : null; /* fix81 */
     saveProducts(); saveSales(); addSaleDoc(sale);
     showToast(tr('refundSuccess'));
@@ -14700,6 +14841,7 @@ function renderReportsMenu(container){
     })()}
     ${historyWindowDays() ? `<p class="subtle" style="margin-top:12px;font-size:12px;">${tr('historyWindowNote').replace('{days}', historyWindowDays())}</p>` : ''}
   `;
+  if(R3_ON){ try{ __r4Home(container); }catch(e){ console.error('fix130 home', e); } }   /* fix130-rep2 */
   container.querySelectorAll('[data-cat]').forEach(el=>{
     el.addEventListener('click', ()=>{
       if(el.dataset.cat === 'receipts'){ state.view = 'receipts'; renderAll(); return; }
@@ -14825,6 +14967,7 @@ function renderReportsCategory(container, cat){
   const unsoldCost = visibleProducts().reduce((s,p)=>s+Math.max(0, productInventoryCost(p)),0);
 
   if(cat==='receipts'){
+    if(R3_ON){ try{ __r3Receipts(container, 'reports'); return; }catch(e){ console.error('fix129 receipts', e); } }   /* fix129-rep1 */
     container.innerHTML = `
       ${reportsBackHeader(tr('allReceiptsTitle'))}
       <div class="search-bar">${ICONS.search}<input type="text" id="receipts-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.receiptsSearch||'')}"></div>
@@ -14883,6 +15026,7 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='expenses'){
+    if(R3_ON){ try{ __r4Expenses(container, historyCutoff); return; }catch(e){ console.error('fix130 expenses', e); } }   /* fix130-rep2 */
     const historyExpenses = visibleExpenses().filter(x=>!historyCutoff || new Date(x.date) >= historyCutoff).sort((a,b)=>new Date(b.date)-new Date(a.date));
     const totalExpenses = historyExpenses.reduce((a,x)=>a+x.amount,0);
     const byCategory = {};
@@ -14976,6 +15120,7 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='refunds'){
+    if(R3_ON){ try{ __r4Refunds(container); return; }catch(e){ console.error('fix130 refunds', e); } }   /* fix130-rep2 */
     const refundedSales = state.sales.filter(s=>s.refunded && effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId)).sort((a,b)=>new Date(b.refundedAt||b.date)-new Date(a.refundedAt||a.date));
     const refundsGrandTotal = refundedSales.reduce((a,s)=>a+s.total,0);
     container.innerHTML = `
@@ -15035,6 +15180,10 @@ function renderReportsCategory(container, cat){
         <div class="stat-card"><div class="stat-label">${tr('orderTypeTakeaway')}</div><div class="stat-value">${fmt(takeaway)}</div></div>
       </div>`;
     })() : '';
+    if(R3_ON){ try{   /* fix129-rep1: qiymatlar yuqoridagi eski hisobdan */
+      container.innerHTML = __r3TodayHtml({todayTotal, cashInRegister, todaySales, todayCash, todayCard, todayCredit, todayProfit, todayExpensesTotal, todayNetProfit, todayRefundTotal, totalDebt, todayDebtCash, todayDebtCard, startingCashToday, todayCashExpenses, todayCredPayCash, todayCashRefundsOld, todayServiceCharge, todayDeliveryFee, orderTypeHtml, activeSales});
+      bindReportsBack(); return;
+    }catch(e){ console.error('fix129 today', e); } }
     container.innerHTML = `
       ${reportsBackHeader(tr('todaySales'))}
       <div class="stat-grid">
@@ -15075,6 +15224,7 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='total'){
+    if(R3_ON){ try{ __r3Total(container, {allTotal, totalProfit, totalExpensesTotal, totalNetProfit, unsoldValue, unsoldCost, totalServiceCharge, totalDeliveryFee, activeSales, historyCutoff, profitOf}); return; }catch(e){ console.error('fix129 total', e); } }   /* fix129-rep1 */
     container.innerHTML = `
       ${reportsBackHeader(tr('totalSales'))}
       <div class="stat-grid">
@@ -15138,6 +15288,7 @@ function renderReportsCategory(container, cat){
       const rangeExpenses = visibleExpenses().filter(x=>{ const d=new Date(x.date); return d>=fromD && d<=toD; });
       const rangeExpensesTotal = rangeExpenses.filter(x=>x.category!=='purchase').reduce((a,x)=>a+(x.amount||0),0); /* fix68 */
       const rangeNetProfit = rangeProfit - rangeExpensesTotal;
+      if(R3_ON){ try{ resEl.innerHTML = __r3RangeHtml({rangeSales, rangeTotal, rangeProfit, rangeCash, rangeCard, rangeCredit, rangeServiceCharge, rangeDeliveryFee, rangeExpensesTotal, rangeNetProfit, fromD, toD}); return; }catch(e){ console.error('fix129 range', e); } }   /* fix129-rep1 */
       resEl.innerHTML = `
         <div class="row"><span class="subtle">${tr('total')}</span><strong class="stat-value-lg">${fmt(rangeTotal)}</strong></div>
         <div class="row"><span class="subtle">${tr('totalProfit')}</span><strong style="color:${rangeProfit>=0?'var(--success)':'var(--danger)'};">${fmt(rangeProfit)}</strong></div>
@@ -15172,6 +15323,7 @@ function renderReportsCategory(container, cat){
       document.getElementById('range-to').value = __ymdLocal(now);
       runRangeReport();
     });
+    if(R3_ON){ try{ __r3RangeEnhance(container, runRangeReport); }catch(e){ console.error('fix129 range+', e); } }   /* fix129-rep1 */
     return;
   }
 
@@ -15190,6 +15342,7 @@ function renderReportsCategory(container, cat){
       label: fmtDayShort(dateKey),   /* fix126-ds1b */
       value: total
     }));
+    if(R3_ON){ try{ container.innerHTML = __r3DailyHtml(dailyList, activeSales); bindReportsBack(); return; }catch(e){ console.error('fix129 daily', e); } }   /* fix129-rep1 */
     container.innerHTML = `
       ${reportsBackHeader(tr('dailyBreakdown'))}
       ${chartPoints.length>1 ? `<div class="card" style="padding:14px 10px 8px;margin-bottom:14px;">${buildLineChartSvg(chartPoints)}</div>` : ''}
@@ -15202,6 +15355,7 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='products'){
+    if(R3_ON){ try{ __r4Products(container, activeSales); return; }catch(e){ console.error('fix130 products', e); } }   /* fix130-rep2 */
     const productTotals = {};
     activeSales.forEach(s=>s.items.forEach(it=>{ productTotals[it.name]=(productTotals[it.name]||0)+it.qty; }));
     const topProducts = Object.entries(productTotals).sort((a,b)=>b[1]-a[1]).slice(0,10);
@@ -15223,19 +15377,19 @@ function renderReportsCategory(container, cat){
     const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)'};
     container.innerHTML = `${reportsBackHeader(tr('auditReport'))}<p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('auditHint')}</p>
       <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
-      <div id="audit-list"><div class="empty-state">…</div></div>`;
+      <div id="audit-list"><div class="empty-state">${R3_ON ? tr('r4Loading') : '…'}</div></div>`;
     bindReportsBack();
     loadCloudAudit(1000).then(list=>{
       const el = document.getElementById('audit-list'); if(!el) return;
       const draw = ()=>{
         const q = (document.getElementById('audit-search').value||'').toLowerCase();
-        const rows = list.filter(a=>!q || (a.detail||'').toLowerCase().includes(q) || (a.staffName||'').toLowerCase().includes(q) || tr(labels[a.action]||'').toLowerCase().includes(q));
+        const rows = list.filter(a=>!q || (a.detail||'').toLowerCase().includes(q) || (a.staffName||'').toLowerCase().includes(q) || tr(labels[a.action]||'').toLowerCase().includes(q)).filter(a=>__r4AuOk(a));   /* fix130-rep2 */
         el.innerHTML = rows.length ? rows.map((a,i)=>__auditDayHead(rows,i)+`<div class="card" style="padding:10px 12px;margin-bottom:6px;border-left:4px solid ${colors[a.action]||'var(--line)'};">
           <div class="row" style="font-size:12px;"><strong style="color:${colors[a.action]||'var(--ink)'};">${tr(labels[a.action]||a.action)}</strong><span class="subtle">${fmtDateTime(a.date)}</span></div>
           <div style="font-size:13px;margin-top:2px;">${escapeHtml(a.detail||'')}</div>
           <div class="subtle" style="font-size:11.5px;">${escapeHtml(a.staffName||'—')}</div></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`;
       };
-      document.getElementById('audit-search').addEventListener('input', draw); draw();
+      document.getElementById('audit-search').addEventListener('input', draw); if(R3_ON){ try{ __r4AuChips(list, draw); }catch(e){ console.error('fix130 audit', e); } } draw();   /* fix130-rep2 */
     });
     return;
   }
@@ -15260,7 +15414,7 @@ function renderReportsCategory(container, cat){
     container.innerHTML = `
       ${reportsBackHeader(tr('payrollReport'))}
       <div class="row" style="margin-bottom:12px;"><button class="icon-btn" id="pr-prev">&lsaquo;</button><strong style="text-transform:capitalize;">${monthName}</strong><button class="icon-btn" id="pr-next">&rsaquo;</button></div>
-      <div class="card" style="padding:10px 14px;margin-bottom:12px;font-weight:700;font-size:13px;">${tr('prTotals').replace('{a}', fmt(tot.a)).replace('{p}', fmt(tot.p)).replace('{r}', fmt(tot.r))}</div>
+      <div class="card" id="pr-totals" style="padding:10px 14px;margin-bottom:12px;font-weight:700;font-size:13px;">${tr('prTotals').replace('{a}', fmt(tot.a)).replace('{p}', fmt(tot.p)).replace('{r}', fmt(tot.r))}</div>
       ${rows.length ? rows.map(r=>`
       <div class="card" style="padding:12px 14px;margin-bottom:10px;">
         <div class="row"><strong>${escapeHtml(r.st.name)}</strong><span class="badge badge-clear" style="color:${r.remaining>0?'var(--danger)':'var(--teal)'};">${tr('prRemaining')}: ${fmt(r.remaining)}</span></div>
@@ -15285,6 +15439,7 @@ function renderReportsCategory(container, cat){
         const amt = document.getElementById('ef-amount'); if(amt && r && r.remaining > 0) amt.value = formatMoneyInputValue(r.remaining);
       }, 60);
     }));
+    if(R3_ON){ try{ __r4PayrollEnhance(container, rows, tot); }catch(e){ console.error('fix130 payroll', e); } }   /* fix130-rep2 */
     return;
   }
   if(cat==='pnl'){
@@ -15395,6 +15550,7 @@ function renderReportsCategory(container, cat){
     const totalRevenue = rows.reduce((x,r)=>x+r.revenue,0);
     const totalProfit = rows.reduce((x,r)=>x+r.profit,0);
     const chartEntries = rows.slice(0,10).filter(r=>r.profit>0).slice(0, 5).map(r=>({label:r.name, value:Math.round(r.profit), money:true}));   /* fix126-ds1b: top 5 */
+    if(R3_ON){ try{ __r4ProductProfit(container, rows, totalRevenue, totalProfit, chartEntries); return; }catch(e){ console.error('fix130 pp', e); } }   /* fix130-rep2 */
     container.innerHTML = `
       ${reportsBackHeader(tr('productProfitReport'))}
       <div class="toggle-group" style="margin-bottom:12px;">
@@ -15430,6 +15586,7 @@ function renderReportsCategory(container, cat){
     const custRanked = Object.entries(custTotals).map(([cid,total])=>({cust: state.customers.find(c=>c.id===cid), total})).filter(r=>r.cust && !r.cust.hidden).sort((a,b)=>b.total-a.total);
     const topCust = custRanked.slice(0,5);
     const worstCust = custRanked.length>1 ? custRanked[custRanked.length-1] : null;
+    if(R3_ON){ try{ __r4Customers(container, periodSales, custRanked, worstCust, activeSales); return; }catch(e){ console.error('fix130 customers', e); } }   /* fix130-rep2 */
     container.innerHTML = `
       ${reportsBackHeader(tr('topCustomersSection'))}
       <div class="toggle-group" id="top-cust-period-toggle">
@@ -15468,6 +15625,7 @@ function renderReportsCategory(container, cat){
     });
     const ranked = Object.entries(byStaff).map(([name,v])=>({name, ...v})).sort((a,b)=>b.total-a.total);
     const commissionPct = state.settings.staffCommissionPercent || 0;
+    if(R3_ON){ try{ __r4Staff(container, ranked, commissionPct); return; }catch(e){ console.error('fix130 staff', e); } }   /* fix130-rep2 */
     container.innerHTML = `
       ${reportsBackHeader(tr('staffReportSection'))}
       <div class="toggle-group" id="staff-report-period">
@@ -15515,7 +15673,7 @@ function renderReportsCategory(container, cat){
     bindReportsBack();
     const renderList = ()=>{
       const q = (document.getElementById('sm-search').value||'').toLowerCase();
-      const rows = (state.stockMoves||[]).filter(m=>effectiveBranchId(m.branchId)===effectiveBranchId(state.currentBranchId)).filter(m=>!q || (m.name||'').toLowerCase().includes(q)).slice().reverse().slice(0, 300);
+      const rows = (state.stockMoves||[]).filter(m=>effectiveBranchId(m.branchId)===effectiveBranchId(state.currentBranchId)).filter(m=>!q || (m.name||'').toLowerCase().includes(q)).filter(m=>__r4SmOk(m)).slice().reverse().slice(0, 300);   /* fix130-rep2: turi filtri */
       const byDay = {};
       rows.forEach(m=>{ const d = fmtDayLong(m.date); (byDay[d] = byDay[d]||[]).push(m); });
       document.getElementById('sm-list').innerHTML = rows.length ? Object.keys(byDay).map(day=>`
@@ -15535,6 +15693,7 @@ function renderReportsCategory(container, cat){
         </div>`; }).join('')}`).join('') : `<div class="empty-state">${tr('noData')}</div>`;
     };
     document.getElementById('sm-search').addEventListener('input', renderList);
+    if(R3_ON){ try{ __r4SmChips(container, renderList); }catch(e){ console.error('fix130 sm', e); } }   /* fix130-rep2 */
     renderList();
     return;
   }
@@ -18382,12 +18541,23 @@ function renderSettingsStaffRules(container){
       ${__ssChk('pdf', 's-staff-export-pdf', state.settings.staffCanExportDebtPdf !== false, tr('staffExportPdfLabel'))}
       <p class="subtle" style="margin:6px 0 0;">${tr('staffExportPdfHint')}</p>
     </div>
+    <div class="card" id="ss-comm" style="margin-top:14px;">
+      <h3 class="sub-title" style="margin:0 0 6px;">${tr('r4CommTitle')}</h3>
+      <div class="field" style="margin-bottom:0;">${__ssLbl('comm', tr('commissionPercent'))}<input type="number" id="s-commission" min="0" max="100" step="any" inputmode="decimal" value="${state.settings.staffCommissionPercent || 0}">${__ssErr('comm')}</div>
+      <p class="subtle" style="margin:6px 0 0;">${tr('commissionHint')}</p>
+    </div>
     <div class="card" style="margin-top:14px;">
       <p class="subtle" style="margin:0 0 ${canStaff ? '12px' : '0'};">${tr('ssStaffEachHint')}</p>
       ${canStaff ? `<button class="btn btn-outline btn-block" id="ss-open-staff">${ICONS.peopleIcon} ${tr('ssOpenStaff')}</button>` : ''}
     </div>
   `);
   __ssBindCheck('pdf', 's-staff-export-pdf', v=>{ state.settings.staffCanExportDebtPdf = v; });
+  __ssBindField('comm', 's-commission', {   /* fix130-rep2: hisobotdan ko'chdi */
+    read: raw=>{ const v = __ssNum(raw); return (isFinite(v) && v >= 0 && v <= 100) ? {ok: true, v} : {ok: false, msg: tr('r4CommBad')}; },
+    same: v=>v === (state.settings.staffCommissionPercent || 0),
+    apply: v=>{ state.settings.staffCommissionPercent = v; }
+  });
+  if(state.__r4FocusComm){ state.__r4FocusComm = false; state.__ssFocus = 'ss-comm'; __ssFocusCard(); }
   const ob = document.getElementById('ss-open-staff');
   if(ob) ob.addEventListener('click', ()=>{ state.settingsCategory = 'staff'; renderSettings(); });
 }
@@ -18488,6 +18658,7 @@ function __dpShow(inp){
   const b = inp.__dpBtn; if(!b) return;
   const t = __dpLabel(inp);
   b.querySelector('span').textContent = t || tr('dpPick');
+  if(t){ try{ const f = ()=>{ if(inp.__dpBtn === b && __dpLabel(inp) === t){ b.querySelector('span').textContent = t; __dpFit(inp, b.querySelector('span')); } }; requestAnimationFrame(f); if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>requestAnimationFrame(f)); }catch(e){} }   /* fix129-rep1: sig'masa qisqartiriladi */
   b.classList.toggle('empty', !t);
   b.disabled = !!inp.disabled;
 }
@@ -18870,6 +19041,681 @@ if(!window.__scBound){
   window.__scBound = true;
   let t = 0;
   window.addEventListener('resize', ()=>{ clearTimeout(t); t = setTimeout(()=>{ try{ if(state.view === 'sale') renderCartBar(); else __scRemove(); }catch(e){} }, 150); });
+}
+
+/* fix129-rep1: 3-bosqich — hisobotlar (1-qism). R3_ON = false bo'lsa eski ko'rinish. */
+var R3_ON = true;
+function __r3Pct(cur, base){ if(!(base > 0)) return null; return Math.round((cur - base) / base * 100); }
+function __r3Delta(p){
+  if(p === null) return '<span class="r3-delta flat">—</span>';
+  if(p > 0) return '<span class="r3-delta up">▲ ' + p + '%</span>';
+  if(p < 0) return '<span class="r3-delta down">▼ ' + Math.abs(p) + '%</span>';
+  return '<span class="r3-delta flat">0%</span>';
+}
+function __r3CmpLine(cur, base, label){
+  return '<div>' + __r3Delta(__r3Pct(cur, base)) + '<span>' + escapeHtml(label) + ': <b>' + escapeHtml(fmt(base)) + '</b></span></div>';
+}
+function __r3Sum(arr){ return arr.reduce((a, s)=>a + (s.total || 0), 0); }
+function __r3SOD(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+function __r3Chip(attr, val, label, on){ return '<button type="button" class="r3-chip' + (on ? ' on' : '') + '" ' + attr + '="' + escapeHtml(val) + '">' + escapeHtml(label) + '</button>'; }
+function __r3PayBox(cash, card, credit){
+  const tot = (cash || 0) + (card || 0) + (credit || 0);
+  const seg = [[cash, 'var(--success)', tr('cashLabel')], [card, 'var(--teal)', tr('cardLabel')], [credit, 'var(--warm)', tr('creditLabel')]];
+  const pc = (v)=>tot > 0 ? Math.round(v / tot * 100) : 0;
+  return '<div class="r3-box r3-pay"><h4>' + escapeHtml(tr('r3PayMix')) + '</h4>'
+    + '<div class="r3-bar">' + (tot > 0 ? seg.filter(x=>x[0] > 0).map(x=>'<i style="width:' + (x[0] / tot * 100).toFixed(2) + '%;background:' + x[1] + ';"></i>').join('') : '') + '</div>'
+    + seg.map(x=>'<div class="r3-leg"><span class="dot" style="background:' + x[1] + ';"></span><span class="n">' + escapeHtml(x[2]) + '</span><span class="a">' + escapeHtml(fmt(x[0] || 0)) + '</span><span class="p">' + pc(x[0] || 0) + '%</span></div>').join('')
+    + '</div>';
+}
+function __r3Kpi(cards, cls){
+  return '<div class="r3-kpi' + (cls ? ' ' + cls : '') + '">' + cards.map(c=>'<div class="stat-card"><div class="stat-label">' + escapeHtml(c[0]) + '</div><div class="stat-value"' + (c[2] ? ' style="color:' + c[2] + ';"' : '') + '>' + escapeHtml(c[1]) + '</div></div>').join('') + '</div>';
+}
+function __r3ProfitBox(profit, exp, net){
+  return '<div class="r3-box r3-pl"><h4>' + escapeHtml(tr('r3ProfitTitle')) + '</h4>'
+    + '<div class="row"><span class="subtle">' + escapeHtml(tr('r3Gross')) + '</span><strong style="color:' + (profit >= 0 ? 'var(--success)' : 'var(--danger)') + ';">' + escapeHtml(fmt(profit)) + '</strong></div>'
+    + '<div class="row"><span class="subtle">' + escapeHtml(tr('todayExpensesLabel')) + '</span><strong style="color:' + (exp > 0 ? 'var(--danger)' : 'var(--ink-soft)') + ';">' + (exp > 0 ? '-' : '') + escapeHtml(fmt(exp)) + '</strong></div>'
+    + '<div class="row tot"><span>' + escapeHtml(tr('netProfitLabel')) + '</span><strong style="color:' + (net >= 0 ? 'var(--success)' : 'var(--danger)') + ';">' + escapeHtml(fmt(net)) + '</strong></div>'
+    + '<p class="r3-hint" style="margin:6px 0 0;">' + escapeHtml(tr('r3NetHint')) + '</p></div>';
+}
+/* Ustunli grafik (vertikal): Y o'qi, ixtiyoriy o'rtacha chiziq, eng yuqori ustun ajratiladi */
+function __r3Cols(pts, o){
+  o = o || {};
+  const w = 400, h = o.h || 170, padL = 50, padR = 8, padT = 14, padB = 24, pw = w - padL - padR, ph = h - padT - padB;
+  const vals = pts.map(p=>Math.max(0, Number(p.value) || 0));
+  const maxV = __niceMax(Math.max(0, Math.max.apply(null, vals.concat([0])), o.avg || 0));
+  const n = pts.length, slot = pw / Math.max(1, n), bw = Math.max(3, Math.min(28, slot * 0.64));
+  const Y = (v)=>padT + ph - v / maxV * ph;
+  let g = '';
+  [0, 0.5, 1].forEach(f=>{ const y = (padT + ph - f * ph).toFixed(1); g += '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--v4-line, #e6ebf3)" stroke-width="1"' + (f ? ' stroke-dasharray="3 3"' : '') + '/><text x="' + (padL - 6) + '" y="' + (Number(y) + 3.5).toFixed(1) + '" font-size="10" fill="var(--ink-faint)" text-anchor="end">' + escapeHtml(fmtCompact(maxV * f)) + '</text>'; });
+  const every = o.every || Math.max(1, Math.ceil(n / 7));
+  const top = Math.max.apply(null, vals.concat([0]));
+  const bars = pts.map((p, i)=>{
+    const v = vals[i], x = padL + i * slot + (slot - bw) / 2, hh = v > 0 ? Math.max(2, padT + ph - Y(v)) : 0;
+    const showL = (i % every === 0) || (i === n - 1 && (n - 1) % every >= Math.ceil(every / 2));
+    return '<g><title>' + escapeHtml(String(p.title || p.label)) + ': ' + escapeHtml(fmt(v)) + '</title><rect x="' + x.toFixed(1) + '" y="' + (padT + ph - hh).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + hh.toFixed(1) + '" rx="3" fill="' + ((o.hlMax && v > 0 && v === top) ? 'var(--accent-dark, #1f4fb8)' : 'var(--accent)') + '"/></g>'
+      + (showL ? '<text x="' + (padL + i * slot + slot / 2).toFixed(1) + '" y="' + (h - 7) + '" font-size="10" fill="var(--ink-faint)" text-anchor="middle">' + escapeHtml(String(p.label)) + '</text>' : '');
+  }).join('');
+  let avg = '';
+  if(o.avg > 0){ const y = Y(o.avg).toFixed(1); avg = '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--warm, #d97706)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="' + (w - padR) + '" y="' + (Number(y) - 4).toFixed(1) + '" font-size="10" font-weight="700" fill="var(--warm, #d97706)" text-anchor="end">' + escapeHtml(tr('r3AvgLine')) + '</text>'; }
+  return '<svg class="ds-chart r3-cols" viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:auto;display:block;margin:0 auto;">' + g + bars + avg + '</svg>';
+}
+
+/* Sana tugmasi matni sig'masa: avval yilsiz (shu yil bo'lsa), keyin hafta kunisiz */
+function __dpFit(inp, sp){
+  if(!sp || !sp.clientWidth || sp.scrollWidth <= sp.clientWidth) return;
+  const dt = inp.dataset.dpType === 'datetime-local', p = __dpParse(__dpDesc.get.call(inp), dt); if(!p) return;
+  const L = __dtL(), cy = p.y === new Date().getFullYear(), tail = dt ? __p2(p.h) + ':' + __p2(p.mi) : L.w[__dpWd(p)];
+  const opts = [__dtDay(p.y, p.mo, p.d, !cy) + ', ' + tail, __dtDay(p.y, p.mo, p.d, !cy) + (dt ? ', ' + tail : ''), __dtDay(p.y, p.mo, p.d, false) + (dt ? ', ' + tail : ''), __dtDay(p.y, p.mo, p.d, false)];
+  for(let i = 0; i < opts.length; i++){ sp.textContent = opts[i]; if(sp.scrollWidth <= sp.clientWidth) return; }
+}
+
+/* ---- 3.1 Kvitansiyalar ---- */
+function __r3Receipts(container, mode){
+  const F = state.__r3Rc || (state.__r3Rc = {p: 'all', pay: '', cashier: ''});
+  const sortedSales = state.sales.filter(s=>effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId)).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const cashiers = Array.from(new Set(sortedSales.map(s=>s.cashierName).filter(Boolean))).sort();
+  if(F.cashier && cashiers.indexOf(F.cashier) < 0) F.cashier = '';
+  const hasMixed = sortedSales.some(s=>s.paymentType === 'mixed'), hasRef = sortedSales.some(s=>s.refunded);
+  if(F.pay === 'mixed' && !hasMixed) F.pay = ''; if(F.pay === 'refunded' && !hasRef) F.pay = '';
+  const head = mode === 'reports' ? reportsBackHeader(tr('allReceiptsTitle')) : `<div class="back-row"><button id="receipts-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('allReceiptsTitle')}</span></div>`;
+  const P = [['today', tr('r3PToday')], ['yest', tr('r3PYest')], ['7', tr('r3P7')], ['30', tr('r3P30')], ['all', tr('r3PAll')]];
+  const PAY = [['', tr('r3AllPay')], ['cash', tr('cashLabel')], ['card', tr('cardLabel')], ['credit', tr('creditLabel')]].concat(hasMixed ? [['mixed', tr('mixPay')]] : []).concat(hasRef ? [['refunded', tr('refunded')]] : []);
+  container.innerHTML = head
+    + `<div class="search-bar">${ICONS.search}<input type="text" id="receipts-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.receiptsSearch||'')}"></div>`
+    + '<div class="r3-chips" id="r3-rc-p">' + P.map(x=>__r3Chip('data-r3p', x[0], x[1], F.p === x[0])).join('') + '</div>'
+    + '<div class="r3-chips" id="r3-rc-pay">' + PAY.map(x=>__r3Chip('data-r3pay', x[0], x[1], F.pay === x[0])).join('')
+    + (cashiers.length > 1 ? '<select class="r3-sel" id="r3-rc-cashier"><option value="">' + escapeHtml(tr('r3AllCashiers')) + '</option>' + cashiers.map(c=>'<option value="' + escapeHtml(c) + '"' + (F.cashier === c ? ' selected' : '') + '>' + escapeHtml(c) + '</option>').join('') + '</select>' : '')
+    + '</div><div id="r3-rc-sum"></div><div id="receipts-list"></div><div id="receipts-load-more-slot"></div>';
+  let windowDays = 10;
+  function range(){
+    const d0 = __r3SOD(new Date());
+    if(F.p === 'today') return [d0, null];
+    if(F.p === 'yest'){ const y = new Date(d0); y.setDate(y.getDate() - 1); return [y, d0]; }
+    if(F.p === '7' || F.p === '30'){ const x = new Date(d0); x.setDate(x.getDate() - (F.p === '7' ? 6 : 29)); return [x, null]; }
+    return [null, null];
+  }
+  function base(){
+    const r = range();
+    return sortedSales.filter(s=>{
+      const d = new Date(s.date);
+      if(r[0] && d < r[0]) return false; if(r[1] && d >= r[1]) return false;
+      if(F.pay === 'refunded'){ if(!s.refunded) return false; } else if(F.pay && s.paymentType !== F.pay) return false;
+      if(F.cashier && s.cashierName !== F.cashier) return false;
+      return true;
+    });
+  }
+  function searched(list){
+    const q = (state.receiptsSearch || '').toLowerCase();
+    if(!q) return list;
+    return list.filter(s=>
+      String(s.receiptNumber||'').toLowerCase().includes(q) ||
+      (s.items||[]).some(it=>String(it.name||'').toLowerCase().includes(q)) ||
+      String(s.cashierName||'').toLowerCase().includes(q) || String(((s.customerId && state.customers.find(c=>c.id===s.customerId))||{}).name||'').toLowerCase().includes(q)
+    );
+  }
+  function draw(){
+    const all = searched(base()), q = (state.receiptsSearch || '').trim();
+    const ok = all.filter(s=>!s.refunded), refN = all.length - ok.length;
+    const sumEl = document.getElementById('r3-rc-sum');
+    if(sumEl) sumEl.innerHTML = all.length ? '<div class="r3-sum"><div><div class="l">' + escapeHtml(tr('total')) + '</div><div class="v" data-r3-rc-total="' + Math.round(__r3Sum(ok)) + '">' + escapeHtml(fmt(__r3Sum(ok))) + '</div></div><div class="r">' + escapeHtml(tr('r3RcSum').replace('{n}', all.length)) + (refN ? '<br>' + escapeHtml(tr('r3RcRef').replace('{n}', refN)) : '') + '</div></div>' + (refN ? '<p class="r3-hint">' + escapeHtml(tr('r3RcTotalHint')) + '</p>' : '') : '';
+    let visible = all;
+    const slot = document.getElementById('receipts-load-more-slot');
+    if(!q){
+      const days = []; const seen = {};
+      for(const s of all){ const k = new Date(s.date).toDateString(); if(!seen[k]){ seen[k] = 1; days.push(k); if(days.length > windowDays) break; } }
+      if(days.length > windowDays){ const keep = {}; days.slice(0, windowDays).forEach(k=>keep[k] = 1); visible = all.filter(s=>keep[new Date(s.date).toDateString()]); }
+    }
+    renderReceiptsListItems(visible);
+    __r3DayHeads(document.getElementById('receipts-list'), visible, all);
+    if(slot){
+      if(visible.length < all.length){
+        slot.innerHTML = `<button class="btn btn-outline btn-block" id="load-more-receipts-btn" style="margin-top:10px;">${tr('loadMoreReceiptsBtn')}</button>`;
+        document.getElementById('load-more-receipts-btn').addEventListener('click', ()=>{ windowDays += 10; draw(); });
+      } else slot.innerHTML = '';
+    }
+  }
+  draw();
+  if(mode === 'reports') bindReportsBack();
+  else document.getElementById('receipts-back-btn').addEventListener('click', ()=>{
+    state.view = (isAdmin()||hasPerm('reports'))?'reports':'sale';
+    state.reportsCategory = null;
+    renderAll();
+  });
+  document.getElementById('receipts-search-input').addEventListener('input', (e)=>{ state.receiptsSearch = e.target.value; windowDays = 10; draw(); });
+  container.querySelectorAll('[data-r3p]').forEach(b=>b.addEventListener('click', ()=>{ F.p = b.dataset.r3p; windowDays = 10; container.querySelectorAll('[data-r3p]').forEach(x=>x.classList.toggle('on', x === b)); draw(); }));
+  container.querySelectorAll('[data-r3pay]').forEach(b=>b.addEventListener('click', ()=>{ F.pay = b.dataset.r3pay; windowDays = 10; container.querySelectorAll('[data-r3pay]').forEach(x=>x.classList.toggle('on', x === b)); draw(); }));
+  const cs = document.getElementById('r3-rc-cashier');
+  if(cs) cs.addEventListener('change', ()=>{ F.cashier = cs.value; windowDays = 10; draw(); });
+}
+function __r3DayHeads(listEl, sales, all){
+  if(!listEl) return;
+  const byId = {}; sales.forEach(s=>{ byId[s.id] = s; });
+  const tot = {}; all.forEach(s=>{ const k = new Date(s.date).toDateString(); const t = tot[k] || (tot[k] = {n: 0, sum: 0}); t.n++; if(!s.refunded) t.sum += s.total || 0; });
+  let last = null;
+  Array.prototype.slice.call(listEl.children).forEach(card=>{
+    const id = card.getAttribute && card.getAttribute('data-receipt-toggle'); const s = id && byId[id]; if(!s) return;
+    const k = new Date(s.date).toDateString();
+    if(k === last) return; last = k;
+    const t = tot[k] || {n: 0, sum: 0}, h = document.createElement('div');
+    h.className = 'r3-dayh'; h.setAttribute('data-r3-day', k);
+    h.innerHTML = '<b>' + escapeHtml(fmtDayLong(s.date)) + '</b><span>' + escapeHtml(tr('r3RcSum').replace('{n}', t.n)) + ' · ' + escapeHtml(fmt(t.sum)) + '</span>';
+    listEl.insertBefore(h, card);
+  });
+}
+
+/* ---- 3.2 Bugungi savdo ---- */
+function __r3TodayHtml(V){
+  const now = new Date(), mins = now.getHours() * 60 + now.getMinutes();
+  const dayAgo = (n)=>{ const d = __r3SOD(now); d.setDate(d.getDate() - n); return d.toDateString(); };
+  const upToNow = (s)=>{ const d = new Date(s.date); return d.getHours() * 60 + d.getMinutes() <= mins; };
+  const yKey = dayAgo(1), wKey = dayAgo(7);
+  const ySoFar = __r3Sum(V.activeSales.filter(s=>new Date(s.date).toDateString() === yKey && upToNow(s)));
+  const wSoFar = __r3Sum(V.activeSales.filter(s=>new Date(s.date).toDateString() === wKey && upToNow(s)));
+  const n = V.todaySales.length, avg = n ? V.todayTotal / n : 0;
+  const canExp = canManageExpenses();
+  /* soatlar */
+  let hourHtml = '';
+  if(n){
+    const hrs = {}; V.todaySales.forEach(s=>{ const hh = new Date(s.date).getHours(); hrs[hh] = (hrs[hh] || 0) + (s.total || 0); });
+    const ks = Object.keys(hrs).map(Number);
+    let a = Math.min.apply(null, ks), b = Math.max(Math.max.apply(null, ks), now.getHours());
+    while(b - a < 5){ if(a > 0) a--; else b++; }
+    const pts = []; for(let hh = a; hh <= b; hh++) pts.push({label: String(hh), title: __p2(hh) + ':00–' + __p2((hh + 1) % 24) + ':00', value: hrs[hh] || 0});
+    const peak = ks.reduce((m, k)=>hrs[k] > hrs[m] ? k : m, ks[0]);
+    hourHtml = '<h3 class="sub-title">' + escapeHtml(tr('r3ByHour')) + '</h3><div class="card r3-hours" style="padding:14px 10px 8px;margin-bottom:6px;">' + __r3Cols(pts, {hlMax: true, every: Math.max(1, Math.ceil(pts.length / 8))}) + '</div>'
+      + '<p class="r3-hint" style="margin-bottom:12px;">' + escapeHtml(tr('r3Peak').replace('{h}', __p2(peak) + ':00–' + __p2((peak + 1) % 24) + ':00')) + '</p>';
+  }
+  const other = [];
+  other.push(`<div class="stat-card" style="background:var(--danger-bg);"><div class="stat-label td-label"><span>${tr('totalDebt')}</span>${__tdEyeBtn()}</div><div class="stat-value" style="color:var(--danger);" data-td-amount="${Math.round(V.totalDebt||0)}">${__tdValue(V.totalDebt)}</div></div>`);
+  if(V.todayDebtCash || V.todayDebtCard) other.push(`<div class="stat-card" style="background:var(--teal-bg);"><div class="stat-label">${tr('debtPaymentsToday')}</div><div class="stat-value" style="color:var(--success);">${fmt(V.todayDebtCash + V.todayDebtCard)}</div><div class="subtle" style="font-size:11px;">${tr('cashLabel')}: ${fmt(V.todayDebtCash)} · ${tr('cardLabel')}: ${fmt(V.todayDebtCard)}</div></div>`);
+  if(V.todayRefundTotal) other.push(`<div class="stat-card" style="background:var(--warm-bg);"><div class="stat-label">${tr('refundsTotal')}</div><div class="stat-value" style="color:var(--warm);">${fmt(V.todayRefundTotal)}</div></div>`);
+  return `
+      ${reportsBackHeader(tr('todaySales'))}
+      <div class="r3-hero" data-r3="today-hero">
+        <div class="h-l">${tr('total')}</div>
+        <div class="h-v" data-r3-v="${Math.round(V.todayTotal)}">${fmt(V.todayTotal)}</div>
+        <div class="r3-cmp">${__r3CmpLine(V.todayTotal, ySoFar, tr('r3VsYest'))}${__r3CmpLine(V.todayTotal, wSoFar, tr('r3VsWeekAgo'))}</div>
+      </div>
+      ${__r3Kpi([[tr('r3Profit'), fmt(V.todayProfit), V.todayProfit >= 0 ? 'var(--success)' : 'var(--danger)'], [tr('dsReceiptsCount'), String(n)], [tr('r3AvgCheck'), fmt(avg)]])}
+      ${__r3PayBox(V.todayCash, V.todayCard, V.todayCredit)}
+      ${canExp ? __r3ProfitBox(V.todayProfit, V.todayExpensesTotal, V.todayNetProfit) : ''}
+      <h3 class="sub-title">${tr('cashInRegisterLabel')}</h3>
+      <div class="card" style="padding:10px 14px;margin-bottom:12px;">
+        <div class="row" style="justify-content:space-between"><span class="subtle">${tr('startingCash')}</span><strong>${fmt(V.startingCashToday)}</strong></div>
+        <div class="row" style="justify-content:space-between"><span class="subtle">+ ${tr('cashLabel')}</span><strong>${fmt(V.todayCash)}</strong></div>
+        ${V.todayCashExpenses>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">- ${tr('cashExpensesLabel')}</span><strong style="color:var(--danger);">${fmt(V.todayCashExpenses)}</strong></div>` : ''}
+        ${__cxRowsHtml({debtCash: V.todayDebtCash, credCash: V.todayCredPayCash, refundCash: V.todayCashRefundsOld})}
+        <div class="row" style="justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;margin-top:4px;"><span style="font-weight:800;">${tr('expectedCash')}</span><strong style="color:var(--success);font-size:17px;" data-r3-cash="${Math.round(V.cashInRegister)}">${fmt(V.cashInRegister)}</strong></div>
+      </div>
+      ${hourHtml}
+      <h3 class="sub-title">${tr('r3DebtsRefunds')}</h3>
+      <div class="stat-grid">${other.join('')}</div>
+      ${(V.todayServiceCharge || V.todayDeliveryFee) ? `
+      <h3 class="sub-title">${tr('additionalChargesSection')}</h3>
+      <div class="stat-grid">
+        ${V.todayServiceCharge ? `<div class="stat-card"><div class="stat-label">${tr('serviceCharge')}</div><div class="stat-value">${fmt(V.todayServiceCharge)}</div></div>` : ''}
+        ${V.todayDeliveryFee ? `<div class="stat-card"><div class="stat-label">${tr('deliveryFee')}</div><div class="stat-value">${fmt(V.todayDeliveryFee)}</div></div>` : ''}
+      </div>
+      ` : ''}
+      ${V.orderTypeHtml}
+    `;
+}
+
+/* ---- 3.3 Umumiy savdo ---- */
+function __r3PeriodRange(p, shiftBack){
+  const now = new Date(), d0 = __r3SOD(now);
+  let from;
+  if(p === 'today') from = d0;
+  else if(p === 'week'){ const day = now.getDay(); from = new Date(d0); from.setDate(d0.getDate() - (day === 0 ? 6 : day - 1)); }
+  else if(p === 'month') from = new Date(now.getFullYear(), now.getMonth(), 1);
+  else if(p === 'year') from = new Date(now.getFullYear(), 0, 1);
+  else return null;
+  if(!shiftBack) return [from, now];
+  if(p === 'today'){ const a = new Date(from); a.setDate(a.getDate() - 1); const b = new Date(now); b.setDate(b.getDate() - 1); return [a, b]; }
+  if(p === 'week'){ const a = new Date(from); a.setDate(a.getDate() - 7); const b = new Date(now); b.setDate(b.getDate() - 7); return [a, b]; }
+  if(p === 'month'){ const a = new Date(now.getFullYear(), now.getMonth() - 1, 1); const last = new Date(now.getFullYear(), now.getMonth(), 0).getDate(); const b = new Date(now.getFullYear(), now.getMonth() - 1, Math.min(now.getDate(), last), now.getHours(), now.getMinutes(), now.getSeconds()); return [a, b]; }
+  const a = new Date(now.getFullYear() - 1, 0, 1); const b = new Date(now); b.setFullYear(now.getFullYear() - 1); return [a, b];
+}
+function __r3Total(container, A){
+  const p = state.__r3TotP || 'all';
+  const inR = (iso, r)=>{ const d = new Date(iso); return d >= r[0] && d <= r[1]; };
+  const calc = (r)=>{
+    const sales = r ? A.activeSales.filter(s=>inR(s.date, r)) : A.activeSales;
+    const exps = visibleExpenses().filter(x=>(!A.historyCutoff || new Date(x.date) >= A.historyCutoff) && (!r || inR(x.date, r)));
+    const total = sales.reduce((a,s)=>a+s.total,0), profit = A.profitOf(sales);
+    const exp = exps.filter(x=>x.category!=='purchase').reduce((a,x)=>a+(x.amount||0),0);
+    return {sales, total, profit, exp, net: profit - exp, service: sales.reduce((a,s)=>a+(s.serviceChargeAmount||0),0), delivery: sales.reduce((a,s)=>a+(s.deliveryFee||0),0)};
+  };
+  let C;
+  if(p === 'all') C = {sales: A.activeSales, total: A.allTotal, profit: A.totalProfit, exp: A.totalExpensesTotal, net: A.totalNetProfit, service: A.totalServiceCharge, delivery: A.totalDeliveryFee};
+  else C = calc(__r3PeriodRange(p, false));
+  const P = [['today', tr('r3PToday')], ['week', tr('r3PWeek')], ['month', tr('r3PMonth')], ['year', tr('r3PYear')], ['all', tr('r3PAll')]];
+  let cmp = '';
+  if(p !== 'all'){
+    const prev = calc(__r3PeriodRange(p, true));
+    const lbl = {today: 'r3VsYest', week: 'r3VsPrevW', month: 'r3VsPrevM', year: 'r3VsPrevY'}[p];
+    cmp = '<div class="r3-cmp">' + __r3CmpLine(C.total, prev.total, tr(lbl)) + '</div>';
+  }
+  const n = C.sales.length, canExp = canManageExpenses();
+  container.innerHTML = `
+      ${reportsBackHeader(tr('totalSales'))}
+      <div class="r3-chips" id="r3-tot-p">${P.map(x=>__r3Chip('data-r3tp', x[0], x[1], p === x[0])).join('')}</div>
+      <div class="r3-hero" data-r3="total-hero">
+        <div class="h-l">${tr('totalSales')}</div>
+        <div class="h-v" data-r3-v="${Math.round(C.total)}">${fmt(C.total)}</div>
+        <div class="h-n">${escapeHtml(tr('r3RcSum').replace('{n}', n))} · ${escapeHtml(tr('r3AvgCheck'))}: ${escapeHtml(fmt(n ? C.total / n : 0))}</div>
+        ${cmp}
+      </div>
+      ${canExp ? __r3ProfitBox(C.profit, C.exp, C.net).replace(escapeHtml(tr('todayExpensesLabel')), escapeHtml(tr('totalExpensesLabel'))) : __r3Kpi([[tr('totalProfit'), fmt(C.profit), C.profit >= 0 ? 'var(--success)' : 'var(--danger)']], 'k2')}
+      ${__r3PayBox(sumSalesByMethod(C.sales, 'cash'), sumSalesByMethod(C.sales, 'card'), sumSalesByMethod(C.sales, 'credit'))}
+      <h3 class="sub-title">${tr('r3StockNow')}</h3>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-label">${tr('unsoldInventoryValue')}</div><div class="stat-value" style="color:var(--accent-dark);">${fmt(A.unsoldValue)}</div></div>
+        <div class="stat-card"><div class="stat-label">${tr('unsoldInventoryCost')}</div><div class="stat-value">${fmt(A.unsoldCost)}</div></div>
+      </div>
+      ${(C.service || C.delivery) ? `
+      <h3 class="sub-title">${tr('additionalChargesSection')}</h3>
+      <div class="stat-grid">
+        ${C.service ? `<div class="stat-card"><div class="stat-label">${tr('serviceCharge')}</div><div class="stat-value">${fmt(C.service)}</div></div>` : ''}
+        ${C.delivery ? `<div class="stat-card"><div class="stat-label">${tr('deliveryFee')}</div><div class="stat-value">${fmt(C.delivery)}</div></div>` : ''}
+      </div>` : ''}
+    `;
+  bindReportsBack();
+  container.querySelectorAll('[data-r3tp]').forEach(b=>b.addEventListener('click', ()=>{ state.__r3TotP = b.dataset.r3tp; renderReports(); }));
+}
+
+/* ---- 3.4 Sana oralig'i ---- */
+function __r3RangeHtml(V){
+  const n = V.rangeSales.length, canExp = canManageExpenses();
+  const days = Math.round((__r3SOD(V.toD) - __r3SOD(V.fromD)) / 86400000) + 1;
+  let chart = '';
+  if(days >= 2 && days <= 62){
+    const m = {}; V.rangeSales.forEach(s=>{ const k = new Date(s.date).toDateString(); m[k] = (m[k] || 0) + (s.total || 0); });
+    const pts = []; const d = __r3SOD(V.fromD);
+    for(let i = 0; i < days; i++){ pts.push({label: days <= 8 ? (__dtL().ws[d.getDay()] || '') : String(d.getDate()), title: fmtDayLong(d), value: m[d.toDateString()] || 0}); d.setDate(d.getDate() + 1); }
+    chart = '<h3 class="sub-title">' + escapeHtml(tr('r3ByDay')) + '</h3><div class="card" style="padding:14px 10px 8px;margin-bottom:12px;">' + __r3Cols(pts, {avg: V.rangeTotal / days, every: Math.max(1, Math.ceil(days / 8))}) + '</div>';
+  }
+  return `
+        <div class="r3-hero" data-r3="range-hero">
+          <div class="h-l">${tr('total')}</div>
+          <div class="h-v" data-r3-v="${Math.round(V.rangeTotal)}">${fmt(V.rangeTotal)}</div>
+          <div class="h-n">${escapeHtml(tr('r3RcSum').replace('{n}', n))} · ${escapeHtml(tr('r3AvgCheck'))}: ${escapeHtml(fmt(n ? V.rangeTotal / n : 0))}</div>
+        </div>
+        ${canExp ? __r3ProfitBox(V.rangeProfit, V.rangeExpensesTotal, V.rangeNetProfit).replace(escapeHtml(tr('todayExpensesLabel')), escapeHtml(tr('rangeExpensesLabel'))) : __r3Kpi([[tr('totalProfit'), fmt(V.rangeProfit), V.rangeProfit >= 0 ? 'var(--success)' : 'var(--danger)']], 'k2')}
+        ${__r3PayBox(V.rangeCash, V.rangeCard, V.rangeCredit)}
+        ${chart}
+        ${(V.rangeServiceCharge || V.rangeDeliveryFee) ? `<div class="r3-box">
+          ${V.rangeServiceCharge ? `<div class="row"><span class="subtle">${tr('serviceCharge')}</span><span>${fmt(V.rangeServiceCharge)}</span></div>` : ''}
+          ${V.rangeDeliveryFee ? `<div class="row"><span class="subtle">${tr('deliveryFee')}</span><span>${fmt(V.rangeDeliveryFee)}</span></div>` : ''}
+        </div>` : ''}
+      `;
+}
+function __r3RangeEnhance(container, run){
+  const fromEl = document.getElementById('range-from'), toEl = document.getElementById('range-to');
+  const wk = document.getElementById('range-preset-week'), mo = document.getElementById('range-preset-month');
+  const res = document.getElementById('range-result');
+  if(!fromEl || !toEl || !wk || !mo || !res) return;
+  const fr = fromEl.closest('.btn-row'); if(fr) fr.classList.add('r3-range-row');
+  const card = res.closest('.card'); if(card && card.parentNode){ res.style.marginTop = '12px'; card.parentNode.insertBefore(res, card.nextSibling); }
+  const row = wk.parentNode;
+  const mk = (id, label)=>{ const b = document.createElement('button'); b.type = 'button'; b.className = 'fav-chip'; b.id = id; b.textContent = label; return b; };
+  const bT = mk('range-preset-today', tr('r3PToday')), bY = mk('range-preset-yest', tr('r3PYest')), bLW = mk('range-preset-lastweek', tr('r3PLastWeek')), bLM = mk('range-preset-lastmonth', tr('r3PLastMonth'));
+  row.insertBefore(bT, wk); row.insertBefore(bY, wk); row.insertBefore(bLW, mo); row.appendChild(bLM);
+  row.style.flexWrap = 'wrap';
+  const all = [bT, bY, wk, bLW, mo, bLM];
+  const mark = (b)=>all.forEach(x=>x.classList.toggle('fav-chip-active', x === b));
+  const save = ()=>{ state.__r3Range = {from: fromEl.value, to: toEl.value}; };
+  const set = (a, b, btn)=>{ fromEl.value = __ymdLocal(a); toEl.value = __ymdLocal(b); mark(btn); save(); run(); };
+  const d0 = ()=>__r3SOD(new Date());
+  bT.addEventListener('click', ()=>set(d0(), d0(), bT));
+  bY.addEventListener('click', ()=>{ const y = d0(); y.setDate(y.getDate() - 1); set(y, y, bY); });
+  bLW.addEventListener('click', ()=>{ const n = d0(), day = n.getDay(); const mon = new Date(n); mon.setDate(n.getDate() - (day === 0 ? 6 : day - 1) - 7); const sun = new Date(mon); sun.setDate(mon.getDate() + 6); set(mon, sun, bLW); });
+  bLM.addEventListener('click', ()=>{ const n = d0(); set(new Date(n.getFullYear(), n.getMonth() - 1, 1), new Date(n.getFullYear(), n.getMonth(), 0), bLM); });
+  wk.addEventListener('click', ()=>{ mark(wk); save(); });
+  mo.addEventListener('click', ()=>{ mark(mo); save(); });
+  [fromEl, toEl].forEach(el=>el.addEventListener('change', ()=>{ mark(null); }));
+  const vb = document.getElementById('view-range-btn'); if(vb) vb.addEventListener('click', save);
+  const R = state.__r3Range;
+  if(R && R.from && R.to){ fromEl.value = R.from; toEl.value = R.to; run(); }
+  else if(!fromEl.value && !toEl.value) wk.click();
+}
+
+/* ---- 3.5 Kunlar bo'yicha ---- */
+function __r3DailyHtml(dailyList, activeSales){
+  if(!dailyList.length) return `${reportsBackHeader(tr('dailyBreakdown'))}<div><div class="empty-state">${tr('noData')}</div></div>`;
+  const cnt = {}; activeSales.forEach(s=>{ const k = new Date(s.date).toDateString(); cnt[k] = (cnt[k] || 0) + 1; });
+  const vals = dailyList.map(x=>x[1]), avg = vals.reduce((a, b)=>a + b, 0) / vals.length;
+  const maxV = Math.max.apply(null, vals), minV = Math.min.apply(null, vals);
+  const best = dailyList.find(x=>x[1] === maxV), worst = dailyList.slice().reverse().find(x=>x[1] === minV);
+  const pts = dailyList.slice().reverse().map(([k, v])=>({label: fmtDayShort(k), title: fmtDayLong(k), value: v}));
+  const many = dailyList.length > 1;
+  return `
+      ${reportsBackHeader(tr('dailyBreakdown'))}
+      <div class="r3-kpi">
+        <div class="stat-card"><div class="stat-label">${tr('r3DayAvg')}</div><div class="stat-value">${fmt(avg)}</div><div class="subtle" style="font-size:11.5px;">${escapeHtml(tr('r3NDays').replace('{n}', dailyList.length))}</div></div>
+        <div class="stat-card"><div class="stat-label">${tr('r3Best')}</div><div class="stat-value" style="color:var(--success);">${fmt(best[1])}</div><div class="subtle" style="font-size:11.5px;">${escapeHtml(fmtDayShort(best[0]))}</div></div>
+        <div class="stat-card"><div class="stat-label">${tr('r3Worst')}</div><div class="stat-value" style="color:var(--danger);">${fmt(worst[1])}</div><div class="subtle" style="font-size:11.5px;">${escapeHtml(fmtDayShort(worst[0]))}</div></div>
+      </div>
+      ${many ? `<div class="card" style="padding:14px 10px 8px;margin-bottom:6px;">${__r3Cols(pts, {avg: avg, every: Math.max(1, Math.ceil(pts.length / 6))})}</div>` : ''}
+      <p class="r3-hint" style="margin-bottom:12px;">${escapeHtml(tr('r3DaysNote').replace('{n}', dailyList.length))}</p>
+      <div>${dailyList.map(([k, total])=>`
+        <div class="list-item"><div class="info" style="min-width:0;"><div class="name">${fmtDayLong(k)}${many && k === best[0] ? `<span class="r3-tag best">${escapeHtml(tr('r3Best'))}</span>` : ''}${many && k === worst[0] && k !== best[0] ? `<span class="r3-tag worst">${escapeHtml(tr('r3Worst'))}</span>` : ''}</div>
+          <div class="r3-mini"><i style="width:${maxV > 0 ? (total / maxV * 100).toFixed(1) : 0}%;"></i></div>
+          <div class="meta">${escapeHtml(tr('r3RcSum').replace('{n}', cnt[k] || 0))}</div></div><span class="badge badge-clear">${fmt(total)}</span></div>
+      `).join('')}</div>
+    `;
+}
+
+/* fix130-rep2: 3-bosqich — hisobotlar (2-qism) */
+function __r4Med(a){ if(!a.length) return 0; const b = a.slice().sort((x, y)=>x - y), m = Math.floor(b.length / 2); return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; }
+function __r4Pc(v, t){ return t > 0 ? Math.round(v / t * 100) : 0; }
+function __r4ShareRow(label, amount, total, color){
+  const p = total > 0 ? Math.max(0, amount / total * 100) : 0;
+  return '<div class="r4-share"><span class="n" title="' + escapeHtml(label) + '">' + escapeHtml(label) + '</span><span class="b"><i style="width:' + p.toFixed(1) + '%;background:' + (color || 'var(--accent)') + ';"></i></span><span class="a">' + escapeHtml(fmt(amount)) + '</span><span class="p">' + Math.round(p) + '%</span></div>';
+}
+/* ---- 3.6 Ko'p sotilgan ---- */
+function __r4Products(container, activeSales){
+  const F = state.__r4Prod || (state.__r4Prod = {m: 'qty', p: 'all', all: false});
+  const rg = F.p === 'all' ? null : __r3PeriodRange(F.p, false);
+  const sales = rg ? activeSales.filter(s=>{ const d = new Date(s.date); return d >= rg[0] && d <= rg[1]; }) : activeSales;
+  const agg = {};
+  sales.forEach(s=>s.items.forEach(it=>{ const a = agg[it.name] || (agg[it.name] = {name: it.name, qty: 0, sum: 0, profit: 0}); a.qty += it.qty; a.sum += (it.price || 0) * it.qty; a.profit += saleItemProfit(it); }));
+  const key = F.m;
+  const rows = Object.values(agg).sort((a, b)=>b[key] - a[key]);
+  const tot = rows.reduce((x, r)=>x + Math.max(0, r[key]), 0);
+  let cum = 0; const abc = {a: 0, b: 0, c: 0};
+  rows.forEach(r=>{ const v = Math.max(0, r[key]); const before = tot > 0 ? cum / tot : 1; cum += v; r.abc = (v <= 0 || tot <= 0) ? 'c' : (before < 0.8 ? 'a' : (before < 0.95 ? 'b' : 'c')); abc[r.abc]++; });
+  const val = (r)=>key === 'qty' ? `${r.qty} ${tr('soldCount')}` : fmt(r[key]);
+  const chart = rows.filter(r=>r[key] > 0).slice(0, 5).map(r=>key === 'qty' ? {label: r.name, value: r.qty} : {label: r.name, value: Math.round(r[key]), money: true});
+  const shown = F.all ? rows : rows.slice(0, 10);
+  const P = [['today', tr('r3PToday')], ['week', tr('r3PWeek')], ['month', tr('r3PMonth')], ['all', tr('r3PAll')]];
+  const M = [['qty', tr('r4Qty')], ['sum', tr('r4Sum')], ['profit', tr('r3Profit')]];
+  container.innerHTML = `
+      ${reportsBackHeader(tr('topProducts'))}
+      <div class="toggle-group" style="margin-bottom:10px;">${M.map(x=>`<div class="toggle-opt ${F.m === x[0] ? 'active' : ''}" data-r4m="${x[0]}">${escapeHtml(x[1])}</div>`).join('')}</div>
+      <div class="r3-chips">${P.map(x=>__r3Chip('data-r4p', x[0], x[1], F.p === x[0])).join('')}</div>
+      ${chart.length ? `<div class="card" style="padding:14px 12px;margin-bottom:10px;overflow-x:auto;">${buildBarChartSvg(chart)}</div>` : ''}
+      ${rows.length ? `<div class="r3-box" style="padding:10px 14px;"><div style="display:flex;gap:16px;font-size:13px;font-weight:800;margin-bottom:4px;"><span><span class="r4-abc a">A</span>${abc.a}</span><span><span class="r4-abc b">B</span>${abc.b}</span><span><span class="r4-abc c">C</span>${abc.c}</span></div><p class="r3-hint" style="margin:0;">${escapeHtml(tr('r4AbcHint'))}</p></div>` : ''}
+      <div>${rows.length ? shown.map(r=>`
+        <div class="list-item"><div class="info" style="min-width:0;"><div class="name"><span class="r4-abc ${r.abc}">${r.abc.toUpperCase()}</span>${escapeHtml(r.name)}</div>
+          <div class="meta">${r.qty} ${tr('soldCount')} &middot; ${tr('ppRevenue')}: ${fmt(r.sum)} &middot; ${tr('ppProfit')}: ${fmt(r.profit)}</div></div>
+          <span class="badge badge-clear" style="white-space:nowrap;${key === 'profit' && r.profit < 0 ? 'color:var(--danger);' : ''}">${val(r)}</span></div>
+      `).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>
+      ${rows.length > shown.length ? `<button class="btn btn-outline btn-block" id="r4-prod-all" style="margin-top:10px;">${escapeHtml(tr('r4ShowAll').replace('{n}', rows.length))}</button>` : ''}
+    `;
+  bindReportsBack();
+  container.querySelectorAll('[data-r4m]').forEach(b=>b.addEventListener('click', ()=>{ F.m = b.dataset.r4m; renderReports(); }));
+  container.querySelectorAll('[data-r4p]').forEach(b=>b.addEventListener('click', ()=>{ F.p = b.dataset.r4p; F.all = false; renderReports(); }));
+  const ab = document.getElementById('r4-prod-all'); if(ab) ab.addEventListener('click', ()=>{ F.all = true; renderReports(); });
+}
+/* ---- 3.7 Mahsulot foydasi ---- */
+function __r4ProductProfit(container, rows, totalRevenue, totalProfit, chartEntries){
+  const sortM = state.__r4PPSort === 'margin';
+  const mg = (r)=>r.revenue > 0 ? r.profit / r.revenue * 100 : 0;
+  const list = sortM ? rows.slice().sort((a, b)=>mg(a) - mg(b)) : rows;
+  const loss = rows.filter(r=>r.profit < 0).sort((a, b)=>a.profit - b.profit);
+  const low = rows.filter(r=>r.revenue > 0 && r.profit >= 0).sort((a, b)=>mg(a) - mg(b)).slice(0, 5);
+  const lossTot = loss.reduce((a, r)=>a + r.profit, 0);
+  const P = [['day', tr('ppPeriodDay')], ['month', tr('ppPeriodMonth')], ['all', tr('ppPeriodAll')]];
+  container.innerHTML = `
+      ${reportsBackHeader(tr('productProfitReport'))}
+      <div class="r3-chips">${P.map(x=>__r3Chip('data-pp-period', x[0], x[1], state.productProfitPeriod === x[0])).join('')}</div>
+      <div class="r3-kpi">
+        <div class="stat-card"><div class="stat-label">${tr('ppRevenue')}</div><div class="stat-value">${fmt(totalRevenue)}</div></div>
+        <div class="stat-card"><div class="stat-label">${tr('ppProfit')}</div><div class="stat-value" style="color:${totalProfit >= 0 ? 'var(--success)' : 'var(--danger)'};">${fmt(totalProfit)}</div></div>
+        <div class="stat-card"><div class="stat-label">${tr('ppMargin')}</div><div class="stat-value">${totalRevenue > 0 ? Math.round(totalProfit / totalRevenue * 100) : 0}%</div></div>
+      </div>
+      ${loss.length ? `<div class="r3-box r4-warn"><h4>${icI('alert')} ${escapeHtml(tr('r4Loss'))}: −${fmt(Math.abs(lossTot))}</h4>${loss.slice(0, 10).map(r=>`<div class="r4-line"><span>${escapeHtml(r.name)}</span><b style="color:var(--danger);">${fmt(r.profit)}</b></div>`).join('')}</div>` : ''}
+      ${low.length > 1 ? `<div class="r3-box"><h4>${escapeHtml(tr('r4LowMargin'))}</h4>${low.map(r=>`<div class="r4-line"><span>${escapeHtml(r.name)}</span><b>${Math.round(mg(r))}%</b></div>`).join('')}</div>` : ''}
+      ${chartEntries.length ? `<div class="card" style="padding:14px 12px;margin-bottom:14px;overflow-x:auto;">${buildBarChartSvg(chartEntries)}</div>` : ''}
+      ${rows.length > 1 ? `<div class="r3-chips">${__r3Chip('data-r4pps', 'profit', tr('r4SortProfit'), !sortM)}${__r3Chip('data-r4pps', 'margin', tr('r4SortMargin'), sortM)}</div>` : ''}
+      <div>${list.length ? list.map(r=>`
+        <div class="list-item"><div class="info" style="min-width:0;"><div class="name">${escapeHtml(r.name)}</div><div class="meta">${r.qty} ${tr('soldCount')} &middot; ${tr('ppRevenue')}: ${fmt(r.revenue)} &middot; ${tr('ppMargin')}: ${r.revenue>0?Math.round(r.profit/r.revenue*100):0}%</div></div><span class="badge badge-clear" style="color:${r.profit<0?'var(--danger)':'var(--teal)'};white-space:nowrap;">${fmt(r.profit)}</span></div>
+      `).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>
+      <p class="subtle" style="margin:12px 0 0;font-size:11.5px;">${tr('ppHint')}</p>
+    `;
+  bindReportsBack();
+  container.querySelectorAll('[data-pp-period]').forEach(el=>el.addEventListener('click', ()=>{ state.productProfitPeriod = el.dataset.ppPeriod; renderReports(); }));
+  container.querySelectorAll('[data-r4pps]').forEach(el=>el.addEventListener('click', ()=>{ state.__r4PPSort = el.dataset.r4pps; renderReports(); }));
+}
+/* ---- 3.8 Qaytarishlar ---- */
+var RF_REASONS = [['defect', 'r4RsDefect'], ['mind', 'r4RsMind'], ['mistake', 'r4RsMistake'], ['other', 'r4RsOther']];
+var __rfPicked = '';
+function __rfLabel(k){ const r = RF_REASONS.find(x=>x[0] === k); return r ? tr(r[1]) : tr('r4NoReason'); }
+function __rfInject(){
+  __rfPicked = '';
+  const yes = document.getElementById('confirm-yes-btn'); if(!yes) return;
+  const row = yes.closest('.btn-row'); if(!row || !row.parentNode || row.parentNode.querySelector('.rf-reasons')) return;
+  const box = document.createElement('div'); box.className = 'rf-reasons';
+  box.innerHTML = '<div class="rf-q">' + escapeHtml(tr('r4ReasonQ')) + '</div><div class="r3-chips">' + RF_REASONS.map(r=>__r3Chip('data-rf', r[0], tr(r[1]), false)).join('') + '</div>';
+  row.parentNode.insertBefore(box, row);
+  box.querySelectorAll('[data-rf]').forEach(b=>b.addEventListener('click', ()=>{ const on = __rfPicked !== b.dataset.rf; __rfPicked = on ? b.dataset.rf : ''; box.querySelectorAll('[data-rf]').forEach(x=>x.classList.toggle('on', on && x === b)); }));
+}
+function __r4Refunds(container){
+  const P = state.__r4RefP || 'all';
+  const br = (s)=>effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId);
+  let from = null; if(P === '7' || P === '30'){ from = __r3SOD(new Date()); from.setDate(from.getDate() - (P === '7' ? 6 : 29)); }
+  const rd = (s)=>new Date(s.refundedAt || s.date);
+  const refundedSales = state.sales.filter(s=>s.refunded && br(s) && (!from || rd(s) >= from)).sort((a,b)=>rd(b)-rd(a));
+  const total = refundedSales.reduce((a,s)=>a+s.total,0);
+  const base = state.sales.filter(s=>br(s) && (!from || new Date(s.date) >= from)).reduce((a,s)=>a+(s.total||0),0);
+  const rate = base > 0 ? Math.round(total / base * 1000) / 10 : 0;
+  const bySt = {}; refundedSales.forEach(s=>{ const k = s.refundedBy || '—'; const o = bySt[k] || (bySt[k] = {n: 0, sum: 0, own: 0}); o.n++; o.sum += s.total || 0; if(s.refundedBy && s.cashierName && s.refundedBy === s.cashierName) o.own++; });
+  const byRs = {}; refundedSales.forEach(s=>{ const k = s.refundReason || ''; byRs[k] = (byRs[k] || 0) + (s.total || 0); });
+  const noRs = refundedSales.some(s=>!s.refundReason);
+  const PP = [['7', tr('r3P7')], ['30', tr('r3P30')], ['all', tr('r3PAll')]];
+  let last = null;
+  const cards = refundedSales.map(s=>{
+    const sameStaff = s.refundedBy && s.cashierName && s.refundedBy===s.cashierName;
+    const k = rd(s).toDateString(); let h = '';
+    if(k !== last){ last = k; const dd = refundedSales.filter(x=>rd(x).toDateString() === k); h = '<div class="r3-dayh"><b>' + escapeHtml(fmtDayLong(rd(s))) + '</b><span>' + escapeHtml(tr('r3RcSum').replace('{n}', dd.length)) + ' · ' + escapeHtml(fmt(__r3Sum(dd))) + '</span></div>'; }
+    return h + `
+          <div class="card" style="padding:14px 16px;margin-bottom:10px;">
+            <div class="row"><strong>${fmt(s.total)}</strong><span class="subtle">${s.receiptNumber?('№'+escapeHtml(String(s.receiptNumber))):''}</span></div>
+            <div class="ledger-row"><span class="subtle">${tr('originalCashierLabel')}</span><span>${escapeHtml(s.cashierName||'—')} · ${fmtDateTime(s.date)}</span></div>
+            <div class="ledger-row"><span class="subtle">${tr('refundedByLabel')}</span><span style="${sameStaff?'':'color:var(--danger);font-weight:700;'}">${escapeHtml(s.refundedBy||'—')}${s.refundedAt?(' · '+fmtDateTime(s.refundedAt)):''}</span></div>
+            ${s.refundReason ? `<div class="ledger-row"><span class="subtle">${tr('r4Reasons')}</span><span>${escapeHtml(__rfLabel(s.refundReason))}</span></div>` : ''}
+          </div>`; }).join('');
+  container.innerHTML = `
+      ${reportsBackHeader(tr('refundsReportSection'))}
+      <div class="r3-chips">${PP.map(x=>__r3Chip('data-r4rp', x[0], x[1], P === x[0])).join('')}</div>
+      <div class="r3-hero" data-r4="ref-hero">
+        <div class="h-l">${tr('refundsTotal')}</div>
+        <div class="h-v" style="color:var(--warm);">${fmt(total)}</div>
+        <div class="h-n">${escapeHtml(tr('dsRefundCount'))}: ${refundedSales.length}${base > 0 ? ' · ' + escapeHtml(tr('r4RefRate').replace('{p}', String(rate).replace('.', state.lang === 'en' ? '.' : ','))) : ''}</div>
+      </div>
+      ${refundedSales.length ? `<div class="r3-box"><h4>${escapeHtml(tr('r4ByStaff'))}</h4>${Object.keys(bySt).sort((a,b)=>bySt[b].sum-bySt[a].sum).map(k=>`<div class="r4-line"><span>${escapeHtml(k)}<br><small class="subtle">${escapeHtml(tr('r3RcSum').replace('{n}', bySt[k].n))}${bySt[k].own ? ' · ' + escapeHtml(tr('r4OwnRefunds').replace('{n}', bySt[k].own)) : ''}</small></span><b>${fmt(bySt[k].sum)}</b></div>`).join('')}</div>
+      <div class="r3-box"><h4>${escapeHtml(tr('r4Reasons'))}</h4>${Object.keys(byRs).sort((a,b)=>byRs[b]-byRs[a]).map(k=>__r4ShareRow(__rfLabel(k), byRs[k], total, k ? 'var(--warm)' : '#b8c2d3')).join('')}${noRs ? `<p class="r3-hint" style="margin:6px 0 0;">${escapeHtml(tr('r4ReasonNote'))}</p>` : ''}</div>` : ''}
+      <div style="margin-top:4px;">${refundedSales.length ? cards : `<div class="empty-state">${tr('noRefundsYet')}</div>`}</div>
+    `;
+  bindReportsBack();
+  container.querySelectorAll('[data-r4rp]').forEach(b=>b.addEventListener('click', ()=>{ state.__r4RefP = b.dataset.r4rp; renderReports(); }));
+}
+/* ---- 3.10 Xarajatlar ---- */
+function __r4Expenses(container, historyCutoff){
+  const P = state.__r4ExpP || 'all', now = new Date();
+  const historyExpenses = visibleExpenses().filter(x=>!historyCutoff || new Date(x.date) >= historyCutoff).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const inM = (x, y, m)=>{ const d = new Date(x.date); return d.getFullYear() === y && d.getMonth() === m; };
+  let list = historyExpenses;
+  if(P === 'month') list = historyExpenses.filter(x=>inM(x, now.getFullYear(), now.getMonth()));
+  else if(P === 'last'){ const d = new Date(now.getFullYear(), now.getMonth() - 1, 1); list = historyExpenses.filter(x=>inM(x, d.getFullYear(), d.getMonth())); }
+  const totalExpenses = list.reduce((a,x)=>a+x.amount,0);
+  let cmp = '';
+  if(P === 'month'){
+    const a = new Date(now.getFullYear(), now.getMonth() - 1, 1), lastD = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    const b = new Date(now.getFullYear(), now.getMonth() - 1, Math.min(now.getDate(), lastD), 23, 59, 59);
+    const prev = historyExpenses.filter(x=>{ const d = new Date(x.date); return d >= a && d <= b; }).reduce((s,x)=>s+(x.amount||0),0);
+    const pc = __r3Pct(totalExpenses, prev);   /* xarajat ko'paysa — qizil, kamaysa — yashil */
+    const pill = pc === null ? '<span class="r3-delta flat">—</span>' : (pc === 0 ? '<span class="r3-delta flat">0%</span>' : '<span class="r3-delta ' + (pc > 0 ? 'down' : 'up') + '">' + (pc > 0 ? '▲ ' : '▼ ') + Math.abs(pc) + '%</span>');
+    cmp = '<div class="r3-cmp"><div>' + pill + '<span>' + escapeHtml(tr('r3VsPrevM')) + ': <b>' + escapeHtml(fmt(prev)) + '</b></span></div></div>';
+  }
+  const byCategory = {}; list.forEach(x=>{ byCategory[x.category] = (byCategory[x.category]||0) + x.amount; });
+  const cats = Object.keys(byCategory).sort((a,b)=>byCategory[b]-byCategory[a]);
+  const amtsByCat = {}; historyExpenses.forEach(x=>{ (amtsByCat[x.category] = amtsByCat[x.category] || []).push(Number(x.amount) || 0); });
+  const unusual = list.map(x=>{ const arr = amtsByCat[x.category] || [], med = __r4Med(arr); return {x, r: (arr.length >= 3 && med > 0) ? (Number(x.amount) || 0) / med : 0}; }).filter(o=>o.r >= 2).sort((a,b)=>b.r-a.r).slice(0, 5);
+  const PP = [['month', tr('r4ThisMonth')], ['last', tr('r3PLastMonth')], ['all', tr('r3PAll')]];
+  let last = null;
+  const rowsHtml = list.map(x=>{
+    const k = new Date(x.date).toDateString(); let h = '';
+    if(k !== last){ last = k; const dd = list.filter(y=>new Date(y.date).toDateString() === k); h = '<div class="r3-dayh"><b>' + escapeHtml(fmtDayLong(x.date)) + '</b><span>' + escapeHtml(fmt(dd.reduce((s,y)=>s+(y.amount||0),0))) + '</span></div>'; }
+    return h + `
+          <div class="list-item ds-row-tap" data-exp-open="${x.id}">
+            <div class="info">
+              <div class="name">${escapeHtml(x.note || expenseCategoryLabel(x.category))}</div>
+              <div class="meta"><span style="color:${expenseCategoryColor(x.category)};font-weight:700;">${expenseCategoryLabel(x.category)}</span> · ${fmtDateTime(x.date)}${x.staffName ? ' · '+icI('user')+' '+escapeHtml(x.staffName) : ''}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <strong style="color:var(--danger);white-space:nowrap;">-${fmt(x.amount)}</strong>
+              <button class="icon-btn" data-del-expense="${x.id}" hidden aria-hidden="true">${ICONS.trash}</button>
+            </div>
+          </div>`; }).join('');
+  container.innerHTML = `
+      ${reportsBackHeader(tr('expensesSection'))}
+      <div class="r3-chips">${PP.map(x=>__r3Chip('data-r4ep', x[0], x[1], P === x[0])).join('')}</div>
+      <div class="r3-hero" data-r4="exp-hero">
+        <div class="h-l">${tr('total')}</div>
+        <div class="h-v" style="color:var(--danger);">${fmt(totalExpenses)}</div>
+        <div class="h-n">${escapeHtml(tr('r4ExpCount').replace('{n}', list.length))}</div>
+        ${cmp}
+      </div>
+      ${cats.length ? `<div class="r3-box"><h4>${escapeHtml(tr('r4CatShare'))}</h4>${cats.map(c=>__r4ShareRow(expenseCategoryLabel(c), byCategory[c], totalExpenses, expenseCategoryColor(c))).join('')}</div>` : ''}
+      ${unusual.length ? `<div class="r3-box r4-warn"><h4>${icI('alert')} ${escapeHtml(tr('r4Unusual'))}</h4>${unusual.map(o=>`<div class="r4-line"><span>${escapeHtml(o.x.note || expenseCategoryLabel(o.x.category))}<br><small class="subtle">${escapeHtml(expenseCategoryLabel(o.x.category))} · ${escapeHtml(fmtDate(o.x.date))} · ${escapeHtml(tr('r4UnusualX').replace('{x}', String(Math.round(o.r * 10) / 10).replace('.', state.lang === 'en' ? '.' : ',')))}</small></span><b style="color:var(--danger);">-${fmt(o.x.amount)}</b></div>`).join('')}</div>` : ''}
+      <button class="btn btn-accent" id="add-expense-btn" style="margin-bottom:6px;">${ICONS.plus} ${tr('addExpense')}</button>
+      <div id="expenses-list">${list.length ? rowsHtml : `<div class="empty-state">${tr('noExpensesYet')}</div>`}</div>
+    `;
+  bindReportsBack();
+  document.getElementById('add-expense-btn').addEventListener('click', ()=>openExpenseForm(()=>renderReportsCategory(container,'expenses')));
+  container.querySelectorAll('[data-exp-open]').forEach(row=>row.addEventListener('click', ()=>__openExpenseSheet(row.dataset.expOpen)));
+  container.querySelectorAll('[data-del-expense]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(!confirm(tr('deleteExpenseConfirm'))) return;
+      const id = btn.dataset.delExpense;
+      { const __de = state.expenses.find(x=>x.id===id); if(__de) auditLog('expenseDelete', `${expenseCategoryLabel(__de.category)} — ${fmt(__de.amount)}${__de.note?(' · '+__de.note):''}`, {expenseId: id}); }
+      state.expenses = state.expenses.filter(x=>x.id!==id);
+      saveExpenses();
+      deleteExpenseDoc(id);
+      renderReportsCategory(container, 'expenses');
+    });
+  });
+  container.querySelectorAll('[data-r4ep]').forEach(b=>b.addEventListener('click', ()=>{ state.__r4ExpP = b.dataset.r4ep; renderReportsCategory(container, 'expenses'); }));
+}
+/* ---- 3.11 Ish haqi ---- */
+function __r4PayrollEnhance(container, rows, tot){
+  const t = document.getElementById('pr-totals'); if(!t) return;
+  const k = document.createElement('div');
+  k.innerHTML = __r3Kpi([[tr('prAccrued'), fmt(tot.a)], [tr('prPaid'), fmt(tot.p), 'var(--teal)'], [tr('prRemaining'), fmt(tot.r), tot.r > 0 ? 'var(--danger)' : 'var(--teal)']]);
+  t.parentNode.insertBefore(k.firstChild, t); t.hidden = true;
+  container.querySelectorAll('[data-pr-pay]').forEach(b=>{
+    const r = rows.find(x=>x.st.id === b.dataset.prPay), card = b.closest('.card'); if(!r || !card) return;
+    const p = r.accrued > 0 ? Math.min(100, Math.max(0, r.paid / r.accrued * 100)) : (r.paid > 0 ? 100 : 0);
+    const bar = document.createElement('div'); bar.className = 'r4-prog'; bar.innerHTML = '<i style="width:' + p.toFixed(1) + '%;"></i>';
+    const first = card.querySelector('.row'); if(first && first.nextSibling) card.insertBefore(bar, first.nextSibling);
+  });
+}
+/* ---- 3.12 Eng yaxshi mijozlar ---- */
+function __r4Customers(container, periodSales, custRanked, worstCust, activeSales){
+  const visits = {}; periodSales.forEach(s=>{ visits[s.customerId] = (visits[s.customerId] || 0) + 1; });
+  const lastBuy = {}; activeSales.forEach(s=>{ if(s.customerId && (!lastBuy[s.customerId] || new Date(s.date) > new Date(lastBuy[s.customerId]))) lastBuy[s.customerId] = s.date; });
+  const top = custRanked.slice(0, 10), sum = custRanked.reduce((a, r)=>a + r.total, 0), nVis = custRanked.reduce((a, r)=>a + (visits[r.cust.id] || 0), 0);
+  const maxT = top.length ? top[0].total : 0;
+  const PP = [['day', tr('periodDay')], ['month', tr('periodMonth')], ['year', tr('periodYear')]];
+  container.innerHTML = `
+      ${reportsBackHeader(tr('topCustomersSection'))}
+      <div class="r3-chips" id="top-cust-period-toggle">${PP.map(x=>__r3Chip('data-period', x[0], x[1], state.topCustomersPeriod === x[0])).join('')}</div>
+      ${custRanked.length ? __r3Kpi([[tr('r4Buyers'), String(custRanked.length)], [tr('total'), fmt(sum)], [tr('r3AvgCheck'), fmt(nVis ? sum / nVis : 0)]]) : ''}
+      <div>${top.length ? top.map((r,i)=>`
+        <div class="list-item"><div class="info" style="min-width:0;"><div class="name">${i===0?icI('trophy')+' ':''}${i+1}. ${escapeHtml(r.cust.name)}</div>
+          <div class="r3-mini"><i style="width:${maxT > 0 ? (r.total / maxT * 100).toFixed(1) : 0}%;"></i></div>
+          <div class="meta">${escapeHtml(tr('r4Visits').replace('{n}', visits[r.cust.id] || 0))} · ${escapeHtml(tr('r3AvgCheck'))}: ${fmt((visits[r.cust.id] ? r.total / visits[r.cust.id] : 0))}${lastBuy[r.cust.id] ? ' · ' + escapeHtml(tr('r4LastBuy').replace('{d}', fmtDate(lastBuy[r.cust.id]))) : ''}</div></div>
+          <span class="badge badge-clear" style="white-space:nowrap;">${fmt(r.total)}</span></div>
+      `).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>
+      ${worstCust ? `<div class="card" style="margin-top:6px;"><div class="row"><span class="subtle">${tr('leastActiveCustomer')}</span><span>${escapeHtml(worstCust.cust.name)} — ${fmt(worstCust.total)}</span></div></div>` : ''}
+    `;
+  bindReportsBack();
+  container.querySelectorAll('#top-cust-period-toggle [data-period]').forEach(el=>el.addEventListener('click', ()=>{ state.topCustomersPeriod = el.dataset.period; renderReportsCategory(container,'customers'); }));
+}
+/* ---- 3.13 Xodimlar ---- */
+function __r4Staff(container, ranked, commissionPct){
+  const sum = ranked.reduce((a, r)=>a + r.total, 0);
+  const canSet = isAdmin() || hasPerm('staffManage');
+  const PP = [['day', tr('periodDay')], ['month', tr('periodMonth')], ['year', tr('periodYear')]];
+  container.innerHTML = `
+      ${reportsBackHeader(tr('staffReportSection'))}
+      <div class="r3-chips" id="staff-report-period">${PP.map(x=>__r3Chip('data-period', x[0], x[1], state.staffReportPeriod === x[0])).join('')}</div>
+      <div class="r3-box" id="r4-comm"><div class="row" style="gap:10px;"><span style="min-width:0;"><b>${escapeHtml(tr('commissionPercent'))}: ${commissionPct}%</b><br><small class="subtle">${escapeHtml(tr('commissionHint'))}</small></span>${canSet ? `<button class="btn btn-outline btn-sm" id="r4-comm-edit" style="flex-shrink:0;">${escapeHtml(tr('r4CommEdit'))}</button>` : ''}</div></div>
+      <div>${ranked.length ? ranked.map((r,i)=>`
+        <div class="card">
+          <div class="row"><strong>${i===0?icI('trophy')+' ':''}${i+1}. ${escapeHtml(r.name)}</strong><span class="badge badge-clear">${fmt(r.total)}</span></div>
+          <div class="r4-prog"><i style="width:${__r4Pc(r.total, sum)}%;background:var(--accent);"></i></div>
+          <div class="subtle" style="font-size:11.5px;margin-bottom:6px;">${escapeHtml(tr('r4ShareTotal').replace('{p}', __r4Pc(r.total, sum)))}</div>
+          <div class="row"><span class="subtle">${tr('salesCountLabel')}</span><span>${r.count}</span></div>
+          <div class="row"><span class="subtle">${tr('r3AvgCheck')}</span><span>${fmt(r.count ? r.total / r.count : 0)}</span></div>
+          <div class="row"><span class="subtle">${tr('totalProfit')}</span><span style="color:${r.profit>=0?'var(--success)':'var(--danger)'};">${fmt(r.profit)}</span></div>
+          ${commissionPct>0 ? `<div class="row"><span class="subtle">${tr('commissionEarned')}</span><strong style="color:var(--accent-dark);">${fmt(r.total*commissionPct/100)}</strong></div>` : ''}
+        </div>
+      `).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>
+      ${ranked.length>1 ? `<div class="card" style="background:var(--warm-bg);"><div class="row"><span class="subtle">${tr('lowestPerformer')}</span><span>${escapeHtml(ranked[ranked.length-1].name)} — ${fmt(ranked[ranked.length-1].total)}</span></div></div>` : ''}
+    `;
+  bindReportsBack();
+  container.querySelectorAll('#staff-report-period [data-period]').forEach(el=>el.addEventListener('click', ()=>{ state.staffReportPeriod = el.dataset.period; renderReportsCategory(container,'staff'); }));
+  const eb = document.getElementById('r4-comm-edit');
+  if(eb) eb.addEventListener('click', ()=>{ state.__r4FocusComm = true; state.reportsCategory = null; state.view = 'settings'; state.settingsCategory = 'staffrules'; renderAll(); });
+}
+/* ---- 3.14 Ombor harakati ---- */
+var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']]];
+function __r4SmOk(m){ const g = SM_GROUPS.find(x=>x[0] === (state.__r4SmG || '')); return !g || !g[2] || g[2].indexOf(m.reason) >= 0; }
+function __r4SmChips(container, renderList){
+  const s = document.getElementById('sm-search'); if(!s) return;
+  const all = (state.stockMoves||[]).filter(m=>effectiveBranchId(m.branchId)===effectiveBranchId(state.currentBranchId));
+  const groups = SM_GROUPS.filter(g=>!g[2] || all.some(m=>g[2].indexOf(m.reason) >= 0));
+  if(!groups.some(g=>g[0] === (state.__r4SmG || ''))) state.__r4SmG = '';
+  const box = document.createElement('div'); box.className = 'r3-chips'; box.id = 'r4-sm-chips';
+  box.innerHTML = groups.map(g=>__r3Chip('data-r4sm', g[0], tr(g[1]), (state.__r4SmG || '') === g[0])).join('');
+  s.closest('.search-bar').insertAdjacentElement('afterend', box);
+  box.querySelectorAll('[data-r4sm]').forEach(b=>b.addEventListener('click', ()=>{ state.__r4SmG = b.dataset.r4sm; box.querySelectorAll('[data-r4sm]').forEach(x=>x.classList.toggle('on', x === b)); renderList(); __r4SmEmpty(); }));
+  s.addEventListener('input', __r4SmEmpty);   /* renderList dan keyin ishlaydi */
+  setTimeout(__r4SmEmpty, 0);
+}
+function __r4SmEmpty(){
+  const el = document.getElementById('sm-list'); if(!el) return;
+  const e = el.querySelector(':scope > .empty-state');
+  if(e && (state.__r4SmG || (document.getElementById('sm-search') || {}).value)) e.textContent = tr('r4FilterEmpty');
+}
+/* ---- 3.15 Audit ---- */
+var AU_GROUPS = [['', 'r3PAll', null], ['del', 'r4AuDelete', ['customerDelete', 'productDelete', 'saleDelete', 'expenseDelete', 'staffDelete']], ['price', 'r4AuPrice', ['priceChange', 'saleEdit', 'stockCount']], ['money', 'r4AuMoney', ['saleRefund', 'debtPayment', 'debtManual', 'customerRestore']], ['login', 'r4AuLogin', ['login']]];
+function __r4AuOk(a){
+  const g = AU_GROUPS.find(x=>x[0] === (state.__r4AuG || ''));
+  if(g && g[2] && g[2].indexOf(a.action) < 0) return false;
+  if(state.__r4AuSt && (a.staffName || '—') !== state.__r4AuSt) return false;
+  return true;
+}
+function __r4AuChips(list, draw){
+  const s = document.getElementById('audit-search'); if(!s || document.getElementById('r4-au-chips')) return;
+  const groups = AU_GROUPS.filter(g=>!g[2] || list.some(a=>g[2].indexOf(a.action) >= 0));
+  if(!groups.some(g=>g[0] === (state.__r4AuG || ''))) state.__r4AuG = '';
+  const staff = Array.from(new Set(list.map(a=>a.staffName || '—'))).sort();
+  if(state.__r4AuSt && staff.indexOf(state.__r4AuSt) < 0) state.__r4AuSt = '';
+  const box = document.createElement('div'); box.className = 'r3-chips'; box.id = 'r4-au-chips';
+  box.innerHTML = groups.map(g=>__r3Chip('data-r4au', g[0], tr(g[1]), (state.__r4AuG || '') === g[0])).join('')
+    + (staff.length > 1 ? '<select class="r3-sel" id="r4-au-staff"><option value="">' + escapeHtml(tr('r4AllStaff')) + '</option>' + staff.map(n=>'<option value="' + escapeHtml(n) + '"' + (state.__r4AuSt === n ? ' selected' : '') + '>' + escapeHtml(n) + '</option>').join('') + '</select>' : '');
+  s.closest('.search-bar').insertAdjacentElement('afterend', box);
+  const redraw = ()=>{ draw(); const el = document.getElementById('audit-list'); const e = el && el.querySelector(':scope > .empty-state'); if(e && list.length) e.textContent = tr('r4FilterEmpty'); };
+  box.querySelectorAll('[data-r4au]').forEach(b=>b.addEventListener('click', ()=>{ state.__r4AuG = b.dataset.r4au; box.querySelectorAll('[data-r4au]').forEach(x=>x.classList.toggle('on', x === b)); redraw(); }));
+  const sel = document.getElementById('r4-au-staff'); if(sel) sel.addEventListener('change', ()=>{ state.__r4AuSt = sel.value; redraw(); });
+  s.addEventListener('input', ()=>{ const el = document.getElementById('audit-list'); const e = el && el.querySelector(':scope > .empty-state'); if(e && list.length) e.textContent = tr('r4FilterEmpty'); });
+}
+/* ---- 3.16 Hisobot bosh sahifasi: bugungi 3 raqam ---- */
+function __r4Home(container){
+  const h2 = container.querySelector('h2.section-title'); if(!h2) return;
+  const hd = historyWindowDays(), cut = hd ? new Date(Date.now() - hd * 86400000) : null, today = todayStr();
+  const ts = state.sales.filter(s=>!s.refunded && (!cut || new Date(s.date) >= cut) && effectiveBranchId(s.branchId)===effectiveBranchId(state.currentBranchId) && new Date(s.date).toDateString() === today);
+  const total = ts.reduce((a,s)=>a+s.total,0), profit = ts.reduce((a,s)=>a+saleProfit(s),0);
+  const box = document.createElement('div'); box.className = 'r4-home'; box.id = 'r4-home';
+  box.innerHTML = '<button type="button" data-r4home="1"><span class="l">' + escapeHtml(tr('todaySales')) + '</span><span class="v" data-r4-total="' + Math.round(total) + '">' + escapeHtml(fmt(total)) + '</span></button>'
+    + '<button type="button" data-r4home="1"><span class="l">' + escapeHtml(tr('r3Profit')) + '</span><span class="v" style="color:' + (profit >= 0 ? 'var(--success)' : 'var(--danger)') + ';">' + escapeHtml(fmt(profit)) + '</span></button>'
+    + '<button type="button" data-r4home="1"><span class="l">' + escapeHtml(tr('dsReceiptsCount')) + '</span><span class="v">' + ts.length + '</span></button>';
+  h2.insertAdjacentElement('afterend', box);
+  box.querySelectorAll('[data-r4home]').forEach(b=>b.addEventListener('click', ()=>{ state.reportsCategory = 'today'; renderReports(); }));
 }
 
 /* --- Online catalog --- */
