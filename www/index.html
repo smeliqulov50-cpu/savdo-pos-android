@@ -653,6 +653,50 @@
   .tg-try[disabled]{opacity:.55;}
   .tg-pf-st{font-size:12px;font-weight:700;color:var(--ink-soft);min-height:16px;margin:2px 0 0;line-height:1.35;}
   .tg-pf-st.err{color:var(--danger);} .tg-pf-st.ok{color:#16A34A;}
+  /* fix128-main: asosiy ekranlar */
+  .product-card{position:relative;}
+  .product-card.no-img{padding:10px 10px 9px;gap:3px;min-height:0;justify-content:flex-start;}
+  .product-card.no-img > div:first-child{position:static;display:flex;flex-wrap:wrap;gap:4px;min-height:0;}
+  .product-card.no-img > div:first-child:empty{display:none;}
+  .product-card.no-img .cart-qty-badge{top:-6px;right:-6px;}
+  .product-card.no-img .variant-badge{position:static;display:inline-flex;align-items:center;gap:3px;background:#eef2f9;color:var(--ink-soft);}
+  .product-card.no-img .product-name{font-size:13px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em;}
+  .staff-ava{font-weight:800;font-size:14px;background:var(--accent-bg) !important;color:var(--accent-dark) !important;}
+  #sm-layer{position:fixed;inset:0;z-index:99990;}
+  #sm-layer .sm-pop{position:absolute;right:12px;top:calc(58px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px)));width:250px;max-width:calc(100vw - 24px);background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:16px;box-shadow:0 14px 34px rgba(22,35,59,.18);padding:8px;}
+  .sm-who{display:flex;align-items:center;gap:10px;padding:8px 8px 10px;border-bottom:1px solid var(--v4-line, #e6ebf3);margin-bottom:6px;}
+  .sm-who b{display:block;font-size:14px;color:var(--ink);} .sm-who small{color:var(--ink-soft);font-size:12px;}
+  .sm-it{display:flex;align-items:center;gap:10px;width:100%;padding:11px 10px;border:none;background:none;border-radius:10px;font:inherit;font-size:14px;font-weight:700;color:var(--ink);text-align:left;cursor:pointer;}
+  .sm-it:active{background:#eef2f9;} .sm-it svg{width:18px;height:18px;color:var(--ink-soft);}
+  .tool-row.tr-compact{flex-wrap:nowrap;overflow:visible;gap:8px;}
+  .tool-row.tr-compact .tool-chip{flex:1 1 0;min-width:0;flex-direction:row;justify-content:flex-start;gap:8px;padding:7px 9px;font-size:12px;min-height:46px;}
+  .tool-row.tr-compact .tool-chip > span:last-child{max-width:none;white-space:normal;line-height:1.15;font-size:11.5px;text-align:left;}
+  .tool-row.tr-compact .tool-chip .tool-ic{width:28px;height:28px;border-radius:9px;flex-shrink:0;}
+  .tool-row.tr-compact .tool-chip.tc-more{flex:0 0 auto;min-width:0;padding:7px;}
+  @media (max-width:599px){ .tool-row.tr-compact .tool-chip.tc-more > span:last-child{display:none;} }
+  .cust-actions{display:flex;gap:8px;margin-bottom:12px;}
+  .cust-actions .btn{margin:0 !important;}
+  .cust-actions .icon-round{width:46px;height:46px;border-radius:14px;flex-shrink:0;}
+  #side-cart{display:none;}
+  @media (min-width:900px){
+    body.side-cart-on #view-container{padding-right:356px !important;}
+    #side-cart{display:flex;flex-direction:column;position:absolute;right:12px;width:332px;background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:18px;box-shadow:0 6px 22px rgba(22,35,59,.08);z-index:20;overflow:hidden;}
+    #side-cart .sc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 16px 10px;border-bottom:1px solid var(--v4-line, #e6ebf3);}
+    #side-cart .sc-head b{font-size:16px;color:var(--ink);} #side-cart .sc-head span{font-size:12.5px;color:var(--ink-soft);font-weight:700;}
+    #side-cart .sc-lines{flex:1;overflow-y:auto;padding:6px 10px;}
+    #side-cart .sc-line{display:flex;align-items:center;gap:8px;padding:9px 6px;border-bottom:1px solid #f1f4f9;}
+    #side-cart .sc-line .nm{flex:1;min-width:0;} #side-cart .sc-line .nm b{display:block;font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    #side-cart .sc-line .nm small{font-size:12px;color:var(--ink-soft);}
+    #side-cart .sc-step{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+    #side-cart .sc-step button{width:32px;height:32px;border-radius:10px;border:none;background:#eef2f9;color:var(--ink);font-size:18px;font-weight:700;line-height:1;cursor:pointer;}
+    #side-cart .sc-step span{min-width:24px;text-align:center;font-weight:800;font-size:14px;cursor:pointer;}
+    #side-cart .sc-sum{font-size:13px;font-weight:800;color:var(--ink);min-width:72px;text-align:right;white-space:nowrap;}
+    #side-cart .sc-foot{padding:12px 14px 14px;border-top:1px solid var(--v4-line, #e6ebf3);background:#fbfcfe;}
+    #side-cart .sc-total{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;font-weight:800;color:var(--ink);} #side-cart .sc-total b{font-size:22px;}
+    #side-cart .sc-btns{display:flex;gap:8px;margin-bottom:8px;} #side-cart .sc-btns .btn{flex:1;margin:0;}
+    #side-cart .sc-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;text-align:center;color:var(--ink-soft);}
+    #side-cart .sc-empty svg{width:28px;height:28px;color:var(--accent);}
+  }
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -1806,6 +1850,15 @@ const T = {
   dzDelete:{uz:"O'chirish",ru:"Удалить",en:"Delete",kk:"Жою",ky:"Өчүрүү",tg:"Нест кардан"},
   dzExpense:{uz:"Xarajat",ru:"Расход",en:"Expense",kk:"Шығын",ky:"Чыгым",tg:"Хароҷот"},
   dzMore:{uz:"Boshqa amallar",ru:"Другие действия",en:"More actions",kk:"Басқа әрекеттер",ky:"Башка аракеттер",tg:"Амалҳои дигар"},
+  /* fix128-main */
+  smMenu:{uz:"Xodim menyusi",ru:"Меню сотрудника",en:"Staff menu",kk:"Қызметкер мәзірі",ky:"Кызматкер менюсу",tg:"Менюи корманд"},
+  smSwitch:{uz:"Xodimni almashtirish",ru:"Сменить сотрудника",en:"Switch staff",kk:"Қызметкерді ауыстыру",ky:"Кызматкерди алмаштыруу",tg:"Иваз кардани корманд"},
+  smEndShift:{uz:"Smenani yopish",ru:"Закрыть смену",en:"Close shift",kk:"Ауысымды жабу",ky:"Сменаны жабуу",tg:"Пӯшидани баст"},
+  smShiftOpen:{uz:"Smena ochiq",ru:"Смена открыта",en:"Shift is open",kk:"Ауысым ашық",ky:"Смена ачык",tg:"Баст кушода"},
+  moreLabel:{uz:"Yana",ru:"Ещё",en:"More",kk:"Тағы",ky:"Дагы",tg:"Боз"},
+  scEmpty:{uz:"Savat bo'sh",ru:"Корзина пуста",en:"Cart is empty",kk:"Себет бос",ky:"Себет бош",tg:"Сабад холӣ"},
+  scEmptySub:{uz:"Tovarni bosing — shu yerga tushadi.",ru:"Нажмите на товар — он появится здесь.",en:"Tap a product — it appears here.",kk:"Тауарды басыңыз — осында түседі.",ky:"Товарды басыңыз — ушул жерге түшөт.",tg:"Ба мол пахш кунед — ин ҷо пайдо мешавад."},
+  scDetails:{uz:"Batafsil",ru:"Подробнее",en:"Details",kk:"Толығырақ",ky:"Толугураак",tg:"Муфассал"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3296,7 +3349,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.28';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.29';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -5519,7 +5572,7 @@ function renderHeader(){
     ${state.currentStaff && state.currentStaff.jobTitle==='agent' ? `<button class="icon-round" id="my-route-btn">${ICONS.route}</button>` : ''}
     ${isAdmin() ? `<button class="icon-round" id="receipts-btn">${ICONS.receiptIcon}</button>` : ''}
     ${settingsMenuItems().length ? `<button class="icon-round" id="settings-btn">${ICONS.gear}</button>` : ''}
-    ${state.currentStaff ? `<button class="icon-round" id="logout-btn">${ICONS.logout}</button>` : ''}
+    ${state.currentStaff ? `<button class="icon-round staff-ava" id="staff-menu-btn" aria-label="${tr('smMenu')}">${escapeHtml(((state.currentStaff.name||'?').trim().charAt(0)||'?').toUpperCase())}</button><button class="icon-round" id="logout-btn" hidden aria-hidden="true">${ICONS.logout}</button>` : ''}
   `;
   const modeToggle = document.getElementById('sale-mode-toggle');
   if(modeToggle) modeToggle.querySelectorAll('[data-mode]').forEach(btn=>{
@@ -5538,6 +5591,7 @@ function renderHeader(){
   if(receiptsBtn) receiptsBtn.addEventListener('click', ()=>{ state.view='receipts'; renderAll(); });
   const setBtn = document.getElementById('settings-btn');
   if(setBtn) setBtn.addEventListener('click', ()=>{ state.view='settings'; state.settingsCategory=null; renderAll(); });
+  const __smb = document.getElementById('staff-menu-btn'); if(__smb) __smb.addEventListener('click', __openStaffMenu);   /* fix128-main */
   const outBtn = document.getElementById('logout-btn');
   if(outBtn) outBtn.addEventListener('click', ()=>{
     if(state.currentShift && state.currentShift.staffId === state.currentStaff.id){
@@ -5812,9 +5866,9 @@ function productCardHtml(p){
   const cartQty = (window.__erCardQty !== undefined && window.__erCardQty !== null) ? window.__erCardQty : cartQtyForProduct(p.id);
   const isOut = hasVariants ? !p.variants.some(v=>v.stock>0) : totalStock<=0;
   return `
-    <div class="product-card ${isOut?'out':''} ${(isOut && state.settings.allowOversell)?'can-oversell':''}" data-id="${p.id}">
+    <div class="product-card ${isOut?'out':''} ${(isOut && state.settings.allowOversell)?'can-oversell':''} ${p.image?'':'no-img'}" data-id="${p.id}">
       <div style="position:relative;">
-        ${p.image ? `<img class="product-thumb" src="${p.image}" draggable="false">` : `<div class="product-thumb-placeholder" style="background:${avatarColorFor(p.name)};color:#fff;font-weight:800;font-size:20px;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div>`}
+        ${p.image ? `<img class="product-thumb" src="${p.image}" draggable="false">` : ''}
         ${cartQty>0 ? `<span class="cart-qty-badge">${cartQty}</span>` : ''}
         ${hasVariants ? `<span class="variant-badge">${p.variants.length} ${tr('variantsCountSuffix')}</span>` : ''}
         ${(hasBox && !inWholesale) ? `<span class="variant-badge">${icI('package')} ${escapeHtml(p.boxLabel||tr('boxDefaultLabel'))}</span>` : ''}
@@ -6836,6 +6890,7 @@ function renderCartBar(){
   const slot = document.getElementById('cart-bar-slot');
   const cart = activeCart();
   try{ if(state.setupDone || window.__ccReady) __ccSweep(); }catch(_e){}   /* fix111-nocust */
+  try{ if(__scWanted()){ slot.innerHTML = ''; __scRender(); return; } __scRemove(); }catch(_e){ try{ __scRemove(); }catch(__e){} }   /* fix128-main: planshetda o'ngdagi savat */
   if(state.view !== 'sale' || cart.length===0 || (state.settings.restaurantMode && !state.activeTableId && !state.takeawayMode)){ slot.innerHTML=''; return; }
   const total = cartTotal();
   const count = cart.reduce((a,c)=>a+c.qty,0);
@@ -10455,12 +10510,13 @@ function renderProducts(){
   const container = document.getElementById('view-container');
   container.innerHTML = `
     <button class="btn btn-accent btn-block" id="add-product-btn" style="margin-bottom:12px;">${ICONS.plus} ${tr('addProduct')}</button>
-    <div class="tool-row">
+    <div class="tool-row tr-compact">
       ${isAdmin() || hasPerm('products') ? `<button class="tool-chip" id="purchase-btn"><span class="tool-ic" style="background:#e7f6f3;color:#0f9d8a;">${ICONS.box}</span><span>${tr('puTitle')}</span></button>
       <button class="tool-chip" id="stocktake-btn"><span class="tool-ic" style="background:#fff4e5;color:#d97706;">${ICONS.target}</span><span>${tr('stTitle')}</span></button>` : ''}
-      <button class="tool-chip" id="labels-btn"><span class="tool-ic" style="background:#eef2ff;color:#4f46e5;">${ICONS.barcode}</span><span>${tr('toolLabels')}</span></button>
-      <button class="tool-chip" id="import-export-btn"><span class="tool-ic" style="background:#e8f5e9;color:#2e7d32;">${ICONS.cloud}</span><span>${tr('ieTitle')}</span></button>
-      <button class="tool-chip" id="export-products-btn"><span class="tool-ic" style="background:#fdeceb;color:#c62828;">${ICONS.share}</span><span>${tr('toolPdf')}</span></button>
+      <button class="tool-chip" id="labels-btn" hidden><span class="tool-ic" style="background:#eef2ff;color:#4f46e5;">${ICONS.barcode}</span><span>${tr('toolLabels')}</span></button>
+      <button class="tool-chip" id="import-export-btn" hidden><span class="tool-ic" style="background:#e8f5e9;color:#2e7d32;">${ICONS.cloud}</span><span>${tr('ieTitle')}</span></button>
+      <button class="tool-chip" id="export-products-btn" hidden><span class="tool-ic" style="background:#fdeceb;color:#c62828;">${ICONS.share}</span><span>${tr('toolPdf')}</span></button>
+      <button class="tool-chip tc-more" id="products-more-btn"><span class="tool-ic" style="background:#eef2f9;color:var(--ink);">${ICONS.more}</span><span>${tr('moreLabel')}</span></button>
     </div>
     <div class="search-bar" style="margin-bottom:10px;">${ICONS.search}<input type="text" id="product-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.productSearch||'')}"></div>
     <div class="fav-row" id="product-filter-row">${productFilterChipsHtml()}</div>
@@ -10471,6 +10527,8 @@ function renderProducts(){
   document.getElementById('export-products-btn').addEventListener('click', exportProductsPdf);
   document.getElementById('import-export-btn').addEventListener('click', openImportExportModal);
   document.getElementById('labels-btn').addEventListener('click', openLabelsModal);
+  document.getElementById('products-more-btn').addEventListener('click', ()=>__actSheet(tr('dzMore'), [   /* fix128-main */
+    {icon: ICONS.barcode, label: tr('toolLabels'), sel: '#labels-btn'}, {icon: ICONS.cloud, label: tr('ieTitle'), sel: '#import-export-btn'}, {icon: ICONS.share, label: tr('toolPdf'), sel: '#export-products-btn'}]));
   const puBtn = document.getElementById('purchase-btn');
   if(puBtn) puBtn.addEventListener('click', ()=>{ state.view = 'purchase'; renderAll(); });
   const stBtn = document.getElementById('stocktake-btn');
@@ -11447,9 +11505,9 @@ function renderCustomers(){
       <div class="stat-card"><div class="stat-label">${tr('navCustomers')}</div><div class="stat-value">${branchCustomers.length}</div></div>
     </div>
     <div class="search-bar">${ICONS.search}<input type="text" id="customer-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.customerSearch||'')}"></div>
-    <button class="btn btn-accent" style="margin-bottom:10px;" id="add-customer-btn">${ICONS.plus} ${tr('addCustomer')}</button>
-    ${(isAdmin() || hasPerm('myDebts')) ? `<button class="btn btn-outline btn-block" style="margin-bottom:14px;" id="my-debts-btn">${ICONS.target} ${tr('myDebtsLabel')}</button>` : ''}
-    <div class="btn-row" style="margin-bottom:14px;">
+    <div class="cust-actions"><button class="btn btn-accent" style="flex:1;" id="add-customer-btn">${ICONS.plus} ${tr('addCustomer')}</button><button class="icon-round" id="customers-more-btn" aria-label="${tr('dzMore')}">${ICONS.more}</button></div>
+    ${(isAdmin() || hasPerm('myDebts')) ? `<button class="btn btn-outline btn-block" style="margin-bottom:14px;" id="my-debts-btn" hidden>${ICONS.target} ${tr('myDebtsLabel')}</button>` : ''}
+    <div class="btn-row" style="margin-bottom:14px;" hidden>
       <button class="btn btn-outline" style="flex:1;" id="print-customers-btn">${ICONS.reports} ${tr('printReceipt')}</button>
       ${(isAdmin() || state.settings.staffCanExportDebtPdf) ? `<button class="btn btn-outline" style="flex:1;" id="pdf-customers-btn">${tr('exportPdf')}</button>` : ''}
     </div>
@@ -11462,7 +11520,13 @@ function renderCustomers(){
   });
   document.getElementById('add-customer-btn').addEventListener('click', ()=>openCustomerForm());
   const myDebtsBtn = document.getElementById('my-debts-btn');
-  if(myDebtsBtn) myDebtsBtn.addEventListener('click', ()=>{ state.view='myDebts'; renderAll(); });
+  if(myDebtsBtn) myDebtsBtn.addEventListener('click', ()=>{ state.__mdFrom = 'customers'; state.view='myDebts'; renderAll(); });
+  document.getElementById('customers-more-btn').addEventListener('click', ()=>{   /* fix128-main */
+    const it = [{icon: ICONS.printer, label: tr('printReceipt'), sel: '#print-customers-btn'}];
+    if(document.getElementById('pdf-customers-btn')) it.push({icon: ICONS.share, label: tr('exportPdf'), sel: '#pdf-customers-btn'});
+    if(document.getElementById('my-debts-btn') && !(isAdmin() || hasPerm('reports') || hasPerm('expense'))) it.push({icon: ICONS.book, label: tr('myDebtsLabel'), sel: '#my-debts-btn'});
+    __actSheet(tr('dzMore'), it);
+  });
   document.getElementById('print-customers-btn').addEventListener('click', printCustomersList);
   const pdfBtn = document.getElementById('pdf-customers-btn');
   if(pdfBtn) pdfBtn.addEventListener('click', exportDebtsPdf);
@@ -11789,7 +11853,7 @@ function renderMyDebts(){
   renderCreditorList();
   try{ __sdMount(); }catch(e){}   /* fix114-debts */
   { const _ci = document.getElementById('creditor-search-input'); if(_ci) _ci.addEventListener('input', (e)=>{ state.creditorSearch = e.target.value; renderCreditorList(); }); } /* fix71 */
-  document.getElementById('my-debts-back-btn').addEventListener('click', ()=>{ state.view='customers'; renderAll(); });
+  document.getElementById('my-debts-back-btn').addEventListener('click', ()=>{ state.view = (state.__mdFrom === 'reports' && (isAdmin() || hasPerm('reports') || hasPerm('expense'))) ? 'reports' : 'customers'; state.__mdFrom = null; renderAll(); });   /* fix128-main */
   document.getElementById('add-creditor-btn').addEventListener('click', ()=>openCreditorForm());
   document.getElementById('pdf-creditors-btn').addEventListener('click', exportCreditorsPdf);
 }
@@ -14613,12 +14677,12 @@ function renderReportsMenu(container){
     ${alertCount ? `<div class="card alert-soft" style="cursor:pointer;" id="alerts-shortcut"><p style="margin:0;color:var(--danger);font-weight:700;">${icI('alert')} ${escapeHtml(stockCountsText(__sc, expiringCount))}</p></div>` : ''}
     ${(()=>{
       const G = {receipts:['sales','receiptIcon','#2563eb'], today:['sales','sale','#16a34a'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
-        pnl:['finance','percent','#0f9d8a'], productprofit:['finance','percent','#12a37f'], expenses:['finance','creditCard','#d97706'], payroll:['finance','peopleIcon','#7c5cfc'],
+        pnl:['finance','percent','#0f9d8a'], productprofit:['finance','percent','#12a37f'], expenses:['finance','creditCard','#d97706'], payroll:['finance','peopleIcon','#7c5cfc'], mydebts:['finance','book','#c2410c'],
         inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], products:['sales','products','#0891b2'],
         customers:['people','customers','#8b5cf6'], staff:['people','peopleIcon','#a855f7'], branches:['people','mapPin','#6366f1'],
         audit:['control','target','#475569']};
       const order = [['sales','rgSales'],['finance','rgFinance'],['stock','rgStock'],['people','rgPeople'],['control','rgControl']];
-      const items = reportsMenuItems();
+      const items = reportsMenuItems().concat((isAdmin() || hasPerm('myDebts')) ? [{id: 'mydebts', label: tr('myDebtsLabel')}] : []);   /* fix128-main */
       const known = new Set(Object.keys(G));
       const extra = items.filter(it=>!known.has(it.id));
       return order.map(([g,lbl])=>{
@@ -14639,6 +14703,7 @@ function renderReportsMenu(container){
   container.querySelectorAll('[data-cat]').forEach(el=>{
     el.addEventListener('click', ()=>{
       if(el.dataset.cat === 'receipts'){ state.view = 'receipts'; renderAll(); return; }
+      if(el.dataset.cat === 'mydebts'){ state.__mdFrom = 'reports'; state.reportsCategory = null; state.view = 'myDebts'; renderAll(); return; }   /* fix128-main */
       state.reportsCategory = el.dataset.cat; renderReports();
     });
   });
@@ -18707,6 +18772,106 @@ function __openExpenseSheet(id){
   __dzBindHidden('ex-delete-btn', '[data-del-expense="' + id + '"]');
 }
 
+/* --- fix128-main: asosiy ekranlar --- */
+/* Kichik menyu (pastdan): har bir band — sahifadagi yashirin eski tugmani bosadi, ya'ni aynan eski kod ishlaydi */
+function __actSheet(title, items){
+  const list = (items || []).filter(it=>it && (it.fn || (it.sel && document.querySelector(it.sel))));
+  openModal('<div class="modal-title">' + escapeHtml(title) + '</div>' + list.map((it, i)=>'<button type="button" class="sm-it" data-as-i="' + i + '" style="border-bottom:1px solid #f1f4f9;border-radius:0;">' + (it.icon || '') + '<span>' + escapeHtml(it.label) + '</span></button>').join(''), {center: true});
+  document.querySelectorAll('#modal-root [data-as-i]').forEach(b=>b.addEventListener('click', ()=>{
+    const it = list[+b.dataset.asI]; closeModal();
+    if(it.fn) it.fn(); else { const h = document.querySelector(it.sel); if(h) h.click(); }
+  }));
+}
+/* Xodim menyusi (tepadagi avatar) */
+function __closeStaffMenu(){ const l = document.getElementById('sm-layer'); if(l) l.remove(); }
+function __openStaffMenu(){
+  __closeStaffMenu();
+  const st = state.currentStaff; if(!st) return;
+  const shiftMine = !!(state.currentShift && state.currentShift.staffId === st.id);
+  const role = st.role === 'admin' ? tr('roleAdmin') : jobTitleLabel(st.jobTitle);
+  const l = document.createElement('div'); l.id = 'sm-layer';
+  l.innerHTML = '<div class="sm-pop" role="menu"><div class="sm-who"><span class="icon-round staff-ava" style="width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;">' + escapeHtml(((st.name || '?').trim().charAt(0) || '?').toUpperCase()) + '</span><div><b>' + escapeHtml(st.name || '') + '</b><small>' + escapeHtml(role || '') + (shiftMine ? ' · ' + escapeHtml(tr('smShiftOpen')) : '') + '</small></div></div>'
+    + '<button type="button" class="sm-it" id="sm-out">' + ICONS.logout + '<span>' + escapeHtml(shiftMine ? tr('smEndShift') : tr('smSwitch')) + '</span></button></div>';
+  document.body.appendChild(l);
+  l.addEventListener('click', (e)=>{ if(e.target === l) __closeStaffMenu(); });
+  document.getElementById('sm-out').addEventListener('click', ()=>{ __closeStaffMenu(); const b = document.getElementById('logout-btn'); if(b) b.click(); });
+}
+/* Planshet: o'ngdagi doimiy savat */
+function __scWanted(){
+  if(state.view !== 'sale' || !state.currentStaff || window.innerWidth < 900) return false;
+  if(state.settings.restaurantMode && !state.activeTableId && !state.takeawayMode) return false;
+  return true;
+}
+function __scRemove(){ const a = document.getElementById('side-cart'); if(a) a.remove(); document.body.classList.remove('side-cart-on'); }
+function __scPlace(){
+  const a = document.getElementById('side-cart'), app = document.getElementById('app'), vc = document.getElementById('view-container'), nav = document.getElementById('bottom-nav');
+  if(!a || !app || !vc) return;
+  if(getComputedStyle(app).position === 'static') app.style.position = 'relative';
+  const top = vc.offsetTop + 10, navH = nav ? nav.offsetHeight : 70;
+  a.style.top = top + 'px'; a.style.bottom = (navH + 12) + 'px';
+}
+function __scRender(){
+  let a = document.getElementById('side-cart');
+  if(!a){ a = document.createElement('aside'); a.id = 'side-cart'; (document.getElementById('app') || document.body).appendChild(a); }
+  document.body.classList.add('side-cart-on');
+  const cart = activeCart(), inTable = state.settings.restaurantMode && state.activeTableId;
+  const count = cart.reduce((x, c)=>x + c.qty, 0);
+  let h = '<div class="sc-head"><b>' + escapeHtml(tr('cart')) + '</b><span>' + count + ' ' + escapeHtml(tr('itemsWord')) + (typeof __cartBarCust === 'function' ? __cartBarCust() : '') + '</span></div>';
+  if(!cart.length){
+    h += '<div class="sc-empty">' + (ICONS.sale || '') + '<b style="color:var(--ink);">' + escapeHtml(tr('scEmpty')) + '</b><span style="font-size:13px;">' + escapeHtml(tr('scEmptySub')) + '</span></div>';
+  } else {
+    h += '<div class="sc-lines">' + cart.map(c=>{
+      const p = state.products.find(x=>x.id === c.productId); if(!p) return '';
+      const v = getVariant(p, c.variantId), price = cartItemPrice(c, p), key = cartLineKey(c);
+      const nm = escapeHtml(p.name) + (v ? ' — ' + escapeHtml(v.name || '') : '') + (c.saleMode === 'box' ? ' (' + escapeHtml(c.boxLabel || tr('boxDefaultLabel')) + ')' : '');
+      return '<div class="sc-line"><div class="nm"><b>' + nm + '</b><small>' + escapeHtml(fmt(price)) + '</small></div>'
+        + '<div class="sc-step"><button type="button" data-sc="dec" data-key="' + escapeHtml(key) + '">−</button><span data-sc-qty="' + escapeHtml(key) + '">' + c.qty + '</span><button type="button" data-sc="inc" data-key="' + escapeHtml(key) + '">+</button></div>'
+        + '<div class="sc-sum">' + escapeHtml(fmt(price * c.qty)) + '</div></div>';
+    }).join('') + '</div>';
+  }
+  h += '<div class="sc-foot"><div class="sc-total"><span>' + escapeHtml(tr('total')) + '</span><b>' + escapeHtml(fmt(cartTotal())) + '</b></div>';
+  if(cart.length){
+    h += '<div class="sc-btns"><button type="button" class="btn btn-ghost" id="sc-details">' + escapeHtml(tr('scDetails')) + '</button>'
+      + (inTable ? '<button type="button" class="btn btn-outline" id="sc-save-order">' + escapeHtml(tr('saveOrder')) + '</button>' : (!state.settings.restaurantMode ? '<button type="button" class="btn btn-outline" id="sc-hold">' + escapeHtml(tr('holdCart')) + '</button>' : ''))
+      + '</div><button type="button" class="btn btn-accent btn-block" id="sc-pay">' + escapeHtml(tr('checkout')) + '</button>';
+  }
+  h += '</div>';
+  a.innerHTML = h;
+  __scPlace();
+  const on = (id, f)=>{ const b = document.getElementById(id); if(b) b.addEventListener('click', f); };
+  on('sc-details', ()=>{ window.__cartScroll = 0; openCartModal(); });
+  on('sc-pay', ()=>openCheckoutModal());
+  on('sc-hold', ()=>holdCurrentCart());
+  on('sc-save-order', ()=>saveCurrentTableOrder());
+  a.querySelectorAll('[data-sc]').forEach(b=>b.addEventListener('click', ()=>__scStep(b.dataset.key, b.dataset.sc)));
+  a.querySelectorAll('[data-sc-qty]').forEach(el=>el.addEventListener('click', ()=>openQtyKeypad(el.dataset.scQty)));
+}
+/* − / + : savat oynasidagi bilan aynan bir xil qoida (qoldiq tekshiruvi, bir xil mahsulotning boshqa qatorlari) */
+function __scStep(key, act){
+  const c = activeCart(), item = c.find(x=>cartLineKey(x) === key);
+  if(!item){ renderProductGrid(); renderCartBar(); return; }
+  const product = state.products.find(p=>p.id === item.productId);
+  const maxStock = variantStock(product, item.variantId);
+  const otherUnitsUsed = c.filter(x=>x !== item && x.productId === item.productId && x.variantId === item.variantId).reduce((s2, x)=>s2 + (x.saleMode === 'box' ? x.qty * (x.unitsPerBox || 1) : x.qty), 0);
+  const remainingStock = Math.max(0, maxStock - otherUnitsUsed);
+  const maxQty = item.saleMode === 'box' ? Math.floor(remainingStock / (item.unitsPerBox || 1)) : remainingStock;
+  if(act === 'inc'){
+    if(!state.settings.allowOversell && item.qty + 1 > maxQty){ showToast(tr('notEnoughStock')); return; }
+    item.qty += 1;
+  } else {
+    item.qty -= 1;
+    if(item.qty <= 0){ const idx = c.findIndex(x=>cartLineKey(x) === key); c.splice(idx, 1); }
+  }
+  if(state.settings.restaurantMode){ saveTables(); syncActiveTable(); } else { saveCart(); }
+  renderProductGrid();
+  renderCartBar();
+}
+if(!window.__scBound){
+  window.__scBound = true;
+  let t = 0;
+  window.addEventListener('resize', ()=>{ clearTimeout(t); t = setTimeout(()=>{ try{ if(state.view === 'sale') renderCartBar(); else __scRemove(); }catch(e){} }, 150); });
+}
+
 /* --- Online catalog --- */
 const ONLINE_SHOP_BASE = 'https://savdo-pos.pages.dev/s/';
 function onlineShopCfg(){ return state.settings.onlineShop || {enabled:false, slug:'', telegram:'', whatsapp:'', showOut:false, lang:'', lastPublishedAt:null}; }
@@ -20067,7 +20232,7 @@ function renderAll(){
     const pillToggle = document.getElementById('sync-pill-toggle');
     if(pillToggle) pillToggle.addEventListener('click', ()=>{ state.__syncPillOpen = !state.__syncPillOpen; document.getElementById('sync-pill').classList.toggle('open', state.__syncPillOpen); });
   }
-  if(state.view!=='sale') document.getElementById('cart-bar-slot').innerHTML='';
+  if(state.view!=='sale'){ document.getElementById('cart-bar-slot').innerHTML=''; try{ __scRemove(); }catch(_e){} }   /* fix128-main */
   else renderCartBar();
   applySupportBadges();
   checkDailyDebtExport();
