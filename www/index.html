@@ -653,6 +653,68 @@
   .tg-try[disabled]{opacity:.55;}
   .tg-pf-st{font-size:12px;font-weight:700;color:var(--ink-soft);min-height:16px;margin:2px 0 0;line-height:1.35;}
   .tg-pf-st.err{color:var(--danger);} .tg-pf-st.ok{color:#16A34A;}
+  /* fix127-ds1c: "Xavfli amallar" */
+  [hidden]{display:none !important;}
+  .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
+  .ds-danger-h{display:flex;align-items:center;gap:6px;font-weight:800;font-size:13px;color:#c62828;margin-bottom:6px;}
+  .ds-danger p{margin:0 0 10px;font-size:12.5px;color:var(--ink-soft);line-height:1.45;}
+  .ds-danger .btn{display:flex;align-items:center;justify-content:center;gap:6px;}
+  .ds-danger .btn svg{width:16px;height:16px;}
+  .ds-row-tap{cursor:pointer;}
+  /* fix126-ds1b: kartochkalar, ikonkalar, bo'sh holat, grafik */
+  .ic-i{display:inline-flex;align-items:center;justify-content:center;vertical-align:-0.18em;line-height:1;}
+  .ic-i svg{width:1.15em;height:1.15em;}
+  .pt-ic .ic-i svg{width:20px;height:20px;}
+  .nf-ic svg{width:20px;height:20px;color:var(--ink);}
+  .co-extras .cx-ics i svg{width:15px;height:15px;color:var(--ink);}
+  .inv-card h4 .ic-i{color:var(--accent);margin-right:2px;}
+  .ic-cash{color:#15803D;} .ic-card{color:#0F766E;} .ic-credit{color:#C2410C;}
+  .stat-card{background:#fff !important;border:1px solid var(--v4-line) !important;box-shadow:0 1px 2px rgba(22,35,59,.04),0 4px 14px rgba(22,35,59,.05) !important;display:flex;flex-direction:column;justify-content:space-between;gap:6px;min-width:0;padding:14px 14px 12px !important;}
+  .stat-card::before{display:none !important;}
+  .stat-label{font-size:12.5px;font-weight:600;color:var(--ink-soft);line-height:1.3;}
+  .stat-value{background:none !important;-webkit-background-clip:border-box !important;background-clip:border-box !important;color:var(--ink);white-space:nowrap;overflow:hidden;font-size:20px;line-height:1.15;letter-spacing:-.3px;font-variant-numeric:tabular-nums;}
+  .stat-value-lg{font-size:26px;}
+  .stat-grid{align-items:stretch;}
+  .empty-state.ds-empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:28px 18px;color:var(--ink-soft);text-align:center;}
+  .ds-empty-ic{width:52px;height:52px;border-radius:16px;background:#eef2f9;color:var(--accent);display:flex;align-items:center;justify-content:center;}
+  .empty-state.ds-empty svg{margin:0;padding:0;background:none;border-radius:0;box-sizing:border-box;opacity:1;width:16px;height:16px;color:inherit;}
+  .empty-state.ds-empty .ds-empty-ic svg{width:24px;height:24px;color:var(--accent);}
+  .ds-empty-t{font-weight:800;font-size:15px;color:var(--ink);}
+  .ds-empty-s{font-size:13px;line-height:1.45;max-width:320px;}
+  .ds-empty .btn{margin-top:6px;width:auto;min-width:180px;padding-left:18px;padding-right:18px;display:inline-flex;align-items:center;justify-content:center;gap:6px;}
+  .ds-chart text{font-family:var(--font-ui);}
+  /* fix125-ds1a: bitta toggle, bitta orqaga tugmasi, sana tanlagich */
+  .checkbox-row input[type="checkbox"]:checked{background:var(--accent);}
+  .nf-sw{width:44px;height:26px;border-radius:13px;background:var(--border);}
+  .nf-sw::after{top:3px;left:3px;width:20px;height:20px;box-shadow:0 1px 3px rgba(0,0,0,0.25);}
+  .nf-sw:checked{background:var(--accent);}
+  .nf-sw:checked::after{transform:translateX(18px);}
+  .back-row > button, .ch-hbtn#ch-back{width:40px !important;height:40px !important;border-radius:12px !important;background:#eef2f9 !important;color:var(--ink) !important;flex-shrink:0;}
+  .back-row > button svg, .ch-hbtn#ch-back svg{width:20px;height:20px;}
+  .as-ok{color:var(--teal);font-weight:700;font-size:12px;white-space:nowrap;transition:opacity .4s;}
+  .dp-btn{width:100%;min-height:46px;display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;font-size:16px;text-align:left;cursor:pointer;}
+  .dp-btn svg{width:18px;height:18px;flex-shrink:0;color:var(--accent);}
+  .dp-btn span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .dp-btn.empty span{color:var(--ink-faint);}
+  .dp-btn:disabled{opacity:.55;cursor:default;}
+  #dp-layer{position:fixed;inset:0;z-index:100000;background:rgba(15,23,42,.45);display:flex;align-items:flex-end;justify-content:center;}
+  @media (min-width:600px){ #dp-layer{align-items:center;} }
+  #dp-layer .dp-sheet{background:var(--surface);width:100%;max-width:380px;border-radius:22px 22px 0 0;padding:14px 14px calc(14px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));box-shadow:0 -10px 30px rgba(22,35,59,.2);}
+  @media (min-width:600px){ #dp-layer .dp-sheet{border-radius:22px;} }
+  .dp-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  .dp-head b{font-size:16px;font-weight:800;color:var(--ink);}
+  .dp-nav{width:40px;height:40px;border-radius:12px;border:none;background:#eef2f9;color:var(--ink);font-size:20px;line-height:1;cursor:pointer;}
+  .dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .dp-wd{text-align:center;font-size:11.5px;font-weight:700;color:var(--ink-faint);padding:4px 0;}
+  .dp-day{height:40px;border-radius:12px;border:none;background:transparent;color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;padding:0;}
+  .dp-day.today{box-shadow:inset 0 0 0 1.5px var(--accent);}
+  .dp-day.sel{background:var(--accent);color:#fff;}
+  .dp-day:disabled{color:var(--ink-faint);opacity:.45;cursor:default;}
+  .dp-time{display:flex;align-items:center;gap:8px;margin-top:10px;font-weight:700;color:var(--ink-soft);font-size:13px;}
+  .dp-time select{width:auto;flex:1;}
+  .dp-foot{display:flex;gap:8px;margin-top:12px;}
+  .dp-foot button{flex:1;min-height:44px;border-radius:12px;border:none;font:inherit;font-weight:700;font-size:14px;cursor:pointer;background:#eef2f9;color:var(--ink);}
+  .dp-foot button.dp-ok{background:var(--accent);color:#fff;}
 </style>
 </head>
 <body>
@@ -1710,6 +1772,40 @@ const T = {
   pfMinStockHint:{uz:"Qoldiq shu songa tushsa \"kam qolgan\" deyiladi. Bo'sh qoldirsangiz, Sozlamalardagi umumiy qoida ishlaydi. Variantli tovarda har bir variantga qo'llanadi.",ru:"Когда остаток опустится до этого числа, товар считается «мало осталось». Если оставить пустым, работает общее правило из Настроек. Для товара с вариантами — для каждого варианта.",en:"When stock drops to this number, the item is low. Leave empty to use the general rule from Settings. For items with variants it applies to each variant.",kk:"Қалдық осы санға түссе, «аз қалды» деп есептеледі. Бос қалдырсаңыз, Баптаулардағы жалпы ереже жұмыс істейді. Нұсқалы тауарда әр нұсқаға қолданылады.",ky:"Калдык ушул санга түшсө, «аз калды» деп эсептелет. Бош калтырсаңыз, Жөндөөлөрдөгү жалпы эреже иштейт. Варианттуу товардa ар бир вариантка колдонулат.",tg:"Вақте бақия то ин рақам фурояд, мол «кам монд» ҳисоб мешавад. Агар холӣ монед, қоидаи умумии Танзимот кор мекунад. Барои моли вариантдор — ба ҳар вариант."},
   pfMinStockBad:{uz:"Minimum uchun 0 yoki undan katta son kiriting.",ru:"Для минимума введите число 0 или больше.",en:"Enter 0 or a greater number for the minimum.",kk:"Минимум үшін 0 немесе одан үлкен сан енгізіңіз.",ky:"Минимум үчүн 0 же андан чоң сан киргизиңиз.",tg:"Барои ҳадди ақал рақами 0 ё зиёдтар ворид кунед."},
   tgPLowSubAuto:{uz:"Kuniga bir marta. Avtomatik: {d} kunlik savdoga yetmasa (Sozlamalardan)",ru:"Раз в день. Автоматически: не хватит на {d} дн. продаж (из настроек)",en:"Once a day. Automatic: won't last {d} days of sales (from Settings)",kk:"Күніне бір рет. Автоматты: {d} күндік сатуға жетпесе (баптаулардан)",ky:"Күнүнө бир жолу. Автоматтык: {d} күндүк сатууга жетпесе (жөндөөлөрдөн)",tg:"Рӯзе як бор. Худкор: ба фурӯши {d} рӯз нарасад (аз танзимот)"},
+  /* fix125-ds1a */
+  dpPick:{uz:"Sanani tanlang",ru:"Выберите дату",en:"Choose a date",kk:"Күнді таңдаңыз",ky:"Күндү тандаңыз",tg:"Санаро интихоб кунед"},
+  dpToday:{uz:"Bugun",ru:"Сегодня",en:"Today",kk:"Бүгін",ky:"Бүгүн",tg:"Имрӯз"},
+  dpClear:{uz:"Tozalash",ru:"Очистить",en:"Clear",kk:"Тазалау",ky:"Тазалоо",tg:"Тоза кардан"},
+  dpCancel:{uz:"Bekor qilish",ru:"Отмена",en:"Cancel",kk:"Бас тарту",ky:"Жокко чыгаруу",tg:"Бекор кардан"},
+  dpDone:{uz:"Tayyor",ru:"Готово",en:"Done",kk:"Дайын",ky:"Даяр",tg:"Тайёр"},
+  dpTime:{uz:"Vaqt",ru:"Время",en:"Time",kk:"Уақыт",ky:"Убакыт",tg:"Вақт"},
+  dpPrev:{uz:"Oldingi oy",ru:"Предыдущий месяц",en:"Previous month",kk:"Алдыңғы ай",ky:"Мурунку ай",tg:"Моҳи гузашта"},
+  dpNext:{uz:"Keyingi oy",ru:"Следующий месяц",en:"Next month",kk:"Келесі ай",ky:"Кийинки ай",tg:"Моҳи оянда"},
+  loyaltyPercentBad:{uz:"0 dan 100 gacha son kiriting. Saqlanmadi.",ru:"Введите число от 0 до 100. Не сохранено.",en:"Enter a number from 0 to 100. Not saved.",kk:"0-ден 100-ге дейін сан енгізіңіз. Сақталмады.",ky:"0дөн 100гө чейин сан киргизиңиз. Сакталган жок.",tg:"Рақами аз 0 то 100 ворид кунед. Захира нашуд."},
+  /* fix126-ds1b */
+  dsReceiptsCount:{uz:"Cheklar soni",ru:"Количество чеков",en:"Receipts",kk:"Чектер саны",ky:"Чектердин саны",tg:"Шумораи чекҳо"},
+  dsExpenseCount:{uz:"Xarajatlar soni",ru:"Количество расходов",en:"Expenses",kk:"Шығындар саны",ky:"Чыгымдардын саны",tg:"Шумораи хароҷот"},
+  dsRefundCount:{uz:"Qaytarilgan cheklar",ru:"Возвращённых чеков",en:"Refunded receipts",kk:"Қайтарылған чектер",ky:"Кайтарылган чектер",tg:"Чекҳои баргардонидашуда"},
+  esNoProducts:{uz:"Hali mahsulot yo'q",ru:"Товаров пока нет",en:"No products yet",kk:"Әзірге тауар жоқ",ky:"Азырынча товар жок",tg:"Ҳоло мол нест"},
+  esNoProductsSub:{uz:"Birinchi mahsulotni qo'shing — keyin uni kassada sotasiz.",ru:"Добавьте первый товар — потом продавайте его на кассе.",en:"Add your first product, then sell it at the till.",kk:"Алғашқы тауарды қосыңыз — кейін оны кассада сатасыз.",ky:"Биринчи товарды кошуңуз — анан аны кассада сатасыз.",tg:"Моли аввалро илова кунед — баъд онро дар касса мефурӯшед."},
+  esNotFound:{uz:"Hech narsa topilmadi",ru:"Ничего не найдено",en:"Nothing found",kk:"Ештеңе табылмады",ky:"Эч нерсе табылган жок",tg:"Чизе ёфт нашуд"},
+  esNotFoundSub:{uz:"Qidiruv so'zini yoki filtrni o'zgartirib ko'ring.",ru:"Измените запрос или фильтр.",en:"Try another search or filter.",kk:"Іздеу сөзін немесе сүзгіні өзгертіп көріңіз.",ky:"Издөө сөзүн же чыпканы өзгөртүп көрүңүз.",tg:"Калимаи ҷустуҷӯ ё филтрро иваз кунед."},
+  esNoCustomers:{uz:"Hali mijoz yo'q",ru:"Клиентов пока нет",en:"No customers yet",kk:"Әзірге клиент жоқ",ky:"Азырынча кардар жок",tg:"Ҳоло мизоҷ нест"},
+  esNoCustomersSub:{uz:"Mijoz qo'shsangiz, qarz, bonus va xaridlar tarixi shu yerda yuritiladi.",ru:"Добавьте клиента — здесь будут его долг, бонусы и покупки.",en:"Add a customer to track debt, bonus and purchases here.",kk:"Клиент қоссаңыз, қарыз, бонус және сатып алулар осында жүргізіледі.",ky:"Кардар кошсоңуз, карыз, бонус жана сатып алуулар ушул жерде жүргүзүлөт.",tg:"Мизоҷ илова кунед — қарз, бонус ва харидҳо дар ин ҷо нигоҳ дошта мешаванд."},
+  esNoReceipts:{uz:"Hali chek yo'q",ru:"Чеков пока нет",en:"No receipts yet",kk:"Әзірге чек жоқ",ky:"Азырынча чек жок",tg:"Ҳоло чек нест"},
+  esNoReceiptsSub:{uz:"Birinchi savdodan keyin cheklar shu yerda chiqadi.",ru:"После первой продажи чеки появятся здесь.",en:"Receipts appear here after your first sale.",kk:"Алғашқы сатудан кейін чектер осында шығады.",ky:"Биринчи сатуудан кийин чектер ушул жерде чыгат.",tg:"Пас аз фурӯши аввал чекҳо дар ин ҷо пайдо мешаванд."},
+  esNoExpensesSub:{uz:"Ijara, maosh, kommunal — xarajatlarni yozsangiz, sof foyda to'g'ri hisoblanadi.",ru:"Записывайте аренду, зарплату, коммуналку — чистая прибыль будет точной.",en:"Record rent, salaries and utilities so net profit is accurate.",kk:"Жалдау, жалақы, коммуналдық — шығындарды жазсаңыз, таза пайда дұрыс есептеледі.",ky:"Ижара, айлык, коммуналдык — чыгымдарды жазсаңыз, таза пайда туура эсептелет.",tg:"Иҷора, маош, коммуналӣ — хароҷотро нависед, фоидаи соф дуруст ҳисоб мешавад."},
+  /* fix127-ds1c */
+  dzTitle:{uz:"Xavfli amallar",ru:"Опасные действия",en:"Danger zone",kk:"Қауіпті әрекеттер",ky:"Коркунучтуу аракеттер",tg:"Амалҳои хатарнок"},
+  dzDelProduct:{uz:"Mahsulotni o'chirish",ru:"Удалить товар",en:"Delete product",kk:"Тауарды жою",ky:"Товарды өчүрүү",tg:"Нест кардани мол"},
+  dzDelProductNote:{uz:"Mahsulot ro'yxatdan o'chadi. Eski cheklar va hisobotlar o'zgarmaydi.",ru:"Товар исчезнет из списка. Старые чеки и отчёты не изменятся.",en:"The product disappears from the list. Past receipts and reports stay unchanged.",kk:"Тауар тізімнен жойылады. Ескі чектер мен есептер өзгермейді.",ky:"Товар тизмеден өчөт. Эски чектер жана отчеттор өзгөрбөйт.",tg:"Мол аз рӯйхат нест мешавад. Чекҳо ва ҳисоботҳои пешина тағйир намеёбанд."},
+  dzDelStaff:{uz:"Xodimni o'chirish",ru:"Удалить сотрудника",en:"Delete staff member",kk:"Қызметкерді жою",ky:"Кызматкерди өчүрүү",tg:"Нест кардани корманд"},
+  dzOwnerNo:{uz:"Biznes egasini o'chirib bo'lmaydi.",ru:"Владельца бизнеса удалить нельзя.",en:"The business owner cannot be deleted.",kk:"Бизнес иесін жоюға болмайды.",ky:"Бизнес ээсин өчүрүүгө болбойт.",tg:"Соҳиби тиҷоратро нест кардан мумкин нест."},
+  dzDelExpense:{uz:"Xarajatni o'chirish",ru:"Удалить расход",en:"Delete expense",kk:"Шығынды жою",ky:"Чыгымды өчүрүү",tg:"Нест кардани хароҷот"},
+  dzDelBranch:{uz:"Filialni o'chirish",ru:"Удалить филиал",en:"Delete branch",kk:"Филиалды жою",ky:"Филиалды өчүрүү",tg:"Нест кардани филиал"},
+  dzDelete:{uz:"O'chirish",ru:"Удалить",en:"Delete",kk:"Жою",ky:"Өчүрүү",tg:"Нест кардан"},
+  dzExpense:{uz:"Xarajat",ru:"Расход",en:"Expense",kk:"Шығын",ky:"Чыгым",tg:"Хароҷот"},
+  dzMore:{uz:"Boshqa amallar",ru:"Другие действия",en:"More actions",kk:"Басқа әрекеттер",ky:"Башка аракеттер",tg:"Амалҳои дигар"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -2883,7 +2979,7 @@ function bindAutosaveStatus(){
   const el = document.getElementById('settings-autosave-text');
   if(!el) return;
   if(bindAutosaveStatus.__handler) document.removeEventListener('settings-saved', bindAutosaveStatus.__handler);
-  bindAutosaveStatus.__handler = ()=>{ const t = document.getElementById('settings-autosave-text'); if(!t) return; t.textContent = tr('autosavedAt') + ' \u2713 ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); t.style.color = 'var(--teal)'; t.style.fontWeight = '700'; };
+  bindAutosaveStatus.__handler = ()=>{ const t = document.getElementById('settings-autosave-text'); if(!t) return; t.textContent = tr('autosavedAt') + ' \u2713 ' + fmtTime(new Date(), true); t.style.color = 'var(--teal)'; t.style.fontWeight = '700'; };
   document.addEventListener('settings-saved', bindAutosaveStatus.__handler);
 }
 function saveSettingsLocalOnly(){ storSet(STORAGE_KEYS.settings, state.settings); }
@@ -3032,7 +3128,7 @@ function openModal(html, opts){
   const __ovT = Date.now();
   document.getElementById('modal-overlay').addEventListener('click',(e)=>{ if(e.target.id==='modal-overlay' && Date.now()-__ovT > 450) closeModal(); });
 }
-function closeModal(){ document.getElementById('modal-root').innerHTML=''; }
+function closeModal(){ document.getElementById('modal-root').innerHTML=''; try{ __dpClose(); }catch(e){} }   /* fix125-ds1a */
 initBackButtonHandling();
 
 function confirmDialog(message, onYes, yesLabel){
@@ -3200,7 +3296,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.27';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.28';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -5316,7 +5412,7 @@ function openEndShiftModal(){
     <div class="modal-title">${tr('shiftSummary')}</div>
     <div class="stat-grid" style="margin-bottom:14px;">
       <div class="stat-card"><div class="stat-label">${tr('total')}</div><div class="stat-value stat-value-lg">${fmt(grossTotal)}</div></div>
-      <div class="stat-card"><div class="stat-label">${shiftSales.length} ${tr('salesCountLabel')}</div><div class="stat-value">&nbsp;</div></div>
+      <div class="stat-card"><div class="stat-label">${tr('dsReceiptsCount')}</div><div class="stat-value">${shiftSales.length}</div></div>
     </div>
     <div class="card">
       <div class="row"><span class="subtle">${tr('cashLabel')}</span><strong>${fmt(cashTotal)}</strong></div>
@@ -5405,7 +5501,7 @@ function renderHeader(){
   if(branchEl){
     if(isAdmin() && branchList().length > 1){
       branchEl.style.display = '';
-      branchEl.innerHTML = `<button id="branch-indicator-btn">📍 ${escapeHtml(branchName(state.currentBranchId))} ▾</button>`;
+      branchEl.innerHTML = `<button id="branch-indicator-btn">${icI('mapPin')} ${escapeHtml(branchName(state.currentBranchId))} ▾</button>`;
       document.getElementById('branch-indicator-btn').addEventListener('click', openQuickBranchSwitch);
     } else {
       branchEl.style.display = 'none';
@@ -5615,10 +5711,10 @@ function renderSale(){
   const categories = Array.from(new Set(visibleProducts().map(p=>p.category).filter(Boolean)));
   container.innerHTML = `
     ${tbl ? `<div class="back-row"><button id="back-to-tables-btn">${ICONS.arrowLeft}</button><span class="t-title">${tableWord()}: ${escapeHtml(tbl.name)}</span></div>` : ''}
-    ${isTakeawayFromGrid ? `<div class="back-row"><button id="back-to-tables-btn">${ICONS.arrowLeft}</button><span class="t-title">🥡 ${tr('orderTypeTakeaway')}</span></div>` : ''}
+    ${isTakeawayFromGrid ? `<div class="back-row"><button id="back-to-tables-btn">${ICONS.arrowLeft}</button><span class="t-title">${icI('bag')} ${tr('orderTypeTakeaway')}</span></div>` : ''}
     ${(state.settings.printerMode==='bluetooth' && ((!getBtCharacteristic('main') && !loadRememberedBtDevices().main) || window.__spBtOff)) ? `
     <div class="card" style="margin-bottom:10px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--danger);">
-      <span style="font-size:13px;color:var(--danger);font-weight:700;">🖨️ ${window.__spBtOff ? tr('btOffBanner') : tr('printerNotConnected')}</span>
+      <span style="font-size:13px;color:var(--danger);font-weight:700;">${icI('printer')} ${window.__spBtOff ? tr('btOffBanner') : tr('printerNotConnected')}</span>
       <button class="btn btn-primary btn-sm" id="sale-quick-connect-printer-btn">${tr('connectPrinter')}</button>
     </div>
     ` : ''}
@@ -5721,7 +5817,7 @@ function productCardHtml(p){
         ${p.image ? `<img class="product-thumb" src="${p.image}" draggable="false">` : `<div class="product-thumb-placeholder" style="background:${avatarColorFor(p.name)};color:#fff;font-weight:800;font-size:20px;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div>`}
         ${cartQty>0 ? `<span class="cart-qty-badge">${cartQty}</span>` : ''}
         ${hasVariants ? `<span class="variant-badge">${p.variants.length} ${tr('variantsCountSuffix')}</span>` : ''}
-        ${(hasBox && !inWholesale) ? `<span class="variant-badge">📦 ${escapeHtml(p.boxLabel||tr('boxDefaultLabel'))}</span>` : ''}
+        ${(hasBox && !inWholesale) ? `<span class="variant-badge">${icI('package')} ${escapeHtml(p.boxLabel||tr('boxDefaultLabel'))}</span>` : ''}
       </div>
       <div class="product-name">${escapeHtml(p.name)}</div>
       <div class="product-price" style="${inWholesale?'color:var(--warm);font-size:12px;':''}">${priceLabel}</div>
@@ -5781,8 +5877,8 @@ function renderTableGrid(){
   container.innerHTML = `
     <h2 class="section-title">${tableWord()}</h2>
     <div class="btn-row" style="margin-bottom:14px;">
-      <button class="btn btn-accent" id="takeaway-btn">🥡 ${tr('orderTypeTakeaway')}${takeawayCount?` <span style="opacity:0.85;">(${takeawayCount})</span>`:''}</button>
-      <button class="btn btn-outline" id="reservations-nav-btn">📅 ${tr('reservationsSection')}${reservedCount?` (${reservedCount})`:''}</button>
+      <button class="btn btn-accent" id="takeaway-btn">${icI('bag')} ${tr('orderTypeTakeaway')}${takeawayCount?` <span style="opacity:0.85;">(${takeawayCount})</span>`:''}</button>
+      <button class="btn btn-outline" id="reservations-nav-btn">${icI('calendar')} ${tr('reservationsSection')}${reservedCount?` (${reservedCount})`:''}</button>
     </div>
     <div class="table-grid">
       ${visibleTables().map(t=>{
@@ -5792,7 +5888,7 @@ function renderTableGrid(){
         return `<div class="table-card ${occupied?'occupied':''}" data-id="${t.id}">
           <div class="t-num">${escapeHtml(t.name)}</div>
           <div class="t-status">${occupied?fmt(total):tr('tableFree')}</div>
-          ${reservation && !occupied ? `<div style="font-size:10px;font-weight:700;color:var(--warm);margin-top:2px;">📅 ${new Date(reservation.date).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})} · ${escapeHtml(reservation.customerName)}</div>` : ''}
+          ${reservation && !occupied ? `<div style="font-size:10px;font-weight:700;color:var(--warm);margin-top:2px;">${icI('calendar')} ${fmtTime(reservation.date)} · ${escapeHtml(reservation.customerName)}</div>` : ''}
         </div>`;
       }).join('')}
     </div>
@@ -5896,7 +5992,7 @@ function renderReservationsList(){
       <div class="list-item">
         <div class="info">
           <div class="name">${escapeHtml(r.customerName)} · ${r.partySize} ${tr('personSuffix')}</div>
-          <div class="subtle">${new Date(r.date).toLocaleString()}${table?(' · '+tr('tablesSection')+' '+escapeHtml(table.name)):''}${r.phone?(' · '+escapeHtml(r.phone)):''}</div>
+          <div class="subtle">${fmtDateTime(r.date)}${table?(' · '+tr('tablesSection')+' '+escapeHtml(table.name)):''}${r.phone?(' · '+escapeHtml(r.phone)):''}</div>
         </div>
         <button class="btn btn-ghost btn-sm" data-cancel-reservation="${r.id}">${ICONS.trash}</button>
       </div>
@@ -6583,7 +6679,7 @@ function openCustomerHub(opts){
     var html = '<div class="ch-dhead">' + avatar(c) + '<div style="min-width:0;"><div class="ch-dname">' + escapeHtml(c.name) + '</div>'
       + (c.phone ? '<div class="subtle">' + escapeHtml(c.phone) + '</div>' : '')
       + (c.address ? '<div class="subtle" style="font-size:12px;">' + escapeHtml(c.address) + '</div>' : '') + '</div></div>';
-    if(canView && c.phone) html += '<p class="subtle" style="font-size:11.5px;line-height:1.35;margin:6px 2px 10px;">&#128241; ' + escapeHtml(tr('sdCreditorHint')) + '</p>';   /* fix114-debts */
+    if(canView && c.phone) html += '<p class="subtle" style="font-size:11.5px;line-height:1.35;margin:6px 2px 10px;">' + icI('phone') + ' ' + escapeHtml(tr('sdCreditorHint')) + '</p>';   /* fix114-debts */
     if(canView){
       html += '<div class="ch-stats">'
         + '<div class="ch-stat"><div class="ch-sl">' + tr('debt') + '</div><div class="ch-sv" style="color:' + (c.debt > 0 ? 'var(--danger)' : 'var(--success)') + ';">' + fmt(c.debt || 0) + '</div></div>'
@@ -6677,7 +6773,7 @@ function openCustomerHub(opts){
     var list = state.sales.filter(function(s){ return s.customerId === c.id; }).sort(function(a, b){ return new Date(b.date) - new Date(a.date); }).slice(0, 100);
     var html = list.length ? list.map(function(s){
       var items = (s.items || []).map(function(it){ return escapeHtml(it.name || '') + ' × ' + it.qty; }).join(', ');
-      return '<div class="ch-sale" data-ch-sale="' + s.id + '"><div class="ch-sale-top"><div><b>' + (s.receiptNumber ? '№' + escapeHtml(String(s.receiptNumber)) + ' · ' : '') + new Date(s.date).toLocaleString() + '</b>'
+      return '<div class="ch-sale" data-ch-sale="' + s.id + '"><div class="ch-sale-top"><div><b>' + (s.receiptNumber ? '№' + escapeHtml(String(s.receiptNumber)) + ' · ' : '') + fmtDateTime(s.date) + '</b>'
         + '<div class="subtle" style="font-size:12px;">' + paymentTypeLabel(s.paymentType) + (s.refunded ? ' · <span style="color:var(--danger);">' + tr('refundSale') + '</span>' : '') + '</div></div>'
         + '<b>' + fmt(s.total || 0) + '</b></div><div class="ch-sale-items" style="display:none;">' + (items || '—') + '</div></div>';
     }).join('') : '<div class="subtle" style="padding:12px 0;">' + tr('noHistory') + '</div>';
@@ -6694,7 +6790,7 @@ function openCustomerHub(opts){
     var html = '<div class="card" style="padding:10px 14px;margin-bottom:10px;display:flex;justify-content:space-between;"><span class="subtle">' + tr('debt') + '</span><b style="color:' + (c.debt > 0 ? 'var(--danger)' : 'var(--success)') + ';">' + fmt(c.debt || 0) + '</b></div>';
     html += list.length ? list.map(function(h){
       var isSale = h.type === 'sale';
-      return '<div class="ledger-row" style="flex-direction:column;align-items:stretch;gap:2px;"><div style="display:flex;justify-content:space-between;"><span>' + new Date(h.date).toLocaleString()
+      return '<div class="ledger-row" style="flex-direction:column;align-items:stretch;gap:2px;"><div style="display:flex;justify-content:space-between;"><span>' + fmtDateTime(h.date)
         + '</span><span class="ledger-amt ' + (isSale ? 'up' : 'down') + '">' + (isSale ? '+' : '−') + fmt(h.amount) + '</span></div>'
         + ((h.staffName || h.note) ? '<div class="subtle" style="font-size:11px;">' + (h.staffName ? escapeHtml(h.staffName) : '') + (h.staffName && h.note ? ' · ' : '') + escapeHtml(h.note || '') + '</div>' : '') + '</div>';
     }).join('') : '<div class="subtle" style="padding:12px 0;">' + tr('noHistory') + '</div>';
@@ -6748,7 +6844,7 @@ function renderCartBar(){
     <div class="left"><div class="count">${count} ${tr('itemsWord')}${__cartBarCust()}</div><div class="sum">${fmt(total)}</div></div>
     <div style="display:flex;gap:8px;">
       ${inTableMode ? `<button id="quick-save-order-btn" style="background:rgba(255,255,255,0.16);">${tr('saveOrder')}</button>` : ''}
-      ${inTableMode ? `<button id="quick-save-logout-btn" title="${tr('saveAndLogoutBtn')}" style="background:rgba(255,255,255,0.16);">🚪</button>` : ''}
+      ${inTableMode ? `<button id="quick-save-logout-btn" title="${tr('saveAndLogoutBtn')}" style="background:rgba(255,255,255,0.16);">${ICONS.logout}</button>` : ''}
       ${!state.settings.restaurantMode ? `<button id="hold-cart-btn" title="${tr('holdCartTitle')}" style="background:rgba(255,255,255,0.16);"><svg width='14' height='14' viewBox='0 0 24 24' fill='currentColor'><rect x='6' y='4' width='4' height='16' rx='1'/><rect x='14' y='4' width='4' height='16' rx='1'/></svg> ${tr('holdCart')}</button>` : ''}
       <button id="open-cart-btn">${tr('cart')}</button>
     </div>
@@ -7037,7 +7133,7 @@ function openHeldCartsModal(){
       <div class="card" style="padding:12px 14px;margin-bottom:10px;">
         <div class="row" style="align-items:flex-start;gap:10px;">
           <div style="flex:1;min-width:0;"><div style="font-weight:800;">${escapeHtml(h.name)}</div>
-            <div class="subtle" style="font-size:12px;">${h.qty} ${tr('itemsWord')} &middot; ${new Date(h.createdAt).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}${h.staffName?(' &middot; '+escapeHtml(h.staffName)):''}</div>
+            <div class="subtle" style="font-size:12px;">${h.qty} ${tr('itemsWord')} &middot; ${fmtDateTime(h.createdAt)}${h.staffName?(' &middot; '+escapeHtml(h.staffName)):''}</div>
             <div class="subtle" style="font-size:12px;margin-top:2px;">${h.items.map(it=>{ const p=state.products.find(x=>x.id===it.productId); const v=p?getVariant(p,it.variantId):null; return escapeHtml((p?p.name:'?')+(v?' '+v.name:''))+' x'+it.qty; }).join(', ')}</div></div>
           <strong style="white-space:nowrap;">${fmt(h.total)}</strong>
         </div>
@@ -7211,7 +7307,7 @@ function renderCartModalContent(){
     const label = c.saleMode==='box' ? `${escapeHtml(p.name)} (${escapeHtml(c.boxLabel||tr('boxDefaultLabel'))})` : (c.priceTier==='wholesale' ? `${escapeHtml(p.name)} (${tr('wholesaleModeShort')})` : (v ? `${escapeHtml(p.name)} — ${escapeHtml(v.name)}` : escapeHtml(p.name)));
     return `<div class="row cart-line">
       <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px;">${label}${c.isTakeaway?`<span class="badge badge-clear" style="font-size:10px;">🥡 ${tr('orderTypeTakeaway')}</span>`:''}</div>
+        <div style="font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px;">${label}${c.isTakeaway?`<span class="badge badge-clear" style="font-size:10px;">${icI('bag')} ${tr('orderTypeTakeaway')}</span>`:''}</div>
         <div style="font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;">
           <span data-price-edit="${key}" style="text-decoration:underline dotted;cursor:pointer;${edited?'color:var(--accent-dark);font-weight:700;':''}">${fmt(price)}</span>
           ${edited ? `<span style="text-decoration:line-through;color:var(--ink-faint);">${fmt(basePrice)}</span>` : ''}
@@ -7229,13 +7325,13 @@ function renderCartModalContent(){
     ${cart.length ? rows : `<div class="empty-state">${ICONS.box}<div>${tr('emptyCart')}</div></div>`}
     ${cart.length ? `
       <div class="row" style="border-top:1px solid var(--border);padding-top:12px;margin-top:6px;"><strong>${tr('total')}</strong><strong>${fmt(cartSubtotal())}</strong></div>
-      ${inTableMode ? `<button class="btn btn-outline btn-block" id="split-takeaway-btn" style="margin-top:10px;">🥡 ${tr('splitTakeawayBtn')}</button>` : ''}
+      ${inTableMode ? `<button class="btn btn-outline btn-block" id="split-takeaway-btn" style="margin-top:10px;">${icI('bag')} ${tr('splitTakeawayBtn')}</button>` : ''}
       <button class="btn btn-ghost btn-block" id="clear-cart-btn" style="margin-top:10px;">${tr('clearCart')}</button>
       <div class="btn-row" style="margin-top:10px;">
         ${inTableMode ? `<button class="btn btn-outline" id="save-order-btn">${tr('saveOrder')}</button>` : ''}
         <button class="btn btn-accent" id="go-checkout-btn">${tr('checkout')}</button>
       </div>
-      ${inTableMode ? `<button class="btn btn-outline btn-block" id="save-logout-btn" style="margin-top:10px;">🚪 ${tr('saveAndLogoutBtn')}</button>` : ''}
+      ${inTableMode ? `<button class="btn btn-outline btn-block" id="save-logout-btn" style="margin-top:10px;">${icI('logout')} ${tr('saveAndLogoutBtn')}</button>` : ''}
     ` : ''}
   `);
   (function(){
@@ -7589,7 +7685,7 @@ function openCheckoutModal(){
         <div class="toggle-opt ${paymentType==='cash'?'active':''}" data-pt="cash"><span class="pt-ic">${paymentTypeIcon('cash')}</span>${tr('cash')}</div>
         <div class="toggle-opt ${paymentType==='card'?'active':''}" data-pt="card"><span class="pt-ic">${paymentTypeIcon('card')}</span>${tr('card')}</div>
         ${canSellOnCredit() ? `<div class="toggle-opt ${paymentType==='credit'?'active':''}" data-pt="credit"><span class="pt-ic">${paymentTypeIcon('credit')}</span>${tr('credit')}</div>` : ''}
-        <div class="toggle-opt ${paymentType==='mixed'?'active':''}" data-pt="mixed"><span class="pt-ic">&#128256;</span>${tr('mixPay')}</div>
+        <div class="toggle-opt ${paymentType==='mixed'?'active':''}" data-pt="mixed"><span class="pt-ic">${icI('shuffle')}</span>${tr('mixPay')}</div>
       </div>
       ${showOrderType ? `
       <div class="field">
@@ -7600,9 +7696,9 @@ function openCheckoutModal(){
         </div>
       </div>
       ` : ''}
-      <button type="button" class="co-summary" id="co-customer-toggle"><span>&#128100; ${tr('coCustomer')}:</span><span class="co-val" id="co-customer-name"></span><span class="co-act" id="co-customer-act"></span></button>
+      <button type="button" class="co-summary" id="co-customer-toggle"><span>${icI('user')} ${tr('coCustomer')}:</span><span class="co-val" id="co-customer-name"></span><span class="co-act" id="co-customer-act"></span></button>
       <div class="co-body" id="co-customer-body"></div>
-      <button type="button" class="co-summary co-extras" id="co-extras-toggle"><span class="cx-ics"><i style="background:#FEE2E2;">&#127991;&#65039;</i><i style="background:#EDE9FE;">&#128718;&#65039;</i><i style="background:#DBEAFE;">&#128666;</i></span><span class="co-val cx-txt">${tr('coExtras')}</span><span class="co-act" id="co-extras-act">&#9662;</span></button>
+      <button type="button" class="co-summary co-extras" id="co-extras-toggle"><span class="cx-ics"><i style="background:#FEE2E2;">${ICONS.tag}</i><i style="background:#EDE9FE;">${ICONS.bell}</i><i style="background:#DBEAFE;">${ICONS.truck}</i></span><span class="co-val cx-txt">${tr('coExtras')}</span><span class="co-act" id="co-extras-act">&#9662;</span></button>
       <div class="co-body" id="co-extras-body"><div id="credit-fields"></div><div id="charges-fields"></div><div id="bonus-fields"></div></div>
       <div class="row"><span class="subtle">${tr('subtotal')}</span><span>${fmt(subtotal())}</span></div>
       ${canApplyDiscount() ? `<div class="row" id="discount-row" style="${discountAmount()>0?'':'display:none;'}"><span class="subtle">${tr('discountLabel')}</span><span id="discount-amount-display">-${fmt(discountAmount())}</span></div>` : ''}
@@ -7819,7 +7915,7 @@ function openCheckoutModal(){
     const body = document.getElementById('co-customer-body');
     const openC = false; /* fix93: mijoz tezkor oynada tanlanadi */
     body.classList.toggle('open', openC); tgl.classList.toggle('open', openC); tgl.classList.toggle('required', required && !cust && selectedCustomerId!=='__new__');
-    document.getElementById('co-customer-act').innerHTML = cust ? '&#9998;' : ('+&#128100; ' + tr('coChoose'));
+    document.getElementById('co-customer-act').innerHTML = cust ? icI('edit') : ('+' + icI('user') + ' ' + tr('coChoose'));
     const openE = coExtrasOpen!=null ? coExtrasOpen : (discountOn || serviceChargeOn || deliveryFeeOn || bonusRedeemAmount>0 || splitOn);
     document.getElementById('co-extras-body').classList.toggle('open', openE);
     document.getElementById('co-extras-toggle').classList.toggle('open', openE);
@@ -8072,7 +8168,7 @@ function playSaleSuccess(sale){
   var el = document.createElement('div');
   el.id = 'sale-ok'; el.className = 'sale-ok';
   var snd = __soSoundOn();
-  el.innerHTML = '<button type="button" class="so-snd" id="so-snd" aria-label="sound">' + (snd ? '&#128266;' : '&#128263;') + '</button>'
+  el.innerHTML = '<button type="button" class="so-snd" id="so-snd" aria-label="sound">' + (snd ? ICONS.volume : ICONS.volumeX) + '</button>'
     + '<div class="so-box"><svg class="so-svg" viewBox="0 0 120 120"><circle class="so-glow" cx="60" cy="60" r="52"></circle>'
     + '<circle class="so-ring" cx="60" cy="60" r="52"></circle><path class="so-check" d="M36 62 L54 80 L86 44"></path></svg>'
     + '<div class="so-amount">' + fmt(sale && sale.total ? sale.total : 0) + '</div>'
@@ -8083,7 +8179,7 @@ function playSaleSuccess(sale){
     e.stopPropagation();
     var on = !__soSoundOn();
     try{ localStorage.setItem('savdo_ok_sound', on ? '1' : '0'); }catch(_e){}
-    sb.innerHTML = on ? '&#128266;' : '&#128263;';
+    sb.innerHTML = on ? ICONS.volume : ICONS.volumeX;
   });
   if(snd){ __soChime(); }
   try{ if(navigator.vibrate) navigator.vibrate(35); }catch(e){}
@@ -9536,7 +9632,7 @@ async function renderSettingsDevices(container){
     <div class="card" style="padding:12px 14px;margin-bottom:8px;">
       <div class="row" style="gap:10px;">
         <div style="min-width:0;"><div style="font-weight:800;">${escapeHtml(d.name||'?')} ${d.id===mine ? `<span class="badge badge-clear" style="font-size:11px;">${tr('thisDevice')}</span>` : ''}</div>
-          <div class="subtle" style="font-size:12px;">${tr('lastSeen')}: ${new Date(d.lastSeen).toLocaleString()}${d.staffName ? ' &middot; '+escapeHtml(d.staffName) : ''} &middot; v${d.appVersionName||d.appVersion||'?'}</div></div>
+          <div class="subtle" style="font-size:12px;">${tr('lastSeen')}: ${fmtDateTime(d.lastSeen)}${d.staffName ? ' &middot; '+escapeHtml(d.staffName) : ''} &middot; v${d.appVersionName||d.appVersion||'?'}</div></div>
         ${d.id!==mine && isAdmin() ? `<button class="btn btn-outline btn-sm btn-red" style="width:auto;" data-revoke-device="${d.id}">${tr('disconnectDevice')}</button>` : ''}
       </div></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`);
   el.querySelectorAll('[data-revoke-device]').forEach(b=>b.addEventListener('click', ()=>confirmDialog(tr('disconnectDevice')+'?', async ()=>{
@@ -10513,14 +10609,16 @@ function renderProductListItems(){
       ${p.image ? `<img src="${p.image}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;">` : `<div style="width:40px;height:40px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:${avatarColorFor(p.name)};color:#fff;font-weight:800;font-size:16px;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div>`}
       <div class="info"><div class="name">${escapeHtml(p.name)}${hasVariants?` · ${p.variants.length} ${tr('variantsCountSuffix')}`:''}</div><div class="meta">${priceLabel} · <span style="${out?'color:var(--danger);font-weight:700;':(low?'color:var(--warm);font-weight:700;':'')}">${tr('stock')}: ${isFinite(totalStock) ? totalStock : stockUnits(p).reduce((a,x)=>a+x.qty,0)} ${unitLabel(p.unit)}</span>${__vnote ? ` · <span style="color:var(--danger);font-weight:700;">${escapeHtml(__vnote)}</span>` : ''}</div></div>
       <button class="icon-btn" data-act="edit" data-id="${p.id}">${ICONS.edit}</button>
-      <button class="icon-btn" data-act="del" data-id="${p.id}">${ICONS.trash}</button>
+      <button class="icon-btn" data-act="del" data-id="${p.id}" hidden aria-hidden="true">${ICONS.trash}</button>
     </div>
   `;
   }).join('') : `<div class="empty-state">${tr('noData')}</div>`;
   listEl.querySelectorAll('[data-act="edit"]').forEach(btn=>btn.addEventListener('click', ()=>openProductForm(btn.dataset.id)));
-  listEl.querySelectorAll('[data-act="del"]').forEach(btn=>btn.addEventListener('click', ()=>{
-    confirmDialog(tr('confirmDeleteProduct'), ()=>{ markProductDeleted(btn.dataset.id); const __dp = state.products.find(p=>p.id===btn.dataset.id); if(__dp) auditLog('productDelete', `${__dp.name} (${tr('stock')}: ${productTotalStock(__dp)})`, {productId: __dp.id}); state.products = state.products.filter(p=>p.id!==btn.dataset.id); saveProducts(); renderProductListItems(); });
-  }));
+  listEl.querySelectorAll('[data-act="del"]').forEach(btn=>btn.addEventListener('click', ()=>__delProduct(btn.dataset.id)));
+}
+/* fix127-ds1c: mahsulotni o'chirish — avvalgi kod, endi tovar formasining "Xavfli amallar" bo'limidan chaqiriladi */
+function __delProduct(id){
+    confirmDialog(tr('confirmDeleteProduct'), ()=>{ markProductDeleted(id); const __dp = state.products.find(p=>p.id===id); if(__dp) auditLog('productDelete', `${__dp.name} (${tr('stock')}: ${productTotalStock(__dp)})`, {productId: __dp.id}); state.products = state.products.filter(p=>p.id!==id); saveProducts(); renderProductListItems(); });
 }
 
 function openProductForm(productId, draft){
@@ -10620,7 +10718,9 @@ function openProductForm(productId, draft){
     ` : ''}
     <div id="pf-error" class="error-text"></div>
     <button class="btn btn-primary" id="pf-save-btn" style="margin-top:6px;">${tr('save')}</button>
+    ${(editing && (isAdmin() || hasPerm('products'))) ? dangerZoneHtml(tr('dzDelProduct'), tr('dzDelProductNote'), 'pf-delete-btn') : ''}
   `);
+  { const __pd = document.getElementById('pf-delete-btn'); if(__pd) __pd.addEventListener('click', ()=>{ const __id = editing.id; closeModal(); __delProduct(__id); }); }   /* fix127-ds1c */
   document.getElementById('pf-image-btn').addEventListener('click', ()=>document.getElementById('pf-image-input').click());
   function updateBoxHelpers(){
     const wholesaleInput = document.getElementById('pf-wholesale-price');
@@ -10901,9 +11001,9 @@ function paymentTypeColor(pt){
   return 'var(--warm)';
 }
 function paymentTypeIcon(pt){
-  if(pt==='cash') return '💵';
-  if(pt==='card') return '💳';
-  return '📒';
+  if(pt==='cash') return '<span class="ic-i ic-cash">' + ICONS.banknote + '</span>';   /* fix126-ds1b */
+  if(pt==='card') return '<span class="ic-i ic-card">' + ICONS.creditCard + '</span>';
+  return '<span class="ic-i ic-credit">' + ICONS.book + '</span>';
 }
 function renderReceiptsListItems(sales){
   const listEl = document.getElementById('receipts-list');
@@ -10918,8 +11018,8 @@ function renderReceiptsListItems(sales){
         <div class="info" style="display:flex;align-items:center;gap:10px;">
           <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
           <div>
-            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${new Date(s.date).toLocaleString()}</span></div>
-            <div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${cust?(' · '+escapeHtml(cust.name)):''}${s.cashierName?(' · '+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · ✏️ '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>
+            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${fmtDateTime(s.date)}</span></div>
+            <div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${cust?(' · '+escapeHtml(cust.name)):''}${s.cashierName?(' · '+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · '+icI('edit')+' '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>
           </div>
         </div>
         <span class="rcpt-chev">›</span>
@@ -10932,7 +11032,7 @@ function renderReceiptsListItems(sales){
           ${!s.refunded && canEditReceipt() ? `<button class="rcpt-act" data-edit-receipt="${s.id}"><span class="tool-ic" style="background:#f1f5f9;color:#475569;">${ICONS.edit}</span><span>${tr('actEdit')}</span></button>` : ''}
         </div>
         ${s.items.map(it=>`<div class="ledger-row"><span>${escapeHtml(it.name)} x${it.qty}</span><span style="font-weight:700;">${fmt(it.price*it.qty)}</span></div>`).join('')}
-        ${s.edited ? `<div class="subtle" style="font-size:11px;margin-top:6px;">${tr('receiptEditedLabel')}${s.editedAt?(' · '+new Date(s.editedAt).toLocaleString()):''}</div>` : ''}
+        ${s.edited ? `<div class="subtle" style="font-size:11px;margin-top:6px;">${tr('receiptEditedLabel')}${s.editedAt?(' · '+fmtDateTime(s.editedAt)):''}</div>` : ''}
         ${!s.refunded && canRefund() && isWithinRefundWindow(s) ? `<button class="btn btn-danger btn-block btn-sm" style="margin-top:10px;" data-refund-list="${s.id}">${tr('refundSale')}</button>` : ''}
         ${!s.refunded && canRefund() && !isWithinRefundWindow(s) ? `<p class="subtle" style="margin:10px 0 0;font-size:11px;">${tr('refundWindowExpired')}</p>` : ''}
         ${canDeleteSale() ? `<button class="btn btn-outline btn-block btn-sm" style="margin-top:10px;color:var(--danger);border-color:var(--danger);" data-delete-sale="${s.id}">${tr('deleteSaleRecord')}</button>` : ''}
@@ -11200,7 +11300,7 @@ function __invRowHtml(r, D, mode){
       + R(tr('invStockValue') + ' · ' + tr('invCost'), escapeHtml(fmt(q * r.cost)))
       + R(tr('invProfit'), escapeHtml(fmt(prof) + mk))
       + (D.histDays > 0 ? R(__invT('invSoldIn', {d: D.histDays}), escapeHtml(__invQty(r.sold) + ' ' + unitLabel(r.unit))) : '')
-      + R(tr('invLastSold'), escapeHtml(r.last ? new Date(r.last).toLocaleDateString() : tr('invNever')))
+      + R(tr('invLastSold'), escapeHtml(r.last ? fmtDate(r.last) : tr('invNever')))
       + (r.orderQty > 0 ? R(tr('invShare'), escapeHtml(__invT('invOrderQty', {n: __invQty(r.orderQty) + ' ' + unitLabel(r.unit)}))) : '')
       + (r.p.supplierName ? R(tr('supplierInfo'), escapeHtml(r.p.supplierName + (r.p.supplierPhone ? ' · ' + r.p.supplierPhone : ''))) : '')
       + (r.expText ? R(tr('expiryDate'), escapeHtml(r.expText)) : '')
@@ -11260,19 +11360,19 @@ function __invRender(container){
   const catMax = catArr.length ? catArr[0].v : 1;
   let insights = '';
   if(D.hasHist){
-    insights += '<div class="inv-card"><div class="inv-ct"><div><h4>⏳ ' + escapeHtml(tr('invSoon')) + '</h4><small>' + escapeHtml(__invT('invSoonNote', {d: D.histDays})) + '</small></div>' + (cnt.soon ? '<button type="button" class="inv-link" data-inv-f="soon">' + escapeHtml(tr('invSeeAll')) + '</button>' : '') + '</div>'
+    insights += '<div class="inv-card"><div class="inv-ct"><div><h4>' + icI('hourglass') + ' ' + escapeHtml(tr('invSoon')) + '</h4><small>' + escapeHtml(__invT('invSoonNote', {d: D.histDays})) + '</small></div>' + (cnt.soon ? '<button type="button" class="inv-link" data-inv-f="soon">' + escapeHtml(tr('invSeeAll')) + '</button>' : '') + '</div>'
       + (soonList.length ? soonList.map(r=>'<div class="inv-li"><div class="nm">' + escapeHtml(r.name) + '<small>' + escapeHtml(tr('invLeft') + ' ' + __invQty(r.stock) + ' ' + unitLabel(r.unit) + (r.orderQty > 0 ? ' · ' + __invT('invOrderQty', {n: __invQty(r.orderQty)}) : '')) + '</small></div><span class="inv-pill ' + (r.daysLeft < 3 ? 'red' : 'amber') + '">' + escapeHtml(__invDaysTxt(r)) + '</span></div>').join('') : '<div class="inv-li"><div class="nm" style="font-weight:600;color:var(--ink-soft);">' + escapeHtml(tr('invAllGood')) + '</div></div>')
       + '</div>';
-    insights += '<div class="inv-card"><div class="inv-ct"><div><h4>🧊 ' + escapeHtml(__invT('invIdleTitle', {d: D.histDays})) + '</h4><small>' + escapeHtml(__invT('invIdleText', {n: cnt.idle})) + '</small></div>' + (cnt.idle ? '<button type="button" class="inv-link" data-inv-f="idle">' + escapeHtml(tr('invSeeAll')) + '</button>' : '') + '</div>'
+    insights += '<div class="inv-card"><div class="inv-ct"><div><h4>' + icI('snowflake') + ' ' + escapeHtml(__invT('invIdleTitle', {d: D.histDays})) + '</h4><small>' + escapeHtml(__invT('invIdleText', {n: cnt.idle})) + '</small></div>' + (cnt.idle ? '<button type="button" class="inv-link" data-inv-f="idle">' + escapeHtml(tr('invSeeAll')) + '</button>' : '') + '</div>'
       + '<div class="inv-big">' + fmt(idleCost) + '</div>'
-      + idleList.map(r=>'<div class="inv-li"><div class="nm">' + escapeHtml(r.name) + '<small>' + escapeHtml(tr('invLastSold') + ': ' + (r.last ? new Date(r.last).toLocaleDateString() : tr('invNever'))) + '</small></div><span class="inv-pill gray">' + escapeHtml(fmt(r.stock * r.cost)) + '</span></div>').join('')
+      + idleList.map(r=>'<div class="inv-li"><div class="nm">' + escapeHtml(r.name) + '<small>' + escapeHtml(tr('invLastSold') + ': ' + (r.last ? fmtDate(r.last) : tr('invNever'))) + '</small></div><span class="inv-pill gray">' + escapeHtml(fmt(r.stock * r.cost)) + '</span></div>').join('')
       + '</div>';
-    if(D.revTot > 0) insights += '<div class="inv-card"><div class="inv-ct"><div><h4>📊 ' + escapeHtml(tr('invAbcTitle')) + '</h4><small>' + escapeHtml(__invT('invAbcNote', {d: D.histDays})) + '</small></div></div>'
+    if(D.revTot > 0) insights += '<div class="inv-card"><div class="inv-ct"><div><h4>' + icI('barChart') + ' ' + escapeHtml(tr('invAbcTitle')) + '</h4><small>' + escapeHtml(__invT('invAbcNote', {d: D.histDays})) + '</small></div></div>'
       + '<div class="inv-abc"><div class="A"><b>A · ' + D.abc.A + '</b><span>' + escapeHtml(tr('invAbcA')) + '</span></div><div class="B"><b>B · ' + D.abc.B + '</b><span>' + escapeHtml(tr('invAbcB')) + '</span></div><div class="C"><b>C · ' + D.abc.C + '</b><span>' + escapeHtml(tr('invAbcC')) + '</span></div></div></div>';
   } else if(D.rows.length){
     insights += '<p class="inv-note">' + escapeHtml(tr('invNoHistory')) + '</p>';
   }
-  if(catArr.length > 1) insights += '<div class="inv-card"><div class="inv-ct"><div><h4>🗂 ' + escapeHtml(tr('invByCat')) + '</h4><small>' + escapeHtml(tr(mode === 'w' ? 'invWholesale' : 'invRetail')) + '</small></div></div>'
+  if(catArr.length > 1) insights += '<div class="inv-card"><div class="inv-ct"><div><h4>' + icI('folder') + ' ' + escapeHtml(tr('invByCat')) + '</h4><small>' + escapeHtml(tr(mode === 'w' ? 'invWholesale' : 'invRetail')) + '</small></div></div>'
     + catArr.map(x=>{ const nm = x.k === '\u0000' ? tr('invOthers') : (x.k || tr('invNoCat')); const pc = T.v > 0 ? Math.round(x.v / T.v * 100) : 0;
         return '<div class="inv-cat"><div class="row1"><span>' + escapeHtml(nm) + '</span><span>' + escapeHtml(fmt(x.v)) + ' · ' + pc + '%</span></div><div class="bar"><i style="width:' + Math.max(2, x.v / catMax * 100).toFixed(1) + '%"></i></div></div>'; }).join('')
     + '</div>';
@@ -11399,7 +11499,7 @@ function __sdFmt(n, code){
 }
 function __sdDate(iso, withTime){
   const d = new Date(iso); if(isNaN(d.getTime())) return '';
-  return d.toLocaleDateString() + (withTime ? ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '');
+  return withTime ? fmtDateTime(d) : fmtDate(d);   /* fix125-ds1a */
 }
 function __sdErrText(code){
   const m = { taken:'sdErrTaken', rate:'sdErrRate', rate_links:'sdErrRateLinks', invalid_phone:'sdErrPhone', no_business:'sdErrNoBiz', forbidden:'sdErrGone',
@@ -11572,7 +11672,7 @@ function __sdDetailHtml(D, loading, err){
   h += '<div class="card" style="margin:10px 0 10px;"><div class="row" style="display:flex;justify-content:space-between;align-items:center;"><span class="subtle">' + escapeHtml(tr('debt')) + '</span>' + __sdBalanceHtml(D.debt, cur, 20) + '</div>'
     + (D.name ? '<div class="subtle" style="font-size:12px;margin-top:6px;">' + escapeHtml(tr('sdYouAs')) + ': <b style="color:var(--ink);">' + escapeHtml(D.name) + '</b></div>' : '') + '</div>';
   if(D.shopPhone) h += '<button type="button" class="btn btn-outline btn-block" id="sd-d-call" style="margin-bottom:10px;">' + ICONS.phoneCall + ' ' + escapeHtml(tr('callBtn')) + '</button>';
-  h += '<p class="subtle" style="font-size:11.5px;margin:0 2px 12px;">&#128274; ' + escapeHtml(tr('sdReadOnly')) + '</p>';
+  h += '<p class="subtle" style="font-size:11.5px;margin:0 2px 12px;">' + icI('lock') + ' ' + escapeHtml(tr('sdReadOnly')) + '</p>';
   if(err) h += '<div class="' + (err === 'offline' ? 'subtle' : 'error-text') + '" style="font-size:12px;margin:0 0 10px;">' + escapeHtml(err === 'offline' ? tr('sdOffline') : __sdErrText(err)) + '</div>';
   if(loading) h += '<p class="subtle" style="font-size:12px;margin:0 0 10px;">' + escapeHtml(tr('sdLoading')) + '</p>';
   const tab = S.tab === 'rc' ? 'rc' : 'hist';
@@ -11640,7 +11740,7 @@ function __sdOpenFromPush(d){
   }catch(e){}
 }
 function __sdSaReleaseModal(){
-  openModal('<div class="modal-title">&#128241; ' + escapeHtml(tr('sdSaRelease')) + '</div>'
+  openModal('<div class="modal-title">' + icI('phone') + ' ' + escapeHtml(tr('sdSaRelease')) + '</div>'
     + '<p class="subtle" style="font-size:12.5px;margin:0 0 10px;">' + escapeHtml(tr('sdSaReleaseHint')) + '</p>'
     + '<div class="field"><label class="field-label">' + escapeHtml(tr('phone')) + '</label><input type="tel" inputmode="tel" id="sd-sa-phone" placeholder="+998 90 123 45 67"></div>'
     + '<div id="sd-sa-msg" class="error-text"></div>'
@@ -11672,7 +11772,7 @@ function renderMyDebts(){
   const totalOwed = state.creditors.reduce((s,c)=>s+Math.max(0,c.debt||0),0);
   container.innerHTML = `
     <div class="back-row">
-      <button id="my-debts-back-btn">${ICONS.back || '←'}</button>
+      <button id="my-debts-back-btn">${ICONS.arrowLeft}</button>
       <div class="t-title">${tr('myDebtsLabel')}</div>
     </div>
     <p class="subtle" style="margin:0 0 12px;">${tr('myDebtsHint')}</p>
@@ -11717,7 +11817,7 @@ function renderCreditorList(){
     <div class="list-item" data-creditor-open="${c.id}" style="cursor:pointer;">
       <div class="info">
         <div class="name">${escapeHtml(c.name)}</div>
-        <div class="meta">${escapeHtml(c.phone||'')}${last?(c.phone?' · ':'')+last.toLocaleDateString():''}</div>
+        <div class="meta">${escapeHtml(c.phone||'')}${last?(c.phone?' · ':'')+fmtDate(last):''}</div>
       </div>
       ${creditorBalanceHtml(c.debt, 14)}
     </div>
@@ -11795,7 +11895,7 @@ function openCreditorDetail(creditorId){
     <h3 class="sub-title">${tr('creditorHistoryLabel')}</h3>
     ${entries.length ? entries.map(l=>`
       <div class="ledger-row">
-        <span>${new Date(l.date).toLocaleDateString()} — ${l.type==='debt'?tr('creditorDebtType'):tr('creditorPaymentType')}${l.note?(' ('+l.note+')'):''}</span>
+        <span>${fmtDate(l.date)} — ${l.type==='debt'?tr('creditorDebtType'):tr('creditorPaymentType')}${l.note?(' ('+l.note+')'):''}</span>
         <span class="ledger-amt ${l.type==='debt'?'up':'down'}">${l.type==='debt'?'+':'-'}${fmt(l.amount)}</span>
       </div>
     `).join('') : `<p class="subtle" style="font-size:12px;">${tr('noData')}</p>`}
@@ -12062,7 +12162,7 @@ function dailySummaryHtml(){
   try{ d = computeDailySummary(); }catch(e){ return ''; }
   var row = function(label, val, color){ return '<div class="row" style="align-items:flex-start;gap:10px;"><span class="subtle" style="text-align:left;">' + label + '</span><strong style="text-align:right;' + (color ? ('color:' + color + ';') : '') + '">' + val + '</strong></div>'; };
   var h = '<div class="card" id="daily-summary-card" style="margin-bottom:12px;text-align:left;">'
-    + '<div style="font-weight:800;margin-bottom:2px;">&#128202; ' + tr('dsTitle') + '</div>'
+    + '<div style="font-weight:800;margin-bottom:2px;">' + icI('barChart') + ' ' + tr('dsTitle') + '</div>'
     + '<div class="subtle" style="font-size:11.5px;margin-bottom:6px;">' + tr('dsAllBranches') + '</div>';
   if(!d.count && !d.expenses && !d.debtPaid && !d.refundCount){
     h += '<div class="subtle" style="padding:6px 0;">' + tr('dsNoSales') + '</div>';
@@ -12198,7 +12298,7 @@ function checkChangelog(){
   if(!entry){ state.settings.lastSeenVersion = APP_VERSION; saveSettingsLocalOnly(); root.innerHTML=''; return false; }
   const items = entry[state.lang] || entry.uz;
   root.innerHTML = `<div class="login-screen" style="z-index:56;justify-content:flex-start;padding-top:32px;overflow-y:auto;">
-    <div class="brand" style="font-size:22px;margin-bottom:6px;">🎉 ${tr('whatsNewTitle')}</div>
+    <div class="brand" style="font-size:22px;margin-bottom:6px;">${icI('sparkles')} ${tr('whatsNewTitle')}</div>
     <p class="subtle" style="margin-bottom:18px;">${tr('whatsNewSubtitle')}</p>
     <div class="card" style="margin-bottom:20px;">
       ${items.map(txt=>`<div class="row" style="align-items:flex-start;"><span style="margin-right:8px;">✓</span><span style="text-align:left;">${txt}</span></div>`).join('')}
@@ -12237,7 +12337,7 @@ function renderSubscriptionReminderOverlay(todayKey, daysLeft, expires){
     <p class="subtle" style="margin-bottom:16px;">${tr('subReminderText').replace('{days}', daysLeft)}</p>
     <div class="card" style="margin-bottom:20px;border:2px solid var(--danger);background:var(--danger-bg);">
       <div class="row"><span class="subtle">${planLabel}</span><strong style="color:var(--danger);">${daysLeft} ${tr('daysLeftSuffix')}</strong></div>
-      <div class="row"><span class="subtle">${tr('expiresOn')}</span><span>${expires.toLocaleDateString()}</span></div>
+      <div class="row"><span class="subtle">${tr('expiresOn')}</span><span>${fmtDate(expires)}</span></div>
     </div>
     <button class="btn btn-primary btn-pill btn-block" id="sub-reminder-renew-btn" style="margin-bottom:10px;">${tr('renewNowBtn')}</button>
     <button class="btn btn-ghost btn-block" id="sub-reminder-later-btn">${tr('remindTomorrowBtn')}</button>
@@ -13050,7 +13150,7 @@ function openMyRouteModal(){
   const myVisits = state.visits.filter(v=>v.agentStaffId===state.currentStaff.id && v.date===today);
   openModal(`
     <div class="modal-title">${tr('myRouteLabel')}</div>
-    <p class="subtle" style="margin:0 0 12px;">${new Date().toLocaleDateString()}</p>
+    <p class="subtle" style="margin:0 0 12px;">${fmtDayLong(new Date())}</p>
     <div id="mr-list">
       ${myVisits.length ? myVisits.map(v=>{
         const cust = state.customers.find(c=>c.id===v.customerId);
@@ -13279,7 +13379,7 @@ function renderEditReceiptModal(){
   if(!sale || !d){ closeModal(); return; }
   openModal(`
     <div class="modal-title">${tr('editReceiptTitle')}</div>
-    <div class="subtle" style="margin-bottom:12px;">${sale.receiptNumber?('№'+sale.receiptNumber+' · '):''}${new Date(sale.date).toLocaleString()}</div>
+    <div class="subtle" style="margin-bottom:12px;">${sale.receiptNumber?('№'+sale.receiptNumber+' · '):''}${fmtDateTime(sale.date)}</div>
     <div id="er-items">
       ${d.items.length ? d.items.map((it,i)=>`
         <div class="card" style="padding:10px 12px;margin-bottom:8px;">
@@ -14100,7 +14200,7 @@ function openCustomerDetail(customerId){
         ${cust.address ? `<div class="subtle" style="font-size:12px;">${tr('customerAddress')}: ${escapeHtml(cust.address)}</div>` : ''}
       </div>
     </div>
-    ${cust.phone ? `<p class="subtle" style="font-size:11.5px;line-height:1.35;margin:-6px 2px 10px;">&#128241; ${escapeHtml(tr('sdCreditorHint'))}</p>` : ''}
+    ${cust.phone ? `<p class="subtle" style="font-size:11.5px;line-height:1.35;margin:-6px 2px 10px;">${icI('phone')} ${escapeHtml(tr('sdCreditorHint'))}</p>` : ''}
     <div class="card cust-balance" style="margin-bottom:14px;${oldDebtFlag?'border:2px solid var(--danger);':''}">
       <div class="subtle" style="font-size:12px;font-weight:700;">${tr('debt')}</div>
       <div class="cust-debt" style="color:${cust.debt>0?'var(--danger)':'var(--success)'};">${fmt(cust.debt||0)}</div>
@@ -14190,7 +14290,7 @@ function openCustomerPurchases(customerId){
         <div class="row" style="padding-left:6px;">
           <div class="info" style="display:flex;align-items:center;gap:10px;">
             <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
-            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${new Date(s.date).toLocaleString()}</span>${(s.receiptNumber||s.cashierName)?(`<div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${s.cashierName?((s.receiptNumber?' · ':'')+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · ✏️ '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>`):''}</div>
+            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${fmtDateTime(s.date)}</span>${(s.receiptNumber||s.cashierName)?(`<div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${s.cashierName?((s.receiptNumber?' · ':'')+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · '+icI('edit')+' '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>`):''}</div>
           </div>
           <span class="rcpt-chev">›</span>
         </div>
@@ -14202,7 +14302,7 @@ function openCustomerPurchases(customerId){
           ${!s.refunded && canEditReceipt() ? `<button class="rcpt-act" data-edit-receipt="${s.id}"><span class="tool-ic" style="background:#f1f5f9;color:#475569;">${ICONS.edit}</span><span>${tr('actEdit')}</span></button>` : ''}
         </div>
           ${s.items.map(it=>`<div class="ledger-row"><span>${escapeHtml(it.name)} x${it.qty}</span><span style="font-weight:700;">${fmt(it.price*it.qty)}</span></div>`).join('')}
-          ${s.edited ? `<div class="subtle" style="font-size:11px;margin-top:6px;">${tr('receiptEditedLabel')}${s.editedAt?(' · '+new Date(s.editedAt).toLocaleString()):''}</div>` : ''}
+          ${s.edited ? `<div class="subtle" style="font-size:11px;margin-top:6px;">${tr('receiptEditedLabel')}${s.editedAt?(' · '+fmtDateTime(s.editedAt)):''}</div>` : ''}
           ${!s.refunded && canRefund() && isWithinRefundWindow(s) ? `<button class="btn btn-danger btn-block btn-sm" style="margin-top:10px;" data-refund="${s.id}">${tr('refundSale')}</button>` : ''}
           ${!s.refunded && canRefund() && !isWithinRefundWindow(s) ? `<p class="subtle" style="margin:10px 0 0;font-size:11px;">${tr('refundWindowExpired')}</p>` : ''}
           ${canDeleteSale() ? `<button class="btn btn-outline btn-block btn-sm" style="margin-top:10px;color:var(--danger);border-color:var(--danger);" data-delete-sale="${s.id}">${tr('deleteSaleRecord')}</button>` : ''}
@@ -14270,7 +14370,7 @@ function openCustomerLedger(customerId){
     <div>${history.length ? history.map(h=>`
       <div class="ledger-row" style="flex-direction:column;align-items:stretch;gap:2px;">
         <div style="display:flex;justify-content:space-between;">
-          <span>${new Date(h.date).toLocaleString()}</span>
+          <span>${fmtDateTime(h.date)}</span>
           <span class="ledger-amt ${h.type==='sale'?'up':'down'}">${h.type==='sale'?'+':'−'}${fmt(h.amount)}</span>
         </div>
         ${(h.staffName || h.note) ? `<div class="subtle" style="font-size:11px;">${h.staffName ? (tr('cashier')+': '+escapeHtml(h.staffName)) : ''}${h.staffName && h.note ? ' · ' : ''}${escapeHtml(h.note||'')}</div>` : ''}
@@ -14510,7 +14610,7 @@ function renderReportsMenu(container){
   const alertCount = lowStockItems.length + expiringCount;
   container.innerHTML = `
     <h2 class="section-title">${ICONS.reports} ${tr('navReports')}</h2>
-    ${alertCount ? `<div class="card alert-soft" style="cursor:pointer;" id="alerts-shortcut"><p style="margin:0;color:var(--danger);font-weight:700;">⚠ ${escapeHtml(stockCountsText(__sc, expiringCount))}</p></div>` : ''}
+    ${alertCount ? `<div class="card alert-soft" style="cursor:pointer;" id="alerts-shortcut"><p style="margin:0;color:var(--danger);font-weight:700;">${icI('alert')} ${escapeHtml(stockCountsText(__sc, expiringCount))}</p></div>` : ''}
     ${(()=>{
       const G = {receipts:['sales','receiptIcon','#2563eb'], today:['sales','sale','#16a34a'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
         pnl:['finance','percent','#0f9d8a'], productprofit:['finance','percent','#12a37f'], expenses:['finance','creditCard','#d97706'], payroll:['finance','peopleIcon','#7c5cfc'],
@@ -14559,7 +14659,7 @@ function bindReportsBack(){
 // once) would leave the whole report screen broken instead of just
 // showing plain numbers. SVG generated here is just markup — nothing to
 // fetch, nothing that can fail to load.
-function buildLineChartSvg(points, opts){
+function __oldBuildLineChartSvg(points, opts){   /* fix126-ds1b: eski versiya — zaxira */
   opts = opts || {};
   const w = opts.width || 400, h = opts.height || 160;
   const padL = 8, padR = 8, padT = 12, padB = 24;
@@ -14585,7 +14685,7 @@ function buildLineChartSvg(points, opts){
     ${labels}
   </svg>`;
 }
-function buildBarChartSvg(entries, opts){
+function __oldBuildBarChartSvg(entries, opts){   /* fix126-ds1b: eski versiya — zaxira */
   opts = opts || {};
   const w = opts.width || 400;
   const rowH = 28, gap = 6;
@@ -14727,20 +14827,20 @@ function renderReportsCategory(container, cat){
       ${reportsBackHeader(tr('expensesSection'))}
       <div class="stat-grid">
         <div class="stat-card" style="background:var(--danger-bg);"><div class="stat-label">${tr('total')}</div><div class="stat-value stat-value-lg" style="color:var(--danger);">${fmt(totalExpenses)}</div></div>
-        <div class="stat-card"><div class="stat-label">${historyExpenses.length} ${tr('salesCountLabel')}</div><div class="stat-value">&nbsp;</div></div>
+        <div class="stat-card"><div class="stat-label">${tr('dsExpenseCount')}</div><div class="stat-value">${historyExpenses.length}</div></div>
       </div>
       ${chartEntries.length ? `<div class="card" style="padding:14px 12px;margin-bottom:14px;overflow-x:auto;">${buildBarChartSvg(chartEntries)}</div>` : ''}
       <button class="btn btn-accent" id="add-expense-btn" style="margin-bottom:14px;">${ICONS.plus} ${tr('addExpense')}</button>
       <div id="expenses-list">
         ${historyExpenses.length ? historyExpenses.map(x=>`
-          <div class="list-item">
+          <div class="list-item ds-row-tap" data-exp-open="${x.id}">
             <div class="info">
               <div class="name">${escapeHtml(x.note || expenseCategoryLabel(x.category))}</div>
-              <div class="meta"><span style="color:${expenseCategoryColor(x.category)};font-weight:700;">${expenseCategoryLabel(x.category)}</span> · ${new Date(x.date).toLocaleString()}${x.staffName ? ' · 👤 '+escapeHtml(x.staffName) : ''}</div>
+              <div class="meta"><span style="color:${expenseCategoryColor(x.category)};font-weight:700;">${expenseCategoryLabel(x.category)}</span> · ${fmtDateTime(x.date)}${x.staffName ? ' · '+icI('user')+' '+escapeHtml(x.staffName) : ''}</div>
             </div>
             <div style="display:flex;align-items:center;gap:8px;">
               <strong style="color:var(--danger);">-${fmt(x.amount)}</strong>
-              <button class="icon-btn" data-del-expense="${x.id}">${ICONS.trash}</button>
+              <button class="icon-btn" data-del-expense="${x.id}" hidden aria-hidden="true">${ICONS.trash}</button>
             </div>
           </div>
         `).join('') : `<div class="empty-state">${tr('noExpensesYet')}</div>`}
@@ -14748,6 +14848,7 @@ function renderReportsCategory(container, cat){
     `;
     bindReportsBack();
     document.getElementById('add-expense-btn').addEventListener('click', ()=>openExpenseForm(()=>renderReportsCategory(container,'expenses')));
+    container.querySelectorAll('[data-exp-open]').forEach(row=>row.addEventListener('click', ()=>__openExpenseSheet(row.dataset.expOpen)));   /* fix127-ds1c */
     container.querySelectorAll('[data-del-expense]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         if(!confirm(tr('deleteExpenseConfirm'))) return;
@@ -14816,7 +14917,7 @@ function renderReportsCategory(container, cat){
       ${reportsBackHeader(tr('refundsReportSection'))}
       <div class="stat-grid">
         <div class="stat-card" style="background:var(--warm-bg);"><div class="stat-label">${tr('refundsTotal')}</div><div class="stat-value stat-value-lg" style="color:var(--warm);">${fmt(refundsGrandTotal)}</div></div>
-        <div class="stat-card"><div class="stat-label">${refundedSales.length} ${tr('salesCountLabel')}</div><div class="stat-value">&nbsp;</div></div>
+        <div class="stat-card"><div class="stat-label">${tr('dsRefundCount')}</div><div class="stat-value">${refundedSales.length}</div></div>
       </div>
       <div style="margin-top:14px;">
         ${refundedSales.length ? refundedSales.map(s=>{
@@ -14824,8 +14925,8 @@ function renderReportsCategory(container, cat){
           return `
           <div class="card" style="padding:14px 16px;margin-bottom:10px;">
             <div class="row"><strong>${fmt(s.total)}</strong><span class="subtle">${s.receiptNumber?('№'+s.receiptNumber):''}</span></div>
-            <div class="ledger-row"><span class="subtle">${tr('originalCashierLabel')}</span><span>${escapeHtml(s.cashierName||'—')} · ${new Date(s.date).toLocaleString()}</span></div>
-            <div class="ledger-row"><span class="subtle">${tr('refundedByLabel')}</span><span style="${sameStaff?'':'color:var(--danger);font-weight:700;'}">${escapeHtml(s.refundedBy||'—')}${s.refundedAt?(' · '+new Date(s.refundedAt).toLocaleString()):''}</span></div>
+            <div class="ledger-row"><span class="subtle">${tr('originalCashierLabel')}</span><span>${escapeHtml(s.cashierName||'—')} · ${fmtDateTime(s.date)}</span></div>
+            <div class="ledger-row"><span class="subtle">${tr('refundedByLabel')}</span><span style="${sameStaff?'':'color:var(--danger);font-weight:700;'}">${escapeHtml(s.refundedBy||'—')}${s.refundedAt?(' · '+fmtDateTime(s.refundedAt)):''}</span></div>
           </div>
         `;}).join('') : `<div class="empty-state">${tr('noRefundsYet')}</div>`}
       </div>
@@ -14874,7 +14975,7 @@ function renderReportsCategory(container, cat){
       <div class="stat-grid">
         <div class="stat-card"><div class="stat-label">${tr('total')}</div><div class="stat-value stat-value-lg">${fmt(todayTotal)}</div></div>
         <div class="stat-card" style="background:var(--teal-bg);"><div class="stat-label">${tr('cashInRegisterLabel')}</div><div class="stat-value stat-value-lg" style="color:var(--success);">${fmt(cashInRegister)}</div></div>
-        <div class="stat-card"><div class="stat-label">${todaySales.length} ${tr('salesCountLabel')}</div><div class="stat-value">&nbsp;</div></div>
+        <div class="stat-card"><div class="stat-label">${tr('dsReceiptsCount')}</div><div class="stat-value">${todaySales.length}</div></div>
         <div class="stat-card" style="background:var(--teal-bg);"><div class="stat-label">${tr('cashLabel')}</div><div class="stat-value" style="color:var(--success);">${fmt(todayCash)}</div></div>
         <div class="stat-card" style="background:var(--accent-bg);"><div class="stat-label">${tr('cardLabel')}</div><div class="stat-value" style="color:var(--teal);">${fmt(todayCard)}</div></div>
         <div class="stat-card" style="background:var(--danger-bg);"><div class="stat-label">${tr('creditLabel')}</div><div class="stat-value" style="color:var(--danger);">${fmt(todayCredit)}</div></div>
@@ -15021,14 +15122,14 @@ function renderReportsCategory(container, cat){
     // someone actually scanning for "yesterday's total" wants it) — same
     // data, ordered differently for each purpose.
     const chartPoints = dailyList.slice().reverse().map(([dateKey,total])=>({
-      label: new Date(dateKey).toLocaleDateString(undefined,{day:'numeric',month:'numeric'}),
+      label: fmtDayShort(dateKey),   /* fix126-ds1b */
       value: total
     }));
     container.innerHTML = `
       ${reportsBackHeader(tr('dailyBreakdown'))}
       ${chartPoints.length>1 ? `<div class="card" style="padding:14px 10px 8px;margin-bottom:14px;">${buildLineChartSvg(chartPoints)}</div>` : ''}
       <div>${dailyList.length ? dailyList.map(([dateKey,total])=>`
-        <div class="list-item"><div class="info"><div class="name">${new Date(dateKey).toLocaleDateString()}</div></div><span class="badge badge-clear">${fmt(total)}</span></div>
+        <div class="list-item"><div class="info"><div class="name">${fmtDayLong(dateKey)}</div></div><span class="badge badge-clear">${fmt(total)}</span></div>
       `).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>
     `;
     bindReportsBack();
@@ -15039,7 +15140,7 @@ function renderReportsCategory(container, cat){
     const productTotals = {};
     activeSales.forEach(s=>s.items.forEach(it=>{ productTotals[it.name]=(productTotals[it.name]||0)+it.qty; }));
     const topProducts = Object.entries(productTotals).sort((a,b)=>b[1]-a[1]).slice(0,10);
-    const chartEntries = topProducts.map(([name,qty])=>({label:name, value:qty}));
+    const chartEntries = topProducts.slice(0, 5).map(([name,qty])=>({label:name, value:qty}));   /* fix126-ds1b: grafikda top 5, ro'yxat to'liq */
     container.innerHTML = `
       ${reportsBackHeader(tr('topProducts'))}
       ${chartEntries.length ? `<div class="card" style="padding:14px 12px;margin-bottom:14px;overflow-x:auto;">${buildBarChartSvg(chartEntries)}</div>` : ''}
@@ -15065,7 +15166,7 @@ function renderReportsCategory(container, cat){
         const q = (document.getElementById('audit-search').value||'').toLowerCase();
         const rows = list.filter(a=>!q || (a.detail||'').toLowerCase().includes(q) || (a.staffName||'').toLowerCase().includes(q) || tr(labels[a.action]||'').toLowerCase().includes(q));
         el.innerHTML = rows.length ? rows.map((a,i)=>__auditDayHead(rows,i)+`<div class="card" style="padding:10px 12px;margin-bottom:6px;border-left:4px solid ${colors[a.action]||'var(--line)'};">
-          <div class="row" style="font-size:12px;"><strong style="color:${colors[a.action]||'var(--ink)'};">${tr(labels[a.action]||a.action)}</strong><span class="subtle">${new Date(a.date).toLocaleString()}</span></div>
+          <div class="row" style="font-size:12px;"><strong style="color:${colors[a.action]||'var(--ink)'};">${tr(labels[a.action]||a.action)}</strong><span class="subtle">${fmtDateTime(a.date)}</span></div>
           <div style="font-size:13px;margin-top:2px;">${escapeHtml(a.detail||'')}</div>
           <div class="subtle" style="font-size:11.5px;">${escapeHtml(a.staffName||'—')}</div></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`;
       };
@@ -15102,7 +15203,7 @@ function renderReportsCategory(container, cat){
         ${pct>0 ? `<div class="row" style="font-size:13px;"><span class="subtle">${tr('prCommission')} (${pct}% × ${fmt(r.sales)})</span><span>${fmt(r.commission)}</span></div>` : ''}
         <div class="row" style="font-size:13px;font-weight:700;"><span>${tr('prAccrued')}</span><span>${fmt(r.accrued)}</span></div>
         <div class="row" style="font-size:13px;"><span class="subtle">${tr('prPaid')}</span><span style="color:var(--teal);">${fmt(r.paid)}</span></div>
-        ${r.pays.length ? `<div class="subtle" style="font-size:11.5px;margin-top:4px;">${tr('prPayments')}: ${r.pays.map(p=>new Date(p.date).toLocaleDateString()+' — '+fmt(p.amount)).join(' · ')}</div>` : ''}
+        ${r.pays.length ? `<div class="subtle" style="font-size:11.5px;margin-top:4px;">${tr('prPayments')}: ${r.pays.map(p=>fmtDate(p.date)+' — '+fmt(p.amount)).join(' · ')}</div>` : ''}
         <button class="btn btn-outline btn-sm btn-block" style="margin-top:8px;" data-pr-pay="${r.st.id}">${tr('prPay')}</button>
       </div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`}
       <p class="subtle" style="margin:12px 0 0;font-size:11.5px;">${tr('prHint')}</p>`;
@@ -15177,13 +15278,13 @@ function renderReportsCategory(container, cat){
         ${cur.refunds ? `<div class="subtle" style="font-size:11.5px;margin-top:4px;">${tr('pnlRefundsInfo').replace('{n}', cur.refundCount)}: ${fmt(cur.refunds)}</div>` : ''}
       </div>
       ${(cur.acc.lossList.length || cur.acc.noCostN || cur.acc.overN) ? `<h3 class="sub-title">${tr('pnlAccuracy')}</h3><div class="card" style="padding:10px 14px;margin-bottom:12px;">
-        ${cur.acc.lossList.length ? `<div style="font-weight:700;color:var(--danger);margin-bottom:4px;">⚠️ ${tr('pnlBelowCost')}: −${fmt(cur.acc.lossTotal)}</div>
+        ${cur.acc.lossList.length ? `<div style="font-weight:700;color:var(--danger);margin-bottom:4px;">${icI('alert')} ${tr('pnlBelowCost')}: −${fmt(cur.acc.lossTotal)}</div>
         ${cur.acc.lossList.slice(0,10).map(x=>`<div class="row" style="padding:6px 0;border-bottom:1px solid var(--line);gap:8px;"><span style="flex:1;min-width:0;font-size:13px;">${escapeHtml(x.name||'')}</span><span style="white-space:nowrap;flex-shrink:0;color:var(--danger);font-size:13px;font-weight:700;">−${fmt(x.loss)}</span><button class="btn btn-outline btn-sm" style="flex-shrink:0;" data-pnl-recost="${escapeHtml(x.productId+'|'+(x.variantId||''))}">${tr('pnlRecost')}</button></div>`).join('')}
         <p class="subtle" style="font-size:11.5px;margin:6px 0 8px;">${tr('pnlBelowCostHint')}</p>` : ''}
         ${cur.acc.noCostN ? `<div class="subtle" style="font-size:12.5px;margin:4px 0;">${tr('pnlNoCost').replace('{n}', cur.acc.noCostN)}: ${fmt(cur.acc.noCostRev)}</div>` : ''}
         ${cur.acc.overN ? `<div class="subtle" style="font-size:12.5px;margin:4px 0;">${tr('pnlOversold').replace('{n}', cur.acc.overN)}: ${fmt(cur.acc.overRev)}</div>` : ''}
       </div>` : ''}
-      ${last6.some(x=>x.value) ? `<h3 class="sub-title">${tr('pnlLast6')}</h3><div class="card" style="padding:14px 12px;overflow-x:auto;">${buildBarChartSvg(last6.map(x=>({label:x.label, value:Math.max(0,x.value)})))}</div>` : ''}
+      ${last6.some(x=>x.value) ? `<h3 class="sub-title">${tr('pnlLast6')}</h3><div class="card" style="padding:14px 12px;overflow-x:auto;">${buildBarChartSvg(last6.map(x=>({label:x.label, value:x.value, money:true})))}</div>` : ''}
       <p class="subtle" style="margin:12px 0 0;font-size:11.5px;">${tr('pnlHint')}</p>`;
     bindReportsBack();
     const shift = (n)=>{ const d = new Date(py, pm-1+n, 1); state.pnlMonth = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); renderReports(); };
@@ -15228,7 +15329,7 @@ function renderReportsCategory(container, cat){
     const rows = Object.values(agg).sort((a,b)=>b.profit-a.profit);
     const totalRevenue = rows.reduce((x,r)=>x+r.revenue,0);
     const totalProfit = rows.reduce((x,r)=>x+r.profit,0);
-    const chartEntries = rows.slice(0,10).filter(r=>r.profit>0).map(r=>({label:r.name, value:Math.round(r.profit)}));
+    const chartEntries = rows.slice(0,10).filter(r=>r.profit>0).slice(0, 5).map(r=>({label:r.name, value:Math.round(r.profit), money:true}));   /* fix126-ds1b: top 5 */
     container.innerHTML = `
       ${reportsBackHeader(tr('productProfitReport'))}
       <div class="toggle-group" style="margin-bottom:12px;">
@@ -15318,7 +15419,7 @@ function renderReportsCategory(container, cat){
       </div>
       <div style="margin-top:10px;">${ranked.length ? ranked.map((r,i)=>`
         <div class="card">
-          <div class="row"><strong>${i===0?'🏆 ':''}${i+1}. ${escapeHtml(r.name)}</strong><span class="badge badge-clear">${fmt(r.total)}</span></div>
+          <div class="row"><strong>${i===0?icI('trophy')+' ':''}${i+1}. ${escapeHtml(r.name)}</strong><span class="badge badge-clear">${fmt(r.total)}</span></div>
           <div class="row"><span class="subtle">${tr('salesCountLabel')}</span><span>${r.count}</span></div>
           <div class="row"><span class="subtle">${tr('totalProfit')}</span><span style="color:${r.profit>=0?'var(--success)':'var(--danger)'};">${fmt(r.profit)}</span></div>
           ${commissionPct>0 ? `<div class="row"><span class="subtle">${tr('commissionEarned')}</span><strong style="color:var(--accent-dark);">${fmt(r.total*commissionPct/100)}</strong></div>` : ''}
@@ -15351,7 +15452,7 @@ function renderReportsCategory(container, cat){
       const q = (document.getElementById('sm-search').value||'').toLowerCase();
       const rows = (state.stockMoves||[]).filter(m=>effectiveBranchId(m.branchId)===effectiveBranchId(state.currentBranchId)).filter(m=>!q || (m.name||'').toLowerCase().includes(q)).slice().reverse().slice(0, 300);
       const byDay = {};
-      rows.forEach(m=>{ const d = new Date(m.date).toLocaleDateString(); (byDay[d] = byDay[d]||[]).push(m); });
+      rows.forEach(m=>{ const d = fmtDayLong(m.date); (byDay[d] = byDay[d]||[]).push(m); });
       document.getElementById('sm-list').innerHTML = rows.length ? Object.keys(byDay).map(day=>`
         <div class="subtle" style="font-weight:700;margin:12px 0 6px;">${day}</div>
         ${byDay[day].map(m=>{ const sale = m.refId ? state.sales.find(x=>x.id===m.refId) : null; return `
@@ -15359,7 +15460,7 @@ function renderReportsCategory(container, cat){
           <div class="row" style="gap:10px;align-items:flex-start;">
             <div style="flex:1;min-width:0;">
               <div style="font-weight:800;">${escapeHtml(m.name||'')}</div>
-              <div class="subtle" style="font-size:11.5px;">${new Date(m.date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} &middot; <span style="color:${reasonColor(m.reason)};font-weight:700;">${reasonLabel(m.reason)}</span>${sale && sale.receiptNumber ? ' &middot; №'+escapeHtml(String(sale.receiptNumber)) : ''}${m.staffName ? ' &middot; '+escapeHtml(m.staffName) : ''}</div>
+              <div class="subtle" style="font-size:11.5px;">${fmtTime(m.date)} &middot; <span style="color:${reasonColor(m.reason)};font-weight:700;">${reasonLabel(m.reason)}</span>${sale && sale.receiptNumber ? ' &middot; №'+escapeHtml(String(sale.receiptNumber)) : ''}${m.staffName ? ' &middot; '+escapeHtml(m.staffName) : ''}</div>
             </div>
             <div style="text-align:right;white-space:nowrap;">
               <div style="font-weight:800;font-size:15px;color:${m.delta<0?'var(--danger)':'var(--teal)'};">${m.delta>0?'+':''}${m.delta}</div>
@@ -15479,7 +15580,7 @@ function renderPurchase(){
     <button class="btn btn-primary btn-block" id="pu-apply" ${purchaseDraft.items.length?'':'disabled'}>${tr('puApply')}</button>
     ${recent.length ? `<h3 class="sub-title" style="margin-top:18px;">${tr('puHistory')}</h3>${recent.map(x=>`
       <div class="card" style="padding:10px 12px;margin-bottom:8px;">
-        <div class="row"><div style="min-width:0;"><div style="font-weight:800;">${escapeHtml(x.supplier||'—')}</div><div class="subtle" style="font-size:11.5px;">${new Date(x.date).toLocaleString()} &middot; ${tr('puItemsCount').replace('{n}', x.items.length)}${x.staffName?(' &middot; '+escapeHtml(x.staffName)):''}${x.note?(' &middot; '+escapeHtml(x.note)):''}</div></div><strong style="white-space:nowrap;">${fmt(x.total)}</strong></div>
+        <div class="row"><div style="min-width:0;"><div style="font-weight:800;">${escapeHtml(x.supplier||'—')}</div><div class="subtle" style="font-size:11.5px;">${fmtDateTime(x.date)} &middot; ${tr('puItemsCount').replace('{n}', x.items.length)}${x.staffName?(' &middot; '+escapeHtml(x.staffName)):''}${x.note?(' &middot; '+escapeHtml(x.note)):''}</div></div><strong style="white-space:nowrap;">${fmt(x.total)}</strong></div>
         <div class="subtle" style="font-size:12px;margin-top:4px;">${x.items.map(it=>escapeHtml(it.name)+' ×'+it.qty).join(', ')}</div>
       </div>`).join('')}` : ''}`;
   document.getElementById('pu-back-btn').addEventListener('click', ()=>{ state.view='products'; renderAll(); });
@@ -15745,7 +15846,7 @@ function payProviderLabel(id){
 function payDateStr(ms){
   const n = Number(ms);
   if(!isFinite(n) || n <= 0) return '—';
-  try{ return new Date(n).toLocaleString(); }catch(e){ return '—'; }
+  try{ return fmtDateTime(n); }catch(e){ return '—'; }
 }
 
 function payEnsureStyle(){
@@ -15923,7 +16024,7 @@ function payStatusScreen(kind, text, withRecheck){
   payEnsureStyle();
   let root = document.getElementById('pay-root');
   if(!root){ root = document.createElement('div'); root.id = 'pay-root'; document.body.appendChild(root); }
-  const icon = kind === 'ok' ? '✅' : (kind === 'wait' ? '⏳' : 'ℹ️');
+  const icon = '<span class="ic-i" style="color:' + (kind === 'ok' ? 'var(--success)' : 'var(--accent)') + ';">' + (kind === 'ok' ? ICONS.checkCircle : (kind === 'wait' ? ICONS.hourglass : ICONS.info)) + '</span>';   /* fix126-ds1b */
   root.innerHTML = '<div class="login-screen" style="z-index:80;text-align:center;">'
     + '<div style="font-size:44px;margin-bottom:10px;">' + icon + '</div>'
     + '<div class="brand" style="font-size:20px;margin-bottom:16px;">' + text + '</div>'
@@ -15973,7 +16074,7 @@ async function payHandleReturn(isRecheck){
   let d = null;
   try{ d = await payApplyServerSubscription(); }catch(e){}
   const expIso = (d && d.subscriptionExpiresAt) || (found.newExpiryMs ? new Date(found.newExpiryMs).toISOString() : '');
-  const dateTxt = expIso ? new Date(expIso).toLocaleDateString() : '';
+  const dateTxt = expIso ? fmtDate(expIso) : '';
   try{ localStorage.removeItem(PAY_LAST_KEY); }catch(e){}
   payStatusScreen('ok', tr('paySuccess').replace('{date}', dateTxt));
 }
@@ -16006,12 +16107,12 @@ function payHistoryTableHtml(rows, admin){
 }
 function payExpiredButtonHtml(){
   if(isNativeApp()) return '';
-  return '<button type="button" class="btn btn-primary btn-pill btn-block" style="margin-bottom:14px;" onclick="openPaymentScreen()">💳 ' + tr('payOnlineBtn') + '</button>';
+  return '<button type="button" class="btn btn-primary btn-pill btn-block" style="margin-bottom:14px;" onclick="openPaymentScreen()">' + icI('creditCard') + ' ' + tr('payOnlineBtn') + '</button>';
 }
 function paySettingsHtml(){
   payEnsureStyle();
   const buy = (!isNativeApp() && isAdmin())
-    ? '<div class="card"><button type="button" class="btn btn-primary btn-block" onclick="openPaymentScreen()">💳 ' + tr('payOnlineBtn') + '</button></div>' : '';
+    ? '<div class="card"><button type="button" class="btn btn-primary btn-block" onclick="openPaymentScreen()">' + icI('creditCard') + ' ' + tr('payOnlineBtn') + '</button></div>' : '';
   return buy + '<h3 class="sub-title">' + tr('payHistoryMine') + '</h3><div class="card" id="pay-history-card"><div class="subtle">…</div></div>';
 }
 async function payBindSettings(){
@@ -16035,7 +16136,7 @@ async function payBindSettings(){
 async function openSaPayments(){
   if(!(window.__saUnlocked || (typeof isSuperAdmin === 'function' && isSuperAdmin()))) return;
   payEnsureStyle();
-  openModal('<div class="modal-title">💳 ' + tr('payHistoryTitle') + '</div>'
+  openModal('<div class="modal-title">' + icI('creditCard') + ' ' + tr('payHistoryTitle') + '</div>'
     + '<div class="search-bar" style="margin-bottom:10px;">' + ICONS.search + '<input type="text" id="sa-pay-search" placeholder="' + tr('search') + '"></div>'
     + '<div id="sa-pay-body" class="subtle">…</div>');
   let rows = [];
@@ -16071,9 +16172,9 @@ function renderSuperAdmin(){
   const container = document.getElementById('view-container');
   container.innerHTML = `
     <div class="back-row"><button id="superadmin-back-btn">${ICONS.arrowLeft}</button><span class="t-title">★ ${tr('superAdminPanel')}</span></div>
-    <div class="btn-row" style="margin-bottom:10px;"><button class="btn btn-outline btn-sm" id="sa-change-pin">🔑 ${tr('saChangePin')}</button><button class="btn btn-ghost btn-sm" id="sa-lock">🔒 ${tr('saLockBtn')}</button></div>
-    <div style="margin-bottom:10px;"><button type="button" class="btn btn-accent btn-block btn-sm" onclick="openSaPayments()">💳 ${tr('payHistoryTitle')}</button></div>
-    <div style="margin-bottom:10px;"><button type="button" class="btn btn-outline btn-block btn-sm" id="sa-sd-release">&#128241; ${tr('sdSaRelease')}</button></div>
+    <div class="btn-row" style="margin-bottom:10px;"><button class="btn btn-outline btn-sm" id="sa-change-pin">${icI('key')} ${tr('saChangePin')}</button><button class="btn btn-ghost btn-sm" id="sa-lock">${icI('lock')} ${tr('saLockBtn')}</button></div>
+    <div style="margin-bottom:10px;"><button type="button" class="btn btn-accent btn-block btn-sm" onclick="openSaPayments()">${icI('creditCard')} ${tr('payHistoryTitle')}</button></div>
+    <div style="margin-bottom:10px;"><button type="button" class="btn btn-outline btn-block btn-sm" id="sa-sd-release">${icI('phone')} ${tr('sdSaRelease')}</button></div>
     <div class="search-bar">${ICONS.search}<input type="text" id="superadmin-search" placeholder="${tr('search')}"></div>
     <div id="sa-inbox" style="margin:10px 0;"></div>
     <div id="sa-stats"></div>
@@ -16121,7 +16222,7 @@ async function renderSuperAdminList(){
           <div class="sa-stat"><div class="sa-num" style="color:#2f6fed;">${cnt.trial}</div><div class="sa-lbl">${tr('saTrial')}</div></div>
           <div class="sa-stat"><div class="sa-num" style="color:#e5484d;">${cnt.expired}</div><div class="sa-lbl">${tr('saExpired')}</div></div>
         </div>
-        ${next ? `<div class="card" style="padding:10px 14px;margin:0 0 10px;border-left:4px solid #d97706;"><div class="subtle" style="font-size:11.5px;font-weight:700;">⏳ ${tr('saSoon')}: ${cnt.soon}</div><div style="font-weight:800;">${escapeHtml(next.d.businessName||next.id)} — ${tr('saDaysLeft').replace('{n}', next.st.days)} (${new Date(next.st.exp).toLocaleDateString()})</div></div>` : ''}
+        ${next ? `<div class="card" style="padding:10px 14px;margin:0 0 10px;border-left:4px solid #d97706;"><div class="subtle" style="font-size:11.5px;font-weight:700;">${icI('hourglass')} ${tr('saSoon')}: ${cnt.soon}</div><div style="font-weight:800;">${escapeHtml(next.d.businessName||next.id)} — ${tr('saDaysLeft').replace('{n}', next.st.days)} (${fmtDate(next.st.exp)})</div></div>` : ''}
         <div class="fav-row" style="margin-bottom:10px;">${[['all',tr('saAll'),cnt.all],['soon',tr('saSoon'),cnt.soon],['paid',tr('saPaid'),cnt.paid],['trial',tr('saTrial'),cnt.trial],['expired',tr('saExpired'),cnt.expired]].map(([k,l,n])=>`<button class="fav-chip ${f===k?'fav-chip-active':''}" data-sa-filter="${k}">${l} · ${n}</button>`).join('')}
           <button class="fav-chip" id="sa-refresh">↻ ${tr('saRefresh')}</button></div>`;
       statsEl.querySelectorAll('[data-sa-filter]').forEach(b=>b.addEventListener('click', ()=>{ state.saFilter = b.dataset.saFilter; renderSuperAdminList(); }));
@@ -16154,16 +16255,16 @@ async function renderSuperAdminList(){
       return `
         <div class="card sa-card" data-biz-id="${id}" style="${unread?'border:2px solid var(--accent);':''}">
           <div class="sa-head" data-sa-toggle="${id}" style="cursor:pointer;">
-            <div class="row"><strong>${unread?'💬 ':''}${escapeHtml(d.businessName||id)}</strong><span class="badge ${active?'badge-clear':'badge-debt'}">${active?planLabel:tr('subscriptionExpiredTitle')}</span></div>
+            <div class="row"><strong>${unread?icI('chat')+' ':''}${escapeHtml(d.businessName||id)}</strong><span class="badge ${active?'badge-clear':'badge-debt'}">${active?planLabel:tr('subscriptionExpiredTitle')}</span></div>
             <div class="row" style="font-size:12.5px;"><span class="subtle">${escapeHtml(d.ownerEmail||'—')}</span><span style="font-weight:800;color:${whenColor};">${whenTxt}</span></div>
-            <div class="row" style="font-size:12px;"><span class="subtle">${escapeHtml(d.ownerPhone||d.businessPhone||'')}</span><span class="subtle">${expires ? expires.toLocaleDateString() : ''} ›</span></div>
+            <div class="row" style="font-size:12px;"><span class="subtle">${escapeHtml(d.ownerPhone||d.businessPhone||'')}</span><span class="subtle">${expires ? fmtDate(expires) : ''} ›</span></div>
           </div>
           <div class="sa-manage" id="sa-manage-${id}" style="display:none;margin-top:10px;border-top:1px solid var(--v4-line);padding-top:10px;">
           <div class="row"><span class="subtle">${tr('businessPhone')}</span><span>${escapeHtml(d.businessPhone||'—')}</span></div>
           <div class="row"><span class="subtle">${tr('authEmail')}</span><span style="font-size:12px;">${d.ownerEmail||'—'}</span></div>
           <div class="row"><span class="subtle">${tr('businessPhone')}</span><span>${escapeHtml(d.businessPhone||'—')}</span></div>
           <div class="row"><span class="subtle">${tr('ownerPhoneSettingsLabel')}</span><span style="font-weight:700;">${escapeHtml(d.ownerPhone||'—')}</span></div>
-          <div class="row"><span class="subtle">${tr('expiresOn')}</span><span>${expires ? expires.toLocaleDateString() : tr('noExpiryYet')}</span></div>
+          <div class="row"><span class="subtle">${tr('expiresOn')}</span><span>${expires ? fmtDate(expires) : tr('noExpiryYet')}</span></div>
           <div class="btn-row" style="margin-top:10px;">
             <button class="btn btn-outline btn-sm" data-extend="${id}" data-plan="monthly">+${planLabelFor('monthly')}</button>
             <button class="btn btn-outline btn-sm" data-extend="${id}" data-plan="sixmonth">+${planLabelFor('sixmonth')}</button>
@@ -16183,11 +16284,11 @@ async function renderSuperAdminList(){
             </div>
           </div>
           <div class="btn-row" style="margin-top:8px;">
-            <button class="btn btn-accent btn-sm" style="flex:1;position:relative;" data-chat="${id}" data-chat-name="${d.businessName||id}">💬 ${tr('supportSection')}${unread?` <span style="background:#fff;color:var(--accent);border-radius:8px;padding:1px 6px;font-size:10px;margin-left:4px;">${tr('newMsgBadge')}</span>`:''}</button>
+            <button class="btn btn-accent btn-sm" style="flex:1;position:relative;" data-chat="${id}" data-chat-name="${d.businessName||id}">${icI('chat')} ${tr('supportSection')}${unread?` <span style="background:#fff;color:var(--accent);border-radius:8px;padding:1px 6px;font-size:10px;margin-left:4px;">${tr('newMsgBadge')}</span>`:''}</button>
             ${d.ownerEmail ? `<button class="btn btn-outline btn-sm" style="flex:1;" data-reset-pw="${d.ownerEmail}">${tr('sendResetLink')}</button>` : ''}
           </div>
-          <button class="btn btn-ghost btn-sm btn-block" style="margin-top:8px;" data-view-errors="${id}" data-view-errors-name="${d.businessName||id}">⚠️ ${tr('viewErrorsBtn')}</button>
-          <button class="btn btn-ghost btn-sm btn-block" style="margin-top:8px;color:var(--danger);" data-delete-biz="${id}" data-delete-name="${d.businessName||id}">🗑 ${tr('deleteBusinessBtn')}</button>
+          <button class="btn btn-ghost btn-sm btn-block" style="margin-top:8px;" data-view-errors="${id}" data-view-errors-name="${d.businessName||id}">${icI('alert')} ${tr('viewErrorsBtn')}</button>
+          <button class="btn btn-ghost btn-sm btn-block" style="margin-top:8px;color:var(--danger);" data-delete-biz="${id}" data-delete-name="${d.businessName||id}">${icI('trash')} ${tr('deleteBusinessBtn')}</button>
           </div>
         </div>
       `;
@@ -16263,7 +16364,7 @@ async function renderSuperAdminList(){
 
 async function openBusinessErrorsModal(businessId, businessName){
   openModal(`
-    <div class="modal-title">⚠️ ${tr('viewErrorsBtn')} — ${businessName}</div>
+    <div class="modal-title">${icI('alert')} ${tr('viewErrorsBtn')} — ${businessName}</div>
     <div id="business-errors-list"><p class="subtle">${tr('loadingLabel')}</p></div>
   `);
   const listEl = document.getElementById('business-errors-list');
@@ -16275,7 +16376,7 @@ async function openBusinessErrorsModal(businessId, businessName){
       return `<div class="card" style="margin-bottom:8px;">
         <div class="row"><strong style="font-size:12px;color:var(--danger);">${e.message||''}</strong></div>
         <div class="subtle" style="font-size:11px;">${e.source||''}${e.line?(':'+e.line):''}</div>
-        <div class="subtle" style="font-size:11px;">${new Date(e.date).toLocaleString()}</div>
+        <div class="subtle" style="font-size:11px;">${fmtDateTime(e.date)}</div>
       </div>`;
     }).join('');
   }catch(err){
@@ -16285,7 +16386,7 @@ async function openBusinessErrorsModal(businessId, businessName){
 
 function openDeleteBusinessConfirm(businessId, businessName){
   openModal(`
-    <div class="modal-title" style="color:var(--danger);">⚠️ ${tr('deleteBusinessTitle')}</div>
+    <div class="modal-title" style="color:var(--danger);">${icI('alert')} ${tr('deleteBusinessTitle')}</div>
     <p class="subtle" style="margin:0 0 14px;">${tr('deleteBusinessWarning').replace('{name}', businessName)}</p>
     <div class="field">
       <label class="field-label">${tr('typeToConfirmLabel')}</label>
@@ -16494,7 +16595,9 @@ function openEditBranchNameModal(branch, afterDone){
     <div class="field"><input type="text" id="eb-name" value="${escapeHtml(branch.name)}"></div>
     <div id="eb-error" class="error-text"></div>
     <button class="btn btn-primary" id="eb-save-btn">${tr('save')}</button>
+    ${branchList().length > 1 ? dangerZoneHtml(tr('dzDelBranch'), '', 'eb-delete-btn') : ''}
   `, {center:true});
+  __dzBindHidden('eb-delete-btn', '[data-del-branch="' + branch.id + '"]');   /* fix127-ds1c */
   document.getElementById('eb-save-btn').addEventListener('click', ()=>{
     const trimmed = document.getElementById('eb-name').value.trim();
     if(!trimmed){ document.getElementById('eb-error').textContent = tr('fillFields'); return; }
@@ -16523,25 +16626,40 @@ function renderSettingsLoyalty(container){
       <p class="subtle" id="loyalty-mode-hint" style="margin:0 0 14px;">${state.settings.loyaltyMode==='creditLimit' ? tr('loyaltyModeCreditLimitHint') : tr('loyaltyModeCashbackHint')}</p>
       <div class="field"><label class="field-label">${tr('loyaltyEarnPercentLabel')}</label>
         <input type="number" id="s-loyalty-percent" min="0" max="100" step="0.5" value="${state.settings.loyaltyEarnPercent!=null?state.settings.loyaltyEarnPercent:2}">
+        <p id="s-loyalty-percent-err" style="display:none;margin:6px 0 0;font-size:12px;color:var(--danger);font-weight:600;"></p>
       </div>
       <p class="subtle" style="margin:0;">${tr('loyaltyEarnPercentHint')}</p>
     </div>
-    <button class="btn btn-primary" id="save-loyalty-btn">${tr('save')}</button>
+    <!-- fix125-ds1a: "Saqlash" kerak emas — har bir o'zgarish darhol saqlanadi -->
   `;
+  { const __h = container.querySelector('.back-row'); if(__h) __h.insertAdjacentHTML('afterend', autosaveStatusHtml()); }
   bindSettingsBack(container);
+  bindAutosaveStatus();
   let selectedMode = state.settings.loyaltyMode==='creditLimit' ? 'creditLimit' : 'cashback';
   const enabledCheck = document.getElementById('s-loyalty-enabled');
   enabledCheck.addEventListener('change', ()=>{
     document.getElementById('loyalty-percent-card').style.display = enabledCheck.checked ? '' : 'none';
+    state.settings.loyaltyEnabled = enabledCheck.checked; saveSettings();   /* fix125-ds1a */
   });
+  { const __lp = document.getElementById('s-loyalty-percent');   /* fix125-ds1a */
+    __asDebounce(['s-loyalty-percent']);
+    if(__lp) __lp.addEventListener('change', ()=>{
+      const __er = document.getElementById('s-loyalty-percent-err');
+      const __v = __lp.value === '' ? NaN : Number(String(__lp.value).replace(',', '.'));
+      if(!isFinite(__v) || __v < 0 || __v > 100){ if(__er){ __er.textContent = tr('loyaltyPercentBad'); __er.style.display = 'block'; } __asLastEl = null; return; }
+      if(__er) __er.style.display = 'none';
+      if(state.settings.loyaltyEarnPercent === __v){ __asLastEl = null; return; }
+      state.settings.loyaltyEarnPercent = __v; saveSettings();
+    }); }
   container.querySelectorAll('[data-loyalty-mode]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       selectedMode = btn.dataset.loyaltyMode;
       container.querySelectorAll('[data-loyalty-mode]').forEach(b=>b.classList.toggle('active', b.dataset.loyaltyMode===selectedMode));
       document.getElementById('loyalty-mode-hint').textContent = selectedMode==='creditLimit' ? tr('loyaltyModeCreditLimitHint') : tr('loyaltyModeCashbackHint');
+      state.settings.loyaltyMode = selectedMode; saveSettings();   /* fix125-ds1a */
     });
   });
-  document.getElementById('save-loyalty-btn').addEventListener('click', async ()=>{
+  const __lsb = document.getElementById('save-loyalty-btn'); if(__lsb) __lsb.addEventListener('click', async ()=>{   /* fix125-ds1a */
     state.settings.loyaltyEnabled = enabledCheck.checked;
     state.settings.loyaltyMode = selectedMode;
     state.settings.loyaltyEarnPercent = parseFloat(document.getElementById('s-loyalty-percent').value) || 0;
@@ -16560,7 +16678,7 @@ function renderDeletedCustomers(container){
           <div class="name">${escapeHtml(c.name)}</div>
           <div class="subtle" style="font-size:11.5px;">
             ${c.hiddenBy ? `${tr('deletedByLabel')}: ${escapeHtml(c.hiddenBy)}` : ''}
-            ${c.hiddenAt ? ` · ${new Date(c.hiddenAt).toLocaleString()}` : ''}
+            ${c.hiddenAt ? ` · ${fmtDateTime(c.hiddenAt)}` : ''}
           </div>
         </div>
         <button class="btn btn-outline btn-sm" data-restore-customer="${c.id}">${tr('restoreBtn')}</button>
@@ -16602,7 +16720,7 @@ function renderSettingsBranches(container){
         <div style="display:flex;gap:6px;">
           ${b.id!==state.currentBranchId?`<button class="btn btn-outline btn-sm" data-switch="${b.id}">${tr('switchBranch')}</button>`:''}
           <button class="btn btn-ghost btn-sm" data-edit-branch="${b.id}">${ICONS.edit}</button>
-          <button class="btn btn-ghost btn-sm" data-del-branch="${b.id}">${ICONS.trash}</button>
+          <button class="btn btn-ghost btn-sm" data-del-branch="${b.id}" hidden aria-hidden="true">${ICONS.trash}</button>
         </div>
       </div>
     `;}).join('')}</div>
@@ -16880,7 +16998,7 @@ function renderSettingsBusiness(container){
           ${(state.settings.timeZone && TZ_OPTIONS.indexOf(state.settings.timeZone)<0 ? [state.settings.timeZone] : []).concat(TZ_OPTIONS).map(z=>`<option value="${escapeHtml(z)}" ${state.settings.timeZone===z?'selected':''}>${escapeHtml(z)}${tzOffsetLabel(z)?(' ('+tzOffsetLabel(z)+')'):''}</option>`).join('')}
         </select>
         <p class="subtle" style="margin:6px 0 0;font-size:11px;">${tr('tzHint')}</p>
-        <p class="subtle" style="margin:4px 0 0;font-size:11.5px;">${tr('tzNow')}: <strong>${new Date().toLocaleString()}</strong></p>
+        <p class="subtle" style="margin:4px 0 0;font-size:11.5px;">${tr('tzNow')}: <strong>${fmtDateTime(new Date())}</strong></p>
       </div>
       ${isAdmin() ? `<div class="field" id="report-time-field">
         <label class="field-label">${tr('dailyReportTimeLabel')}</label>
@@ -16911,12 +17029,13 @@ function renderSettingsBusiness(container){
         <div>${state.tables.map(t=>`
           <div class="list-item">
             <div class="info"><div class="name">${escapeHtml(t.name)}</div><div class="meta">${t.cart.length ? tableWord() : tr('tableFree')}</div></div>
-            <button class="icon-btn" data-act="del-table" data-id="${t.id}">${ICONS.trash}</button>
+            <button class="icon-btn" data-tbl-more="${t.id}" aria-label="${tr('dzMore')}">${ICONS.more}</button>
+            <button class="icon-btn" data-act="del-table" data-id="${t.id}" hidden aria-hidden="true">${ICONS.trash}</button>
           </div>
         `).join('')}</div>
       </div>
     ` : ''}
-    <button class="btn btn-primary btn-block" id="save-settings-btn" style="margin-top:4px;">${tr('save')}</button>
+    <!-- fix125-ds1a: "Saqlash" kerak emas — har bir o'zgarish darhol saqlanadi -->
   `;
   bindSettingsBack(container);
   const retrySyncBtn = document.getElementById('settings-retry-sync-btn');
@@ -17033,6 +17152,7 @@ function renderSettingsBusiness(container){
       renderSettingsBusiness(container);
     });
   });
+  container.querySelectorAll('[data-tbl-more]').forEach(btn=>btn.addEventListener('click', ()=>{ const t = state.tables.find(x=>x.id===btn.dataset.tblMore); if(t) __dzSheet(tableWord() + ': ' + t.name, '', tr('dzDelete'), '[data-act="del-table"][data-id="' + t.id + '"]'); }));   /* fix127-ds1c */
   container.querySelectorAll('[data-act="del-table"]').forEach(btn=>btn.addEventListener('click', ()=>{
     const t = state.tables.find(x=>x.id===btn.dataset.id);
     if(t && t.cart.length){ showToast(tr('tableNotEmpty')); return; }
@@ -17043,7 +17163,14 @@ function renderSettingsBusiness(container){
       renderSettingsBusiness(container);
     });
   }));
-  document.getElementById('save-settings-btn').addEventListener('click', async ()=>{
+  [['s-name','businessName'],['s-address','businessAddress'],['s-phone','businessPhone'],['s-inn','businessInn'],['s-bank','businessBank'],['s-director','businessDirector'],['s-owner-phone','ownerPhone']].forEach(function(f){   /* fix125-ds1a */
+    const el = document.getElementById(f[0]); if(!el) return;
+    el.addEventListener('change', ()=>{ const v = el.value.trim(); if(state.settings[f[1]] === v) return; state.settings[f[1]] = v; saveSettings(); });
+  });
+  __asDebounce(['s-name','s-address','s-phone','s-inn','s-bank','s-director','s-owner-phone']);
+  { const __cur = document.getElementById('s-currency'); if(__cur) __cur.addEventListener('change', ()=>{ state.settings.currency = __cur.value; saveSettings(); }); }
+  { const __b = container.querySelector('.back-row'); if(__b && !document.getElementById('settings-autosave-status')) __b.insertAdjacentHTML('afterend', autosaveStatusHtml()); bindAutosaveStatus(); }
+  const __bsb = document.getElementById('save-settings-btn'); if(__bsb) __bsb.addEventListener('click', async ()=>{
     Object.assign(state.settings, {
       businessName: document.getElementById('s-name').value.trim(),
       businessAddress: document.getElementById('s-address').value.trim(),
@@ -17080,7 +17207,7 @@ function renderSettingsStaff(container){
           </div>
           <span class="badge badge-role">${s.role==='admin'?tr('roleAdmin'):jobTitleLabel(s.jobTitle)}</span>
           ${(s.role==='admin' && !isAdmin()) ? '' : `<button class="icon-btn" data-act="edit-staff" data-id="${s.id}">${ICONS.edit}</button>`}
-          <button class="icon-btn" data-act="del-staff" data-id="${s.id}">${ICONS.trash}</button>
+          <button class="icon-btn" data-act="del-staff" data-id="${s.id}" hidden aria-hidden="true">${ICONS.trash}</button>
         </div>
       `).join('') : `<div class="empty-state">${tr('noData')}</div>`}
     </div>
@@ -17100,6 +17227,7 @@ function renderSettingsStaff(container){
     // check — confirmed by actually driving it through the UI, not just
     // read from the code — with no way back in afterward (the PIN
     // recovery flow itself depends on an admin record existing to reset).
+    if(target.id === __ownerStaffId()){ showToast(tr('dzOwnerNo')); return; }   /* fix127-ds1c: biznes egasi o'chirilmaydi */
     if(target.role==='admin' && !isAdmin()){
       showToast(tr('onlyAdminCanRemoveAdmin'));
       return;
@@ -17139,7 +17267,7 @@ async function renderSettingsAgentMap(container){
     const bounds = [];
     points.forEach(p=>{
       const marker = L.marker([p.lat, p.lng]).addTo(map);
-      marker.bindPopup(`<strong>${escapeHtml(p.staffName)}</strong><br>${new Date(p.updatedAt).toLocaleString()}`);
+      marker.bindPopup(`<strong>${escapeHtml(p.staffName)}</strong><br>${fmtDateTime(p.updatedAt)}`);
       bounds.push([p.lat, p.lng]);
     });
     if(bounds.length > 1) map.fitBounds(bounds, {padding:[30,30]});
@@ -17182,7 +17310,8 @@ function renderKitchenPrinterSection(){
             <div class="card" style="margin-bottom:10px;">
               <div class="row" style="margin-bottom:${isBrowser?'0':'8px'};">
                 <strong>${escapeHtml(st.name)}</strong>
-                <button class="icon-btn" data-del-station="${st.id}">${ICONS.trash}</button>
+                <button class="icon-btn" data-st-more="${st.id}" aria-label="${tr('dzMore')}">${ICONS.more}</button>
+                <button class="icon-btn" data-del-station="${st.id}" hidden aria-hidden="true">${ICONS.trash}</button>
               </div>
               ${isBrowser ? '' : `
                 <div class="row" style="margin-bottom:10px;">
@@ -17238,6 +17367,7 @@ function bindKitchenPrinterSectionEvents(){
   document.querySelectorAll('[data-disconnect-station]').forEach(btn=>{
     btn.addEventListener('click', ()=>disconnectBluetoothPrinter(btn.dataset.disconnectStation));
   });
+  document.querySelectorAll('[data-st-more]').forEach(b=>b.addEventListener('click', ()=>{ const st = state.kitchenStations.find(x=>x.id===b.dataset.stMore); if(st) __dzSheet(st.name, '', tr('dzDelete'), '[data-del-station="' + st.id + '"]'); }));   /* fix127-ds1c */
   document.querySelectorAll('[data-del-station]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.delStation;
@@ -17397,7 +17527,7 @@ function renderSettingsPrinter(container){
       </div>
     </div>
     </details>
-    <button class="btn btn-primary btn-block" id="save-printer-settings-btn" style="margin-top:4px;">${tr('saveAndBack')}</button>
+    <!-- fix125-ds1a: "Saqlash va qaytish" kerak emas — har bir o'zgarish darhol saqlanadi -->
   `;
   bindSettingsBack(container);
   const iosNoteEl = document.getElementById('ios-note');
@@ -17479,6 +17609,7 @@ function renderSettingsPrinter(container){
     }
   });
   const customCharsInput = document.getElementById('printer-chars-input');
+  __asDebounce(['printer-chars-input']);   /* fix125-ds1a */
   if(customCharsInput) customCharsInput.addEventListener('change', (e)=>{
     const val = parseInt(e.target.value,10);
     if(val>10 && val<80){ state.settings.printerCharsPerLine = val; saveSettings(); }
@@ -17697,7 +17828,7 @@ function renderSettingsReceipt(container){
       <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('riHint')}</p>
       ${receiptImageFieldHtml('receiptLogo', tr('receiptLogo'), 'logoScalePercent')}
       ${receiptImageFieldHtml('footerImage', tr('footerImage'), 'footerImageScalePercent')}
-      <button class="btn btn-primary btn-block" style="margin-top:12px;" id="save-receipt-design-btn">${tr('saveAndBack')}</button>
+      <!-- fix125-ds1a: "Saqlash va qaytish" kerak emas — har bir o'zgarish darhol saqlanadi -->
       <button class="btn btn-outline btn-block" id="receipt-preview-btn">${tr('receiptPreview')}</button>
     </div>
   `;
@@ -17757,10 +17888,11 @@ function renderSettingsReceipt(container){
     saveSettings();
   });
   bindAutosaveStatus();
+  __asDebounce(['s-extra-line', 's-footer']);   /* fix125-ds1a: yozib bo'lingandan 0,6 s keyin saqlanadi */
   bindReceiptImageFields(container);
   const rlSel = document.getElementById('s-receipt-language');
   if(rlSel) rlSel.addEventListener('change', ()=>{ state.settings.receiptLanguage = rlSel.value || ''; saveSettings(); });
-  document.getElementById('save-receipt-design-btn').addEventListener('click', async ()=>{
+  const __rdSave = document.getElementById('save-receipt-design-btn'); if(__rdSave) __rdSave.addEventListener('click', async ()=>{   /* fix125-ds1a */
     state.settings.receiptExtraLine = document.getElementById('s-extra-line').value.trim();
     state.settings.receiptFooter = document.getElementById('s-footer').value.trim();
     state.settings.receiptBusinessBold = document.getElementById('s-business-bold').checked;
@@ -18195,6 +18327,386 @@ function renderSettingsStaffRules(container){
   if(ob) ob.addEventListener('click', ()=>{ state.settingsCategory = 'staff'; renderSettings(); });
 }
 
+/* --- fix125-ds1a: dizayn tizimi 1a (sana formati, sana tanlagich, darhol saqlash yordamchilari) --- */
+var DT_L = {
+  uz: {m:['yan','fev','mar','apr','may','iyn','iyl','avg','sen','okt','noy','dek'], M:['Yanvar','Fevral','Mart','Aprel','May','Iyun','Iyul','Avgust','Sentabr','Oktabr','Noyabr','Dekabr'], w:['yakshanba','dushanba','seshanba','chorshanba','payshanba','juma','shanba'], ws:['Ya','Du','Se','Ch','Pa','Ju','Sh'], today:'Bugun', yest:'Kecha'},
+  ru: {m:['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'], M:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'], w:['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'], ws:['Вс','Пн','Вт','Ср','Чт','Пт','Сб'], today:'Сегодня', yest:'Вчера'},
+  en: {m:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], M:['January','February','March','April','May','June','July','August','September','October','November','December'], w:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], ws:['Su','Mo','Tu','We','Th','Fr','Sa'], today:'Today', yest:'Yesterday'},
+  kk: {m:['қаң','ақп','нау','сәу','мам','мау','шіл','там','қыр','қаз','қар','жел'], M:['Қаңтар','Ақпан','Наурыз','Сәуір','Мамыр','Маусым','Шілде','Тамыз','Қыркүйек','Қазан','Қараша','Желтоқсан'], w:['жексенбі','дүйсенбі','сейсенбі','сәрсенбі','бейсенбі','жұма','сенбі'], ws:['Жс','Дс','Сс','Ср','Бс','Жм','Сб'], today:'Бүгін', yest:'Кеше'},
+  ky: {m:['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'], M:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'], w:['жекшемби','дүйшөмбү','шейшемби','шаршемби','бейшемби','жума','ишемби'], ws:['Жк','Дш','Шш','Шр','Бш','Жм','Иш'], today:'Бүгүн', yest:'Кечээ'},
+  tg: {m:['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'], M:['Январ','Феврал','Март','Апрел','Май','Июн','Июл','Август','Сентябр','Октябр','Ноябр','Декабр'], w:['якшанбе','душанбе','сешанбе','чоршанбе','панҷшанбе','ҷумъа','шанбе'], ws:['Яш','Дш','Сш','Чш','Пш','Ҷм','Шб'], today:'Имрӯз', yest:'Дирӯз'}
+};
+function __dtL(){ return DT_L[(typeof state !== 'undefined' && state && state.lang) || 'uz'] || DT_L.uz; }
+function __dtD(x){ if(x == null || x === '') return null; const d = (x instanceof Date) ? x : new Date(x); return isNaN(d.getTime()) ? null : d; }
+function __p2(n){ return (n < 10 ? '0' : '') + n; }
+/* kun qismi: uz "16-okt", en "Oct 16", qolganlar "16 окт"; boshqa yil bo'lsa yil qo'shiladi */
+function __dtDay(y, mo, da, withYear){
+  const L = __dtL(), lang = (state && state.lang) || 'uz', m = L.m[mo];
+  if(lang === 'en') return m + ' ' + da + (withYear ? ', ' + y : '');
+  if(lang === 'uz') return da + '-' + m + (withYear ? ' ' + y : '');
+  return da + ' ' + m + (withYear ? ' ' + y : '');
+}
+function __dtRel(d){
+  const n = new Date(), y = new Date(n.getTime() - 86400000);
+  const k = (x)=>x.getFullYear() * 10000 + x.getMonth() * 100 + x.getDate(), kd = k(d);
+  if(kd === k(n)) return 'today'; if(kd === k(y)) return 'yest'; return null;
+}
+function fmtTime(x, sec){ const d = __dtD(x); if(!d) return ''; return __p2(d.getHours()) + ':' + __p2(d.getMinutes()) + (sec ? ':' + __p2(d.getSeconds()) : ''); }
+function fmtDate(x){
+  const d = __dtD(x); if(!d) return '';
+  const r = __dtRel(d), L = __dtL(); if(r) return L[r];
+  return __dtDay(d.getFullYear(), d.getMonth(), d.getDate(), d.getFullYear() !== new Date().getFullYear());
+}
+function fmtDateTime(x){
+  const d = __dtD(x); if(!d) return '';
+  const r = __dtRel(d), L = __dtL();
+  return (r ? L[r] : __dtDay(d.getFullYear(), d.getMonth(), d.getDate(), d.getFullYear() !== new Date().getFullYear())) + ', ' + fmtTime(d);
+}
+function fmtDayLong(x){
+  const d = __dtD(x); if(!d) return '';
+  const r = __dtRel(d), L = __dtL(), day = __dtDay(d.getFullYear(), d.getMonth(), d.getDate(), d.getFullYear() !== new Date().getFullYear());
+  return r ? L[r] + ', ' + day : day + ', ' + L.w[d.getDay()];
+}
+
+/* Darhol saqlash: matn/son maydoni yozib bo'lingandan 0,6 s keyin (yoki "orqaga"da) 'change' hodisasi beriladi —
+   mavjud saqlash kodi o'zgarmasdan ishlaydi. Saqlangandan keyin o'sha maydon yonida "Saqlandi ✓". */
+var __asPend = {}, __asLastEl = null;
+function __asFire(id){ const t = __asPend[id]; if(!t) return; clearTimeout(t.timer); delete __asPend[id]; const el = document.getElementById(id); if(el && el.value !== t.v0) el.dispatchEvent(new Event('change', {bubbles: true})); }
+function __asFlush(){ Object.keys(__asPend).forEach(__asFire); }
+function __asDebounce(ids){
+  (ids || []).forEach(function(id){
+    const el = document.getElementById(id); if(!el || el.__asBound) return; el.__asBound = true;
+    let last = el.value;
+    el.addEventListener('change', ()=>{ last = el.value; delete __asPend[id]; });
+    el.addEventListener('input', ()=>{
+      const p = __asPend[id] || (__asPend[id] = {v0: last});
+      clearTimeout(p.timer); p.timer = setTimeout(()=>__asFire(id), 600);
+    });
+  });
+}
+function __asTick(el){
+  if(!el || !el.isConnected || el.hasAttribute('data-ss-key')) return;
+  const host = (el.closest('.checkbox-row') && el.closest('.checkbox-row').querySelector('span')) || (el.closest('.field') && el.closest('.field').querySelector('.field-label'));
+  if(!host) return;
+  let t = host.querySelector(':scope > .as-ok');
+  if(!t){ t = document.createElement('small'); t.className = 'as-ok'; host.appendChild(t); }
+  t.textContent = ' ' + tr('ssSaved'); t.style.opacity = '1';
+  clearTimeout(t.__h); t.__h = setTimeout(()=>{ t.style.opacity = '0'; }, 2500);
+}
+if(!window.__asBound){
+  window.__asBound = true;
+  let __asAt = 0;
+  const __mark = (e)=>{ try{ if(state.view === 'settings' && e.target && e.target.closest && e.target.closest('#view-container')){ __asLastEl = e.target; __asAt = Date.now(); } }catch(_e){} };
+  document.addEventListener('change', __mark, true);
+  document.addEventListener('settings-saved', ()=>{ const el = __asLastEl; __asLastEl = null; try{ if(el && state.view === 'settings' && Date.now() - __asAt < 3000) __asTick(el); }catch(_e){} });
+  document.addEventListener('click', (e)=>{ if(e.target && e.target.closest && e.target.closest('#settings-back-btn')) __asFlush(); }, true);
+  document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'hidden') __asFlush(); });
+}
+
+/* Sana tanlagich — ilova tilida, Dushanbadan. Asl <input type="date|datetime-local"> joyida qoladi (yashirin):
+   uning qiymati, id si va hodisalari o'zgarmaydi, shuning uchun mavjud kod avvalgidek ishlaydi. */
+var __dpDesc = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+function __dpParse(v, dt){
+  const m = /^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/.exec(String(v || ''));
+  if(!m) return null;
+  return {y: +m[1], mo: +m[2] - 1, d: +m[3], h: m[4] != null ? +m[4] : 0, mi: m[5] != null ? +m[5] : 0};
+}
+function __dpVal(p, dt){ const b = p.y + '-' + __p2(p.mo + 1) + '-' + __p2(p.d); return dt ? b + 'T' + __p2(p.h) + ':' + __p2(p.mi) : b; }
+function __dpWd(p){ return new Date(Date.UTC(p.y, p.mo, p.d)).getUTCDay(); }
+function __dpLabel(inp){
+  const dt = inp.dataset.dpType === 'datetime-local', p = __dpParse(__dpDesc.get.call(inp), dt);
+  if(!p) return '';
+  const L = __dtL(), day = __dtDay(p.y, p.mo, p.d, true);
+  return dt ? day + ', ' + __p2(p.h) + ':' + __p2(p.mi) : day + ', ' + L.w[__dpWd(p)];
+}
+function __dpShow(inp){
+  const b = inp.__dpBtn; if(!b) return;
+  const t = __dpLabel(inp);
+  b.querySelector('span').textContent = t || tr('dpPick');
+  b.classList.toggle('empty', !t);
+  b.disabled = !!inp.disabled;
+}
+function __dpEnhance(inp){
+  if(!inp || inp.__dp) return;
+  const type = (inp.getAttribute('type') || '').toLowerCase();
+  if(type !== 'date' && type !== 'datetime-local') return;
+  inp.__dp = true; inp.dataset.dpType = type;
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'dp-btn';
+  b.innerHTML = (ICONS.calendar || '') + '<span></span>';
+  if(inp.style.flex) b.style.flex = inp.style.flex;
+  inp.parentNode.insertBefore(b, inp.nextSibling);
+  inp.style.display = 'none';
+  inp.__dpBtn = b;
+  try{ Object.defineProperty(inp, 'value', {configurable: true, get: function(){ return __dpDesc.get.call(this); }, set: function(v){ __dpDesc.set.call(this, v); __dpShow(this); }}); }catch(e){}
+  b.addEventListener('click', ()=>__dpOpen(inp));
+  try{ new MutationObserver(()=>__dpShow(inp)).observe(inp, {attributes: true, attributeFilter: ['disabled']}); }catch(e){}
+  inp.addEventListener('change', ()=>__dpShow(inp));
+  __dpShow(inp);
+}
+function __dpScan(root){
+  try{
+    if(root.matches && root.matches('input[type=date],input[type=datetime-local]')) __dpEnhance(root);
+    if(root.querySelectorAll) root.querySelectorAll('input[type=date],input[type=datetime-local]').forEach(__dpEnhance);
+  }catch(e){}
+}
+function __dpClose(){ const l = document.getElementById('dp-layer'); if(l) l.remove(); }
+function __dpCommit(inp, v){
+  __dpDesc.set.call(inp, v); __dpShow(inp);
+  inp.dispatchEvent(new Event('input', {bubbles: true}));
+  inp.dispatchEvent(new Event('change', {bubbles: true}));
+}
+function __dpOpen(inp){
+  if(inp.disabled) return;
+  __dpClose();
+  const dt = inp.dataset.dpType === 'datetime-local', L = __dtL();
+  const now = new Date(), today = {y: now.getFullYear(), mo: now.getMonth(), d: now.getDate(), h: now.getHours(), mi: now.getMinutes()};
+  const cur = __dpParse(__dpDesc.get.call(inp), dt);
+  const sel = cur ? Object.assign({}, cur) : (dt ? Object.assign({}, today) : null);
+  let vy = (cur || today).y, vm = (cur || today).mo;
+  const mn = __dpParse(inp.getAttribute('min'), false), mx = __dpParse(inp.getAttribute('max'), false);
+  const key = (p)=>p.y * 10000 + p.mo * 100 + p.d;
+  const layer = document.createElement('div'); layer.id = 'dp-layer';
+  layer.innerHTML = '<div class="dp-sheet" role="dialog"></div>';
+  document.body.appendChild(layer);
+  const sheet = layer.firstChild;
+  function draw(){
+    const first = __dpWd({y: vy, mo: vm, d: 1}), off = (first + 6) % 7, dim = new Date(Date.UTC(vy, vm + 1, 0)).getUTCDate();
+    let h = '<div class="dp-head"><button type="button" class="dp-nav" data-dp="prev" aria-label="' + escapeHtml(tr('dpPrev')) + '">‹</button><b>' + escapeHtml(L.M[vm]) + ' ' + vy + '</b><button type="button" class="dp-nav" data-dp="next" aria-label="' + escapeHtml(tr('dpNext')) + '">›</button></div><div class="dp-grid">';
+    [1, 2, 3, 4, 5, 6, 0].forEach(i=>{ h += '<div class="dp-wd">' + escapeHtml(L.ws[i]) + '</div>'; });
+    for(let i = 0; i < off; i++) h += '<div></div>';
+    for(let d = 1; d <= dim; d++){
+      const p = {y: vy, mo: vm, d}, k = key(p), dis = (mn && k < key(mn)) || (mx && k > key(mx));
+      const c = 'dp-day' + (k === key(today) ? ' today' : '') + (sel && k === key(sel) ? ' sel' : '');
+      h += '<button type="button" class="' + c + '" data-day="' + d + '"' + (dis ? ' disabled' : '') + '>' + d + '</button>';
+    }
+    h += '</div>';
+    if(dt){
+      let hs = '', ms = '';
+      for(let i = 0; i < 24; i++) hs += '<option value="' + i + '"' + (sel && sel.h === i ? ' selected' : '') + '>' + __p2(i) + '</option>';
+      for(let i = 0; i < 60; i++) ms += '<option value="' + i + '"' + (sel && sel.mi === i ? ' selected' : '') + '>' + __p2(i) + '</option>';
+      h += '<div class="dp-time"><span>' + escapeHtml(tr('dpTime')) + '</span><select data-dp="h">' + hs + '</select><span>:</span><select data-dp="m">' + ms + '</select></div>';
+    }
+    h += '<div class="dp-foot">' + (inp.required ? '' : '<button type="button" data-dp="clear">' + escapeHtml(tr('dpClear')) + '</button>')
+      + '<button type="button" data-dp="today">' + escapeHtml(tr('dpToday')) + '</button>'
+      + (dt ? '<button type="button" class="dp-ok" data-dp="ok">' + escapeHtml(tr('dpDone')) + '</button>' : '<button type="button" data-dp="cancel">' + escapeHtml(tr('dpCancel')) + '</button>') + '</div>';
+    sheet.innerHTML = h;
+  }
+  draw();
+  layer.addEventListener('click', (e)=>{
+    if(e.target === layer){ __dpClose(); return; }
+    const b = e.target.closest ? e.target.closest('button') : null; if(!b || b.disabled) return;
+    const a = b.dataset.dp;
+    if(a === 'prev'){ vm--; if(vm < 0){ vm = 11; vy--; } draw(); return; }
+    if(a === 'next'){ vm++; if(vm > 11){ vm = 0; vy++; } draw(); return; }
+    if(a === 'cancel'){ __dpClose(); return; }
+    if(a === 'clear'){ __dpClose(); __dpCommit(inp, ''); return; }
+    if(a === 'today'){
+      const p = {y: today.y, mo: today.mo, d: today.d, h: sel ? sel.h : today.h, mi: sel ? sel.mi : today.mi};
+      __dpClose(); __dpCommit(inp, __dpVal(p, dt)); return;
+    }
+    if(a === 'ok'){ __dpClose(); if(sel) __dpCommit(inp, __dpVal(sel, true)); return; }
+    if(b.dataset.day){
+      const p = {y: vy, mo: vm, d: +b.dataset.day, h: sel ? sel.h : 0, mi: sel ? sel.mi : 0};
+      if(dt){ Object.assign(sel, p); draw(); return; }
+      __dpClose(); __dpCommit(inp, __dpVal(p, false));
+    }
+  });
+  layer.addEventListener('change', (e)=>{
+    const a = e.target && e.target.dataset ? e.target.dataset.dp : '';
+    if(a === 'h' && sel) sel.h = +e.target.value;
+    if(a === 'm' && sel) sel.mi = +e.target.value;
+  });
+}
+if(!window.__dpObs){
+  try{
+    window.__dpObs = new MutationObserver((list)=>{ list.forEach(m=>{ m.addedNodes && m.addedNodes.forEach(n=>{ if(n.nodeType === 1) __dpScan(n); }); }); });
+    const __go = ()=>{ __dpScan(document.body); window.__dpObs.observe(document.body, {childList: true, subtree: true}); };
+    if(document.body) __go(); else document.addEventListener('DOMContentLoaded', __go);
+  }catch(e){}
+}
+
+/* --- fix126-ds1b: ikonkalar, ixcham raqam, grafik, kartochka va bo'sh holat --- */
+(function(){
+  const sv = (p, w)=>'<svg width="' + (w || 20) + '" height="' + (w || 20) + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + p + '</svg>';
+  const add = {
+    banknote: sv('<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>'),
+    book: sv('<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>'),
+    hourglass: sv('<path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>'),
+    snowflake: sv('<path d="M2 12h20M12 2v20M20 16l-4-4 4-4M4 8l4 4-4 4M16 4l-4 4-4-4M8 20l4-4 4 4"/>'),
+    barChart: sv('<path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/>'),
+    folder: sv('<path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>'),
+    trophy: sv('<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/>'),
+    bag: sv('<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>'),
+    package: sv('<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/>'),
+    user: sv('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'),
+    alert: sv('<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4M12 17h.01"/>'),
+    phone: sv('<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>'),
+    shuffle: sv('<path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>'),
+    lock: sv('<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'),
+    volume: sv('<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>'),
+    volumeX: sv('<path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6M16 9l6 6"/>'),
+    tag: sv('<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1"/>'),
+    truck: sv('<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>'),
+    checkCircle: sv('<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>'),
+    key: sv('<circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/>'),
+    bot: sv('<path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/>'),
+    sparkles: sv('<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/>'),
+    info: sv('<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>'),
+    inbox: sv('<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>')
+  };
+  Object.keys(add).forEach(function(k){ if(!ICONS[k]) ICONS[k] = add[k]; });
+  if(!ICONS.bell) ICONS.bell = sv('<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>');
+})();
+function icI(n){ return '<span class="ic-i">' + (ICONS[n] || '') + '</span>'; }
+
+/* Ixcham raqam: 2 297 500 -> "2,3 mln" (6 tilda) */
+var NUM_U = {uz:['ming','mln','mlrd'], ru:['тыс.','млн','млрд'], en:['K','M','B'], kk:['мың','млн','млрд'], ky:['миң','млн','млрд'], tg:['ҳаз.','млн','млрд']};
+function fmtCompact(n){
+  n = Number(n) || 0;
+  const lang = (state && state.lang) || 'uz', U = NUM_U[lang] || NUM_U.uz, neg = n < 0, a = Math.abs(n);
+  let v, u = '';
+  if(a < 1000) v = String(Math.round(a));
+  else { const i = a >= 1e9 ? 2 : (a >= 1e6 ? 1 : 0), d = [1e3, 1e6, 1e9][i]; v = (Math.round(a / d * 10) / 10).toString(); if(lang !== 'en') v = v.replace('.', ','); u = U[i]; }
+  return (neg ? '−' : '') + v + (u ? (lang === 'en' ? '' : ' ') + u : '');
+}
+function fmtDayShort(x){ const d = __dtD(x); if(!d) return ''; return __dtDay(d.getFullYear(), d.getMonth(), d.getDate(), false); }
+function __niceMax(v){ if(v <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p; }
+
+/* Chiziqli grafik: Y o'qi (0, yarmi, eng yuqori), formatlangan yorliqlar */
+function buildLineChartSvg(points, opts){
+  try{
+    opts = opts || {};
+    const w = opts.width || 400, h = opts.height || 180, padL = 58, padR = 14, padT = 14, padB = 26;
+    const plotW = w - padL - padR, plotH = h - padT - padB;
+    const maxV = __niceMax(Math.max(0, ...points.map(p=>Number(p.value) || 0)));
+    const stepX = points.length > 1 ? plotW / (points.length - 1) : 0;
+    const Y = (v)=>padT + plotH - (Math.max(0, v) / maxV) * plotH;
+    const c = points.map((p, i)=>({x: padL + i * stepX, y: Y(Number(p.value) || 0), label: p.label, value: p.value}));
+    const line = c.map((q, i)=>(i ? 'L' : 'M') + q.x.toFixed(1) + ',' + q.y.toFixed(1)).join(' ');
+    const area = line + ' L' + c[c.length - 1].x.toFixed(1) + ',' + (padT + plotH) + ' L' + c[0].x.toFixed(1) + ',' + (padT + plotH) + ' Z';
+    let g = '';
+    [0, 0.5, 1].forEach(f=>{ const y = (padT + plotH - f * plotH).toFixed(1); g += '<line x1="' + padL + '" y1="' + y + '" x2="' + (w - padR) + '" y2="' + y + '" stroke="var(--v4-line, #e6ebf3)" stroke-width="1"' + (f ? ' stroke-dasharray="3 3"' : '') + '/><text x="' + (padL - 6) + '" y="' + (Number(y) + 3.5) + '" font-size="10" fill="var(--ink-faint)" text-anchor="end">' + escapeHtml(fmtCompact(maxV * f)) + '</text>'; });
+    const every = Math.max(1, Math.ceil(points.length / 5));
+    const last = c.length - 1;
+    const lbl = c.map((q, i)=>(i === last || (i % every === 0 && last - i >= Math.max(1, every * 0.75))) ? '<text x="' + q.x.toFixed(1) + '" y="' + (h - 7) + '" font-size="10" fill="var(--ink-faint)" text-anchor="' + (i === 0 ? 'start' : (i === last ? 'end' : 'middle')) + '">' + escapeHtml(String(q.label == null ? '' : q.label)) + '</text>' : '').join('');
+    const dots = c.map(q=>'<circle cx="' + q.x.toFixed(1) + '" cy="' + q.y.toFixed(1) + '" r="3" fill="var(--accent)"><title>' + escapeHtml(String(q.label)) + ': ' + escapeHtml(fmt(q.value)) + '</title></circle>').join('');
+    return '<svg class="ds-chart" viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;max-width:760px;height:auto;display:block;margin:0 auto;">' + g + '<path d="' + area + '" fill="var(--accent-bg)" opacity=".7"/><path d="' + line + '" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round"/>' + dots + lbl + '</svg>';
+  }catch(e){ return __oldBuildLineChartSvg(points, opts); }
+}
+/* Ustunli grafik: nom kesilmaydi (2 qatorga bo'linadi, to'liq nom — bosib turilsa), qiymat ixcham, manfiy qizil */
+function buildBarChartSvg(entries, opts){
+  try{
+    opts = opts || {};
+    const w = opts.width || 400, rowH = 34, gap = 6, labelW = 150, valW = 70, barX = labelW + 6, barArea = w - barX - valW;
+    const h = entries.length * (rowH + gap);
+    const maxV = Math.max(1, ...entries.map(e=>Math.abs(Number(e.value) || 0)));
+    const wrap = (t)=>{ t = String(t || ''); const max = 22; if(t.length <= max) return [t]; let cut = t.lastIndexOf(' ', max); if(cut < 8) cut = max; const a = t.slice(0, cut).trim(), b = t.slice(cut).trim(); return [a, b.length > max ? b.slice(0, max - 1) + '…' : b]; };
+    const rows = entries.map((e, i)=>{
+      const v = Number(e.value) || 0, y = i * (rowH + gap), bw = Math.max(v ? 3 : 0, Math.abs(v) / maxV * barArea);
+      const L = wrap(e.label), money = e.money || (e.display != null && /[^\d\s.,−-]/.test(String(e.display)));
+      const txt = money ? fmtCompact(v) : (e.display != null && String(e.display).length <= 9 ? String(e.display) : fmtCompact(v));
+      const ly = L.length > 1 ? [y + rowH / 2 - 3, y + rowH / 2 + 9] : [y + rowH / 2 + 4];
+      return '<g><title>' + escapeHtml(String(e.label || '')) + ': ' + escapeHtml(e.display != null ? String(e.display) : (money ? fmt(v) : String(v))) + '</title>'
+        + L.map((t, k)=>'<text x="0" y="' + ly[k] + '" font-size="11.5" font-weight="' + (k ? 500 : 600) + '" fill="' + (k ? 'var(--ink-soft)' : 'var(--ink)') + '">' + escapeHtml(t) + '</text>').join('')
+        + '<rect x="' + barX + '" y="' + (y + 7) + '" width="' + barArea + '" height="' + (rowH - 14) + '" rx="6" fill="#eef2f9"/>'
+        + '<rect x="' + barX + '" y="' + (y + 7) + '" width="' + bw.toFixed(1) + '" height="' + (rowH - 14) + '" rx="6" fill="' + (v < 0 ? 'var(--danger)' : 'var(--accent)') + '"/>'
+        + '<text x="' + (w - 2) + '" y="' + (y + rowH / 2 + 4) + '" font-size="12" font-weight="700" text-anchor="end" fill="' + (v < 0 ? 'var(--danger)' : 'var(--ink)') + '">' + escapeHtml(txt) + '</text></g>';
+    }).join('');
+    return '<svg class="ds-chart" viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto;">' + rows + '</svg>';
+  }catch(e){ return __oldBuildBarChartSvg(entries, opts); }
+}
+
+/* Kartochka raqami bitta qatorda: sig'masa shrift kichrayadi (min 13px) */
+function __fitStats(root){
+  (root || document).querySelectorAll('.stat-value').forEach(el=>{
+    el.style.fontSize = '';
+    if(!el.clientWidth) return;
+    let fs = parseFloat(getComputedStyle(el).fontSize) || 20, n = 0;
+    while(el.scrollWidth > el.clientWidth + 1 && fs > 13 && n < 20){ fs -= 1; el.style.fontSize = fs + 'px'; n++; }
+  });
+}
+/* Bo'sh holat: ikonka + gap + harakat */
+var ES_ACT = {
+  addProduct: ()=>openProductForm(null), addCustomer: ()=>openCustomerForm(), addExpense: ()=>openExpenseForm(()=>{ renderAll(); }),
+  goSale: ()=>{ state.view = 'sale'; state.reportsCategory = null; renderAll(); }
+};
+function emptyStateHtml(o){
+  return '<span class="ds-empty-ic">' + (o.icon || ICONS.inbox) + '</span><div class="ds-empty-t">' + escapeHtml(o.text || tr('noData')) + '</div>'
+    + (o.sub ? '<div class="ds-empty-s">' + escapeHtml(o.sub) + '</div>' : '')
+    + (o.btn ? '<button type="button" class="btn btn-primary btn-sm" data-es-act="' + o.act + '">' + ICONS.plus + ' ' + escapeHtml(o.btn) + '</button>' : '');
+}
+function __esFor(el){
+  const pid = el.parentElement && el.parentElement.id, txt = (el.textContent || '').trim();
+  if(pid === 'product-list'){
+    if(visibleProducts().length) return {icon: ICONS.search, text: tr('esNotFound'), sub: tr('esNotFoundSub')};
+    return {icon: ICONS.products, text: tr('esNoProducts'), sub: tr('esNoProductsSub'), btn: (isAdmin() || hasPerm('products')) ? tr('addProduct') : '', act: 'addProduct'};
+  }
+  if(pid === 'customer-list'){
+    if(visibleCustomers().some(c=>!c.hidden)) return {icon: ICONS.search, text: tr('esNotFound'), sub: tr('esNotFoundSub')};
+    return {icon: ICONS.customers, text: tr('esNoCustomers'), sub: tr('esNoCustomersSub'), btn: (isAdmin() || hasPerm('customers')) ? tr('addCustomer') : '', act: 'addCustomer'};
+  }
+  if(pid === 'receipts-list'){
+    if((state.receiptsSearch || '').trim()) return {icon: ICONS.search, text: tr('esNotFound'), sub: tr('esNotFoundSub')};
+    return {icon: ICONS.receiptIcon, text: tr('esNoReceipts'), sub: tr('esNoReceiptsSub'), btn: tr('navSale'), act: 'goSale'};
+  }
+  if(txt === tr('noExpensesYet')) return {icon: ICONS.banknote, text: txt, sub: tr('esNoExpensesSub'), btn: (isAdmin() || hasPerm('expense')) ? tr('addExpense') : '', act: 'addExpense'};
+  if(txt && txt !== '…' && txt.length > 2 && !el.children.length) return {icon: ICONS.inbox, text: txt};
+  return null;
+}
+function __esScan(root){
+  (root || document).querySelectorAll('.empty-state:not([data-es])').forEach(el=>{
+    el.setAttribute('data-es', '1');
+    try{
+      const o = __esFor(el);
+      if(o){
+        if(o.btn){ const scope = el.closest('#modal-root') || document.getElementById('view-container') || document; if([...scope.querySelectorAll('button')].some(b=>!el.contains(b) && b.offsetParent && (b.textContent || '').trim() === o.btn)) o.btn = ''; }   /* sahifada xuddi shu tugma bo'lsa — takrorlanmaydi */
+        el.classList.add('ds-empty'); el.innerHTML = emptyStateHtml(o);
+      }
+    }catch(e){}
+  });
+}
+if(!window.__dsObs){
+  try{
+    let raf = 0;
+    const run = ()=>{ raf = 0; __esScan(document); __fitStats(document.getElementById('view-container')); const mr = document.getElementById('modal-root'); if(mr) __fitStats(mr); };
+    window.__dsObs = new MutationObserver(()=>{ if(!raf) raf = requestAnimationFrame(run); });
+    const go = ()=>{ ['view-container', 'modal-root'].forEach(id=>{ const n = document.getElementById(id); if(n) window.__dsObs.observe(n, {childList: true, subtree: true}); }); run(); };
+    if(document.getElementById('view-container')) go(); else document.addEventListener('DOMContentLoaded', go);
+    window.addEventListener('resize', ()=>{ if(!raf) raf = requestAnimationFrame(run); });
+    document.addEventListener('click', (e)=>{ const b = e.target && e.target.closest ? e.target.closest('[data-es-act]') : null; if(!b) return; const f = ES_ACT[b.dataset.esAct]; if(f){ e.preventDefault(); try{ f(); }catch(_e){} } });
+  }catch(e){}
+}
+
+/* --- fix127-ds1c: "Xavfli amallar" --- */
+if(!ICONS.more) ICONS.more = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>';
+function __ownerStaffId(){ const a = (state.staff || []).find(s=>s && s.role === 'admin'); return a ? a.id : null; }   /* ro'yxatdan o'tishda birinchi yaratilgan admin — biznes egasi */
+function dangerZoneHtml(label, note, id){
+  return '<div class="ds-danger"><div class="ds-danger-h">' + icI('alert') + ' ' + escapeHtml(tr('dzTitle')) + '</div>' + (note ? '<p>' + escapeHtml(note) + '</p>' : '')
+    + '<button type="button" class="btn btn-danger btn-block" id="' + id + '">' + ICONS.trash + ' ' + escapeHtml(label) + '</button></div>';
+}
+/* Tugma bosilganda oyna yopiladi va ro'yxatdagi (yashirin) eski o'chirish tugmasi ishga tushadi — barcha tekshiruvlar o'shanda */
+function __dzBindHidden(btnId, sel){
+  const b = document.getElementById(btnId); if(!b) return;
+  if(!sel || !document.querySelector(sel)){ const z = b.closest('.ds-danger'); if(z) z.remove(); return; }
+  b.addEventListener('click', ()=>{ closeModal(); const h = document.querySelector(sel); if(h) h.click(); });
+}
+function __dzSheet(title, note, label, sel){
+  openModal('<div class="modal-title">' + escapeHtml(title) + '</div>' + dangerZoneHtml(label, note, 'dz-sheet-btn'), {center: true});
+  __dzBindHidden('dz-sheet-btn', sel);
+}
+function __openExpenseSheet(id){
+  const x = (state.expenses || []).find(e=>e.id === id); if(!x) return;
+  const row = (k, v)=>v ? '<div class="row" style="padding:6px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);"><span class="subtle">' + escapeHtml(k) + '</span><span style="text-align:right;">' + v + '</span></div>' : '';
+  openModal('<div class="modal-title">' + escapeHtml(tr('dzExpense')) + '</div>'
+    + '<div style="font-size:26px;font-weight:800;color:var(--danger);margin:2px 0 10px;">-' + escapeHtml(fmt(x.amount)) + '</div>'
+    + row(tr('categoryLabel'), '<span style="color:' + expenseCategoryColor(x.category) + ';font-weight:700;">' + escapeHtml(expenseCategoryLabel(x.category)) + '</span>')
+    + row(tr('dateTime'), escapeHtml(fmtDateTime(x.date)))
+    + row(tr('cashier'), x.staffName ? escapeHtml(x.staffName) : '')
+    + (x.note ? '<p style="margin:10px 0 0;font-size:13.5px;">' + escapeHtml(x.note) + '</p>' : '')
+    + dangerZoneHtml(tr('dzDelExpense'), '', 'ex-delete-btn'), {center: true});
+  __dzBindHidden('ex-delete-btn', '[data-del-expense="' + id + '"]');
+}
+
 /* --- Online catalog --- */
 const ONLINE_SHOP_BASE = 'https://savdo-pos.pages.dev/s/';
 function onlineShopCfg(){ return state.settings.onlineShop || {enabled:false, slug:'', telegram:'', whatsapp:'', showOut:false, lang:'', lastPublishedAt:null}; }
@@ -18275,7 +18787,7 @@ function renderSettingsCatalog(container){
         <div class="checkbox-row"><input type="checkbox" id="os-showout" ${cfg.showOut?'checked':''}><span>${tr('osShowOut')}</span></div>
         <div id="os-err" class="error-text" style="margin-top:8px;"></div>
         <button class="btn btn-primary btn-block" id="os-publish" style="margin-top:12px;">${tr('osPublish')}</button>
-        <p class="subtle" style="margin:8px 0 0;font-size:11.5px;">${tr('osAuto')}${cfg.lastPublishedAt ? ' '+tr('osLastPub')+': '+new Date(cfg.lastPublishedAt).toLocaleString() : ''}</p>
+        <p class="subtle" style="margin:8px 0 0;font-size:11.5px;">${tr('osAuto')}${cfg.lastPublishedAt ? ' '+tr('osLastPub')+': '+fmtDateTime(cfg.lastPublishedAt) : ''}</p>
       </div>
     </div>
     <div class="card"><p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('catalogHint')}</p><button class="btn btn-outline btn-block" id="gen-catalog-btn">${tr('generateCatalog')}</button></div>
@@ -18375,7 +18887,7 @@ function renderSettingsSupport(container){
       <h3 class="sub-title">${tr('subscriptionStatusTitle')}</h3>
       <div class="card" style="${daysLeft<=3?'border:2px solid var(--danger);background:var(--danger-bg);':'border:2px solid var(--accent);'}">
         <div class="row"><span class="subtle">${planLabel}</span><strong style="color:${daysLeft<=3?'var(--danger)':'var(--accent-dark)'};">${daysLeft} ${tr('daysLeftSuffix')}</strong></div>
-        <div class="row"><span class="subtle">${tr('expiresOn')}</span><span>${expires.toLocaleDateString()}</span></div>
+        <div class="row"><span class="subtle">${tr('expiresOn')}</span><span>${fmtDate(expires)}</span></div>
       </div>
     ` : ''}
     ${paySettingsHtml()}
@@ -18456,7 +18968,7 @@ function renderSaInbox(){
   const list = state.saInbox || [];
   el.innerHTML = list.length ? `<h3 class="sub-title" style="margin-top:0;">${tr('saInboxTitle')} (${list.length})</h3>` + list.map(x=>`
     <div class="list-item" style="cursor:pointer;border-left:4px solid #e5484d;" data-sa-open="${escapeHtml(x.bizId)}" data-sa-name="${escapeHtml(x.businessName||'')}">
-      <div class="info" style="min-width:0;"><div class="name">💬 ${escapeHtml(x.businessName||x.bizId)}</div><div class="meta" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(x.lastText||'')} · ${x.lastAt ? new Date(x.lastAt).toLocaleString() : ''}</div></div>
+      <div class="info" style="min-width:0;"><div class="name">${icI('chat')} ${escapeHtml(x.businessName||x.bizId)}</div><div class="meta" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(x.lastText||'')} · ${x.lastAt ? fmtDateTime(x.lastAt) : ''}</div></div>
     </div>`).join('') : '';
   el.querySelectorAll('[data-sa-open]').forEach(r=>r.addEventListener('click', ()=>openSuperAdminChat(r.dataset.saOpen, r.dataset.saName)));
 }
@@ -18491,9 +19003,9 @@ async function loadSupportMessages(businessId){
       const mine = m.from === (businessId ? 'admin' : 'business');
       return `<div style="display:flex;justify-content:${mine?'flex-end':'flex-start'};margin-bottom:8px;">
         <div style="max-width:85%;background:${mine?'var(--accent)':'#fff'};color:${mine?'#fff':'var(--ink)'};padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.4;box-shadow:0 1px 3px rgba(22,35,59,.08);">
-          ${m.auto ? `<div style="font-size:10.5px;opacity:.75;margin-bottom:2px;">🤖 ${tr('autoReplyLabel')}</div>` : ''}
+          ${m.auto ? `<div style="font-size:10.5px;opacity:.75;margin-bottom:2px;">${icI('bot')} ${tr('autoReplyLabel')}</div>` : ''}
           <div style="white-space:pre-wrap;word-break:break-word;">${escapeHtml(m.text||'')}</div>
-          <div style="font-size:10px;opacity:0.7;margin-top:3px;">${new Date(m.date).toLocaleString()}</div>
+          <div style="font-size:10px;opacity:0.7;margin-top:3px;">${fmtDateTime(m.date)}</div>
         </div>
       </div>`;
     }).join('');
@@ -18718,11 +19230,11 @@ function renderSettingsNotifications(container){
   }
   container.innerHTML = settingsBackHeader(tr('notifSection'))
     + '<div class="card nf-card">'
-    + row('nf-sound', '&#128276;', '#FEF3C7', tr('notifSoundLabel'), tr('notifSoundHint'), __notifSoundOn())
-    + row('nf-sale', '&#9989;', '#DCFCE7', tr('notifSaleSoundLabel'), tr('notifSaleSoundHint'), __soSoundOn())
-    + (isAdmin() ? row('nf-debt', '&#128210;', '#FFEDD5', tr('notifDebtLabel'), tr('notifDebtHint'), __debtDailyOn()) : '')
+    + row('nf-sound', ICONS.bell, '#FEF3C7', tr('notifSoundLabel'), tr('notifSoundHint'), __notifSoundOn())
+    + row('nf-sale', ICONS.checkCircle, '#DCFCE7', tr('notifSaleSoundLabel'), tr('notifSaleSoundHint'), __soSoundOn())
+    + (isAdmin() ? row('nf-debt', ICONS.book, '#FFEDD5', tr('notifDebtLabel'), tr('notifDebtHint'), __debtDailyOn()) : '')
     + '</div>'
-    + '<button type="button" class="btn btn-outline btn-block" id="nf-test">&#128266; ' + tr('notifTestBtn') + '</button>'
+    + '<button type="button" class="btn btn-outline btn-block" id="nf-test">' + icI('volume') + ' ' + tr('notifTestBtn') + '</button>'
     + '<p class="subtle" style="margin:12px 2px 0;font-size:12px;line-height:1.4;">' + tr('notifPhoneHint') + '</p>';
   bindSettingsBack(container);
   function bind(id, key, after){
@@ -18793,7 +19305,7 @@ function __tgRender(){
   if(chats.length){
     h += '<div>' + chats.map(c=>{
       const nm = c.name || (c.username ? '@' + c.username : 'Telegram');
-      const sub = [c.username ? '@' + c.username : '', c.at ? __tgT('tgLinkedAt', {d: new Date(c.at).toLocaleDateString()}) : ''].filter(Boolean).join(' · ');
+      const sub = [c.username ? '@' + c.username : '', c.at ? __tgT('tgLinkedAt', {d: fmtDate(c.at)}) : ''].filter(Boolean).join(' · ');
       return '<div class="tg-chat"><span class="tg-av">' + escapeHtml((nm.replace(/^@/, '')[0] || 'T').toUpperCase()) + '</span><div class="tg-cn"><b>' + escapeHtml(nm) + '</b><small>' + escapeHtml(sub) + '</small></div>'
         + '<button type="button" class="tg-un" data-tg-un="' + escapeHtml(c.id) + '" data-tg-nm="' + escapeHtml(nm) + '">' + escapeHtml(tr('tgDisconnect')) + '</button></div>';
     }).join('') + '</div><p class="tg-msg" style="margin-top:6px;">' + escapeHtml(__tgT('tgChatsCount', {n: chats.length, max: max})) + '</p>';
@@ -18890,11 +19402,11 @@ document.addEventListener('visibilitychange', ()=>{ try{ if(document.visibilityS
 /* fix121-tg2: Telegram bot — 2-bosqich: qaysi xabarlar kelsin (har biri alohida; hammasi standart holatda o'chiq) + "Sinab ko'rish". */
 var __tgPf = {saving:false, again:false, timer:0};
 var TG_PF_ROWS = [
-  {k:'daily', ic:'&#128202;', bg:'#E0F2FE', t:'tgPDaily', s:'tgPDailySub', time:'dailyTime', min:'12:00', max:'23:50'},
-  {k:'shift', ic:'&#128274;', bg:'#EDE9FE', t:'tgPShift', s:'tgPShiftSub'},
-  {k:'low', ic:'&#128230;', bg:'#FEF3C7', t:'tgPLow', s:'tgPLowSub', time:'lowTime'},
-  {k:'disc', ic:'&#127991;', bg:'#FCE7F3', t:'tgPDisc', s:'tgPDiscSub', pct:true},
-  {k:'rcpt', ic:'&#128465;', bg:'#FEE2E2', t:'tgPRcpt', s:'tgPRcptSub'}
+  {k:'daily', ic:ICONS.barChart, bg:'#E0F2FE', t:'tgPDaily', s:'tgPDailySub', time:'dailyTime', min:'12:00', max:'23:50'},
+  {k:'shift', ic:ICONS.lock, bg:'#EDE9FE', t:'tgPShift', s:'tgPShiftSub'},
+  {k:'low', ic:ICONS.package, bg:'#FEF3C7', t:'tgPLow', s:'tgPLowSub', time:'lowTime'},
+  {k:'disc', ic:ICONS.tag, bg:'#FCE7F3', t:'tgPDisc', s:'tgPDiscSub', pct:true},
+  {k:'rcpt', ic:ICONS.trash, bg:'#FEE2E2', t:'tgPRcpt', s:'tgPRcptSub'}
 ];
 function __tgPfSub(r, p){
   if(r.k === 'low') return lowStockMode() === 'auto' ? __tgT('tgPLowSubAuto', {d: lowStockAutoDays()}) : __tgT(r.s, {n: lowStockThresholdValue()});   /* fix122-stock, fix124-smart */
@@ -19009,7 +19521,7 @@ function __auditDayHead(rows, i){
   try{
     var d = new Date(rows[i].date);
     if(i > 0 && new Date(rows[i - 1].date).toDateString() === d.toDateString()) return '';
-    return '<div class="au-day">' + d.toLocaleDateString() + '</div>';
+    return '<div class="au-day">' + fmtDayLong(d) + '</div>';
   }catch(e){ return ''; }
 }
 
@@ -19269,7 +19781,9 @@ function openStaffForm(staffId){
     </div>
     <div id="sf-error" class="error-text"></div>
     <button class="btn btn-primary" id="sf-save-btn" style="margin-top:10px;">${tr('save')}</button>
+    ${editing ? (editing.id === __ownerStaffId() ? `<div class="ds-danger"><div class="ds-danger-h">${icI('lock')} ${tr('dzTitle')}</div><p style="margin:0;">${tr('dzOwnerNo')}</p></div>` : dangerZoneHtml(tr('dzDelStaff'), '', 'sf-delete-btn')) : ''}
   `);
+  __dzBindHidden('sf-delete-btn', editing ? '[data-act="del-staff"][data-id="' + editing.id + '"]' : '');   /* fix127-ds1c */
   attachMoneyInputsById('sf-plan-daily', 'sf-plan-monthly', 'sf-salary');
   document.getElementById('sf-role').addEventListener('change', (e)=>{    const isAdminRole = e.target.value==='admin';
     document.getElementById('sf-perms').style.display = isAdminRole ? 'none' : '';
