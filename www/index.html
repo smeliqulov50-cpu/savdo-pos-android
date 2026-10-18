@@ -804,6 +804,24 @@
   .tr-row{padding:9px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);}
   .tr-row .h{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:700;} .tr-row .h span{min-width:0;}
   .tr-row .g{display:flex;gap:8px;align-items:center;margin-top:6px;} .tr-row .g input{width:96px;text-align:center;font-weight:700;padding:8px 6px;} .tr-row .g select{width:auto;}
+  /* fix138-ds5: 5-bosqich dizayn */
+  .md-act{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin:0 0 12px;}
+  .md-act .btn{margin:0 !important;width:100%;} .md-act #pdf-creditors-btn{width:auto;padding-left:18px;padding-right:18px;}
+  .pu-hint{margin:6px 0 0;font-size:12px;line-height:1.4;}
+  .pu-h{display:flex;justify-content:space-between;align-items:baseline;margin:4px 2px 8px;font-size:13px;color:var(--ink);} .pu-h b{font-weight:800;} .pu-h span{color:var(--ink-soft);font-weight:700;}
+  .pu-dock{position:sticky;bottom:calc(64px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0 4px;box-shadow:0 -4px 16px rgba(22,35,59,0.08);}
+  .pu-dock .row{margin:0 0 8px !important;border-top:none !important;padding-top:0 !important;}
+  .st-prog{background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:14px;padding:10px 12px;margin:0 0 10px;}
+  .st-prog .t{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;font-weight:800;color:var(--ink);} .st-prog .t span{color:var(--ink-soft);}
+  .st-prog .r3-mini{max-width:none;margin:8px 0 0;}
+  .rs-row{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:14px;padding:10px 12px;margin-bottom:8px;}
+  .rs-time{min-width:58px;text-align:center;font-weight:800;font-size:17px;color:var(--accent-dark);font-variant-numeric:tabular-nums;}
+  .rs-row .info{flex:1;min-width:0;} .rs-row .name{font-weight:800;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .rs-row .meta{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .rs-row .meta a{color:var(--accent-dark);text-decoration:none;font-weight:700;}
+  .rs-row .btn{width:auto;flex-shrink:0;color:var(--danger);border-color:var(--danger);}
+  #support-chat-messages{height:auto !important;min-height:96px !important;max-height:50vh;}
+  .sp-h{margin:16px 2px 8px;font-size:13.5px;font-weight:800;color:var(--ink);}
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -2178,6 +2196,29 @@ const T = {
   sdErrBadResp:{uz:"Server noto'g'ri javob qaytardi ({s}). Qayta urinib ko'ring.",ru:"Сервер вернул неверный ответ ({s}). Попробуйте снова.",en:"The server returned an invalid response ({s}). Try again.",kk:"Сервер қате жауап қайтарды ({s}). Қайта көріңіз.",ky:"Сервер туура эмес жооп кайтарды ({s}). Кайра аракет кылыңыз.",tg:"Сервер ҷавоби нодуруст дод ({s}). Дубора кӯшиш кунед."},
   sdErrTimeout:{uz:"Server 20 soniyada javob bermadi. Qayta urinib ko'ring.",ru:"Сервер не ответил за 20 секунд. Попробуйте снова.",en:"The server did not answer within 20 seconds. Try again.",kk:"Сервер 20 секундта жауап бермеді. Қайта көріңіз.",ky:"Сервер 20 секундда жооп берген жок. Кайра аракет кылыңыз.",tg:"Сервер дар 20 сония ҷавоб надод. Дубора кӯшиш кунед."},
   sdErrAuth:{uz:"Hisobni tasdiqlab bo'lmadi. Ilovadan chiqib, qayta kiring.",ru:"Не удалось подтвердить аккаунт. Выйдите и войдите снова.",en:"Could not verify the account. Sign out and sign in again.",kk:"Аккаунтты растау мүмкін болмады. Шығып, қайта кіріңіз.",ky:"Аккаунтту ырастоо мүмкүн болгон жок. Чыгып, кайра кириңиз.",tg:"Ҳисобро тасдиқ кардан нашуд. Бароед ва дубора ворид шавед."},
+  /* fix138-ds5 */
+  mdCount:{uz:"Qarz beruvchilar",ru:"Кредиторы",en:"Creditors",kk:"Қарыз берушілер",ky:"Карыз берүүчүлөр",tg:"Қарздиҳандагон"},
+  mdEmptySub:{uz:"Tovarni nasiyaga olsangiz yoki qarz olsangiz, shu yerga yozing — kimga qancha qarzingiz borligi doim ko'rinib turadi.",ru:"Если берёте товар в долг или занимаете деньги, записывайте здесь — всегда будет видно, кому и сколько вы должны.",en:"If you take goods on credit or borrow money, record it here — you will always see whom you owe and how much.",kk:"Тауарды несиеге алсаңыз немесе қарыз алсаңыз, осында жазыңыз — кімге қанша қарызыңыз бар екені әрдайым көрінеді.",ky:"Товарды насыяга алсаңыз же карыз алсаңыз, ушул жерге жазыңыз — кимге канча карызыңыз бар экени дайыма көрүнөт.",tg:"Агар молро насия гиред ё қарз гиред, ҳамин ҷо нависед — ба кӣ чанд қарздор будан ҳамеша намоён аст."},
+  puPayCashS:{uz:"Naqd",ru:"Наличные",en:"Cash",kk:"Қолма-қол",ky:"Накталай",tg:"Нақд"},
+  puPayCreditS:{uz:"Nasiya",ru:"В долг",en:"On credit",kk:"Несие",ky:"Насыя",tg:"Насия"},
+  puHintCash:{uz:"Kassadagi naqddan to'lanadi: xarajat bo'lib yoziladi, kassa balansi kamayadi.",ru:"Оплата из кассы: записывается как расход, остаток кассы уменьшается.",en:"Paid from the cash register: recorded as an expense, the register balance goes down.",kk:"Кассадан төленеді: шығын ретінде жазылады, касса қалдығы азаяды.",ky:"Кассадан төлөнөт: чыгым катары жазылат, касса калдыгы азаят.",tg:"Аз касса пардохт мешавад: ҳамчун хароҷот навишта мешавад, бақияи касса кам мешавад."},
+  puHintBank:{uz:"Karta yoki bankdan to'lanadi: xarajat bo'lib yoziladi, kassadagi naqdga ta'sir qilmaydi.",ru:"Оплата картой или через банк: записывается как расход, наличные в кассе не меняются.",en:"Paid by card or bank: recorded as an expense, cash in the register is not affected.",kk:"Карта немесе банк арқылы: шығын ретінде жазылады, кассадағы қолма-қолға әсер етпейді.",ky:"Карта же банк аркылуу: чыгым катары жазылат, кассадагы накталайга таасир этпейт.",tg:"Бо корт ё бонк: ҳамчун хароҷот навишта мешавад, ба нақди касса таъсир намекунад."},
+  puHintCredit:{uz:"Keyin to'lanadi: \"Mening qarzlarim\"da shu yetkazib beruvchiga qarz yoziladi.",ru:"Оплата позже: в \"Мои долги\" записывается долг этому поставщику.",en:"Pay later: a debt to this supplier is recorded in \"My debts\".",kk:"Кейін төленеді: \"Менің қарыздарым\" бөлімінде осы жеткізушіге қарыз жазылады.",ky:"Кийин төлөнөт: \"Менин карыздарым\" бөлүмүндө ушул жеткирүүчүгө карыз жазылат.",tg:"Баъдтар пардохт мешавад: дар \"Қарзҳои ман\" ба ин таъминкунанда қарз навишта мешавад."},
+  puEmptySub:{uz:"Pastdagi tugma bilan tovar qo'shing: qidiruv yoki shtrix-kod orqali.",ru:"Добавьте товар кнопкой ниже: через поиск или штрих-код.",en:"Add a product with the button below: by search or barcode.",kk:"Төмендегі батырмамен тауар қосыңыз: іздеу немесе штрих-код арқылы.",ky:"Төмөнкү баскыч менен товар кошуңуз: издөө же штрих-код аркылуу.",tg:"Бо тугмаи поён мол илова кунед: бо ҷустуҷӯ ё штрих-код."},
+  puItemsH:{uz:"Tovarlar",ru:"Товары",en:"Products",kk:"Тауарлар",ky:"Товарлар",tg:"Молҳо"},
+  stAll:{uz:"Hammasi",ru:"Все",en:"All",kk:"Барлығы",ky:"Баары",tg:"Ҳама"},
+  stTodo:{uz:"Sanalmagan",ru:"Не посчитано",en:"Not counted",kk:"Саналмаған",ky:"Саналбаган",tg:"Ҳисоб нашуда"},
+  stProg:{uz:"Sanaldi: {c} / {n}",ru:"Посчитано: {c} / {n}",en:"Counted: {c} / {n}",kk:"Саналды: {c} / {n}",ky:"Саналды: {c} / {n}",tg:"Ҳисоб шуд: {c} / {n}"},
+  stDiffN:{uz:"Farq: {d} ta tovar",ru:"Разница: {d} тов.",en:"Differences: {d} items",kk:"Айырма: {d} тауар",ky:"Айырма: {d} товар",tg:"Фарқ: {d} мол"},
+  rsToday:{uz:"Bugun",ru:"Сегодня",en:"Today",kk:"Бүгін",ky:"Бүгүн",tg:"Имрӯз"},
+  rsTomorrow:{uz:"Ertaga",ru:"Завтра",en:"Tomorrow",kk:"Ертең",ky:"Эртең",tg:"Пагоҳ"},
+  rsCancel:{uz:"Bekor qilish",ru:"Отменить",en:"Cancel",kk:"Болдырмау",ky:"Жокко чыгаруу",tg:"Бекор кардан"},
+  rsCancelQ:{uz:"Bron bekor qilinsinmi? ({name}, {time})",ru:"Отменить бронь? ({name}, {time})",en:"Cancel the reservation? ({name}, {time})",kk:"Бронь болдырылмасын ба? ({name}, {time})",ky:"Брон жокко чыгарылсынбы? ({name}, {time})",tg:"Брон бекор шавад? ({name}, {time})"},
+  rsEmpty:{uz:"Yaqin kunlarga bron yo'q",ru:"Ближайших броней нет",en:"No upcoming reservations",kk:"Жақын күндерге бронь жоқ",ky:"Жакынкы күндөргө брон жок",tg:"Брони наздик нест"},
+  rsEmptySub:{uz:"Mijoz stol band qilsa, shu yerga yozing — stol savdo oynasida \"band\" bo'lib ko'rinadi.",ru:"Когда клиент бронирует стол, запишите здесь — стол будет отмечен как занятый в окне продаж.",en:"When a guest books a table, record it here — the table shows as reserved on the sale screen.",kk:"Қонақ үстел брондаса, осында жазыңыз — үстел сату терезесінде брондалған болып көрінеді.",ky:"Конок стол брондосо, ушул жерге жазыңыз — стол сатуу терезесинде бош эмес болуп көрүнөт.",tg:"Агар меҳмон мизро банд кунад, ҳамин ҷо нависед — миз дар равзанаи фурӯш банд намоён мешавад."},
+  spChatH:{uz:"Yordam chati",ru:"Чат поддержки",en:"Support chat",kk:"Қолдау чаты",ky:"Колдоо чаты",tg:"Чати дастгирӣ"},
+  spPayH:{uz:"Obuna va to'lovlar",ru:"Подписка и платежи",en:"Subscription and payments",kk:"Жазылым және төлемдер",ky:"Жазылуу жана төлөмдөр",tg:"Обуна ва пардохтҳо"},
+  spNeedLogin:{uz:"Chat hisob bilan (bulutga) kirganda ishlaydi. Shoshilinch bo'lsa, qo'ng'iroq qiling: {phone}",ru:"Чат работает при входе в аккаунт (облако). Если срочно, позвоните: {phone}",en:"The chat works when signed in to the account (cloud). If urgent, call: {phone}",kk:"Чат аккаунтқа (бұлтқа) кіргенде жұмыс істейді. Шұғыл болса, қоңырау шалыңыз: {phone}",ky:"Чат аккаунтка (булутка) киргенде иштейт. Шашылыш болсо, чалыңыз: {phone}",tg:"Чат ҳангоми воридшавӣ ба ҳисоб (абр) кор мекунад. Агар фаврӣ бошад, занг занед: {phone}"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3670,7 +3711,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.36';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.37';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6376,17 +6417,7 @@ function renderReservationsList(){
   container.innerHTML = `
     <div class="back-row"><button id="reservations-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('reservationsSection')}</span></div>
     <button class="btn btn-accent btn-block" id="add-reservation-btn" style="margin-bottom:14px;">${tr('reserveTableTitle')}</button>
-    <div>${list.length ? list.map(r=>{
-      const table = state.tables.find(t=>t.id===r.tableId);
-      return `
-      <div class="list-item">
-        <div class="info">
-          <div class="name">${escapeHtml(r.customerName)} · ${r.partySize} ${tr('personSuffix')}</div>
-          <div class="subtle">${fmtDateTime(r.date)}${table?(' · '+tr('tablesSection')+' '+escapeHtml(table.name)):''}${r.phone?(' · '+escapeHtml(r.phone)):''}</div>
-        </div>
-        <button class="btn btn-ghost btn-sm" data-cancel-reservation="${r.id}">${ICONS.trash}</button>
-      </div>
-    `;}).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>
+    <div id="rs-list">${list.length ? __rsHtml(list) : `<div class="empty-state">${tr('rsEmpty')}</div>`}</div>
   `;
   document.getElementById('reservations-back-btn').addEventListener('click', ()=>{ state.view='sale'; renderAll(); });
   document.getElementById('add-reservation-btn').addEventListener('click', openReservationForm);
@@ -6394,6 +6425,7 @@ function renderReservationsList(){
     btn.addEventListener('click', ()=>{
       const r = state.reservations.find(x=>x.id===btn.dataset.cancelReservation);
       if(!r) return;
+      if(!btn.__rsOk){ confirmDialog(escapeHtml(tr('rsCancelQ').replace('{name}', r.customerName || '').replace('{time}', fmtDateTime(r.date))), ()=>{ btn.__rsOk = true; btn.click(); }, tr('rsCancel')); return; }   /* fix138-ds5 */
       r.status = 'cancelled';
       saveReservations();
       addReservationDoc(r);
@@ -12185,13 +12217,12 @@ function renderMyDebts(){
     </div>
     <p class="subtle" style="margin:0 0 12px;">${tr('myDebtsHint')}</p>
     <div id="sd-root"></div>
-    <div class="stat-grid">
+    <div class="stat-grid r3-kpi k2">   <!-- fix138-ds5 -->
       <div class="stat-card"><div class="stat-label">${tr('totalMyDebt')}</div><div class="stat-value" style="color:var(--danger);">${fmt(totalOwed)}</div></div>
-      <div class="stat-card"><div class="stat-label">${tr('myDebtsLabel')}</div><div class="stat-value">${state.creditors.length}</div></div>
+      <div class="stat-card"><div class="stat-label">${tr('mdCount')}</div><div class="stat-value">${state.creditors.length}</div></div>
     </div>
-    <div class="search-bar">${ICONS.search}<input type="text" id="creditor-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.creditorSearch||'')}"></div>
-    <button class="btn btn-accent" style="margin-bottom:10px;" id="add-creditor-btn">${ICONS.plus} ${tr('addCreditorBtn')}</button>
-    <button class="btn btn-outline btn-block" style="margin-bottom:14px;" id="pdf-creditors-btn">${tr('exportPdf')}</button>
+    <div class="md-act"><button class="btn btn-accent" id="add-creditor-btn">${ICONS.plus} ${tr('addCreditorBtn')}</button><button class="btn btn-outline" id="pdf-creditors-btn"${state.creditors.length ? '' : ' disabled'}>PDF</button></div>
+    <div class="search-bar"${state.creditors.length ? '' : ' style="display:none;"'}>${ICONS.search}<input type="text" id="creditor-search-input" placeholder="${tr('search')}" value="${escapeHtml(state.creditorSearch||'')}"></div>
     <div id="creditor-list"></div>
   `;
   renderCreditorList();
@@ -16005,6 +16036,7 @@ function renderPurchase(){
       <div class="field"><label class="field-label">${tr('puSupplier')}</label><input type="text" id="pu-supplier" autocomplete="off" value="${escapeHtml(purchaseDraft.supplier)}"><div class="pu-sugg" id="pu-sugg"></div><datalist id="pu-supplier-list">${suppliers.map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
       <div class="field"><label class="field-label">${tr('puNote')}</label><input type="text" id="pu-note" value="${escapeHtml(purchaseDraft.note)}"></div>
     </div>
+    <div class="pu-h"><b>${tr('puItemsH')}</b><span>${purchaseDraft.items.length ? escapeHtml(tr('puItemsCount').replace('{n}', purchaseDraft.items.length)) : ''}</span></div>
     <div id="pu-items">${purchaseDraft.items.length ? purchaseDraft.items.map((it,i)=>`
       <div class="card" style="padding:10px 12px;margin-bottom:8px;">
         <div class="row" style="gap:8px;align-items:center;"><div style="flex:1;min-width:0;font-weight:800;">${escapeHtml(it.name)}</div><button class="icon-btn" data-pu-del="${i}" style="color:var(--danger);">${ICONS.trash}</button></div>
@@ -16016,11 +16048,11 @@ function renderPurchase(){
       </div>`).join('') : `<div class="empty-state">${tr('puEmpty')}</div>`}</div>
     <button class="btn btn-outline btn-block" id="pu-add" style="margin-bottom:10px;">${tr('puAddItem')}</button>
     <div class="field"><label class="field-label">${tr('puPayment')}</label>
-      <div class="toggle-group" id="pu-pay-mode">${[['cash',tr('puPayCash')],['bank',tr('puPayBank')],['credit',tr('puPayCredit')]].map(([id,l])=>`<div class="toggle-opt ${(purchaseDraft.payMode||'cash')===id?'active':''}" data-pu-pay="${id}">${l}</div>`).join('')}</div>
-      <p class="subtle" style="margin:6px 0 0;font-size:11.5px;">${tr('puPayHint')}</p></div>
+      <div class="toggle-group" id="pu-pay-mode">${[['cash',tr('puPayCashS')],['bank',tr('puPayBank')],['credit',tr('puPayCreditS')]].map(([id,l])=>`<div class="toggle-opt ${(purchaseDraft.payMode||'cash')===id?'active':''}" data-pu-pay="${id}">${l}</div>`).join('')}</div>
+      <p class="subtle pu-hint" id="pu-pay-hint">${__puHint(purchaseDraft.payMode)}</p></div>
     <div class="checkbox-row"><input type="checkbox" id="pu-update-cost" ${purchaseDraft.updateCost?'checked':''}><span>${tr('puUpdateCost')}</span></div>
-    <div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin:8px 0 12px;"><strong>${tr('puTotal')}</strong><strong id="pu-total">${fmt(purchaseTotal())}</strong></div>
-    <button class="btn btn-primary btn-block" id="pu-apply" ${purchaseDraft.items.length?'':'disabled'}>${tr('puApply')}</button>
+    <div class="pu-dock"><div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin:8px 0 12px;"><strong>${tr('puTotal')}</strong><strong id="pu-total">${fmt(purchaseTotal())}</strong></div>
+    <button class="btn btn-primary btn-block" id="pu-apply" ${purchaseDraft.items.length?'':'disabled'}>${tr('puApply')}</button></div>
     ${__puHistSlot()}${(recent.length && !window.__puHistOk) ? `<h3 class="sub-title" style="margin-top:18px;">${tr('puHistory')}</h3>${recent.map(x=>`
       <div class="card" style="padding:10px 12px;margin-bottom:8px;">
         <div class="row"><div style="min-width:0;"><div style="font-weight:800;">${escapeHtml(x.supplier||'—')}</div><div class="subtle" style="font-size:11.5px;">${fmtDateTime(x.date)} &middot; ${tr('puItemsCount').replace('{n}', x.items.length)}${x.staffName?(' &middot; '+escapeHtml(x.staffName)):''}${x.note?(' &middot; '+escapeHtml(x.note)):''}</div></div><strong style="white-space:nowrap;">${fmt(x.total)}</strong></div>
@@ -16033,7 +16065,7 @@ function renderPurchase(){
   try{ const __sb = document.getElementById('pu-so-unlink'); if(__sb) __sb.addEventListener('click', ()=>{ delete purchaseDraft.orderId; renderPurchase(); }); }catch(e){}   /* fix135-sup */
   document.getElementById('pu-note').addEventListener('input', (e)=>{ purchaseDraft.note = e.target.value; });
   document.getElementById('pu-update-cost').addEventListener('change', (e)=>{ purchaseDraft.updateCost = e.target.checked; });
-  container.querySelectorAll('[data-pu-pay]').forEach(el=>el.addEventListener('click', ()=>{ purchaseDraft.payMode = el.dataset.puPay; container.querySelectorAll('[data-pu-pay]').forEach(x=>x.classList.toggle('active', x===el)); }));
+  container.querySelectorAll('[data-pu-pay]').forEach(el=>el.addEventListener('click', ()=>{ purchaseDraft.payMode = el.dataset.puPay; container.querySelectorAll('[data-pu-pay]').forEach(x=>x.classList.toggle('active', x===el)); const __h = document.getElementById('pu-pay-hint'); if(__h) __h.textContent = __puHint(purchaseDraft.payMode); }));
   document.getElementById('pu-add').addEventListener('click', openPurchasePicker);
   document.getElementById('pu-apply').addEventListener('click', applyPurchase);
   container.querySelectorAll('[data-pu-del]').forEach(b=>b.addEventListener('click', ()=>{ purchaseDraft.items.splice(parseInt(b.dataset.puDel,10),1); renderPurchase(); }));
@@ -16115,7 +16147,8 @@ function renderStocktake(){
     <div class="back-row"><button id="st-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('stTitle')}</span></div>
     <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('stHint')}</p>
     <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="st-search" placeholder="${tr('search')}" value="${escapeHtml(state.stSearch||'')}"></div>
-    <div class="fav-row" style="margin-bottom:8px;"><button class="fav-chip ${stocktakeOnlyDiff?'fav-chip-active':''}" id="st-onlydiff">${tr('stOnlyDiff')}</button><button class="fav-chip" id="st-clear">${tr('stClear')}</button></div>
+    <div class="st-prog" id="st-prog"></div>
+    <div class="r3-chips" id="st-chips">${__r3Chip('data-stf', 'all', tr('stAll'), __stF() === 'all')}${__r3Chip('data-stf', 'todo', tr('stTodo'), __stF() === 'todo')}<button type="button" class="r3-chip ${stocktakeOnlyDiff ? 'on fav-chip-active' : ''}" id="st-onlydiff" data-stf="diff">${tr('stOnlyDiff')}</button><button type="button" class="r3-chip" id="st-clear"${Object.keys(stocktakeDraft).length ? '' : ' style="display:none;"'}>${tr('stClear')}</button></div>
     <div id="st-list"></div>
     <div style="position:sticky;bottom:calc(64px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:10px;box-shadow:0 -4px 16px rgba(22,35,59,0.08);">
       <div class="subtle" id="st-summary" style="font-size:12.5px;font-weight:700;margin-bottom:8px;"></div>
@@ -16123,7 +16156,8 @@ function renderStocktake(){
     </div>`;
   document.getElementById('st-back-btn').addEventListener('click', ()=>{ state.view='products'; renderAll(); });
   document.getElementById('st-search').addEventListener('input', (e)=>{ state.stSearch = e.target.value; renderStocktakeList(); });
-  document.getElementById('st-onlydiff').addEventListener('click', ()=>{ stocktakeOnlyDiff = !stocktakeOnlyDiff; renderStocktake(); });
+  document.getElementById('st-onlydiff').addEventListener('click', ()=>{ stocktakeOnlyDiff = !stocktakeOnlyDiff; state.__stF = stocktakeOnlyDiff ? 'diff' : 'all'; renderStocktake(); });
+  container.querySelectorAll('[data-stf="all"],[data-stf="todo"]').forEach(b=>b.addEventListener('click', ()=>{ state.__stF = b.dataset.stf; stocktakeOnlyDiff = false; renderStocktake(); }));   /* fix138-ds5 */
   document.getElementById('st-clear').addEventListener('click', ()=>{ stocktakeDraft = {}; renderStocktake(); });
   document.getElementById('st-apply').addEventListener('click', applyStocktake);
   renderStocktakeList();
@@ -16136,6 +16170,7 @@ function renderStocktakeList(){
   const q = (state.stSearch||'').toLowerCase();
   let rows = stocktakeRows().filter(r=>!q || r.name.toLowerCase().includes(q));
   if(stocktakeOnlyDiff) rows = rows.filter(r=>stocktakeDraft[r.key]!==undefined && stocktakeDraft[r.key]!==r.stock);
+  else if(__stF() === 'todo') rows = rows.filter(r=>stocktakeDraft[r.key]===undefined);   /* fix138-ds5 */
   listEl.innerHTML = rows.length ? rows.slice(0, 400).map(r=>{
     const c = stocktakeDraft[r.key]; const has = c!==undefined; const diff = has ? c - r.stock : 0;
     return `<div class="list-item" style="padding:10px 12px 10px 16px;gap:8px;">
@@ -16153,6 +16188,7 @@ function updateStocktakeSummary(){
   const counted = Object.keys(stocktakeDraft).length; const diffs = stocktakeDiffs();
   const plus = diffs.filter(d=>d.diff>0).reduce((a,d)=>a+d.diff,0), minus = diffs.filter(d=>d.diff<0).reduce((a,d)=>a+d.diff,0);
   el.textContent = tr('stSummary').replace('{c}', counted).replace('{d}', `${diffs.length} (+${plus} / ${minus})`);
+  try{ __stProg(counted, diffs.length); }catch(e){}   /* fix138-ds5 */
   const btn = document.getElementById('st-apply'); if(btn) btn.disabled = diffs.length===0;
 }
 function applyStocktake(){
@@ -19116,6 +19152,9 @@ function __esFor(el){
     if((state.receiptsSearch || '').trim()) return {icon: ICONS.search, text: tr('esNotFound'), sub: tr('esNotFoundSub')};
     return {icon: ICONS.receiptIcon, text: tr('esNoReceipts'), sub: tr('esNoReceiptsSub'), btn: tr('navSale'), act: 'goSale'};
   }
+  if(pid === 'creditor-list' && !(state.creditorSearch || '').trim()) return {icon: ICONS.truck, text: tr('noCreditors'), sub: tr('mdEmptySub')};   /* fix138-ds5 */
+  if(pid === 'pu-items') return {icon: ICONS.products, text: tr('puEmpty'), sub: tr('puEmptySub')};
+  if(pid === 'rs-list') return {icon: ICONS.calendar, text: tr('rsEmpty'), sub: tr('rsEmptySub')};
   if(txt === tr('noExpensesYet')) return {icon: ICONS.banknote, text: txt, sub: tr('esNoExpensesSub'), btn: (isAdmin() || hasPerm('expense')) ? tr('addExpense') : '', act: 'addExpense'};
   if(txt && txt !== '…' && txt.length > 2 && !el.children.length) return {icon: ICONS.inbox, text: txt};
   return null;
@@ -21083,6 +21122,38 @@ function __sdLog(kind, status, err){
   }catch(e){}
 }
 
+/* fix138-ds5: 5-bosqich dizayn yordamchilari */
+function __puHint(m){ return tr({bank: 'puHintBank', credit: 'puHintCredit'}[m] || 'puHintCash'); }
+function __stF(){ return stocktakeOnlyDiff ? 'diff' : (state.__stF === 'todo' ? 'todo' : 'all'); }
+function __stProg(counted, nd){
+  const el = document.getElementById('st-prog'); if(!el) return;
+  const n = stocktakeRows().length, pc = n ? Math.min(100, counted / n * 100) : 0;
+  el.innerHTML = '<div class="t"><b>' + escapeHtml(tr('stProg').replace('{c}', counted).replace('{n}', n)) + '</b><span>' + escapeHtml(tr('stDiffN').replace('{d}', nd)) + '</span></div><div class="r3-mini"><i style="width:' + pc.toFixed(1) + '%;"></i></div>';
+  const cl = document.getElementById('st-clear'); if(cl) cl.style.display = counted ? '' : 'none';
+}
+function __rsDayLabel(d){
+  const a = new Date(d); a.setHours(0, 0, 0, 0); const t = new Date(); t.setHours(0, 0, 0, 0);
+  const diff = Math.round((a - t) / 86400000);
+  if(diff === 0) return tr('rsToday');
+  if(diff === 1) return tr('rsTomorrow');
+  try{ return (typeof fmtDayLong === 'function') ? fmtDayLong(a) : fmtDate(a); }catch(e){ return fmtDate(a); }
+}
+function __rsTime(d){ const x = new Date(d); return String(x.getHours()).padStart(2, '0') + ':' + String(x.getMinutes()).padStart(2, '0'); }
+function __rsHtml(list){
+  let out = '', last = '';
+  list.forEach(r=>{
+    const k = new Date(r.date).toDateString();
+    if(k !== last){ last = k; const n = list.filter(x=>new Date(x.date).toDateString() === k).length; out += '<div class="r3-dayh"><b>' + escapeHtml(__rsDayLabel(r.date)) + '</b><span>' + n + '</span></div>'; }
+    const table = state.tables.find(t=>t.id === r.tableId);
+    const ph = String(r.phone || '').trim();
+    out += '<div class="rs-row"><div class="rs-time">' + __rsTime(r.date) + '</div><div class="info"><div class="name">' + escapeHtml(r.customerName || '—') + '</div>'
+      + '<div class="meta">' + r.partySize + ' ' + escapeHtml(tr('personSuffix')) + (table ? ' · ' + escapeHtml(tr('tablesSection')) + ' ' + escapeHtml(table.name) : '')
+      + (ph ? ' · <a href="tel:' + escapeHtml(ph.replace(/[^\d+]/g, '')) + '">' + escapeHtml(ph) + '</a>' : '') + (r.note ? ' · ' + escapeHtml(r.note) : '') + '</div></div>'
+      + '<button class="btn btn-outline btn-sm" data-cancel-reservation="' + escapeHtml(r.id) + '">' + escapeHtml(tr('rsCancel')) + '</button></div>';
+  });
+  return out;
+}
+
 /* --- Online catalog --- */
 const ONLINE_SHOP_BASE = 'https://savdo-pos.pages.dev/s/';
 function onlineShopCfg(){ return state.settings.onlineShop || {enabled:false, slug:'', telegram:'', whatsapp:'', showOut:false, lang:'', lastPublishedAt:null}; }
@@ -21266,7 +21337,7 @@ function renderSettingsSupport(container){
         <div class="row"><span class="subtle">${tr('expiresOn')}</span><span>${fmtDate(expires)}</span></div>
       </div>
     ` : ''}
-    ${paySettingsHtml()}
+    <h3 class="sp-h">${tr('spChatH')}</h3>
     <div class="card">
       <p class="subtle" style="margin:0 0 12px;">${tr('supportChatHint')}</p>
       <div id="support-chat-messages" style="height:55vh;min-height:280px;overflow-y:auto;margin-bottom:12px;padding:8px;background:#f4f7fc;border-radius:14px;"></div>
@@ -21276,6 +21347,8 @@ function renderSettingsSupport(container){
       <button class="btn btn-accent btn-block" id="support-send-btn">${tr('supportSendBtn')}</button>
       <div id="support-chat-error" class="error-text" style="margin-top:8px;"></div>
     </div>
+    <h3 class="sp-h">${tr('spPayH')}</h3>
+    ${paySettingsHtml()}
     ${fbUser ? `
       <div class="card">
         <p class="subtle" style="margin:0 0 10px;">${fbUser.email}</p>
@@ -21285,6 +21358,7 @@ function renderSettingsSupport(container){
     ` : ''}
   `;
   bindSettingsBack(container);
+  try{ const __b = document.getElementById('support-chat-messages'); if(__b && !(fbUser && fbDb)) __b.innerHTML = '<p class="subtle" style="margin:0;text-align:center;font-size:13px;">' + escapeHtml(tr('spNeedLogin').replace('{phone}', SUPPORT_PHONE)) + '</p>'; }catch(e){}   /* fix138-ds5 */
   loadSupportMessages();
   payBindSettings(); /* fix85 */
   state.pendingPlanRequest = null;
