@@ -2172,6 +2172,12 @@ const T = {
   trBox:{uz:"quti",ru:"кор.",en:"box",kk:"қорап",ky:"куту",tg:"қуттӣ"},
   trNote:{uz:"Izoh",ru:"Комментарий",en:"Note",kk:"Ескерту",ky:"Эскертүү",tg:"Эзоҳ"},
   trUnitPc:{uz:"dona",ru:"шт",en:"pcs",kk:"дана",ky:"даана",tg:"дона"},
+  /* fix137-cash */
+  sdErrNoSrv:{uz:"Server funksiyasi topilmadi ({s}). Bu internet muammosi emas — server qismini qayta yuklash kerak.",ru:"Функция сервера не найдена ({s}). Это не проблема интернета — нужно заново загрузить серверную часть.",en:"Server function not found ({s}). This is not an internet problem — the server part needs to be deployed again.",kk:"Сервер функциясы табылмады ({s}). Бұл интернет мәселесі емес — сервер бөлігін қайта жүктеу керек.",ky:"Сервер функциясы табылган жок ({s}). Бул интернет көйгөйү эмес — сервер бөлүгүн кайра жүктөө керек.",tg:"Функсияи сервер ёфт нашуд ({s}). Ин мушкили интернет нест — қисми серверро бояд дубора бор кард."},
+  sdErrDenied:{uz:"Server so'rovni qabul qilmadi ({s}). Bu internet muammosi emas — server ruxsat sozlamasi kerak.",ru:"Сервер отклонил запрос ({s}). Это не проблема интернета — нужна настройка доступа на сервере.",en:"The server refused the request ({s}). This is not an internet problem — server access settings are needed.",kk:"Сервер сұрауды қабылдамады ({s}). Бұл интернет мәселесі емес — сервер рұқсатын баптау керек.",ky:"Сервер сурамды кабыл алган жок ({s}). Бул интернет көйгөйү эмес — сервер уруксатын жөндөө керек.",tg:"Сервер дархостро қабул накард ({s}). Ин мушкили интернет нест — танзими иҷозати сервер лозим."},
+  sdErrBadResp:{uz:"Server noto'g'ri javob qaytardi ({s}). Qayta urinib ko'ring.",ru:"Сервер вернул неверный ответ ({s}). Попробуйте снова.",en:"The server returned an invalid response ({s}). Try again.",kk:"Сервер қате жауап қайтарды ({s}). Қайта көріңіз.",ky:"Сервер туура эмес жооп кайтарды ({s}). Кайра аракет кылыңыз.",tg:"Сервер ҷавоби нодуруст дод ({s}). Дубора кӯшиш кунед."},
+  sdErrTimeout:{uz:"Server 20 soniyada javob bermadi. Qayta urinib ko'ring.",ru:"Сервер не ответил за 20 секунд. Попробуйте снова.",en:"The server did not answer within 20 seconds. Try again.",kk:"Сервер 20 секундта жауап бермеді. Қайта көріңіз.",ky:"Сервер 20 секундда жооп берген жок. Кайра аракет кылыңыз.",tg:"Сервер дар 20 сония ҷавоб надод. Дубора кӯшиш кунед."},
+  sdErrAuth:{uz:"Hisobni tasdiqlab bo'lmadi. Ilovadan chiqib, qayta kiring.",ru:"Не удалось подтвердить аккаунт. Выйдите и войдите снова.",en:"Could not verify the account. Sign out and sign in again.",kk:"Аккаунтты растау мүмкін болмады. Шығып, қайта кіріңіз.",ky:"Аккаунтту ырастоо мүмкүн болгон жок. Чыгып, кайра кириңиз.",tg:"Ҳисобро тасдиқ кардан нашуд. Бароед ва дубора ворид шавед."},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3379,7 +3385,7 @@ async function repairStaffAuthRecords(){
 }
 async function saveStaff(){ await storSet(STORAGE_KEYS.staff, state.staff); syncStaffDoc(); }
 function saveShifts(){ storSet(STORAGE_KEYS.shifts, state.shifts); syncShiftsDoc(); }
-function saveCurrentShift(){ storSet(STORAGE_KEYS.currentShift, state.currentShift); }
+function saveCurrentShift(){ storSet(STORAGE_KEYS.currentShift, state.currentShift); try{ __osPublish(); }catch(e){} }   /* fix137-cash */
 function saveTables(){ storSet(STORAGE_KEYS.tables, state.tables); try{ if((state.setupDone || window.__ccReady) && typeof __ccSweep === 'function') __ccSweep(); }catch(_e){} /* fix106-nocust */ }
 async function saveSetupDone(){ await storSet(STORAGE_KEYS.setupDone, true); }
 /* fix112-setup: biznes sozlangan — shu qurilmada ochilgan (setupDone) yoki hisob bilan kirilgan (xodimlar bor). renderAll'dagi qoida bilan bir xil. */
@@ -3664,7 +3670,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.35';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.36';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -5689,8 +5695,10 @@ function logIn(person){
   document.getElementById('login-root').innerHTML = '';
   startAgentLocationTracking();
   if(!staffNeedsShiftTracking(person)){ renderAll(); return; }
+  try{ __osApply(); }catch(e){}   /* fix137-cash: boshqa qurilmadagi ochiq smena */
     if(state.currentShift && new Date(state.currentShift.startTime).toDateString() !== new Date().toDateString()){ autoCloseStaleShift(state.currentShift); }
-  const myOpenShift = state.currentShift && state.currentShift.staffId === person.id ? state.currentShift : null;
+  try{ __osApply(); }catch(e){}
+  const myOpenShift = state.currentShift && (state.currentShift.staffId === person.id || effectiveBranchId(state.currentShift.branchId) === effectiveBranchId(state.currentBranchId)) ? state.currentShift : null;
   if(!myOpenShift){
     openStartShiftModal();
   } else {
@@ -5704,9 +5712,9 @@ function openCashBalanceModal(){
     openModal(`<div class="modal-title">${tr('cbTitle')}</div><div class="field"><span class="subtle">${tr('cbNoShift')}</span></div>`);
     return;
   }
-  const shiftSales = state.sales.filter(s=> s.shiftId === shift.id && !s.refunded);
+  const shiftSales = state.sales.filter(s=> __shIn(shift, s.shiftId) && !s.refunded);
   const cashTotal = sumSalesByMethod(shiftSales, 'cash');
-  const shiftCashExpenses = state.expenses.filter(x=>x.shiftId===shift.id && x.paidFrom!=='other');
+  const shiftCashExpenses = state.expenses.filter(x=>__shIn(shift, x.shiftId) && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
   const __cx = shiftCashExtras(shift); /* fix81 */
   const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
@@ -5722,8 +5730,8 @@ function openCashBalanceModal(){
 }
 
 function autoCloseStaleShift(shift){
-  const shiftSales = state.sales.filter(s=> s.shiftId === shift.id && !s.refunded);
-  const shiftRefunds = state.sales.filter(s=> s.shiftId === shift.id && s.refunded);
+  const shiftSales = state.sales.filter(s=> __shIn(shift, s.shiftId) && !s.refunded);
+  const shiftRefunds = state.sales.filter(s=> __shIn(shift, s.shiftId) && s.refunded);
   const cashTotal = sumSalesByMethod(shiftSales, 'cash');
   const cardTotal = sumSalesByMethod(shiftSales, 'card');
   const creditTotal = sumSalesByMethod(shiftSales, 'credit');
@@ -5732,13 +5740,13 @@ function autoCloseStaleShift(shift){
   const deliveryFeeTotal = shiftSales.reduce((a,s)=>a+(s.deliveryFee||0), 0);
   const refundedTotal = shiftRefunds.reduce((a,s)=>a+s.total, 0);
   const profitTotal = shiftSales.reduce((a,s)=>a+saleProfit(s), 0);
-  const shiftCashExpenses = state.expenses.filter(x=>x.shiftId===shift.id && x.paidFrom!=='other');
+  const shiftCashExpenses = state.expenses.filter(x=>__shIn(shift, x.shiftId) && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
   const __cx = shiftCashExtras(shift); /* fix81 */
   const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
-  state.shifts.push({...shift, endTime:new Date().toISOString(), endCash:expected, expectedCash:expected, cashTotal, cardTotal, creditTotal, discountTotal, serviceChargeTotal, deliveryFeeTotal, refundedTotal, cashExpensesTotal, profitTotal, salesCount: shiftSales.length, autoClosed:true});
+  if(!state.shifts.some(x=>x && x.id === shift.id)) state.shifts.push({...shift, endTime:new Date().toISOString(), endCash:expected, expectedCash:expected, cashTotal, cardTotal, creditTotal, discountTotal, serviceChargeTotal, deliveryFeeTotal, refundedTotal, cashExpensesTotal, profitTotal, salesCount: shiftSales.length, autoClosed:true});   /* fix137-cash */
   saveShifts();
-  state.currentShift = {id:uid(), staffId:shift.staffId, staffName:shift.staffName, startTime:new Date().toISOString(), startCash:expected, branchId:shift.branchId};
+  state.currentShift = {id:uid(), staffId:shift.staffId, staffName:shift.staffName, startTime:new Date().toISOString(), startCash:expected, branchId:shift.branchId, prevId: shift.id};
   saveCurrentShift();
 }
 
@@ -5754,7 +5762,8 @@ function openStartShiftModal(){
   attachMoneyInputsById('start-cash-input');
   document.getElementById('start-shift-btn').addEventListener('click', ()=>{
     const cash = parseMoneyInput(document.getElementById('start-cash-input').value) || 0;
-    state.currentShift = {id:uid(), staffId:state.currentStaff.id, staffName:state.currentStaff.name, startTime:new Date().toISOString(), startCash:cash, branchId: state.currentBranchId};
+    const __pvS = state.currentShift && effectiveBranchId(state.currentShift.branchId) === effectiveBranchId(state.currentBranchId) ? state.currentShift.id : null;   /* fix137-cash */
+    state.currentShift = {id:uid(), staffId:state.currentStaff.id, staffName:state.currentStaff.name, startTime:new Date().toISOString(), startCash:cash, branchId: state.currentBranchId, prevId: __pvS};
     saveCurrentShift();
     closeModal();
     renderAll();
@@ -5763,8 +5772,8 @@ function openStartShiftModal(){
 
 function openEndShiftModal(){
   const shift = state.currentShift;
-  const shiftSales = state.sales.filter(s=> s.shiftId === shift.id && !s.refunded);
-  const shiftRefunds = state.sales.filter(s=> s.shiftId === shift.id && s.refunded);
+  const shiftSales = state.sales.filter(s=> __shIn(shift, s.shiftId) && !s.refunded);
+  const shiftRefunds = state.sales.filter(s=> __shIn(shift, s.shiftId) && s.refunded);
   const cashTotal = sumSalesByMethod(shiftSales, 'cash');
   const cardTotal = sumSalesByMethod(shiftSales, 'card');
   const creditTotal = sumSalesByMethod(shiftSales, 'credit');
@@ -5784,7 +5793,7 @@ function openEndShiftModal(){
   // cash" only ever accounted for money coming IN, so any such expense
   // showed up at close-out as an unexplained shortfall that was never
   // actually a discrepancy.
-  const shiftCashExpenses = state.expenses.filter(x=>x.shiftId===shift.id && x.paidFrom!=='other');
+  const shiftCashExpenses = state.expenses.filter(x=>__shIn(shift, x.shiftId) && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
   const __cx = shiftCashExtras(shift); /* fix81 */
   const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
@@ -9784,9 +9793,9 @@ function __fx81Sum(arr){ return arr.reduce((a,e)=>a+(Number(e.amount)||0), 0); }
 function shiftCashExtras(shift){
   const sid = shift && shift.id;
   if(!sid) return {debtCash:0, debtCard:0, credCash:0, refundCash:0};
-  const debt = (state.ledger||[]).filter(e=>e && e.type==='payment' && e.method && e.shiftId===sid);
-  const cred = (state.creditorLedger||[]).filter(e=>e && e.type==='payment' && e.method==='cash' && e.shiftId===sid);
-  const refundCash = state.sales.filter(x=>x && x.refunded && x.refundShiftId===sid && x.shiftId!==sid).reduce((a,x)=>a+(salePaymentBreakdown(x).cash||0), 0);
+  const debt = (state.ledger||[]).filter(e=>e && e.type==='payment' && e.method && __shIn(shift, e.shiftId));   /* fix137-cash */
+  const cred = (state.creditorLedger||[]).filter(e=>e && e.type==='payment' && e.method==='cash' && __shIn(shift, e.shiftId));
+  const refundCash = state.sales.filter(x=>x && x.refunded && __shIn(shift, x.refundShiftId) && !__shIn(shift, x.shiftId)).reduce((a,x)=>a+(salePaymentBreakdown(x).cash||0), 0);
   return {debtCash: __fx81Sum(debt.filter(e=>e.method==='cash')), debtCard: __fx81Sum(debt.filter(e=>e.method==='card')), credCash: __fx81Sum(cred), refundCash: refundCash};
 }
 function __cxRowsHtml(cx){
@@ -11897,8 +11906,9 @@ function __sdDate(iso, withTime){
 }
 function __sdErrText(code){
   const m = { taken:'sdErrTaken', rate:'sdErrRate', rate_links:'sdErrRateLinks', invalid_phone:'sdErrPhone', no_business:'sdErrNoBiz', forbidden:'sdErrGone',
-    not_linked:'sdErrGone', net:'sdErrNet', no_server:'sdErrNet', internal:'sdErrGeneric', offline:'sdOffline', login:'sdNeedLogin' };
-  return tr(m[code] || 'sdErrGeneric');
+    not_linked:'sdErrGone', net:'sdErrNet', no_server:'sdErrNoSrv', internal:'sdErrGeneric', offline:'sdOffline', login:'sdNeedLogin',
+    srv_denied:'sdErrDenied', srv_bad:'sdErrBadResp', timeout:'sdErrTimeout', auth:'sdErrAuth' };   /* fix137-cash */
+  return tr(m[code] || 'sdErrGeneric').split('{s}').join('HTTP ' + (window.__sdLastSt || '?'));
 }
 async function __sdApi(action, payload, asSuperAdmin){
   let user = fbUser;
@@ -11906,20 +11916,24 @@ async function __sdApi(action, payload, asSuperAdmin){
   if(!user) throw {code: asSuperAdmin ? 'forbidden' : 'login'};
   if(typeof navigator !== 'undefined' && navigator.onLine === false) throw {code: 'offline'};
   let token;
-  try{ token = await user.getIdToken(); }catch(e){ throw {code: 'net'}; }
+  try{ token = await user.getIdToken(); }catch(e){ __sdLog('auth', 0, e); throw {code: 'auth'}; }   /* fix137-cash */
   const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
-  const to = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch(e){} }, 20000);
+  let __tmo = false;
+  const to = setTimeout(()=>{ __tmo = true; try{ ctrl && ctrl.abort(); }catch(e){} }, 20000);
   try{
     const resp = await fetch(payFnUrl('sharedDebts'), {
       method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
       body: JSON.stringify(Object.assign({}, payload || {}, {action: action})), signal: ctrl ? ctrl.signal : undefined
     });
     let data = null; try{ data = await resp.json(); }catch(e){}
-    if(!data) throw {code: resp.status === 404 ? 'no_server' : 'net'};
+    if(!data){ const st = resp.status; window.__sdLastSt = String(st); __sdLog('http', st, null); throw {code: st === 404 ? 'no_server' : (st === 401 || st === 403) ? 'srv_denied' : 'srv_bad', status: st}; }
     if(!data.ok) throw {code: data.code || 'internal', status: resp.status};
     return data;
   }catch(e){
     if(e && e.code) throw e;
+    __sdLog(__tmo ? 'timeout' : 'fetch', 0, e);
+    if(__tmo) throw {code: 'timeout'};
+    if(typeof navigator !== 'undefined' && navigator.onLine === false) throw {code: 'offline'};
     throw {code: 'net'};
   }finally{ clearTimeout(to); }
 }
@@ -15365,10 +15379,8 @@ function renderReportsCategory(container, cat){
       effectiveBranchId(sh.branchId) === effectiveBranchId(state.currentBranchId) &&
       new Date(sh.startTime).toDateString() === today
     );
-    let startingCashToday = todayShiftsForBranch.reduce((a,sh)=>a+(sh.startCash||0), 0);
-    if(state.currentShift && new Date(state.currentShift.startTime).toDateString()===today && effectiveBranchId(state.currentShift.branchId)===effectiveBranchId(state.currentBranchId)){
-      startingCashToday += state.currentShift.startCash||0;
-    }
+    let startingCashToday = __osStartToday();   /* fix137-cash: bitta kassa — smenalar ketma-ket, birinchisining summasi */
+    void todayShiftsForBranch;
     const __sb = (b)=>effectiveBranchId(b)===effectiveBranchId(state.currentBranchId); /* fix81 */
     const __todayDebt = (state.ledger||[]).filter(e=>e && e.type==='payment' && e.method && __sb(e.branchId) && __fx81Day(e.createdAt||e.date)===today);
     const todayDebtCash = __fx81Sum(__todayDebt.filter(e=>e.method==='cash'));
@@ -20343,6 +20355,7 @@ function __gcWatch(kind){
     Object.keys(byId).forEach(k=>out.push(byId[k]));
     first = false;
     state[g.key] = out; __gcSave(kind);
+    if(kind === 'openShift'){ try{ __osOnCloud(); }catch(e){} }   /* fix137-cash */
     try{
       const busy = document.getElementById('modal-root').children.length || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
       if(state.view === 'supply' && !busy) renderSupply();
@@ -20979,6 +20992,95 @@ function __trEditor(c, t){
     try{ auditLog('transferCancel', `${t.num}: ${branchName(t.fromBranchId)} → ${branchName(t.toBranchId)}`, {transferId: t.id}); }catch(e){}
     __trEditor(c, t);
   }, tr('trCancel')));
+}
+
+/* fix137-cash: bitta filial — bitta kassa. Ochiq smena bulut orqali hamma qurilmada bitta. */
+__gcK().openShift = {col: 'openShifts', key: 'openShifts', store: 'sardor_open_shifts_v1'};
+function __shIn(shift, sid){ return !!(shift && sid && (sid === shift.id || (Array.isArray(shift.merged) && shift.merged.indexOf(sid) >= 0))); }
+function __osB(x){ return effectiveBranchId(x && x.branchId); }
+function __osRec(b){ return (state.openShifts || []).find(r=>r && r.id === effectiveBranchId(b)) || null; }
+function __osDay(iso){ try{ return new Date(iso).toDateString(); }catch(e){ return ''; } }
+function __osToday(sh){ return !!(sh && __osDay(sh.startTime) === new Date().toDateString()); }
+var __osPrev = null;
+function __osPublish(){
+  const cur = state.currentShift;
+  let rec = null;
+  if(cur) rec = {id: __osB(cur), shift: JSON.parse(JSON.stringify(cur)), closedId: null};
+  else if(__osPrev) rec = {id: __osB(__osPrev), shift: null, closedId: __osPrev.id, closedMerged: (__osPrev.merged || []).slice()};
+  __osPrev = cur ? JSON.parse(JSON.stringify(cur)) : null;
+  if(!rec) return;
+  state.openShifts = state.openShifts || [];
+  const i = state.openShifts.findIndex(r=>r && r.id === rec.id);
+  if(i >= 0) state.openShifts[i] = rec; else state.openShifts.push(rec);
+  __gcPush('openShift', rec);
+}
+function __osAdopt(sh){
+  state.currentShift = JSON.parse(JSON.stringify(sh));
+  __osPrev = JSON.parse(JSON.stringify(sh));
+  try{ storSet(STORAGE_KEYS.currentShift, state.currentShift); }catch(e){}
+}
+/* Ikki qurilmada ikki xil ochiq smena: oldin ochilgani qoladi, ikkinchisi unga qo'shiladi (savdolari yo'qolmaydi) */
+function __osWins(a, b){ const x = String(a.startTime || ''), y = String(b.startTime || ''); return x !== y ? x < y : String(a.id) < String(b.id); }
+function __osApply(){
+  const loc = state.currentShift;
+  const b = loc ? __osB(loc) : effectiveBranchId(state.currentBranchId);
+  const rec = __osRec(b);
+  if(!rec) { if(loc && (!__osPrev || __osPrev.id !== loc.id)) __osPublish(); return 'none'; }
+  const rs = rec.shift;
+  if(!rs){
+    if(loc && (loc.id === rec.closedId || (rec.closedMerged || []).indexOf(loc.id) >= 0)){
+      state.currentShift = null; __osPrev = null; try{ storSet(STORAGE_KEYS.currentShift, null); }catch(e){}
+      return 'closed';
+    }
+    if(loc && (!__osPrev || __osPrev.id !== loc.id)) __osPublish();
+    return 'none';
+  }
+  if(!loc){ if(__osToday(rs)){ __osAdopt(rs); return 'adopt'; } return 'stale'; }
+  if(loc.id === rs.id){
+    const m = Array.from(new Set([].concat(loc.merged || [], rs.merged || [])));
+    if(m.length !== (loc.merged || []).length){ loc.merged = m; try{ storSet(STORAGE_KEYS.currentShift, loc); }catch(e){} }
+    if((rs.merged || []).length !== m.length){ __osPublish(); }
+    return 'same';
+  }
+  if(rs.prevId === loc.id || (rs.merged || []).indexOf(loc.id) >= 0){ __osAdopt(rs); return 'adopt'; }
+  if(loc.prevId === rs.id || (loc.merged || []).indexOf(rs.id) >= 0){ __osPublish(); return 'mine'; }
+  if(!__osToday(rs) && __osToday(loc)){ __osPublish(); return 'mine'; }
+  if(__osToday(rs) && !__osToday(loc)) return 'stale';
+  if(__osWins(rs, loc)){
+    const w = JSON.parse(JSON.stringify(rs)); w.merged = Array.from(new Set([].concat(w.merged || [], [loc.id], loc.merged || [])));
+    __osAdopt(w); __osPublish(); return 'merged';
+  }
+  loc.merged = Array.from(new Set([].concat(loc.merged || [], [rs.id], rs.merged || [])));
+  try{ storSet(STORAGE_KEYS.currentShift, loc); }catch(e){}
+  __osPublish(); return 'merged';
+}
+function __osOnCloud(){
+  let r = 'none';
+  try{ r = __osApply(); }catch(e){ return; }
+  try{
+    if(r === 'closed' && state.currentStaff && staffNeedsShiftTracking(state.currentStaff) && !document.getElementById('modal-root').children.length){ openStartShiftModal(); return; }
+    if(r === 'adopt' || r === 'merged' || r === 'closed'){
+      const busy = document.getElementById('modal-root').children.length || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
+      if(!busy && state.view === 'reports') renderAll();
+    }
+  }catch(e){}
+}
+/* Bugungi boshlang'ich naqd: bugun ochilgan birinchi smenaning summasi (bitta kassa — smenalar ketma-ket) */
+function __osStartToday(){
+  const today = new Date().toDateString(), b = effectiveBranchId(state.currentBranchId);
+  const list = (state.shifts || []).filter(sh=>sh && effectiveBranchId(sh.branchId) === b && __osDay(sh.startTime) === today);
+  if(state.currentShift && __osB(state.currentShift) === b && __osToday(state.currentShift) && !list.some(x=>x.id === state.currentShift.id)) list.push(state.currentShift);
+  if(!list.length) return 0;
+  list.sort((x, y)=>String(x.startTime).localeCompare(String(y.startTime)));
+  return Number(list[0].startCash) || 0;
+}
+/* Mening qarzlarim: server xatolari jurnali (sababni aniqlash uchun, telefonda) */
+function __sdLog(kind, status, err){
+  try{
+    const k = 'sp_sd_err_v1'; const a = JSON.parse(localStorage.getItem(k) || '[]') || [];
+    a.push({at: new Date().toISOString(), kind: kind, status: status || 0, msg: String((err && (err.message || err.name)) || '').slice(0, 160), online: (typeof navigator !== 'undefined') ? navigator.onLine : null});
+    localStorage.setItem(k, JSON.stringify(a.slice(-10)));
+  }catch(e){}
 }
 
 /* --- Online catalog --- */
