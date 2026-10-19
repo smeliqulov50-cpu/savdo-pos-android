@@ -55,14 +55,27 @@ async function loadCtx(deps, bid) {
   const db = deps.db;
   const res = await Promise.all([getData(db.collection('businesses').doc(bid)), getData(db.collection('tgBiz').doc(bid))]);
   const b = res[0] || {}, tb = res[1];
+  const chats = deps.key ? core.validChats(deps.key, bid, tb) : [];
+  const lang0 = M.lg(tb && tb.lang);
+  /* fix144-tgcmd: chatda /til bilan tanlangan til bo'lsa — xabarlar o'sha tilda */
+  for (let i = 0; i < chats.length; i++) {
+    let ul = null;
+    try { const ch = await getData(db.collection('tgChats').doc(chats[i].id)); ul = ch && ch.ulang; } catch (e) { ul = null; }
+    chats[i].lang = M.LANGS.indexOf(ul) !== -1 ? ul : lang0;
+  }
   return {
-    biz: b, chats: deps.key ? core.validChats(deps.key, bid, tb) : [], lang: M.lg(tb && tb.lang),
+    biz: b, chats: chats, lang: lang0,
     tz: DR.validTz(b.timeZone) ? b.timeZone : DEFAULT_TZ, cur: b.currency || 'UZS', shop: shopNameOf(b),
     branches: Array.isArray(b.branches) ? b.branches.filter(function (x) { return x && x.id; }) : [],
     now: typeof deps.nowMs === 'function' ? deps.nowMs() : Date.now()   /* fix124-smart: avtomatik "kam qolgan" uchun */
   };
 }
 function multiBranch(ctx) { return ctx.branches.length > 1; }
+/* fix144-tgcmd: ma'lumot bir marta hisoblanadi, filial nomi ("Bosh filial") har bir til uchun qayta yoziladi */
+function inLang(ctx, l) { return Object.assign({}, ctx, { lang: M.lg(l) }); }
+function relabel(arr, ctx, l) { const c = inLang(ctx, l); return (arr || []).map(function (x) { return Object.assign({}, x, { name: branchName(c, x.id) }); }); }
+function dailyIn(d, ctx, l) { return Object.assign({}, d, { branches: relabel(d.branches, ctx, l) }); }
+function lowIn(d, ctx, l) { return Object.assign({}, d, { groups: relabel(d.groups, ctx, l) }); }
 function branchName(ctx, id) {
   const k = id || 'main';
   const f = ctx.branches.filter(function (x) { return x.id === k; })[0];
@@ -81,10 +94,13 @@ function dmyOfYmd(ymd) { const a = String(ymd).split('-'); return a[2] + '.' + a
 /* ---------- Telegram'ga yuborish ---------- */
 async function sendAll(deps, chats, text) {
   const r = { sent: 0, failed: 0, removed: 0 };
+  const byLang = {};   /* fix144-tgcmd: text — funksiya bo'lsa har bir chat o'z tilida oladi */
   for (let i = 0; i < chats.length; i++) {
     const c = chats[i];
+    let body = text;
+    if (typeof text === 'function') { const l = c.lang || 'uz'; if (!(l in byLang)) byLang[l] = text(l); body = byLang[l]; }
     for (let attempt = 0; attempt < 2; attempt++) {
-      try { await deps.tg('sendMessage', { chat_id: c.id, text: text, parse_mode: 'HTML', disable_web_page_preview: true }); r.sent++; break; }
+      try { await deps.tg('sendMessage', { chat_id: c.id, text: body, parse_mode: 'HTML', disable_web_page_preview: true }); r.sent++; break; }
       catch (e) {
         if (e && e.tgCode === 429 && attempt === 0) { await sleep(deps, Math.min(10, Number(e.retryAfter) || 1) * 1000); continue; }
         const gone = e && (e.tgCode === 403 || (e.tgCode === 400 && /chat not found|deactivated|blocked/i.test(String(e.desc || e.message || ''))));
@@ -283,13 +299,13 @@ async function runTick(deps, now) {
       const dd = due(ctx.tz, p.daily, p.dailyTime);
       if (dd && await markOnce(deps, bid, 'daily', dd.ymd)) {
         const data = await computeDaily(deps.db, bid, dd, ctx);
-        addSt(st, await sendAll(deps, ctx.chats, M.dailyText(ctx.lang, data, { shop: ctx.shop, cur: ctx.cur, dateStr: dmyOfYmd(dd.ymd) })));
+        addSt(st, await sendAll(deps, ctx.chats, function (l) { return M.dailyText(l, dailyIn(data, ctx, l), { shop: ctx.shop, cur: ctx.cur, dateStr: dmyOfYmd(dd.ymd) }); }));
         st.daily++;
       }
       const dl = due(ctx.tz, p.low, p.lowTime);
       if (dl && await markOnce(deps, bid, 'low', dl.ymd)) {
         const data = await computeLow(deps.db, bid, ctx);
-        addSt(st, await sendAll(deps, ctx.chats, M.lowText(ctx.lang, data, { shop: ctx.shop })));
+        addSt(st, await sendAll(deps, ctx.chats, function (l) { return M.lowText(l, lowIn(data, ctx, l), { shop: ctx.shop }); }));
         st.low++;
       }
     } catch (e) { st.errors++; try { console.error('telegramTick xatosi', bid, e && e.message); } catch (_e) {} }
@@ -310,9 +326,11 @@ async function handleSaleCreated(deps, bid, sid, sale) {
   const ctx = await loadCtx(deps, bid);
   if (!ctx.chats.length) return { skipped: 'no_chats' };
   if (!(await gate(deps, bid, 'sd:' + sid))) return { skipped: 'dup' };
-  const o = { shop: ctx.shop, cur: ctx.cur, timeStr: hm(Date.parse(sale.date), ctx.tz) };
-  if (multiBranch(ctx)) o.branchName = branchName(ctx, sale.branchId);
-  const r = await sendAll(deps, ctx.chats, M.discText(ctx.lang, { receiptNumber: sale.receiptNumber, discountAmount: di.da, pct: Math.round(di.pct), total: sale.total, cashierName: sale.cashierName }, o));
+  const r = await sendAll(deps, ctx.chats, function (l) {
+    const o = { shop: ctx.shop, cur: ctx.cur, timeStr: hm(Date.parse(sale.date), ctx.tz) };
+    if (multiBranch(ctx)) o.branchName = branchName(inLang(ctx, l), sale.branchId);
+    return M.discText(l, { receiptNumber: sale.receiptNumber, discountAmount: di.da, pct: Math.round(di.pct), total: sale.total, cashierName: sale.cashierName }, o);
+  });
   return Object.assign({ alert: 'disc' }, r);
 }
 async function handleAuditCreated(deps, bid, aid, entry) {
@@ -325,7 +343,7 @@ async function handleAuditCreated(deps, bid, aid, entry) {
   const ctx = await loadCtx(deps, bid);
   if (!ctx.chats.length) return { skipped: 'no_chats' };
   if (!(await gate(deps, bid, 'au:' + aid))) return { skipped: 'dup' };
-  const r = await sendAll(deps, ctx.chats, M.rcptText(ctx.lang, { action: entry.action, detail: String(entry.detail || '').slice(0, 200), staffName: entry.staffName }, { shop: ctx.shop, timeStr: hm(Date.parse(entry.date), ctx.tz) }));
+  const r = await sendAll(deps, ctx.chats, function (l) { return M.rcptText(l, { action: entry.action, detail: String(entry.detail || '').slice(0, 200), staffName: entry.staffName }, { shop: ctx.shop, timeStr: hm(Date.parse(entry.date), ctx.tz) }); });
   return Object.assign({ alert: entry.action }, r);
 }
 function newClosedShifts(deps, before, after) {
@@ -345,7 +363,8 @@ async function handleCatalogWrite(deps, bid, before, after) {
   const st = { alert: 'shift', shifts: 0, sent: 0, failed: 0, removed: 0 };
   for (let i = 0; i < fresh.length; i++) {
     if (!(await gate(deps, bid, 'sh:' + fresh[i].id))) continue;
-    addSt(st, await sendAll(deps, ctx.chats, M.shiftText(ctx.lang, fresh[i], shiftCtx(ctx, fresh[i]))));
+    const sh = fresh[i];
+    addSt(st, await sendAll(deps, ctx.chats, function (l) { return M.shiftText(l, sh, shiftCtx(inLang(ctx, l), sh)); }));
     st.shifts++;
   }
   return st;
@@ -382,22 +401,30 @@ async function actTest(deps, bid, body) {
   if (!allowed) return errBody(429, 'too_many');
   const ctx = await loadCtx(deps, bid);
   if (!ctx.chats.length) return errBody(409, 'no_chats');
-  const w = M.W(ctx.lang);
-  let text;
-  if (kind === 'daily') {
-    const day = DR.dayInfo(new Date(now), ctx.tz);
-    text = M.dailyText(ctx.lang, await computeDaily(db, bid, day, ctx), { shop: ctx.shop, cur: ctx.cur, dateStr: dmyOfYmd(day.ymd), soFar: true, timeStr: hm(now, ctx.tz), test: true });
-  } else if (kind === 'low') {
-    text = M.lowText(ctx.lang, await computeLow(db, bid, ctx), { shop: ctx.shop, test: true });
-  } else if (kind === 'shift') {
-    const sh = (await lastClosedShift(db, bid)) || { staffName: w.sampleCashier, startTime: new Date(now - 8 * HOUR).toISOString(), endTime: new Date(now).toISOString(),
-      salesCount: 34, cashTotal: 1300000, cardTotal: 600000, creditTotal: 200000, expectedCash: 1450000, endCash: 1420000 };
-    text = M.shiftText(ctx.lang, sh, shiftCtx(ctx, sh, { test: true }));
-  } else if (kind === 'disc') {
-    text = M.discText(ctx.lang, { receiptNumber: '1001', discountAmount: 50000, pct: 25, total: 150000, cashierName: w.sampleCashier }, { shop: ctx.shop, cur: ctx.cur, timeStr: hm(now, ctx.tz), test: true });
-  } else {
-    text = M.rcptText(ctx.lang, { action: 'saleDelete', detail: '№ 1001 — ' + M.money(ctx.lang, ctx.cur, 150000), staffName: w.sampleCashier }, { shop: ctx.shop, timeStr: hm(now, ctx.tz), test: true });
-  }
+  /* fix144-tgcmd: har bir chat o'z tilida — ma'lumot bir marta o'qiladi */
+  let data = null, sh0 = null;
+  if (kind === 'daily') data = { day: DR.dayInfo(new Date(now), ctx.tz) };
+  if (kind === 'daily') data.d = await computeDaily(db, bid, data.day, ctx);
+  if (kind === 'low') data = await computeLow(db, bid, ctx);
+  if (kind === 'shift') sh0 = await lastClosedShift(db, bid);
+  const text = function (l) {
+    const w = M.W(l), cx = inLang(ctx, l);
+    let text;
+    if (kind === 'daily') {
+      text = M.dailyText(l, dailyIn(data.d, ctx, l), { shop: ctx.shop, cur: ctx.cur, dateStr: dmyOfYmd(data.day.ymd), soFar: true, timeStr: hm(now, ctx.tz), test: true });
+    } else if (kind === 'low') {
+      text = M.lowText(l, lowIn(data, ctx, l), { shop: ctx.shop, test: true });
+    } else if (kind === 'shift') {
+      const sh = sh0 || { staffName: w.sampleCashier, startTime: new Date(now - 8 * HOUR).toISOString(), endTime: new Date(now).toISOString(),
+        salesCount: 34, cashTotal: 1300000, cardTotal: 600000, creditTotal: 200000, expectedCash: 1450000, endCash: 1420000 };
+      text = M.shiftText(l, sh, shiftCtx(cx, sh, { test: true }));
+    } else if (kind === 'disc') {
+      text = M.discText(l, { receiptNumber: '1001', discountAmount: 50000, pct: 25, total: 150000, cashierName: w.sampleCashier }, { shop: ctx.shop, cur: ctx.cur, timeStr: hm(now, ctx.tz), test: true });
+    } else {
+      text = M.rcptText(l, { action: 'saleDelete', detail: '№ 1001 — ' + M.money(l, ctx.cur, 150000), staffName: w.sampleCashier }, { shop: ctx.shop, timeStr: hm(now, ctx.tz), test: true });
+    }
+    return text;
+  };
   const r = await sendAll(deps, ctx.chats, text);
   return okBody({ sent: r.sent, failed: r.failed, removed: r.removed });
 }
@@ -407,5 +434,6 @@ async function handleAction(deps, caller, action, body) {
   return errBody(400, 'bad_action');
 }
 
-module.exports = { normPrefs, getPrefs, runTick, handleSaleCreated, handleAuditCreated, handleCatalogWrite, handleAction, readPrefsForStatus,
+module.exports = { loadCtx, inLang, dailyIn, lowIn, hm, dmy, dmyOfYmd, branchName, multiBranch, docsOf,   /* fix144-tgcmd */
+  normPrefs, getPrefs, runTick, handleSaleCreated, handleAuditCreated, handleCatalogWrite, handleAction, readPrefsForStatus,
   computeDaily, computeLow, lowThresholdOf, lowModeOf, lowAutoDaysOf, minStockOf, salesVel, sendAll, gate, newClosedShifts, discInfo, DEF, KINDS, WINDOW_MIN, RECENT_MS, ALERTS_PER_HOUR, TESTS_PER_HOUR };

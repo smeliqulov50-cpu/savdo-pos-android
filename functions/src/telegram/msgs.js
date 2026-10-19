@@ -115,7 +115,7 @@ function dailyText(lang, d, ctx) {
   lines.push('📅 ' + esc(ctx.dateStr) + (ctx.soFar ? ' (' + esc(w.soFar) + ', ' + esc(ctx.timeStr) + ')' : ''));
   lines.push('');
   if (!d.count && !d.expenses && !d.debtPaid && !d.refundCount) {
-    lines.push(esc(w.noSales));
+    lines.push(ctx.noSalesHtml || esc(w.noSales));   /* fix144-tgcmd: kecha uchun boshqa matn */
   } else {
     lines.push('💰 ' + esc(w.sales) + ': <b>' + money(lang, cur, d.revenue) + '</b>');
     lines.push('🧾 ' + esc(w.receipts) + ': ' + fmt(d.count));
