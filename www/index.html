@@ -2350,6 +2350,13 @@ const T = {
   subExpiredNativeText2:{uz:"Obuna muddati tugagan. Ma'lumotlaringiz saqlangan va hech narsa o'chirilmaydi.",ru:"Срок подписки истёк. Ваши данные сохранены и не удаляются.",en:"The subscription has expired. Your data is kept and nothing is deleted.",kk:"Жазылым мерзімі аяқталды. Деректеріңіз сақталған, ештеңе жойылмайды.",ky:"Жазылуу мөөнөтү бүттү. Маалыматтарыңыз сакталган, эч нерсе өчүрүлбөйт.",tg:"Мӯҳлати обуна ба охир расид. Маълумоти шумо нигоҳ дошта шудааст ва нест намешавад."},
   subReminderNativeText:{uz:"Obunangizga {days} kun qoldi.",ru:"До конца подписки осталось {days} дн.",en:"{days} days left on your subscription.",kk:"Жазылымға {days} күн қалды.",ky:"Жазылууга {days} күн калды.",tg:"То анҷоми обуна {days} рӯз монд."},
   okGotIt:{uz:"Tushunarli",ru:"Понятно",en:"Got it",kk:"Түсінікті",ky:"Түшүнүктүү",tg:"Фаҳмо"},
+  /* fix143-kjrelay */
+  kjQueued:{uz:"Oshxonaga yuborildi — printerli planshet chop etadi",ru:"Отправлено на кухню — распечатает планшет с принтером",en:"Sent to the kitchen — the tablet with the printer will print it",kk:"Асүйге жіберілді — принтері бар планшет басып шығарады",ky:"Ашканага жөнөтүлдү — принтери бар планшет басып чыгарат",tg:"Ба ошхона фиристода шуд — планшети дорои принтер чоп мекунад"},
+  kjPermErr:{uz:"Oshxona cheki yuborilmadi: server ruxsat bermadi (Firestore qoidalari). Sozlash kerak.",ru:"Чек для кухни не отправлен: сервер не разрешил (правила Firestore). Нужна настройка.",en:"Kitchen ticket not sent: the server refused (Firestore rules). Setup needed.",kk:"Асүй чегі жіберілмеді: сервер рұқсат бермеді (Firestore ережелері). Баптау керек.",ky:"Ашкана чеги жөнөтүлгөн жок: сервер уруксат берген жок (Firestore эрежелери). Жөндөө керек.",tg:"Чеки ошхона фиристода нашуд: сервер иҷозат надод (қоидаҳои Firestore). Танзим лозим."},
+  kjRelayLabel:{uz:"Oshxona cheklarini printerli planshetga yuborish",ru:"Отправлять кухонные чеки на планшет с принтером",en:"Send kitchen tickets to the tablet with the printer",kk:"Асүй чектерін принтері бар планшетке жіберу",ky:"Ашкана чектерин принтери бар планшетке жөнөтүү",tg:"Чекҳои ошхонаро ба планшети дорои принтер фиристодан"},
+  kjRelayHint:{uz:"Masalan, iPhone'da. Buyurtma saqlanganda oshxona cheki printerga ulangan planshetda avtomatik chiqadi. O'sha planshetda Bluetooth rejimi va «Boshqa qurilmalarning chop etilmagan cheklarini shu yerda chop etish» yoqilgan bo'lishi kerak.",ru:"Например, на iPhone. При сохранении заказа кухонный чек автоматически печатается на планшете с принтером. На том планшете должен быть включён режим Bluetooth и «Печатать здесь неотправленные чеки с других устройств».",en:"For example, on an iPhone. When an order is saved, the kitchen ticket prints automatically on the tablet with the printer. That tablet needs Bluetooth mode and “Print other devices' unprinted receipts here” turned on.",kk:"Мысалы, iPhone-да. Тапсырыс сақталғанда асүй чегі принтері бар планшетте автоматты түрде басылады. Сол планшетте Bluetooth режимі және «Басқа құрылғылардың басылмаған чектерін осында басу» қосулы болуы керек.",ky:"Мисалы, iPhone'до. Буйрутма сакталганда ашкана чеги принтери бар планшетте автоматтык түрдө басылат. Ал планшетте Bluetooth режими жана «Башка түзмөктөрдүн басылбаган чектерин ушул жерде басуу» күйүк болушу керек.",tg:"Масалан, дар iPhone. Ҳангоми нигоҳ доштани фармоиш чеки ошхона дар планшети дорои принтер худкор чоп мешавад. Дар он планшет реҷаи Bluetooth ва «Чопи чекҳои чопнашудаи дастгоҳҳои дигар дар ин ҷо» бояд фаъол бошад."},
+  kjRelayBtHint:{uz:"Oshxona cheklari ham: boshqa qurilmalardagi (masalan, iPhone) buyurtmalar shu qurilmaga ulangan oshxona printerida chiqadi.",ru:"Кухонные чеки тоже: заказы с других устройств (например, iPhone) печатаются на кухонном принтере, подключённом к этому устройству.",en:"Kitchen tickets too: orders from other devices (e.g. an iPhone) print on the kitchen printer connected to this device.",kk:"Асүй чектері де: басқа құрылғылардағы (мысалы, iPhone) тапсырыстар осы құрылғыға қосылған асүй принтерінде басылады.",ky:"Ашкана чектери да: башка түзмөктөрдөгү (мисалы, iPhone) буйрутмалар ушул түзмөккө туташкан ашкана принтеринде басылат.",tg:"Чекҳои ошхона низ: фармоишҳо аз дастгоҳҳои дигар (масалан, iPhone) дар принтери ошхонаи ба ин дастгоҳ пайвастшуда чоп мешаванд."},
+  kjRelayPrintedN:{uz:"Oshxona cheklari",ru:"Кухонные чеки",en:"Kitchen tickets",kk:"Асүй чектері",ky:"Ашкана чектери",tg:"Чекҳои ошхона"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3843,7 +3850,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.39';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.40';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -4320,7 +4327,7 @@ function __relayStatusHtml(){
   parts.push(rem ? `${tr('relayPrinter')}: ${escapeHtml(rem.name || rem.id || '—')}` : `<span style="color:var(--danger);">${tr('relayNoPrinter')}</span>`);
   if(st.running){
     parts.push(`${tr('relayLastCheck')}: ${__relayTime(st.lastSweep)}`);
-    parts.push(`${tr('relayWaiting')}: ${st.waiting || 0} · ${tr('relayPrintedN')}: ${st.printed || 0}`);
+    parts.push(`${tr('relayWaiting')}: ${st.waiting || 0} · ${tr('relayPrintedN')}: ${st.printed || 0}` + (st.kitchenPrinted ? ` · ${tr('kjRelayPrintedN')}: ${st.kitchenPrinted}` : ''));   /* fix143-kjrelay */
   }
   if(st.lastErr) parts.push(`<span style="color:var(--danger);">${tr('relayLastErr')}: ${escapeHtml(st.lastErr)} (${__relayTime(st.lastErrAt)})</span>`);
   return `${tr('relayStatus')}: ` + parts.join('<br>');
@@ -4440,6 +4447,7 @@ function startLiveListeners(){
   watchForNewRefunds(salesCol().where('refundedAt','>=', new Date().toISOString()));
   if(state.settings.printerMode==='bluetooth' && state.settings.autoPrintRelay){
     watchForPrintRelay(salesCol().where('date','>=', new Date(Date.now() - 12*3600000).toISOString()));
+    try{ watchKitchenRelay(kitchenJobsCol().where('createdAt','>=', new Date(Date.now() - 12*3600000).toISOString())); }catch(e){}   /* fix143-kjrelay */
   }
   watchArrayCollection(ledgerCol().where('date','>=',liveSyncSinceIso()), 'ledger', 'ledger', liveSyncSinceIso());
   watchArrayCollection(visitsCol(), 'visits', 'visit');
@@ -9855,9 +9863,93 @@ function buildKitchenTicketHtmlInner(items, tableName, cashierName, stationName)
   `;
 }
 
-async function sendKitchenTicket(items, tableName, cashierName, slot){
+/* fix143-kjrelay: oshxona cheki printerli planshet orqali */
+var KJ_PREF_KEY = 'savdo_kitchen_relay_v1';
+function __kjIsIOS(){ try{ return /iPad|iPhone|iPod/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }catch(e){ return false; } }
+function __kjRelayPref(){
+  try{ const v = localStorage.getItem(KJ_PREF_KEY); if(v === '1') return true; if(v === '0') return false; }catch(e){}
+  try{ return !!state.deviceHasNoPrinter || (__kjIsIOS() && !isNativeApp()); }catch(e){ return !!state.deviceHasNoPrinter; }
+}
+function kitchenJobsCol(){ return businessDocRef().collection('kitchenJobs'); }
+function __kjHasLocal(slot){ try{ return !!getBtCharacteristic(slot) || !!loadRememberedBtDevices()[slot]; }catch(e){ return false; } }
+function __kjShouldRelay(slot){
+  if(!fbUser || !fbDb) return false;
+  if(state.settings.printerMode === 'browser') return __kjRelayPref();
+  return !__kjHasLocal(slot);
+}
+var __kjToastAt = 0;
+async function __kjQueue(items, tableName, cashierName, slot){
+  const job = {id: 'kj' + uid(), slot: slot || 'kitchen', stationName: kitchenStationName(slot) || '',
+    items: (items || []).map(i=>({name: String((i && i.name) || ''), qty: Number(i && i.qty) || 0})),
+    tableName: tableName || '', cashier: cashierName || '', branchId: state.currentBranchId || null,
+    createdAt: new Date().toISOString(), printed: false};
+  const offline = (typeof navigator !== 'undefined' && navigator.onLine === false);
+  try{
+    const w = kitchenJobsCol().doc(job.id).set(sanitizeForFirestore(job));
+    // Internet yo'q bo'lsa Firestore yozuvni navbatda saqlaydi va ulanganda yuboradi — kutib o'tirilmaydi
+    await Promise.race([w, new Promise(r=>setTimeout(r, offline ? 0 : 2500))]);
+  }catch(e){
+    const c = String((e && (e.code || e.message)) || '');
+    if(/permission|insufficient/i.test(c)){ window.__kjPermAt = Date.now(); showToast(tr('kjPermErr')); }
+    return false;
+  }
+  if(Date.now() - __kjToastAt > 2500){ __kjToastAt = Date.now(); showToast(tr('kjQueued')); }
+  return true;
+}
+function watchKitchenRelay(queryRef){
+  const startMs = Date.now(), fromMs = startMs - 30*60*1000;
+  const wanted = new Set(), lastTry = new Map();
+  let lastDocs = [], ready = false;
+  try{ window.__relayStat.kitchenPrinted = window.__relayStat.kitchenPrinted || 0; }catch(e){}
+  function eligible(j){
+    if(!j || !j.id || j.printed) return false;
+    if(effectiveBranchId(j.branchId) !== effectiveBranchId(state.currentBranchId)) return false;
+    if(!__kjHasLocal(j.slot || 'kitchen')) return false;
+    const t = Date.parse(j.createdAt || '') || 0;
+    return t >= fromMs || wanted.has(j.id);
+  }
+  async function claim(id){
+    const ref = kitchenJobsCol().doc(id);
+    let job = null;
+    try{
+      await fbDb.runTransaction(async (tx)=>{
+        const d = await tx.get(ref);
+        if(!d.exists) return;
+        const x = d.data();
+        if(!x || x.printed) return;
+        tx.update(ref, {printed: true, printedAt: new Date().toISOString()});
+        job = x;
+      });
+    }catch(e){ __relayErr('kitchen claim: ' + ((e && (e.code || e.message)) || 'error')); return; }
+    if(!job) return;
+    let ok = false;
+    try{ ok = await sendKitchenTicket(job.items || [], job.tableName || null, job.cashier || '', job.slot || 'kitchen', true); }catch(e){ ok = false; }
+    if(ok){ try{ window.__relayStat.kitchenPrinted = (window.__relayStat.kitchenPrinted || 0) + 1; }catch(e){} }
+    else { __relayErr('kitchen print'); try{ await ref.update({printed: false}); }catch(e){} }
+  }
+  function sweep(){
+    lastDocs.slice().sort((a,b)=>String(a.createdAt||'').localeCompare(String(b.createdAt||''))).forEach(j=>{
+      if(!eligible(j)) return;
+      const last = lastTry.get(j.id) || 0;
+      if(Date.now() - last < 20000) return;
+      lastTry.set(j.id, Date.now());
+      claim(j.id);
+    });
+  }
+  const unsub = queryRef.onSnapshot(snap=>{
+    lastDocs = snap.docs.map(d=>d.data()).filter(Boolean);
+    if(ready){ snap.docChanges().forEach(ch=>{ const d = ch.doc.data(); if(d && d.id && ch.type === 'added') wanted.add(d.id); if(d && d.id && ch.type === 'modified' && !d.printed) wanted.add(d.id); }); }
+    ready = true;
+    sweep();
+  }, (err)=>{ __relayErr('kitchen listen: ' + ((err && (err.code || err.message)) || 'error')); });
+  const iv = setInterval(sweep, 15000);
+  liveListenerUnsubs.push(unsub);
+  liveListenerUnsubs.push(()=>clearInterval(iv));
+}
+async function sendKitchenTicket(items, tableName, cashierName, slot, __kjLocal){
   slot = slot || 'kitchen';
   if(!items.length) return false;
+  if(!__kjLocal && __kjShouldRelay(slot)) return __kjQueue(items, tableName, cashierName, slot);   /* fix143-kjrelay */
   if(state.settings.printerMode === 'browser'){
     // Same mechanism the register receipt already uses in browser mode:
     // fill the hidden #print-receipt container and open the OS print
@@ -9953,7 +10045,7 @@ async function printKitchenDelta(table){
     table.kitchenSent = updatedSentMap;
     saveTables(); syncTableDoc(table);
   }
-  if(failedSlots.length){
+  if(failedSlots.length && !(window.__kjPermAt && Date.now() - window.__kjPermAt < 3000)){   /* fix143-kjrelay: ruxsat xabari ustidan yozilmaydi */
     // Name the specific printer(s) that failed, not just a generic
     // message — with several kitchens, "couldn't print" alone doesn't
     // tell staff which physical printer to check.
@@ -17527,7 +17619,7 @@ async function deleteMyAccountAndData(password){
   try{ stopLiveListeners(); }catch(e){}
   try{ pendingSyncQueue.length = 0; }catch(e){}
   const biz = fbDb.collection('businesses').doc(bizId);
-  const subs = ['sales','ledger','products','customers','expenses','creditors','creditorLedger','tables','visits','reservations','kitchenStations','agentLocations','support','devices','audit','errors','meta'];
+  const subs = ['sales','ledger','products','customers','expenses','creditors','creditorLedger','tables','visits','reservations','kitchenStations','agentLocations','support','devices','audit','errors','meta','kitchenJobs'];
   for(const c of subs){
     for(let guard=0; guard<200; guard++){
       let snap; try{ snap = await biz.collection(c).limit(300).get(); }catch(e){ break; }
@@ -17970,6 +18062,7 @@ function renderKitchenPrinterSection(){
       <label class="field-label" style="margin-bottom:8px;">${tr('kitchenPrinterLabel')}</label>
       <p class="subtle" style="margin:0 0 10px;">${tr('kitchenPrinterHint')}</p>
       ${isBrowser ? `<p class="subtle" style="margin:0 0 10px;">${tr('kitchenBrowserHint')}</p>` : ''}
+      ${isBrowser ? `<div class="checkbox-row" style="margin:0 0 6px;"><input type="checkbox" id="s-kj-relay" ${__kjRelayPref()?'checked':''}><span>${tr('kjRelayLabel')}</span></div><p class="subtle" style="margin:0 0 10px;">${tr('kjRelayHint')}</p>` : ''}
       ${state.kitchenStations.length ? `
         <div id="kitchen-stations-list">
           ${state.kitchenStations.map(st=>{
@@ -18015,6 +18108,8 @@ function renderKitchenPrinterSection(){
   `;
 }
 function bindKitchenPrinterSectionEvents(){
+  const __kjCb = document.getElementById('s-kj-relay');   /* fix143-kjrelay */
+  if(__kjCb) __kjCb.addEventListener('change', (e)=>{ try{ localStorage.setItem(KJ_PREF_KEY, e.target.checked ? '1' : '0'); }catch(_){} });
   const setupMultiKitchenBtn = document.getElementById('setup-multi-kitchen-btn');
   if(setupMultiKitchenBtn) setupMultiKitchenBtn.addEventListener('click', ()=>{
     // Reuses the 'kitchen' slot id for the first station, so an
@@ -18100,7 +18195,7 @@ function renderSettingsPrinter(container){
         <p class="subtle" style="margin:4px 0 10px;">${tr('btHoldHint')}</p>
         <div class="checkbox-row"><input type="checkbox" id="s-drawer-on-cash" ${state.settings.openDrawerOnCash?'checked':''}><span>${tr('openDrawerOnCashLabel')}</span></div>
         <div class="checkbox-row"><input type="checkbox" id="s-auto-print-relay" ${state.settings.autoPrintRelay?'checked':''}><span>${tr('autoPrintRelayLabel')}</span></div>
-        <p class="subtle" style="margin:4px 0 0;">${tr('autoPrintRelayHint')}</p>
+        <p class="subtle" style="margin:4px 0 0;">${tr('autoPrintRelayHint')}</p>${state.settings.restaurantMode ? `<p class="subtle" style="margin:4px 0 0;">${tr('kjRelayBtHint')}</p>` : ''}
         ${state.settings.autoPrintRelay ? `<div id="relay-status" class="subtle" style="margin:8px 0 4px;padding:8px 10px;border:1px dashed var(--border);border-radius:10px;font-size:12.5px;line-height:1.5;">${__relayStatusHtml()}</div>` : ''}
         <div class="field">
           <label class="field-label">${tr('feedLinesLabel')}</label>
