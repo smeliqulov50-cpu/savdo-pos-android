@@ -2346,6 +2346,10 @@ const T = {
   gftRefundLater:{uz:"{sum} internet qaytganda sertifikatga qaytariladi",ru:"{sum} вернётся на сертификат, когда появится интернет",en:"{sum} will return to the gift card when online",kk:"{sum} интернет қайтқанда сертификатқа қайтарылады",ky:"{sum} интернет кайтканда сертификатка кайтарылат",tg:"{sum} ҳангоми пайдо шудани интернет ба сертификат бармегардад"},
   gftCashIn:{uz:"Sertifikat sotuvi (naqd)",ru:"Продажа сертификатов (наличные)",en:"Gift card sales (cash)",kk:"Сертификат сатуы (қолма-қол)",ky:"Сертификат сатуу (накталай)",tg:"Фурӯши сертификат (нақд)"},
   auGiftSell:{uz:"Sertifikat sotildi",ru:"Продан сертификат",en:"Gift card sold",kk:"Сертификат сатылды",ky:"Сертификат сатылды",tg:"Сертификат фурӯхта шуд"},
+  /* fix141-play */
+  subExpiredNativeText2:{uz:"Obuna muddati tugagan. Ma'lumotlaringiz saqlangan va hech narsa o'chirilmaydi.",ru:"Срок подписки истёк. Ваши данные сохранены и не удаляются.",en:"The subscription has expired. Your data is kept and nothing is deleted.",kk:"Жазылым мерзімі аяқталды. Деректеріңіз сақталған, ештеңе жойылмайды.",ky:"Жазылуу мөөнөтү бүттү. Маалыматтарыңыз сакталган, эч нерсе өчүрүлбөйт.",tg:"Мӯҳлати обуна ба охир расид. Маълумоти шумо нигоҳ дошта шудааст ва нест намешавад."},
+  subReminderNativeText:{uz:"Obunangizga {days} kun qoldi.",ru:"До конца подписки осталось {days} дн.",en:"{days} days left on your subscription.",kk:"Жазылымға {days} күн қалды.",ky:"Жазылууга {days} күн калды.",tg:"То анҷоми обуна {days} рӯз монд."},
+  okGotIt:{uz:"Tushunarli",ru:"Понятно",en:"Got it",kk:"Түсінікті",ky:"Түшүнүктүү",tg:"Фаҳмо"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3839,7 +3843,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.38';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.39';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -12836,10 +12840,8 @@ function renderSubscriptionExpiredScreen(){
   if(isNativeApp() && isAdmin()){
     root.innerHTML = `<div class="login-screen" style="z-index:70;">
       <div class="brand" style="font-size:22px;margin-bottom:14px;">${tr('subscriptionExpiredTitle')}</div>
-      <p class="subtle" style="margin-bottom:18px;">${tr('subExpiredNativeText')}</p>
-      <button class="btn btn-primary btn-pill btn-block" id="sub-native-support-btn">${tr('supportSection')}</button>
-    </div>`;
-    document.getElementById('sub-native-support-btn').addEventListener('click', ()=>{ state.view='settings'; state.settingsCategory='support'; root.innerHTML=''; renderAll(); });
+      <p class="subtle" style="margin-bottom:18px;">${tr('subExpiredNativeText2')}</p>
+    </div>`;   /* fix141-play: Google Play — ilovadan tashqari to'lovga yo'naltirilmaydi */
     return;
   }
   if(!isAdmin()){
@@ -12932,6 +12934,14 @@ function checkSubscriptionReminder(){
 }
 
 function renderSubscriptionReminderOverlay(todayKey, daysLeft, expires){
+  if(isNativeApp()){   /* fix141-play */
+    const r0 = document.getElementById('sub-reminder-root'); if(!r0) return;
+    r0.innerHTML = `<div class="login-screen" style="z-index:55;"><div class="brand" style="font-size:22px;margin-bottom:10px;">⏰ ${tr('subReminderTitle')}</div>
+      <p class="subtle" style="margin-bottom:16px;">${tr('subReminderNativeText').replace('{days}', daysLeft)} ${escapeHtml(tr('expiresOn'))}: ${fmtDate(expires)}</p>
+      <button class="btn btn-primary btn-pill btn-block" id="sub-reminder-ok-btn">${tr('okGotIt')}</button></div>`;
+    document.getElementById('sub-reminder-ok-btn').addEventListener('click', ()=>{ state.settings.lastSubReminderDate = todayKey; saveSettings(); r0.innerHTML = ''; });
+    return;
+  }
   try{ if(localStorage.getItem('savdo_sub_ding') !== todayKey){ localStorage.setItem('savdo_sub_ding', todayKey); playNotifySound(); } }catch(_e){}
   const root = document.getElementById('sub-reminder-root');
   const planLabel = state.settings.subscriptionPlan==='trial' ? tr('trialActiveNote') : (state.settings.subscriptionPlan ? planLabelFor(state.settings.subscriptionPlan) : '');
