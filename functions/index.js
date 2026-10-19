@@ -199,6 +199,10 @@ const __TG = require('./src/telegram/core');
 const { makeTg: __makeTg } = require('./src/telegram/tgApi');
 const __TG_SECRET = (PUSH_ONLY && process.env.SAVDO_TG !== '1') ? null : defineSecret('TELEGRAM_BOT_TOKEN');
 const __tgSecrets = __TG_SECRET ? [__TG_SECRET] : [];
+/* fix142-tgpay: Click provayder tokeni (Telegram Payments) — faqat Secret Manager'da. SAVDO_TG_PAY=1 bilan yuklanganda ulanadi. */
+const __TGPAY_SECRET = (__TG_SECRET && process.env.SAVDO_TG_PAY === '1') ? defineSecret('CLICK_TG_PROVIDER_TOKEN') : null;
+const __tgHookSecrets = __TGPAY_SECRET ? __tgSecrets.concat([__TGPAY_SECRET]) : __tgSecrets;
+function __tgPayToken() { try { const v = __TGPAY_SECRET ? __TGPAY_SECRET.value() : ''; return v ? String(v).trim() : ''; } catch (e) { return ''; } }
 function __tgToken() {
   try { const v = __TG_SECRET ? __TG_SECRET.value() : ''; if (v) return String(v).trim(); } catch (e) {}
   return String(process.env.TELEGRAM_BOT_TOKEN || '').trim();
@@ -213,7 +217,7 @@ async function __tgDeps() {
     try { const me = await __tgCache.tg('getMe', {}); __tgCache.botName = (me && me.username) || ''; }
     catch (e) { console.error('telegram getMe xatosi', e && e.message); }
   }
-  return Object.assign(base, { key: __tgCache.key, tg: __tgCache.tg, botName: __tgCache.botName });
+  return Object.assign(base, { key: __tgCache.key, tg: __tgCache.tg, botName: __tgCache.botName, payToken: __tgPayToken(), genId: function () { return __fbAdmin.firestore().collection('paymentOrders').doc().id; } });   /* fix142-tgpay */
 }
 function __tgProjectId() {
   try { const c = JSON.parse(process.env.FIREBASE_CONFIG || '{}'); if (c.projectId) return c.projectId; } catch (e) {}
@@ -240,7 +244,7 @@ exports.telegramApi = onRequest({ cors: true, secrets: __tgSecrets }, async func
 
 /* Telegram serveri chaqiradi. Sirli sarlavha (X-Telegram-Bot-Api-Secret-Token) tokendan hisoblanadi — boshqa hech kim yubora olmaydi.
    GET ?setup=1 — webhook manzilini o'rnatadi (yuklashdan keyin bir marta; qayta chaqirish xavfsiz). */
-exports.telegramWebhook = onRequest({ secrets: __tgSecrets }, async function (req, res) {
+exports.telegramWebhook = onRequest({ secrets: __tgHookSecrets }, async function (req, res) {
   let deps;
   try { deps = await __tgDeps(); } catch (e) { console.error('telegramWebhook deps', e && e.message); res.status(200).json({ ok: false }); return; }
   if (req.method === 'GET') {
@@ -255,6 +259,7 @@ exports.telegramWebhook = onRequest({ secrets: __tgSecrets }, async function (re
   try {
     const r = await __TG.handleUpdate(deps, req.body || {});
     if (r && (r.linked || r.stopped || r.blocked)) console.log('telegramWebhook', JSON.stringify({ linked: !!r.linked, stopped: r.stopped || 0, blocked: !!r.blocked }));
+    if (r && (r.invoice || r.applied || r.already || r.bad || r.why)) console.log('telegramPay', JSON.stringify({ invoice: r.invoice || null, applied: !!r.applied, already: !!r.already, bad: !!r.bad, why: r.why || null }));   /* fix142-tgpay */
   } catch (e) { console.error('telegramWebhook xatosi', e && e.message); }
   res.status(200).json({ ok: true });   // Telegram qayta-qayta yubormasligi uchun har doim 200
 });

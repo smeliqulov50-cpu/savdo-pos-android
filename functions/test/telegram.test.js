@@ -224,7 +224,7 @@ test('webhook o\'rnatish: sirli sarlavha tokendan, kerakli yangilanish turlari',
   assert.equal(r.ok, true); assert.equal(r.bot, 'savdo_test_bot');
   const sw = s.sent.find(function (x) { return x.method === 'setWebhook'; }).params;
   assert.equal(sw.secret_token, TG.webhookSecret(KEY)); assert.match(sw.secret_token, /^[0-9a-f]{48}$/);
-  assert.deepEqual(sw.allowed_updates, ['message', 'my_chat_member']);
+  assert.deepEqual(sw.allowed_updates, ['message', 'my_chat_member', 'callback_query', 'pre_checkout_query']);
   assert.notEqual(TG.webhookSecret(TG.keyFromToken('boshqa')), sw.secret_token);
 });
 

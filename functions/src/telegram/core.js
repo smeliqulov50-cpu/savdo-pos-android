@@ -182,6 +182,9 @@ async function tryLink(deps, msg, code, lang) {
 async function handleUpdate(deps, upd) {
   upd = upd || {};
   if (!deps.key) return { skipped: 'no_key' };
+  const __pay = require('./pay');   /* fix142-tgpay: obuna to'lovi */
+  if (upd.pre_checkout_query) { const q = upd.pre_checkout_query; return __pay.onPreCheckout(deps, q, pickLang(q.from && q.from.language_code)); }
+  if (upd.callback_query) { const cq = upd.callback_query; if (!cq.message || !cq.message.chat || cq.message.chat.type !== 'private') return { ignored: true }; return __pay.onCallback(deps, cq, pickLang(cq.from && cq.from.language_code)); }
   // foydalanuvchi botni bloklasa — hamma do'konlardan uziladi
   const mc = upd.my_chat_member;
   if (mc && mc.chat && mc.chat.type === 'private' && mc.new_chat_member && (mc.new_chat_member.status === 'kicked' || mc.new_chat_member.status === 'left')) {
@@ -192,6 +195,7 @@ async function handleUpdate(deps, upd) {
   if (!msg || !msg.chat || msg.chat.id == null) return { ignored: true };
   const text = typeof msg.text === 'string' ? msg.text.trim() : '';
   const lang = pickLang(msg.from && msg.from.language_code);
+  if (msg.successful_payment && msg.chat.type === 'private') return __pay.onPaid(deps, msg, lang);   /* fix142-tgpay */
   if (msg.chat.type !== 'private') {
     if (/^\//.test(text)) await sendText(deps, msg.chat.id, txt('privateOnly', lang));
     return { group: true };
@@ -199,6 +203,7 @@ async function handleUpdate(deps, upd) {
   const m = /^\/start(?:@[A-Za-z0-9_]+)?(?:\s+([A-Za-z0-9_-]{4,64}))?$/.exec(text);
   let out;
   if (m && m[1]) out = await tryLink(deps, msg, m[1], lang);
+  else if (/^\/(obuna|pay)(?:@[A-Za-z0-9_]+)?$/i.test(text)) out = await __pay.sendMenu(deps, msg.chat.id, lang);   /* fix142-tgpay */
   else if (/^\/stop(?:@[A-Za-z0-9_]+)?$/.test(text)) {
     const n = await unbindChatEverywhere(deps, msg.chat.id);
     // har bir do'konga emas, chatning o'ziga bir marta xabar
@@ -209,7 +214,7 @@ async function handleUpdate(deps, upd) {
     if (bids.length) {
       const names = [];
       for (let i = 0; i < bids.length && i < 5; i++) names.push(await shopName(deps.db, bids[i]));
-      out = { reply: txt('linkedInfo', lang, { shop: names.join(', ') }) };
+      out = { reply: txt('linkedInfo', lang, { shop: names.join(', ') }) + (deps.payToken ? '\n' + require('./payTexts').txt('payHint', lang) : '') };
     } else out = { reply: txt('welcome', lang) };
   }
   if (out && out.reply) await sendText(deps, msg.chat.id, out.reply);
@@ -219,7 +224,7 @@ async function handleUpdate(deps, upd) {
 /* Webhook manzilini o'rnatish (bir xil manzil bo'lsa ham qayta o'rnatish xavfsiz) */
 async function setupWebhook(deps, url) {
   const me = await deps.tg('getMe', {});
-  await deps.tg('setWebhook', { url: url, secret_token: webhookSecret(deps.key), allowed_updates: ['message', 'my_chat_member'], max_connections: 20 });
+  await deps.tg('setWebhook', { url: url, secret_token: webhookSecret(deps.key), allowed_updates: ['message', 'my_chat_member', 'callback_query', 'pre_checkout_query'], max_connections: 20 });
   const info = await deps.tg('getWebhookInfo', {});
   return { bot: me && me.username, url: info && info.url, pending: info && info.pending_update_count, ok: !!(info && info.url === url) };
 }
