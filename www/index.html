@@ -822,6 +822,11 @@
   .rs-row .btn{width:auto;flex-shrink:0;color:var(--danger);border-color:var(--danger);}
   #support-chat-messages{height:auto !important;min-height:96px !important;max-height:50vh;}
   .sp-h{margin:16px 2px 8px;font-size:13.5px;font-weight:800;color:var(--ink);}
+  /* fix139-promo */
+  .pm-row span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .sc-pm{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;padding:2px 0;}
+  /* fix140-gift */
+  .gft-co{padding:4px 2px 8px;} .gft-co input{text-transform:uppercase;}
   /* fix127-ds1c: "Xavfli amallar" */
   [hidden]{display:none !important;}
   .ds-danger{margin-top:22px;padding:14px;border:1px solid rgba(198,40,40,.22);border-radius:16px;background:#fff7f7;}
@@ -2219,6 +2224,128 @@ const T = {
   spChatH:{uz:"Yordam chati",ru:"Чат поддержки",en:"Support chat",kk:"Қолдау чаты",ky:"Колдоо чаты",tg:"Чати дастгирӣ"},
   spPayH:{uz:"Obuna va to'lovlar",ru:"Подписка и платежи",en:"Subscription and payments",kk:"Жазылым және төлемдер",ky:"Жазылуу жана төлөмдөр",tg:"Обуна ва пардохтҳо"},
   spNeedLogin:{uz:"Chat hisob bilan (bulutga) kirganda ishlaydi. Shoshilinch bo'lsa, qo'ng'iroq qiling: {phone}",ru:"Чат работает при входе в аккаунт (облако). Если срочно, позвоните: {phone}",en:"The chat works when signed in to the account (cloud). If urgent, call: {phone}",kk:"Чат аккаунтқа (бұлтқа) кіргенде жұмыс істейді. Шұғыл болса, қоңырау шалыңыз: {phone}",ky:"Чат аккаунтка (булутка) киргенде иштейт. Шашылыш болсо, чалыңыз: {phone}",tg:"Чат ҳангоми воридшавӣ ба ҳисоб (абр) кор мекунад. Агар фаврӣ бошад, занг занед: {phone}"},
+  /* fix139-promo */
+  pmMenu:{uz:"Aksiyalar",ru:"Акции",en:"Promotions",kk:"Акциялар",ky:"Акциялар",tg:"Аксияҳо"},
+  permPromo:{uz:"Aksiyalar va sertifikatlar",ru:"Акции и сертификаты",en:"Promotions and gift cards",kk:"Акциялар мен сертификаттар",ky:"Акциялар жана сертификаттар",tg:"Аксияҳо ва сертификатҳо"},
+  pmNew:{uz:"Yangi aksiya",ru:"Новая акция",en:"New promotion",kk:"Жаңа акция",ky:"Жаңы акция",tg:"Аксияи нав"},
+  pmEmpty:{uz:"Hozircha aksiya yo'q",ru:"Пока нет акций",en:"No promotions yet",kk:"Әзірге акция жоқ",ky:"Азырынча акция жок",tg:"Ҳоло аксия нест"},
+  pmLine:{uz:"Aksiya: {name}",ru:"Акция: {name}",en:"Promo: {name}",kk:"Акция: {name}",ky:"Акция: {name}",tg:"Аксия: {name}"},
+  pmTBxgy:{uz:"N ta olsang, M ta tekin",ru:"Купи N — M в подарок",en:"Buy N get M free",kk:"N алсаң — M тегін",ky:"N алсаң — M бекер",tg:"N харӣ — M ройгон"},
+  pmTItem:{uz:"Mahsulot/kategoriya chegirmasi",ru:"Скидка на товар/категорию",en:"Product/category discount",kk:"Тауар/санат жеңілдігі",ky:"Товар/категория арзандатуусу",tg:"Тахфифи мол/категория"},
+  pmTCheck:{uz:"Chek summasi bo'yicha",ru:"От суммы чека",en:"By receipt total",kk:"Чек сомасы бойынша",ky:"Чек суммасы боюнча",tg:"Аз рӯи маблағи чек"},
+  pmTHappy:{uz:"Ma'lum soatlarda (happy hour)",ru:"В определённые часы (happy hour)",en:"At certain hours (happy hour)",kk:"Белгілі сағаттарда (happy hour)",ky:"Белгилүү сааттарда (happy hour)",tg:"Дар соатҳои муайян (happy hour)"},
+  pmDescBxgy:{uz:"{n} ta olsa, {m} ta tekin",ru:"{n} купил — {m} бесплатно",en:"buy {n}, get {m} free",kk:"{n} алса — {m} тегін",ky:"{n} алса — {m} бекер",tg:"{n} харад — {m} ройгон"},
+  pmDescCheck:{uz:"chek {min} dan oshsa {v}",ru:"чек от {min}: {v}",en:"receipt over {min}: {v}",kk:"чек {min}-ден асса {v}",ky:"чек {min}-дан ашса {v}",tg:"чек аз {min} зиёд: {v}"},
+  pmName:{uz:"Aksiya nomi (chekda chiqadi)",ru:"Название (печатается в чеке)",en:"Name (printed on receipt)",kk:"Атауы (чекте шығады)",ky:"Аталышы (чекте чыгат)",tg:"Ном (дар чек чоп мешавад)"},
+  pmNamePh:{uz:"Masalan: 2+1 Coca-Cola",ru:"Например: 2+1 Coca-Cola",en:"E.g.: 2+1 Coca-Cola",kk:"Мысалы: 2+1 Coca-Cola",ky:"Мисалы: 2+1 Coca-Cola",tg:"Масалан: 2+1 Coca-Cola"},
+  pmType:{uz:"Turi",ru:"Тип",en:"Type",kk:"Түрі",ky:"Түрү",tg:"Намуд"},
+  pmBuy:{uz:"Nechta oladi (N)",ru:"Сколько купить (N)",en:"Buy (N)",kk:"Неше алады (N)",ky:"Канча алат (N)",tg:"Чанд мехарад (N)"},
+  pmFree:{uz:"Nechtasi tekin (M)",ru:"Сколько бесплатно (M)",en:"Free (M)",kk:"Нешеуі тегін (M)",ky:"Канчасы бекер (M)",tg:"Чандтояш ройгон (M)"},
+  pmBxgyHint:{uz:"Masalan 2+1: 3 ta olsa 1 tasi tekin, 6 ta olsa 2 tasi. Har bir mahsulot alohida sanaladi.",ru:"Например 2+1: за 3 шт. 1 бесплатно, за 6 — 2. Каждый товар считается отдельно.",en:"E.g. 2+1: 3 items → 1 free, 6 → 2 free. Each product is counted separately.",kk:"Мысалы 2+1: 3 дана алса 1-еуі тегін, 6 алса 2. Әр тауар бөлек саналады.",ky:"Мисалы 2+1: 3 алса 1и бекер, 6 алса 2. Ар бир товар өзүнчө саналат.",tg:"Масалан 2+1: 3 адад — 1 ройгон, 6 — 2. Ҳар мол алоҳида ҳисоб мешавад."},
+  pmAmount:{uz:"Summa",ru:"Сумма",en:"Amount",kk:"Сома",ky:"Сумма",tg:"Маблағ"},
+  pmValuePct:{uz:"Chegirma, %",ru:"Скидка, %",en:"Discount, %",kk:"Жеңілдік, %",ky:"Арзандатуу, %",tg:"Тахфиф, %"},
+  pmValueAmt:{uz:"Chegirma summasi",ru:"Сумма скидки",en:"Discount amount",kk:"Жеңілдік сомасы",ky:"Арзандатуу суммасы",tg:"Маблағи тахфиф"},
+  pmAmtHint:{uz:"Summa har bir donaga beriladi.",ru:"Сумма скидки — за каждую единицу.",en:"The amount is per unit.",kk:"Сома әр данаға беріледі.",ky:"Сумма ар бир даанага берилет.",tg:"Маблағ барои ҳар адад."},
+  pmMin:{uz:"Chek summasi kamida",ru:"Сумма чека от",en:"Receipt total at least",kk:"Чек сомасы кемінде",ky:"Чек суммасы жок дегенде",tg:"Маблағи чек ақаллан"},
+  pmTarget:{uz:"Qaysi tovarlarga",ru:"На какие товары",en:"Which products",kk:"Қай тауарларға",ky:"Кайсы товарларга",tg:"Ба кадом молҳо"},
+  pmTgtProducts:{uz:"Mahsulotlar",ru:"Товары",en:"Products",kk:"Тауарлар",ky:"Товарлар",tg:"Молҳо"},
+  pmTgtCategory:{uz:"Kategoriya",ru:"Категория",en:"Category",kk:"Санат",ky:"Категория",tg:"Категория"},
+  pmTgtAll:{uz:"Barcha tovarlar",ru:"Все товары",en:"All products",kk:"Барлық тауарлар",ky:"Бардык товарлар",tg:"Ҳамаи молҳо"},
+  pmTgtProductsN:{uz:"{n} ta mahsulot",ru:"товаров: {n}",en:"{n} products",kk:"{n} тауар",ky:"{n} товар",tg:"{n} мол"},
+  pmTgtHint:{uz:"Narxi qo'lda o'zgartirilgan, ulgurji va quti narxidagi qatorlarga aksiya qo'llanmaydi.",ru:"Акция не применяется к строкам с изменённой вручную ценой, оптовой и коробочной.",en:"Promotions do not apply to lines with a manually changed price, wholesale or box price.",kk:"Бағасы қолмен өзгертілген, көтерме және қорап бағасындағы жолдарға акция қолданылмайды.",ky:"Баасы кол менен өзгөртүлгөн, дүң жана куту баасындагы саптарга акция колдонулбайт.",tg:"Ба сатрҳои нархашон дастӣ ивазшуда, яклухт ва қуттӣ аксия татбиқ намешавад."},
+  pmDays:{uz:"Hafta kunlari",ru:"Дни недели",en:"Days of week",kk:"Апта күндері",ky:"Жуманын күндөрү",tg:"Рӯзҳои ҳафта"},
+  pmDaysHint:{uz:"Hech biri tanlanmasa — har kuni.",ru:"Если ничего не выбрано — каждый день.",en:"If none selected — every day.",kk:"Ештеңе таңдалмаса — күн сайын.",ky:"Эч нерсе тандалбаса — күн сайын.",tg:"Агар интихоб нашавад — ҳар рӯз."},
+  pmEveryDay:{uz:"har kuni",ru:"каждый день",en:"every day",kk:"күн сайын",ky:"күн сайын",tg:"ҳар рӯз"},
+  pmFrom:{uz:"Soat (dan)",ru:"С (время)",en:"From (time)",kk:"Сағат (бастап)",ky:"Саат (баштап)",tg:"Соат (аз)"},
+  pmTo:{uz:"Soat (gacha)",ru:"До (время)",en:"To (time)",kk:"Сағат (дейін)",ky:"Саат (чейин)",tg:"Соат (то)"},
+  pmStart:{uz:"Boshlanish sanasi",ru:"Дата начала",en:"Start date",kk:"Басталу күні",ky:"Башталыш күнү",tg:"Санаи оғоз"},
+  pmEnd:{uz:"Tugash sanasi",ru:"Дата окончания",en:"End date",kk:"Аяқталу күні",ky:"Аяктоо күнү",tg:"Санаи анҷом"},
+  pmDatesHint:{uz:"Tugash sanasi bo'sh bo'lsa — muddatsiz.",ru:"Без даты окончания — бессрочно.",en:"No end date — no expiry.",kk:"Аяқталу күні бос болса — мерзімсіз.",ky:"Аяктоо күнү бош болсо — мөөнөтсүз.",tg:"Бе санаи анҷом — бемӯҳлат."},
+  pmBranches:{uz:"Filiallar",ru:"Филиалы",en:"Branches",kk:"Филиалдар",ky:"Филиалдар",tg:"Филиалҳо"},
+  pmAllBranches:{uz:"Barcha filiallar",ru:"Все филиалы",en:"All branches",kk:"Барлық филиалдар",ky:"Бардык филиалдар",tg:"Ҳамаи филиалҳо"},
+  pmActive:{uz:"Yoqilgan",ru:"Включена",en:"Enabled",kk:"Қосулы",ky:"Күйгүзүлгөн",tg:"Фаъол"},
+  pmDelete:{uz:"Aksiyani o'chirish",ru:"Удалить акцию",en:"Delete promotion",kk:"Акцияны жою",ky:"Акцияны өчүрүү",tg:"Нест кардани аксия"},
+  pmDeleteQ:{uz:"Aksiya o'chirilsinmi? Avvalgi cheklar o'zgarmaydi.",ru:"Удалить акцию? Прошлые чеки не изменятся.",en:"Delete the promotion? Past receipts will not change.",kk:"Акция жойылсын ба? Бұрынғы чектер өзгермейді.",ky:"Акция өчүрүлсүнбү? Мурунку чектер өзгөрбөйт.",tg:"Аксия нест шавад? Чекҳои пешина тағйир намеёбанд."},
+  pmSaved:{uz:"Aksiya saqlandi",ru:"Акция сохранена",en:"Promotion saved",kk:"Акция сақталды",ky:"Акция сакталды",tg:"Аксия захира шуд"},
+  pmStOn:{uz:"Faol",ru:"Активна",en:"Active",kk:"Белсенді",ky:"Активдүү",tg:"Фаъол"},
+  pmStOff:{uz:"O'chiq",ru:"Выключена",en:"Off",kk:"Өшірулі",ky:"Өчүк",tg:"Хомӯш"},
+  pmStSoon:{uz:"Kutilmoqda",ru:"Ожидается",en:"Upcoming",kk:"Күтілуде",ky:"Күтүлүүдө",tg:"Дар интизор"},
+  pmStOver:{uz:"Muddati o'tgan",ru:"Завершена",en:"Ended",kk:"Мерзімі өткен",ky:"Мөөнөтү өткөн",tg:"Мӯҳлаташ гузашт"},
+  pmErrName:{uz:"Aksiya nomini kiriting",ru:"Введите название",en:"Enter a name",kk:"Атауын енгізіңіз",ky:"Аталышын киргизиңиз",tg:"Номро ворид кунед"},
+  pmErrBxgy:{uz:"N va M kamida 1 bo'lsin",ru:"N и M должны быть не меньше 1",en:"N and M must be at least 1",kk:"N мен M кемінде 1 болсын",ky:"N жана M жок дегенде 1 болсун",tg:"N ва M ақаллан 1 бошанд"},
+  pmErrValue:{uz:"Chegirma qiymatini kiriting",ru:"Введите размер скидки",en:"Enter the discount",kk:"Жеңілдік мөлшерін енгізіңіз",ky:"Арзандатуу өлчөмүн киргизиңиз",tg:"Андозаи тахфифро ворид кунед"},
+  pmErrPct:{uz:"Foiz 100 dan oshmasin",ru:"Процент не больше 100",en:"Percent cannot exceed 100",kk:"Пайыз 100-ден аспасын",ky:"Пайыз 100дөн ашпасын",tg:"Фоиз аз 100 зиёд набошад"},
+  pmErrProducts:{uz:"Kamida bitta mahsulot tanlang",ru:"Выберите хотя бы один товар",en:"Choose at least one product",kk:"Кемінде бір тауар таңдаңыз",ky:"Жок дегенде бир товар тандаңыз",tg:"Ақаллан як мол интихоб кунед"},
+  pmErrCats:{uz:"Kamida bitta kategoriya tanlang",ru:"Выберите хотя бы одну категорию",en:"Choose at least one category",kk:"Кемінде бір санат таңдаңыз",ky:"Жок дегенде бир категория тандаңыз",tg:"Ақаллан як категория интихоб кунед"},
+  pmErrDates:{uz:"Tugash sanasi boshlanishdan oldin bo'lmasin",ru:"Дата окончания раньше начала",en:"End date is before start date",kk:"Аяқталу күні басталудан бұрын болмасын",ky:"Аяктоо күнү башталыштан мурун болбосун",tg:"Санаи анҷом пеш аз оғоз набошад"},
+  pmErrTime:{uz:"Soatlarni kiriting",ru:"Укажите часы",en:"Enter the hours",kk:"Сағаттарды енгізіңіз",ky:"Сааттарды киргизиңиз",tg:"Соатҳоро ворид кунед"},
+  pmReport:{uz:"Hisobot",ru:"Отчёт",en:"Report",kk:"Есеп",ky:"Отчет",tg:"Ҳисобот"},
+  pm7d:{uz:"7 kun",ru:"7 дней",en:"7 days",kk:"7 күн",ky:"7 күн",tg:"7 рӯз"},
+  pm30d:{uz:"30 kun",ru:"30 дней",en:"30 days",kk:"30 күн",ky:"30 күн",tg:"30 рӯз"},
+  pmGiven:{uz:"Aksiya chegirmasi",ru:"Скидки по акциям",en:"Promo discounts",kk:"Акция жеңілдігі",ky:"Акция арзандатуусу",tg:"Тахфифи аксия"},
+  pmChecks:{uz:"Aksiyali cheklar",ru:"Чеков с акцией",en:"Receipts with promo",kk:"Акциялы чектер",ky:"Акциялуу чектер",tg:"Чекҳо бо аксия"},
+  pmManual:{uz:"Qo'lda chegirma",ru:"Ручная скидка",en:"Manual discount",kk:"Қолмен жеңілдік",ky:"Кол менен арзандатуу",tg:"Тахфифи дастӣ"},
+  pmUses:{uz:"{n} marta ishlatildi",ru:"использована {n} раз",en:"used {n} times",kk:"{n} рет қолданылды",ky:"{n} жолу колдонулду",tg:"{n} бор истифода шуд"},
+  pmReportHint:{uz:"Qaytarilgan cheklar hisobga olinmaydi.",ru:"Возвращённые чеки не учитываются.",en:"Refunded receipts are not counted.",kk:"Қайтарылған чектер есептелмейді.",ky:"Кайтарылган чектер эсепке алынбайт.",tg:"Чекҳои баргардонидашуда ҳисоб намешаванд."},
+  auPromoSave:{uz:"Aksiya saqlandi",ru:"Акция сохранена",en:"Promotion saved",kk:"Акция сақталды",ky:"Акция сакталды",tg:"Аксия захира шуд"},
+  auPromoDelete:{uz:"Aksiya o'chirildi",ru:"Акция удалена",en:"Promotion deleted",kk:"Акция жойылды",ky:"Акция өчүрүлдү",tg:"Аксия нест шуд"},
+  /* fix140-gift */
+  gftMenu:{uz:"Sertifikatlar",ru:"Сертификаты",en:"Gift cards",kk:"Сертификаттар",ky:"Сертификаттар",tg:"Сертификатҳо"},
+  gftTitle:{uz:"Sovg'a sertifikati",ru:"Подарочный сертификат",en:"Gift card",kk:"Сыйлық сертификаты",ky:"Белек сертификаты",tg:"Сертификати тӯҳфавӣ"},
+  gftPay:{uz:"Sertifikat",ru:"Сертификат",en:"Gift card",kk:"Сертификат",ky:"Сертификат",tg:"Сертификат"},
+  gftCo:{uz:"Sovg'a sertifikati",ru:"Подарочный сертификат",en:"Gift card",kk:"Сыйлық сертификаты",ky:"Белек сертификаты",tg:"Сертификати тӯҳфавӣ"},
+  gftCheck:{uz:"Tekshirish",ru:"Проверить",en:"Check",kk:"Тексеру",ky:"Текшерүү",tg:"Санҷидан"},
+  gftBal:{uz:"Qoldiq: {sum} · muddati: {d}",ru:"Остаток: {sum} · срок: {d}",en:"Balance: {sum} · valid until: {d}",kk:"Қалдық: {sum} · мерзімі: {d}",ky:"Калдык: {sum} · мөөнөтү: {d}",tg:"Бақия: {sum} · мӯҳлат: {d}"},
+  gftUseAmt:{uz:"Ishlatish:",ru:"Списать:",en:"Use:",kk:"Қолдану:",ky:"Колдонуу:",tg:"Истифода:"},
+  gftRemove:{uz:"Olib tashlash",ru:"Убрать",en:"Remove",kk:"Алып тастау",ky:"Алып салуу",tg:"Хориҷ кардан"},
+  gftLine:{uz:"Sertifikat {code}",ru:"Сертификат {code}",en:"Gift card {code}",kk:"Сертификат {code}",ky:"Сертификат {code}",tg:"Сертификат {code}"},
+  gftLeft:{uz:"Sertifikat qoldig'i",ru:"Остаток сертификата",en:"Gift card balance",kk:"Сертификат қалдығы",ky:"Сертификат калдыгы",tg:"Бақияи сертификат"},
+  gftSell:{uz:"Sertifikat sotish",ru:"Продать сертификат",en:"Sell a gift card",kk:"Сертификат сату",ky:"Сертификат сатуу",tg:"Фурӯши сертификат"},
+  gftSellBtn:{uz:"Sotish",ru:"Продать",en:"Sell",kk:"Сату",ky:"Сатуу",tg:"Фурӯхтан"},
+  gftAmount:{uz:"Summa",ru:"Сумма",en:"Amount",kk:"Сома",ky:"Сумма",tg:"Маблағ"},
+  gftBalance:{uz:"Qoldiq",ru:"Остаток",en:"Balance",kk:"Қалдық",ky:"Калдык",tg:"Бақия"},
+  gftExpires:{uz:"Amal qilish muddati",ru:"Действует до",en:"Valid until",kk:"Жарамдылық мерзімі",ky:"Жарактуу мөөнөтү",tg:"Мӯҳлати амал"},
+  gftPayBy:{uz:"Qanday to'landi",ru:"Способ оплаты",en:"Paid by",kk:"Қалай төленді",ky:"Кантип төлөндү",tg:"Чӣ тавр пардохт шуд"},
+  gftBuyer:{uz:"Xaridor",ru:"Покупатель",en:"Buyer",kk:"Сатып алушы",ky:"Сатып алуучу",tg:"Харидор"},
+  gftPhone:{uz:"Telefon",ru:"Телефон",en:"Phone",kk:"Телефон",ky:"Телефон",tg:"Телефон"},
+  gftOptional:{uz:"ixtiyoriy",ru:"необязательно",en:"optional",kk:"міндетті емес",ky:"милдеттүү эмес",tg:"ихтиёрӣ"},
+  gftSellHint:{uz:"Pul kassaga kiradi, lekin savdo va foydaga sertifikat ishlatilganda kiradi. Sotish uchun internet kerak.",ru:"Деньги поступают в кассу, но в продажи и прибыль — при использовании сертификата. Для продажи нужен интернет.",en:"Money goes into the register, but counts as sales and profit when the card is used. Selling needs internet.",kk:"Ақша кассаға түседі, бірақ сатылым мен пайдаға сертификат қолданылғанда кіреді. Сату үшін интернет керек.",ky:"Акча кассага түшөт, бирок сатуу жана пайдага сертификат колдонулганда кирет. Сатуу үчүн интернет керек.",tg:"Пул ба касса ворид мешавад, вале ба фурӯш ва фоида ҳангоми истифодаи сертификат. Барои фурӯш интернет лозим."},
+  gftSoldToast:{uz:"Sertifikat sotildi",ru:"Сертификат продан",en:"Gift card sold",kk:"Сертификат сатылды",ky:"Сертификат сатылды",tg:"Сертификат фурӯхта шуд"},
+  gftShare:{uz:"PDF / ulashish",ru:"PDF / поделиться",en:"PDF / share",kk:"PDF / бөлісу",ky:"PDF / бөлүшүү",tg:"PDF / мубодила"},
+  gftSold:{uz:"Sotilgan",ru:"Продано",en:"Sold",kk:"Сатылған",ky:"Сатылган",tg:"Фурӯхта шуд"},
+  gftCount:{uz:"{n} ta",ru:"{n} шт.",en:"{n} cards",kk:"{n} дана",ky:"{n} даана",tg:"{n} адад"},
+  gftUsed:{uz:"Ishlatilgan",ru:"Использовано",en:"Redeemed",kk:"Қолданылған",ky:"Колдонулган",tg:"Истифодашуда"},
+  gftOpen:{uz:"Faol qoldiq",ru:"Активный остаток",en:"Open balance",kk:"Белсенді қалдық",ky:"Активдүү калдык",tg:"Бақияи фаъол"},
+  gftExpiredSum:{uz:"Muddati o'tgan qoldiq",ru:"Остаток просроченных",en:"Expired balance",kk:"Мерзімі өткен қалдық",ky:"Мөөнөтү өткөн калдык",tg:"Бақияи мӯҳлатгузашта"},
+  gftSearch:{uz:"Raqam yoki xaridor",ru:"Номер или покупатель",en:"Number or buyer",kk:"Нөмір немесе сатып алушы",ky:"Номер же сатып алуучу",tg:"Рақам ё харидор"},
+  gftEmpty:{uz:"Hali sertifikat sotilmagan",ru:"Сертификаты ещё не продавались",en:"No gift cards sold yet",kk:"Әлі сертификат сатылмаған",ky:"Азырынча сертификат сатылган жок",tg:"Ҳоло сертификат фурӯхта нашудааст"},
+  gftHint:{uz:"Qoldiq bulutda saqlanadi: sertifikat bilan to'lash va sotish internet bilan ishlaydi, shuning uchun bir sertifikat ikki marta ishlatilmaydi.",ru:"Остаток хранится в облаке: оплата и продажа сертификатов работают при интернете, поэтому сертификат нельзя использовать дважды.",en:"The balance is kept in the cloud: paying with and selling gift cards needs internet, so a card cannot be used twice.",kk:"Қалдық бұлтта сақталады: сертификатпен төлеу және сату интернетпен жұмыс істейді, сондықтан екі рет қолданылмайды.",ky:"Калдык булутта сакталат: сертификат менен төлөө жана сатуу интернет менен иштейт, ошондуктан эки жолу колдонулбайт.",tg:"Бақия дар абр нигоҳ дошта мешавад: пардохт ва фурӯш бо интернет кор мекунад, бинобар ин сертификат ду бор истифода намешавад."},
+  gftBalOf:{uz:"Qoldiq {b} / {a}",ru:"Остаток {b} / {a}",en:"Balance {b} / {a}",kk:"Қалдық {b} / {a}",ky:"Калдык {b} / {a}",tg:"Бақия {b} / {a}"},
+  gftUntil:{uz:"{d} gacha",ru:"до {d}",en:"until {d}",kk:"{d} дейін",ky:"{d} чейин",tg:"то {d}"},
+  gftNoExpiry:{uz:"Muddatsiz",ru:"Бессрочный",en:"No expiry",kk:"Мерзімсіз",ky:"Мөөнөтсүз",tg:"Бемӯҳлат"},
+  gftUseHint:{uz:"Kassada to'lov sifatida qabul qilinadi",ru:"Принимается на кассе как оплата",en:"Accepted at the checkout as payment",kk:"Кассада төлем ретінде қабылданады",ky:"Кассада төлөм катары кабыл алынат",tg:"Дар касса ҳамчун пардохт қабул мешавад"},
+  gftStActive:{uz:"Faol",ru:"Активен",en:"Active",kk:"Белсенді",ky:"Активдүү",tg:"Фаъол"},
+  gftStUsed:{uz:"Ishlatib bo'lingan",ru:"Использован",en:"Used up",kk:"Қолданылып болған",ky:"Колдонулуп бүткөн",tg:"Истифода шуд"},
+  gftStExpired:{uz:"Muddati o'tgan",ru:"Просрочен",en:"Expired",kk:"Мерзімі өткен",ky:"Мөөнөтү өткөн",tg:"Мӯҳлаташ гузашт"},
+  gftStVoid:{uz:"Bekor qilingan",ru:"Аннулирован",en:"Void",kk:"Жойылған",ky:"Жокко чыгарылган",tg:"Бекоршуда"},
+  gftHSold:{uz:"Sotildi",ru:"Продан",en:"Sold",kk:"Сатылды",ky:"Сатылды",tg:"Фурӯхта шуд"},
+  gftHRedeem:{uz:"To'lovga ishlatildi",ru:"Оплата",en:"Redeemed",kk:"Төлемге қолданылды",ky:"Төлөмгө колдонулду",tg:"Барои пардохт истифода шуд"},
+  gftHRefund:{uz:"Chek qaytarildi — qaytdi",ru:"Возврат чека — возвращено",en:"Receipt refunded — returned",kk:"Чек қайтарылды — қайтты",ky:"Чек кайтарылды — кайтты",tg:"Чек баргардонида шуд — баргашт"},
+  gftErrOffline:{uz:"Sertifikat uchun internet kerak",ru:"Для сертификата нужен интернет",en:"Gift cards need internet",kk:"Сертификат үшін интернет керек",ky:"Сертификат үчүн интернет керек",tg:"Барои сертификат интернет лозим"},
+  gftErrTimeout:{uz:"Server javob bermadi. Qayta urinib ko'ring.",ru:"Сервер не ответил. Попробуйте снова.",en:"The server did not answer. Try again.",kk:"Сервер жауап бермеді. Қайта көріңіз.",ky:"Сервер жооп берген жок. Кайра аракет кылыңыз.",tg:"Сервер ҷавоб надод. Дубора кӯшиш кунед."},
+  gftErrNotFound:{uz:"Bunday sertifikat topilmadi",ru:"Сертификат не найден",en:"Gift card not found",kk:"Мұндай сертификат табылмады",ky:"Мындай сертификат табылган жок",tg:"Чунин сертификат ёфт нашуд"},
+  gftErrVoid:{uz:"Sertifikat bekor qilingan",ru:"Сертификат аннулирован",en:"The gift card is void",kk:"Сертификат жойылған",ky:"Сертификат жокко чыгарылган",tg:"Сертификат бекор шудааст"},
+  gftErrExpired:{uz:"Sertifikat muddati o'tgan",ru:"Срок сертификата истёк",en:"The gift card has expired",kk:"Сертификат мерзімі өткен",ky:"Сертификаттын мөөнөтү өткөн",tg:"Мӯҳлати сертификат гузаштааст"},
+  gftErrBalance:{uz:"Sertifikatda yetarli qoldiq yo'q",ru:"Недостаточно средств на сертификате",en:"Not enough balance on the gift card",kk:"Сертификатта қалдық жеткіліксіз",ky:"Сертификатта калдык жетишсиз",tg:"Дар сертификат бақия кифоя нест"},
+  gftErrPerm:{uz:"Server ruxsat bermadi (Firestore qoidalari). Sozlash kerak.",ru:"Сервер не разрешил (правила Firestore). Нужна настройка.",en:"The server refused (Firestore rules). Setup needed.",kk:"Сервер рұқсат бермеді (Firestore ережелері). Баптау керек.",ky:"Сервер уруксат берген жок (Firestore эрежелери). Жөндөө керек.",tg:"Сервер иҷозат надод (қоидаҳои Firestore). Танзим лозим."},
+  gftErrGeneric:{uz:"Sertifikat bilan xatolik. Qayta urinib ko'ring.",ru:"Ошибка сертификата. Попробуйте снова.",en:"Gift card error. Try again.",kk:"Сертификат қатесі. Қайта көріңіз.",ky:"Сертификат катасы. Кайра аракет кылыңыз.",tg:"Хатои сертификат. Дубора кӯшиш кунед."},
+  gftErrAmount:{uz:"Summani kiriting",ru:"Введите сумму",en:"Enter the amount",kk:"Соманы енгізіңіз",ky:"Сумманы киргизиңиз",tg:"Маблағро ворид кунед"},
+  gftErrExpDate:{uz:"Muddat bugundan oldin bo'lmasin",ru:"Срок не может быть раньше сегодняшнего дня",en:"The date cannot be in the past",kk:"Мерзім бүгіннен бұрын болмасын",ky:"Мөөнөт бүгүндөн мурун болбосун",tg:"Мӯҳлат пеш аз имрӯз набошад"},
+  gftNoEdit:{uz:"Sertifikat bilan to'langan chekni tahrirlab bo'lmaydi: qaytarib, qayta soting.",ru:"Чек, оплаченный сертификатом, нельзя редактировать: оформите возврат и продайте заново.",en:"A receipt paid with a gift card cannot be edited: refund it and sell again.",kk:"Сертификатпен төленген чекті өзгерту мүмкін емес: қайтарып, қайта сатыңыз.",ky:"Сертификат менен төлөнгөн чекти оңдоого болбойт: кайтарып, кайра сатыңыз.",tg:"Чеки бо сертификат пардохтшударо таҳрир кардан мумкин нест: баргардонед ва аз нав фурӯшед."},
+  gftRefundDone:{uz:"Sertifikatga {sum} qaytarildi",ru:"На сертификат возвращено {sum}",en:"{sum} returned to the gift card",kk:"Сертификатқа {sum} қайтарылды",ky:"Сертификатка {sum} кайтарылды",tg:"Ба сертификат {sum} баргардонида шуд"},
+  gftRefundLater:{uz:"{sum} internet qaytganda sertifikatga qaytariladi",ru:"{sum} вернётся на сертификат, когда появится интернет",en:"{sum} will return to the gift card when online",kk:"{sum} интернет қайтқанда сертификатқа қайтарылады",ky:"{sum} интернет кайтканда сертификатка кайтарылат",tg:"{sum} ҳангоми пайдо шудани интернет ба сертификат бармегардад"},
+  gftCashIn:{uz:"Sertifikat sotuvi (naqd)",ru:"Продажа сертификатов (наличные)",en:"Gift card sales (cash)",kk:"Сертификат сатуы (қолма-қол)",ky:"Сертификат сатуу (накталай)",tg:"Фурӯши сертификат (нақд)"},
+  auGiftSell:{uz:"Sertifikat sotildi",ru:"Продан сертификат",en:"Gift card sold",kk:"Сертификат сатылды",ky:"Сертификат сатылды",tg:"Сертификат фурӯхта шуд"},
   dailyDebtExportTitle:{uz:"Kunlik qarz hisobotini yuklab oling",ru:"Скачайте дневной отчёт по долгам",en:"Download today's debt report",kk:"Күнделікті қарыз есебін жүктеп алыңыз",ky:"Күндөлүк карыз отчётун жүктөп алыңыз",tg:"Ҳисоботи рӯзонаи қарзро боргирӣ кунед"},
   dailyDebtExportText:{uz:"Xavfsizlik va nazorat uchun, har kuni ish yakunida barcha mijozlar va qarzlar ro'yxatini yuklab olish tavsiya etiladi. Bugungi jami qarz:",ru:"Для безопасности и контроля рекомендуется каждый день в конце работы скачивать список клиентов и долгов. Общий долг сегодня:",en:"For safety and control, it's recommended to download the customer/debt list at the end of each business day. Today's total debt:",kk:"Қауіпсіздік пен бақылау үшін, әр күн жұмыс соңында барлық клиенттер мен қарыздар тізімін жүктеп алу ұсынылады. Бүгінгі жалпы қарыз:",ky:"Коопсуздук жана көзөмөл үчүн, ар күнү иштин аягында бардык кардарлар жана карыздар тизмесин жүктөп алуу сунушталат. Бүгүнкү жалпы карыз:",tg:"Барои амният ва назорат тавсия мешавад, ки дар охири ҳар рӯзи корӣ рӯйхати мизоҷон ва қарзҳо боргирӣ карда шавад. Қарзи умумии имрӯз:"},
   downloadAndContinue:{uz:"Yuklab olish va davom etish",ru:"Скачать и продолжить",en:"Download and continue",kk:"Жүктеп алу және жалғастыру",ky:"Жүктөп алуу жана улантуу",tg:"Боргирӣ кардан ва идома додан"},
@@ -3202,6 +3329,7 @@ async function loadAll(){
   try{ pruneAudit(); }catch(e){} /* fix96 */
   state.purchases = (await storGet(STORAGE_KEYS.purchases)) || [];
   try{ for(const __k of Object.keys(__gcK())){ const __g = __gcK()[__k]; state[__g.key] = (await storGet(__g.store)) || []; } }catch(e){}   /* fix135-sup */
+  try{ state.giftCards = (await storGet(GFT_STORE)) || []; }catch(e){}   /* fix140-gift */
   state.subCloudCheck = (await storGet(STORAGE_KEYS.subCloudCheck)) || 0;
   state.stockMoves = (await storGet(STORAGE_KEYS.stockMoves)) || [];
   state.heldCarts = (await storGet(STORAGE_KEYS.heldCarts)) || [];
@@ -3711,7 +3839,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.37';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.38';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -4316,6 +4444,7 @@ function startLiveListeners(){
   watchArrayCollection(kitchenStationsCol(), 'kitchenStations', 'kitchenStation');
   try{ __puWatch(); }catch(e){}   /* fix133-pur */
   try{ Object.keys(__gcK()).forEach(k=>__gcWatch(k)); }catch(e){}   /* fix135-sup */
+  try{ __gftWatch(); }catch(e){}   /* fix140-gift */
 
   // catalog doc: staff + shifts (small, still synced as merge:true fields
   // rather than their own subcollections — see syncStaffDoc/syncShiftsDoc)
@@ -5758,7 +5887,7 @@ function openCashBalanceModal(){
   const shiftCashExpenses = state.expenses.filter(x=>__shIn(shift, x.shiftId) && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
   const __cx = shiftCashExtras(shift); /* fix81 */
-  const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
+  const expected = shift.startCash + cashTotal + __cx.debtCash + (__cx.giftCash||0) - cashExpensesTotal - __cx.credCash - __cx.refundCash;
   openModal(`
     <div class="modal-title">${tr('cbTitle')}</div>
     <div class="row" style="justify-content:space-between"><span class="subtle">${tr('startingCash')}</span><strong>${fmt(shift.startCash)}</strong></div>
@@ -5776,7 +5905,7 @@ function autoCloseStaleShift(shift){
   const cashTotal = sumSalesByMethod(shiftSales, 'cash');
   const cardTotal = sumSalesByMethod(shiftSales, 'card');
   const creditTotal = sumSalesByMethod(shiftSales, 'credit');
-  const discountTotal = shiftSales.reduce((a,s)=>a+(s.discountAmount||0), 0);
+  const discountTotal = shiftSales.reduce((a,s)=>a+(s.discountAmount||0)+(s.promoDiscount||0), 0);
   const serviceChargeTotal = shiftSales.reduce((a,s)=>a+(s.serviceChargeAmount||0), 0);
   const deliveryFeeTotal = shiftSales.reduce((a,s)=>a+(s.deliveryFee||0), 0);
   const refundedTotal = shiftRefunds.reduce((a,s)=>a+s.total, 0);
@@ -5784,7 +5913,7 @@ function autoCloseStaleShift(shift){
   const shiftCashExpenses = state.expenses.filter(x=>__shIn(shift, x.shiftId) && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
   const __cx = shiftCashExtras(shift); /* fix81 */
-  const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
+  const expected = shift.startCash + cashTotal + __cx.debtCash + (__cx.giftCash||0) - cashExpensesTotal - __cx.credCash - __cx.refundCash;
   if(!state.shifts.some(x=>x && x.id === shift.id)) state.shifts.push({...shift, endTime:new Date().toISOString(), endCash:expected, expectedCash:expected, cashTotal, cardTotal, creditTotal, discountTotal, serviceChargeTotal, deliveryFeeTotal, refundedTotal, cashExpensesTotal, profitTotal, salesCount: shiftSales.length, autoClosed:true});   /* fix137-cash */
   saveShifts();
   state.currentShift = {id:uid(), staffId:shift.staffId, staffName:shift.staffName, startTime:new Date().toISOString(), startCash:expected, branchId:shift.branchId, prevId: shift.id};
@@ -5819,7 +5948,7 @@ function openEndShiftModal(){
   const cardTotal = sumSalesByMethod(shiftSales, 'card');
   const creditTotal = sumSalesByMethod(shiftSales, 'credit');
   const grossTotal = cashTotal + cardTotal + creditTotal;
-  const discountTotal = shiftSales.reduce((a,s)=>a+(s.discountAmount||0), 0);
+  const discountTotal = shiftSales.reduce((a,s)=>a+(s.discountAmount||0)+(s.promoDiscount||0), 0);
   // Service charge / delivery fee only mean anything for restaurantMode
   // businesses — a plain retail shop never sets these, so the rows stay
   // hidden rather than showing a permanent "0 so'm" line that means
@@ -5837,7 +5966,7 @@ function openEndShiftModal(){
   const shiftCashExpenses = state.expenses.filter(x=>__shIn(shift, x.shiftId) && x.paidFrom!=='other');
   const cashExpensesTotal = shiftCashExpenses.reduce((a,x)=>a+x.amount, 0);
   const __cx = shiftCashExtras(shift); /* fix81 */
-  const expected = shift.startCash + cashTotal + __cx.debtCash - cashExpensesTotal - __cx.credCash - __cx.refundCash;
+  const expected = shift.startCash + cashTotal + __cx.debtCash + (__cx.giftCash||0) - cashExpensesTotal - __cx.credCash - __cx.refundCash;
   openModal(`
     <div class="modal-title">${tr('shiftSummary')}</div>
     <div class="stat-grid" style="margin-bottom:14px;">
@@ -6200,7 +6329,7 @@ function cartQtyForProduct(productId){
 }
 function saleProfit(sale){
   const itemsProfit = sale.items.reduce((sum,it)=> sum + saleItemProfit(it), 0);
-  return itemsProfit - (sale.discountAmount||0) - (sale.bonusUsed||0) + (sale.serviceChargeAmount||0) + (sale.deliveryFee||0); /* fix68 */
+  return itemsProfit - (sale.discountAmount||0) - (sale.promoDiscount||0) - (sale.bonusUsed||0) + (sale.serviceChargeAmount||0) + (sale.deliveryFee||0); /* fix68 */
 }
 
 function saleItemProfit(it){
@@ -7452,7 +7581,7 @@ function cartSubtotal(){
   return activeCart().reduce((sum,c)=>{ const p=state.products.find(pr=>pr.id===c.productId); return sum + (p? cartItemPrice(c,p)*c.qty : 0); },0);
 }
 function cartTotal(){
-  return cartSubtotal();
+  return cartSubtotal() - __pmCart().total;   /* fix139-promo */
 }
 
 function openCartModal(){ renderCartModalContent(); }
@@ -7510,6 +7639,7 @@ async function buildInvoicePdf(sale){
     if(pi === pages.length-1){
       y += 16;
       const rows = [];
+      __pmSaleRows(sale).forEach(l=>rows.push([trR('pmLine').replace('{name}', l.name || ''), '-'+fmt(l.amount)]));   /* fix139-promo */
       if(sale.discountAmount) rows.push([trR('discountLabel'), '-'+fmt(sale.discountAmount)]);
       if(sale.serviceChargeAmount) rows.push([trR('serviceCharge'), fmt(sale.serviceChargeAmount)]);
       if(sale.deliveryFee) rows.push([trR('deliveryFee'), fmt(sale.deliveryFee)]);
@@ -7749,7 +7879,7 @@ function renderCartModalContent(){
     ${cart.length ? cartCustomerBarHtml() : ''}
     ${cart.length ? rows : `<div class="empty-state">${ICONS.box}<div>${tr('emptyCart')}</div></div>`}
     ${cart.length ? `
-      <div class="row" style="border-top:1px solid var(--border);padding-top:12px;margin-top:6px;"><strong>${tr('total')}</strong><strong>${fmt(cartSubtotal())}</strong></div>
+      ${__pmRowsHtml(__pmCart())}<div class="row" style="border-top:1px solid var(--border);padding-top:12px;margin-top:6px;"><strong>${tr('total')}</strong><strong>${fmt(cartTotal())}</strong></div>
       ${inTableMode ? `<button class="btn btn-outline btn-block" id="split-takeaway-btn" style="margin-top:10px;">${icI('bag')} ${tr('splitTakeawayBtn')}</button>` : ''}
       <button class="btn btn-ghost btn-block" id="clear-cart-btn" style="margin-top:10px;">${tr('clearCart')}</button>
       <div class="btn-row" style="margin-top:10px;">
@@ -7998,6 +8128,7 @@ function __showLossWarning(a, onYes){
   document.getElementById('loss-go-btn').addEventListener('click', function(){ if(Date.now() - opened < 350) return; __closeLossWarn(); onYes(); });
 }
 function openCheckoutModal(){
+  window.__gftApplied = null; try{ if(window.__gftScanner){ window.__gftScanner.stop().catch(()=>{}); window.__gftScanner = null; } }catch(_e){}   /* fix140-gift */
   let paymentType = 'cash';
   let tenderedAmount = 0;
   let orderType = state.takeawayMode ? 'takeaway' : 'dine_in';
@@ -8077,7 +8208,7 @@ function openCheckoutModal(){
   let serviceChargePercent = serviceChargeOn ? (scPresetsInit[0]||0) : 0;
   let deliveryFee = deliveryFeeOn ? (dfPresetsInit[0]||0) : 0;
 
-  function subtotal(){ return cartSubtotal(); }
+  function subtotal(){ return cartSubtotal() - __pmCart().total; }   /* fix139-promo: aksiyadan keyingi summa */
   function discountAmount(){
     if(!discountOn || !discountValue) return 0;
     const raw = discountType==='percent' ? subtotal() * (discountValue/100) : discountValue;
@@ -8100,7 +8231,9 @@ function openCheckoutModal(){
     return Math.min(cust.bonusBalance, Math.max(0, subtotal() - discountAmount()));
   }
   function bonusAmount(){ return Math.min(bonusRedeemAmount, maxBonusRedeemable()); }
-  function grandTotal(){ return Math.round(subtotal() - discountAmount() - bonusAmount() + serviceChargeAmount() + deliveryFee); /* fix100 */ }
+  function __coRaw(){ return Math.round(subtotal() - discountAmount() - bonusAmount() + serviceChargeAmount() + deliveryFee); /* fix100 */ }
+  function grandTotal(){ const __t = __coRaw(); return __t - __gftUse(__t); }   /* fix140-gift: sertifikatdan keyin to'lanadigani */
+  window.__coGrand = __coRaw;
   const showOrderType = state.settings.restaurantMode;
 
   function bodyHtml(){
@@ -8125,10 +8258,12 @@ function openCheckoutModal(){
       <div class="co-body" id="co-customer-body"></div>
       <button type="button" class="co-summary co-extras" id="co-extras-toggle"><span class="cx-ics"><i style="background:#FEE2E2;">${ICONS.tag}</i><i style="background:#EDE9FE;">${ICONS.bell}</i><i style="background:#DBEAFE;">${ICONS.truck}</i></span><span class="co-val cx-txt">${tr('coExtras')}</span><span class="co-act" id="co-extras-act">&#9662;</span></button>
       <div class="co-body" id="co-extras-body"><div id="credit-fields"></div><div id="charges-fields"></div><div id="bonus-fields"></div></div>
-      <div class="row"><span class="subtle">${tr('subtotal')}</span><span>${fmt(subtotal())}</span></div>
+      ${__gftCoHtml()}
+      <div class="row"><span class="subtle">${tr('subtotal')}</span><span>${fmt(cartSubtotal())}</span></div>${__pmRowsHtml(__pmCart())}
       ${canApplyDiscount() ? `<div class="row" id="discount-row" style="${discountAmount()>0?'':'display:none;'}"><span class="subtle">${tr('discountLabel')}</span><span id="discount-amount-display">-${fmt(discountAmount())}</span></div>` : ''}
       <div class="row" id="bonus-row" style="${bonusAmount()>0?'':'display:none;'}"><span class="subtle">${tr('bonusUsedLabel')}</span><span id="bonus-amount-display">-${fmt(bonusAmount())}</span></div>
       <div class="row"><span class="subtle">${tr('serviceCharge')}</span><span id="sc-amount-display">${fmt(serviceChargeAmount())}</span></div>
+      <div class="row" id="gft-row" style="display:none;"><span class="subtle" data-gft-l></span><span id="gft-amount-display" style="color:var(--teal);font-weight:700;"></span></div>
       <div class="row" style="border-top:1px solid var(--border);padding-top:12px;margin:6px 0 14px;"><strong>${tr('grandTotal')}</strong><strong id="grand-total-display">${fmt(grandTotal())}</strong></div>
       <div id="cash-tender-block" style="${paymentType==='cash'?'':'display:none;'}margin:-6px 0 14px;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-soft);">
         <label class="field-label">${tr('cashTenderedLabel')}</label>
@@ -8353,6 +8488,7 @@ function openCheckoutModal(){
     if(et) et.addEventListener('click', ()=>{ coExtrasOpen = !document.getElementById('co-extras-body').classList.contains('open'); updateCheckoutSummaries(); });
   }
   function refreshTotals(){
+    try{ __gftCoSync(); }catch(_e){}   /* fix140-gift */
     updateChangeDue();
     updateCheckoutSummaries();
     document.getElementById('sc-amount-display').textContent = fmt(serviceChargeAmount());
@@ -8383,6 +8519,7 @@ function openCheckoutModal(){
     }
   }
 
+  window.__coRefresh = refreshTotals;   /* fix140-gift */
   function tenderQuickAmounts(){
     const total = grandTotal();
     const notes = [1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000];
@@ -8411,6 +8548,7 @@ function openCheckoutModal(){
         updateChangeDue();
       }));
     };
+    window.__coTenderRender = ()=>{ try{ render(); input.placeholder = fmt(grandTotal()); }catch(_e){} };   /* fix140-gift */
     render();
     input.addEventListener('input', ()=>{
       const v = parseMoneyInput(input.value);
@@ -8421,6 +8559,7 @@ function openCheckoutModal(){
     updateChangeDue();
   }
   function attachCheckoutHandlers(){
+    try{ __gftCoBind(); }catch(_e){}   /* fix140-gift */
     const backBtn = document.getElementById('checkout-back-btn');
     if(backBtn) backBtn.addEventListener('click', openCartModal);
     document.querySelectorAll('#modal-root [data-pt]').forEach(el=>{
@@ -8483,7 +8622,7 @@ function openCheckoutModal(){
       }
       if(!lossAck){   /* fix106-loss: zararga sotishdan oldin ogohlantirish */
         let la = null;
-        try{ la = __lossAnalyze(activeCart(), discountAmount(), bonusAmount(), serviceChargeAmount() + (Number(deliveryFee) || 0)); }catch(_e){ la = null; }
+        try{ la = __lossAnalyze(activeCart(), discountAmount() + __pmCart().total, bonusAmount(), serviceChargeAmount() + (Number(deliveryFee) || 0)); }catch(_e){ la = null; }
         if(la && la.warn){
           __showLossWarning(la, ()=>{ lossAck = true; const b2 = document.getElementById('confirm-sale-btn'); if(b2) b2.click(); });
           return;
@@ -8505,6 +8644,7 @@ function openCheckoutModal(){
           splitMethod: (splitOn && paymentType!=='mixed') ? splitMethod : null,
           splitParts: __parts,
           bonusRedeemAmount: bonusAmount(),
+          gift: window.__gftApplied ? Object.assign({}, window.__gftApplied) : null,   /* fix140-gift */
           cashTendered: (paymentType==='cash' && !splitOn) ? tenderedAmount : 0
         });
       } finally {
@@ -8615,7 +8755,7 @@ function playSaleSuccess(sale){
 /* fix110-mixpay: aralash to'lov qismlarini tekshiradi; yaxlitlash farqi bo'lsa eng katta qismga qo'shadi */
 function __mixNormalize(parts, total){
   if(!Array.isArray(parts)) return null;
-  const ok = ['cash','card','credit'];
+  const ok = ['cash','card','credit','gift'];   /* fix140-gift */
   const out = [];
   parts.forEach(p=>{ if(p && ok.indexOf(p.method) >= 0){ const a = Math.max(0, Math.round(Number(p.amount) || 0)); if(a > 0){ const ex = out.find(x=>x.method===p.method); if(ex) ex.amount += a; else out.push({method:p.method, amount:a}); } } });
   if(out.length < 2) return null;
@@ -8639,6 +8779,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   // "chegirma berish" permission must never be able to apply a discount
   // even if they found a way to call this function directly.
   if(!canApplyDiscount()){ extras.discountValue = 0; }
+  const __custIds0 = new Set((state.customers || []).map(c=>c.id)); const __ptOrig = paymentType, __exOrig = extras; let __gUse = 0, __gDone = null;   /* fix140-gift */
   // Same defense-in-depth as the discount permission above — if someone
   // without "nasiyaga sotish" rights somehow calls this with credit
   // involved EITHER as the primary type OR smuggled in via a split
@@ -8688,7 +8829,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
       return;
     }
   }
-  const subtotalPreview = cartSubtotal();
+  const subtotalPreview = cartSubtotal() - __pmCart().total;   /* fix139-promo */
   const discountAmountPreview = Math.min(
     extras.discountType==='percent' ? subtotalPreview * ((extras.discountValue||0)/100) : (extras.discountValue||0),
     subtotalPreview
@@ -8696,6 +8837,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   const discountedSubtotalPreview = subtotalPreview - Math.round(discountAmountPreview); /* fix100 */
   const serviceChargePreview = Math.round(discountedSubtotalPreview * ((extras.serviceChargePercent||0)/100));
   const totalPreview = Math.round(discountedSubtotalPreview + serviceChargePreview + (extras.deliveryFee||0));
+  const __gp = __gftSplit(__ptOrig, __exOrig, totalPreview); if(__gp){ paymentType = __gp.pt; extras = Object.assign({}, __exOrig, {splitParts: __gp.parts, splitAmount: 0, splitMethod: null}); }   /* fix140-gift */
 
   // A sale can now be split across two payment methods (half cash half
   // card, half card half on credit, etc.) instead of only ever being ONE
@@ -8781,15 +8923,17 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     try{ const _k = p.id+'|'+(c.variantId||''); const _units = isBox ? c.qty*(c.unitsPerBox||1) : c.qty; const _avail = Math.max(0, (v ? (v.stock||0) : (p.stock||0)) - (__ovUsed[_k]||0)); __ovUsed[_k] = (__ovUsed[_k]||0) + _units; if(_units > _avail) item.oversoldUnits = _units - _avail; }catch(_e){} /* fix77 */
     if(isBox){ item.saleMode = 'box'; item.unitsPerBox = c.unitsPerBox||1; }
     if(isWholesaleUnit){ item.priceTier = 'wholesale'; }
+    if(c.priceOverride!=null && !isNaN(c.priceOverride)) item.noPromo = true;   /* fix139-promo */
     if(c.isTakeaway){ item.isTakeaway = true; }
     return item;
   });
   const subtotal = cartSubtotal();
+  const __pm = __pmCart(); const __pmBase = subtotal - __pm.total;   /* fix139-promo: avval aksiya, keyin qo'lda chegirma */
   const discountAmount = Math.round(Math.min(
-    extras.discountType==='percent' ? subtotal * ((extras.discountValue||0)/100) : (extras.discountValue||0),
-    subtotal
+    extras.discountType==='percent' ? __pmBase * ((extras.discountValue||0)/100) : (extras.discountValue||0),
+    __pmBase
   )); /* fix100 */
-  const discountedSubtotal = subtotal - discountAmount;
+  const discountedSubtotal = __pmBase - discountAmount;
   // Re-validated here against the actual customer record — never just
   // trusting whatever number the checkout screen sent — for the exact
   // same reason the debt-overpayment fix earlier re-validated payment
@@ -8804,6 +8948,14 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   const serviceChargeAmount = Math.round(discountedSubtotal * ((extras.serviceChargePercent||0)/100)); /* fix100 */
   const deliveryFee = extras.deliveryFee || 0;
   const total = Math.round(discountedSubtotal - bonusRedeemed + serviceChargeAmount + deliveryFee); /* fix100 */
+  { const __g2 = __gftSplit(__ptOrig, __exOrig, total);   /* fix140-gift: sertifikat — bulutda tranzaksiya, muvaffaqiyatsiz bo'lsa sotuv bo'lmaydi */
+    if(__g2){
+      paymentType = __g2.pt; extras = Object.assign({}, __exOrig, {splitParts: __g2.parts, splitAmount: 0, splitMethod: null}); __gUse = __g2.use;
+      extras.__saleId = uid();
+      try{ __gDone = await __gftRedeem(__exOrig.gift.id, __gUse, {saleId: extras.__saleId, by: state.currentStaff ? state.currentStaff.name : '', branchId: state.currentBranchId}); }
+      catch(__ge){ errorEl.textContent = __gftErr(__ge); state.customers = state.customers.filter(c=>__custIds0.has(c.id)); return; }
+      window.__gftRedeemedNow = {id: __exOrig.gift.id, amount: __gUse, saleId: extras.__saleId};
+    } }
   items.forEach(it=>{
     const p=state.products.find(pr=>pr.id===it.productId);
     const v = getVariant(p, it.variantId);
@@ -8842,17 +8994,19 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   // picks exactly one of the two per the loyaltyMode setting, never both
   // at once for the same sale.
   const loyaltyEarnedAmount = (state.settings.loyaltyEnabled && customerForBonus && state.settings.loyaltyEarnPercent > 0)
-    ? Math.round((total - creditAmount) * (state.settings.loyaltyEarnPercent/100))
+    ? Math.round((total - creditAmount - __gUse) * (state.settings.loyaltyEarnPercent/100))
     : 0;
   const loyaltyIsCreditMode = state.settings.loyaltyMode === 'creditLimit';
   const earnedCashback = (loyaltyEarnedAmount > 0 && !loyaltyIsCreditMode) ? loyaltyEarnedAmount : 0;
   const earnedCreditBoost = (loyaltyEarnedAmount > 0 && loyaltyIsCreditMode) ? loyaltyEarnedAmount : 0;
   const sale = {
-    id:uid(), receiptNumber, date:new Date().toISOString(), items, subtotal,
+    id:(extras.__saleId || uid()), receiptNumber, date:new Date().toISOString(), items, subtotal,
     discountType: discountAmount>0 ? (extras.discountType||'percent') : null,
     discountValue: discountAmount>0 ? (extras.discountValue||0) : 0,
     discountAmount,
+    promoDiscount: __pm.total || 0, promos: __pm.total ? __pm.lines : null, promoRules: __pm.total || __pmAll().length ? __pmRuleSnap(state.promos, new Date(), state.currentBranchId) : null,   /* fix139-promo */
     bonusUsed: bonusRedeemed>0 ? bonusRedeemed : 0,
+    giftPaid: __gUse || 0, giftCard: __gUse ? {id: __exOrig.gift.id, code: __exOrig.gift.code, balanceAfter: __gDone ? __gDone.balance : null} : null,   /* fix140-gift */
     bonusEarned: earnedCashback>0 ? earnedCashback : 0,
     creditLimitBoost: earnedCreditBoost>0 ? earnedCreditBoost : 0,
     serviceChargePercent: extras.serviceChargePercent||0, serviceChargeAmount, deliveryFee,
@@ -8872,9 +9026,10 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     // since iOS Safari has no Web Bluetooth at all — is still waiting.
     printed: false,
     cashTendered: extras.cashTendered || 0,
-    changeDue: (extras.cashTendered && extras.cashTendered > total) ? extras.cashTendered - total : 0
+    changeDue: (()=>{ const __cd = __gUse ? ((((extras.splitParts||[]).find(p=>p.method==='cash'))||{}).amount||0) : total; return (extras.cashTendered && extras.cashTendered > __cd) ? extras.cashTendered - __cd : 0; })()
   };
   state.sales.push(sale);
+  window.__gftRedeemedNow = null; window.__gftApplied = null;   /* fix140-gift */
   try{ (window.__relayLocalSales = window.__relayLocalSales || new Map()).set(sale.id, Date.now()); }catch(e){}   /* fix109-relay */
   tagPendingStockMoves(sale.id);
 
@@ -8948,6 +9103,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
   renderAll();
   openPostSaleModal(sale, custDebtAfter);
  }catch(e){
+   try{ const __r = window.__gftRedeemedNow; if(__r && !state.sales.some(x=>x.id === __r.saleId)) __gftQueueReturn(__r.id, __r.amount, __r.saleId, 'checkoutFailed'); }catch(_e){} window.__gftRedeemedNow = null;   /* fix140-gift */
    const errEl = document.getElementById('checkout-error');
    if(errEl) errEl.textContent = tr('checkoutUnexpectedError') + ': ' + (e && e.message ? e.message : e);
   } finally {
@@ -9107,8 +9263,9 @@ function receiptImageBlob(sale, customer){
     y += 16;
     itemLayouts.forEach(layout=>{ y += (layout.sameLine ? 1 : (layout.mergeLast ? layout.nameLines.length : layout.nameLines.length+1)) * lineH; });
     y += 16;
-    if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed){
+    if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed || sale.promoDiscount){
       y += smallLineH; // subtotal
+      y += smallLineH * __pmSaleRows(sale).length;   /* fix139-promo */
       if(sale.discountAmount) y += smallLineH;
       if(sale.bonusUsed) y += smallLineH;
       if(sale.serviceChargeAmount) y += smallLineH;
@@ -9198,8 +9355,9 @@ function receiptImageBlob(sale, customer){
     });
     cy += 4; sepLine(cy); cy += 22;
 
-    if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed){
+    if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed || sale.promoDiscount){
       rowText(trR('subtotal'), fmt(sale.subtotal||sale.total), cy, '13px Arial', '#51677E'); cy += smallLineH;
+      __pmSaleRows(sale).forEach(l=>{ rowText(trR('pmLine').replace('{name}', l.name || ''), '-'+fmt(l.amount), cy, '13px Arial', '#51677E'); cy += smallLineH; });   /* fix139-promo */
       if(sale.discountAmount){ rowText(trR('discountLabel')+' ('+(sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue))+')', '-'+fmt(sale.discountAmount), cy, '13px Arial', '#51677E'); cy += smallLineH; }
       if(sale.bonusUsed){ rowText(trR('bonusUsedLabel'), '-'+fmt(sale.bonusUsed), cy, '13px Arial', '#51677E'); cy += smallLineH; }
       if(sale.serviceChargeAmount){ rowText(trR('serviceCharge')+' ('+sale.serviceChargePercent+'%)', fmt(sale.serviceChargeAmount), cy, '13px Arial', '#51677E'); cy += smallLineH; }
@@ -9574,14 +9732,16 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
     buildItemReceiptLines(`${safeName} x${it.qty}`, amount, width).forEach(line=>lines.push(line));
   });
   lines.push(sep);
-  if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed){
+  if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed || sale.promoDiscount){
     lines.push(padLine(trR('subtotal'), fmt(sale.subtotal||sale.total), width));
+    __pmSaleRows(sale).forEach(l=>{ buildItemReceiptLines(trR('pmLine').replace('{name}', l.name || ''), '-'+fmt(l.amount), width).forEach(x=>lines.push(x)); });   /* fix139-promo */
     if(sale.discountAmount) lines.push(padLine(trR('discountLabel')+' ('+(sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue))+')', '-'+fmt(sale.discountAmount), width));
     if(sale.bonusUsed) lines.push(padLine(trR('bonusUsedLabel'), '-'+fmt(sale.bonusUsed), width));
     if(sale.serviceChargeAmount) lines.push(padLine(trR('serviceCharge')+' ('+sale.serviceChargePercent+'%)', fmt(sale.serviceChargeAmount), width));
     if(sale.deliveryFee) lines.push(padLine(trR('deliveryFee'), fmt(sale.deliveryFee), width));
   }
   lines.push(padLine(trR('total'), fmt(sale.total), width));
+  if(sale.giftCard && sale.giftPaid > 0 && sale.giftCard.balanceAfter != null) lines.push(padLine(trR('gftLeft') + ' ' + __gftShow(sale.giftCard.code), fmt(sale.giftCard.balanceAfter), width));   /* fix140-gift */
   lines.push(`${trR('paymentType')}: ${paymentTypeDisplayText(sale)}`);
   if(sale.cashTendered > 0){
     lines.push(padLine(trR('cashTenderedLabel'), fmt(sale.cashTendered), width));
@@ -9801,6 +9961,7 @@ async function printKitchenDelta(table){
 function paymentTypeLabel(pt){
   if(pt==='cash') return tr('cash');
   if(pt==='card') return tr('card');
+  if(pt==='gift') return tr('gftPay');   /* fix140-gift */
   return tr('credit');
 }
 
@@ -9828,10 +9989,10 @@ function shiftCashExtras(shift){
   const debt = (state.ledger||[]).filter(e=>e && e.type==='payment' && e.method && __shIn(shift, e.shiftId));   /* fix137-cash */
   const cred = (state.creditorLedger||[]).filter(e=>e && e.type==='payment' && e.method==='cash' && __shIn(shift, e.shiftId));
   const refundCash = state.sales.filter(x=>x && x.refunded && __shIn(shift, x.refundShiftId) && !__shIn(shift, x.shiftId)).reduce((a,x)=>a+(salePaymentBreakdown(x).cash||0), 0);
-  return {debtCash: __fx81Sum(debt.filter(e=>e.method==='cash')), debtCard: __fx81Sum(debt.filter(e=>e.method==='card')), credCash: __fx81Sum(cred), refundCash: refundCash};
+  return {debtCash: __fx81Sum(debt.filter(e=>e.method==='cash')), debtCard: __fx81Sum(debt.filter(e=>e.method==='card')), credCash: __fx81Sum(cred), refundCash: refundCash, giftCash: __gftShiftCash(shift)};   /* fix140-gift */
 }
 function __cxRowsHtml(cx){
-  return (cx.debtCash>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">+ ${tr('debtPaymentsCash')}</span><strong>${fmt(cx.debtCash)}</strong></div>` : '')
+  return ((cx.giftCash>0) ? `<div class="row" style="justify-content:space-between"><span class="subtle">+ ${tr('gftCashIn')}</span><strong>${fmt(cx.giftCash)}</strong></div>` : '') + (cx.debtCash>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">+ ${tr('debtPaymentsCash')}</span><strong>${fmt(cx.debtCash)}</strong></div>` : '')
     + (cx.credCash>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">- ${tr('creditorPaidCash')}</span><strong style="color:var(--danger);">${fmt(cx.credCash)}</strong></div>` : '')
     + (cx.refundCash>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">- ${tr('refundsCash')}</span><strong style="color:var(--danger);">${fmt(cx.refundCash)}</strong></div>` : '');
 }
@@ -9884,9 +10045,10 @@ function buildReceiptHtmlInner(sale, customer){
     <hr style="${hrStyle}">
     <table style="width:100%;border-collapse:collapse;">${rows}</table>
     <hr style="${hrStyle}">
-    ${(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed) ? `
+    ${(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed || sale.promoDiscount) ? `
       <table style="width:100%;">
         <tr><td>${trR('subtotal')}</td><td style="text-align:right;">${fmt(sale.subtotal||sale.total)}</td></tr>
+        ${__pmSaleRows(sale).map(l=>`<tr><td>${escapeHtml(trR('pmLine').replace('{name}', l.name || ''))}</td><td style="text-align:right;">-${fmt(l.amount)}</td></tr>`).join('')}
         ${sale.discountAmount ? `<tr><td>${trR('discountLabel')} (${sale.discountType==='percent'?sale.discountValue+'%':fmt(sale.discountValue)})</td><td style="text-align:right;">-${fmt(sale.discountAmount)}</td></tr>` : ''}
         ${sale.bonusUsed ? `<tr><td>${trR('bonusUsedLabel')}</td><td style="text-align:right;">-${fmt(sale.bonusUsed)}</td></tr>` : ''}
         ${sale.serviceChargeAmount ? `<tr><td>${trR('serviceCharge')} (${sale.serviceChargePercent}%)</td><td style="text-align:right;">${fmt(sale.serviceChargeAmount)}</td></tr>` : ''}
@@ -9896,6 +10058,7 @@ function buildReceiptHtmlInner(sale, customer){
     ` : ''}
     <table style="width:100%;font-weight:bold;background:#EBE5FE;border-radius:6px;"><tr><td style="padding:6px 8px;">${trR('total')}</td><td style="text-align:right;padding:6px 8px;color:#1F4FB8;font-size:1.15em;">${fmt(sale.total)}</td></tr></table>
     <div style="margin-top:4px;">${trR('paymentType')}: ${paymentTypeDisplayText(sale)}</div>
+    ${(sale.giftCard && sale.giftPaid > 0 && sale.giftCard.balanceAfter != null) ? `<div style="margin-top:2px;">${trR('gftLeft')} ${escapeHtml(__gftShow(sale.giftCard.code))}: ${fmt(sale.giftCard.balanceAfter)}</div>` : ''}
     ${sale.cashTendered > 0 ? `<div style="margin-top:2px;">${trR('cashTenderedLabel')}: ${fmt(sale.cashTendered)} &nbsp;·&nbsp; ${trR('changeDueLabel')}: ${fmt(sale.changeDue||0)}</div>` : ''}
     ${s.receiptFooter?`<hr style="${hrStyle}"><div style="text-align:${align};">${escapeHtml(s.receiptFooter)}</div>`:''}
     ${s.footerImage ? `<div style="text-align:center;margin-top:8px;"><img src="${s.footerImage}" style="width:${s.footerImageScalePercent||100}%;max-width:100%;"></div>` : ''}
@@ -11432,6 +11595,7 @@ function paymentTypeColor(pt){
 function paymentTypeIcon(pt){
   if(pt==='cash') return '<span class="ic-i ic-cash">' + ICONS.banknote + '</span>';   /* fix126-ds1b */
   if(pt==='card') return '<span class="ic-i ic-card">' + ICONS.creditCard + '</span>';
+  if(pt==='gift') return '<span class="ic-i ic-card">' + (ICONS.gift || ICONS.creditCard) + '</span>';   /* fix140-gift */
   return '<span class="ic-i ic-credit">' + ICONS.book + '</span>';
 }
 function renderReceiptsListItems(sales){
@@ -13712,6 +13876,7 @@ function refundSale(saleId, afterDone){
     sale.refundedBy = state.currentStaff ? state.currentStaff.name : '';
     if(__rr) sale.refundReason = __rr;   /* fix130-rep2 */
     sale.refundShiftId = state.currentShift ? state.currentShift.id : null; /* fix81 */
+    try{ __gftOnRefund(sale); }catch(_e){}   /* fix140-gift */
     saveProducts(); saveSales(); addSaleDoc(sale);
     showToast(tr('refundSuccess'));
     if(afterDone) afterDone();
@@ -13780,6 +13945,7 @@ function openEditReceiptModal(saleId, afterDone){
   if(!sale) return;
   if(!canEditReceipt()){ showToast(tr('noPermEditReceipt')); return; }
   if(sale.refunded){ showToast(tr('cannotEditRefunded')); return; }
+  if(Number(sale.giftPaid) > 0){ showToast(tr('gftNoEdit')); return; }   /* fix140-gift */
   editReceiptDraft = {
     saleId,
     items: sale.items.map(it=>({...it, _origQty: it.qty, _isOriginal: true})),
@@ -13802,15 +13968,15 @@ function __erDiscount(d, subtotal){ /* fix82 */
 }
 function editReceiptTotal(){ /* fix82 */
   const d = editReceiptDraft; const sale = state.sales.find(s=>s.id===d.saleId) || {};
-  const subtotal = editReceiptSubtotal(); const ds = subtotal - __erDiscount(d, subtotal);
+  const subtotal = editReceiptSubtotal() - __pmForSale(sale, d.items).total; const ds = subtotal - __erDiscount(d, subtotal);   /* fix139-promo */
   const svc = Math.round(ds * ((Number(d.serviceChargePercent)||0)/100));
   return Math.round(ds - Math.min(sale.bonusUsed||0, ds) + svc + (Number(d.deliveryFee)||0));
 }
 function __erSummaryHtml(){ /* fix82 */
   const d = editReceiptDraft; const sale = state.sales.find(s=>s.id===d.saleId) || {};
-  const subtotal = editReceiptSubtotal(); const disc = __erDiscount(d, subtotal); const ds = subtotal - disc;
+  const __pmE = __pmForSale(sale, d.items); const subtotal = editReceiptSubtotal(); const disc = __erDiscount(d, subtotal - __pmE.total); const ds = subtotal - __pmE.total - disc;   /* fix139-promo */
   const svc = Math.round(ds * ((Number(d.serviceChargePercent)||0)/100)); const bonus = Math.min(sale.bonusUsed||0, ds);
-  return `<div class="row"><span class="subtle">${tr('subtotal')}</span><strong>${fmt(subtotal)}</strong></div>`
+  return `<div class="row"><span class="subtle">${tr('subtotal')}</span><strong>${fmt(subtotal)}</strong></div>` + __pmRowsHtml(__pmE)
     + (disc ? `<div class="row"><span class="subtle">${tr('discountLabel')}</span><strong style="color:var(--warm);">−${fmt(disc)}</strong></div>` : '')
     + (bonus ? `<div class="row"><span class="subtle">Bonus</span><strong style="color:var(--warm);">−${fmt(bonus)}</strong></div>` : '')
     + (svc ? `<div class="row"><span class="subtle">${tr('serviceCharge')}</span><strong>+${fmt(svc)}</strong></div>` : '')
@@ -14568,8 +14734,9 @@ function saveEditedReceipt(){
   // editing — recomputed against the NEW subtotal (a percent discount
   // scales with it; a fixed-amount one stays fixed, but never past the
   // new subtotal itself, same cap used at checkout time).
-  const discountAmount = __erDiscount(d, subtotal); /* fix82 */
-  const discountedSubtotal = subtotal - discountAmount;
+  const __pmE = __pmForSale(sale, d.items);   /* fix139-promo: sotuv vaqtidagi aksiya qoidalari bilan */
+  const discountAmount = __erDiscount(d, subtotal - __pmE.total); /* fix82 */
+  const discountedSubtotal = subtotal - __pmE.total - discountAmount;
   const serviceChargeAmount = Math.round(discountedSubtotal * ((Number(d.serviceChargePercent)||0)/100)); /* fix82 */
   const newTotal = Math.round(discountedSubtotal - Math.min(sale.bonusUsed||0, discountedSubtotal) + serviceChargeAmount + (Number(d.deliveryFee)||0)); /* fix68 + fix82 */
   const oldTotal = sale.total;
@@ -14618,6 +14785,7 @@ function saveEditedReceipt(){
   sale.items = d.items.map(it=>{ const {_origQty, _isOriginal, ...clean} = it; return clean; });
   sale.subtotal = subtotal;
   sale.discountAmount = discountAmount;
+  if(Array.isArray(sale.promoRules) && sale.promoRules.length){ sale.promoDiscount = __pmE.total || 0; sale.promos = __pmE.total ? __pmE.lines : null; }   /* fix139-promo */
   sale.serviceChargeAmount = serviceChargeAmount;
   sale.deliveryFee = Number(d.deliveryFee) || 0; sale.serviceChargePercent = Number(d.serviceChargePercent) || 0; /* fix82 */
   sale.discountType = discountAmount > 0 ? d.discountType : null; sale.discountValue = discountAmount > 0 ? (Number(d.discountValue) || 0) : 0;
@@ -15032,7 +15200,7 @@ function reportsMenuItems(){
     {id:'staff', label:tr('staffReportSection')},
     {id:'inventory', label:tr('inventoryReport')},
     {id:'stockmoves', label:tr('stockMovesReport')}
-  ].concat(canSupply() ? [{id:'suppliers', label:tr('soMenu')}] : []);   /* fix135-sup */
+  ].concat(canSupply() ? [{id:'suppliers', label:tr('soMenu')}] : []).concat(canPromo() ? [{id:'promos', label:tr('pmMenu')}] : []);   /* fix135-sup, fix139-promo */
   // Deliberately admin-only, not gated by the general 'reports' permission
   // a cashier might also hold for legitimate reasons (checking top
   // products, etc.) — this specific list exists so the OWNER can see who
@@ -15069,7 +15237,7 @@ function renderReportsMenu(container){
     ${(()=>{
       const G = {receipts:['sales','receiptIcon','#2563eb'], today:['sales','sale','#16a34a'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
         pnl:['finance','percent','#0f9d8a'], productprofit:['finance','percent','#12a37f'], expenses:['finance','creditCard','#d97706'], payroll:['finance','peopleIcon','#7c5cfc'], mydebts:['finance','book','#c2410c'],
-        inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], suppliers:['stock','truck','#0f766e'], products:['sales','products','#0891b2'],
+        inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], suppliers:['stock','truck','#0f766e'], promos:['sales','tag','#db2777'], products:['sales','products','#0891b2'],
         customers:['people','customers','#8b5cf6'], staff:['people','peopleIcon','#a855f7'], branches:['people','mapPin','#6366f1'],
         audit:['control','target','#475569']};
       const order = [['sales','rgSales'],['finance','rgFinance'],['stock','rgStock'],['people','rgPeople'],['control','rgControl']];
@@ -15097,6 +15265,7 @@ function renderReportsMenu(container){
     el.addEventListener('click', ()=>{
       if(el.dataset.cat === 'receipts'){ state.view = 'receipts'; renderAll(); return; }
       if(el.dataset.cat === 'suppliers'){ state.__soTab = 'suppliers'; state.__soEdit = null; state.__soFrom = 'reports'; state.reportsCategory = null; state.view = 'supply'; renderAll(); return; }   /* fix135-sup */
+      if(el.dataset.cat === 'promos'){ state.__pmTab = 'report'; state.__pmEdit = null; state.__pmFrom = 'reports'; state.reportsCategory = null; state.view = 'promo'; renderAll(); return; }   /* fix139-promo */
       if(el.dataset.cat === 'mydebts'){ state.__mdFrom = 'reports'; state.reportsCategory = null; state.view = 'myDebts'; renderAll(); return; }   /* fix128-main */
       state.reportsCategory = el.dataset.cat; renderReports();
     });
@@ -15419,7 +15588,7 @@ function renderReportsCategory(container, cat){
     const todayCredPayCash = __fx81Sum((state.creditorLedger||[]).filter(e=>e && e.type==='payment' && e.method==='cash' && __sb(e.branchId) && __fx81Day(e.createdAt||e.date)===today));
     const todayCashExpenses = visibleExpenses().filter(x=>__fx81Day(x.date)===today && x.paidFrom!=='other').reduce((a,x)=>a+(Number(x.amount)||0), 0);
     const todayCashRefundsOld = state.sales.filter(x=>x && x.refunded && x.refundedAt && __sb(x.branchId) && __fx81Day(x.refundedAt)===today && __fx81Day(x.date)!==today).reduce((a,x)=>a+(salePaymentBreakdown(x).cash||0), 0);
-    const cashInRegister = startingCashToday + todayCash + todayDebtCash - todayCashExpenses - todayCredPayCash - todayCashRefundsOld;
+    const cashInRegister = startingCashToday + todayCash + todayDebtCash + __gftTodayCash() - todayCashExpenses - todayCredPayCash - todayCashRefundsOld;   /* fix140-gift */
     const orderTypeHtml = state.settings.restaurantMode ? (()=>{
       const dineIn = todaySales.filter(s=>s.orderType==='dine_in').reduce((a,s)=>a+s.total,0);
       const takeaway = todaySales.filter(s=>s.orderType==='takeaway').reduce((a,s)=>a+s.total,0);
@@ -15457,7 +15626,7 @@ function renderReportsCategory(container, cat){
         <div class="row" style="justify-content:space-between"><span class="subtle">${tr('startingCash')}</span><strong>${fmt(startingCashToday)}</strong></div>
         <div class="row" style="justify-content:space-between"><span class="subtle">+ ${tr('cashLabel')}</span><strong>${fmt(todayCash)}</strong></div>
         ${todayCashExpenses>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">- ${tr('cashExpensesLabel')}</span><strong style="color:var(--danger);">${fmt(todayCashExpenses)}</strong></div>` : ''}
-        ${__cxRowsHtml({debtCash: todayDebtCash, credCash: todayCredPayCash, refundCash: todayCashRefundsOld})}
+        ${__cxRowsHtml({debtCash: todayDebtCash, credCash: todayCredPayCash, refundCash: todayCashRefundsOld, giftCash: __gftTodayCash()})}
         <div class="row" style="justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;margin-top:4px;"><span class="subtle">${tr('expectedCash')}</span><strong>${fmt(cashInRegister)}</strong></div>
       </div>
       ${(todayServiceCharge || todayDeliveryFee) ? `
@@ -15623,8 +15792,8 @@ function renderReportsCategory(container, cat){
 
   if(cat==='audit'){
     if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
-    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount', purchaseReturn:'puReturnBtn', transferSend:'trAuSend', transferReceive:'trAuRecv', transferCancel:'trMoveBack'};
-    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)', purchaseReturn:'var(--warm)', transferSend:'var(--accent-dark)', transferReceive:'var(--teal)', transferCancel:'var(--warm)'};
+    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount', purchaseReturn:'puReturnBtn', transferSend:'trAuSend', transferReceive:'trAuRecv', transferCancel:'trMoveBack', promoSave:'auPromoSave', promoDelete:'auPromoDelete', giftSell:'auGiftSell'};
+    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)', purchaseReturn:'var(--warm)', transferSend:'var(--accent-dark)', transferReceive:'var(--teal)', transferCancel:'var(--warm)', promoSave:'var(--teal)', promoDelete:'var(--danger)', giftSell:'var(--accent-dark)'};
     container.innerHTML = `${reportsBackHeader(tr('auditReport'))}<p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('auditHint')}</p>
       <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
       <div id="audit-list"><div class="empty-state">${R3_ON ? tr('r4Loading') : '…'}</div></div>`;
@@ -15710,7 +15879,7 @@ function renderReportsCategory(container, cat){
         if(it.oversoldUnits > 0){ const u = it.saleMode==='box' ? q*(it.unitsPerBox||1) : q; __acc.overRev += pr*q*Math.min(1, it.oversoldUnits/(u||1)); __acc.overN++; }
       }));
       __acc.lossList = Object.values(__acc.lossMap).sort((a,b)=>b.loss-a.loss);
-      const discounts = ok.reduce((a,s)=>a+(s.discountAmount||0)+(s.bonusUsed||0),0);
+      const discounts = ok.reduce((a,s)=>a+(s.discountAmount||0)+(s.promoDiscount||0)+(s.bonusUsed||0),0);   /* fix139-promo */
       const exps = visibleExpenses().filter(e=>monthKeyOf(e.date)===key);
       const purchases = exps.filter(e=>e.category==='purchase').reduce((a,e)=>a+(e.amount||0),0);
       const byCat = {}; exps.filter(e=>e.category!=='purchase').forEach(e=>{ byCat[e.category||'other'] = (byCat[e.category||'other']||0)+(e.amount||0); });
@@ -19270,6 +19439,7 @@ function __scRender(){
         + '<div class="sc-sum">' + escapeHtml(fmt(price * c.qty)) + '</div></div>';
     }).join('') + '</div>';
   }
+  try{ if(cart.length) h += __pmRowsHtml(__pmCart(), 'sc-pm'); }catch(_e){}   /* fix139-promo */
   h += '<div class="sc-foot"><div class="sc-total"><span>' + escapeHtml(tr('total')) + '</span><b>' + escapeHtml(fmt(cartTotal())) + '</b></div>';
   if(cart.length){
     h += '<div class="sc-btns"><button type="button" class="btn btn-ghost" id="sc-details">' + escapeHtml(tr('scDetails')) + '</button>'
@@ -19514,7 +19684,7 @@ function __r3TodayHtml(V){
         <div class="row" style="justify-content:space-between"><span class="subtle">${tr('startingCash')}</span><strong>${fmt(V.startingCashToday)}</strong></div>
         <div class="row" style="justify-content:space-between"><span class="subtle">+ ${tr('cashLabel')}</span><strong>${fmt(V.todayCash)}</strong></div>
         ${V.todayCashExpenses>0 ? `<div class="row" style="justify-content:space-between"><span class="subtle">- ${tr('cashExpensesLabel')}</span><strong style="color:var(--danger);">${fmt(V.todayCashExpenses)}</strong></div>` : ''}
-        ${__cxRowsHtml({debtCash: V.todayDebtCash, credCash: V.todayCredPayCash, refundCash: V.todayCashRefundsOld})}
+        ${__cxRowsHtml({debtCash: V.todayDebtCash, credCash: V.todayCredPayCash, refundCash: V.todayCashRefundsOld, giftCash: __gftTodayCash()})}
         <div class="row" style="justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;margin-top:4px;"><span style="font-weight:800;">${tr('expectedCash')}</span><strong style="color:var(--success);font-size:17px;" data-r3-cash="${Math.round(V.cashInRegister)}">${fmt(V.cashInRegister)}</strong></div>
       </div>
       ${hourHtml}
@@ -20399,6 +20569,8 @@ function __gcWatch(kind){
       const busy = document.getElementById('modal-root').children.length || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
       if(state.view === 'supply' && !busy) renderSupply();
       else if(state.view === 'transfer' && !busy) renderTransfer();   /* fix136-trf */
+      else if(state.view === 'promo' && !busy) renderPromo();   /* fix139-promo */
+      if(kind === 'promo' && !busy){ try{ renderCartBar(); }catch(_e){} }
     }catch(e){}
   }, (e)=>{ if(__gcPerm(e)) __gcOffSet(kind); });
   liveListenerUnsubs.push(unsub);
@@ -21152,6 +21324,662 @@ function __rsHtml(list){
       + '<button class="btn btn-outline btn-sm" data-cancel-reservation="' + escapeHtml(r.id) + '">' + escapeHtml(tr('rsCancel')) + '</button></div>';
   });
   return out;
+}
+
+/* fix139-promo: avtomatik aksiyalar */
+__gcK().promo = {col: 'promos', key: 'promos', store: 'sardor_promos_v1'};
+function canPromo(){ return isAdmin() || hasPerm('promo'); }
+MORE_EXTRA.push(()=>canPromo() ? {icon: ICONS.tag, label: tr('pmMenu'), fn: ()=>{ state.__pmTab = 'list'; state.__pmEdit = null; state.__pmFrom = 'products'; state.view = 'promo'; renderAll(); }} : null);
+var PM_TYPES = {bxgy: 'pmTBxgy', item: 'pmTItem', check: 'pmTCheck', happy: 'pmTHappy'};
+function __pmAll(){ return (state.promos || []).filter(p=>p && !p.deleted); }
+function __pmYmd(d){ const x = d instanceof Date ? d : new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); }
+function __pmHm(d){ const x = d instanceof Date ? d : new Date(d); return String(x.getHours()).padStart(2, '0') + ':' + String(x.getMinutes()).padStart(2, '0'); }
+/* Holat: on | off | soon | over */
+function __pmState(p, at){
+  at = at || new Date();
+  if(!p.active) return 'off';
+  const d = __pmYmd(at);
+  if(p.start && d < p.start) return 'soon';
+  if(p.end && d > p.end) return 'over';
+  return 'on';
+}
+function __pmLive(p, at, branchId){
+  at = at || new Date();
+  if(!p || p.deleted || __pmState(p, at) !== 'on') return false;
+  if(Array.isArray(p.branches) && p.branches.length && p.branches.indexOf(effectiveBranchId(branchId)) < 0) return false;
+  if(p.type === 'happy'){
+    const days = Array.isArray(p.days) ? p.days : [];
+    if(days.length && days.indexOf(at.getDay()) < 0) return false;
+    const hm = __pmHm(at), f = p.from || '00:00', t = p.to || '23:59';
+    if(f <= t){ if(hm < f || hm > t) return false; }
+    else if(hm < f && hm > t) return false;   /* tun bo'yi: 22:00–02:00 */
+  }
+  return true;
+}
+function __pmTargets(p, prod){
+  if(!prod) return false;
+  const t = p.target || 'all';
+  if(t === 'product') return (p.productIds || []).indexOf(prod.id) >= 0;
+  if(t === 'category') return (p.categories || []).indexOf(String(prod.category || '')) >= 0;
+  return true;
+}
+/* Asosiy hisob: lines = [{productId, variantId, qty, price, ok}] — ok=false bo'lsa aksiya qo'llanmaydi.
+   Har bir tovarga eng foydali bitta aksiya; keyin chek summasi aksiyasi qolgan summaga. */
+function __pmCalc(lines, rules, at, branchId){
+  const out = {total: 0, lines: [], items: {}};
+  const live = (rules || []).filter(p=>__pmLive(p, at, branchId));
+  if(!live.length) return out;
+  const groups = {}; let gross = 0;
+  (lines || []).forEach(l=>{
+    const q = Number(l.qty) || 0, u = Number(l.price) || 0; gross += q * u;
+    if(!l.ok || q <= 0 || u <= 0) return;
+    const k = l.productId + '::' + (l.variantId || '') + '::' + u;
+    (groups[k] = groups[k] || {productId: l.productId, variantId: l.variantId || null, price: u, qty: 0}).qty += q;
+  });
+  const by = {};
+  const add = (p, amt)=>{ amt = Math.round(amt); if(amt <= 0) return; if(!by[p.id]) by[p.id] = {id: p.id, name: p.name, type: p.type, amount: 0, n: 0}; by[p.id].amount += amt; by[p.id].n++; out.total += amt; };
+  Object.keys(groups).forEach(k=>{
+    const g = groups[k], prod = state.products.find(x=>x.id === g.productId);
+    let best = null, bestAmt = 0;
+    live.forEach(p=>{
+      if(p.type === 'check' || !__pmTargets(p, prod)) return;
+      let a = 0;
+      if(p.type === 'bxgy'){
+        const n = Math.max(1, Math.floor(Number(p.buy) || 0)), m = Math.max(1, Math.floor(Number(p.free) || 0));
+        const sets = Math.floor(Math.floor(g.qty + 1e-9) / (n + m));
+        a = sets * m * g.price;
+      } else {
+        const v = Number(p.value) || 0;
+        a = p.mode === 'amount' ? Math.min(v, g.price) * g.qty : g.price * g.qty * Math.min(100, v) / 100;
+      }
+      a = Math.min(a, g.price * g.qty);
+      if(a > bestAmt + 1e-9){ bestAmt = a; best = p; }
+    });
+    if(best){ add(best, bestAmt); out.items[k] = {promoId: best.id, amount: Math.round(bestAmt)}; }
+  });
+  const rest = gross - out.total;
+  let bc = null, bca = 0;
+  live.filter(p=>p.type === 'check').forEach(p=>{
+    if(rest + 1e-9 < (Number(p.min) || 0)) return;
+    const v = Number(p.value) || 0;
+    const a = Math.min(rest, p.mode === 'amount' ? v : rest * Math.min(100, v) / 100);
+    if(a > bca + 1e-9){ bca = a; bc = p; }
+  });
+  if(bc) add(bc, bca);
+  out.lines = Object.keys(by).map(k=>by[k]).sort((a, b)=>b.amount - a.amount);
+  return out;
+}
+function __pmCartLines(cart){
+  return (cart || []).map(c=>{
+    const p = state.products.find(x=>x.id === c.productId); if(!p) return null;
+    const ov = c.priceOverride != null && !isNaN(c.priceOverride);
+    return {productId: c.productId, variantId: c.variantId || null, qty: c.qty, price: cartItemPrice(c, p), ok: c.saleMode !== 'box' && c.priceTier !== 'wholesale' && !ov};
+  }).filter(Boolean);
+}
+function __pmCart(){
+  try{ if(!__pmAll().length) return {total: 0, lines: [], items: {}}; return __pmCalc(__pmCartLines(activeCart()), state.promos, new Date(), state.currentBranchId); }
+  catch(e){ return {total: 0, lines: [], items: {}}; }
+}
+function __pmRuleSnap(rules, at, branchId){ return (rules || []).filter(p=>__pmLive(p, at, branchId)).map(p=>JSON.parse(JSON.stringify(p))); }
+function __pmSaleLines(items){ return (items || []).map(it=>({productId: it.productId, variantId: it.variantId || null, qty: it.qty, price: it.price, ok: !it.noPromo && it.saleMode !== 'box' && it.priceTier !== 'wholesale'})); }
+/* Tahrirlangan chek: sotuv vaqtidagi qoidalar bilan qayta hisob */
+function __pmForSale(sale, items){
+  try{
+    const rules = Array.isArray(sale.promoRules) ? sale.promoRules : [];
+    if(!rules.length) return {total: 0, lines: [], items: {}};
+    return __pmCalc(__pmSaleLines(items), rules, new Date(sale.date), sale.branchId);
+  }catch(e){ return {total: 0, lines: [], items: {}}; }
+}
+function __pmLabel(l){ return tr('pmLine').replace('{name}', l.name || ''); }
+function __pmRowsHtml(pm, cls){
+  if(!pm || !pm.total) return '';
+  return pm.lines.map(l=>'<div class="row pm-row' + (cls ? ' ' + cls : '') + '"><span class="subtle">' + escapeHtml(__pmLabel(l)) + '</span><span style="color:var(--teal);font-weight:700;white-space:nowrap;">−' + escapeHtml(fmt(l.amount)) + '</span></div>').join('');
+}
+function __pmSaleRows(sale){ return (sale && Array.isArray(sale.promos)) ? sale.promos.filter(l=>l && l.amount > 0) : []; }
+
+/* ---------- Aksiyalar sahifasi ---------- */
+function renderPromo(){
+  const c = document.getElementById('view-container'); if(!c) return;
+  const backTo = ()=>{ state.view = state.__pmFrom === 'reports' ? 'reports' : 'products'; state.__pmFrom = null; state.__pmEdit = null; renderAll(); };
+  if(!canPromo()){
+    c.innerHTML = `<div class="back-row"><button id="pm-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('pmMenu')}</span></div><div class="empty-state">${escapeHtml(tr('soNoPerm'))}</div>`;
+    document.getElementById('pm-back').addEventListener('click', backTo); return;
+  }
+  if(state.__pmEdit){ __pmEditor(c); return; }
+  const tab = state.__pmTab || 'list';
+  const tabs = [['list', tr('pmMenu')], ['report', tr('pmReport')]].concat(window.__gcTabs ? window.__gcTabs() : []);
+  c.innerHTML = `<div class="back-row"><button id="pm-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('pmMenu')}</span></div>
+    <div class="toggle-group" style="margin-bottom:12px;">${tabs.map(x=>`<div class="toggle-opt ${tab === x[0] ? 'active' : ''}" data-pm-tab="${x[0]}">${escapeHtml(x[1])}</div>`).join('')}</div>
+    <div id="pm-body"></div>`;
+  document.getElementById('pm-back').addEventListener('click', backTo);
+  c.querySelectorAll('[data-pm-tab]').forEach(b=>b.addEventListener('click', ()=>{ state.__pmTab = b.dataset.pmTab; renderPromo(); }));
+  const body = document.getElementById('pm-body');
+  if(tab === 'report') __pmReport(body);
+  else if(tab !== 'list' && window.__gcTabRender) window.__gcTabRender(tab, body);
+  else __pmList(body);
+}
+function __pmDesc(p){
+  const val = (m, v)=> m === 'amount' ? fmt(v) : (v + '%');
+  let s = '';
+  if(p.type === 'bxgy') s = tr('pmDescBxgy').replace('{n}', p.buy).replace('{m}', p.free);
+  else if(p.type === 'check') s = tr('pmDescCheck').replace('{min}', fmt(p.min || 0)).replace('{v}', val(p.mode, p.value));
+  else s = '−' + val(p.mode, p.value);
+  if(p.type !== 'check'){
+    if(p.target === 'product') s += ' · ' + tr('pmTgtProductsN').replace('{n}', (p.productIds || []).length);
+    else if(p.target === 'category') s += ' · ' + (p.categories || []).join(', ');
+    else s += ' · ' + tr('pmTgtAll');
+  }
+  if(p.type === 'happy'){
+    const dn = __pmDayNames();
+    s += ' · ' + ((p.days && p.days.length && p.days.length < 7) ? p.days.slice().sort((a, b)=>((a + 6) % 7) - ((b + 6) % 7)).map(d=>dn[d]).join(', ') : tr('pmEveryDay')) + ' ' + (p.from || '00:00') + '–' + (p.to || '23:59');
+  }
+  return s;
+}
+function __pmDayNames(){ try{ const w = __dtL().w; if(Array.isArray(w) && w.length === 7) return w; }catch(e){} return ['0', '1', '2', '3', '4', '5', '6']; }
+function __pmStBadge(p){
+  const st = __pmState(p), k = {on: 'pmStOn', off: 'pmStOff', soon: 'pmStSoon', over: 'pmStOver'}[st];
+  return '<span class="so-st ' + ({on: 'received', off: 'cancelled', soon: 'sent', over: 'draft'}[st]) + '">' + escapeHtml(tr(k)) + '</span>';
+}
+function __pmList(body){
+  const list = __pmAll().slice().sort((a, b)=>{ const o = {on: 0, soon: 1, off: 2, over: 3}; return (o[__pmState(a)] - o[__pmState(b)]) || String(b.createdAt || '').localeCompare(String(a.createdAt || '')); });
+  body.innerHTML = `<button class="btn btn-accent btn-block" id="pm-new" style="margin-bottom:10px;">${ICONS.plus} ${escapeHtml(tr('pmNew'))}</button>
+    <div id="pm-list">${list.length ? list.map(p=>`<div class="card so-card" data-pm-open="${escapeHtml(p.id)}"><div class="t"><b>${escapeHtml(p.name)}</b>${__pmStBadge(p)}</div>
+      <div class="subtle" style="font-size:12.5px;margin-top:3px;">${escapeHtml(tr(PM_TYPES[p.type] || 'pmTItem'))} · ${escapeHtml(__pmDesc(p))}</div>
+      <div class="subtle" style="font-size:12px;margin-top:2px;">${escapeHtml((p.start ? fmtDate(new Date(p.start + 'T00:00')) : '…') + ' — ' + (p.end ? fmtDate(new Date(p.end + 'T00:00')) : '…'))}${(p.branches && p.branches.length && branchList().length > 1) ? ' · ' + escapeHtml(p.branches.map(b=>branchName(b)).join(', ')) : ''}</div></div>`).join('') : `<div class="empty-state">${tr('pmEmpty')}</div>`}</div>`;
+  document.getElementById('pm-new').addEventListener('click', ()=>{ state.__pmEdit = 'new'; state.__pmDraft = {id: uid(), name: '', type: 'bxgy', active: true, target: 'product', productIds: [], categories: [], buy: 2, free: 1, mode: 'percent', value: 10, min: 0, days: [], from: '18:00', to: '20:00', start: __pmYmd(new Date()), end: '', branches: []}; renderPromo(); });
+  body.querySelectorAll('[data-pm-open]').forEach(b=>b.addEventListener('click', ()=>{ const p = __pmAll().find(x=>x.id === b.dataset.pmOpen); if(!p) return; state.__pmEdit = p.id; state.__pmDraft = JSON.parse(JSON.stringify(p)); renderPromo(); }));
+}
+function __pmCats(){ const s = {}; visibleProducts().forEach(p=>{ const c = String(p.category || '').trim(); if(c) s[c] = 1; }); return Object.keys(s).sort((a, b)=>a.localeCompare(b)); }
+function __pmEditor(c){
+  const D = state.__pmDraft; if(!D){ state.__pmEdit = null; renderPromo(); return; }
+  const isNew = state.__pmEdit === 'new';
+  const chip = (attr, v, label, on)=>__r3Chip(attr, v, label, on);
+  const dn = __pmDayNames();
+  const prodNames = (D.productIds || []).map(id=>{ const p = state.products.find(x=>x.id === id); return p ? {id, name: p.name} : null; }).filter(Boolean);
+  const cats = __pmCats(); (D.categories || []).forEach(k=>{ if(cats.indexOf(k) < 0) cats.push(k); });
+  const brs = branchList();
+  c.innerHTML = `<div class="back-row"><button id="pm-ed-back">${ICONS.arrowLeft}</button><span class="t-title">${escapeHtml(isNew ? tr('pmNew') : (D.name || tr('pmMenu')))}</span></div>
+    <div class="card" style="padding:12px 14px;">
+      <div class="field"><label class="field-label">${tr('pmName')}</label><input type="text" id="pm-name" value="${escapeHtml(D.name || '')}" placeholder="${escapeHtml(tr('pmNamePh'))}"></div>
+      <label class="field-label">${tr('pmType')}</label>
+      <div class="r3-chips">${Object.keys(PM_TYPES).map(k=>chip('data-pm-type', k, tr(PM_TYPES[k]), D.type === k)).join('')}</div>
+      <div id="pm-type-fields"></div>
+    </div>
+    ${D.type !== 'check' ? `<div class="card" style="padding:12px 14px;"><label class="field-label">${tr('pmTarget')}</label>
+      <div class="r3-chips">${[['product', tr('pmTgtProducts')], ['category', tr('pmTgtCategory')], ['all', tr('pmTgtAll')]].map(x=>chip('data-pm-tgt', x[0], x[1], (D.target || 'all') === x[0])).join('')}</div>
+      ${D.target === 'product' ? `<div id="pm-prods">${prodNames.map(x=>`<div class="tr-row" style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><span style="min-width:0;font-weight:700;font-size:13.5px;">${escapeHtml(x.name)}</span><button class="icon-btn" data-pm-rmp="${escapeHtml(x.id)}" style="color:var(--danger);">${ICONS.trash}</button></div>`).join('')}</div>
+        <button class="btn btn-outline btn-block" id="pm-addp" style="margin-top:8px;">${escapeHtml(tr('puAddItem'))}</button>` : ''}
+      ${D.target === 'category' ? `<div class="r3-chips">${cats.length ? cats.map(k=>chip('data-pm-cat', k, k, (D.categories || []).indexOf(k) >= 0)).join('') : `<span class="subtle" style="font-size:12.5px;">${escapeHtml(tr('noData'))}</span>`}</div>` : ''}
+      <p class="subtle" style="margin:6px 0 0;font-size:11.5px;">${escapeHtml(tr('pmTgtHint'))}</p></div>` : ''}
+    ${D.type === 'happy' ? `<div class="card" style="padding:12px 14px;"><label class="field-label">${tr('pmDays')}</label>
+      <div class="r3-chips">${[1, 2, 3, 4, 5, 6, 0].map(d=>chip('data-pm-day', String(d), dn[d], (D.days || []).indexOf(d) >= 0)).join('')}</div>
+      <p class="subtle" style="margin:0 0 8px;font-size:11.5px;">${escapeHtml(tr('pmDaysHint'))}</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="field" style="margin:0;"><label class="field-label">${tr('pmFrom')}</label><input type="time" id="pm-from" value="${escapeHtml(D.from || '')}"></div><div class="field" style="margin:0;"><label class="field-label">${tr('pmTo')}</label><input type="time" id="pm-to" value="${escapeHtml(D.to || '')}"></div></div></div>` : ''}
+    <div class="card" style="padding:12px 14px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="field" style="margin:0;"><label class="field-label">${tr('pmStart')}</label><input type="date" id="pm-start" value="${escapeHtml(D.start || '')}"></div><div class="field" style="margin:0;"><label class="field-label">${tr('pmEnd')}</label><input type="date" id="pm-end" value="${escapeHtml(D.end || '')}"></div></div>
+      <p class="subtle" style="margin:6px 0 10px;font-size:11.5px;">${escapeHtml(tr('pmDatesHint'))}</p>
+      ${brs.length > 1 ? `<label class="field-label">${tr('pmBranches')}</label><div class="r3-chips">${chip('data-pm-br', '', tr('pmAllBranches'), !(D.branches || []).length)}${brs.map(b=>chip('data-pm-br', b.id, b.name, (D.branches || []).indexOf(b.id) >= 0)).join('')}</div>` : ''}
+      <div class="checkbox-row"><input type="checkbox" id="pm-active" ${D.active ? 'checked' : ''}><span>${tr('pmActive')}</span></div>
+    </div>
+    <div id="pm-err" class="error-text"></div>
+    <button class="btn btn-accent btn-block" id="pm-save">${escapeHtml(tr('save'))}</button>
+    ${isNew ? '' : `<div style="margin-top:22px;">${dangerZoneHtml(tr('pmDelete'), '', 'pm-del')}</div>`}`;
+  const tf = document.getElementById('pm-type-fields');
+  const num = (id, label, v, money)=>`<div class="field" style="margin:0;"><label class="field-label">${label}</label><input type="text" inputmode="${money ? 'numeric' : 'decimal'}" id="${id}" ${money ? 'data-money' : ''} value="${money ? formatMoneyInputValue(v || 0) : (v == null ? '' : v)}"></div>`;
+  const modeChips = `<div class="r3-chips" style="margin-top:8px;">${chip('data-pm-mode', 'percent', '%', D.mode !== 'amount')}${chip('data-pm-mode', 'amount', tr('pmAmount'), D.mode === 'amount')}</div>`;
+  const valField = ()=>D.mode === 'amount' ? num('pm-value', tr('pmValueAmt'), D.value, true) : num('pm-value', tr('pmValuePct'), D.value, false);
+  if(D.type === 'bxgy') tf.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">${num('pm-buy', tr('pmBuy'), D.buy)}${num('pm-free', tr('pmFree'), D.free)}</div><p class="subtle" style="margin:6px 0 0;font-size:11.5px;">${escapeHtml(tr('pmBxgyHint'))}</p>`;
+  else if(D.type === 'check') tf.innerHTML = `<div style="margin-top:8px;">${num('pm-min', tr('pmMin'), D.min, true)}</div>${modeChips}<div>${valField()}</div>`;
+  else tf.innerHTML = `${modeChips}<div>${valField()}</div>${D.mode === 'amount' ? `<p class="subtle" style="margin:6px 0 0;font-size:11.5px;">${escapeHtml(tr('pmAmtHint'))}</p>` : ''}`;
+  try{ c.querySelectorAll('[data-money]').forEach(inp=>attachMoneyInputFormatting(inp)); }catch(e){}
+  const read = ()=>{
+    const g = (id)=>document.getElementById(id);
+    if(g('pm-name')) D.name = g('pm-name').value.trim();
+    if(g('pm-buy')) D.buy = parseInt(g('pm-buy').value, 10) || 0;
+    if(g('pm-free')) D.free = parseInt(g('pm-free').value, 10) || 0;
+    if(g('pm-min')) D.min = parseMoneyInput(g('pm-min').value) || 0;
+    if(g('pm-value')) D.value = D.mode === 'amount' ? (parseMoneyInput(g('pm-value').value) || 0) : (parseFloat(String(g('pm-value').value).replace(',', '.')) || 0);
+    if(g('pm-from')) D.from = g('pm-from').value; if(g('pm-to')) D.to = g('pm-to').value;
+    if(g('pm-start')) D.start = g('pm-start').value; if(g('pm-end')) D.end = g('pm-end').value;
+    if(g('pm-active')) D.active = g('pm-active').checked;
+  };
+  const re = ()=>{ read(); __pmEditor(c); };
+  document.getElementById('pm-ed-back').addEventListener('click', ()=>{ state.__pmEdit = null; state.__pmDraft = null; renderPromo(); });
+  c.querySelectorAll('[data-pm-type]').forEach(b=>b.addEventListener('click', ()=>{ read(); D.type = b.dataset.pmType; if(D.type === 'check'){ D.mode = D.mode || 'percent'; } re(); }));
+  c.querySelectorAll('[data-pm-mode]').forEach(b=>b.addEventListener('click', ()=>{ read(); if(D.mode !== b.dataset.pmMode){ D.mode = b.dataset.pmMode; D.value = 0; } __pmEditor(c); }));
+  c.querySelectorAll('[data-pm-tgt]').forEach(b=>b.addEventListener('click', ()=>{ read(); D.target = b.dataset.pmTgt; __pmEditor(c); }));
+  c.querySelectorAll('[data-pm-cat]').forEach(b=>b.addEventListener('click', ()=>{ read(); const k = b.dataset.pmCat; D.categories = D.categories || []; const i = D.categories.indexOf(k); if(i >= 0) D.categories.splice(i, 1); else D.categories.push(k); __pmEditor(c); }));
+  c.querySelectorAll('[data-pm-day]').forEach(b=>b.addEventListener('click', ()=>{ read(); const d = +b.dataset.pmDay; D.days = D.days || []; const i = D.days.indexOf(d); if(i >= 0) D.days.splice(i, 1); else D.days.push(d); __pmEditor(c); }));
+  c.querySelectorAll('[data-pm-br]').forEach(b=>b.addEventListener('click', ()=>{ read(); const id = b.dataset.pmBr; if(!id) D.branches = []; else { D.branches = D.branches || []; const i = D.branches.indexOf(id); if(i >= 0) D.branches.splice(i, 1); else D.branches.push(id); } __pmEditor(c); }));
+  c.querySelectorAll('[data-pm-rmp]').forEach(b=>b.addEventListener('click', ()=>{ read(); D.productIds = (D.productIds || []).filter(x=>x !== b.dataset.pmRmp); __pmEditor(c); }));
+  const ap = document.getElementById('pm-addp');
+  if(ap) ap.addEventListener('click', ()=>{ read(); __soPicker((p)=>{ D.productIds = D.productIds || []; if(D.productIds.indexOf(p.id) < 0) D.productIds.push(p.id); if(!D.name && D.type === 'bxgy') D.name = (D.buy || 2) + '+' + (D.free || 1) + ' ' + p.name; __pmEditor(c); }); });
+  document.getElementById('pm-save').addEventListener('click', ()=>{
+    read();
+    const err = document.getElementById('pm-err'); err.textContent = '';
+    const bad = (k)=>{ err.textContent = tr(k); };
+    if(!D.name) return bad('pmErrName');
+    if(D.type === 'bxgy' && !(D.buy >= 1 && D.free >= 1)) return bad('pmErrBxgy');
+    if(D.type !== 'bxgy' && !(D.value > 0)) return bad('pmErrValue');
+    if(D.mode !== 'amount' && D.type !== 'bxgy' && D.value > 100) return bad('pmErrPct');
+    if(D.type !== 'check' && D.target === 'product' && !(D.productIds || []).length) return bad('pmErrProducts');
+    if(D.type !== 'check' && D.target === 'category' && !(D.categories || []).length) return bad('pmErrCats');
+    if(D.start && D.end && D.end < D.start) return bad('pmErrDates');
+    if(D.type === 'happy' && !(D.from && D.to)) return bad('pmErrTime');
+    const now = new Date().toISOString();
+    const list = state.promos = state.promos || [];
+    const i = list.findIndex(x=>x && x.id === D.id);
+    const rec = JSON.parse(JSON.stringify(D)); rec.updatedAt = now; if(!rec.createdAt) rec.createdAt = now; rec.createdBy = rec.createdBy || (state.currentStaff ? state.currentStaff.name : '');
+    if(i >= 0) list[i] = rec; else list.push(rec);
+    __gcPush('promo', rec);
+    try{ auditLog('promoSave', rec.name + ' · ' + tr(PM_TYPES[rec.type]) + ' · ' + __pmDesc(rec), {promoId: rec.id}); }catch(e){}
+    state.__pmEdit = null; state.__pmDraft = null; showToast(tr('pmSaved')); renderPromo(); try{ renderCartBar(); }catch(e){}
+  });
+  const del = document.getElementById('pm-del');
+  if(del) del.addEventListener('click', ()=>confirmDialog(escapeHtml(tr('pmDeleteQ')), ()=>{
+    const p = (state.promos || []).find(x=>x && x.id === D.id); if(p){ p.deleted = true; p.active = false; __gcPush('promo', p); }
+    try{ auditLog('promoDelete', D.name, {promoId: D.id}); }catch(e){}
+    state.__pmEdit = null; state.__pmDraft = null; renderPromo(); try{ renderCartBar(); }catch(e){}
+  }, tr('delete')));
+}
+/* ---------- Hisobot ---------- */
+function __pmReport(body){
+  const P = state.__pmRp || '30';
+  const from = P === 'all' ? null : (()=>{ const a = new Date(); a.setHours(0, 0, 0, 0); a.setDate(a.getDate() - (P === 'today' ? 0 : (+P - 1))); return a; })();
+  const b = effectiveBranchId(state.currentBranchId);
+  const sales = state.sales.filter(s=>s && !s.refunded && effectiveBranchId(s.branchId) === b && (!from || new Date(s.date) >= from));
+  const by = {}; let total = 0, cnt = 0;
+  sales.forEach(s=>{ const rows = __pmSaleRows(s); if(rows.length) cnt++; rows.forEach(l=>{ const k = l.id || l.name; (by[k] = by[k] || {name: l.name, type: l.type, uses: 0, amount: 0}); by[k].uses++; by[k].amount += Number(l.amount) || 0; total += Number(l.amount) || 0; }); });
+  const rows = Object.keys(by).map(k=>by[k]).sort((a, c)=>c.amount - a.amount);
+  const manual = sales.reduce((a, s)=>a + (Number(s.discountAmount) || 0), 0);
+  body.innerHTML = `<div class="r3-chips">${[['today', tr('rsToday')], ['7', tr('pm7d')], ['30', tr('pm30d')], ['all', tr('r3PAll')]].map(x=>__r3Chip('data-pm-rp', x[0], x[1], P === x[0])).join('')}</div>
+    <div class="stat-grid r3-kpi">
+      <div class="stat-card"><div class="stat-label">${tr('pmGiven')}</div><div class="stat-value" style="color:var(--teal);">${fmt(total)}</div></div>
+      <div class="stat-card"><div class="stat-label">${tr('pmChecks')}</div><div class="stat-value">${cnt}</div></div>
+      <div class="stat-card"><div class="stat-label">${tr('pmManual')}</div><div class="stat-value">${fmt(manual)}</div></div>
+    </div>
+    ${rows.length ? rows.map(r=>`<div class="list-item"><div class="info"><div class="name">${escapeHtml(r.name)}</div><div class="meta">${escapeHtml(tr(PM_TYPES[r.type] || 'pmTItem'))} · ${escapeHtml(tr('pmUses').replace('{n}', r.uses))}</div></div><strong style="color:var(--teal);white-space:nowrap;">−${fmt(r.amount)}</strong></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`}
+    <p class="subtle" style="font-size:11.5px;margin-top:10px;">${escapeHtml(tr('pmReportHint'))}</p>`;
+  body.querySelectorAll('[data-pm-rp]').forEach(x=>x.addEventListener('click', ()=>{ state.__pmRp = x.dataset.pmRp; renderPromo(); }));
+}
+
+/* fix140-gift: QR kod yasash (bayt rejimi, xatoni tuzatish darajasi M, 1–10-versiya). Tashqi kutubxonasiz. */
+var __QR_ECC_M = [0, 10, 16, 26, 18, 24, 16, 18, 22, 22, 26];
+var __QR_BLK_M = [0, 1, 1, 1, 2, 2, 4, 4, 4, 5, 5];
+var __QR_ALIGN = [null, [], [6, 18], [6, 22], [6, 26], [6, 30], [6, 34], [6, 22, 38], [6, 24, 42], [6, 26, 46], [6, 28, 50]];
+function __qrRawModules(v){ let r = (16 * v + 128) * v + 64; if(v >= 2){ const n = Math.floor(v / 7) + 2; r -= (25 * n - 10) * n - 55; if(v >= 7) r -= 36; } return r; }
+function __qrGfMul(x, y){ let z = 0; for(let i = 7; i >= 0; i--){ z = (z << 1) ^ ((z >>> 7) * 0x11D); z ^= ((y >>> i) & 1) * x; } return z & 0xFF; }
+function __qrRsDivisor(deg){ const r = []; for(let i = 0; i < deg - 1; i++) r.push(0); r.push(1); let root = 1; for(let i = 0; i < deg; i++){ for(let j = 0; j < r.length; j++){ r[j] = __qrGfMul(r[j], root); if(j + 1 < r.length) r[j] ^= r[j + 1]; } root = __qrGfMul(root, 0x02); } return r; }
+function __qrRsRem(data, div){ const r = div.map(()=>0); data.forEach(b=>{ const f = b ^ r.shift(); r.push(0); div.forEach((c, i)=>{ r[i] ^= __qrGfMul(c, f); }); }); return r; }
+function __qrMatrix(text){
+  const bytes = []; const s = unescape(encodeURIComponent(String(text))); for(let i = 0; i < s.length; i++) bytes.push(s.charCodeAt(i) & 0xFF);
+  let ver = 0;
+  for(let v = 1; v <= 10; v++){ const cap = Math.floor(__qrRawModules(v) / 8) - __QR_ECC_M[v] * __QR_BLK_M[v]; if(4 + (v < 10 ? 8 : 16) + bytes.length * 8 <= cap * 8){ ver = v; break; } }
+  if(!ver) throw new Error('QR: matn juda uzun');
+  const size = ver * 4 + 17, raw = Math.floor(__qrRawModules(ver) / 8), eccLen = __QR_ECC_M[ver], nBlk = __QR_BLK_M[ver], dataCap = raw - eccLen * nBlk;
+  const bits = []; const put = (val, len)=>{ for(let i = len - 1; i >= 0; i--) bits.push((val >>> i) & 1); };
+  put(4, 4); put(bytes.length, ver < 10 ? 8 : 16); bytes.forEach(b=>put(b, 8));
+  put(0, Math.min(4, dataCap * 8 - bits.length)); while(bits.length % 8) bits.push(0);
+  for(let pad = 0xEC; bits.length < dataCap * 8; pad ^= 0xEC ^ 0x11) put(pad, 8);
+  const data = []; for(let i = 0; i < bits.length; i += 8){ let b = 0; for(let j = 0; j < 8; j++) b = (b << 1) | bits[i + j]; data.push(b); }
+  const nShort = nBlk - raw % nBlk, shortLen = Math.floor(raw / nBlk), div = __qrRsDivisor(eccLen), blocks = [];
+  for(let i = 0, k = 0; i < nBlk; i++){ const dl = shortLen - eccLen + (i < nShort ? 0 : 1); const d = data.slice(k, k + dl); k += dl; const e = __qrRsRem(d, div); if(i < nShort) d.push(-1); blocks.push(d.concat(e)); }
+  const cw = []; for(let i = 0; i < blocks[0].length; i++) blocks.forEach(b=>{ if(b[i] !== -1 && b[i] !== undefined) cw.push(b[i]); });
+  const M = [], F = []; for(let y = 0; y < size; y++){ M.push(new Array(size).fill(false)); F.push(new Array(size).fill(false)); }
+  const set = (x, y, d)=>{ M[y][x] = d; F[y][x] = true; };
+  for(let i = 0; i < size; i++){ set(6, i, i % 2 === 0); set(i, 6, i % 2 === 0); }
+  const finder = (cx, cy)=>{ for(let dy = -4; dy <= 4; dy++) for(let dx = -4; dx <= 4; dx++){ const x = cx + dx, y = cy + dy; if(x < 0 || y < 0 || x >= size || y >= size) continue; const d = Math.max(Math.abs(dx), Math.abs(dy)); set(x, y, d !== 2 && d !== 4); } };
+  finder(3, 3); finder(size - 4, 3); finder(3, size - 4);
+  const al = __QR_ALIGN[ver], na = al.length;
+  for(let i = 0; i < na; i++) for(let j = 0; j < na; j++){
+    if((i === 0 && j === 0) || (i === 0 && j === na - 1) || (i === na - 1 && j === 0)) continue;
+    for(let dy = -2; dy <= 2; dy++) for(let dx = -2; dx <= 2; dx++) set(al[i] + dx, al[j] + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1);
+  }
+  const drawFormat = (mask)=>{
+    const data5 = (0 << 3) | mask; let rem = data5; for(let i = 0; i < 10; i++) rem = (rem << 1) ^ ((rem >>> 9) * 0x537);
+    const b = ((data5 << 10) | rem) ^ 0x5412, g = (i)=>((b >>> i) & 1) !== 0;
+    for(let i = 0; i <= 5; i++) set(8, i, g(i));
+    set(8, 7, g(6)); set(8, 8, g(7)); set(7, 8, g(8));
+    for(let i = 9; i < 15; i++) set(14 - i, 8, g(i));
+    for(let i = 0; i < 8; i++) set(size - 1 - i, 8, g(i));
+    for(let i = 8; i < 15; i++) set(8, size - 15 + i, g(i));
+    set(8, size - 8, true);
+  };
+  drawFormat(0);
+  if(ver >= 7){ let rem = ver; for(let i = 0; i < 12; i++) rem = (rem << 1) ^ ((rem >>> 11) * 0x1F25); const b = (ver << 12) | rem; for(let i = 0; i < 18; i++){ const bit = ((b >>> i) & 1) !== 0, a = size - 11 + i % 3, c = Math.floor(i / 3); set(a, c, bit); set(c, a, bit); } }
+  let bi = 0;
+  for(let right = size - 1; right >= 1; right -= 2){
+    if(right === 6) right = 5;
+    for(let vert = 0; vert < size; vert++) for(let j = 0; j < 2; j++){
+      const x = right - j, up = ((right + 1) & 2) === 0, y = up ? size - 1 - vert : vert;
+      if(!F[y][x] && bi < cw.length * 8){ M[y][x] = ((cw[bi >>> 3] >>> (7 - (bi & 7))) & 1) !== 0; bi++; }
+    }
+  }
+  const maskFn = [(x, y)=>(x + y) % 2 === 0, (x, y)=>y % 2 === 0, (x)=>x % 3 === 0, (x, y)=>(x + y) % 3 === 0, (x, y)=>(Math.floor(x / 3) + Math.floor(y / 2)) % 2 === 0, (x, y)=>x * y % 2 + x * y % 3 === 0, (x, y)=>(x * y % 2 + x * y % 3) % 2 === 0, (x, y)=>((x + y) % 2 + x * y % 3) % 2 === 0];
+  const applyMask = (m)=>{ for(let y = 0; y < size; y++) for(let x = 0; x < size; x++) if(!F[y][x] && maskFn[m](x, y)) M[y][x] = !M[y][x]; };
+  const penalty = ()=>{
+    let p = 0, dark = 0;
+    const line = (get)=>{ for(let a = 0; a < size; a++){ let run = 1; for(let b = 1; b <= size; b++){ if(b < size && get(a, b) === get(a, b - 1)) run++; else { if(run >= 5) p += 3 + run - 5; run = 1; } }
+      for(let b = 0; b + 10 < size; b++){ const seq = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0]; let f1 = true, f2 = true; for(let k = 0; k < 11; k++){ const v = get(a, b + k) ? 1 : 0; if(v !== seq[k]) f1 = false; if(v !== seq[10 - k]) f2 = false; } if(f1) p += 40; if(f2) p += 40; } } };
+    line((a, b)=>M[a][b]); line((a, b)=>M[b][a]);
+    for(let y = 0; y < size - 1; y++) for(let x = 0; x < size - 1; x++){ const c = M[y][x]; if(c === M[y][x + 1] && c === M[y + 1][x] && c === M[y + 1][x + 1]) p += 3; }
+    for(let y = 0; y < size; y++) for(let x = 0; x < size; x++) if(M[y][x]) dark++;
+    const total = size * size; p += (Math.ceil(Math.abs(dark * 20 - total * 10) / total) - 1) * 10;
+    return p;
+  };
+  let best = 0, bestP = Infinity;
+  for(let m = 0; m < 8; m++){ applyMask(m); drawFormat(m); const pp = penalty(); if(pp < bestP){ bestP = pp; best = m; } applyMask(m); }
+  applyMask(best); drawFormat(best);
+  return M;
+}
+function __qrSvg(text, px){
+  const M = __qrMatrix(text), n = M.length, q = 4, t = n + q * 2; let d = '';
+  for(let y = 0; y < n; y++) for(let x = 0; x < n; x++) if(M[y][x]) d += 'M' + (x + q) + ' ' + (y + q) + 'h1v1h-1z';
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + t + ' ' + t + '" width="' + (px || 160) + '" height="' + (px || 160) + '" shape-rendering="crispEdges"><rect width="' + t + '" height="' + t + '" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
+}
+
+if(!ICONS.gift) ICONS.gift = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>';
+/* fix140-gift: sovg'a sertifikatlari. Qoldiq faqat bulutda (tranzaksiya) — internet bilan ishlaydi, ikki marta ishlatilmaydi.
+   Sotilganda pul kassaga kiradi, lekin savdo/foyda emas; ishlatilganda savdo bo'ladi (to'lov turi "Sertifikat"). */
+var GFT_STORE = 'sardor_gift_cards_v1', GFT_PEND = 'sp_gift_pending_v1';
+var GFT_ABC = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+function __gftNorm(c){ let s = String(c || '').toUpperCase().replace(/[^0-9A-Z]/g, ''); if(s && s.indexOf('GC') !== 0 && s.length === 8) s = 'GC' + s; return s; }
+function __gftShow(c){ const s = __gftNorm(c); return s.length === 10 ? s.slice(0, 2) + '-' + s.slice(2, 6) + '-' + s.slice(6) : s; }
+function __gftNewCode(){ let s = 'GC'; const a = new Uint8Array(8); try{ crypto.getRandomValues(a); }catch(e){ for(let i = 0; i < 8; i++) a[i] = Math.floor(Math.random() * 256); } for(let i = 0; i < 8; i++) s += GFT_ABC[a[i] % 32]; return s; }
+function __gftOnline(){ try{ return !!(fbUser && fbDb && (typeof navigator === 'undefined' || navigator.onLine !== false) && !window.__startedOffline); }catch(e){ return false; } }
+function __gftRef(id){ return businessDocRef().collection('giftCards').doc(id); }
+function __gftTO(p, ms){ return Promise.race([p, new Promise((_, rej)=>setTimeout(()=>rej({code: 'timeout'}), ms || 15000))]); }
+function __gftErr(e){
+  const c = (e && (e.code || e.message)) || '';
+  if(/permission|insufficient/i.test(String(c))) return tr('gftErrPerm');
+  const m = {offline: 'gftErrOffline', timeout: 'gftErrTimeout', notfound: 'gftErrNotFound', void: 'gftErrVoid', expired: 'gftErrExpired', balance: 'gftErrBalance', exists: 'gftErrGeneric'};
+  return tr(m[c] || 'gftErrGeneric');
+}
+function __gftExpired(g, at){ if(!g || !g.expires) return false; return __pmYmd(at || new Date()) > g.expires; }
+function __gftSaveLocal(){ try{ storSet(GFT_STORE, (state.giftCards || []).slice(-3000)); }catch(e){} }
+function __gftUpsert(g){ if(!g || !g.id) return; state.giftCards = state.giftCards || []; const i = state.giftCards.findIndex(x=>x && x.id === g.id); if(i >= 0) state.giftCards[i] = g; else state.giftCards.push(g); __gftSaveLocal(); }
+/* --- bulut amallari (tranzaksiya) --- */
+async function __gftCreate(card){
+  if(!__gftOnline()) throw {code: 'offline'};
+  for(let t = 0; t < 4; t++){
+    const ref = __gftRef(card.id);
+    try{
+      await __gftTO(fbDb.runTransaction(async (tx)=>{ const s = await tx.get(ref); if(s.exists) throw {code: 'exists'}; tx.set(ref, sanitizeForFirestore(card)); }));
+      return card;
+    }catch(e){ if(e && e.code === 'exists'){ card.id = card.code = __gftNewCode(); continue; } throw e; }
+  }
+  throw {code: 'exists'};
+}
+async function __gftFetch(code){
+  const id = __gftNorm(code); if(!id) throw {code: 'notfound'};
+  if(!__gftOnline()) throw {code: 'offline'};
+  const s = await __gftTO(__gftRef(id).get());
+  if(!s.exists) throw {code: 'notfound'};
+  const g = s.data(); __gftUpsert(g); return g;
+}
+async function __gftRedeem(id, amount, meta){
+  if(!__gftOnline()) throw {code: 'offline'};
+  const ref = __gftRef(id); let out = null;
+  await __gftTO(fbDb.runTransaction(async (tx)=>{
+    const s = await tx.get(ref); if(!s.exists) throw {code: 'notfound'};
+    const g = s.data();
+    if(g.status !== 'active') throw {code: 'void'};
+    if(__gftExpired(g)) throw {code: 'expired'};
+    const bal = Math.round(Number(g.balance) || 0), a = Math.round(Number(amount) || 0);
+    if(a <= 0 || a > bal) throw {code: 'balance'};
+    const now = new Date().toISOString();
+    const h = (g.history || []).concat([{at: now, type: 'redeem', amount: a, saleId: meta.saleId || null, receipt: meta.receipt || null, by: meta.by || '', branchId: meta.branchId || null}]);
+    out = Object.assign({}, g, {balance: bal - a, history: h, updatedAt: now});
+    tx.update(ref, sanitizeForFirestore({balance: bal - a, history: h, updatedAt: now}));
+  }));
+  __gftUpsert(out); return out;
+}
+async function __gftReturn(id, amount, saleId, kind){
+  if(!__gftOnline()) throw {code: 'offline'};
+  const ref = __gftRef(id); let out = null;
+  await __gftTO(fbDb.runTransaction(async (tx)=>{
+    const s = await tx.get(ref); if(!s.exists) throw {code: 'notfound'};
+    const g = s.data();
+    if((g.history || []).some(x=>x && x.type === 'refund' && x.saleId === saleId)){ out = g; return; }   /* takror qaytarilmaydi */
+    const now = new Date().toISOString(), a = Math.round(Number(amount) || 0);
+    const h = (g.history || []).concat([{at: now, type: 'refund', amount: a, saleId: saleId, note: kind || '', by: state.currentStaff ? state.currentStaff.name : ''}]);
+    out = Object.assign({}, g, {balance: Math.round(Number(g.balance) || 0) + a, history: h, updatedAt: now});
+    tx.update(ref, sanitizeForFirestore({balance: out.balance, history: h, updatedAt: now}));
+  }));
+  __gftUpsert(out); return out;
+}
+/* Internet yo'q paytda qaytarish — navbatga, internet qaytganda bajariladi (faqat qoldiqni oshiradi, xavfsiz) */
+function __gftPend(){ try{ return JSON.parse(localStorage.getItem(GFT_PEND) || '[]') || []; }catch(e){ return []; } }
+function __gftPendSet(a){ try{ localStorage.setItem(GFT_PEND, JSON.stringify(a)); }catch(e){} }
+var __gftFlushing = false;
+async function __gftFlush(){
+  if(__gftFlushing || !__gftOnline()) return; __gftFlushing = true;
+  try{
+    for(const p of __gftPend()){
+      try{ await __gftReturn(p.id, p.amount, p.saleId, p.kind); __gftPendSet(__gftPend().filter(x=>!(x.id === p.id && x.saleId === p.saleId))); }catch(e){ if(e && (e.code === 'notfound')) __gftPendSet(__gftPend().filter(x=>!(x.id === p.id && x.saleId === p.saleId))); }
+    }
+  }finally{ __gftFlushing = false; }
+}
+function __gftQueueReturn(id, amount, saleId, kind){
+  const a = __gftPend(); if(!a.some(x=>x.id === id && x.saleId === saleId)) a.push({id, amount, saleId, kind, at: new Date().toISOString()}); __gftPendSet(a);
+  __gftFlush();
+}
+try{ window.addEventListener('online', ()=>setTimeout(__gftFlush, 1500)); setInterval(()=>{ if(__gftPend().length) __gftFlush(); }, 60000); }catch(e){}
+/* --- bulutni kuzatish --- */
+function __gftWatch(){
+  try{
+    const unsub = businessDocRef().collection('giftCards').onSnapshot(snap=>{
+      const cloud = {}; snap.docs.forEach(d=>{ const x = d.data(); if(x && x.id) cloud[x.id] = x; });
+      state.giftCards = Object.keys(cloud).map(k=>cloud[k]);
+      __gftSaveLocal(); __gftFlush();
+      try{ const busy = document.getElementById('modal-root').children.length || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)); if(state.view === 'promo' && state.__pmTab === 'gift' && !busy) renderPromo(); }catch(e){}
+    }, ()=>{});
+    liveListenerUnsubs.push(unsub);
+  }catch(e){}
+}
+/* --- kassa: sertifikat naqd sotuvlari --- */
+function __gftCashIn(filterFn){ return (state.giftCards || []).filter(g=>g && g.payMethod === 'cash' && filterFn(g)).reduce((a, g)=>a + (Number(g.amount) || 0), 0); }
+function __gftShiftCash(shift){ return shift ? __gftCashIn(g=>__shIn(shift, g.shiftId)) : 0; }
+function __gftTodayCash(){ const t = new Date().toDateString(), b = effectiveBranchId(state.currentBranchId); return __gftCashIn(g=>new Date(g.soldAt).toDateString() === t && effectiveBranchId(g.branchId) === b); }
+/* --- sotuvda ishlatish --- */
+function __gftUse(total){ const g = window.__gftApplied; if(!g) return 0; return Math.max(0, Math.min(Math.round(Number(g.amount) || 0), Math.round(Number(g.balance) || 0), Math.round(total))); }
+function __gftSplit(pt, ex, total){
+  const g = ex && ex.gift; if(!g) return null;
+  const use = Math.max(0, Math.min(Math.round(Number(g.amount) || 0), Math.round(Number(g.balance) || 0), Math.round(total)));
+  if(use <= 0) return null;
+  const rest = Math.round(total) - use;
+  let other = [];
+  if(Array.isArray(ex.splitParts) && ex.splitParts.length){ other = ex.splitParts.filter(p=>p && p.method !== 'gift' && (Number(p.amount) || 0) > 0).map(p=>({method: p.method, amount: Math.round(Number(p.amount) || 0)})); }
+  else if(ex.splitMethod && (Number(ex.splitAmount) || 0) > 0){ const sa = Math.min(rest, Math.round(Number(ex.splitAmount) || 0)); other = [{method: pt, amount: rest - sa}, {method: ex.splitMethod, amount: sa}]; }
+  else other = [{method: pt, amount: rest}];
+  other = other.filter(p=>p.amount > 0);
+  const sum = other.reduce((a, p)=>a + p.amount, 0);
+  if(other.length && sum !== rest){ other.sort((a, b)=>b.amount - a.amount); other[0].amount += rest - sum; if(other[0].amount < 0) other[0].amount = 0; other = other.filter(p=>p.amount > 0); }
+  if(!other.length) return {pt: 'gift', parts: null, use};
+  return {pt: other.slice().sort((a, b)=>b.amount - a.amount)[0].method, parts: other.concat([{method: 'gift', amount: use}]), use};
+}
+/* --- kassa oynasidagi bo'lim --- */
+function __gftCoHtml(){
+  if(!(state.giftCards || []).length && !window.__gftAlways) return '';
+  return `<button type="button" class="co-summary" id="co-gift-toggle"><span>${icI('gift')} ${escapeHtml(tr('gftCo'))}:</span><span class="co-val" id="co-gift-val"></span><span class="co-act">&#9662;</span></button>
+    <div class="co-body" id="co-gift-body"><div class="gft-co">
+      <div style="display:flex;gap:8px;"><input type="text" id="gft-code" placeholder="GC-XXXX-XXXX" autocomplete="off" style="flex:1;min-width:0;text-transform:uppercase;"><button type="button" class="btn btn-outline" id="gft-scan" style="width:auto;flex-shrink:0;">${ICONS.barcode || ''}</button><button type="button" class="btn btn-accent" id="gft-check" style="width:auto;flex-shrink:0;">${escapeHtml(tr('gftCheck'))}</button></div>
+      <div id="gft-reader" style="margin-top:8px;"></div>
+      <div id="gft-info" class="subtle" style="font-size:12.5px;margin-top:6px;"></div>
+      <div id="gft-err" class="error-text"></div>
+    </div></div>`;
+}
+function __gftCoSync(){
+  try{ if(window.__coTenderRender && document.getElementById('cf-tendered')) window.__coTenderRender(); }catch(e){}
+  const g = window.__gftApplied, row = document.getElementById('gft-row'), val = document.getElementById('co-gift-val');
+  let used = 0; try{ used = g ? __gftUse(window.__coGrand ? window.__coGrand() : 0) : 0; }catch(e){}
+  if(val) val.textContent = g ? __gftShow(g.code) + ' · −' + fmt(used) : '';
+  if(row){ row.style.display = g ? '' : 'none'; if(g){ row.querySelector('[data-gft-l]').textContent = tr('gftLine').replace('{code}', __gftShow(g.code)); const ad = document.getElementById('gft-amount-display'); if(ad) ad.textContent = '−' + fmt(used); } }
+}
+function __gftCoBind(){
+  const tg = document.getElementById('co-gift-toggle'); if(!tg) return;
+  const body = document.getElementById('co-gift-body');
+  tg.addEventListener('click', ()=>{ body.classList.toggle('open'); });
+  const info = document.getElementById('gft-info'), err = document.getElementById('gft-err'), inp = document.getElementById('gft-code');
+  const refresh = ()=>{ try{ window.__coRefresh && window.__coRefresh(); }catch(e){} };
+  const draw = ()=>{
+    const g = window.__gftApplied;
+    if(!g){ info.innerHTML = ''; refresh(); return; }
+    info.innerHTML = escapeHtml(tr('gftBal').replace('{sum}', fmt(g.balance)).replace('{d}', g.expires ? fmtDate(new Date(g.expires + 'T00:00')) : '—'))
+      + '<div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><span>' + escapeHtml(tr('gftUseAmt')) + '</span><input type="text" inputmode="numeric" id="gft-amt" style="width:130px;" value="' + formatMoneyInputValue(g.amount) + '"><button type="button" class="btn btn-ghost btn-sm" id="gft-rm" style="width:auto;color:var(--danger);">' + escapeHtml(tr('gftRemove')) + '</button></div>';
+    const a = document.getElementById('gft-amt');
+    try{ attachMoneyInputFormatting(a); }catch(e){}
+    a.addEventListener('input', ()=>{ const v = parseMoneyInput(a.value) || 0; g.amount = Math.max(0, Math.min(v, g.balance)); refresh(); });
+    document.getElementById('gft-rm').addEventListener('click', ()=>{ window.__gftApplied = null; inp.value = ''; draw(); });
+    refresh();
+  };
+  const check = async (code)=>{
+    err.textContent = ''; info.textContent = '…';
+    try{
+      const g = await __gftFetch(code);
+      if(g.status !== 'active') throw {code: 'void'};
+      if(__gftExpired(g)) throw {code: 'expired'};
+      if(!(Number(g.balance) > 0)) throw {code: 'balance'};
+      let due = 0; try{ due = window.__coGrand ? window.__coGrand() : 0; }catch(e){}
+      window.__gftApplied = {id: g.id, code: g.code, balance: Math.round(Number(g.balance) || 0), expires: g.expires || '', amount: Math.min(Math.round(Number(g.balance) || 0), due || Math.round(Number(g.balance) || 0))};
+      inp.value = __gftShow(g.code); draw();
+    }catch(e){ window.__gftApplied = null; info.textContent = ''; err.textContent = __gftErr(e); refresh(); }
+  };
+  document.getElementById('gft-check').addEventListener('click', ()=>check(inp.value));
+  inp.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); check(inp.value); } });
+  document.getElementById('gft-scan').addEventListener('click', ()=>{
+    const box = document.getElementById('gft-reader');
+    if(window.__gftScanner){ try{ window.__gftScanner.stop().then(()=>window.__gftScanner.clear()).catch(()=>{}); }catch(e){} window.__gftScanner = null; box.innerHTML = ''; return; }
+    waitForQrLib((ok)=>{
+      if(!ok){ err.textContent = tr('scannerLibFailed'); return; }
+      try{
+        box.innerHTML = '<div id="gft-reader-v" style="width:100%;border-radius:12px;overflow:hidden;"></div>';
+        const sc = new Html5Qrcode('gft-reader-v'); window.__gftScanner = sc;
+        sc.start({facingMode: 'environment'}, {fps: 10, qrbox: {width: 200, height: 200}}, (txt)=>{
+          try{ sc.stop().then(()=>sc.clear()).catch(()=>{}); }catch(e){} window.__gftScanner = null; box.innerHTML = '';
+          const m = /GC[-\s]?[0-9A-Z]{4}[-\s]?[0-9A-Z]{4}/i.exec(String(txt)); const code = m ? m[0] : txt;
+          inp.value = __gftShow(code); check(code);
+        }, ()=>{}).catch((e)=>{ err.textContent = tr('cameraError') + (e && e.name ? ' (' + e.name + ')' : ''); });
+      }catch(e){ err.textContent = tr('cameraError'); }
+    }, 10);
+  });
+}
+/* --- sertifikatlar bo'limi --- */
+window.__gcTabs = ()=>canPromo() ? [['gift', tr('gftMenu')]] : [];
+window.__gcTabRender = (tab, body)=>{ if(tab === 'gift') __gftTab(body); };
+function __gftStatus(g){ if(g.status !== 'active') return 'void'; if(__gftExpired(g)) return 'expired'; if(!(Number(g.balance) > 0)) return 'used'; return 'active'; }
+function __gftBadge(g){ const s = __gftStatus(g); return '<span class="so-st ' + ({active: 'received', used: 'draft', expired: 'cancelled', void: 'cancelled'}[s]) + '">' + escapeHtml(tr({active: 'gftStActive', used: 'gftStUsed', expired: 'gftStExpired', void: 'gftStVoid'}[s])) + '</span>'; }
+function __gftTab(body){
+  const b = effectiveBranchId(state.currentBranchId);
+  const all = (state.giftCards || []).slice().sort((x, y)=>String(y.soldAt || '').localeCompare(String(x.soldAt || '')));
+  const sold = all.reduce((a, g)=>a + (Number(g.amount) || 0), 0);
+  const used = all.reduce((a, g)=>a + (g.history || []).reduce((s, h)=>s + (h.type === 'redeem' ? (Number(h.amount) || 0) : h.type === 'refund' ? -(Number(h.amount) || 0) : 0), 0), 0);
+  const open = all.filter(g=>__gftStatus(g) === 'active').reduce((a, g)=>a + (Number(g.balance) || 0), 0);
+  const exp = all.filter(g=>__gftStatus(g) === 'expired').reduce((a, g)=>a + (Number(g.balance) || 0), 0);
+  const q = __gftNorm(state.__gftQ || '');
+  const list = all.filter(g=>!q || String(g.code).indexOf(q) >= 0 || String(g.buyer || '').toUpperCase().indexOf(String(state.__gftQ || '').toUpperCase()) >= 0);
+  body.innerHTML = `<button class="btn btn-accent btn-block" id="gft-sell" style="margin-bottom:10px;">${ICONS.plus} ${escapeHtml(tr('gftSell'))}</button>
+    <div class="stat-grid r3-kpi k2">
+      <div class="stat-card"><div class="stat-label">${tr('gftSold')}</div><div class="stat-value">${fmt(sold)}</div><div class="subtle" style="font-size:11.5px;">${escapeHtml(tr('gftCount').replace('{n}', all.length))}</div></div>
+      <div class="stat-card"><div class="stat-label">${tr('gftUsed')}</div><div class="stat-value" style="color:var(--teal);">${fmt(used)}</div></div>
+      <div class="stat-card"><div class="stat-label">${tr('gftOpen')}</div><div class="stat-value" style="color:var(--accent-dark);">${fmt(open)}</div></div>
+      <div class="stat-card"><div class="stat-label">${tr('gftExpiredSum')}</div><div class="stat-value">${fmt(exp)}</div></div>
+    </div>
+    <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="gft-q" placeholder="${escapeHtml(tr('gftSearch'))}" value="${escapeHtml(state.__gftQ || '')}"></div>
+    <div id="gft-list">${list.length ? list.map(g=>`<div class="card so-card" data-gft-open="${escapeHtml(g.id)}"><div class="t"><b style="font-variant-numeric:tabular-nums;letter-spacing:.3px;">${escapeHtml(__gftShow(g.code))}</b>${__gftBadge(g)}</div>
+      <div class="subtle" style="font-size:12.5px;margin-top:3px;">${escapeHtml(tr('gftBalOf').replace('{b}', fmt(g.balance || 0)).replace('{a}', fmt(g.amount || 0)))}${g.expires ? ' · ' + escapeHtml(tr('gftUntil').replace('{d}', fmtDate(new Date(g.expires + 'T00:00')))) : ''}${g.buyer ? ' · ' + escapeHtml(g.buyer) : ''}</div></div>`).join('') : `<div class="empty-state">${tr('gftEmpty')}</div>`}</div>
+    <p class="subtle" style="font-size:11.5px;margin-top:10px;">${escapeHtml(tr('gftHint'))}</p>`;
+  document.getElementById('gft-sell').addEventListener('click', __gftSellForm);
+  const qi = document.getElementById('gft-q'); qi.addEventListener('input', ()=>{ state.__gftQ = qi.value; const pos = qi.selectionStart; renderPromo(); const n = document.getElementById('gft-q'); if(n){ n.focus(); try{ n.setSelectionRange(pos, pos); }catch(e){} } });
+  body.querySelectorAll('[data-gft-open]').forEach(x=>x.addEventListener('click', ()=>{ const g = (state.giftCards || []).find(y=>y.id === x.dataset.gftOpen); if(g) __gftCard(g); }));
+}
+function __gftSellForm(){
+  const exp = new Date(); exp.setFullYear(exp.getFullYear() + 1);
+  const S = window.__gftSell = {amount: 0, pay: 'cash', expires: __pmYmd(exp), buyer: '', phone: ''};
+  openModal(`<div class="modal-title">${tr('gftSell')}</div>
+    <div class="field"><label class="field-label">${tr('gftAmount')}</label><input type="text" inputmode="numeric" id="gs-amt" data-money value=""></div>
+    <div class="r3-chips" id="gs-quick">${[50000, 100000, 200000, 500000].map(v=>`<button type="button" class="r3-chip" data-gs-q="${v}">${escapeHtml(fmt(v))}</button>`).join('')}</div>
+    <div class="field"><label class="field-label">${tr('gftExpires')}</label><input type="date" id="gs-exp" value="${S.expires}"></div>
+    <label class="field-label">${tr('gftPayBy')}</label>
+    <div class="r3-chips">${__r3Chip('data-gs-pay', 'cash', tr('cash'), true)}${__r3Chip('data-gs-pay', 'card', tr('card'), false)}</div>
+    <div class="field"><label class="field-label">${tr('gftBuyer')}</label><input type="text" id="gs-buyer" placeholder="${escapeHtml(tr('gftOptional'))}"></div>
+    <div class="field"><label class="field-label">${tr('gftPhone')}</label><input type="tel" id="gs-phone" placeholder="${escapeHtml(tr('gftOptional'))}"></div>
+    <p class="subtle" style="font-size:11.5px;margin:0 0 8px;">${escapeHtml(tr('gftSellHint'))}</p>
+    <div id="gs-err" class="error-text"></div>
+    <div class="btn-row"><button class="btn btn-outline" id="gs-cancel">${tr('cancel')}</button><button class="btn btn-accent" id="gs-ok">${escapeHtml(tr('gftSellBtn'))}</button></div>`);
+  const amt = document.getElementById('gs-amt'); try{ attachMoneyInputFormatting(amt); }catch(e){}
+  document.querySelectorAll('[data-gs-q]').forEach(b=>b.addEventListener('click', ()=>{ amt.value = formatMoneyInputValue(+b.dataset.gsQ); }));
+  document.querySelectorAll('[data-gs-pay]').forEach(b=>b.addEventListener('click', ()=>{ S.pay = b.dataset.gsPay; document.querySelectorAll('[data-gs-pay]').forEach(x=>x.classList.toggle('on', x === b)); }));
+  document.getElementById('gs-cancel').addEventListener('click', ()=>closeModal());
+  const ok = document.getElementById('gs-ok');
+  ok.addEventListener('click', async ()=>{
+    const err = document.getElementById('gs-err'); err.textContent = '';
+    S.amount = Math.round(parseMoneyInput(amt.value) || 0);
+    S.expires = document.getElementById('gs-exp').value || '';
+    S.buyer = document.getElementById('gs-buyer').value.trim(); S.phone = document.getElementById('gs-phone').value.trim();
+    if(!(S.amount > 0)){ err.textContent = tr('gftErrAmount'); return; }
+    if(S.expires && S.expires < __pmYmd(new Date())){ err.textContent = tr('gftErrExpDate'); return; }
+    if(!__gftOnline()){ err.textContent = tr('gftErrOffline'); return; }
+    const now = new Date().toISOString(), code = __gftNewCode();
+    const card = {id: code, code, amount: S.amount, balance: S.amount, expires: S.expires, status: 'active', payMethod: S.pay, soldAt: now, updatedAt: now, branchId: state.currentBranchId,
+      shiftId: state.currentShift ? state.currentShift.id : null, soldBy: state.currentStaff ? state.currentStaff.name : '', buyer: S.buyer, phone: S.phone,
+      history: [{at: now, type: 'sold', amount: S.amount, by: state.currentStaff ? state.currentStaff.name : '', pay: S.pay}]};
+    ok.disabled = true; ok.textContent = '…';
+    try{
+      await __gftCreate(card);
+      __gftUpsert(card);
+      try{ auditLog('giftSell', __gftShow(card.code) + ' · ' + fmt(card.amount) + ' · ' + paymentTypeLabel(card.payMethod), {giftId: card.id}); }catch(e){}
+      closeModal(); showToast(tr('gftSoldToast')); __gftCard(card);
+      try{ if(state.view === 'promo') renderPromo(); }catch(e){}
+    }catch(e){ ok.disabled = false; ok.textContent = tr('gftSellBtn'); err.textContent = __gftErr(e); }
+  });
+}
+function __gftCanvas(g){
+  const W = 600, H = 820, c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+  x.strokeStyle = '#1f4fb8'; x.lineWidth = 6; x.strokeRect(14, 14, W - 28, H - 28);
+  x.fillStyle = '#1f4fb8'; x.textAlign = 'center'; x.font = 'bold 34px Arial, sans-serif'; x.fillText(String(state.settings.businessName || 'Savdo Pos').slice(0, 30), W / 2, 80);
+  x.fillStyle = '#16233b'; x.font = 'bold 30px Arial, sans-serif'; x.fillText(trR('gftTitle'), W / 2, 130);
+  x.font = 'bold 56px Arial, sans-serif'; x.fillText(fmt(g.amount), W / 2, 205);
+  const M = __qrMatrix(g.code), n = M.length, s = Math.floor(300 / n), qx = (W - n * s) / 2, qy = 240;
+  x.fillStyle = '#000'; for(let yy = 0; yy < n; yy++) for(let xx = 0; xx < n; xx++) if(M[yy][xx]) x.fillRect(qx + xx * s, qy + yy * s, s, s);
+  x.font = 'bold 40px "Courier New", monospace'; x.fillStyle = '#16233b'; x.fillText(__gftShow(g.code), W / 2, qy + n * s + 60);
+  x.font = '24px Arial, sans-serif'; x.fillStyle = '#51677E';
+  x.fillText(g.expires ? trR('gftUntil').replace('{d}', fmtDate(new Date(g.expires + 'T00:00'))) : trR('gftNoExpiry'), W / 2, qy + n * s + 105);
+  x.font = '20px Arial, sans-serif'; x.fillText(trR('gftUseHint'), W / 2, qy + n * s + 145);
+  return c;
+}
+async function __gftPdf(g){
+  if(typeof window.jspdf === 'undefined'){ showToast(tr('pdfLibFailed')); return; }
+  const { jsPDF } = window.jspdf; const doc = new jsPDF({unit: 'pt', format: [300, 410]});
+  const cv = __gftCanvas(g); doc.addImage(cv.toDataURL('image/png'), 'PNG', 0, 0, 300, 410);
+  await sharePdfBlob(doc, 'sertifikat-' + __gftShow(g.code) + '.pdf', tr('gftTitle'));
+}
+function __gftCard(g){
+  const hist = (g.history || []).slice().reverse();
+  openModal(`<div class="modal-title">${escapeHtml(tr('gftTitle'))}</div>
+    <div style="text-align:center;"><div style="display:inline-block;padding:8px;background:#fff;border-radius:12px;border:1px solid var(--line);">${__qrSvg(g.code, 168)}</div>
+      <div style="font:800 22px/1.2 'Courier New',monospace;letter-spacing:1px;margin-top:8px;">${escapeHtml(__gftShow(g.code))}</div>
+      <div style="margin-top:6px;">${__gftBadge(g)}</div></div>
+    <div class="card" style="padding:10px 14px;margin-top:10px;">
+      <div class="row"><span class="subtle">${tr('gftAmount')}</span><strong>${fmt(g.amount || 0)}</strong></div>
+      <div class="row"><span class="subtle">${tr('gftBalance')}</span><strong style="color:var(--accent-dark);">${fmt(g.balance || 0)}</strong></div>
+      <div class="row"><span class="subtle">${tr('gftExpires')}</span><span>${g.expires ? escapeHtml(fmtDate(new Date(g.expires + 'T00:00'))) : '—'}</span></div>
+      ${g.buyer || g.phone ? `<div class="row"><span class="subtle">${tr('gftBuyer')}</span><span>${escapeHtml([g.buyer, g.phone].filter(Boolean).join(' · '))}</span></div>` : ''}
+    </div>
+    <h3 class="sub-title">${tr('supHistory')}</h3>
+    ${hist.map(h=>`<div class="list-item" style="padding:8px 12px;"><div class="info"><div class="name" style="font-size:13px;">${escapeHtml(tr({sold: 'gftHSold', redeem: 'gftHRedeem', refund: 'gftHRefund'}[h.type] || 'gftHSold'))}${h.receipt ? ' · №' + escapeHtml(String(h.receipt)) : ''}</div><div class="meta">${escapeHtml(fmtDateTime(h.at))}${h.by ? ' · ' + escapeHtml(h.by) : ''}</div></div><strong style="white-space:nowrap;color:${h.type === 'redeem' ? 'var(--danger)' : 'var(--teal)'};">${h.type === 'redeem' ? '−' : '+'}${fmt(h.amount || 0)}</strong></div>`).join('')}
+    <div class="btn-row" style="margin-top:12px;"><button class="btn btn-outline" id="gc-close">${tr('cancel')}</button><button class="btn btn-accent" id="gc-pdf">${ICONS.share || ''} ${escapeHtml(tr('gftShare'))}</button></div>`);
+  document.getElementById('gc-close').addEventListener('click', ()=>closeModal());
+  document.getElementById('gc-pdf').addEventListener('click', ()=>__gftPdf(g));
+}
+/* --- chek qaytarilganda sertifikatga qaytarish --- */
+function __gftOnRefund(sale){
+  const gp = sale && Number(sale.giftPaid) > 0 && sale.giftCard && sale.giftCard.id ? Math.round(Number(sale.giftPaid)) : 0;
+  if(!gp) return;
+  const id = sale.giftCard.id;
+  if(!__gftOnline()){ __gftQueueReturn(id, gp, sale.id, 'refund'); showToast(tr('gftRefundLater').replace('{sum}', fmt(gp))); return; }
+  __gftReturn(id, gp, sale.id, 'refund').then(()=>showToast(tr('gftRefundDone').replace('{sum}', fmt(gp)))).catch(()=>{ __gftQueueReturn(id, gp, sale.id, 'refund'); showToast(tr('gftRefundLater').replace('{sum}', fmt(gp))); });
 }
 
 /* --- Online catalog --- */
@@ -22224,6 +23052,7 @@ function openStaffForm(staffId){
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-mydebts" ${perms.myDebts?'checked':''}><span>${tr('permMyDebts')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-supply" ${perms.supply?'checked':''}><span>${tr('permSupply')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-transfer" ${perms.transfer?'checked':''}><span>${tr('permTransfer')}</span></div>
+      <div class="checkbox-row"><input type="checkbox" id="sf-perm-promo" ${perms.promo?'checked':''}><span>${tr('permPromo')}</span></div>
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-printer" ${perms.printerSetup!==false?'checked':''}><span>${tr('permPrinterSetup')}</span></div>
       ${canGrantAdmin ? `
       <div class="checkbox-row"><input type="checkbox" id="sf-perm-settings" ${perms.settings?'checked':''}><span>${tr('settingsPerm')}</span></div>
@@ -22311,6 +23140,7 @@ function openStaffForm(staffId){
       myDebts: document.getElementById('sf-perm-mydebts').checked,
       supply: !!(document.getElementById('sf-perm-supply') && document.getElementById('sf-perm-supply').checked),   /* fix135-sup */
       transfer: !!(document.getElementById('sf-perm-transfer') && document.getElementById('sf-perm-transfer').checked),   /* fix136-trf */
+      promo: !!(document.getElementById('sf-perm-promo') && document.getElementById('sf-perm-promo').checked),   /* fix139-promo */
       expense: document.getElementById('sf-perm-expense').checked,
       settings: settingsEl ? settingsEl.checked : (perms.settings||false),
       staffManage: staffManageEl ? staffManageEl.checked : (perms.staffManage||false),
@@ -22514,6 +23344,7 @@ function renderAll(){
   else if(state.view==='purchase') renderPurchase();
   else if(state.view==='supply') renderSupply();   /* fix135-sup */
   else if(state.view==='transfer') renderTransfer();   /* fix136-trf */
+  else if(state.view==='promo') renderPromo();   /* fix139-promo */
   if(warningHtml) container.insertAdjacentHTML('afterbegin', warningHtml);
   const syncBannerHtml = pendingSyncBannerHtml();
   if(syncBannerHtml){
