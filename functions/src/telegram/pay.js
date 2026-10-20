@@ -40,10 +40,14 @@ async function sendMenu(deps, chatId, lang) {
   if (!deps.payToken) return { reply: txt('payOff', lang) };
   const bids = await linkedBids(deps, chatId);
   if (!bids.length) return { reply: txt('payNotLinked', lang) };
-  for (const bid of bids) {
+  const SH = require('./shop');   /* fix146-tgsub: tariflar katalogi (mini ilova) tugmasi va pastki menyu */
+  await SH.ownerMenu(deps, chatId, lang);
+  for (let bi = 0; bi < bids.length; bi++) {
+    const bid = bids[bi];
     const s = await shopOf(deps.db, bid);
     const exp = readExpiryMs(s.biz);
     const kb = Object.keys(PLANS).map(function (k) { const p = PLANS[k]; return [{ text: txt('payPlanBtn_' + k, lang, { sum: fmtSum(p.price) }), callback_data: 'p|' + bidHash(bid) + '|' + SHORT_OF[k] }]; });
+    if (bi === bids.length - 1) kb.push([{ text: require('./shopTexts').t('btnPlans', lang), web_app: { url: SH.hubUrl() } }]);
     await deps.tg('sendMessage', { chat_id: chatId, parse_mode: 'HTML', text: txt(exp > deps.nowMs() ? 'payMenu' : 'payMenuExpired', lang, { shop: s.name, date: fmtDate(exp) }), reply_markup: { inline_keyboard: kb } });
   }
   return { menu: bids.length };
@@ -59,30 +63,39 @@ async function onCallback(deps, cq, lang) {
   const bid = (await linkedBids(deps, chatId)).find(function (b) { return bidHash(b) === m[1]; });
   if (!bid) { await answer(txt('payNotLinkedShort', lang)); return { notLinked: true }; }
   const plan = getPlan(SHORT[m[2]]);
+  const r = await orderFor(deps, bid, plan, chatId, (cq.from && cq.from.id) || chatId);
+  if (r.tooMany) { await answer(txt('payTooMany', lang)); return { tooMany: true }; }
+  await deps.tg('sendInvoice', Object.assign({ chat_id: chatId }, await invoiceParams(deps, bid, plan, r.order, lang)));
+  await answer('');
+  return { invoice: r.order.orderId };
+}
+/* fix146-tgsub: buyurtma (kutilayotgan bo'lsa — o'sha) va hisob maydonlari — chatdagi tugma ham, mini ilova ham shuni ishlatadi */
+async function orderFor(deps, bid, plan, chatId, fromId) {
   const now = deps.nowMs(), db = deps.db;
+  chatId = String(chatId);
   // yaqinda shu chat/tarif uchun yaratilgan kutilayotgan buyurtma bo'lsa — o'sha (spamdan himoya)
   const pend = await db.collection('paymentOrders').where('businessId', '==', bid).where('status', '==', 'PENDING').get();
   let order = null;
   pend.docs.forEach(function (d) { const o = d.data(); if (o.provider === PROVIDER && o.plan === plan.key && o.chatId === chatId && now - o.createdAtMs < REUSE_MS) order = o; });
   const recent = pend.docs.map(function (d) { return d.data(); }).filter(function (o) { return o.provider === PROVIDER && now - o.createdAtMs < 3600 * 1000; });
-  if (!order && recent.length >= 10) { await answer(txt('payTooMany', lang)); return { tooMany: true }; }
+  if (!order && recent.length >= 10) return { tooMany: true };
   if (!order) {
-    order = { orderId: deps.genId(), businessId: bid, userId: 'tg:' + String((cq.from && cq.from.id) || chatId), plan: plan.key, months: plan.months, amount: plan.price,
+    order = { orderId: deps.genId(), businessId: bid, userId: 'tg:' + String(fromId || chatId), plan: plan.key, months: plan.months, amount: plan.price,
       provider: PROVIDER, status: 'PENDING', createdAtMs: now, chatId: chatId, paymeTxId: null };
     await db.collection('paymentOrders').doc(order.orderId).set(order);
   }
-  const s = await shopOf(db, bid);
-  await deps.tg('sendInvoice', {
-    chat_id: chatId,
+  return { order: order };
+}
+async function invoiceParams(deps, bid, plan, order, lang) {
+  const s = await shopOf(deps.db, bid);
+  return {
     title: txt('payInvTitle_' + plan.key, lang).slice(0, 32),
     description: txt('payInvDesc', lang, { shop: s.name, months: plan.months }).slice(0, 255),
     payload: order.orderId,
     provider_token: deps.payToken,
     currency: 'UZS',
     prices: [{ label: txt('payInvTitle_' + plan.key, lang).slice(0, 32), amount: plan.price * 100 }]
-  });
-  await answer('');
-  return { invoice: order.orderId };
+  };
 }
 
 /* Telegram to'lovdan oldin so'raydi: 10 soniya ichida javob kerak */
@@ -126,4 +139,4 @@ async function onPaid(deps, msg, lang) {
   return r;
 }
 
-module.exports = { sendMenu, onCallback, onPreCheckout, onPaid, linkedBids, bidHash, PROVIDER };
+module.exports = { sendMenu, onCallback, onPreCheckout, onPaid, linkedBids, bidHash, orderFor, invoiceParams, shopOf, fmtDate, PROVIDER, SHORT };

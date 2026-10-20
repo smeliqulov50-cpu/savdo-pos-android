@@ -419,3 +419,68 @@ test('inbox: hajmi 600 KB dan oshsa eski yopilganlar tushib qoladi', () => {
   assert.ok(JSON.stringify(p).length <= shop.INBOX_MAX_BYTES);
   assert.ok(p.a19 && p.a0 && p.d0 && !p.d149);
 });
+
+/* ---------- fix146-tgsub: egasining mini ilovasi — obuna tariflari ---------- */
+function subSeed(extra) {
+  const s = seed(extra);
+  s['tgChats/' + CUST] = { bids: [BID], lang: 'uz' };
+  s['tgBiz/' + BID].chats[String(CUST)] = { name: 'Ega', at: 2, sig: core.sigOf(KEY, BID, String(CUST)) };
+  s['businesses/' + BID].subscriptionExpiresAtMs = NOW + 3 * 86400000;
+  return s;
+}
+test('obuna katalogi: ulangan ega do\'konlari, muddat, tariflar; ulanmagan — bo\'sh', async () => {
+  const { deps } = mk(subSeed(), { payToken: 'PROV:LIVE:x', genId: () => 'ordSub1abc' });
+  let r = await shop.handleWebApp(deps, { initData: ID1, action: 'subInfo' });
+  assert.equal(r.body.linked, true); assert.equal(r.body.payOn, true);
+  assert.equal(r.body.shops.length, 1); assert.equal(r.body.shops[0].name, 'Sardor Market'); assert.equal(r.body.shops[0].active, true);
+  assert.equal(r.body.shops[0].slug, 'sardor'); assert.ok(r.body.shops[0].link.endsWith('start=s_sardor'));
+  assert.deepEqual(r.body.plans.map(p => p.k), ['m', 's', 'y']);
+  r = await shop.handleWebApp(deps, { initData: ID2, action: 'subInfo' });
+  assert.equal(r.body.linked, false); assert.equal(r.body.shops.length, 0);
+  // soxta (imzosiz) ulanish hisobga olinmaydi
+  const s2 = subSeed(); s2['tgBiz/' + BID].chats[String(CUST)].sig = 'bad';
+  r = await shop.handleWebApp(mk(s2, { payToken: 'P:LIVE:x' }).deps, { initData: ID1, action: 'subInfo' });
+  assert.equal(r.body.linked, false);
+});
+test('obuna katalogi: to\'lash — serverdagi narx bilan hisob havolasi, buyurtma qayta ishlatiladi; begona do\'kon, o\'chiq to\'lov', async () => {
+  let n = 0;
+  const { deps, db, tg } = mk(subSeed(), { payToken: 'PROV:LIVE:x', genId: () => 'ordSub' + (++n) + 'abc' });
+  tg.calls.length = 0;
+  const realTg = deps.tg; deps.tg = async function (m, p) { if (m === 'createInvoiceLink') { tg.calls.push({ method: m, params: p }); return 'https://t.me/$inv' + n; } return realTg(m, p); };
+  const h = require('../src/telegram/pay').bidHash(BID);
+  let r = await shop.handleWebApp(deps, { initData: ID1, action: 'subPay', h: h, k: 's' });
+  assert.equal(r.body.ok, true); assert.ok(r.body.link.startsWith('https://t.me/'));
+  const inv = tg.calls.find(c => c.method === 'createInvoiceLink').params;
+  const { PLANS } = require('../src/domain/plans');
+  assert.equal(inv.prices[0].amount, PLANS.sixmonth.price * 100); assert.equal(inv.currency, 'UZS'); assert.equal(inv.provider_token, 'PROV:LIVE:x');
+  const o = db.store['paymentOrders/' + inv.payload];
+  assert.equal(o.businessId, BID); assert.equal(o.plan, 'sixmonth'); assert.equal(o.status, 'PENDING'); assert.equal(o.chatId, String(CUST));
+  r = await shop.handleWebApp(deps, { initData: ID1, action: 'subPay', h: h, k: 's' });
+  assert.equal(r.body.order, inv.payload);   // 30 daqiqa ichida — o'sha buyurtma
+  r = await shop.handleWebApp(deps, { initData: ID2, action: 'subPay', h: h, k: 's' });
+  assert.equal(r.body.code, 'not_linked');
+  r = await shop.handleWebApp(deps, { initData: ID1, action: 'subPay', h: h, k: 'z' });
+  assert.equal(r.body.code, 'bad_plan');
+  r = await shop.handleWebApp(Object.assign({}, deps, { payToken: '' }), { initData: ID1, action: 'subPay', h: h, k: 'm' });
+  assert.equal(r.body.code, 'pay_off');
+  // to'lovdan oldingi tekshiruv va to'lov — avvalgi oqim bilan bir xil
+  const pay = require('../src/telegram/pay');
+  const pc = await pay.onPreCheckout(deps, { id: 'q1', invoice_payload: inv.payload, currency: 'UZS', total_amount: PLANS.sixmonth.price * 100 }, 'uz');
+  assert.equal(pc.ok, true);
+});
+test('egasi: ulanganda, /yordam va /obuna da pastki menyu "Do\'konim"; mijoz oddiy matn yozsa — do\'kon tugmasi', async () => {
+  const { deps, tg } = mk(subSeed(), { payToken: 'PROV:LIVE:x' });
+  const m = (text) => ({ message: { message_id: 1, chat: { id: CUST, type: 'private' }, from: { id: CUST, language_code: 'uz' }, text: text } });
+  await core.handleUpdate(deps, m('/yordam'));
+  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.web_app.url.endsWith('?v=me')));
+  tg.calls.length = 0;
+  await core.handleUpdate(deps, m('/obuna'));
+  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.text === "Do'konim"));
+  const last = tg.sent[tg.sent.length - 1];
+  assert.ok(last.reply_markup.inline_keyboard.pop()[0].web_app.url.endsWith('?v=me'));
+  const c = mk();
+  await core.handleUpdate(c.deps, { message: { message_id: 1, chat: { id: CUST2, type: 'private' }, from: { id: CUST2, language_code: 'uz' }, text: '/start s_sardor' } });
+  c.tg.calls.length = 0;
+  await core.handleUpdate(c.deps, { message: { message_id: 2, chat: { id: CUST2, type: 'private' }, from: { id: CUST2, language_code: 'uz' }, text: 'salom' } });
+  assert.ok(c.tg.calls.some(x => x.method === 'setChatMenuButton' && x.params.menu_button.web_app.url.endsWith('?s=sardor')));
+});

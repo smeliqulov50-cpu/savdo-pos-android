@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Savdo Pos — buyurtma</title>
 <!-- fix145-botshop: Telegram mini ilova — bot orqali buyurtma -->
+<!-- fix146-tgsub: egasi uchun sahifa (?v=me): obuna tariflari va o'z katalogi -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
@@ -195,6 +196,30 @@ var I = {
  clear:["Savatni tozalash","Очистить корзину","Clear cart","Себетті тазалау","Себетти тазалоо","Тоза кардани сабад"],
  qtyP:["Miqdorni kiriting","Введите количество","Enter quantity","Санын енгізіңіз","Санын жазыңыз","Миқдорро ворид кунед"],
  itemsN:["{n} ta","{n} шт.","{n} items","{n} дана","{n} даана","{n} адад"],
+ hubTitle:["Do'konim","Мой магазин","My shop","Менің дүкенім","Менин дүкөнүм","Мағозаи ман"],
+ tabSub:["Obuna","Подписка","Subscription","Жазылым","Жазылуу","Обуна"],
+ tabCat:["Katalog","Каталог","Catalog","Каталог","Каталог","Феҳрист"],
+ subUntil:["Obuna {d} gacha faol","Подписка активна до {d}","Subscription active until {d}","Жазылым {d} дейін белсенді","Жазылуу {d} чейин активдүү","Обуна то {d} фаъол аст"],
+ subExpired:["Obuna muddati tugagan ({d})","Срок подписки истёк ({d})","Subscription expired ({d})","Жазылым мерзімі аяқталды ({d})","Жазылуу мөөнөтү бүттү ({d})","Мӯҳлати обуна тамом шуд ({d})"],
+ plan_m:["1 oy","1 месяц","1 month","1 ай","1 ай","1 моҳ"],
+ plan_s:["6 oy","6 месяцев","6 months","6 ай","6 ай","6 моҳ"],
+ plan_y:["1 yil","1 год","1 year","1 жыл","1 жыл","1 сол"],
+ perMonth:["oyiga {sum}","{sum} в месяц","{sum} per month","айына {sum}","айына {sum}","моҳе {sum}"],
+ save:["{p}% tejaysiz","экономия {p}%","save {p}%","{p}% үнемдейсіз","{p}% үнөмдөйсүз","{p}% сарфа"],
+ best:["Eng foydali","Выгоднее всего","Best value","Ең тиімді","Эң пайдалуу","Аз ҳама фоиданоктар"],
+ payBtn:["To'lash","Оплатить","Pay","Төлеу","Төлөө","Пардохт"],
+ payOpening:["To'lov oynasi ochilmoqda…","Открываем оплату…","Opening payment…","Төлем терезесі ашылуда…","Төлөм терезеси ачылууда…","Равзанаи пардохт кушода мешавад…"],
+ paidOk:["To'lov qabul qilindi! Obuna uzaytirildi.","Оплата принята! Подписка продлена.","Payment received! The subscription has been extended.","Төлем қабылданды! Жазылым ұзартылды.","Төлөм кабыл алынды! Жазылуу узартылды.","Пардохт қабул шуд! Обуна дароз карда шуд."],
+ payFail:["To'lov o'tmadi. Qayta urinib ko'ring.","Оплата не прошла. Попробуйте ещё раз.","The payment did not go through. Please try again.","Төлем өтпеді. Қайталап көріңіз.","Төлөм өткөн жок. Кайра аракет кылыңыз.","Пардохт нагузашт. Боз кӯшиш кунед."],
+ notLinked:["Bu Telegram hisobi hech bir do'konga ulanmagan. Ilovada Sozlamalar → Bildirishnomalar va ovoz → Telegram bot bo'limida «Telegram'ga ulash» tugmasini bosing.","Этот аккаунт Telegram не подключён ни к одному магазину. В приложении откройте Настройки → Уведомления и звук → Telegram-бот и нажмите «Подключить Telegram».","This Telegram account is not connected to any shop. In the app open Settings → Notifications & sound → Telegram bot and tap “Connect Telegram”.","Бұл Telegram аккаунты ешбір дүкенге қосылмаған. Қолданбада Баптаулар → Хабарландырулар және дыбыс → Telegram бот бөлімінде «Telegram-ға қосу» түймесін басыңыз.","Бул Telegram аккаунту эч бир дүкөнгө туташкан эмес. Колдонмодо Жөндөөлөр → Билдирмелер жана үн → Telegram бот бөлүмүндө «Telegram'га туташуу» баскычын басыңыз.","Ин ҳисоби Telegram ба ягон мағоза пайваст нест. Дар барнома Танзимот → Огоҳиномаҳо ва садо → Telegram-бот-ро кушоед ва «Пайваст ба Telegram»-ро пахш кунед."],
+ payOffMsg:["Bot orqali to'lov hali yoqilmagan.","Оплата через бота ещё не включена.","Payment through the bot is not enabled yet.","Бот арқылы төлем әлі қосылмаған.","Бот аркылуу төлөм азырынча күйгүзүлгөн эмес.","Пардохт тавассути бот ҳанӯз фаъол нест."],
+ openCat:["🛍 Katalogni ochish","🛍 Открыть каталог","🛍 Open catalog","🛍 Каталогты ашу","🛍 Каталогду ачуу","🛍 Кушодани феҳрист"],
+ shareLink:["📤 Havolani ulashish","📤 Поделиться ссылкой","📤 Share the link","📤 Сілтемемен бөлісу","📤 Шилтеме менен бөлүшүү","📤 Мубодилаи пайванд"],
+ copyLink:["Nusxalash","Копировать","Copy","Көшіру","Көчүрүү","Нусха"],
+ copied:["Nusxalandi","Скопировано","Copied","Көшірілді","Көчүрүлдү","Нусха шуд"],
+ catOff:["Bot orqali buyurtma hali yoqilmagan. Ilovada Sozlamalar → Onlayn buyurtma bo'limida yoqing.","Заказы через бота ещё не включены. Включите их в приложении: Настройки → Онлайн-заказ.","Ordering through the bot is not on yet. Turn it on in the app: Settings → Online ordering.","Бот арқылы тапсырыс әлі қосылмаған. Қолданбада қосыңыз: Баптаулар → Онлайн тапсырыс.","Бот аркылуу буйрутма азырынча күйгүзүлгөн эмес. Колдонмодо күйгүзүңүз: Жөндөөлөр → Онлайн буйрутма.","Фармоиш тавассути бот ҳанӯз фаъол нест. Дар барнома фаъол кунед: Танзимот → Фармоиши онлайн."],
+ catHint:["Bu havolani mijozlaringizga yuboring: ular shu katalogdan buyurtma beradi.","Отправьте эту ссылку клиентам: они будут заказывать из этого каталога.","Send this link to your customers: they will order from this catalog.","Бұл сілтемені клиенттеріңізге жіберіңіз: олар осы каталогтан тапсырыс береді.","Бул шилтемени кардарларыңызга жөнөтүңүз: алар ушул каталогдон буйрутма беришет.","Ин пайвандро ба мизоҷонатон фиристед: онҳо аз ҳамин феҳрист фармоиш медиҳанд."],
+ share:["Ulashish","Поделиться","Share","Бөлісу","Бөлүшүү","Мубодила"],
  modeDel:["Yetkazib berish","Доставка","Delivery","Жеткізу","Жеткирүү","Расонидан"],
  modePick:["Olib ketish","Самовывоз","Pickup","Өзі алып кету","Өзү алып кетүү","Худ гирифта бурдан"],
  noFound:["Hech narsa topilmadi","Ничего не найдено","Nothing found","Ештеңе табылмады","Эч нерсе табылган жок","Чизе ёфт нашуд"],
@@ -254,7 +279,7 @@ function hoursStr(){ var h = S.shop && S.shop.hours; return h && h.on ? h.from +
 
 /* ---------- katalog ---------- */
 function applyCatalog(j){
-  S.shop = j.shop; S.items = j.items || []; S.cats = j.cats || []; S.me = j.me || {}; S.active = j.active || 0;
+  S.shop = j.shop; S.bot = j.bot || ''; S.items = j.items || []; S.cats = j.cats || []; S.me = j.me || {}; S.active = j.active || 0;
   S.byId = {}; S.items.forEach(function(it){ S.byId[it.id] = it; });
   if(!S.form.name && S.me.name) S.form.name = S.me.name;
   if(S.form.mode === 'delivery' && !S.shop.delivery) S.form.mode = 'pickup';
@@ -271,7 +296,90 @@ function applyCatalog(j){
   saveCart();
   if(removed.length) toast(t('e_stock0', { n: removed.join(', ') }));
 }
+/* ---------- fix146-tgsub: egasining sahifasi — obuna tariflari va o'z katalogi (?v=me) ---------- */
+var HUB = qs.get('v') === 'me';
+var H = { data:null, tab: 'sub', shop: 0, busy:'', msg:'', msgOk:false };
+function hubDate(ms){ if(!ms) return '—'; var d = new Date(ms), z = function(n){ return (n < 10 ? '0' : '') + n; }; return z(d.getDate()) + '.' + z(d.getMonth() + 1) + '.' + d.getFullYear(); }
+function hubMoney(n){ return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ' + ((CUR.UZS.l[LI]) || "so'm"); }
+function hubLoad(silent){
+  api('subInfo').then(function(j){
+    if(!j.ok){ S.err = errText(j); S.view = 'fatal'; render(); return; }
+    H.data = j; if(H.shop >= (j.shops || []).length) H.shop = 0; hubRender();
+  });
+}
+function hubRender(){
+  var app = document.getElementById('app'), d = H.data;
+  if(!d){ app.innerHTML = '<div class="spin"></div>'; return; }
+  var h = '<header><div class="hrow"><h1>' + esc(t('hubTitle')) + '</h1></div>';
+  if(d.linked){
+    h += '<div class="seg" style="margin-top:10px;"><button data-htab="sub" class="' + (H.tab === 'sub' ? 'on' : '') + '">' + esc(t('tabSub')) + '</button><button data-htab="cat" class="' + (H.tab === 'cat' ? 'on' : '') + '">' + esc(t('tabCat')) + '</button></div>';
+    if(d.shops.length > 1) h += '<div class="chips" style="padding:10px 0 0;">' + d.shops.map(function(x, i){ return '<button class="chip' + (H.shop === i ? ' on' : '') + '" data-hshop="' + i + '">' + esc(x.name) + '</button>'; }).join('') + '</div>';
+  }
+  h += '</header>';
+  if(!d.linked){ app.innerHTML = h + '<div class="sec"><p style="margin:0;font-size:14px;">' + esc(t('notLinked')) + '</p></div>'; hubBind(); return; }
+  var sh = d.shops[H.shop];
+  if(H.tab === 'sub'){
+    h += '<div class="sec"><div style="font-weight:800;font-size:16px;">' + esc(sh.name) + '</div><div style="margin-top:4px;font-weight:700;color:' + (sh.active ? 'var(--ok)' : 'var(--danger)') + ';">' + esc(t(sh.active ? 'subUntil' : 'subExpired', { d: hubDate(sh.exp) })) + '</div></div>';
+    if(!d.payOn) h += '<div class="banner warn">' + esc(t('payOffMsg')) + '</div>';
+    var base = (d.plans.find(function(p){ return p.k === 'm'; }) || d.plans[0]);
+    var svOf = function(p){ return base && p.months > 1 ? Math.round((1 - p.price / (base.price * p.months)) * 100) : 0; };
+    var bestK = '', bestSv = 0; d.plans.forEach(function(p){ var v = svOf(p); if(v > bestSv){ bestSv = v; bestK = p.k; } });
+    d.plans.forEach(function(p){
+      var per = Math.round(p.price / Math.max(1, p.months)), sv = svOf(p);
+      h += '<div class="sec" style="display:flex;align-items:center;gap:12px;' + (p.k === bestK ? 'outline:2px solid var(--btn);' : '') + '"><div style="flex:1;min-width:0;"><div style="font-weight:800;font-size:16px;">' + esc(t('plan_' + p.k)) + (p.k === bestK ? ' <span class="st" style="margin-left:6px;">' + esc(t('best')) + '</span>' : '') + '</div>'
+        + '<div style="font-size:19px;font-weight:800;margin-top:2px;">' + esc(hubMoney(p.price)) + '</div>'
+        + '<div class="muted">' + (p.months > 1 ? esc(t('perMonth', { sum: hubMoney(per) })) : '') + (sv > 0 ? ' · <b style="color:var(--ok)">' + esc(t('save', { p: sv })) + '</b>' : '') + '</div></div>'
+        + '<button class="addb" style="width:auto;padding:0 18px;height:44px;flex-shrink:0;margin:0;" data-hpay="' + esc(p.k) + '"' + (!d.payOn || H.busy ? ' disabled' : '') + '>' + esc(H.busy === p.k ? '…' : t('payBtn')) + '</button></div>';
+    });
+    if(H.msg) h += '<div class="' + (H.msgOk ? 'banner' : 'err') + '" style="' + (H.msgOk ? 'border-left-color:var(--ok);' : '') + '">' + esc(H.msg) + '</div>';
+  } else {
+    if(sh.slug){
+      h += '<div class="sec"><div style="font-weight:800;font-size:16px;">' + esc(sh.name) + '</div><div class="muted" style="margin-top:4px;">' + esc(t('catHint')) + '</div><div style="font-weight:700;word-break:break-all;margin:10px 0;color:var(--link);">' + esc(sh.link) + '</div>'
+        + '<button class="addb" style="height:46px;" data-hcat="' + esc(sh.slug) + '">' + esc(t('openCat')) + '</button>'
+        + '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn2" data-hshare="1">' + esc(t('shareLink')) + '</button><button class="btn2" data-hcopy="1" style="width:auto;">' + esc(t('copyLink')) + '</button></div></div>';
+    } else h += '<div class="sec"><div style="font-weight:800;font-size:16px;">' + esc(sh.name) + '</div><p class="muted" style="font-size:14px;margin:6px 0 0;">' + esc(t('catOff')) + '</p></div>';
+  }
+  app.innerHTML = h; hubBind();
+}
+function shareTg(link, text){
+  var u = 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text || '');
+  try{ if(TG && TG.openTelegramLink){ TG.openTelegramLink(u); return; } }catch(e){}
+  window.open(u, '_blank');
+}
+function copyText(x){ try{ navigator.clipboard.writeText(x).then(function(){ toast(t('copied')); }, function(){ toast(x); }); }catch(e){ toast(x); } }
+function hubPay(k){
+  var sh = H.data.shops[H.shop]; H.busy = k; H.msg = ''; hubRender();
+  api('subPay', { h: sh.h, k: k }).then(function(j){
+    if(!j.ok || !j.link){ H.busy = ''; H.msg = j.code === 'pay_off' ? t('payOffMsg') : j.code === 'too_many' ? t('e_many') : errText(j); H.msgOk = false; haptic('err'); hubRender(); return; }
+    var done = function(st){
+      H.busy = '';
+      if(st === 'paid'){ H.msg = t('paidOk'); H.msgOk = true; haptic('ok'); hubRender(); setTimeout(function(){ hubLoad(true); }, 2500); setTimeout(function(){ hubLoad(true); }, 7000); return; }
+      if(st === 'failed'){ H.msg = t('payFail'); H.msgOk = false; haptic('err'); }
+      hubRender();
+    };
+    try{ if(TG && TG.openInvoice){ TG.openInvoice(j.link, done); return; } }catch(e){}
+    try{ if(TG && TG.openTelegramLink){ TG.openTelegramLink(j.link); done('pending'); return; } }catch(e){}
+    window.location.href = j.link;
+  });
+}
+function hubBind(){
+  var app = document.getElementById('app');
+  app.onclick = function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    var v;
+    if(b.id === 'b-retry'){ H.data = null; hubRender(); hubLoad(); return; }
+    if((v = b.getAttribute('data-htab'))){ H.tab = v; H.msg = ''; hubRender(); return; }
+    if((v = b.getAttribute('data-hshop')) !== null){ H.shop = Number(v) || 0; H.msg = ''; hubRender(); return; }
+    if((v = b.getAttribute('data-hpay'))){ hubPay(v); return; }
+    if((v = b.getAttribute('data-hcat'))){ location.href = location.pathname + '?s=' + encodeURIComponent(v) + '&lang=' + LANG; return; }
+    var sh = H.data && H.data.shops[H.shop];
+    if(b.hasAttribute('data-hshare') && sh){ shareTg(sh.link, sh.name); return; }
+    if(b.hasAttribute('data-hcopy') && sh){ copyText(sh.link); return; }
+  };
+  try{ if(TG && TG.BackButton) TG.BackButton.hide(); }catch(e){}
+}
 function load(){
+  if(HUB){ if(!INIT){ renderOutside(); return; } hubRender(); hubLoad(); return; }
   if(!INIT || !SLUG){ renderOutside(); return; }
   api('catalog').then(function(j){
     if(!j.ok){ S.err = errText(j); S.view = 'fatal'; render(); return; }
@@ -336,7 +444,7 @@ function filtered(){
 }
 function renderShop(){
   var tt = totals();
-  var h = '<header><div class="hrow"><h1>' + esc(S.shop.name) + '</h1><button class="icon-btn" id="b-orders">' + IC.list + esc(t('myOrders')) + (S.active ? '<span class="dot">' + S.active + '</span>' : '') + '</button></div>';
+  var h = '<header><div class="hrow"><h1>' + esc(S.shop.name) + '</h1>' + (S.bot ? '<button class="icon-btn" id="b-share" aria-label="' + esc(t('share')) + '">📤</button>' : '') + '<button class="icon-btn" id="b-orders">' + IC.list + esc(t('myOrders')) + (S.active ? '<span class="dot">' + S.active + '</span>' : '') + '</button></div>';
   if(S.shop.address) h += '<div class="sub">📍 ' + esc(S.shop.address) + '</div>';
   h += '<div class="search">' + IC.search + '<input id="q" type="search" placeholder="' + esc(t('search')) + '" value="' + esc(S.q) + '" autocomplete="off"></div></header>';
   h += bannerHtml();
@@ -560,8 +668,9 @@ function bind(){
   app.onclick = function(e){
     var b = e.target.closest('button'); if(!b) return;
     var id;
-    if(b.id === 'b-retry'){ S.view = 'shop'; S.shop = null; render(); load(); return; }
+    if(b.id === 'b-retry'){ S.view = 'shop'; S.shop = null; if(HUB){ H.data = null; S.view = 'shop'; } render(); load(); return; }
     if(b.id === 'b-cart'){ go('cart'); return; }
+    if(b.id === 'b-share'){ shareTg('https://t.me/' + S.bot + '?start=s_' + SLUG, S.shop.name); return; }   /* fix146-tgsub */
     if(b.id === 'b-back' || b.id === 'b-back2'){ readForm(); go('shop'); return; }
     if(b.id === 'b-orders' || b.id === 'b-orders2'){ S.orders = null; go('orders'); return; }
     if(b.id === 'b-again'){ go('shop'); return; }

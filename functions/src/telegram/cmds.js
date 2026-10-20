@@ -39,6 +39,7 @@ function menuKb(deps, lang) {
   const b = function (k, cb) { return { text: C.t(k, lang), callback_data: 'c|' + cb }; };
   const rows = [[b('bToday', 'today'), b('bYday', 'yday')], [b('bDebts', 'debts'), b('bLow', 'low')]];
   rows.push(deps.payToken ? [b('bPay', 'pay'), b('bLang', 'lang')] : [b('bLang', 'lang')]);
+  rows.push([require('./shop').hubBtn(lang)]);   /* fix146-tgsub: obuna tariflari va o'z katalogi (mini ilova) */
   return { inline_keyboard: rows };
 }
 function langKb() {
@@ -137,7 +138,7 @@ async function run(deps, chatId, kind, lang) {
     return Object.assign({ cmd: 'pay' }, out);
   }
   const bids = await P().linkedBids(deps, chatId);
-  if (kind === 'help') { await send(deps, chatId, helpHtml(deps, lang, bids.length > 0), bids.length ? menuKb(deps, lang) : null); return { help: true, linked: bids.length }; }
+  if (kind === 'help') { if (bids.length) await require('./shop').ownerMenu(deps, chatId, lang); await send(deps, chatId, helpHtml(deps, lang, bids.length > 0), bids.length ? menuKb(deps, lang) : null); return { help: true, linked: bids.length }; }
   if (!bids.length) { await send(deps, chatId, C.t('notLinked', lang)); return { notLinked: true }; }
   if (!(await allow(deps, chatId))) { await send(deps, chatId, C.t('tooMany', lang)); return { tooMany: true }; }
   const use = bids.slice(0, MAX_SHOPS);

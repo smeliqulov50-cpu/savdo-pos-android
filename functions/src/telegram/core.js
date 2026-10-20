@@ -217,7 +217,7 @@ async function handleUpdate(deps, upd) {
   if (m && m[1] && /^s_/.test(m[1])) return require('./shop').onStart(deps, msg, m[1].slice(2), lang);   /* fix145-botshop: do'kon havolasi */
   const kind = __cmd.parse(text);
   let out;
-  if (m && m[1]) { out = await tryLink(deps, msg, m[1], lang); if (out && out.linked) out.kb = __cmd.menuKb(deps, lang); }
+  if (m && m[1]) { out = await tryLink(deps, msg, m[1], lang); if (out && out.linked) { out.kb = __cmd.menuKb(deps, lang); await require('./shop').ownerMenu(deps, msg.chat.id, lang); } }   /* fix146-tgsub: pastki menyuda "Do'konim" */
   else if (kind) return __cmd.run(deps, msg.chat.id, kind, lang);   /* fix144-tgcmd (/obuna ham shu yerda) */
   else if (/^\/stop(?:@[A-Za-z0-9_]+)?$/.test(text)) {
     const n = await unbindChatEverywhere(deps, msg.chat.id);

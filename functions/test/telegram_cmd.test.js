@@ -48,8 +48,9 @@ test('/bugun: bugungi savdo hozirgacha, tugmali menyu', async () => {
   assert.match(m.text, /Kunlik hisobot/); assert.match(m.text, /Sardor Market/); assert.match(m.text, /19\.10\.2026 \(hozirgacha, 14:00\)/);
   assert.match(m.text, /50 000 so'm/); assert.ok(!/120 000/.test(m.text), 'kechagi savdo kirmaydi');
   const kb = m.reply_markup.inline_keyboard;
-  assert.deepEqual(kb.map(r => r.map(b => b.callback_data)), [['c|today', 'c|yday'], ['c|debts', 'c|low'], ['c|lang']]);
-  assert.ok(kb.every(row => row.every(b => Buffer.byteLength(b.callback_data) <= 64)));
+  assert.deepEqual(kb.slice(0, -1).map(r => r.map(b => b.callback_data)), [['c|today', 'c|yday'], ['c|debts', 'c|low'], ['c|lang']]);
+  assert.ok(kb[kb.length - 1][0].web_app.url.endsWith('?v=me'));   /* fix146-tgsub: "Do'konim" mini ilovasi */
+  assert.ok(kb.slice(0, -1).every(row => row.every(b => Buffer.byteLength(b.callback_data) <= 64)));
 });
 
 test('/kecha: faqat kechagi savdo; bo\'sh kun — "Bu kunda savdo bo\'lmagan"', async () => {
@@ -211,7 +212,8 @@ test('ulash: "Ulandi" xabari tugmali menyu bilan; oddiy matn — menyu', async (
   const { tg, deps, db } = mk(seed({ ['tgCodes/' + core.codeHash('ABCDEFGHJK')]: { bid: BID, uid: BID, exp: NOW + 60000, used: false, at: NOW } }));
   delete db.store['tgChats/8001'];
   await core.handleUpdate(deps, msg('/start ABCDEFGHJK', '8001'));
-  assert.match(last(tg).text, /Ulandi/); assert.ok(last(tg).reply_markup && last(tg).reply_markup.inline_keyboard.length === 3);
+  assert.match(last(tg).text, /Ulandi/); assert.ok(last(tg).reply_markup && last(tg).reply_markup.inline_keyboard.length === 4);   /* fix146-tgsub: +"Do'konim" */
+  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.web_app.url.endsWith('?v=me')));
   await core.handleUpdate(deps, msg('salom'));
   assert.match(last(tg).text, /ulangan: Sardor Market/); assert.ok(last(tg).reply_markup);
   await core.handleUpdate(deps, msg('salom', '9999'));

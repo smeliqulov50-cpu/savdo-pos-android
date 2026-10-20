@@ -317,7 +317,7 @@ exports.telegramShiftAlert = onDocumentWritten({ document: 'businesses/{bizId}/m
    POST — mini ilova so'rovlari (Telegram initData imzosi bilan; Firebase login kerak emas).
    GET ?img=<slug>&p=<mahsulot> — mahsulot rasmi (katalogdagi, faqat "Botda sotilsin" belgilanganlari).
    Yuklash: SAVDO_PUSH_ONLY=1 SAVDO_TG=1 firebase deploy --only functions:telegramShop */
-exports.telegramShop = onRequest({ cors: true, secrets: __tgSecrets, memory: '512MiB' }, async function (req, res) {
+exports.telegramShop = onRequest({ cors: true, secrets: __tgHookSecrets, memory: '512MiB' },   /* fix146-tgsub: obuna to'lovi uchun Click tokeni ham */ async function (req, res) {
   let deps;
   try { deps = await __tgDeps(); } catch (e) { console.error('telegramShop deps', e && e.message); res.status(503).json({ ok: false, code: 'not_configured' }); return; }
   const SH = require('./src/telegram/shop');

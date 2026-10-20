@@ -52,6 +52,7 @@ function normPhone(v) {
 }
 function round3(n) { return Math.round(n * 1000) / 1000; }
 function shopUrl(slug) { return WEB_BASE + '?s=' + encodeURIComponent(slug); }
+function hubUrl() { return WEB_BASE + '?v=me'; }   /* fix146-tgsub: egasi uchun — obuna tariflari va o'z katalogi */
 function startLink(deps, slug) { return deps.botName ? 'https://t.me/' + deps.botName + '?start=s_' + slug : ''; }
 
 /* ---------- sozlama ---------- */
@@ -326,6 +327,7 @@ async function handleWebApp(deps, body) {
   if (auth.expired) return errBody(401, 'expired');
   const u = auth.user, db = deps.db;
   const action = str(body.action, 20);
+  if (action === 'subInfo' || action === 'subPay') return handleSub(deps, u, action, body);   /* fix146-tgsub */
   const shop = await resolveSlug(db, body.slug);
   if (!shop || !shop.cfg.enabled) return errBody(404, 'closed');
   const bid = shop.bid, cfg = shop.cfg;
@@ -473,6 +475,42 @@ async function handleWebApp(deps, body) {
   return okBody({ order: custSummary(o) });
 }
 
+/* ---------- fix146-tgsub: egasining mini ilovasi — obuna tariflari (Click, Telegram Payments) va o'z katalogi ---------- */
+async function handleSub(deps, u, action, body) {
+  const P = require('./pay'), PL = require('../domain/plans'), SB = require('../domain/subscription');
+  const now = deps.nowMs(), db = deps.db;
+  const lang = S.LANGS.indexOf(body.lang) !== -1 ? body.lang : S.lg(String(u.lang || '').slice(0, 2));
+  const bids = await P.linkedBids(deps, u.id);   // shu Telegram foydalanuvchisining shaxsiy chati ulangan (imzoli) do'konlar
+  if (action === 'subInfo') {
+    const shops = [];
+    for (let i = 0; i < bids.length; i++) {
+      const s = await P.shopOf(db, bids[i]);
+      const exp = SB.readExpiryMs(s.biz);
+      const c = normCfg(await getData(db.collection('tgShop').doc(bids[i])));
+      shops.push({ h: P.bidHash(bids[i]), name: s.name, exp: exp || 0, active: exp > now, slug: c.enabled && c.slug ? c.slug : '', link: c.enabled && c.slug ? startLink(deps, c.slug) : '' });
+    }
+    const plans = Object.keys(PL.PLANS).map(function (k) { const p = PL.PLANS[k]; return { k: { monthly: 'm', sixmonth: 's', yearly: 'y' }[k] || k, key: k, months: p.months, price: p.price }; });
+    return okBody({ linked: shops.length > 0, payOn: !!deps.payToken, shops: shops, plans: plans, bot: deps.botName || '' });
+  }
+  const h = str(body.h, 12), k = str(body.k, 1);
+  const bid = bids.find(function (b) { return P.bidHash(b) === h; });
+  if (!bid) return errBody(403, 'not_linked');
+  if (!deps.payToken) return errBody(409, 'pay_off');
+  const plan = P.SHORT[k] ? PL.getPlan(P.SHORT[k]) : null;
+  if (!plan) return errBody(400, 'bad_plan');
+  const r = await P.orderFor(deps, bid, plan, u.id, u.id);
+  if (r.tooMany) return errBody(429, 'too_many');
+  let link;
+  try { link = await deps.tg('createInvoiceLink', await P.invoiceParams(deps, bid, plan, r.order, lang)); }
+  catch (e) { return errBody(502, 'tg_error'); }
+  return okBody({ link: String(link || ''), order: r.order.orderId });
+}
+/* Egasi chatida pastki menyu tugmasi — "Do'konim" (obuna va katalog). Xato bo'lsa jim o'tadi. */
+async function ownerMenu(deps, chatId, lang) {
+  try { await deps.tg('setChatMenuButton', { chat_id: String(chatId), menu_button: { type: 'web_app', text: S.t('btnHub', lang), web_app: { url: hubUrl() } } }); return true; } catch (e) { return false; }
+}
+function hubBtn(lang) { return { text: S.t('btnHubFull', lang), web_app: { url: hubUrl() } }; }
+
 /* ---------- ilova so'rovlari (Firebase ID token bilan, core.handleApi orqali) ---------- */
 async function handleAppApi(deps, caller, uid, action, body) {
   const db = deps.db, now = deps.nowMs(), bid = caller.bid;
@@ -595,6 +633,7 @@ async function fallbackPrompt(deps, msg, lang) {
   const shop = await resolveSlug(deps.db, cust.lastShop);
   if (!shop || !shop.cfg.enabled) return null;
   const l = cust.lang || lang;
+  try { await deps.tg('setChatMenuButton', { chat_id: String(msg.chat.id), menu_button: { type: 'web_app', text: S.t('btnShop', l).replace(/^\S+\s/, ''), web_app: { url: shopUrl(cust.lastShop) } } }); } catch (e) { /* ixtiyoriy */ }   /* fix146-tgsub */
   return { reply: S.t('fallback', l, { shop: esc(await shopNameBySlug(deps, cust.lastShop)) }), kb: { inline_keyboard: [[webBtn(l, cust.lastShop)]] } };
 }
 async function onCallback(deps, cq, lang) {
@@ -641,5 +680,5 @@ async function productImage(deps, slug, pid) {
   return { type: m[1], buf: Buffer.from(m[2], 'base64') };
 }
 
-module.exports = { handleWebApp, handleAppApi, onStart, onContact, onCallback, fallbackPrompt, applyStatus, cleanupOld, productImage, verifyInitData, webKeyFromToken,
+module.exports = { handleSub, ownerMenu, hubBtn, hubUrl, handleWebApp, handleAppApi, onStart, onContact, onCallback, fallbackPrompt, applyStatus, cleanupOld, productImage, verifyInitData, webKeyFromToken,
   normCfg, buildCatalog, isOpen, INBOX_MAX_BYTES, normPhone, orderIdFor, pruneInbox, clearCatalogCache, shopUrl, SLUG_RE, MAX_ACTIVE_PER_CUST, ORDERS_PER_HOUR, INBOX_MAX };

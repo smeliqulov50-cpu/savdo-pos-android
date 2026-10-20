@@ -32,10 +32,11 @@ test('/obuna: tariflar tugmalari bilan menyu', async () => {
   const m = tg.sent[0];
   assert.ok(m && /Sardor Market/.test(m.text) && /24\.10\.2026/.test(m.text));
   const kb = m.reply_markup.inline_keyboard;
-  assert.equal(kb.length, 3);
+  assert.equal(kb.length, 4);   /* fix146-tgsub: oxirgisi — tariflar katalogi (mini ilova) */
+  assert.ok(kb[3][0].web_app && kb[3][0].web_app.url.endsWith('?v=me'));
   assert.equal(kb[0][0].callback_data, cbData('m'));
   assert.ok(/70 000/.test(kb[0][0].text) && /840 000/.test(kb[2][0].text));
-  assert.ok(kb.every(r => Buffer.byteLength(r[0].callback_data) <= 64));
+  assert.ok(kb.slice(0, 3).every(r => Buffer.byteLength(r[0].callback_data) <= 64));
 });
 
 test('token yo\'q bo\'lsa to\'lov taklif qilinmaydi', async () => {
