@@ -229,11 +229,13 @@ async function handleUpdate(deps, upd) {
   } else {
     const ch = await getData(deps.db.collection('tgChats').doc(String(msg.chat.id)));
     const bids = ch && Array.isArray(ch.bids) ? ch.bids : [];
-    if (bids.length) {
+    const __cm = await require('./shop').onCustomerText(deps, msg, lang);   /* fix154-iso: do'kon egasi ham boshqa do'konda mijoz bo'lishi mumkin */
+    if (__cm) out = __cm;
+    else if (bids.length) {
       const names = [];
       for (let i = 0; i < bids.length && i < 5; i++) names.push(await shopName(deps.db, bids[i]));
       out = { reply: txt('linkedInfo', lang, { shop: names.join(', ') }) + (deps.payToken ? '\n' + require('./payTexts').txt('payHint', lang) : '') + '\n\n' + require('./cmdTexts').t('menu', lang), kb: __cmd.menuKb(deps, lang) };
-    } else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) || { reply: txt('welcome', lang) + '\n\n' + require('./cmdTexts').t('langHint', lang, { cmd: require('./cmdTexts').names(lang).lang }) };
+    } else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) ||   /* fix153-boplus: faol buyurtmasi bor mijozning matni do'konga */ { reply: txt('welcome', lang) + '\n\n' + require('./cmdTexts').t('langHint', lang, { cmd: require('./cmdTexts').names(lang).lang }) };
   }
   if (out && out.reply) await sendText(deps, msg.chat.id, out.reply, out.kb);
   if (out && out.payAfter) { try { await __pay.sendMenu(deps, msg.chat.id, out.lang || lang); } catch (e) {} }   /* fix150-subbot */

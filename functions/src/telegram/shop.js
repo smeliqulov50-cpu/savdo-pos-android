@@ -73,14 +73,17 @@ function normCfg(raw) {
     paused: raw.paused === true,
     notifyTg: raw.notifyTg !== false,
     tz: validTz(raw.tz) ? String(raw.tz) : 'Asia/Tashkent',
-    seq: Math.max(0, Math.floor(num(raw.seq)))
+    seq: Math.max(0, Math.floor(num(raw.seq))),
+    allProducts: raw.allProducts === true,   /* fix153-boplus: hamma mahsulot botda (o'chirilganlardan tashqari) */
+    autoAccept: raw.autoAccept === true,
+    autoEta: Math.max(0, Math.min(240, Math.round(num(raw.autoEta))))
   };
   if (!c.pickup && !c.delivery) c.pickup = true;
   return c;
 }
 function publicCfg(c) {
   return { enabled: c.enabled, slug: c.slug, branchId: c.branchId, pickup: c.pickup, delivery: c.delivery, fee: c.fee, freeFrom: c.freeFrom, minOrder: c.minOrder,
-    note: c.note, hours: c.hours, paused: c.paused, notifyTg: c.notifyTg, tz: c.tz };
+    note: c.note, hours: c.hours, paused: c.paused, notifyTg: c.notifyTg, tz: c.tz, allProducts: c.allProducts, autoAccept: c.autoAccept, autoEta: c.autoEta };
 }
 function localHm(tz, ms) {
   try {
@@ -145,7 +148,7 @@ function buildCatalog(docs, biz, cfg, reserved) {
   const items = [], byId = {}, cats = [];
   docs.forEach(function (d) {
     const p = d || {};
-    if (!p.id || p._deleted || p.botSell !== true) return;
+    if (!p.id || p._deleted || !(p.botSell === true || (cfg.allProducts && p.botSell !== false))) return;   /* fix153-boplus */
     if (effBranch(p.branchId) !== effBranch(cfg.branchId)) return;
     const name = str(p.name, 120); if (!name) return;
     const unit = ['dona', 'kg', 'litr', 'paket'].indexOf(p.unit) !== -1 ? p.unit : 'dona';
@@ -224,9 +227,11 @@ async function send(deps, chatId, text, kb) {
 /* ---------- inbox (ilova ko'radigan nusxa) ---------- */
 function inboxEntry(o) {
   const e = {};
-  ['id', 'no', 'status', 'createdAt', 'updatedAt', 'branchId', 'name', 'phone', 'phoneOk', 'tgUser', 'items', 'subtotal', 'fee', 'total', 'cur', 'mode', 'address', 'loc', 'comment', 'pay', 'eta', 'reason', 'saleId', 'saleNo', 'by']
+  ['id', 'no', 'status', 'createdAt', 'updatedAt', 'branchId', 'src', 'name', 'phone', 'phoneOk', 'tgUser', 'items', 'subtotal', 'fee', 'total', 'cur', 'mode', 'address', 'loc', 'comment', 'pay', 'eta', 'reason', 'saleId', 'saleNo', 'by', 'auto', 'edited']
     .forEach(function (k) { if (o[k] !== undefined && o[k] !== null) e[k] = o[k]; });
   if (e.tgUser) e.tgUser = { username: e.tgUser.username || '' };
+  if (Array.isArray(o.msgs) && o.msgs.length) e.msgs = o.msgs.slice(-6).map(function (m) { return { f: m.f, t: str(m.t, 200), at: m.at }; });   /* fix153-boplus */
+  if (o.tgUser && o.tgUser.id != null) e.canMsg = true;
   return e;
 }
 function pruneInbox(orders, now) {
@@ -259,8 +264,8 @@ async function notifyOwner(deps, bid, kind, o) {
   if (ctx && cfgNotify && ctx.chats && ctx.chats.length) {
     for (let i = 0; i < ctx.chats.length; i++) {
       const l = ctx.chats[i].lang || 'uz';
-      const who = esc(o.name || '') + (o.phone ? ', ' + esc(o.phone) : '');
-      const text = kind === 'new' ? S.t('ownerNew', l, { no: o.no, shop: esc(shop), who: who, body: orderBodyHtml(o, l, true) }) : S.t('ownerCancelled', l, { no: o.no, shop: esc(shop) });
+      const who = esc(o.name || '') + (o.phone ? ', ' + esc(o.phone) : '') + (o.src === 'web' ? ' · ' + S.t('srcWeb', l) : '');   /* fix151-weborder */
+      const text = kind === 'new' ? S.t(o.auto ? 'ownerNewAuto' : 'ownerNew', l, { no: o.no, shop: esc(shop), who: who, body: orderBodyHtml(o, l, true) }) : S.t('ownerCancelled', l, { no: o.no, shop: esc(shop) });
       await send(deps, ctx.chats[i].id, text);
     }
   }
@@ -290,14 +295,15 @@ async function applyStatus(deps, bid, oid, to, extra, actor) {
     if (o.status === to) return { same: true, o: o };
     const allowed = actor === 'customer' ? (o.status === 'new' && to === 'cancelled') : ((NEXT[o.status] || []).indexOf(to) !== -1);
     if (!allowed) return { code: 'bad_state', status: o.status };
-    const cRef = db.collection('tgCust').doc(String(o.tgUser && o.tgUser.id));
+    const cRef = o.tgUser && o.tgUser.id != null ? db.collection('tgCust').doc(String(o.tgUser.id)) : null;   /* fix151-weborder: saytdan kelganida Telegram mijozi yo'q */
     const is = await tx.get(iRef); const inbox = is && is.exists ? (is.data() || {}) : {};
-    const cs = await tx.get(cRef); const cust = cs && cs.exists ? (cs.data() || {}) : null;
+    const cs = cRef ? await tx.get(cRef) : null; const cust = cs && cs.exists ? (cs.data() || {}) : null;
     const n = Object.assign({}, o, { status: to, updatedAt: now });
     if (extra.reason) n.reason = extra.reason;
     if (extra.eta) n.eta = extra.eta;
     if (extra.saleId) { n.saleId = extra.saleId; n.saleNo = extra.saleNo || ''; }
     if (extra.by) n.by = extra.by;
+    if (extra.auto) n.auto = true;   /* fix153-boplus */
     n.history = (Array.isArray(o.history) ? o.history : []).concat([{ s: to, at: now, by: actor === 'customer' ? 'customer' : (extra.by || 'shop') }]).slice(-20);
     tx.set(oRef, n);
     const orders = Object.assign({}, inbox.orders || {}); orders[oid] = inboxEntry(n);
@@ -324,6 +330,118 @@ async function applyStatus(deps, bid, oid, to, extra, actor) {
   }
   if (to === 'cancelled') await notifyOwner(deps, bid, 'cancelled', o);
   return { o: o };
+}
+
+/* ---------- fix153-boplus: avtomatik qabul, tahrirlash, xabarlar ---------- */
+async function autoAccept(deps, bid, cfg, o) {
+  if (!cfg || !cfg.autoAccept) return o;
+  try { const r = await applyStatus(deps, bid, o.id, 'accepted', { eta: cfg.autoEta || 0, by: 'auto', auto: true }, 'shop'); return (r && r.o) || o; } catch (e) { return o; }
+}
+const EDITABLE = ['new', 'accepted', 'ready'];
+async function editOrder(deps, bid, oid, lines, by) {
+  const db = deps.db, now = deps.nowMs();
+  const oRef = db.collection('tgOrders').doc(oid), iRef = inboxRef(db, bid);
+  const want = {};
+  (Array.isArray(lines) ? lines.slice(0, MAX_LINES) : []).forEach(function (x) { if (x) want[str(x.id, 80) + '|' + str(x.v, 80)] = num(x.q); });
+  const res = await db.runTransaction(async function (tx) {
+    const os = await tx.get(oRef); const o = os && os.exists ? (os.data() || {}) : null;
+    if (!o || o.bid !== bid) return { code: 'not_found' };
+    if (EDITABLE.indexOf(o.status) === -1) return { code: 'bad_state', status: o.status };
+    const D = M.decOf(o.cur || 'UZS');
+    const items = []; let subtotal = 0, changed = false;
+    (o.items || []).forEach(function (it) {
+      const k = String(it.id) + '|' + String(it.v || '');
+      let q = k in want ? want[k] : num(it.qty);
+      if (!(q > 0)) { changed = true; return; }
+      q = FRACTION_UNITS.indexOf(it.unit) !== -1 ? round3(q) : Math.round(q);
+      if (!(q > 0)) { changed = true; return; }
+      q = Math.min(q, MAX_QTY);
+      if (q !== num(it.qty)) changed = true;
+      const sum = M.rnd(num(it.price) * q, D);
+      subtotal = M.rnd(subtotal + sum, D);
+      items.push(Object.assign({}, it, { qty: q, sum: sum }));
+    });
+    if (!items.length) return { code: 'empty' };
+    if (!changed) return { same: true, o: o };
+    const is = await tx.get(iRef); const inbox = is && is.exists ? (is.data() || {}) : {};
+    const n = Object.assign({}, o, { items: items, subtotal: subtotal, total: M.rnd(subtotal + num(o.fee), D), updatedAt: now, edited: now });
+    n.history = (Array.isArray(o.history) ? o.history : []).concat([{ s: 'edited', at: now, by: by || 'shop' }]).slice(-20);
+    tx.set(oRef, n);
+    const orders = Object.assign({}, inbox.orders || {}); orders[oid] = inboxEntry(n);
+    tx.set(iRef, { orders: pruneInbox(orders, now), updatedAt: now });
+    return { o: n };
+  });
+  if (res.code || res.same) return res;
+  dropCatalog(bid);
+  const o = res.o, chat = o.tgUser && o.tgUser.id;
+  if (chat) {
+    let l = 'uz'; try { const c = await getData(db.collection('tgCust').doc(String(chat))); l = S.lg((c && c.lang) || o.lang); } catch (e) {}
+    await send(deps, chat, S.t('edited', l, { no: o.no, shop: esc(o.shop || ''), body: orderBodyHtml(o, l, false) }));
+  }
+  return { o: o };
+}
+const MSG_MAX = 30;
+async function addMsg(deps, bid, oid, from, text, by) {
+  const db = deps.db, now = deps.nowMs();
+  const oRef = db.collection('tgOrders').doc(oid), iRef = inboxRef(db, bid);
+  return db.runTransaction(async function (tx) {
+    const os = await tx.get(oRef); const o = os && os.exists ? (os.data() || {}) : null;
+    if (!o || o.bid !== bid) return { code: 'not_found' };
+    const msgs = Array.isArray(o.msgs) ? o.msgs : [];
+    if (msgs.filter(function (m) { return m.f === from; }).length >= MSG_MAX) return { code: 'too_many' };
+    const is = await tx.get(iRef); const inbox = is && is.exists ? (is.data() || {}) : {};
+    const n = Object.assign({}, o, { msgs: msgs.concat([{ f: from, t: text, at: now, by: by || '' }]).slice(-40), updatedAt: now });
+    tx.set(oRef, n);
+    const orders = Object.assign({}, inbox.orders || {}); orders[oid] = inboxEntry(n);
+    tx.set(iRef, { orders: pruneInbox(orders, now), updatedAt: now });
+    return { o: n };
+  });
+}
+/* Ulanmagan chatdagi oddiy matn: mijozning faol buyurtmasi bo'lsa — do'konga yetkaziladi */
+async function onCustomerText(deps, msg, lang) {
+  const text = str(msg.text, 500);
+  if (!text || /^\//.test(text)) return null;
+  const uid = String(msg.from && msg.from.id || msg.chat.id);
+  const cust = await getData(deps.db.collection('tgCust').doc(uid));
+  if (!cust || !cust.active || !Object.keys(cust.active).length) return null;
+  /* fix154-iso: faol buyurtmalar (holati serverda tekshiriladi); bir nechta do'kon bo'lsa — mijoz tanlaydi, aralashmaydi */
+  const acts = [];
+  for (const k of Object.keys(cust.active).slice(0, 10)) {
+    const ao = await getData(deps.db.collection('tgOrders').doc(String(k)));
+    if (ao && ACTIVE.indexOf(ao.status) !== -1 && ao.tgUser && String(ao.tgUser.id) === uid) acts.push(ao);
+  }
+  if (!acts.length) return null;
+  const l = S.lg(cust.lang || lang);
+  const shops = {}; acts.forEach(function (a) { shops[a.bid] = 1; });
+  let o0 = null;
+  if (Object.keys(shops).length > 1 && !(uid && cust.msgTo && acts.some(function (a) { return a.id === cust.msgTo; }))) {
+    await deps.db.collection('tgCust').doc(uid).set(Object.assign({}, cust, { pendingMsg: { t: text, at: deps.nowMs() } }));
+    const kb = acts.sort(function (a, b) { return num(b.createdAt) - num(a.createdAt); }).map(function (a) { return [{ text: '#' + a.no + ' · ' + str(a.shop, 40), callback_data: 'bo:t:' + a.id }]; });
+    await send(deps, msg.chat.id, S.t('custMsgWhich', l), { inline_keyboard: kb });
+    return { custMsg: 'choose' };
+  }
+  if (cust.msgTo) o0 = acts.find(function (a) { return a.id === cust.msgTo; }) || null;
+  if (!o0) o0 = acts.sort(function (a, b) { return num(b.createdAt) - num(a.createdAt); })[0];
+  return forwardCustomerText(deps, cust, uid, o0, text, l);
+}
+async function forwardCustomerText(deps, cust, uid, o0, text, l) {
+  const oid = o0.id, bid = o0.bid;
+  const r = await addMsg(deps, bid, oid, 'c', text, '');
+  try { await deps.db.collection('tgCust').doc(uid).set(Object.assign({}, cust, { msgTo: oid, pendingMsg: null })); } catch (e) {}
+  if (r.code) return { reply: S.t('custMsgSent', l, { no: o0.no, shop: esc(o0.shop || '') }), custMsg: r.code };
+  const o = r.o;
+  let ctx = null; try { ctx = await require('./reports').loadCtx(deps, bid); } catch (e) { ctx = null; }
+  const who = esc(o.name || '') + (o.tgUser && o.tgUser.username ? ' @' + esc(o.tgUser.username) : '');
+  if (ctx && ctx.chats) for (let i = 0; i < ctx.chats.length; i++) await send(deps, ctx.chats[i].id, S.t('custMsgOwner', ctx.chats[i].lang || 'uz', { no: o.no, who: who, text: esc(text) }));
+  if (deps.messaging) {
+    try {
+      const N = require('../push/notify');
+      const snap = await deps.db.collection('businesses').doc(bid).collection('pushTokens').get();
+      const docs = snap.docs.map(function (d) { const x = d.data() || {}; return { token: x.token || d.id, sound: x.sound, ref: d.ref }; });
+      await N.sendToTokenDocs(deps.messaging, docs, { title: S.t('pushMsg', (ctx && ctx.lang) || 'uz', { no: o.no }), body: text.slice(0, 120), channel: 'support', data: { type: 'botOrder', oid: oid, bizId: bid } });
+    } catch (e) { /* ixtiyoriy */ }
+  }
+  return { reply: S.t('custMsgSent', l, { no: o.no, shop: esc(o.shop || '') }), custMsg: oid };
 }
 
 /* ---------- mini ilova so'rovlari ---------- */
@@ -486,9 +604,10 @@ async function handleWebApp(deps, body) {
   if (res.again) return okBody({ order: custSummary(res.again), again: true });
   if (res.busy) return errBody(429, 'busy');
   dropCatalog(bid);
-  const o = res.o;
+  let o = res.o;
   await send(deps, u.id, S.t('created', lang, { no: o.no, shop: esc(o.shop), body: orderBodyHtml(o, lang, false) }),
-    { inline_keyboard: [[{ text: S.t('btnCancel', lang), callback_data: 'bo:c:' + oid }], [webBtn(lang, cfg.slug, 'btnShop')]] });
+    cfg.autoAccept ? { inline_keyboard: [[webBtn(lang, cfg.slug, 'btnShop')]] } : { inline_keyboard: [[{ text: S.t('btnCancel', lang), callback_data: 'bo:c:' + oid }], [webBtn(lang, cfg.slug, 'btnShop')]] });
+  o = await autoAccept(deps, bid, cfg, o);   /* fix153-boplus */
   await notifyOwner(deps, bid, 'new', o);
   return okBody({ order: custSummary(o) });
 }
@@ -523,9 +642,10 @@ async function handleSub(deps, u, action, body) {
   catch (e) { return errBody(502, 'tg_error'); }
   return okBody({ link: String(link || ''), order: r.order.orderId });
 }
-/* Egasi chatida pastki menyu tugmasi — "Do'konim" (obuna va katalog). Xato bo'lsa jim o'tadi. */
+/* Egasi chatida pastki chap tugma — bot buyruqlari menyusi (/bugun, /kecha, /qarzlar, /obuna...). fix152-cmdmenu: egasi shuni so'radi;
+   obuna va katalog — /obuna buyrug'i va xabar ostidagi tugmalarda. Xato bo'lsa jim o'tadi. */
 async function ownerMenu(deps, chatId, lang) {
-  try { await deps.tg('setChatMenuButton', { chat_id: String(chatId), menu_button: { type: 'web_app', text: S.t('btnHub', lang), web_app: { url: hubUrl() } } }); return true; } catch (e) { return false; }
+  try { await deps.tg('setChatMenuButton', { chat_id: String(chatId), menu_button: { type: 'commands' } }); return true; } catch (e) { return false; }
 }
 function hubBtn(lang) { return { text: S.t('btnHubFull', lang), web_app: { url: hubUrl() } }; }
 
@@ -593,6 +713,26 @@ async function handleAppApi(deps, caller, uid, action, body) {
     await sRef.set(Object.assign({}, cur, { paused: c.paused, updatedAt: now }));
     return okBody({ cfg: publicCfg(c) });
   }
+  if (action === 'boEdit') {   /* fix153-boplus */
+    const oid = str(body && body.oid, 40);
+    if (!/^bo[0-9a-f]{22}$/.test(oid)) return errBody(400, 'bad_order');
+    const r = await editOrder(deps, bid, oid, body.items, str(body.by, 60));
+    if (r.code) return errBody(r.code === 'not_found' ? 404 : 409, r.code, { status: r.status });
+    return okBody({ order: inboxEntry(r.o), same: !!r.same });
+  }
+  if (action === 'boMsg') {
+    const oid = str(body && body.oid, 40), text = str(body && body.text, 500);
+    if (!/^bo[0-9a-f]{22}$/.test(oid)) return errBody(400, 'bad_order');
+    if (!text) return errBody(400, 'empty');
+    const o0 = await getData(db.collection('tgOrders').doc(oid));
+    if (!o0 || o0.bid !== bid) return errBody(404, 'not_found');
+    if (!o0.tgUser || o0.tgUser.id == null) return errBody(409, 'no_chat');
+    const r = await addMsg(deps, bid, oid, 's', text, str(body.by, 60));
+    if (r.code) return errBody(r.code === 'too_many' ? 429 : 404, r.code);
+    let l = 'uz'; try { const c = await getData(db.collection('tgCust').doc(String(o0.tgUser.id))); l = S.lg((c && c.lang) || o0.lang); } catch (e) {}
+    const okSend = await send(deps, o0.tgUser.id, S.t('shopMsg', l, { shop: esc(o0.shop || ''), no: o0.no, text: esc(text) }));
+    return okBody({ order: inboxEntry(r.o), sent: okSend });
+  }
   if (action === 'boSet') {
     const oid = str(body && body.oid, 40), to = str(body && body.to, 20);
     if (!/^bo[0-9a-f]{22}$/.test(oid)) return errBody(400, 'bad_order');
@@ -620,7 +760,8 @@ async function onStart(deps, msg, slug, lang) {
   const l = cust.lang || lang;
   const b = (await getData(deps.db.collection('businesses').doc(shop.bid))) || {};
   const name = str(b.businessName || 'Savdo Pos', 80);
-  try { await deps.tg('setChatMenuButton', { chat_id: chatId, menu_button: { type: 'web_app', text: S.t('btnShop', l).replace(/^\S+\s/, ''), web_app: { url: shopUrl(shop.cfg.slug) } } }); } catch (e) { /* ixtiyoriy */ }
+  const __ch = await getData(deps.db.collection('tgChats').doc(chatId));   /* fix152-cmdmenu: do'kon egasining chatida buyruqlar menyusi qoladi */
+  if (!(__ch && Array.isArray(__ch.bids) && __ch.bids.length)) { try { await deps.tg('setChatMenuButton', { chat_id: chatId, menu_button: { type: 'web_app', text: S.t('btnShop', l).replace(/^\S+\s/, ''), web_app: { url: shopUrl(shop.cfg.slug) } } }); } catch (e) { /* ixtiyoriy */ } }
   await send(deps, chatId, S.t('start', l, { shop: esc(name) }), { inline_keyboard: [[webBtn(l, shop.cfg.slug)]] });
   return { shopStart: shop.cfg.slug };
 }
@@ -656,6 +797,20 @@ async function fallbackPrompt(deps, msg, lang) {
 }
 async function onCallback(deps, cq, lang) {
   const data = String((cq && cq.data) || '');
+  const mt = /^bo:t:(bo[0-9a-f]{22})$/.exec(data);   /* fix154-iso: mijoz xabari qaysi buyurtmaga */
+  if (mt) {
+    const uid = String(cq.from && cq.from.id);
+    const cRef = deps.db.collection('tgCust').doc(uid); const cust = (await getData(cRef)) || {};
+    const o = await getData(deps.db.collection('tgOrders').doc(mt[1]));
+    try { await deps.tg('answerCallbackQuery', { callback_query_id: cq.id, text: '' }); } catch (e) {}
+    if (!o || !o.tgUser || String(o.tgUser.id) !== uid || ACTIVE.indexOf(o.status) === -1) return { cb: 'not_found' };
+    const pm = cust.pendingMsg && cust.pendingMsg.t && num(cust.pendingMsg.at) > deps.nowMs() - 3600000 ? String(cust.pendingMsg.t) : '';
+    try { await deps.tg('editMessageReplyMarkup', { chat_id: cq.message.chat.id, message_id: cq.message.message_id, reply_markup: { inline_keyboard: [] } }); } catch (e) {}
+    if (!pm) { await cRef.set(Object.assign({}, cust, { msgTo: o.id })); return { cb: 'target' }; }
+    const r = await forwardCustomerText(deps, cust, uid, o, pm, S.lg(cust.lang || lang));
+    if (r && r.reply) await send(deps, uid, r.reply);
+    return { cb: 'forwarded', custMsg: r && r.custMsg };
+  }
   const m = /^bo:c:(bo[0-9a-f]{22})$/.exec(data);
   if (!m) return null;
   const answer = async function (text) { try { await deps.tg('answerCallbackQuery', { callback_query_id: cq.id, text: text || '', show_alert: !!text }); } catch (e) { } };
@@ -699,4 +854,6 @@ async function productImage(deps, slug, pid) {
 }
 
 module.exports = { handleSub, ownerMenu, hubBtn, hubUrl, handleWebApp, handleAppApi, onStart, onContact, onCallback, fallbackPrompt, applyStatus, cleanupOld, productImage, verifyInitData, webKeyFromToken,
+  inboxEntry, notifyOwner, dropCatalog, money,   /* fix151-weborder */
+  autoAccept, editOrder, addMsg, onCustomerText,   /* fix153-boplus */
   normCfg, buildCatalog, reservedFrom, isOpen, INBOX_MAX_BYTES, normPhone, orderIdFor, pruneInbox, clearCatalogCache, shopUrl, SLUG_RE, MAX_ACTIVE_PER_CUST, ORDERS_PER_HOUR, INBOX_MAX };

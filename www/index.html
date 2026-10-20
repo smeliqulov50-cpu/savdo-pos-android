@@ -1213,6 +1213,37 @@ const T = {
   osTelegram:{uz:"Telegram foydalanuvchi nomi (@username)",ru:"Telegram username (@username)",en:"Telegram username (@username)",kk:"Telegram username",ky:"Telegram username",tg:"Telegram username"},
   osWhatsapp:{uz:"WhatsApp raqami (+998…)",ru:"Номер WhatsApp (+998…)",en:"WhatsApp number (+998…)",kk:"WhatsApp нөмірі",ky:"WhatsApp номери",tg:"Рақами WhatsApp"},
   osOneNeeded:{uz:"Kamida bittasini kiriting: Telegram yoki WhatsApp",ru:"Укажите хотя бы одно: Telegram или WhatsApp",en:"Enter at least one: Telegram or WhatsApp",kk:"Кем дегенде біреуін енгізіңіз",ky:"Жок дегенде бирин киргизиңиз",tg:"Ҳадди ақал якеро ворид кунед"},
+  osOrdersIn:{uz:"Buyurtmalar ilovaga tushsin",ru:"Заказы приходят в приложение",en:"Orders come into the app",kk:"Тапсырыстар қолданбаға келсін",ky:"Буйрутмалар колдонмого келсин",tg:"Фармоишҳо ба барнома ояд"},
+  osOrdersInHint:{uz:"Mijoz katalogda «Buyurtma yuborish» ni bosadi — buyurtma «Bot buyurtmalari» ro'yxatiga ovoz va xabar bilan tushadi. Telegram/WhatsApp orqali yuborish ham qoladi.",ru:"Клиент нажимает «Отправить заказ» в каталоге — заказ приходит в список «Заказы из бота» со звуком и уведомлением. Отправка через Telegram/WhatsApp тоже остаётся.",en:"The customer taps “Send order” in the catalog — the order lands in “Bot orders” with a sound and a notification. Sending via Telegram/WhatsApp stays too.",kk:"Клиент каталогта «Тапсырыс жіберу» басады — тапсырыс «Бот тапсырыстары» тізіміне келеді. Telegram/WhatsApp арқылы жіберу де қалады.",ky:"Кардар каталогдо «Буйрутма жөнөтүү» басат — буйрутма «Бот буйрутмалары» тизмесине келет. Telegram/WhatsApp аркылуу жөнөтүү да калат.",tg:"Мизоҷ дар каталог «Фиристодани фармоиш»-ро пахш мекунад — фармоиш ба рӯйхати «Фармоишҳои бот» меояд. Фиристодан тавассути Telegram/WhatsApp ҳам мемонад."},
+  /* fix153-boplus */
+  boAllProducts:{uz:"Hamma mahsulotlar botda",ru:"Все товары в боте",en:"All products in the bot",kk:"Барлық тауарлар ботта",ky:"Бардык товарлар ботто",tg:"Ҳамаи молҳо дар бот"},
+  boAllProductsHint:{uz:"Yangi qo'shilgan mahsulotlar ham o'zi botga chiqadi. Kerakmaganini «Tanlash» da yoki mahsulot formasida o'chiring.",ru:"Новые товары тоже сразу появятся в боте. Лишние отключите в «Выбрать» или в карточке товара.",en:"New products appear in the bot automatically. Turn off the ones you don't need in “Choose” or in the product form.",kk:"Жаңа тауарлар да ботқа өзі шығады. Керек еместерін «Таңдау» ішінде өшіріңіз.",ky:"Жаңы товарлар да ботко өзү чыгат. Керексиздерин «Тандоо» ичинде өчүрүңүз.",tg:"Молҳои нав ҳам худкор дар бот пайдо мешаванд. Нолозимҳоро дар «Интихоб» хомӯш кунед."},
+  boAutoAccept:{uz:"Buyurtmani avtomatik qabul qilish",ru:"Принимать заказы автоматически",en:"Accept orders automatically",kk:"Тапсырыстарды автоматты қабылдау",ky:"Буйрутмаларды автоматтык кабыл алуу",tg:"Фармоишҳоро худкор қабул кардан"},
+  boAutoEta:{uz:"Tayyor bo'lish vaqti (mijozga aytiladi)",ru:"Время готовности (сообщается клиенту)",en:"Ready time (told to the customer)",kk:"Дайын болу уақыты",ky:"Даяр болуу убактысы",tg:"Вақти тайёр шудан"},
+  boAutoHint:{uz:"Buyurtma kelishi bilan o'zi qabul qilinadi va mijozga xabar boradi. Ovoz baribir chalinadi — siz faqat sotasiz.",ru:"Заказ принимается сразу, клиент получает сообщение. Звук всё равно прозвучит — вам остаётся продать.",en:"The order is accepted at once and the customer is told. The sound still plays — you only sell.",kk:"Тапсырыс бірден қабылданады. Дыбыс бәрібір шығады.",ky:"Буйрутма дароо кабыл алынат. Үн баары бир чыгат.",tg:"Фармоиш дарҳол қабул мешавад. Овоз ба ҳар ҳол садо медиҳад."},
+  boEtaNone:{uz:"Aytilmasin",ru:"Не указывать",en:"Don't say",kk:"Айтпау",ky:"Айтпоо",tg:"Нагуфтан"},
+  boEdit:{uz:"✏️ Tahrirlash",ru:"✏️ Изменить",en:"✏️ Edit",kk:"✏️ Өзгерту",ky:"✏️ Өзгөртүү",tg:"✏️ Тағйир додан"},
+  boEditHint:{uz:"Miqdorni o'zgartiring yoki mahsulotni olib tashlang. Mijozga yangi summa bilan xabar boradi.",ru:"Измените количество или уберите товар. Клиент получит сообщение с новой суммой.",en:"Change the quantity or remove an item. The customer gets a message with the new total.",kk:"Санын өзгертіңіз немесе тауарды алып тастаңыз. Клиентке жаңа сомамен хабар барады.",ky:"Санын өзгөртүңүз же товарды алып салыңыз. Кардарга жаңы сумма менен билдирүү барат.",tg:"Миқдорро тағйир диҳед ё молро хориҷ кунед. Ба мизоҷ бо маблағи нав паём меравад."},
+  boEditSave:{uz:"Saqlash va mijozga yuborish",ru:"Сохранить и отправить клиенту",en:"Save and send to the customer",kk:"Сақтау және клиентке жіберу",ky:"Сактоо жана кардарга жөнөтүү",tg:"Нигоҳ доштан ва ба мизоҷ фиристодан"},
+  boEditEmpty:{uz:"Hamma mahsulot olib tashlansa — buyurtmani rad eting.",ru:"Если убрать всё — отклоните заказ.",en:"If everything is removed, reject the order.",kk:"Бәрі алынса — тапсырыстан бас тартыңыз.",ky:"Баары алынса — буйрутманы четке кагыңыз.",tg:"Агар ҳама хориҷ шавад — фармоишро рад кунед."},
+  boEdited:{uz:"o'zgartirilgan",ru:"изменён",en:"edited",kk:"өзгертілген",ky:"өзгөртүлгөн",tg:"тағйир ёфта"},
+  boAutoChip:{uz:"Avto",ru:"Авто",en:"Auto",kk:"Авто",ky:"Авто",tg:"Авто"},
+  boMsg:{uz:"💬 Xabar",ru:"💬 Написать",en:"💬 Message",kk:"💬 Хабар",ky:"💬 Билдирүү",tg:"💬 Паём"},
+  boMsgTitle:{uz:"Mijozga xabar",ru:"Сообщение клиенту",en:"Message to the customer",kk:"Клиентке хабар",ky:"Кардарга билдирүү",tg:"Паём ба мизоҷ"},
+  boMsgT1:{uz:"5 daqiqada chiqamiz",ru:"Выезжаем через 5 минут",en:"We leave in 5 minutes",kk:"5 минутта шығамыз",ky:"5 мүнөттө чыгабыз",tg:"5 дақиқа баъд мебароем"},
+  boMsgT2:{uz:"Kuryer yo'lda, telefoningiz yoqiq tursin",ru:"Курьер в пути, держите телефон включённым",en:"The courier is on the way, keep your phone on",kk:"Курьер жолда, телефоныңыз қосулы тұрсын",ky:"Курьер жолдо, телефонуңуз күйүк турсун",tg:"Курйер дар роҳ аст, телефонатон фаъол бошад"},
+  boMsgT3:{uz:"Bitta mahsulot tugab qoldi — o'rniga boshqasini beraylikmi?",ru:"Один товар закончился — заменить другим?",en:"One item ran out — may we replace it?",kk:"Бір тауар таусылды — басқасымен ауыстырайық па?",ky:"Бир товар түгөндү — башкасына алмаштыралыбы?",tg:"Як мол тамом шуд — ивазаш кунем?"},
+  boMsgT4:{uz:"Buyurtmangiz tayyor, olib ketishingiz mumkin",ru:"Ваш заказ готов, можно забирать",en:"Your order is ready for pickup",kk:"Тапсырысыңыз дайын, алып кетуге болады",ky:"Буйрутмаңыз даяр, алып кетсеңиз болот",tg:"Фармоиши шумо тайёр аст, гирифта метавонед"},
+  boMsgPh:{uz:"O'z matningiz…",ru:"Свой текст…",en:"Your own text…",kk:"Өз мәтініңіз…",ky:"Өз текстиңиз…",tg:"Матни худ…"},
+  boMsgSend:{uz:"Yuborish",ru:"Отправить",en:"Send",kk:"Жіберу",ky:"Жөнөтүү",tg:"Фиристодан"},
+  boMsgSent:{uz:"Xabar yuborildi",ru:"Сообщение отправлено",en:"Message sent",kk:"Хабар жіберілді",ky:"Билдирүү жөнөтүлдү",tg:"Паём фиристода шуд"},
+  boMsgNew:{uz:"💬 #{no}: mijozdan xabar",ru:"💬 #{no}: сообщение от клиента",en:"💬 #{no}: message from the customer",kk:"💬 #{no}: клиенттен хабар",ky:"💬 #{no}: кардардан билдирүү",tg:"💬 #{no}: паём аз мизоҷ"},
+  boMe:{uz:"Siz",ru:"Вы",en:"You",kk:"Сіз",ky:"Сиз",tg:"Шумо"},
+  boCust:{uz:"Mijoz",ru:"Клиент",en:"Customer",kk:"Клиент",ky:"Кардар",tg:"Мизоҷ"},
+  boKitchenBtn:{uz:"🍳 Oshxonaga",ru:"🍳 На кухню",en:"🍳 To kitchen",kk:"🍳 Асүйге",ky:"🍳 Ашканага",tg:"🍳 Ба ошхона"},
+  boInBot:{uz:"Botda sotiladi",ru:"Продаётся в боте",en:"Sold in the bot",kk:"Ботта сатылады",ky:"Ботто сатылат",tg:"Дар бот фурӯхта мешавад"},
+  boCatToggle:{uz:"Kategoriya nomini bossangiz — hammasi belgilanadi yoki olinadi",ru:"Нажмите на категорию — отметятся или снимутся все",en:"Tap a category to tick or untick all of it",kk:"Санатты бассаңыз — бәрі белгіленеді",ky:"Категорияны бассаңыз — баары белгиленет",tg:"Ба категория пахш кунед — ҳама қайд мешавад"},
+  boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
   osPublish:{uz:"Nashr qilish / yangilash",ru:"Опубликовать / обновить",en:"Publish / update",kk:"Жариялау / жаңарту",ky:"Жарыялоо / жаңылоо",tg:"Нашр / навсозӣ"},
@@ -3973,7 +4004,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.42';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.43';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -11422,7 +11453,7 @@ function renderProductListItems(){
     return `
     <div class="list-item">
       ${p.image ? `<img src="${p.image}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;flex-shrink:0;">` : `<div style="width:40px;height:40px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:${avatarColorFor(p.name)};color:#fff;font-weight:800;font-size:16px;">${escapeHtml((p.name||'?').charAt(0).toUpperCase())}</div>`}
-      <div class="info"><div class="name">${escapeHtml(p.name)}${hasVariants?` · ${p.variants.length} ${tr('variantsCountSuffix')}`:''}</div><div class="meta">${priceLabel} · <span style="${out?'color:var(--danger);font-weight:700;':(low?'color:var(--warm);font-weight:700;':'')}">${tr('stock')}: ${isFinite(totalStock) ? totalStock : stockUnits(p).reduce((a,x)=>a+x.qty,0)} ${unitLabel(p.unit)}</span>${__vnote ? ` · <span style="color:var(--danger);font-weight:700;">${escapeHtml(__vnote)}</span>` : ''}</div></div>
+      <div class="info"><div class="name">${escapeHtml(p.name)}${hasVariants?` · ${p.variants.length} ${tr('variantsCountSuffix')}`:''}${(state.settings.botShopOn && __boInBot(p)) ? ` <span title="${escapeHtml(tr('boInBot'))}" aria-label="${escapeHtml(tr('boInBot'))}" style="font-size:12px;">🤖</span>` : ''}</div><div class="meta">${priceLabel} · <span style="${out?'color:var(--danger);font-weight:700;':(low?'color:var(--warm);font-weight:700;':'')}">${tr('stock')}: ${isFinite(totalStock) ? totalStock : stockUnits(p).reduce((a,x)=>a+x.qty,0)} ${unitLabel(p.unit)}</span>${__vnote ? ` · <span style="color:var(--danger);font-weight:700;">${escapeHtml(__vnote)}</span>` : ''}</div></div>
       <button class="icon-btn" data-act="edit" data-id="${p.id}">${ICONS.edit}</button>
       <button class="icon-btn" data-act="del" data-id="${p.id}" hidden aria-hidden="true">${ICONS.trash}</button>
     </div>
@@ -11511,7 +11542,7 @@ function openProductForm(productId, draft){
     ${(editing && editing.batches && editing.batches.length) ? `<p class="subtle" style="margin:-6px 0 12px;">${tr('expiryAutoFromBatchesHint')}</p>` : ''}
     <div class="checkbox-row"><input type="checkbox" id="pf-catalog-visible" ${d.showInCatalog!==false?'checked':''}><span>${tr('catalogVisibility')}</span></div>
     <div class="checkbox-row"><input type="checkbox" id="pf-quick-access" ${d.quickAccess?'checked':''}><span>${tr('quickAccessLabel')}</span></div>
-    ${(state.settings.botShopOn || d.botSell) ? `<div class="checkbox-row"><input type="checkbox" id="pf-bot-sell" ${d.botSell?'checked':''}><span>${tr('botSellLabel')}</span></div>` : ''}
+    ${(state.settings.botShopOn || d.botSell) ? `<div class="checkbox-row"><input type="checkbox" id="pf-bot-sell" ${(d.botSell === true || (state.settings.botAllProducts && d.botSell !== false))?'checked':''}><span>${tr('botSellLabel')}</span></div>` : ''}
     ${state.settings.restaurantMode ? `<div class="checkbox-row"><input type="checkbox" id="pf-kitchen-print" ${d.kitchenPrint!==false?'checked':''}><span>${tr('kitchenPrintLabel')}</span></div>` : ''}
     ${(state.settings.restaurantMode && state.kitchenStations.length) ? `
       <div class="field" id="pf-kitchen-station-field" style="${d.kitchenPrint===false?'display:none;':''}">
@@ -11658,7 +11689,7 @@ function openProductForm(productId, draft){
       minStock: document.getElementById('pf-min-stock') ? document.getElementById('pf-min-stock').value : undefined,   /* fix124-smart */
       showInCatalog: document.getElementById('pf-catalog-visible').checked,
       quickAccess: document.getElementById('pf-quick-access').checked,
-      botSell: document.getElementById('pf-bot-sell') ? document.getElementById('pf-bot-sell').checked : !!d.botSell,   /* fix145-botshop */
+      botSell: document.getElementById('pf-bot-sell') ? document.getElementById('pf-bot-sell').checked : d.botSell,   /* fix145-botshop; fix153: belgilanmagan holat saqlanadi */
       variants,
       image: currentImage
     };
@@ -22366,6 +22397,8 @@ function __boCss(){
     + '.bo-chip.st-new{background:#fff1d6;color:#8a5a00}.bo-chip.st-done{background:color-mix(in srgb,var(--teal,#0fa89a) 15%,transparent);color:var(--teal,#0f8a7e)}.bo-chip.st-rejected,.bo-chip.st-cancelled{background:color-mix(in srgb,var(--danger,#d64545) 12%,transparent);color:var(--danger,#d64545)}'
     + '.bo-it{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:3px 0}.bo-it span:last-child{white-space:nowrap;font-weight:700}'
     + '.bo-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.bo-acts .btn{flex:1 1 120px;width:auto}'
+    + '.bo-acts2{margin-top:8px}.bo-acts2 .btn{flex:0 1 auto}.bo-msgs{margin-top:6px;display:flex;flex-direction:column;gap:4px}.bo-msg{font-size:13px;padding:6px 10px;border-radius:10px;background:var(--surface-soft,#f1f4f9)}.bo-msg.c{background:var(--accent-bg,#e8f0ff)}'
+    + '.bo-ed{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border,#e3e9f3)}.bo-ed .n{flex:1;min-width:0;font-size:14px}.bo-ed .q{min-width:44px;text-align:center;font-weight:800}.bo-ed button{width:36px;height:36px;border-radius:10px;border:1px solid var(--border,#e3e9f3);background:var(--surface,#fff);font-size:18px;font-weight:800}.bo-ed.off .n{text-decoration:line-through;opacity:.5}'
     + '.bo-meta{font-size:13px;margin-top:6px;display:flex;flex-direction:column;gap:3px}.bo-meta a{color:var(--accent-dark,#1f4fb8);font-weight:700;text-decoration:none}'
     + '.bo-link{font-weight:800;word-break:break-all;color:var(--accent-dark,#1f4fb8);margin:6px 0 10px}'
     + '.bo-pk{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid var(--border,#e3e9f3)}.bo-pk input{width:20px;height:20px;flex-shrink:0}.bo-pk .n{flex:1;min-width:0;font-size:14px}.bo-pk .p{font-size:12px;color:var(--ink-faint,#8a9bb0)}'
@@ -22381,7 +22414,10 @@ function __boIngest(orders){
   var prevKnown = __bo.known;
   __bo.orders = orders;
   var arrived = [];
-  if(prevKnown){ Object.keys(orders).forEach(function(k){ var o = orders[k]; if(!prevKnown[k] && o && o.status === 'new' && __boMine(o)) arrived.push(o); }); }
+  if(prevKnown){ Object.keys(orders).forEach(function(k){ var o = orders[k]; if(!prevKnown[k] && o && (o.status === 'new' || (o.auto && BO_ACTIVE.indexOf(o.status) !== -1)) && __boMine(o)) arrived.push(o); }); }   /* fix153-boplus: avtomatik qabul qilingani ham */
+  var __msgIn = null; var __pm = __bo.msgN || {}; __bo.msgN = {};
+  Object.keys(orders).forEach(function(k){ var o = orders[k]; var n = (o && o.msgs ? o.msgs.filter(function(m){ return m.f === 'c'; }).length : 0); __bo.msgN[k] = n; if(prevKnown && n > (__pm[k] || 0) && __boMine(o)) __msgIn = o; });
+  if(__msgIn){ try{ if(__notifSoundOn()) __dingNow(); }catch(e){} showToast(__boT('boMsgNew', {no: __msgIn.no})); }
   __bo.known = {}; Object.keys(orders).forEach(function(k){ __bo.known[k] = 1; });
   if(arrived.length){
     __bo.ringN = 0;
@@ -22501,6 +22537,8 @@ function __boQty(q){ q = Math.round((Number(q) || 0) * 1000) / 1000; return Numb
 function __boCardHtml(o){
   var h = '<div class="card bo-card s-' + escapeHtml(o.status) + '" data-bo="' + escapeHtml(o.id) + '">';
   h += '<div class="bo-top"><span class="bo-no">#' + escapeHtml(o.no) + '</span><span class="subtle" style="font-size:12.5px;">' + escapeHtml(fmtDateTime(new Date(o.createdAt).toISOString())) + '</span>'
+    + (o.src === 'web' ? '<span class="bo-chip">🌐 ' + escapeHtml(tr('boSrcWeb')) + '</span>' : '')   /* fix151-weborder */
+    + (o.auto ? '<span class="bo-chip">⚡ ' + escapeHtml(tr('boAutoChip')) + '</span>' : '') + (o.edited ? '<span class="bo-chip">✏️ ' + escapeHtml(tr('boEdited')) + '</span>' : '')   /* fix153-boplus */
     + '<span class="bo-chip">' + escapeHtml(o.mode === 'delivery' ? tr('boDeliveryL') : tr('boPickupL')) + '</span><span class="bo-chip st-' + escapeHtml(o.status) + '">' + escapeHtml(__boStLabel(o.status)) + (o.status === 'accepted' && o.eta ? ' · ' + escapeHtml(__boT('boEta', {m: o.eta})) : '') + '</span></div>';
   h += '<div class="bo-meta"><div>' + icI('user') + ' <b>' + escapeHtml(o.name || '') + '</b>' + (o.tgUser && o.tgUser.username ? ' · @' + escapeHtml(o.tgUser.username) : '') + '</div>';
   if(o.phone) h += '<div>' + icI('phone') + ' <a href="tel:' + escapeHtml(o.phone) + '">' + escapeHtml(o.phone) + '</a>' + (o.phoneOk ? ' ✓' : ' <span class="subtle">(' + escapeHtml(tr('boUnverified')) + ')</span>') + '</div>';
@@ -22508,6 +22546,7 @@ function __boCardHtml(o){
     h += '<div>' + icI('mapPin') + ' ' + escapeHtml(o.address || '—') + (o.loc ? ' · <a href="https://maps.google.com/?q=' + encodeURIComponent(o.loc.lat + ',' + o.loc.lng) + '" target="_blank" rel="noopener" data-bo-map="' + escapeHtml(o.loc.lat + ',' + o.loc.lng) + '">' + escapeHtml(tr('boMap')) + '</a>' : '') + '</div>';
   }
   if(o.comment) h += '<div>💬 ' + escapeHtml(o.comment) + '</div>';
+  if(o.msgs && o.msgs.length){ h += '<div class="bo-msgs">' + o.msgs.slice(-3).map(function(m){ return '<div class="bo-msg ' + (m.f === 'c' ? 'c' : 's') + '"><b>' + escapeHtml(tr(m.f === 'c' ? 'boCust' : 'boMe')) + ':</b> ' + escapeHtml(m.t) + '</div>'; }).join('') + '</div>'; }   /* fix153-boplus */
   if(o.reason && o.status === 'rejected') h += '<div class="subtle">' + escapeHtml(tr('boReasonL')) + ': ' + escapeHtml(o.reason) + '</div>';
   h += '</div><div style="margin-top:10px;border-top:1px solid var(--border,#e3e9f3);padding-top:8px;">';
   (o.items || []).forEach(function(x){ h += '<div class="bo-it"><span>' + escapeHtml(x.name) + (x.vName ? ' — ' + escapeHtml(x.vName) : '') + ' × ' + escapeHtml(__boQty(x.qty)) + escapeHtml(__boUnit(x.unit)) + '</span><span>' + escapeHtml(fmt(x.sum)) + '</span></div>'; });
@@ -22520,6 +22559,12 @@ function __boCardHtml(o){
   if(o.status === 'accepted'){ A.push('<button class="btn btn-outline" data-bo-act="' + (o.mode === 'delivery' ? 'delivering' : 'ready') + '"' + b + '>' + escapeHtml(tr(o.mode === 'delivery' ? 'boOnWay' : 'boReady')) + '</button>'); }
   if(o.status === 'ready' && o.mode === 'delivery'){ A.push('<button class="btn btn-outline" data-bo-act="delivering"' + b + '>' + escapeHtml(tr('boOnWay')) + '</button>'); }
   if(BO_ACTIVE.indexOf(o.status) !== -1 && o.status !== 'new'){ A.push('<button class="btn btn-accent" data-bo-act="sell"' + b + '>' + escapeHtml(tr('boSell')) + '</button>'); A.push('<button class="btn btn-ghost" data-bo-act="reject"' + b + '>' + escapeHtml(tr('boReject')) + '</button>'); }
+  /* fix153-boplus: tahrirlash, xabar, oshxona */
+  var B = [];
+  if(['new', 'accepted', 'ready'].indexOf(o.status) !== -1) B.push('<button class="btn btn-ghost btn-sm" data-bo-act="edit"' + b + '>' + escapeHtml(tr('boEdit')) + '</button>');
+  if(o.canMsg && BO_ACTIVE.indexOf(o.status) !== -1) B.push('<button class="btn btn-ghost btn-sm" data-bo-act="msg"' + b + '>' + escapeHtml(tr('boMsg')) + '</button>');
+  if(o.auto && o.status !== 'new' && BO_ACTIVE.indexOf(o.status) !== -1 && __boKitchenAvail() && !__boLsGet(BO_KDONE_KEY, {})[o.id]) B.push('<button class="btn btn-ghost btn-sm" data-bo-act="kitchen"' + b + '>' + escapeHtml(tr('boKitchenBtn')) + '</button>');
+  if(B.length) h += '<div class="bo-acts bo-acts2">' + B.join('') + '</div>';
   if(A.length) h += '<div class="bo-acts">' + A.join('') + '</div>';
   return h + '</div>';
 }
@@ -22560,6 +22605,9 @@ function renderBotOrders(){
       else if(act === 'reject') __boRejectModal(o);
       else if(act === 'ready' || act === 'delivering') __boSet(oid, act).catch(function(){});
       else if(act === 'sell') __boSell(o);
+      else if(act === 'edit') __boEditModal(o);   /* fix153-boplus */
+      else if(act === 'msg') __boMsgModal(o);
+      else if(act === 'kitchen') __boKitchen(o).then(function(ok){ showToast(ok ? tr('boSaved') : tr('boErr')); renderBotOrders(); });
     });
   });
 }
@@ -22595,6 +22643,52 @@ function __boAcceptModal(o){
     });
   }
   draw();
+}
+/* fix153-boplus: buyurtmani tahrirlash */
+function __boEditModal(o){
+  var q = {}; (o.items || []).forEach(function(it, i){ q[i] = Number(it.qty) || 0; });
+  var frac = function(it){ return it.unit === 'kg' || it.unit === 'litr'; };
+  var total = function(){ var t = 0; (o.items || []).forEach(function(it, i){ t = rM(t + rM((Number(it.price) || 0) * (q[i] || 0))); }); return rM(t + (Number(o.fee) || 0)); };
+  function draw(){
+    openModal('<div class="modal-title">' + escapeHtml(tr('boEdit')) + ' #' + escapeHtml(o.no) + '</div><p class="subtle" style="margin:0 0 8px;font-size:12.5px;">' + escapeHtml(tr('boEditHint')) + '</p>'
+      + (o.items || []).map(function(it, i){ return '<div class="bo-ed' + (q[i] > 0 ? '' : ' off') + '"><span class="n">' + escapeHtml(it.name) + (it.vName ? ' — ' + escapeHtml(it.vName) : '') + '<br><span class="subtle" style="font-size:12px;">' + escapeHtml(fmt(it.price)) + '</span></span>'
+        + '<button type="button" data-ed-m="' + i + '">−</button><span class="q">' + escapeHtml(__boQty(q[i] || 0)) + '</span><button type="button" data-ed-p="' + i + '">+</button></div>'; }).join('')
+      + '<div class="bo-it" style="font-size:15.5px;margin-top:10px;"><span><b>' + escapeHtml(tr('grandTotal')) + '</b></span><span id="bo-ed-tot">' + escapeHtml(fmt(total())) + '</span></div>'
+      + '<div id="bo-ed-err" class="error-text"></div>'
+      + '<button class="btn btn-primary btn-block" id="bo-ed-ok" style="margin-top:12px;">' + escapeHtml(tr('boEditSave')) + '</button>', {center: true});
+    document.querySelectorAll('[data-ed-m],[data-ed-p]').forEach(function(b){ b.addEventListener('click', function(){
+      var i = Number(b.getAttribute('data-ed-m') !== null ? b.getAttribute('data-ed-m') : b.getAttribute('data-ed-p')), it = o.items[i], st = frac(it) ? 0.5 : 1;
+      var v = (q[i] || 0) + (b.hasAttribute('data-ed-p') ? st : -st); q[i] = Math.max(0, Math.round(v * 1000) / 1000); draw(); }); });
+    document.getElementById('bo-ed-ok').addEventListener('click', function(){
+      var lines = (o.items || []).map(function(it, i){ return {id: it.id, v: it.v || '', q: q[i] || 0}; });
+      if(!lines.some(function(x){ return x.q > 0; })){ document.getElementById('bo-ed-err').textContent = tr('boEditEmpty'); return; }
+      var btn = document.getElementById('bo-ed-ok'); btn.disabled = true;
+      __tgApi('boEdit', {oid: o.id, items: lines, by: state.currentStaff ? state.currentStaff.name : ''}).then(function(r){
+        if(r && r.order) __bo.orders[o.id] = Object.assign({}, __bo.orders[o.id] || {}, r.order);
+        closeModal(); showToast(tr('boSaved')); __boRefreshUi();
+      }).catch(function(e){ btn.disabled = false; document.getElementById('bo-ed-err').textContent = __boErrText(e); });
+    });
+  }
+  draw();
+}
+/* fix153-boplus: mijozga xabar (bot orqali) */
+function __boMsgModal(o){
+  var MT = ['boMsgT1', 'boMsgT2', 'boMsgT3', 'boMsgT4'];
+  openModal('<div class="modal-title">' + escapeHtml(tr('boMsgTitle')) + ' #' + escapeHtml(o.no) + '</div>'
+    + (o.msgs && o.msgs.length ? '<div class="bo-msgs" style="margin-bottom:10px;">' + o.msgs.map(function(m){ return '<div class="bo-msg ' + (m.f === 'c' ? 'c' : 's') + '"><b>' + escapeHtml(tr(m.f === 'c' ? 'boCust' : 'boMe')) + ':</b> ' + escapeHtml(m.t) + '</div>'; }).join('') + '</div>' : '')
+    + '<div style="display:flex;flex-direction:column;gap:6px;">' + MT.map(function(k){ return '<button class="btn btn-outline" data-mt="' + escapeHtml(tr(k)) + '" style="text-align:left;">' + escapeHtml(tr(k)) + '</button>'; }).join('') + '</div>'
+    + '<div class="field" style="margin-top:10px;"><textarea id="bo-mt" rows="2" maxlength="500" placeholder="' + escapeHtml(tr('boMsgPh')) + '"></textarea></div><div id="bo-mt-err" class="error-text"></div>'
+    + '<button class="btn btn-primary btn-block" id="bo-mt-ok">' + escapeHtml(tr('boMsgSend')) + '</button>', {center: true});
+  var send = function(text){
+    text = String(text || '').trim(); if(!text) return;
+    var btn = document.getElementById('bo-mt-ok'); if(btn) btn.disabled = true;
+    __tgApi('boMsg', {oid: o.id, text: text, by: state.currentStaff ? state.currentStaff.name : ''}).then(function(r){
+      if(r && r.order) __bo.orders[o.id] = Object.assign({}, __bo.orders[o.id] || {}, r.order);
+      closeModal(); showToast(tr('boMsgSent')); __boRefreshUi();
+    }).catch(function(e){ if(btn) btn.disabled = false; var er = document.getElementById('bo-mt-err'); if(er) er.textContent = __boErrText(e); });
+  };
+  document.querySelectorAll('[data-mt]').forEach(function(b){ b.addEventListener('click', function(){ send(b.getAttribute('data-mt')); }); });
+  document.getElementById('bo-mt-ok').addEventListener('click', function(){ send(document.getElementById('bo-mt').value); });
 }
 function __boRejectModal(o){
   var R = ['boR1', 'boR2', 'boR3'];
@@ -22685,7 +22779,7 @@ function __boLoadCfg(){
     __bo.cfgBusy = false;
     if(r && r.configured === false){ __bo.cfgErr = 'not_ready'; __bo.cfg = null; return null; }
     __bo.cfg = r.cfg; __bo.owner = !!r.owner; __bo.bot = r.bot || ''; __bo.link = r.link || '';
-    if(__boOwner() && state.settings.botShopOn !== !!(r.cfg && r.cfg.enabled)){ state.settings.botShopOn = !!(r.cfg && r.cfg.enabled); saveSettings(); }
+    if(__boOwner() && (state.settings.botShopOn !== !!(r.cfg && r.cfg.enabled) || !!state.settings.botAllProducts !== !!(r.cfg && r.cfg.allProducts))){ state.settings.botShopOn = !!(r.cfg && r.cfg.enabled); state.settings.botAllProducts = !!(r.cfg && r.cfg.allProducts); saveSettings(); }   /* fix153-boplus */
     return r;
   }).catch(function(e){ __bo.cfgBusy = false; __bo.cfgErr = (e && e.code) || 'net'; throw e; });
 }
@@ -22698,7 +22792,9 @@ function __boSlugGuess(){
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30).replace(/-+$/, '');
   return validSlug(s) ? s : '';
 }
-function __boBotCount(){ return visibleProducts().filter(function(p){ return p && p.botSell === true; }).length; }
+function __boAllP(){ return !!((__bo.cfg && __bo.cfg.allProducts) || (!__bo.cfg && state.settings.botAllProducts)); }   /* fix153-boplus */
+function __boInBot(p){ return !!p && (p.botSell === true || (__boAllP() && p.botSell !== false)); }
+function __boBotCount(){ return visibleProducts().filter(__boInBot).length; }
 function __boCfgMount(container){
   __boCss();
   var el = document.createElement('div');
@@ -22736,6 +22832,12 @@ function __boCfgRender(){
   h += '<div id="bo-hr-f" style="display:' + (hr.on ? 'flex' : 'none') + ';gap:8px;align-items:center;margin:4px 0 10px;"><input type="time" id="bo-from" value="' + escapeHtml(hr.from || '09:00') + '" style="flex:1;"' + dis + '><span>—</span><input type="time" id="bo-to" value="' + escapeHtml(hr.to || '21:00') + '" style="flex:1;"' + dis + '></div>';
   h += '<div class="field"><label class="field-label">' + escapeHtml(tr('boNote')) + '</label><textarea id="bo-note" rows="2" maxlength="300"' + dis + '>' + escapeHtml(c.note || '') + '</textarea></div>';
   h += '<div class="checkbox-row"><input type="checkbox" id="bo-ntg"' + (c.notifyTg !== false ? ' checked' : '') + dis + '><span>' + escapeHtml(tr('boNotifyTg')) + '</span></div>';
+  /* fix153-boplus: avtomatik qabul */
+  h += '<div class="checkbox-row"><input type="checkbox" id="bo-auto"' + (c.autoAccept ? ' checked' : '') + dis + '><span style="font-weight:700;">' + escapeHtml(tr('boAutoAccept')) + '</span></div>';
+  h += '<div id="bo-auto-f" style="' + (c.autoAccept ? '' : 'display:none;') + 'margin:2px 0 8px 4px;"><p class="subtle" style="margin:0 0 6px;font-size:11.5px;">' + escapeHtml(tr('boAutoHint')) + '</p><div class="field" style="margin:0;"><label class="field-label">' + escapeHtml(tr('boAutoEta')) + '</label><select id="bo-auto-eta"' + dis + '>'
+    + [0, 10, 15, 20, 30, 45, 60, 90].map(function(m){ return '<option value="' + m + '"' + ((c.autoEta || 0) === m ? ' selected' : '') + '>' + escapeHtml(m ? __boT('boMinShort', {m: m}) : tr('boEtaNone')) + '</option>'; }).join('') + '</select></div></div>';
+  h += '<div class="checkbox-row"><input type="checkbox" id="bo-allp"' + (c.allProducts ? ' checked' : '') + dis + '><span style="font-weight:700;">' + escapeHtml(tr('boAllProducts')) + '</span></div>'
+    + '<p class="subtle" style="margin:0 0 6px 4px;font-size:11.5px;">' + escapeHtml(tr('boAllProductsHint')) + '</p>';
   var n = __boBotCount();
   h += '<div style="display:flex;align-items:center;gap:10px;margin:12px 0 4px;"><div style="flex:1;font-weight:700;">' + escapeHtml(__boT('boProducts', {n: n})) + '</div><button class="btn btn-outline btn-sm" id="bo-pick" style="width:auto;"' + dis + '>' + escapeHtml(tr('boPick')) + '</button></div>';
   if(!n) h += '<p class="subtle" style="margin:0 0 6px;font-size:12px;color:var(--danger);">' + escapeHtml(tr('boNoProducts')) + '</p>';
@@ -22754,6 +22856,7 @@ function __boCfgRender(){
   var dl = $('bo-dl'); if(dl) dl.addEventListener('change', function(){ $('bo-dl-f').style.display = dl.checked ? '' : 'none'; });
   var hrc = $('bo-hr'); if(hrc) hrc.addEventListener('change', function(){ $('bo-hr-f').style.display = hrc.checked ? 'flex' : 'none'; });
   var pk = $('bo-pick'); if(pk) pk.addEventListener('click', __boPickProducts);
+  var au = $('bo-auto'); if(au) au.addEventListener('change', function(){ $('bo-auto-f').style.display = au.checked ? '' : 'none'; });   /* fix153-boplus */
   var oo = $('bo-open-orders'); if(oo) oo.addEventListener('click', function(){ state.view = 'botOrders'; renderAll(); });
   var cp = $('bo-copy'); if(cp) cp.addEventListener('click', function(){ __tgCopy(__bo.link); });
   var shb = $('bo-share'); if(shb) shb.addEventListener('click', function(){ shareTextNative(state.settings.businessName || 'Savdo Pos', __bo.link); });
@@ -22765,7 +22868,7 @@ function __boCfgRender(){
     if(!validSlug(s)){ err.textContent = tr('boSlugBad'); return; }
     var mv = function(id){ var i = $(id); var v = i ? parseMoneyInput(i.value) : 0; return isNaN(v) || v < 0 ? 0 : rM(v); };
     var cfg = {enabled: $('bo-en').checked, slug: s, branchId: $('bo-br') ? $('bo-br').value : effectiveBranchId(state.currentBranchId), pickup: $('bo-pk').checked, delivery: $('bo-dl').checked,
-      fee: mv('bo-fee'), freeFrom: mv('bo-free'), minOrder: mv('bo-min'), note: $('bo-note').value.trim(), notifyTg: $('bo-ntg').checked,
+      fee: mv('bo-fee'), freeFrom: mv('bo-free'), minOrder: mv('bo-min'), note: $('bo-note').value.trim(), notifyTg: $('bo-ntg').checked, allProducts: !!($('bo-allp') && $('bo-allp').checked), autoAccept: !!($('bo-auto') && $('bo-auto').checked), autoEta: $('bo-auto-eta') ? (Number($('bo-auto-eta').value) || 0) : 0,   /* fix153-boplus */
       hours: {on: $('bo-hr').checked, from: $('bo-from').value || '09:00', to: $('bo-to').value || '21:00'}, paused: !!(__bo.cfg && __bo.cfg.paused),
       tz: state.settings.timeZone || deviceTimeZone() || 'Asia/Tashkent'};
     if(!cfg.pickup && !cfg.delivery){ err.textContent = tr('boNeedMode'); return; }
@@ -22773,21 +22876,21 @@ function __boCfgRender(){
     sv.disabled = true;
     __tgApi('boSave', {cfg: cfg}).then(function(r){
       __bo.cfg = r.cfg; __bo.link = r.link || ''; __bo.bot = r.bot || __bo.bot;
-      state.settings.botShopOn = !!r.cfg.enabled; saveSettings();
+      state.settings.botShopOn = !!r.cfg.enabled; state.settings.botAllProducts = !!r.cfg.allProducts; saveSettings();   /* fix153-boplus */
       showToast(tr('boSaved')); __boCfgRender(); try{ renderHeader(); }catch(e){}
     }).catch(function(e){ sv.disabled = false; err.textContent = __boErrText(e); });
   });
 }
 function __boPickProducts(){
   var list = visibleProducts().filter(function(p){ return p && p.name; }).slice().sort(function(a, b){ return String(a.category || '').localeCompare(String(b.category || '')) || String(a.name).localeCompare(String(b.name)); });
-  var sel = {}; list.forEach(function(p){ if(p.botSell === true) sel[p.id] = 1; });
+  var sel = {}; list.forEach(function(p){ if(__boInBot(p)) sel[p.id] = 1; });   /* fix153-boplus */
   var q = '';
   function shown(){ var s = q.trim().toLowerCase(); return list.filter(function(p){ return !s || String(p.name).toLowerCase().indexOf(s) !== -1 || String(p.category || '').toLowerCase().indexOf(s) !== -1; }); }
   function rows(){
     var L = shown(), h = '', lastCat = null;
     L.forEach(function(p){
       var cat = p.category || '';
-      if(cat !== lastCat){ h += '<div class="subtle" style="font-size:11.5px;font-weight:800;text-transform:uppercase;margin:10px 0 2px;">' + escapeHtml(cat || '—') + '</div>'; lastCat = cat; }
+      if(cat !== lastCat){ h += '<button type="button" class="subtle" data-pk-cat="' + escapeHtml(cat) + '" style="display:block;width:100%;text-align:left;background:none;border:none;padding:6px 0 2px;cursor:pointer;font-size:11.5px;font-weight:800;text-transform:uppercase;margin:6px 0 0;">' + escapeHtml(cat || '—') + ' ☑︎</button>'; lastCat = cat; }   /* fix153-boplus: bosilsa — butun kategoriya */
       var price = (p.variants && p.variants.length) ? p.variants.map(function(v){ return v.price || 0; }).filter(function(x){ return x > 0; }) : [p.price || 0];
       var noPrice = !price.length || !(Math.min.apply(null, price) > 0);
       h += '<label class="bo-pk"><input type="checkbox" data-pid="' + escapeHtml(p.id) + '"' + (sel[p.id] ? ' checked' : '') + '><span class="n">' + escapeHtml(p.name) + '<br><span class="p">' + (noPrice ? '<span style="color:var(--danger);">' + escapeHtml(tr('boNoPrice')) + '</span>' : escapeHtml(fmt(Math.min.apply(null, price)))) + ' · ' + escapeHtml(tr('stock')) + ': ' + escapeHtml(String(productTotalStock(p))) + '</span></span></label>';
@@ -22798,18 +22901,20 @@ function __boPickProducts(){
   openModal('<div class="back-row"><button id="bo-pk-back">' + ICONS.arrowLeft + '</button><span class="t-title">' + escapeHtml(tr('boPickTitle')) + '</span></div>'
     + '<input type="search" id="bo-pk-q" placeholder="' + escapeHtml(tr('boSearch')) + '" style="margin-bottom:8px;">'
     + '<div style="display:flex;gap:8px;margin-bottom:6px;"><button class="btn btn-outline btn-sm" id="bo-pk-all" style="flex:1;">' + escapeHtml(tr('boSelAll')) + '</button><button class="btn btn-outline btn-sm" id="bo-pk-none" style="flex:1;">' + escapeHtml(tr('boSelNone')) + '</button></div>'
+    + '<p class="subtle" style="margin:0 0 4px;font-size:11.5px;">' + escapeHtml(tr('boCatToggle')) + '</p>'
     + '<div id="bo-pk-rows" style="max-height:52vh;overflow:auto;">' + rows() + '</div>'
     + '<button class="btn btn-primary btn-block" id="bo-pk-ok" style="margin-top:12px;">' + escapeHtml(tr('boSave')) + ' (<span id="bo-pk-n">' + count() + '</span>)</button>');
   var box = document.getElementById('bo-pk-rows');
   var redraw = function(){ box.innerHTML = rows(); document.getElementById('bo-pk-n').textContent = count(); };
   box.addEventListener('change', function(e){ var i = e.target; if(!i || !i.getAttribute('data-pid')) return; if(i.checked) sel[i.getAttribute('data-pid')] = 1; else delete sel[i.getAttribute('data-pid')]; document.getElementById('bo-pk-n').textContent = count(); });
   document.getElementById('bo-pk-q').addEventListener('input', function(e){ q = e.target.value; redraw(); });
+  box.addEventListener('click', function(e){ var b = e.target.closest ? e.target.closest('[data-pk-cat]') : null; if(!b) return; var cat = b.getAttribute('data-pk-cat'); var inCat = shown().filter(function(p){ return (p.category || '') === cat; }); var all = inCat.every(function(p){ return sel[p.id]; }); inCat.forEach(function(p){ if(all) delete sel[p.id]; else sel[p.id] = 1; }); redraw(); });   /* fix153-boplus */
   document.getElementById('bo-pk-all').addEventListener('click', function(){ shown().forEach(function(p){ sel[p.id] = 1; }); redraw(); });
   document.getElementById('bo-pk-none').addEventListener('click', function(){ shown().forEach(function(p){ delete sel[p.id]; }); redraw(); });
   document.getElementById('bo-pk-back').addEventListener('click', closeModal);
   document.getElementById('bo-pk-ok').addEventListener('click', function(){
     var changed = 0;
-    list.forEach(function(p){ var want = !!sel[p.id]; if((p.botSell === true) !== want){ p.botSell = want; changed++; } });
+    list.forEach(function(p){ var want = !!sel[p.id]; if(__boInBot(p) !== want || (want && p.botSell !== true && !__boAllP())){ p.botSell = want; changed++; } });   /* fix153-boplus: "hamma mahsulot" rejimida belgisizlar ham */
     if(changed) saveProducts();
     closeModal(); showToast(tr('boSaved')); __boCfgRender();
   });
@@ -22860,7 +22965,8 @@ function buildShopPayload(){
     return {id:p.id, name:p.name, price:pr ? pr.price : 0, unitLabel: pr ? pr.unitLabel : '', perBox: pr ? pr.perBox : 0, category:p.category||'', unit:p.unit||'dona', image:img, inStock: productTotalStock(p) > 0,
       variants:(p.variants||[]).map(v=>{ const vp = mode==='retail' ? (v.price||0) : (v.wholesalePrice||v.price||0); return {name:v.name, price:vp, inStock:(v.stock||0)>0}; })};
   }).filter(Boolean).filter(p=>cfg.showOut || p.inStock || p.variants.some(v=>v.inStock));
-  return {name: state.settings.businessName||'', address: state.settings.businessAddress||'', phone: state.settings.businessPhone||'', telegram: cfg.telegram||'', whatsapp: cfg.whatsapp||'', lang: cfg.lang || receiptLang(), currency: currencyLabel(), products};
+  return {name: state.settings.businessName||'', address: state.settings.businessAddress||'', phone: state.settings.businessPhone||'', telegram: cfg.telegram||'', whatsapp: cfg.whatsapp||'', lang: cfg.lang || receiptLang(), currency: currencyLabel(), products,
+    orders: cfg.ordersIn !== false, cur: state.settings.currency || 'UZS', branchId: effectiveBranchId(state.currentBranchId)}   /* fix151-weborder: buyurtma ilovaga; valyuta kodi; filial */;
 }
 async function claimShopSlug(slug){
   const ref = publicShopsCol().doc(slug);
@@ -22912,6 +23018,8 @@ function renderSettingsCatalog(container){
         <div class="field"><label class="field-label">${tr('osLang')}</label><select id="os-lang"><option value="" ${!cfg.lang?'selected':''}>${tr('receiptLanguageSameAsApp')}</option><option value="uz" ${cfg.lang==='uz'?'selected':''}>O'zbekcha</option><option value="ru" ${cfg.lang==='ru'?'selected':''}>Русский</option></select></div>
         <div class="field"><label class="field-label">${tr('osPriceMode')}</label><select id="os-price-mode"><option value="retail" ${(cfg.priceMode||'retail')==='retail'?'selected':''}>${tr('osPriceRetail')}</option><option value="wholesale" ${cfg.priceMode==='wholesale'?'selected':''}>${tr('osPriceWholesale')}</option><option value="box" ${cfg.priceMode==='box'?'selected':''}>${tr('osPriceBox')}</option></select><p class="subtle" style="margin:4px 0 0;font-size:11.5px;">${tr('osPriceHint')}</p></div>
         <div class="checkbox-row"><input type="checkbox" id="os-showout" ${cfg.showOut?'checked':''}><span>${tr('osShowOut')}</span></div>
+        <div class="checkbox-row"><input type="checkbox" id="os-ordersin" ${cfg.ordersIn!==false?'checked':''}><span style="font-weight:700;">${tr('osOrdersIn')}</span></div>
+        <p class="subtle" style="margin:2px 0 0;font-size:11.5px;">${tr('osOrdersInHint')}</p>
         <div id="os-err" class="error-text" style="margin-top:8px;"></div>
         <button class="btn btn-primary btn-block" id="os-publish" style="margin-top:12px;">${tr('osPublish')}</button>
         <p class="subtle" style="margin:8px 0 0;font-size:11.5px;">${tr('osAuto')}${cfg.lastPublishedAt ? ' '+tr('osLastPub')+': '+fmtDateTime(cfg.lastPublishedAt) : ''}</p>
@@ -22946,9 +23054,10 @@ function renderSettingsCatalog(container){
     const err = document.getElementById('os-err'); err.textContent = '';
     const slug = slugEl.value.trim(); const tg = document.getElementById('os-tg').value.trim().replace(/^@/,''); const wa = document.getElementById('os-wa').value.trim();
     if(!validSlug(slug)){ err.textContent = tr('osBad'); return; }
-    if(!tg && !wa){ err.textContent = tr('osOneNeeded'); return; }
+    const __oi = document.getElementById('os-ordersin'), ordersIn = __oi ? __oi.checked : true;   /* fix151-weborder */
+    if(!tg && !wa && !ordersIn){ err.textContent = tr('osOneNeeded'); return; }
     const prev = onlineShopCfg();
-    state.settings.onlineShop = Object.assign({}, prev, {enabled:true, slug, telegram:tg, whatsapp:wa, lang: document.getElementById('os-lang').value, showOut: document.getElementById('os-showout').checked, priceMode: document.getElementById('os-price-mode').value});
+    state.settings.onlineShop = Object.assign({}, prev, {enabled:true, slug, telegram:tg, whatsapp:wa, lang: document.getElementById('os-lang').value, showOut: document.getElementById('os-showout').checked, priceMode: document.getElementById('os-price-mode').value, ordersIn: ordersIn});
     pubBtn.disabled = true;
     const ok = await publishOnlineShop(false);
     pubBtn.disabled = false;

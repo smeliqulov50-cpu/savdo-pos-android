@@ -63,7 +63,7 @@ test('/start pay: ulangan — tariflar; ulanmagan — qanday ulash yoziladi', as
   assert.match(texts(s.tg, '9999').pop(), /ulanmagan/);
 });
 
-test('menyu yangilanishi: til tanlangan chatda /obuna qaytadi, ulangan chatda pastki "💳 Obuna" tugmasi', async () => {
+test('menyu yangilanishi: til tanlangan chatda /obuna qaytadi, ulangan chatda pastki chap tugma — buyruqlar menyusi', async () => {
   const s = mk(seed({ 'tgChats/7001': { bids: [BID], ulang: 'ru' }, 'tgChats/7002': { bids: [], ulang: 'uz' }, 'tgChats/7003': { bids: [] } }));
   const ok = await cmds.setupCommands(s.deps);
   assert.equal(ok, 7);
@@ -73,8 +73,15 @@ test('menyu yangilanishi: til tanlangan chatda /obuna qaytadi, ulangan chatda pa
   assert.ok(sc.find(c => c.params.scope.chat_id === 7002).params.commands.some(x => x.command === 'obuna'));
   const mb = s.tg.calls.filter(c => c.method === 'setChatMenuButton');
   assert.deepEqual(mb.map(c => c.params.chat_id), ['7001']);
-  assert.equal(mb[0].params.menu_button.text, '💳 Подписка · Магазин');
-  assert.ok(mb[0].params.menu_button.web_app.url.endsWith('?v=me'));
+  assert.deepEqual(mb[0].params.menu_button, { type: 'commands' });   /* fix152-cmdmenu */
+});
+
+test('fix152: egasi o\'z do\'koni havolasini ochsa ham buyruqlar menyusi o\'zgarmaydi; oddiy mijozda — do\'kon tugmasi', async () => {
+  const s = mk(seed({ 'tgShop/OWNER1': { enabled: true, slug: 'salqin', branchId: 'main', pickup: true }, 'tgSlug/salqin': { bid: BID } }));
+  await core.handleUpdate(s.deps, msg(CHAT, '/start s_salqin'));
+  assert.ok(!s.tg.calls.some(c => c.method === 'setChatMenuButton'));
+  await core.handleUpdate(s.deps, msg('9911', '/start s_salqin'));
+  assert.ok(s.tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.chat_id === '9911' && c.params.menu_button.type === 'web_app'));
 });
 
 test('eslatma bosqichlari: 3 kun, 1 kun, tugagan (2 kungacha); boshqa kunlarda yo\'q', () => {

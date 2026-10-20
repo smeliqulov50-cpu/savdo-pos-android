@@ -468,14 +468,15 @@ test('obuna katalogi: to\'lash — serverdagi narx bilan hisob havolasi, buyurtm
   const pc = await pay.onPreCheckout(deps, { id: 'q1', invoice_payload: inv.payload, currency: 'UZS', total_amount: PLANS.sixmonth.price * 100 }, 'uz');
   assert.equal(pc.ok, true);
 });
-test('egasi: ulanganda, /yordam va /obuna da pastki menyu "Do\'konim"; mijoz oddiy matn yozsa — do\'kon tugmasi', async () => {
+test('egasi: /yordam va /obuna da pastki chap tugma — buyruqlar menyusi (fix152); mijoz oddiy matn yozsa — do\'kon tugmasi', async () => {
   const { deps, tg } = mk(subSeed(), { payToken: 'PROV:LIVE:x' });
   const m = (text) => ({ message: { message_id: 1, chat: { id: CUST, type: 'private' }, from: { id: CUST, language_code: 'uz' }, text: text } });
   await core.handleUpdate(deps, m('/yordam'));
-  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.web_app.url.endsWith('?v=me')));
+  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.type === 'commands'));
   tg.calls.length = 0;
   await core.handleUpdate(deps, m('/obuna'));
-  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.text === "💳 Obuna · Do'konim"));
+  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.type === 'commands'));
+  assert.ok(!tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.type === 'web_app'));
   const last = tg.sent[tg.sent.length - 1];
   assert.ok(last.reply_markup.inline_keyboard.pop()[0].web_app.url.endsWith('?v=me'));
   const c = mk();
@@ -531,4 +532,120 @@ test('fix149-cents: dollarda narx, yetkazish va jami tiyin bilan; so\'mda butun 
   const r2 = await order(d2, { items: [{ id: 'p3', q: 1.25 }] });
   const o2 = db2.store['tgOrders/' + r2.body.order.id];
   assert.equal(o2.items[0].price, 14000); assert.equal(o2.items[0].sum, 17500); assert.equal(o2.total, 17500);   // so'mda avvalgidek butun
+});
+
+/* ---------- fix153-boplus ---------- */
+const app = (deps, action, body) => shop.handleAppApi(deps, { bid: BID, owner: true }, BID, action, body);
+test('fix153: hamma mahsulot botda — o\'chirilgani (botSell=false) ko\'rinmaydi, belgilanmagani ko\'rinadi', async () => {
+  const sd = seed();
+  sd['tgShop/' + BID] = Object.assign({}, sd['tgShop/' + BID], { allProducts: true });
+  sd['businesses/' + BID + '/products/p9'] = { id: 'p9', name: 'Belgisiz', price: 3000, stock: 5, unit: 'dona' };
+  sd['businesses/' + BID + '/products/p4'].botSell = false;
+  const { deps } = mk(sd);
+  const r = await shop.handleWebApp(deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  const ids = r.body.items.map(x => x.id);
+  assert.ok(ids.includes('p9') && !ids.includes('p4') && ids.includes('p1'), ids.join(','));
+  const { deps: d2 } = mk();
+  const r2 = await shop.handleWebApp(d2, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  assert.ok(!r2.body.items.some(x => x.id === 'p9'), 'o\'chiq bo\'lsa avvalgidek');
+});
+
+test('fix153: avtomatik qabul — mijozga "qabul qilindi", egaga "avtomatik qabul" matni, bekor tugmasi yo\'q', async () => {
+  const sd = seed();
+  sd['tgShop/' + BID] = Object.assign({}, sd['tgShop/' + BID], { autoAccept: true, autoEta: 20 });
+  const { deps, db, tg } = mk(sd);
+  const r = await order(deps);
+  assert.equal(r.body.order.status, 'accepted');
+  const o = db.store['tgOrders/' + r.body.order.id];
+  assert.equal(o.status, 'accepted'); assert.equal(o.eta, 20); assert.equal(o.auto, true);
+  assert.equal(db.store['businesses/' + BID + '/meta/botInbox'].orders[o.id].auto, true);
+  const cm = custMsgs(tg);
+  assert.ok(!JSON.stringify(cm[0].reply_markup || {}).includes('bo:c:'), 'bekor tugmasi yo\'q');
+  assert.ok(cm.some(m => /qabul qilindi/.test(m.text) && /20 daqiqada/.test(m.text)));
+  assert.ok(ownerMsgs(tg).some(m => /Avtomatik qabul/.test(m.text)));
+  const st = await app(deps, 'boCfg', {});
+  assert.equal(st.body.cfg.autoAccept, true); assert.equal(st.body.cfg.autoEta, 20);
+});
+
+test('fix153: tahrirlash — miqdor o\'zgaradi, qator olib tashlanadi, jami qayta hisoblanadi, mijozga xabar; qoldiq band qilish ham yangilanadi', async () => {
+  const { deps, db, tg } = mk();
+  const r = await order(deps, { items: [{ id: 'p1', q: 3 }, { id: 'p2', q: 2 }] });
+  const oid = r.body.order.id;
+  const e = await app(deps, 'boEdit', { oid: oid, items: [{ id: 'p1', q: 1 }, { id: 'p2', q: 0 }] });
+  assert.equal(e.status, 200, JSON.stringify(e.body));
+  const o = db.store['tgOrders/' + oid];
+  assert.equal(o.items.length, 1); assert.equal(o.items[0].qty, 1); assert.equal(o.total, 12000);
+  assert.ok(o.history.some(h => h.s === 'edited')); assert.ok(o.edited > 0);
+  assert.equal(db.store['businesses/' + BID + '/meta/botInbox'].orders[oid].total, 12000);
+  assert.ok(custMsgs(tg).some(m => /o'zgartirildi/.test(m.text) && /12 000/.test(m.text)));
+  assert.equal(shop.reservedFrom(db.store['businesses/' + BID + '/meta/botInbox'].orders, 'main')['p2|'] || 0, 0);
+  assert.equal((await app(deps, 'boEdit', { oid: oid, items: [{ id: 'p1', q: 0 }] })).body.code, 'empty');
+  assert.equal((await app(deps, 'boEdit', { oid: oid, items: [{ id: 'p1', q: 1 }] })).body.same, true);
+  await app(deps, 'boSet', { oid: oid, to: 'done' });
+  assert.equal((await app(deps, 'boEdit', { oid: oid, items: [{ id: 'p1', q: 2 }] })).body.code, 'bad_state');
+});
+
+test('fix153: do\'kon xabari mijozga, mijoz javobi egaga va ilovaga', async () => {
+  const { deps, db, tg } = mk();
+  const r = await order(deps);
+  const oid = r.body.order.id;
+  const m = await app(deps, 'boMsg', { oid: oid, text: '5 daqiqada chiqamiz', by: 'Ega' });
+  assert.equal(m.status, 200, JSON.stringify(m.body)); assert.equal(m.body.sent, true);
+  assert.ok(custMsgs(tg).some(x => /5 daqiqada chiqamiz/.test(x.text) && /Sardor Market/.test(x.text)));
+  const out = await core.handleUpdate(deps, { message: { message_id: 5, chat: { id: CUST, type: 'private' }, from: { id: CUST, language_code: 'uz' }, text: 'Yaxshi, kutaman <3' } });
+  assert.equal(out.custMsg, oid);
+  assert.ok(custMsgs(tg).pop().text.includes('yuborildi'));
+  assert.ok(ownerMsgs(tg).some(x => /mijozdan/.test(x.text) && /Yaxshi, kutaman &lt;3/.test(x.text)));
+  const ib = db.store['businesses/' + BID + '/meta/botInbox'].orders[oid];
+  assert.deepEqual(ib.msgs.map(x => x.f), ['s', 'c']); assert.equal(ib.canMsg, true);
+  await app(deps, 'boSet', { oid: oid, to: 'done' });
+  const out2 = await core.handleUpdate(deps, { message: { message_id: 6, chat: { id: CUST, type: 'private' }, from: { id: CUST, language_code: 'uz' }, text: 'rahmat' } });
+  assert.ok(!out2.custMsg, 'yopilgan buyurtmadan keyin avvalgi javob (do\'kon tugmasi)');
+  assert.equal((await app(deps, 'boMsg', { oid: oid, text: '' })).body.code, 'empty');
+});
+
+test('fix153: sayt buyurtmasiga bot xabari yuborilmaydi (Telegram yo\'q)', async () => {
+  const { deps, db } = mk();
+  const W = require('../src/telegram/webshop');
+  db.store['publicShops/sardorweb'] = { ownerUid: BID, businessId: BID, slug: 'sardorweb', payload: JSON.stringify({ name: 'S', orders: true, products: [{ id: 'p1', name: 'Cola', price: 12000, unit: 'dona', inStock: true, variants: [] }] }) };
+  const r = await W.handle(deps, { action: 'siteOrder', slug: 'sardorweb', clientId: 'webclient01', name: 'Ali', phone: '901234567', items: [{ id: 'p1', q: 1 }] }, { ip: '1.1.1.1' });
+  assert.equal(r.status, 200, JSON.stringify(r.body));
+  assert.equal((await app(deps, 'boMsg', { oid: r.body.order.id, text: 'salom' })).body.code, 'no_chat');
+  assert.ok(!db.store['businesses/' + BID + '/meta/botInbox'].orders[r.body.order.id].canMsg);
+});
+
+test('fix154-iso: ikki do\'konda faol buyurtma — mijoz xabari aralashmaydi (tanlash tugmalari); egasi ham mijoz sifatida yoza oladi', async () => {
+  const sd = seed();
+  sd['businesses/' + BID2] = { businessName: 'Ikkinchi', currency: 'UZS' };
+  sd['tgShop/' + BID2] = { enabled: true, slug: 'ikki', branchId: 'main', pickup: true, seq: 0 };
+  sd['tgSlug/ikki'] = { bid: BID2 };
+  sd['businesses/' + BID2 + '/products/z1'] = prod('z1', { name: 'Zet', price: 1000 });
+  sd['tgBiz/' + BID2] = { chats: { '5550002': { name: 'Ega2', at: 1, sig: core.sigOf(KEY, BID2, '5550002') } }, lang: 'uz' };
+  const { deps, db, tg } = mk(sd);
+  const a = await order(deps);
+  const b = await shop.handleWebApp(deps, { initData: ID1, action: 'order', slug: 'ikki', clientId: 'clientzzz1', items: [{ id: 'z1', q: 1 }], mode: 'pickup', phone: '+998901234567' });
+  assert.equal(b.status, 200, JSON.stringify(b.body));
+  const m = (text) => ({ message: { message_id: 1, chat: { id: CUST, type: 'private' }, from: { id: CUST, language_code: 'uz' }, text: text } });
+  const r1 = await core.handleUpdate(deps, m('Qachon tayyor?'));
+  assert.equal(r1.custMsg, 'choose');
+  const kb = custMsgs(tg).pop().reply_markup.inline_keyboard;
+  assert.equal(kb.length, 2); assert.ok(kb.some(k => /Ikkinchi/.test(k[0].text)) && kb.some(k => /Sardor/.test(k[0].text)));
+  const cb = { callback_query: { id: 'q1', data: 'bo:t:' + a.body.order.id, from: { id: CUST }, message: { message_id: 7, chat: { id: CUST, type: 'private' } } } };
+  const r2 = await core.handleUpdate(deps, cb);
+  assert.equal(r2.custMsg, a.body.order.id);
+  assert.ok(ownerMsgs(tg).some(x => /Qachon tayyor/.test(x.text)), 'Sardor egasiga bordi');
+  assert.ok(!tg.sent.some(x => String(x.chat_id) === '5550002' && /Qachon tayyor/.test(x.text || '')), 'Ikkinchi egasiga bormadi');
+  assert.ok(custMsgs(tg).pop().text.includes('Sardor Market'));
+  const r3 = await core.handleUpdate(deps, m('Yana savol'));
+  assert.equal(r3.custMsg, a.body.order.id, 'keyingi xabar tanlangan buyurtmaga');
+  // egasi (ulangan chat) boshqa do'konda mijoz
+  const own = (text) => ({ message: { message_id: 2, chat: { id: Number(OWNER_CHAT), type: 'private' }, from: { id: Number(OWNER_CHAT), language_code: 'uz' }, text: text } });
+  const r4 = await core.handleUpdate(deps, own('salom'));
+  assert.ok(!r4.custMsg && /ulangan/.test(r4.reply || ''), 'faol buyurtmasi yo\'q — avvalgidek');
+  const IDO = initData({ id: Number(OWNER_CHAT), first_name: 'Ega' });
+  const o2 = await shop.handleWebApp(deps, { initData: IDO, action: 'order', slug: 'ikki', clientId: 'clientown01', items: [{ id: 'z1', q: 1 }], mode: 'pickup', phone: '+998901234568' });
+  assert.equal(o2.status, 200, JSON.stringify(o2.body));
+  const r5 = await core.handleUpdate(deps, own('Men ham mijozman'));
+  assert.equal(r5.custMsg, o2.body.order.id);
+  assert.ok(tg.sent.some(x => String(x.chat_id) === '5550002' && /Men ham mijozman/.test(x.text || '')));
 });

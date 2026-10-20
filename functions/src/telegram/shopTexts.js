@@ -121,6 +121,21 @@ const T = {
   payCard: { uz: "💳 To'lov: karta", ru: "💳 Оплата: картой", en: "💳 Payment: card", kk: "💳 Төлем: карта", ky: "💳 Төлөм: карта", tg: "💳 Пардохт: корт" },
   note: { uz: "💬 Izoh", ru: "💬 Комментарий", en: "💬 Note", kk: "💬 Пікір", ky: "💬 Эскертүү", tg: "💬 Шарҳ" },
   shopAddr: { uz: "\n📍 Manzil: {a}", ru: "\n📍 Адрес: {a}", en: "\n📍 Address: {a}", kk: "\n📍 Мекенжай: {a}", ky: "\n📍 Дарек: {a}", tg: "\n📍 Суроға: {a}" },
+  /* fix153-boplus: tahrirlash, do'kon xabari, mijoz javobi, avtomatik qabul */
+  edited: { uz: "✏️ <b>Buyurtma #{no}</b> o'zgartirildi · {shop}\n\n{body}", ru: "✏️ <b>Заказ #{no}</b> изменён · {shop}\n\n{body}", en: "✏️ <b>Order #{no}</b> was changed · {shop}\n\n{body}", kk: "✏️ <b>Тапсырыс #{no}</b> өзгертілді · {shop}\n\n{body}", ky: "✏️ <b>Буйрутма #{no}</b> өзгөртүлдү · {shop}\n\n{body}", tg: "✏️ <b>Фармоиш #{no}</b> тағйир ёфт · {shop}\n\n{body}" },
+  shopMsg: { uz: "💬 <b>{shop}</b> (buyurtma #{no}):\n{text}\n\n<i>Javobni shu yerga yozing.</i>", ru: "💬 <b>{shop}</b> (заказ #{no}):\n{text}\n\n<i>Ответ напишите сюда.</i>", en: "💬 <b>{shop}</b> (order #{no}):\n{text}\n\n<i>Write your reply here.</i>", kk: "💬 <b>{shop}</b> (тапсырыс #{no}):\n{text}\n\n<i>Жауапты осында жазыңыз.</i>", ky: "💬 <b>{shop}</b> (буйрутма #{no}):\n{text}\n\n<i>Жоопту ушул жерге жазыңыз.</i>", tg: "💬 <b>{shop}</b> (фармоиш #{no}):\n{text}\n\n<i>Ҷавобро ба ин ҷо нависед.</i>" },
+  custMsgOwner: { uz: "💬 <b>#{no}</b> mijozdan ({who}):\n{text}", ru: "💬 <b>#{no}</b> от клиента ({who}):\n{text}", en: "💬 <b>#{no}</b> from the customer ({who}):\n{text}", kk: "💬 <b>#{no}</b> клиенттен ({who}):\n{text}", ky: "💬 <b>#{no}</b> кардардан ({who}):\n{text}", tg: "💬 <b>#{no}</b> аз мизоҷ ({who}):\n{text}" },
+  custMsgSent: { uz: "✅ Xabaringiz «{shop}» ga yuborildi (buyurtma #{no}).", ru: "✅ Сообщение отправлено «{shop}» (заказ #{no}).", en: "✅ Your message was sent to “{shop}” (order #{no}).", kk: "✅ Хабарыңыз «{shop}» дүкеніне жіберілді (тапсырыс #{no}).", ky: "✅ Билдирүүңүз «{shop}» дүкөнүнө жөнөтүлдү (буйрутма #{no}).", tg: "✅ Паёми шумо ба «{shop}» фиристода шуд (фармоиш #{no})." },
+  custMsgWhich: { uz: "Bu xabar qaysi buyurtmaga? Tanlang:", ru: "К какому заказу это сообщение? Выберите:", en: "Which order is this message for? Choose:", kk: "Бұл хабар қай тапсырысқа? Таңдаңыз:", ky: "Бул билдирүү кайсы буйрутмага? Тандаңыз:", tg: "Ин паём ба кадом фармоиш? Интихоб кунед:" },   /* fix154-iso */
+  pushMsg: { uz: "#{no}: mijozdan xabar", ru: "#{no}: сообщение от клиента", en: "#{no}: message from the customer", kk: "#{no}: клиенттен хабар", ky: "#{no}: кардардан билдирүү", tg: "#{no}: паём аз мизоҷ" },
+  ownerNewAuto: {
+    uz: "🛍 <b>Yangi buyurtma #{no}</b> · {shop}\n👤 {who}\n\n{body}\n\n✅ Avtomatik qabul qilindi. Ilovada «Bot buyurtmalari» → «Jarayonda».",
+    ru: "🛍 <b>Новый заказ #{no}</b> · {shop}\n👤 {who}\n\n{body}\n\n✅ Принят автоматически. В приложении: «Заказы из бота» → «В работе».",
+    en: "🛍 <b>New order #{no}</b> · {shop}\n👤 {who}\n\n{body}\n\n✅ Accepted automatically. In the app: “Bot orders” → “In progress”.",
+    kk: "🛍 <b>Жаңа тапсырыс #{no}</b> · {shop}\n👤 {who}\n\n{body}\n\n✅ Автоматты қабылданды.",
+    ky: "🛍 <b>Жаңы буйрутма #{no}</b> · {shop}\n👤 {who}\n\n{body}\n\n✅ Автоматтык түрдө кабыл алынды.",
+    tg: "🛍 <b>Фармоиши нав #{no}</b> · {shop}\n👤 {who}\n\n{body}\n\n✅ Худкор қабул шуд."
+  },
   ownerNew: {
     uz: "🛍 <b>Yangi buyurtma #{no}</b> · {shop}\n👤 {who}\n\n{body}\n\nIlovada qabul qiling: «Bot buyurtmalari».",
     ru: "🛍 <b>Новый заказ #{no}</b> · {shop}\n👤 {who}\n\n{body}\n\nПримите его в приложении: «Заказы из бота».",
@@ -138,6 +153,7 @@ const T = {
     tg: "❌ Мизоҷ <b>фармоиши #{no}</b>-ро бекор кард · {shop}"
   },
   btnPlans: { uz: "🧾 Tariflar katalogi", ru: "🧾 Каталог тарифов", en: "🧾 Plans catalog", kk: "🧾 Тарифтер каталогы", ky: "🧾 Тарифтер каталогу", tg: "🧾 Феҳристи тарифҳо" },
+  srcWeb: { uz: "🌐 saytdan", ru: "🌐 с сайта", en: "🌐 from the website", kk: "🌐 сайттан", ky: "🌐 сайттан", tg: "🌐 аз сайт" },   /* fix151-weborder */
   btnHub: { uz: "💳 Obuna · Do'konim", ru: "💳 Подписка · Магазин", en: "💳 Plan · My shop", kk: "💳 Жазылым · Дүкен", ky: "💳 Жазылуу · Дүкөн", tg: "💳 Обуна · Мағоза" },   /* fix150-subbot */
   btnHubFull: { uz: "📱 Do'konim: obuna va katalog", ru: "📱 Мой магазин: подписка и каталог", en: "📱 My shop: subscription and catalog", kk: "📱 Менің дүкенім: жазылым және каталог", ky: "📱 Менин дүкөнүм: жазылуу жана каталог", tg: "📱 Мағозаи ман: обуна ва феҳрист" },
   pushNew: { uz: "Yangi buyurtma #{no}", ru: "Новый заказ #{no}", en: "New order #{no}", kk: "Жаңа тапсырыс #{no}", ky: "Жаңы буйрутма #{no}", tg: "Фармоиши нав #{no}" },

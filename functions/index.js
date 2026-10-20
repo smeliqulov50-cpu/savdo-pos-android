@@ -333,7 +333,9 @@ exports.telegramShop = onRequest({ cors: true, secrets: __tgHookSecrets, memory:
       res.set('Content-Type', im.type); res.status(200).send(im.buf); return;
     }
     if (req.method !== 'POST') { res.status(405).json({ ok: false, code: 'method-not-allowed' }); return; }
-    const out = await SH.handleWebApp(deps, req.body || {});
+    const __b = req.body || {};
+    const __ip = String(req.headers['x-forwarded-for'] || req.ip || '').split(',')[0].trim();
+    const out = /^site[A-Z]/.test(String(__b.action || '')) ? await require('./src/telegram/webshop').handle(deps, __b, { ip: __ip }) : await SH.handleWebApp(deps, __b);   /* fix151-weborder: sayt katalogidan buyurtma */
     res.status(out.status || 200).json(out.body);
   } catch (e) {
     console.error('telegramShop xatosi', e && e.message);
