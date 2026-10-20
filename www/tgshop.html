@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Savdo Pos — buyurtma</title>
+<!-- fix145-botshop: Telegram mini ilova — bot orqali buyurtma -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  --bg:var(--tg-theme-secondary-bg-color,#f1f4f8);--surface:var(--tg-theme-section-bg-color,var(--tg-theme-bg-color,#fff));
+  --ink:var(--tg-theme-text-color,#14202e);--hint:var(--tg-theme-hint-color,#7d8b99);--link:var(--tg-theme-link-color,#0d7d6f);
+  --btn:var(--tg-theme-button-color,#0d7d6f);--btn-ink:var(--tg-theme-button-text-color,#fff);--danger:var(--tg-theme-destructive-text-color,#d64545);
+  --line:color-mix(in srgb,var(--hint) 22%,transparent);--soft:color-mix(in srgb,var(--btn) 10%,var(--surface));--ok:#1b8f5a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{padding-bottom:calc(92px + env(safe-area-inset-bottom,0px));overscroll-behavior-y:contain}
+button{font:inherit;color:inherit;cursor:pointer}
+input,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 12px;width:100%;outline:none}
+input:focus,textarea:focus{border-color:var(--btn)}
+textarea{resize:none;min-height:64px}
+.hidden{display:none!important}
+header{position:sticky;top:0;z-index:5;background:var(--surface);padding:12px 14px 10px;border-bottom:1px solid var(--line)}
+.hrow{display:flex;align-items:center;gap:10px}
+.hrow h1{margin:0;font-size:18px;font-weight:800;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icon-btn{border:none;background:var(--soft);border-radius:12px;min-width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;padding:0 10px;font-weight:700;font-size:13px;color:var(--link);gap:6px;flex-shrink:0}
+.icon-btn .dot{background:var(--danger);color:#fff;border-radius:999px;font-size:11px;min-width:18px;height:18px;line-height:18px;padding:0 5px}
+.sub{font-size:12.5px;color:var(--hint);margin-top:3px}
+.search{margin-top:10px;position:relative}
+.search input{padding-left:36px;background:var(--bg);border-color:transparent}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--hint)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 14px 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:7px 13px;border-radius:999px;border:none;background:var(--surface);font-size:13px;font-weight:700;color:var(--hint)}
+.chip.on{background:var(--btn);color:var(--btn-ink)}
+.banner{margin:10px 14px 0;padding:10px 12px;border-radius:12px;background:var(--surface);font-size:13px;border-left:4px solid var(--btn)}
+.banner.warn{border-left-color:#e3a008}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:10px 14px}
+@media(min-width:620px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.card{background:var(--surface);border-radius:16px;padding:8px;display:flex;flex-direction:column;gap:6px;min-width:0;position:relative}
+.card.off{opacity:.55}
+.thumb{aspect-ratio:1/1;border-radius:12px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:30px;color:var(--btn);overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pname{font-weight:600;font-size:13.5px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px;word-break:break-word}
+.price{font-weight:800;font-size:15px}
+.price small{font-weight:500;color:var(--hint);font-size:11.5px}
+.tag{font-size:11.5px;color:var(--danger);font-weight:700}
+.step{display:flex;align-items:center;gap:4px;margin-top:auto}
+.step button{border:none;width:36px;height:36px;border-radius:11px;background:var(--soft);font-size:20px;font-weight:800;color:var(--btn);flex-shrink:0}
+.step .qv{flex:1;text-align:center;font-weight:800;border:none;background:none;padding:0;min-width:0}
+.addb{margin-top:auto;border:none;border-radius:11px;height:36px;background:var(--btn);color:var(--btn-ink);font-weight:700;font-size:14px;width:100%}
+.addb:disabled{background:var(--line);color:var(--hint)}
+.empty{text-align:center;color:var(--hint);padding:40px 20px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 70%,transparent)}
+.bar button{width:100%;border:none;border-radius:14px;min-height:52px;background:var(--btn);color:var(--btn-ink);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;gap:10px}
+.bar button:disabled{opacity:.55}
+.bar button span:last-child{font-variant-numeric:tabular-nums}
+.sec{background:var(--surface);border-radius:16px;margin:10px 14px;padding:12px 14px}
+.sec h3{margin:0 0 10px;font-size:13px;color:var(--hint);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.line{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.line:first-of-type{border-top:none}
+.line .lt{flex:1;min-width:0}
+.line .ln{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis}
+.line .lp{font-size:12.5px;color:var(--hint)}
+.line .ls{font-weight:800;white-space:nowrap}
+.line .step{margin:0;width:118px;flex-shrink:0}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:none;background:none;border-radius:10px;padding:9px 6px;font-weight:700;font-size:14px;color:var(--hint)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.fld{margin-top:10px}
+.fld label{display:block;font-size:12.5px;color:var(--hint);margin-bottom:5px;font-weight:600}
+.lnk{border:none;background:none;color:var(--link);font-weight:700;padding:6px 0;font-size:14px}
+.okp{display:flex;align-items:center;gap:8px;font-weight:700}
+.okp .b{font-size:11.5px;color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent);border-radius:999px;padding:2px 8px}
+.btn2{border:none;border-radius:12px;background:var(--soft);color:var(--link);font-weight:700;padding:11px 12px;width:100%}
+.row{display:flex;justify-content:space-between;gap:10px;padding:4px 0;font-size:14px}
+.row.t{font-size:17px;font-weight:800;padding-top:8px;margin-top:4px;border-top:1px solid var(--line)}
+.muted{color:var(--hint);font-size:12.5px}
+.err{color:var(--danger);font-size:13.5px;font-weight:600;margin:8px 14px 0}
+.done{text-align:center;padding:36px 22px 10px}
+.done .ic{width:76px;height:76px;border-radius:50%;background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.done h2{margin:0 0 6px;font-size:22px}
+.ord{background:var(--surface);border-radius:16px;margin:10px 14px;padding:12px 14px}
+.ord .oh{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.st{font-size:12px;font-weight:800;border-radius:999px;padding:3px 9px;background:var(--soft);color:var(--link);white-space:nowrap}
+.st.new{background:#fff4d6;color:#8a5a00}.st.done{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.st.rejected,.st.cancelled{background:color-mix(in srgb,var(--danger) 13%,transparent);color:var(--danger)}
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:8;display:none}
+.sheet-bg.on{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--surface);border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:85vh;overflow:auto;transform:translateY(105%);transition:transform .2s}
+.sheet.on{transform:none}
+.sheet h3{margin:0 0 12px;font-size:17px}
+.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#1d2733;color:#fff;padding:10px 14px;border-radius:12px;font-size:14px;z-index:20;max-width:92vw;opacity:0;transition:opacity .2s;pointer-events:none;text-align:center}
+.toast.on{opacity:.96}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--btn);border-radius:50%;animation:sp .8s linear infinite;margin:60px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="app"><div class="spin"></div></div>
+<div class="sheet-bg" id="sheet-bg"></div>
+<div class="sheet" id="sheet"></div>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+'use strict';
+var API = 'https://us-central1-sardor-pos.cloudfunctions.net/telegramShop';
+var TG = window.Telegram && window.Telegram.WebApp;
+var qs = new URLSearchParams(location.search);
+var SLUG = String(qs.get('s') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 30);
+var INIT = TG && TG.initData ? TG.initData : '';
+var LANGS = ['uz','ru','en','kk','ky','tg'];
+var tgUser = (TG && TG.initDataUnsafe && TG.initDataUnsafe.user) || {};
+var LANG = (function(){ var l = String(qs.get('lang') || tgUser.language_code || '').slice(0, 2).toLowerCase(); return LANGS.indexOf(l) !== -1 ? l : 'uz'; })();
+document.documentElement.lang = LANG;
+
+var I = {
+ loading:["Yuklanmoqda…","Загрузка…","Loading…","Жүктелуде…","Жүктөлүүдө…","Бор мешавад…"],
+ outside:["Bu sahifa Telegram ichida ochiladi","Эта страница открывается в Telegram","This page opens inside Telegram","Бұл бет Telegram ішінде ашылады","Бул барак Telegram ичинде ачылат","Ин саҳифа дар дохили Telegram кушода мешавад"],
+ outsideHint:["Do'kon botiga kiring va «Buyurtma berish» tugmasini bosing.","Откройте бот магазина и нажмите «Сделать заказ».","Open the shop's bot and tap “Order now”.","Дүкен ботына кіріп, «Тапсырыс беру» түймесін басыңыз.","Дүкөндүн ботуна кирип, «Буйрутма берүү» баскычын басыңыз.","Ба боти мағоза дароед ва «Фармоиш додан»-ро пахш кунед."],
+ retry:["Qayta urinish","Повторить","Try again","Қайталау","Кайталоо","Аз нав"],
+ netErr:["Internet bilan bog'lanib bo'lmadi.","Не удалось связаться с сервером.","Could not reach the server.","Серверге қосылу мүмкін болмады.","Серверге туташуу мүмкүн болбоду.","Ба сервер пайваст шудан нашуд."],
+ search:["Qidirish","Поиск","Search","Іздеу","Издөө","Ҷустуҷӯ"],
+ all:["Hammasi","Все","All","Барлығы","Баары","Ҳама"],
+ add:["Qo'shish","Добавить","Add","Қосу","Кошуу","Илова"],
+ out:["Tugagan","Нет в наличии","Out of stock","Таусылды","Түгөндү","Тамом шуд"],
+ left:["Faqat {n} {u} bor","Осталось только {n} {u}","Only {n} {u} left","Тек {n} {u} қалды","{n} {u} гана калды","Танҳо {n} {u} мондааст"],
+ cart:["Savat","Корзина","Cart","Себет","Себет","Сабад"],
+ cartEmpty:["Savat bo'sh","Корзина пуста","Your cart is empty","Себет бос","Себет бош","Сабад холӣ аст"],
+ toCart:["Savatga o'tish","Перейти в корзину","View cart","Себетке өту","Себетке өтүү","Ба сабад"],
+ order:["Buyurtma berish","Оформить заказ","Place order","Тапсырыс беру","Буйрутма берүү","Фармоиш додан"],
+ howGet:["Qanday olasiz","Способ получения","How to get it","Қалай аласыз","Кантип аласыз","Чӣ тавр мегиред"],
+ pickup:["Olib ketaman","Самовывоз","Pickup","Өзім аламын","Өзүм алам","Худам мебарам"],
+ delivery:["Yetkazib bering","Доставка","Delivery","Жеткізу","Жеткирүү","Расонидан"],
+ pickupAt:["Olib ketish manzili: {a}","Адрес самовывоза: {a}","Pickup address: {a}","Алып кету мекенжайы: {a}","Алып кетүү дареги: {a}","Суроғаи гирифтан: {a}"],
+ address:["Manzil","Адрес","Address","Мекенжай","Дарек","Суроға"],
+ addressPh:["Ko'cha, uy, xonadon, mo'ljal","Улица, дом, квартира, ориентир","Street, house, apartment, landmark","Көше, үй, пәтер, бағдар","Көчө, үй, батир, багыт","Кӯча, хона, манзил, нишона"],
+ addLoc:["📍 Joylashuvni qo'shish","📍 Добавить геолокацию","📍 Add my location","📍 Орналасуды қосу","📍 Жайгашкан жерди кошуу","📍 Илова кардани ҷойгиршавӣ"],
+ locOk:["📍 Joylashuv qo'shildi","📍 Геолокация добавлена","📍 Location added","📍 Орналасу қосылды","📍 Жайгашкан жер кошулду","📍 Ҷойгиршавӣ илова шуд"],
+ locErr:["Joylashuvni aniqlab bo'lmadi. Manzilni yozing.","Не удалось определить местоположение. Укажите адрес.","Could not get your location. Please type the address.","Орналасуды анықтау мүмкін болмады. Мекенжайды жазыңыз.","Жайгашкан жерди аныктоо мүмкүн болбоду. Даректи жазыңыз.","Ҷойгиршавиро муайян кардан нашуд. Суроғаро нависед."],
+ locDel:["olib tashlash","убрать","remove","алып тастау","алып салуу","нест кардан"],
+ contact:["Aloqa","Контакт","Contact","Байланыс","Байланыш","Тамос"],
+ name:["Ismingiz","Ваше имя","Your name","Атыңыз","Атыңыз","Номи шумо"],
+ phone:["Telefon","Телефон","Phone","Телефон","Телефон","Телефон"],
+ phoneSend:["📱 Telegram raqamimni yuborish","📱 Отправить мой номер Telegram","📱 Share my Telegram number","📱 Telegram нөмірімді жіберу","📱 Telegram номеримди жөнөтүү","📱 Фиристодани рақами Telegram"],
+ phoneOk:["tasdiqlangan","подтверждён","verified","расталған","ырасталган","тасдиқшуда"],
+ phoneChange:["Boshqa raqam","Другой номер","Use another number","Басқа нөмір","Башка номер","Рақами дигар"],
+ phoneOr:["yoki raqamni yozing","или введите номер","or type the number","немесе нөмірді жазыңыз","же номерди жазыңыз","ё рақамро нависед"],
+ phoneWait:["Raqam kutilmoqda…","Ожидаем номер…","Waiting for the number…","Нөмір күтілуде…","Номер күтүлүүдө…","Интизори рақам…"],
+ pay:["To'lov","Оплата","Payment","Төлем","Төлөм","Пардохт"],
+ cash:["💵 Naqd","💵 Наличными","💵 Cash","💵 Қолма-қол","💵 Накталай","💵 Нақд"],
+ card:["💳 Karta","💳 Картой","💳 Card","💳 Карта","💳 Карта","💳 Корт"],
+ payHint:["To'lov mahsulotni olganingizda.","Оплата при получении.","You pay when you receive the order.","Төлем тапсырысты алғанда.","Төлөм буйрутманы алганда.","Пардохт ҳангоми гирифтан."],
+ comment:["Izoh","Комментарий","Note","Пікір","Эскертүү","Шарҳ"],
+ commentPh:["Masalan: qo'ng'iroq qiling, eshik kodi…","Например: позвоните, код двери…","For example: call me, door code…","Мысалы: қоңырау шалыңыз, есік коды…","Мисалы: чалыңыз, эшиктин коду…","Масалан: занг занед, рамзи дар…"],
+ goods:["Mahsulotlar","Товары","Items","Тауарлар","Товарлар","Молҳо"],
+ fee:["Yetkazib berish","Доставка","Delivery","Жеткізу","Жеткирүү","Расонидан"],
+ free:["bepul","бесплатно","free","тегін","акысыз","ройгон"],
+ freeFrom:["{sum} dan ortiq buyurtmada yetkazib berish bepul","Доставка бесплатна при заказе от {sum}","Free delivery for orders from {sum}","{sum} бастап тапсырысқа жеткізу тегін","{sum} баштап буйрутмага жеткирүү акысыз","Аз {sum} зиёд расонидан ройгон аст"],
+ total:["Jami","Итого","Total","Барлығы","Жалпы","Ҳамагӣ"],
+ minOrder:["Minimal buyurtma: {sum}","Минимальный заказ: {sum}","Minimum order: {sum}","Ең аз тапсырыс: {sum}","Минималдуу буйрутма: {sum}","Фармоиши камтарин: {sum}"],
+ closed:["Do'kon hozir yopiq. Ish vaqti: {h}","Магазин сейчас закрыт. Часы работы: {h}","The shop is closed now. Opening hours: {h}","Дүкен қазір жабық. Жұмыс уақыты: {h}","Дүкөн азыр жабык. Иш убактысы: {h}","Мағоза ҳоло баста аст. Вақти корӣ: {h}"],
+ paused:["Hozircha buyurtma qabul qilinmayapti. Birozdan keyin qayting.","Сейчас заказы не принимаются. Загляните чуть позже.","Orders are paused right now. Please come back a bit later.","Қазір тапсырыс қабылданбайды. Сәл кейін келіңіз.","Азыр буйрутма кабыл алынбайт. Бир аздан кийин келиңиз.","Ҳоло фармоиш қабул намешавад. Каме баъдтар биёед."],
+ sending:["Yuborilmoqda…","Отправляем…","Sending…","Жіберілуде…","Жөнөтүлүүдө…","Фиристода мешавад…"],
+ doneT:["Buyurtma yuborildi!","Заказ отправлен!","Order sent!","Тапсырыс жіберілді!","Буйрутма жөнөтүлдү!","Фармоиш фиристода шуд!"],
+ doneS:["Buyurtma #{no}. Do'kon tasdiqlashi bilan Telegram'da xabar olasiz.","Заказ #{no}. Когда магазин подтвердит, вы получите сообщение в Telegram.","Order #{no}. You will get a Telegram message when the shop confirms it.","Тапсырыс #{no}. Дүкен растағанда Telegram-да хабар аласыз.","Буйрутма #{no}. Дүкөн ырастаганда Telegram'да билдирүү аласыз.","Фармоиш #{no}. Вақте мағоза тасдиқ кунад, дар Telegram паём мегиред."],
+ myOrders:["Buyurtmalarim","Мои заказы","My orders","Тапсырыстарым","Буйрутмаларым","Фармоишҳои ман"],
+ again:["Yana buyurtma berish","Заказать ещё","Order more","Тағы тапсырыс беру","Дагы буйрутма берүү","Боз фармоиш додан"],
+ close:["Yopish","Закрыть","Close","Жабу","Жабуу","Пӯшидан"],
+ noOrders:["Hali buyurtma yo'q","Заказов пока нет","No orders yet","Әзірге тапсырыс жоқ","Азырынча буйрутма жок","Ҳоло фармоиш нест"],
+ cancel:["Bekor qilish","Отменить","Cancel","Бас тарту","Жокко чыгаруу","Бекор кардан"],
+ cancelQ:["Buyurtma bekor qilinsinmi?","Отменить заказ?","Cancel this order?","Тапсырыстан бас тарту керек пе?","Буйрутманы жокко чыгарасызбы?","Фармоиш бекор карда шавад?"],
+ st_new:["Kutilmoqda","Ожидает","Waiting","Күтілуде","Күтүлүүдө","Дар интизор"],
+ st_accepted:["Qabul qilindi","Принят","Accepted","Қабылданды","Кабыл алынды","Қабул шуд"],
+ st_ready:["Tayyor","Готов","Ready","Дайын","Даяр","Тайёр"],
+ st_delivering:["Yo'lda","В пути","On the way","Жолда","Жолдо","Дар роҳ"],
+ st_done:["Yakunlandi","Выполнен","Completed","Аяқталды","Аткарылды","Анҷом ёфт"],
+ st_rejected:["Do'kon bekor qildi","Отменён магазином","Cancelled by the shop","Дүкен бас тартты","Дүкөн жокко чыгарды","Мағоза бекор кард"],
+ st_cancelled:["Bekor qilindi","Отменён","Cancelled","Бас тартылды","Жокко чыгарылды","Бекор шуд"],
+ eta:["~{m} daqiqa","~{m} мин","~{m} min","~{m} мин","~{m} мүн","~{m} дақ"],
+ e_changed:["Ba'zi mahsulotlar o'zgardi — ro'yxat yangilandi. Savatni tekshiring.","Некоторые товары изменились — список обновлён. Проверьте корзину.","Some products changed — the list was updated. Please check your cart.","Кейбір тауарлар өзгерді — тізім жаңартылды. Себетті тексеріңіз.","Айрым товарлар өзгөрдү — тизме жаңыланды. Себетти текшериңиз.","Баъзе молҳо тағйир ёфтанд — рӯйхат нав шуд. Сабадро санҷед."],
+ e_stock0:["«{n}» tugab qoldi va savatdan olib tashlandi.","«{n}» закончился и удалён из корзины.","“{n}” is out of stock and was removed from the cart.","«{n}» таусылды және себеттен алынды.","«{n}» түгөндү жана себеттен алынды.","«{n}» тамом шуд ва аз сабад гирифта шуд."],
+ e_min:["Minimal buyurtma {sum}. Yana mahsulot qo'shing.","Минимальный заказ {sum}. Добавьте ещё товаров.","The minimum order is {sum}. Please add more items.","Ең аз тапсырыс {sum}. Тағы тауар қосыңыз.","Минималдуу буйрутма {sum}. Дагы товар кошуңуз.","Фармоиши камтарин {sum}. Боз мол илова кунед."],
+ e_addr:["Yetkazib berish manzilini yozing.","Укажите адрес доставки.","Please enter the delivery address.","Жеткізу мекенжайын жазыңыз.","Жеткирүү дарегин жазыңыз.","Суроғаи расониданро нависед."],
+ e_phone:["Telefon raqamingizni kiriting.","Укажите номер телефона.","Please enter your phone number.","Телефон нөміріңізді енгізіңіз.","Телефон номериңизди жазыңыз.","Рақами телефонро ворид кунед."],
+ e_many:["Juda ko'p buyurtma. Birozdan keyin urinib ko'ring.","Слишком много заказов. Попробуйте чуть позже.","Too many orders. Please try again a bit later.","Тапсырыс тым көп. Сәл кейін көріңіз.","Буйрутма өтө көп. Бир аздан кийин аракет кылыңыз.","Фармоиш хеле зиёд. Каме баъдтар кӯшиш кунед."],
+ e_active:["Sizda tugallanmagan buyurtmalar ko'p. Avval ular yakunlansin.","У вас много незавершённых заказов. Дождитесь их выполнения.","You have several unfinished orders. Please wait until they are completed.","Сізде аяқталмаған тапсырыс көп. Алдымен олар аяқталсын.","Сизде бүтө элек буйрутмалар көп. Адегенде алар бүтсүн.","Шумо фармоишҳои анҷомнаёфта доред. Аввал онҳо анҷом ёбанд."],
+ e_busy:["Do'kon hozir band. Birozdan keyin urinib ko'ring.","Магазин сейчас занят. Попробуйте чуть позже.","The shop is busy right now. Please try again later.","Дүкен қазір бос емес. Сәл кейін көріңіз.","Дүкөн азыр бош эмес. Бир аздан кийин аракет кылыңыз.","Мағоза ҳоло банд аст. Каме баъдтар кӯшиш кунед."],
+ e_auth:["Sahifani yopib, botdan qayta oching.","Закройте страницу и откройте её заново из бота.","Please close this page and open it again from the bot.","Бетті жауып, боттан қайта ашыңыз.","Баракты жаап, боттон кайра ачыңыз.","Саҳифаро пӯшед ва аз бот дубора кушоед."],
+ e_off:["Bu do'konda bot orqali buyurtma o'chirilgan.","В этом магазине заказ через бота отключён.","Ordering through the bot is turned off for this shop.","Бұл дүкенде бот арқылы тапсырыс өшірілген.","Бул дүкөндө бот аркылуу буйрутма өчүрүлгөн.","Дар ин мағоза фармоиш тавассути бот хомӯш аст."],
+ e_late:["Buyurtmani endi bekor qilib bo'lmaydi: do'kon uni qabul qilgan.","Заказ уже нельзя отменить: магазин его принял.","The order can no longer be cancelled: the shop has accepted it.","Тапсырыстан енді бас тартуға болмайды: дүкен оны қабылдады.","Буйрутманы эми жокко чыгарууга болбойт: дүкөн аны кабыл алды.","Фармоишро дигар бекор кардан мумкин нест: мағоза онро қабул кард."],
+ pick:["Turini tanlang","Выберите вариант","Choose an option","Түрін таңдаңыз","Түрүн тандаңыз","Навъро интихоб кунед"],
+ done2:["Tayyor","Готово","Done","Дайын","Даяр","Тайёр"],
+ clear:["Savatni tozalash","Очистить корзину","Clear cart","Себетті тазалау","Себетти тазалоо","Тоза кардани сабад"],
+ qtyP:["Miqdorni kiriting","Введите количество","Enter quantity","Санын енгізіңіз","Санын жазыңыз","Миқдорро ворид кунед"],
+ itemsN:["{n} ta","{n} шт.","{n} items","{n} дана","{n} даана","{n} адад"],
+ modeDel:["Yetkazib berish","Доставка","Delivery","Жеткізу","Жеткирүү","Расонидан"],
+ modePick:["Olib ketish","Самовывоз","Pickup","Өзі алып кету","Өзү алып кетүү","Худ гирифта бурдан"],
+ noFound:["Hech narsa topilmadi","Ничего не найдено","Nothing found","Ештеңе табылмады","Эч нерсе табылган жок","Чизе ёфт нашуд"],
+ back:["Orqaga","Назад","Back","Артқа","Артка","Бозгашт"],
+ u_dona:["dona","шт","pcs","дана","даана","дона"], u_kg:["kg","кг","kg","кг","кг","кг"], u_litr:["litr","л","l","л","л","л"], u_paket:["paket","уп.","pack","қапшық","пакет","баста"]
+};
+var LI = LANGS.indexOf(LANG);
+function t(k, v){ var e = I[k]; var s = e ? (e[LI] || e[0]) : k; Object.keys(v || {}).forEach(function(n){ s = s.split('{' + n + '}').join(v[n]); }); return s; }
+function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+var CUR = {UZS:{l:["so'm","сум","UZS","сом","сом","сум"],b:0},USD:{s:'$',b:1},EUR:{s:'€',b:1},RUB:{s:'₽',b:0},KZT:{s:'₸',b:0},KGS:{l:['сом','сом','som','сом','сом','сом'],b:0},TJS:{l:['смн','смн','TJS','смн','смн','сомонӣ'],b:0}};
+function money(n){
+  var v = Math.round(Number(n) || 0), s = String(Math.abs(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  var c = CUR[(S.shop && S.shop.cur) || 'UZS'] || CUR.UZS, sym = c.s || (c.l ? (c.l[LI] || c.l[0]) : '');
+  return (v < 0 ? '−' : '') + (c.b ? sym + s : s + ' ' + sym);
+}
+function qtyStr(q){ q = Math.round(q * 1000) / 1000; return Number.isInteger(q) ? String(q) : String(q).replace('.', ','); }
+function unitL(u){ return t('u_' + (I['u_' + u] ? u : 'dona')); }
+function haptic(kind){ try{ if(TG && TG.HapticFeedback){ if(kind === 'ok' || kind === 'err') TG.HapticFeedback.notificationOccurred(kind === 'ok' ? 'success' : 'error'); else TG.HapticFeedback.impactOccurred('light'); } }catch(e){} }
+var toastT = 0;
+function toast(m){ var el = document.getElementById('toast'); el.textContent = m; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function(){ el.classList.remove('on'); }, 3200); }
+function lsGet(k, d){ try{ var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
+function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function uidStr(){ var a = ''; var c = 'abcdefghijklmnopqrstuvwxyz0123456789'; for(var i = 0; i < 20; i++) a += c[Math.floor(Math.random() * c.length)]; return a; }
+
+var S = { view:'shop', shop:null, items:[], byId:{}, cats:[], cat:'', q:'', me:{}, active:0,
+  cart: lsGet('tgs_cart_' + SLUG, {}), form: lsGet('tgs_form_' + SLUG, {}), err:'', busy:false, last:null, orders:null, phoneEdit:false, waitPhone:false };
+if(!S.form.mode) S.form.mode = 'pickup';
+if(!S.form.pay) S.form.pay = 'cash';
+function saveCart(){ lsSet('tgs_cart_' + SLUG, S.cart); }
+function saveForm(){ lsSet('tgs_form_' + SLUG, S.form); }
+
+function api(action, extra){
+  var body = Object.assign({ initData: INIT, action: action, slug: SLUG, lang: LANG }, extra || {});
+  var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var to = setTimeout(function(){ try{ ctrl && ctrl.abort(); }catch(e){} }, 20000);
+  return fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body), signal: ctrl ? ctrl.signal : undefined })
+    .then(function(r){ return r.json().catch(function(){ return { ok:false, code:'net' }; }); })
+    .catch(function(){ return { ok:false, code:'net' }; })
+    .then(function(j){ clearTimeout(to); return j || { ok:false, code:'net' }; });
+}
+function errText(j){
+  var c = j && j.code;
+  if(c === 'min_order') return t('e_min', { sum: money(j.min || (S.shop && S.shop.minOrder)) });
+  if(c === 'need_address') return t('e_addr');
+  if(c === 'need_phone') return t('e_phone');
+  if(c === 'paused') return t('paused');
+  if(c === 'closed_hours') return t('closed', { h: hoursStr() });
+  if(c === 'too_many') return t('e_many');
+  if(c === 'too_many_active') return t('e_active');
+  if(c === 'busy') return t('e_busy');
+  if(c === 'auth' || c === 'expired') return t('e_auth');
+  if(c === 'closed') return t('e_off');
+  if(c === 'bad_state') return t('e_late');
+  return t('netErr');
+}
+function hoursStr(){ var h = S.shop && S.shop.hours; return h && h.on ? h.from + '–' + h.to : ''; }
+
+/* ---------- katalog ---------- */
+function applyCatalog(j){
+  S.shop = j.shop; S.items = j.items || []; S.cats = j.cats || []; S.me = j.me || {}; S.active = j.active || 0;
+  S.byId = {}; S.items.forEach(function(it){ S.byId[it.id] = it; });
+  if(!S.form.name && S.me.name) S.form.name = S.me.name;
+  if(S.form.mode === 'delivery' && !S.shop.delivery) S.form.mode = 'pickup';
+  if(S.form.mode === 'pickup' && !S.shop.pickup) S.form.mode = 'delivery';
+  if(S.cat && S.cats.indexOf(S.cat) === -1) S.cat = '';
+  var removed = [];
+  Object.keys(S.cart).forEach(function(k){
+    var c = S.cart[k], it = S.byId[c.id], v = it && c.v ? (it.v || []).find(function(x){ return x.id === c.v; }) : null;
+    if(!it || (c.v && !v) || (!c.v && it.v)){ delete S.cart[k]; return; }
+    var src = v || it;
+    if(!src.s && !j.oversell){ removed.push(it.n); delete S.cart[k]; return; }
+    if(src.m != null && c.q > src.m){ c.q = src.m; if(!(c.q > 0)) delete S.cart[k]; }
+  });
+  saveCart();
+  if(removed.length) toast(t('e_stock0', { n: removed.join(', ') }));
+}
+function load(){
+  if(!INIT || !SLUG){ renderOutside(); return; }
+  api('catalog').then(function(j){
+    if(!j.ok){ S.err = errText(j); S.view = 'fatal'; render(); return; }
+    applyCatalog(j); render();
+  });
+}
+function lineKey(id, v){ return id + '|' + (v || ''); }
+function cartQty(id, v){ var c = S.cart[lineKey(id, v)]; return c ? c.q : 0; }
+function cartCountFor(id){ var n = 0; Object.keys(S.cart).forEach(function(k){ if(S.cart[k].id === id) n += S.cart[k].q; }); return n; }
+function linePrice(c){ var it = S.byId[c.id]; if(!it) return 0; if(c.v){ var v = (it.v || []).find(function(x){ return x.id === c.v; }); return v ? v.p : 0; } return it.p; }
+function totals(){
+  var sub = 0, n = 0;
+  Object.keys(S.cart).forEach(function(k){ var c = S.cart[k]; sub += Math.round(linePrice(c) * c.q); n += S.byId[c.id] && S.byId[c.id].f ? 1 : c.q; });
+  var fee = 0;
+  if(S.form.mode === 'delivery' && S.shop){ fee = (S.shop.freeFrom > 0 && sub >= S.shop.freeFrom) ? 0 : (S.shop.fee || 0); }
+  return { sub: sub, fee: fee, total: sub + fee, n: Math.round(n * 1000) / 1000, lines: Object.keys(S.cart).length };
+}
+function setQty(id, v, q){
+  var it = S.byId[id]; if(!it) return;
+  var src = v ? (it.v || []).find(function(x){ return x.id === v; }) : it;
+  if(!src) return;
+  q = Math.round(Math.max(0, q) * 1000) / 1000;
+  if(!it.f) q = Math.round(q);
+  if(src.m != null && q > src.m){ q = src.m; toast(t('left', { n: qtyStr(src.m), u: unitL(it.u) })); haptic('err'); }
+  var k = lineKey(id, v);
+  if(q > 0) S.cart[k] = { id: id, v: v || '', q: q }; else delete S.cart[k];
+  saveCart(); haptic();
+}
+function stepOf(it){ return it.f ? 0.5 : 1; }
+
+/* ---------- ko'rinishlar ---------- */
+var IC = {
+  search:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  check:'<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  list:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>'
+};
+function imgUrl(it){ return API + '?img=' + encodeURIComponent(SLUG) + '&p=' + encodeURIComponent(it.id) + '&v=' + encodeURIComponent(it.i || '0'); }
+function canOrder(){ return S.shop && S.shop.open; }
+function bannerHtml(){
+  var h = '';
+  if(S.shop.paused) h += '<div class="banner warn">' + esc(t('paused')) + '</div>';
+  else if(!S.shop.open) h += '<div class="banner warn">' + esc(t('closed', { h: hoursStr() })) + '</div>';
+  if(S.shop.note) h += '<div class="banner">' + esc(S.shop.note) + '</div>';
+  return h;
+}
+function cardHtml(it){
+  var off = !it.s, q = cartCountFor(it.id), h = '';
+  h += '<div class="card' + (off ? ' off' : '') + '" data-card="' + esc(it.id) + '">';
+  h += '<div class="thumb">' + (it.i ? '<img loading="lazy" alt="" src="' + esc(imgUrl(it)) + '" onerror="this.remove()">' : esc((it.n.trim()[0] || '?').toUpperCase())) + '</div>';
+  h += '<div class="pname">' + esc(it.n) + '</div>';
+  h += '<div class="price">' + (it.v ? '<small>' + (LANG === 'ru' ? 'от ' : LANG === 'en' ? 'from ' : '') + '</small>' : '') + esc(money(it.p)) + (it.u !== 'dona' ? ' <small>/ ' + esc(unitL(it.u)) + '</small>' : '') + '</div>';
+  if(off) h += '<div class="tag">' + esc(t('out')) + '</div><button class="addb" disabled>' + esc(t('add')) + '</button>';
+  else if(it.v) h += '<button class="addb" data-pick="' + esc(it.id) + '">' + (q ? esc(t('cart')) + ' · ' + esc(qtyStr(q)) : esc(t('add'))) + '</button>';
+  else if(q > 0) h += '<div class="step"><button data-dec="' + esc(it.id) + '" aria-label="-">−</button><button class="qv" data-qty="' + esc(it.id) + '">' + esc(qtyStr(q)) + (it.f ? ' ' + esc(unitL(it.u)) : '') + '</button><button data-inc="' + esc(it.id) + '" aria-label="+">+</button></div>';
+  else h += '<button class="addb" data-inc="' + esc(it.id) + '">' + esc(t('add')) + '</button>';
+  return h + '</div>';
+}
+function filtered(){
+  var q = S.q.trim().toLowerCase();
+  return S.items.filter(function(it){ return (!S.cat || it.c === S.cat) && (!q || it.n.toLowerCase().indexOf(q) !== -1); });
+}
+function renderShop(){
+  var tt = totals();
+  var h = '<header><div class="hrow"><h1>' + esc(S.shop.name) + '</h1><button class="icon-btn" id="b-orders">' + IC.list + esc(t('myOrders')) + (S.active ? '<span class="dot">' + S.active + '</span>' : '') + '</button></div>';
+  if(S.shop.address) h += '<div class="sub">📍 ' + esc(S.shop.address) + '</div>';
+  h += '<div class="search">' + IC.search + '<input id="q" type="search" placeholder="' + esc(t('search')) + '" value="' + esc(S.q) + '" autocomplete="off"></div></header>';
+  h += bannerHtml();
+  if(S.cats.length > 1) h += '<div class="chips"><button class="chip' + (!S.cat ? ' on' : '') + '" data-cat="">' + esc(t('all')) + '</button>' + S.cats.map(function(c){ return '<button class="chip' + (S.cat === c ? ' on' : '') + '" data-cat="' + esc(c) + '">' + esc(c) + '</button>'; }).join('') + '</div>';
+  h += '<div class="grid" id="grid">' + gridHtml() + '</div>';
+  h += '<div class="bar' + (tt.lines ? '' : ' hidden') + '" id="bar"><button id="b-cart"><span>' + esc(t('toCart')) + ' · ' + esc(t('itemsN', { n: qtyStr(tt.n) })) + '</span><span>' + esc(money(tt.sub)) + '</span></button></div>';
+  return h;
+}
+function gridHtml(){ var list = filtered(); return list.length ? list.map(cardHtml).join('') : '<div class="empty" style="grid-column:1/-1">' + esc(t('noFound')) + '</div>'; }
+function refreshGrid(){
+  var g = document.getElementById('grid'); if(g) g.innerHTML = gridHtml();
+  var tt = totals(), bar = document.getElementById('bar'), b = document.getElementById('b-cart');
+  if(bar){ bar.classList.toggle('hidden', !tt.lines); if(b) b.innerHTML = '<span>' + esc(t('toCart')) + ' · ' + esc(t('itemsN', { n: qtyStr(tt.n) })) + '</span><span>' + esc(money(tt.sub)) + '</span>'; }
+}
+function renderCart(){
+  var tt = totals(), keys = Object.keys(S.cart), sh = S.shop;
+  var h = '<header><div class="hrow"><button class="icon-btn" id="b-back" aria-label="' + esc(t('back')) + '">' + IC.back + '</button><h1>' + esc(t('cart')) + '</h1>' + (keys.length ? '<button class="icon-btn" id="b-clear" style="color:var(--danger)">' + esc(t('clear')) + '</button>' : '') + '</div></header>';
+  if(!keys.length){ return h + '<div class="empty">' + esc(t('cartEmpty')) + '</div><div class="bar"><button id="b-back2"><span>' + esc(t('back')) + '</span><span></span></button></div>'; }
+  h += bannerHtml();
+  h += '<div class="sec"><h3>' + esc(t('goods')) + '</h3>';
+  keys.forEach(function(k){
+    var c = S.cart[k], it = S.byId[c.id]; if(!it) return;
+    var v = c.v ? (it.v || []).find(function(x){ return x.id === c.v; }) : null, pr = linePrice(c);
+    h += '<div class="line"><div class="lt"><div class="ln">' + esc(it.n) + (v ? ' · ' + esc(v.n) : '') + '</div><div class="lp">' + esc(money(pr)) + (it.u !== 'dona' ? ' / ' + esc(unitL(it.u)) : '') + ' · <b>' + esc(money(Math.round(pr * c.q))) + '</b></div></div>'
+      + '<div class="step"><button data-ldec="' + esc(k) + '">−</button><button class="qv" data-lqty="' + esc(k) + '">' + esc(qtyStr(c.q)) + '</button><button data-linc="' + esc(k) + '">+</button></div></div>';
+  });
+  h += '</div>';
+  h += '<div class="sec"><h3>' + esc(t('howGet')) + '</h3>';
+  if(sh.pickup && sh.delivery) h += '<div class="seg"><button data-mode="pickup" class="' + (S.form.mode === 'pickup' ? 'on' : '') + '">🏪 ' + esc(t('pickup')) + '</button><button data-mode="delivery" class="' + (S.form.mode === 'delivery' ? 'on' : '') + '">🚚 ' + esc(t('delivery')) + '</button></div>';
+  else h += '<div class="okp">' + (sh.delivery ? '🚚 ' + esc(t('delivery')) : '🏪 ' + esc(t('pickup'))) + '</div>';
+  if(S.form.mode === 'delivery'){
+    h += '<div class="fld"><label for="f-addr">' + esc(t('address')) + '</label><textarea id="f-addr" rows="2" placeholder="' + esc(t('addressPh')) + '">' + esc(S.form.address || '') + '</textarea></div>';
+    h += S.form.loc ? '<div class="okp" style="margin-top:8px;">' + esc(t('locOk')) + ' <button class="lnk" id="b-locdel">' + esc(t('locDel')) + '</button></div>' : '<button class="btn2" id="b-loc" style="margin-top:8px;">' + esc(t('addLoc')) + '</button>';
+    if(sh.freeFrom > 0) h += '<div class="muted" style="margin-top:8px;">' + esc(t('freeFrom', { sum: money(sh.freeFrom) })) + '</div>';
+  } else if(sh.address) h += '<div class="muted" style="margin-top:8px;">' + esc(t('pickupAt', { a: sh.address })) + '</div>';
+  h += '</div>';
+  h += '<div class="sec"><h3>' + esc(t('contact')) + '</h3>';
+  h += '<div class="fld" style="margin-top:0"><label for="f-name">' + esc(t('name')) + '</label><input id="f-name" maxlength="80" value="' + esc(S.form.name || '') + '" autocomplete="name"></div>';
+  h += '<div class="fld"><label>' + esc(t('phone')) + '</label>';
+  if(S.me.phone && S.me.phoneOk && !S.phoneEdit) h += '<div class="okp">' + esc(S.me.phone) + ' <span class="b">✓ ' + esc(t('phoneOk')) + '</span></div><button class="lnk" id="b-phedit">' + esc(t('phoneChange')) + '</button>';
+  else {
+    if(TG && TG.requestContact && !(S.me.phone && S.me.phoneOk)) h += '<button class="btn2" id="b-contact">' + esc(S.waitPhone ? t('phoneWait') : t('phoneSend')) + '</button><div class="muted" style="margin:8px 0 5px;">' + esc(t('phoneOr')) + '</div>';
+    h += '<input id="f-phone" type="tel" inputmode="tel" maxlength="20" placeholder="+998 90 123 45 67" value="' + esc(S.form.phone || '') + '" autocomplete="tel">';
+  }
+  h += '</div></div>';
+  h += '<div class="sec"><h3>' + esc(t('pay')) + '</h3><div class="seg"><button data-pay="cash" class="' + (S.form.pay !== 'card' ? 'on' : '') + '">' + esc(t('cash')) + '</button><button data-pay="card" class="' + (S.form.pay === 'card' ? 'on' : '') + '">' + esc(t('card')) + '</button></div><div class="muted" style="margin-top:8px;">' + esc(t('payHint')) + '</div>';
+  h += '<div class="fld"><label for="f-note">' + esc(t('comment')) + '</label><textarea id="f-note" rows="2" maxlength="300" placeholder="' + esc(t('commentPh')) + '">' + esc(S.form.comment || '') + '</textarea></div></div>';
+  h += '<div class="sec" id="sum">' + sumHtml(tt) + '</div>';
+  h += '<div class="err" id="err">' + esc(S.err || '') + '</div>';
+  var blocked = !canOrder() || (sh.minOrder > 0 && tt.sub < sh.minOrder);
+  h += '<div class="bar"><button id="b-send"' + (blocked || S.busy ? ' disabled' : '') + '><span>' + esc(S.busy ? t('sending') : t('order')) + '</span><span>' + esc(money(tt.total)) + '</span></button></div>';
+  return h;
+}
+function sumHtml(tt){
+  var sh = S.shop, h = '<div class="row"><span>' + esc(t('goods')) + '</span><span>' + esc(money(tt.sub)) + '</span></div>';
+  if(S.form.mode === 'delivery') h += '<div class="row"><span>' + esc(t('fee')) + '</span><span>' + esc(tt.fee > 0 ? money(tt.fee) : t('free')) + '</span></div>';
+  h += '<div class="row t"><span>' + esc(t('total')) + '</span><span>' + esc(money(tt.total)) + '</span></div>';
+  if(sh.minOrder > 0 && tt.sub < sh.minOrder) h += '<div class="muted" style="color:var(--danger);margin-top:6px;">' + esc(t('minOrder', { sum: money(sh.minOrder) })) + '</div>';
+  return h;
+}
+function dtStr(ms){ var d = new Date(ms), z = function(n){ return (n < 10 ? '0' : '') + n; }; return z(d.getDate()) + '.' + z(d.getMonth() + 1) + ' ' + z(d.getHours()) + ':' + z(d.getMinutes()); }
+function stName(s){ return t('st_' + s); }
+function orderCard(o, withCancel){
+  var h = '<div class="ord"><div class="oh"><b>#' + esc(o.no) + ' · ' + esc(money(o.total)) + '</b><span class="st ' + esc(o.status) + '">' + esc(stName(o.status)) + (o.status === 'accepted' && o.eta ? ' · ' + esc(t('eta', { m: o.eta })) : '') + '</span></div>';
+  h += '<div class="muted" style="margin-top:4px;">' + esc(dtStr(o.createdAt)) + ' · ' + esc(o.mode === 'delivery' ? t('modeDel') : t('modePick')) + '</div>';
+  h += '<div style="margin-top:8px;font-size:13.5px;">' + (o.items || []).map(function(x){ return esc(x.name) + (x.vName ? ' · ' + esc(x.vName) : '') + ' × ' + esc(qtyStr(x.qty)); }).join('<br>') + '</div>';
+  if(o.reason) h += '<div class="muted" style="margin-top:6px;">' + esc(o.reason) + '</div>';
+  if(withCancel && o.status === 'new') h += '<button class="btn2" style="margin-top:10px;color:var(--danger)" data-cancel="' + esc(o.id) + '">' + esc(t('cancel')) + '</button>';
+  return h + '</div>';
+}
+function renderDone(){
+  var o = S.last;
+  var h = '<div class="done"><div class="ic">' + IC.check + '</div><h2>' + esc(t('doneT')) + '</h2><div class="muted" style="font-size:14px;">' + esc(t('doneS', { no: o.no })) + '</div></div>';
+  h += orderCard(o, true);
+  h += '<div class="sec" style="background:none;padding:0 0;margin-top:14px;"><button class="btn2" id="b-orders2">' + esc(t('myOrders')) + '</button></div>';
+  h += '<div class="bar"><button id="b-again"><span>' + esc(t('again')) + '</span><span></span></button></div>';
+  return h;
+}
+function renderOrders(){
+  var h = '<header><div class="hrow"><button class="icon-btn" id="b-back" aria-label="' + esc(t('back')) + '">' + IC.back + '</button><h1>' + esc(t('myOrders')) + '</h1></div></header>';
+  if(S.orders == null) return h + '<div class="spin"></div>';
+  if(!S.orders.length) return h + '<div class="empty">' + esc(t('noOrders')) + '</div>';
+  return h + S.orders.map(function(o){ return orderCard(o, true); }).join('');
+}
+function renderOutside(){
+  document.getElementById('app').innerHTML = '<div class="done"><div class="ic" style="color:var(--btn);background:var(--soft)">🛍</div><h2>' + esc(t('outside')) + '</h2><div class="muted" style="font-size:14px;">' + esc(t('outsideHint')) + '</div></div>';
+}
+function render(){
+  var app = document.getElementById('app');
+  if(S.view === 'fatal'){ app.innerHTML = '<div class="done"><h2 style="font-size:18px;">' + esc(S.err) + '</h2><button class="btn2" id="b-retry" style="max-width:260px;margin-top:16px;">' + esc(t('retry')) + '</button></div>'; bind(); return; }
+  if(!S.shop){ app.innerHTML = '<div class="spin"></div>'; return; }
+  app.innerHTML = S.view === 'cart' ? renderCart() : S.view === 'done' ? renderDone() : S.view === 'orders' ? renderOrders() : renderShop();
+  bind();
+  try{
+    if(TG && TG.BackButton){ if(S.view === 'shop') TG.BackButton.hide(); else TG.BackButton.show(); }
+  }catch(e){}
+}
+function go(v){ S.view = v; S.err = ''; window.scrollTo(0, 0); render(); if(v === 'orders') loadOrders(); }
+function loadOrders(){
+  api('orders').then(function(j){ if(S.view !== 'orders' && S.view !== 'done') return; S.orders = j.ok ? (j.orders || []) : []; S.active = S.orders.filter(function(o){ return ['new','accepted','ready','delivering'].indexOf(o.status) !== -1; }).length; if(S.view === 'orders') render(); });
+}
+function readForm(){
+  var a = document.getElementById('f-addr'), n = document.getElementById('f-name'), p = document.getElementById('f-phone'), c = document.getElementById('f-note');
+  if(a) S.form.address = a.value; if(n) S.form.name = n.value; if(p) S.form.phone = p.value; if(c) S.form.comment = c.value;
+  saveForm();
+}
+function openSheet(html, after){
+  var sh = document.getElementById('sheet'), bg = document.getElementById('sheet-bg');
+  sh.innerHTML = html; sh.classList.add('on'); bg.classList.add('on');
+  bg.onclick = closeSheet; if(after) after(sh);
+}
+function closeSheet(){ document.getElementById('sheet').classList.remove('on'); document.getElementById('sheet-bg').classList.remove('on'); }
+function pickVariant(id){
+  var it = S.byId[id]; if(!it) return;
+  function draw(){
+    var h = '<h3>' + esc(it.n) + '</h3><div class="muted" style="margin:-6px 0 8px;">' + esc(t('pick')) + '</div>';
+    (it.v || []).forEach(function(v){
+      var q = cartQty(id, v.id);
+      h += '<div class="line"><div class="lt"><div class="ln">' + esc(v.n) + '</div><div class="lp">' + esc(money(v.p)) + (v.s ? '' : ' · <span style="color:var(--danger)">' + esc(t('out')) + '</span>') + '</div></div>'
+        + (v.s ? (q > 0 ? '<div class="step"><button data-vdec="' + esc(v.id) + '">−</button><span class="qv">' + esc(qtyStr(q)) + '</span><button data-vinc="' + esc(v.id) + '">+</button></div>' : '<button class="addb" style="width:118px;margin:0" data-vinc="' + esc(v.id) + '">' + esc(t('add')) + '</button>') : '') + '</div>';
+    });
+    h += '<button class="addb" id="v-done" style="margin-top:14px;height:46px;">' + esc(t('done2')) + '</button>';
+    return h;
+  }
+  openSheet(draw(), function(sh){
+    sh.onclick = function(e){
+      var b = e.target.closest('button'); if(!b) return;
+      if(b.id === 'v-done'){ closeSheet(); refreshGrid(); return; }
+      var vi = b.getAttribute('data-vinc'), vd = b.getAttribute('data-vdec');
+      if(vi) setQty(id, vi, cartQty(id, vi) + stepOf(it));
+      if(vd) setQty(id, vd, cartQty(id, vd) - stepOf(it));
+      if(vi || vd){ sh.innerHTML = draw(); refreshGrid(); }
+    };
+  });
+}
+function askQty(id, v){
+  var it = S.byId[id]; if(!it) return;
+  var cur = cartQty(id, v);
+  openSheet('<h3>' + esc(it.n) + '</h3><div class="fld" style="margin-top:0"><label for="qv-in">' + esc(t('qtyP')) + ' (' + esc(unitL(it.u)) + ')</label><input id="qv-in" type="text" inputmode="decimal" value="' + esc(qtyStr(cur)) + '"></div><button class="addb" id="qv-ok" style="margin-top:14px;height:46px;">' + esc(t('done2')) + '</button>', function(sh){
+    var inp = sh.querySelector('#qv-in'); setTimeout(function(){ try{ inp.focus(); inp.select(); }catch(e){} }, 50);
+    sh.querySelector('#qv-ok').onclick = function(){ var q = parseFloat(String(inp.value).replace(',', '.')); if(isFinite(q) && q >= 0){ setQty(id, v, Math.min(q, 9999)); } closeSheet(); if(S.view === 'cart') render(); else refreshGrid(); };
+  });
+}
+function getLocation(){
+  var done = function(lat, lng){ S.form.loc = { lat: lat, lng: lng }; saveForm(); readForm(); render(); haptic('ok'); };
+  var fail = function(){ toast(t('locErr')); haptic('err'); };
+  try{
+    var LM = TG && TG.LocationManager;
+    if(LM && typeof LM.init === 'function'){
+      LM.init(function(){
+        if(!LM.isLocationAvailable){ browserLoc(done, fail); return; }
+        LM.getLocation(function(d){ if(d && isFinite(d.latitude)) done(d.latitude, d.longitude); else browserLoc(done, fail); });
+      });
+      return;
+    }
+  }catch(e){}
+  browserLoc(done, fail);
+}
+function browserLoc(done, fail){
+  if(!navigator.geolocation){ fail(); return; }
+  navigator.geolocation.getCurrentPosition(function(p){ done(p.coords.latitude, p.coords.longitude); }, fail, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+}
+function askContact(){
+  if(!TG || !TG.requestContact) return;
+  S.waitPhone = true; readForm(); render();
+  try{
+    TG.requestContact(function(ok){
+      if(!ok){ S.waitPhone = false; render(); return; }
+      var tries = 0;
+      (function poll(){
+        api('me').then(function(j){
+          tries++;
+          if(j.ok && j.me && j.me.phone && j.me.phoneOk){ S.me = j.me; S.waitPhone = false; S.phoneEdit = false; S.err = ''; haptic('ok'); render(); return; }
+          if(tries < 12) setTimeout(poll, 1000); else { S.waitPhone = false; render(); }
+        });
+      })();
+    });
+  }catch(e){ S.waitPhone = false; render(); }
+}
+function submit(){
+  readForm();
+  var sh = S.shop, tt = totals();
+  if(!tt.lines) return;
+  if(S.form.mode === 'delivery' && String(S.form.address || '').trim().length < 3 && !S.form.loc){ S.err = t('e_addr'); render(); haptic('err'); return; }
+  var usePhone = (S.me.phone && S.me.phoneOk && !S.phoneEdit) ? '' : String(S.form.phone || '').trim();
+  if(!usePhone && !(S.me.phone && S.me.phoneOk)){ S.err = t('e_phone'); render(); haptic('err'); return; }
+  if(!S.form.clientId) { S.form.clientId = 'c' + uidStr(); saveForm(); }
+  S.busy = true; S.err = ''; render();
+  var items = Object.keys(S.cart).map(function(k){ var c = S.cart[k]; return { id: c.id, v: c.v || '', q: c.q }; });
+  api('order', { clientId: S.form.clientId, items: items, mode: S.form.mode, address: S.form.mode === 'delivery' ? (S.form.address || '') : '', loc: S.form.mode === 'delivery' ? (S.form.loc || null) : null,
+    phone: usePhone, name: S.form.name || '', comment: S.form.comment || '', pay: S.form.pay }).then(function(j){
+    S.busy = false;
+    if(j.ok){
+      S.last = j.order; S.cart = {}; saveCart(); S.form.clientId = ''; S.form.comment = ''; saveForm(); S.active++;
+      haptic('ok'); go('done'); return;
+    }
+    haptic('err');
+    if(j.code === 'changed' || j.code === 'out_of_stock' || j.code === 'bad_qty'){
+      S.form.clientId = ''; saveForm();
+      api('catalog').then(function(c){ if(c.ok){ applyCatalog(c); } S.err = j.code === 'out_of_stock' && S.byId[j.id] ? (j.max ? t('left', { n: qtyStr(j.max), u: unitL(S.byId[j.id].u) }) + ' — ' + S.byId[j.id].n : t('e_stock0', { n: S.byId[j.id].n })) : t('e_changed'); render(); });
+      return;
+    }
+    if(j.code !== 'net') { S.form.clientId = ''; saveForm(); }
+    if(j.code === 'paused' || j.code === 'closed_hours'){ api('catalog').then(function(c){ if(c.ok) applyCatalog(c); S.err = errText(j); render(); }); return; }
+    S.err = errText(j); render();
+  });
+}
+function cancelOrder(oid){
+  var doIt = function(){
+    api('cancel', { oid: oid }).then(function(j){
+      if(!j.ok){ toast(errText(j)); }
+      else { haptic('ok'); if(S.last && S.last.id === oid) S.last = j.order; }
+      if(S.view === 'orders'){ S.orders = null; render(); loadOrders(); } else { render(); }
+    });
+  };
+  try{ if(TG && TG.showConfirm){ TG.showConfirm(t('cancelQ'), function(ok){ if(ok) doIt(); }); return; } }catch(e){}
+  if(window.confirm(t('cancelQ'))) doIt();
+}
+function bind(){
+  var app = document.getElementById('app');
+  app.onclick = function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    var id;
+    if(b.id === 'b-retry'){ S.view = 'shop'; S.shop = null; render(); load(); return; }
+    if(b.id === 'b-cart'){ go('cart'); return; }
+    if(b.id === 'b-back' || b.id === 'b-back2'){ readForm(); go('shop'); return; }
+    if(b.id === 'b-orders' || b.id === 'b-orders2'){ S.orders = null; go('orders'); return; }
+    if(b.id === 'b-again'){ go('shop'); return; }
+    if(b.id === 'b-clear'){ S.cart = {}; saveCart(); render(); return; }
+    if(b.id === 'b-send'){ submit(); return; }
+    if(b.id === 'b-loc'){ readForm(); getLocation(); return; }
+    if(b.id === 'b-locdel'){ readForm(); S.form.loc = null; saveForm(); render(); return; }
+    if(b.id === 'b-contact'){ askContact(); return; }
+    if(b.id === 'b-phedit'){ readForm(); S.phoneEdit = true; render(); return; }
+    if((id = b.getAttribute('data-cat')) !== null){ S.cat = id; render(); return; }
+    if((id = b.getAttribute('data-inc'))){ var it = S.byId[id]; setQty(id, '', cartQty(id, '') + stepOf(it)); refreshGrid(); return; }
+    if((id = b.getAttribute('data-dec'))){ var it2 = S.byId[id]; setQty(id, '', cartQty(id, '') - stepOf(it2)); refreshGrid(); return; }
+    if((id = b.getAttribute('data-qty'))){ askQty(id, ''); return; }
+    if((id = b.getAttribute('data-pick'))){ pickVariant(id); return; }
+    var lk = b.getAttribute('data-linc') || b.getAttribute('data-ldec') || b.getAttribute('data-lqty');
+    if(lk){
+      readForm();
+      var c = S.cart[lk]; if(!c) return; var it3 = S.byId[c.id];
+      if(b.hasAttribute('data-lqty')){ askQty(c.id, c.v); return; }
+      setQty(c.id, c.v, c.q + (b.hasAttribute('data-linc') ? 1 : -1) * stepOf(it3));
+      render(); return;
+    }
+    if((id = b.getAttribute('data-mode'))){ readForm(); S.err = ''; S.form.mode = id; saveForm(); render(); return; }
+    if((id = b.getAttribute('data-pay'))){ readForm(); S.form.pay = id; saveForm(); render(); return; }
+    if((id = b.getAttribute('data-cancel'))){ cancelOrder(id); return; }
+  };
+  var q = document.getElementById('q');
+  if(q) q.oninput = function(){ S.q = q.value; refreshGrid(); };
+  ['f-addr','f-name','f-phone','f-note'].forEach(function(fid){ var el = document.getElementById(fid); if(el) el.oninput = function(){ readForm(); if(S.err){ S.err = ''; var er = document.getElementById('err'); if(er) er.textContent = ''; } }; });
+}
+try{
+  if(TG){
+    TG.ready(); TG.expand();
+    if(TG.BackButton) TG.BackButton.onClick(function(){ var sh = document.getElementById('sheet'); if(sh.classList.contains('on')){ closeSheet(); return; } readForm(); go('shop'); });
+    if(TG.disableVerticalSwipes) TG.disableVerticalSwipes();
+  }
+}catch(e){}
+setInterval(function(){ if(document.visibilityState === 'visible' && S.view === 'orders') loadOrders(); }, 15000);
+load();
+window.__tgs = S;
+})();
+</script>
+</body>
+</html>

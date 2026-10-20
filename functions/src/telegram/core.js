@@ -90,6 +90,7 @@ async function handleApi(deps, uid, body) {
     if (caller.owner) out.prefs = await require('./reports').readPrefsForStatus(deps, caller.bid);   /* fix121-tg2 */
     return okBody(out);
   }
+  if (/^bo[A-Z]/.test(action)) return require('./shop').handleAppApi(deps, caller, uid, action, body);   /* fix145-botshop: bot orqali buyurtma */
   if (!caller.owner) return errBody(403, 'owner_only');
   if (action === 'prefs' || action === 'test') return require('./reports').handleAction(deps, caller, action, body);   /* fix121-tg2: xabar sozlamalari, sinov */
   if (action === 'link') {
@@ -190,6 +191,7 @@ async function handleUpdate(deps, upd) {
   if (upd.callback_query) {
     const cq = upd.callback_query; if (!cq.message || !cq.message.chat || cq.message.chat.type !== 'private') return { ignored: true };
     const cl = await __cmd.chatLang(deps, cq.message.chat.id, cq.from && cq.from.language_code);
+    if (/^bo:/.test(String(cq.data || ''))) { const r0 = await require('./shop').onCallback(deps, cq, cl); if (r0) return r0; }   /* fix145-botshop */
     const r = await __cmd.onCallback(deps, cq, cl);
     if (r) return r;
     return __pay.onCallback(deps, cq, cl);
@@ -210,7 +212,9 @@ async function handleUpdate(deps, upd) {
     return { group: true };
   }
   lang = await __cmd.chatLang(deps, msg.chat.id, msg.from && msg.from.language_code);   /* fix144-tgcmd: /til bilan tanlangan til */
+  if (msg.contact) return require('./shop').onContact(deps, msg, lang);   /* fix145-botshop: mijoz raqami */
   const m = /^\/start(?:@[A-Za-z0-9_]+)?(?:\s+([A-Za-z0-9_-]{4,64}))?$/.exec(text);
+  if (m && m[1] && /^s_/.test(m[1])) return require('./shop').onStart(deps, msg, m[1].slice(2), lang);   /* fix145-botshop: do'kon havolasi */
   const kind = __cmd.parse(text);
   let out;
   if (m && m[1]) { out = await tryLink(deps, msg, m[1], lang); if (out && out.linked) out.kb = __cmd.menuKb(deps, lang); }
@@ -226,7 +230,7 @@ async function handleUpdate(deps, upd) {
       const names = [];
       for (let i = 0; i < bids.length && i < 5; i++) names.push(await shopName(deps.db, bids[i]));
       out = { reply: txt('linkedInfo', lang, { shop: names.join(', ') }) + (deps.payToken ? '\n' + require('./payTexts').txt('payHint', lang) : '') + '\n\n' + require('./cmdTexts').t('menu', lang), kb: __cmd.menuKb(deps, lang) };
-    } else out = { reply: txt('welcome', lang) + '\n\n' + require('./cmdTexts').t('langHint', lang, { cmd: require('./cmdTexts').names(lang).lang }) };
+    } else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) || { reply: txt('welcome', lang) + '\n\n' + require('./cmdTexts').t('langHint', lang, { cmd: require('./cmdTexts').names(lang).lang }) };
   }
   if (out && out.reply) await sendText(deps, msg.chat.id, out.reply, out.kb);
   return out;
