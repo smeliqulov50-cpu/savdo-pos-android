@@ -139,4 +139,47 @@ async function onPaid(deps, msg, lang) {
   return r;
 }
 
-module.exports = { sendMenu, onCallback, onPreCheckout, onPaid, linkedBids, bidHash, orderFor, invoiceParams, shopOf, fmtDate, PROVIDER, SHORT };
+/* fix150-subbot: obuna tugashidan 3 kun va 1 kun oldin hamda tugagan kuni egasi chatlariga eslatma (har biri bir marta) */
+const DAY_MS = 86400000, TZ_MS = 5 * 3600 * 1000;
+function dayIdx(ms) { return Math.floor((ms + TZ_MS) / DAY_MS); }
+function remStage(exp, now) {
+  const left = dayIdx(exp) - dayIdx(now);
+  if (left === 3) return 'd3';
+  if (left === 1) return 'd1';
+  if (left <= 0 && left >= -2 && exp <= now) return 'end';
+  return '';
+}
+async function subRemind(deps, now) {
+  const st = { checked: 0, sent: 0, failed: 0 };
+  if (!deps.key || !deps.tg) return st;
+  now = now || deps.nowMs();
+  const snap = await deps.db.collection('tgBiz').limit(3000).get();
+  const docs = snap && snap.docs ? snap.docs : [];
+  const SH = require('./shop'), C = require('./cmds');
+  for (let i = 0; i < docs.length; i++) {
+    const bid = docs[i].id, biz = docs[i].data() || {};
+    const chats = validChats(deps.key, bid, biz);
+    if (!chats.length) continue;
+    st.checked++;
+    try {
+      const s = await shopOf(deps.db, bid);
+      const exp = readExpiryMs(s.biz);
+      if (!(exp > 0)) continue;
+      const stage = remStage(exp, now);
+      if (!stage) continue;
+      const mark = exp + '|' + stage;
+      if (biz.subRem === mark) continue;
+      await deps.db.collection('tgBiz').doc(bid).set({ subRem: mark }, { merge: true });
+      const key = stage === 'd3' ? 'remD3' : stage === 'd1' ? 'remD1' : 'remEnd';
+      for (let j = 0; j < chats.length; j++) {
+        const l = await C.chatLang(deps, chats[j].id, biz.lang);
+        try {
+          await deps.tg('sendMessage', { chat_id: chats[j].id, parse_mode: 'HTML', text: txt(key, l, { shop: s.name, date: fmtDate(exp) }), reply_markup: { inline_keyboard: [[{ text: txt('btnRenew', l), web_app: { url: SH.hubUrl() } }]] } });
+          st.sent++;
+        } catch (e) { st.failed++; }
+      }
+    } catch (e) { st.failed++; }
+  }
+  return st;
+}
+module.exports = { subRemind, remStage, sendMenu, onCallback, onPreCheckout, onPaid, linkedBids, bidHash, orderFor, invoiceParams, shopOf, fmtDate, PROVIDER, SHORT };

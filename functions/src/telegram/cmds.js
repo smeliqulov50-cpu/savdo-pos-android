@@ -98,7 +98,7 @@ function debtsText(lang, d, ctx) {
     lines.push('');
     lines.push(icon + ' ' + esc(C.t(title, lang)) + ': <b>' + M.money(lang, ctx.cur, g.total) + '</b> (' + esc(C.t('people', lang, { n: g.count })) + ')');
     g.list.slice(0, top).forEach(function (x, i) {
-      lines.push((i + 1) + '. ' + esc(x.name) + (ctx.multi ? ' (' + esc(ctx.br(x.branchId)) + ')' : '') + ' — ' + M.fmt(x.debt));
+      lines.push((i + 1) + '. ' + esc(x.name) + (ctx.multi ? ' (' + esc(ctx.br(x.branchId)) + ')' : '') + ' — ' + M.fmtC(ctx.cur, x.debt));
     });
     if (g.count > top) lines.push(esc(C.t('more', lang, { n: g.count - top })));
   };
@@ -186,6 +186,19 @@ async function setupCommands(deps) {
     try { await deps.tg('setMyCommands', p); ok++; } catch (e) {}
   }
   try { await deps.tg('setMyCommands', { commands: cmdList(deps, 'uz'), language_code: 'uz' }); ok++; } catch (e) {}
+  /* fix150-subbot: /til tanlangan chatlarda ro'yxat o'sha paytdagi holatda qolib ketardi (/obuna yo'q edi) — yangilanadi;
+     ulangan chatlarda pastki "💳 Obuna · Do'konim" tugmasi qo'yiladi */
+  try {
+    const snap = await deps.db.collection('tgChats').limit(1000).get();
+    const docs = snap && snap.docs ? snap.docs : [];
+    for (let i = 0; i < docs.length; i++) {
+      const id = String(docs[i].id), ch = docs[i].data() || {};
+      if (!/^\d{1,20}$/.test(id)) continue;
+      const ul = C.LANGS.indexOf(ch.ulang) !== -1 ? ch.ulang : '';
+      if (ul) { try { await deps.tg('setMyCommands', { commands: cmdList(deps, ul), scope: { type: 'chat', chat_id: Number(id) } }); } catch (e) {} }
+      if (Array.isArray(ch.bids) && ch.bids.length) await require('./shop').ownerMenu(deps, id, ul || (C.LANGS.indexOf(ch.lang) !== -1 ? ch.lang : 'uz'));
+    }
+  } catch (e) {}
   return ok;
 }
 

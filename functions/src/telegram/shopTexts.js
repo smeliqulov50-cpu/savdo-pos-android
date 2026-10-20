@@ -138,7 +138,7 @@ const T = {
     tg: "❌ Мизоҷ <b>фармоиши #{no}</b>-ро бекор кард · {shop}"
   },
   btnPlans: { uz: "🧾 Tariflar katalogi", ru: "🧾 Каталог тарифов", en: "🧾 Plans catalog", kk: "🧾 Тарифтер каталогы", ky: "🧾 Тарифтер каталогу", tg: "🧾 Феҳристи тарифҳо" },
-  btnHub: { uz: "Do'konim", ru: "Мой магазин", en: "My shop", kk: "Менің дүкенім", ky: "Менин дүкөнүм", tg: "Мағозаи ман" },
+  btnHub: { uz: "💳 Obuna · Do'konim", ru: "💳 Подписка · Магазин", en: "💳 Plan · My shop", kk: "💳 Жазылым · Дүкен", ky: "💳 Жазылуу · Дүкөн", tg: "💳 Обуна · Мағоза" },   /* fix150-subbot */
   btnHubFull: { uz: "📱 Do'konim: obuna va katalog", ru: "📱 Мой магазин: подписка и каталог", en: "📱 My shop: subscription and catalog", kk: "📱 Менің дүкенім: жазылым және каталог", ky: "📱 Менин дүкөнүм: жазылуу жана каталог", tg: "📱 Мағозаи ман: обуна ва феҳрист" },
   pushNew: { uz: "Yangi buyurtma #{no}", ru: "Новый заказ #{no}", en: "New order #{no}", kk: "Жаңа тапсырыс #{no}", ky: "Жаңы буйрутма #{no}", tg: "Фармоиши нав #{no}" },
   pushCancel: { uz: "Buyurtma #{no} bekor qilindi", ru: "Заказ #{no} отменён", en: "Order #{no} cancelled", kk: "Тапсырыс #{no} бас тартылды", ky: "Буйрутма #{no} жокко чыгарылды", tg: "Фармоиш #{no} бекор шуд" }

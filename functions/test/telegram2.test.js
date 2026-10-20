@@ -334,6 +334,8 @@ test('sinov: har bir tur hozir yuboriladi (kunlik va kam qolgan — haqiqiy ma\'
 });
 test('valyuta: UZS bo\'lmasa kod ko\'rsatiladi', () => {
   assert.equal(M.unitOf('uz', 'KZT'), '₸'); assert.equal(M.unitOf('ru', 'UZS'), 'сум'); assert.equal(M.unitOf('tg', 'UZS'), 'сум'); assert.equal(M.unitOf('tg', 'TJS'), 'сомонӣ');
-  assert.equal(M.money('uz', 'USD', 1500), '$1 500'); assert.equal(M.money('en', 'USD', -20), '−$20'); assert.equal(M.money('uz', 'UZS', 20, true), "+20 so'm"); assert.equal(M.unitOf('uz', 'XYZ'), 'XYZ');
+  assert.equal(M.money('uz', 'USD', 1500), '$1 500.00'); assert.equal(M.money('en', 'USD', -20), '−$20.00');   /* fix149-cents */
+  assert.equal(M.money('uz', 'USD', 2.5), '$2.50'); assert.equal(M.money('uz', 'EUR', 1234.567), '€1 234.57'); assert.equal(M.money('uz', 'USD', 0.1 + 0.2), '$0.30'); assert.equal(M.money('uz', 'UZS', 1500.6), "1 501 so'm"); assert.equal(M.money('uz', 'RUB', 99.5), '100 ₽');
+  assert.equal(M.fmtC('USD', 1234.5), '1 234.50'); assert.equal(M.fmtC('UZS', 1234.5), '1 235'); assert.equal(M.fmtC('USD', -0.004), '0.00'); assert.equal(M.money('uz', 'UZS', 20, true), "+20 so'm"); assert.equal(M.unitOf('uz', 'XYZ'), 'XYZ');
   assert.equal(M.fmt(-1234567), '−1 234 567'); assert.equal(M.qty(2.5), '2,5');
 });

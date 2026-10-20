@@ -100,7 +100,9 @@ async function handleApi(deps, uid, body) {
     if (times.length >= CODES_PER_HOUR) return errBody(429, 'too_many');
     if (!deps.botName) return errBody(503, 'bot_unavailable');
     const code = (deps.randCode || newCode)();
-    await db.collection('tgCodes').doc(codeHash(code)).set({ bid: caller.bid, uid: uid, exp: now + CODE_TTL_MS, used: false, at: now });
+    const cd = { bid: caller.bid, uid: uid, exp: now + CODE_TTL_MS, used: false, at: now };
+    if (body.intent === 'pay') cd.intent = 'pay';   /* fix150-subbot: ulangach darhol tariflar chiqadi */
+    await db.collection('tgCodes').doc(codeHash(code)).set(cd);
     const upd = { codeTimes: times.concat([now]) };
     const lang = validLang(body.lang); if (lang) upd.lang = lang;
     await bizRef.set(upd, { merge: true });
@@ -152,14 +154,14 @@ async function tryLink(deps, msg, code, lang) {
   const res = await db.runTransaction(async function (tx) {
     const cs = await tx.get(codeRef);
     const c = cs && cs.exists ? (cs.data() || {}) : null;
-    if (!c || c.used || !(c.exp > now) || typeof c.bid !== 'string') return { bad: true };
+    if (!c || (c.used && c.chat !== chatId) || !(c.exp > now) || typeof c.bid !== 'string') return { bad: true };   /* fix150-subbot: o'sha chat havolani qayta bossa — xato emas */
     const bizRef = db.collection('tgBiz').doc(c.bid);
     const bs = await tx.get(bizRef);
     const biz = bs && bs.exists ? (bs.data() || {}) : {};
     const chs = await tx.get(chRef);
     const ch = chs && chs.exists ? (chs.data() || {}) : {};
     const valid = validChats(deps.key, c.bid, biz);
-    if (valid.some(function (x) { return x.id === chatId; })) { tx.set(codeRef, Object.assign({}, c, { used: true, usedAt: now })); return { bid: c.bid, already: true, lang: biz.lang }; }
+    if (valid.some(function (x) { return x.id === chatId; })) { tx.set(codeRef, Object.assign({}, c, { used: true, usedAt: now })); return { bid: c.bid, already: true, lang: biz.lang, intent: c.intent }; }
     if (valid.length >= MAX_CHATS) return { bid: c.bid, limit: true, lang: biz.lang };
     const name = [msg.from && msg.from.first_name, msg.from && msg.from.last_name].filter(Boolean).join(' ') || (msg.chat.first_name || '');
     const chats = {};
@@ -169,7 +171,7 @@ async function tryLink(deps, msg, code, lang) {
     const bids = (Array.isArray(ch.bids) ? ch.bids : []).filter(function (b) { return b !== c.bid; }).concat([c.bid]);
     tx.set(chRef, Object.assign({}, ch, { bids: bids, fails: 0, failAt: 0, lang: lang }));
     tx.set(codeRef, Object.assign({}, c, { used: true, usedAt: now, chat: chatId }));
-    return { bid: c.bid, linked: true, lang: biz.lang };
+    return { bid: c.bid, linked: true, lang: biz.lang, intent: c.intent };
   });
   if (res.bad) {
     await chRef.set(Object.assign({}, ch0, { fails: recentFails + 1, failAt: recentFails ? ch0.failAt : now, lang: lang }));
@@ -178,8 +180,8 @@ async function tryLink(deps, msg, code, lang) {
   const l = validLang(res.lang) || lang;
   const shop = await shopName(db, res.bid);
   if (res.limit) return { reply: txt('limit', l, { shop: shop }) };
-  if (res.already) return { reply: txt('already', l, { shop: shop }) };
-  return { reply: txt('linked', l, { shop: shop }), linked: res.bid };
+  if (res.already) return { reply: txt('already', l, { shop: shop }), payAfter: res.intent === 'pay', lang: l };
+  return { reply: txt('linked', l, { shop: shop }), linked: res.bid, payAfter: res.intent === 'pay', lang: l };
 }
 
 async function handleUpdate(deps, upd) {
@@ -215,6 +217,7 @@ async function handleUpdate(deps, upd) {
   if (msg.contact) return require('./shop').onContact(deps, msg, lang);   /* fix145-botshop: mijoz raqami */
   const m = /^\/start(?:@[A-Za-z0-9_]+)?(?:\s+([A-Za-z0-9_-]{4,64}))?$/.exec(text);
   if (m && m[1] && /^s_/.test(m[1])) return require('./shop').onStart(deps, msg, m[1].slice(2), lang);   /* fix145-botshop: do'kon havolasi */
+  if (/^\/start(?:@[A-Za-z0-9_]+)?\s+pay$/.test(text)) return __cmd.run(deps, msg.chat.id, 'pay', lang);   /* fix150-subbot: t.me/<bot>?start=pay — tariflar */
   const kind = __cmd.parse(text);
   let out;
   if (m && m[1]) { out = await tryLink(deps, msg, m[1], lang); if (out && out.linked) { out.kb = __cmd.menuKb(deps, lang); await require('./shop').ownerMenu(deps, msg.chat.id, lang); } }   /* fix146-tgsub: pastki menyuda "Do'konim" */
@@ -233,6 +236,7 @@ async function handleUpdate(deps, upd) {
     } else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) || { reply: txt('welcome', lang) + '\n\n' + require('./cmdTexts').t('langHint', lang, { cmd: require('./cmdTexts').names(lang).lang }) };
   }
   if (out && out.reply) await sendText(deps, msg.chat.id, out.reply, out.kb);
+  if (out && out.payAfter) { try { await __pay.sendMenu(deps, msg.chat.id, out.lang || lang); } catch (e) {} }   /* fix150-subbot */
   return out;
 }
 

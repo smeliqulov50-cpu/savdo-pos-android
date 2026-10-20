@@ -96,6 +96,27 @@ header{position:sticky;top:0;z-index:5;background:var(--surface);padding:12px 14
 .toast.on{opacity:.96}
 .spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--btn);border-radius:50%;animation:sp .8s linear infinite;margin:60px auto}
 @keyframes sp{to{transform:rotate(360deg)}}
+/* fix150-subbot: tariflar sahifasi animatsiyalari */
+@keyframes hubUp{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes hubPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--btn) 55%,transparent)}70%{box-shadow:0 0 0 12px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes hubBlink{50%{opacity:.25}}
+@keyframes hubFade{from{opacity:0}to{opacity:1}}
+@keyframes hubPop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@keyframes hubDraw{to{stroke-dashoffset:0}}
+@keyframes hubFall{0%{transform:translate3d(0,-20px,0) rotate(0);opacity:1}100%{transform:translate3d(var(--x),105vh,0) rotate(var(--r));opacity:.9}}
+.hub-anim>header{animation:hubFade .3s ease both}
+.hub-anim>.sec,.hub-anim>.banner{animation:hubUp .45s cubic-bezier(.2,.8,.2,1) both}
+.hub-anim>.sec:nth-of-type(2){animation-delay:.06s}.hub-anim>.sec:nth-of-type(3){animation-delay:.12s}.hub-anim>.sec:nth-of-type(4){animation-delay:.18s}.hub-anim>.sec:nth-of-type(5){animation-delay:.24s}.hub-anim>.sec:nth-of-type(6){animation-delay:.3s}
+.hub-best .addb:not([disabled]){animation:hubPulse 1.9s ease-out infinite}
+.hub-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--danger);margin-right:6px;vertical-align:1px;animation:hubBlink 1.1s ease-in-out infinite}
+.sec .addb{transition:transform .12s ease}.sec .addb:active{transform:scale(.96)}
+.hub-ok{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:color-mix(in srgb,var(--bg) 94%,transparent);animation:hubFade .25s ease both;overflow:hidden;text-align:center;padding:24px}
+.hub-ok svg{width:96px;height:96px;animation:hubPop .5s cubic-bezier(.2,.9,.3,1.3) both}
+.hub-ok circle{stroke:var(--ok);stroke-width:5;fill:none;stroke-dasharray:252;stroke-dashoffset:252;animation:hubDraw .55s .1s ease-out forwards}
+.hub-ok path{stroke:var(--ok);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:hubDraw .35s .55s ease-out forwards}
+.hub-ok b{font-size:18px;animation:hubUp .4s .5s both}
+.hub-ok i{position:absolute;top:0;width:8px;height:14px;border-radius:2px;animation:hubFall 1.9s cubic-bezier(.3,.6,.5,1) forwards}
+@media (prefers-reduced-motion:reduce){.hub-anim>header,.hub-anim>.sec,.hub-anim>.banner,.hub-best .addb,.hub-dot,.hub-ok,.hub-ok svg,.hub-ok b{animation:none!important}.hub-ok circle,.hub-ok path{animation:none!important;stroke-dashoffset:0}.hub-ok i{display:none}}
 </style>
 </head>
 <body>
@@ -230,8 +251,11 @@ var LI = LANGS.indexOf(LANG);
 function t(k, v){ var e = I[k]; var s = e ? (e[LI] || e[0]) : k; Object.keys(v || {}).forEach(function(n){ s = s.split('{' + n + '}').join(v[n]); }); return s; }
 function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 var CUR = {UZS:{l:["so'm","сум","UZS","сом","сом","сум"],b:0},USD:{s:'$',b:1},EUR:{s:'€',b:1},RUB:{s:'₽',b:0},KZT:{s:'₸',b:0},KGS:{l:['сом','сом','som','сом','сом','сом'],b:0},TJS:{l:['смн','смн','TJS','смн','смн','сомонӣ'],b:0}};
+/* fix149-cents: USD va EUR — 2 xonali kasr ($2.50); qolgan valyutalar avvalgidek butun son */
+function dec(){ var c = (S.shop && S.shop.cur) || 'UZS'; return (c === 'USD' || c === 'EUR') ? 2 : 0; }
+function rnd(x){ var v = Number(x) || 0; return dec() ? Math.round(v * 100 + (v >= 0 ? 1e-7 : -1e-7)) / 100 : Math.round(v); }
 function money(n){
-  var v = Math.round(Number(n) || 0), s = String(Math.abs(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  var d = dec(), v = rnd(n), a = d ? Math.abs(v).toFixed(d).split('.') : [String(Math.abs(v))], s = a[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + (d ? '.' + a[1] : '');
   var c = CUR[(S.shop && S.shop.cur) || 'UZS'] || CUR.UZS, sym = c.s || (c.l ? (c.l[LI] || c.l[0]) : '');
   return (v < 0 ? '−' : '') + (c.b ? sym + s : s + ' ' + sym);
 }
@@ -298,13 +322,13 @@ function applyCatalog(j){
 }
 /* ---------- fix146-tgsub: egasining sahifasi — obuna tariflari va o'z katalogi (?v=me) ---------- */
 var HUB = qs.get('v') === 'me';
-var H = { data:null, tab: 'sub', shop: 0, busy:'', msg:'', msgOk:false };
+var H = { data:null, tab: 'sub', shop: 0, busy:'', msg:'', msgOk:false, anim:true };   /* fix150-subbot: anim — kirish animatsiyasi */
 function hubDate(ms){ if(!ms) return '—'; var d = new Date(ms), z = function(n){ return (n < 10 ? '0' : '') + n; }; return z(d.getDate()) + '.' + z(d.getMonth() + 1) + '.' + d.getFullYear(); }
 function hubMoney(n){ return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ' + ((CUR.UZS.l[LI]) || "so'm"); }
 function hubLoad(silent){
   api('subInfo').then(function(j){
     if(!j.ok){ S.err = errText(j); S.view = 'fatal'; render(); return; }
-    H.data = j; if(H.shop >= (j.shops || []).length) H.shop = 0; hubRender();
+    H.data = j; if(H.shop >= (j.shops || []).length) H.shop = 0; if(!silent) H.anim = true; hubRender();
   });
 }
 function hubRender(){
@@ -319,14 +343,14 @@ function hubRender(){
   if(!d.linked){ app.innerHTML = h + '<div class="sec"><p style="margin:0;font-size:14px;">' + esc(t('notLinked')) + '</p></div>'; hubBind(); return; }
   var sh = d.shops[H.shop];
   if(H.tab === 'sub'){
-    h += '<div class="sec"><div style="font-weight:800;font-size:16px;">' + esc(sh.name) + '</div><div style="margin-top:4px;font-weight:700;color:' + (sh.active ? 'var(--ok)' : 'var(--danger)') + ';">' + esc(t(sh.active ? 'subUntil' : 'subExpired', { d: hubDate(sh.exp) })) + '</div></div>';
+    h += '<div class="sec"><div style="font-weight:800;font-size:16px;">' + esc(sh.name) + '</div><div style="margin-top:4px;font-weight:700;color:' + (sh.active ? 'var(--ok)' : 'var(--danger)') + ';">' + (sh.active ? '' : '<span class="hub-dot"></span>') + esc(t(sh.active ? 'subUntil' : 'subExpired', { d: hubDate(sh.exp) })) + '</div></div>';
     if(!d.payOn) h += '<div class="banner warn">' + esc(t('payOffMsg')) + '</div>';
     var base = (d.plans.find(function(p){ return p.k === 'm'; }) || d.plans[0]);
     var svOf = function(p){ return base && p.months > 1 ? Math.round((1 - p.price / (base.price * p.months)) * 100) : 0; };
     var bestK = '', bestSv = 0; d.plans.forEach(function(p){ var v = svOf(p); if(v > bestSv){ bestSv = v; bestK = p.k; } });
     d.plans.forEach(function(p){
       var per = Math.round(p.price / Math.max(1, p.months)), sv = svOf(p);
-      h += '<div class="sec" style="display:flex;align-items:center;gap:12px;' + (p.k === bestK ? 'outline:2px solid var(--btn);' : '') + '"><div style="flex:1;min-width:0;"><div style="font-weight:800;font-size:16px;">' + esc(t('plan_' + p.k)) + (p.k === bestK ? ' <span class="st" style="margin-left:6px;">' + esc(t('best')) + '</span>' : '') + '</div>'
+      h += '<div class="sec' + (p.k === bestK ? ' hub-best' : '') + '" style="display:flex;align-items:center;gap:12px;' + (p.k === bestK ? 'outline:2px solid var(--btn);' : '') + '"><div style="flex:1;min-width:0;"><div style="font-weight:800;font-size:16px;">' + esc(t('plan_' + p.k)) + (p.k === bestK ? ' <span class="st" style="margin-left:6px;">' + esc(t('best')) + '</span>' : '') + '</div>'
         + '<div style="font-size:19px;font-weight:800;margin-top:2px;">' + esc(hubMoney(p.price)) + '</div>'
         + '<div class="muted">' + (p.months > 1 ? esc(t('perMonth', { sum: hubMoney(per) })) : '') + (sv > 0 ? ' · <b style="color:var(--ok)">' + esc(t('save', { p: sv })) + '</b>' : '') + '</div></div>'
         + '<button class="addb" style="width:auto;padding:0 18px;height:44px;flex-shrink:0;margin:0;" data-hpay="' + esc(p.k) + '"' + (!d.payOn || H.busy ? ' disabled' : '') + '>' + esc(H.busy === p.k ? '…' : t('payBtn')) + '</button></div>';
@@ -339,7 +363,18 @@ function hubRender(){
         + '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn2" data-hshare="1">' + esc(t('shareLink')) + '</button><button class="btn2" data-hcopy="1" style="width:auto;">' + esc(t('copyLink')) + '</button></div></div>';
     } else h += '<div class="sec"><div style="font-weight:800;font-size:16px;">' + esc(sh.name) + '</div><p class="muted" style="font-size:14px;margin:6px 0 0;">' + esc(t('catOff')) + '</p></div>';
   }
-  app.innerHTML = h; hubBind();
+  app.innerHTML = h;
+  if(H.anim){ app.classList.remove('hub-anim'); void app.offsetWidth; app.classList.add('hub-anim'); H.anim = false; } else app.classList.remove('hub-anim');   /* fix150-subbot */
+  hubBind();
+}
+function hubSuccess(){   /* fix150-subbot: to'lovdan keyin animatsiya */
+  var o = document.createElement('div'); o.className = 'hub-ok';
+  var cs = ['#1b8f5a', '#2481cc', '#f5a623', '#e94e77', '#7b61ff'], conf = '';
+  for(var i = 0; i < 26; i++) conf += '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;background:' + cs[i % cs.length] + ';animation-delay:' + (Math.random() * .5).toFixed(2) + 's;--x:' + Math.round(Math.random() * 120 - 60) + 'px;--r:' + Math.round(Math.random() * 720 - 360) + 'deg"></i>';
+  o.innerHTML = conf + '<svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="40"/><path d="M30 49l12 12 24-26"/></svg><b>' + esc(t('paidOk')) + '</b>';
+  document.body.appendChild(o);
+  var close = function(){ if(o.parentNode) o.parentNode.removeChild(o); };
+  o.addEventListener('click', close); setTimeout(close, 2800);
 }
 function shareTg(link, text){
   var u = 'https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text || '');
@@ -353,7 +388,7 @@ function hubPay(k){
     if(!j.ok || !j.link){ H.busy = ''; H.msg = j.code === 'pay_off' ? t('payOffMsg') : j.code === 'too_many' ? t('e_many') : errText(j); H.msgOk = false; haptic('err'); hubRender(); return; }
     var done = function(st){
       H.busy = '';
-      if(st === 'paid'){ H.msg = t('paidOk'); H.msgOk = true; haptic('ok'); hubRender(); setTimeout(function(){ hubLoad(true); }, 2500); setTimeout(function(){ hubLoad(true); }, 7000); return; }
+      if(st === 'paid'){ H.msg = t('paidOk'); H.msgOk = true; haptic('ok'); hubRender(); try{ hubSuccess(); }catch(e){} setTimeout(function(){ hubLoad(true); }, 2500); setTimeout(function(){ hubLoad(true); }, 7000); return; }
       if(st === 'failed'){ H.msg = t('payFail'); H.msgOk = false; haptic('err'); }
       hubRender();
     };
@@ -368,8 +403,8 @@ function hubBind(){
     var b = e.target.closest('button'); if(!b) return;
     var v;
     if(b.id === 'b-retry'){ H.data = null; hubRender(); hubLoad(); return; }
-    if((v = b.getAttribute('data-htab'))){ H.tab = v; H.msg = ''; hubRender(); return; }
-    if((v = b.getAttribute('data-hshop')) !== null){ H.shop = Number(v) || 0; H.msg = ''; hubRender(); return; }
+    if((v = b.getAttribute('data-htab'))){ H.tab = v; H.msg = ''; H.anim = true; hubRender(); return; }
+    if((v = b.getAttribute('data-hshop')) !== null){ H.shop = Number(v) || 0; H.msg = ''; H.anim = true; hubRender(); return; }
     if((v = b.getAttribute('data-hpay'))){ hubPay(v); return; }
     if((v = b.getAttribute('data-hcat'))){ location.href = location.pathname + '?s=' + encodeURIComponent(v) + '&lang=' + LANG; return; }
     var sh = H.data && H.data.shops[H.shop];
@@ -392,10 +427,10 @@ function cartCountFor(id){ var n = 0; Object.keys(S.cart).forEach(function(k){ i
 function linePrice(c){ var it = S.byId[c.id]; if(!it) return 0; if(c.v){ var v = (it.v || []).find(function(x){ return x.id === c.v; }); return v ? v.p : 0; } return it.p; }
 function totals(){
   var sub = 0, n = 0;
-  Object.keys(S.cart).forEach(function(k){ var c = S.cart[k]; sub += Math.round(linePrice(c) * c.q); n += S.byId[c.id] && S.byId[c.id].f ? 1 : c.q; });
+  Object.keys(S.cart).forEach(function(k){ var c = S.cart[k]; sub = rnd(sub + rnd(linePrice(c) * c.q)); n += S.byId[c.id] && S.byId[c.id].f ? 1 : c.q; });
   var fee = 0;
   if(S.form.mode === 'delivery' && S.shop){ fee = (S.shop.freeFrom > 0 && sub >= S.shop.freeFrom) ? 0 : (S.shop.fee || 0); }
-  return { sub: sub, fee: fee, total: sub + fee, n: Math.round(n * 1000) / 1000, lines: Object.keys(S.cart).length };
+  return { sub: sub, fee: fee, total: rnd(sub + fee), n: Math.round(n * 1000) / 1000, lines: Object.keys(S.cart).length };
 }
 function setQty(id, v, q){
   var it = S.byId[id]; if(!it) return;
@@ -468,7 +503,7 @@ function renderCart(){
   keys.forEach(function(k){
     var c = S.cart[k], it = S.byId[c.id]; if(!it) return;
     var v = c.v ? (it.v || []).find(function(x){ return x.id === c.v; }) : null, pr = linePrice(c);
-    h += '<div class="line"><div class="lt"><div class="ln">' + esc(it.n) + (v ? ' · ' + esc(v.n) : '') + '</div><div class="lp">' + esc(money(pr)) + (it.u !== 'dona' ? ' / ' + esc(unitL(it.u)) : '') + ' · <b>' + esc(money(Math.round(pr * c.q))) + '</b></div></div>'
+    h += '<div class="line"><div class="lt"><div class="ln">' + esc(it.n) + (v ? ' · ' + esc(v.n) : '') + '</div><div class="lp">' + esc(money(pr)) + (it.u !== 'dona' ? ' / ' + esc(unitL(it.u)) : '') + ' · <b>' + esc(money(rnd(pr * c.q))) + '</b></div></div>'
       + '<div class="step"><button data-ldec="' + esc(k) + '">−</button><button class="qv" data-lqty="' + esc(k) + '">' + esc(qtyStr(c.q)) + '</button><button data-linc="' + esc(k) + '">+</button></div></div>';
   });
   h += '</div>';

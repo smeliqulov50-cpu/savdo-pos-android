@@ -37,7 +37,7 @@ const __cat = new Map();   // bid -> { at, data }
 function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function str(v, n) { return String(v == null ? '' : v).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g, '').trim().slice(0, n); }
 function num(v) { const n = Number(v); return isFinite(n) ? n : 0; }
-function money(v) { const n = Math.round(num(v)); return n > 0 ? Math.min(n, 1e12) : 0; }
+function money(v, d) { const n = M.rnd(num(v), d || 0); return n > 0 ? Math.min(n, 1e12) : 0; }   /* fix149-cents: d=2 — USD/EUR */
 function okBody(extra) { return { status: 200, body: Object.assign({ ok: true }, extra || {}) }; }
 function errBody(status, code, extra) { return { status: status, body: Object.assign({ ok: false, code: code }, extra || {}) }; }
 async function getData(ref) { const s = await ref.get(); return s && s.exists ? (s.data() || {}) : null; }
@@ -65,9 +65,9 @@ function normCfg(raw) {
     branchId: str(raw.branchId, 60) || 'main',
     pickup: raw.pickup !== false,
     delivery: raw.delivery === true,
-    fee: money(raw.fee),
-    freeFrom: money(raw.freeFrom),
-    minOrder: money(raw.minOrder),
+    fee: money(raw.fee, 2),
+    freeFrom: money(raw.freeFrom, 2),
+    minOrder: money(raw.minOrder, 2),
     note: str(raw.note, 300),
     hours: { on: h.on === true && !!hhmm(h.from) && !!hhmm(h.to) && hhmm(h.from) !== hhmm(h.to), from: hhmm(h.from) || '09:00', to: hhmm(h.to) || '21:00' },
     paused: raw.paused === true,
@@ -128,8 +128,20 @@ async function resolveSlug(db, slug) {
 }
 function imgVer(p) { return String(Math.floor(num(p._u)) || 0).slice(-10); }
 function hasImg(p) { return typeof p.image === 'string' && p.image.length < IMG_MAX_CHARS && (/^data:image\/(png|jpe?g|webp|gif);base64,/.test(p.image) || /^https:\/\//.test(p.image)); }
-function buildCatalog(docs, biz, cfg) {
+/* fix148-reserve: faol buyurtmalardagi (yangi, qabul qilingan, tayyor, yo'lda) miqdor botda band — boshqa mijoz ololmaydi */
+function reservedFrom(orders, branchId) {
+  const r = {};
+  Object.keys(orders || {}).forEach(function (k) {
+    const o = orders[k];
+    if (!o || ACTIVE.indexOf(o.status) === -1 || effBranch(o.branchId) !== effBranch(branchId)) return;
+    (o.items || []).forEach(function (x) { const key = String(x.id) + '|' + String(x.v || ''); r[key] = round3((r[key] || 0) + num(x.qty)); });
+  });
+  return r;
+}
+function buildCatalog(docs, biz, cfg, reserved) {
+  reserved = reserved || {};
   const oversell = !!(biz && biz.allowOversell);
+  const D = M.decOf(str((biz && biz.currency) || 'UZS', 6));   /* fix149-cents */
   const items = [], byId = {}, cats = [];
   docs.forEach(function (d) {
     const p = d || {};
@@ -137,16 +149,17 @@ function buildCatalog(docs, biz, cfg) {
     if (effBranch(p.branchId) !== effBranch(cfg.branchId)) return;
     const name = str(p.name, 120); if (!name) return;
     const unit = ['dona', 'kg', 'litr', 'paket'].indexOf(p.unit) !== -1 ? p.unit : 'dona';
-    const vs = Array.isArray(p.variants) ? p.variants.filter(function (v) { return v && v.id && str(v.name, 80) && money(v.price) > 0; }) : [];
+    const vs = (Array.isArray(p.variants) ? p.variants.filter(function (v) { return v && v.id && str(v.name, 80) && money(v.price, D) > 0; }) : [])
+      .map(function (v) { return Object.assign({}, v, { stock: num(v.stock) - (reserved[String(p.id) + '|' + String(v.id)] || 0) }); });   /* fix148-reserve */
     if (Array.isArray(p.variants) && p.variants.length && !vs.length) return;
-    if (!vs.length && !(money(p.price) > 0)) return;
-    const stock = vs.length ? vs.reduce(function (a, v) { return a + num(v.stock); }, 0) : num(p.stock);
-    const it = { id: String(p.id), n: name, p: vs.length ? Math.min.apply(null, vs.map(function (v) { return money(v.price); })) : money(p.price), u: unit,
+    if (!vs.length && !(money(p.price, D) > 0)) return;
+    const stock = vs.length ? vs.reduce(function (a, v) { return a + Math.max(0, num(v.stock)); }, 0) : num(p.stock) - (reserved[String(p.id) + '|'] || 0);   /* fix148-reserve */
+    const it = { id: String(p.id), n: name, p: vs.length ? Math.min.apply(null, vs.map(function (v) { return money(v.price, D); })) : money(p.price, D), u: unit,
       c: str(p.category, 60), f: FRACTION_UNITS.indexOf(unit) !== -1 ? 1 : 0, s: oversell || stock > 0 ? 1 : 0 };
     if (!oversell && !vs.length) it.m = Math.max(0, Math.min(MAX_QTY, round3(stock)));
     if (hasImg(p)) it.i = imgVer(p);
     if (vs.length) it.v = vs.map(function (v) {
-      const o = { id: String(v.id), n: str(v.name, 80), p: money(v.price), s: oversell || num(v.stock) > 0 ? 1 : 0 };
+      const o = { id: String(v.id), n: str(v.name, 80), p: money(v.price, D), s: oversell || num(v.stock) > 0 ? 1 : 0 };
       if (!oversell) o.m = Math.max(0, Math.min(MAX_QTY, round3(num(v.stock))));
       return o;
     });
@@ -164,19 +177,20 @@ async function loadCatalog(deps, bid, cfg, fresh) {
   const c = __cat.get(key);
   if (!fresh && c && now - c.at < CAT_TTL_MS) return c.data;
   const ref = deps.db.collection('businesses').doc(bid);
-  const res = await Promise.all([getData(ref), ref.collection('products').get()]);
+  const res = await Promise.all([getData(ref), ref.collection('products').get(), getData(ref.collection('meta').doc('botInbox'))]);
   const biz = res[0] || {};
-  const data = buildCatalog(res[1].docs.map(function (d) { return d.data(); }), biz, cfg);
+  const data = buildCatalog(res[1].docs.map(function (d) { return d.data(); }), biz, cfg, reservedFrom((res[2] || {}).orders, cfg.branchId));   /* fix148-reserve */
   data.biz = biz;
   __cat.set(key, { at: now, data: data });
   if (__cat.size > 300) __cat.delete(__cat.keys().next().value);
   return data;
 }
 function clearCatalogCache() { __cat.clear(); }
+function dropCatalog(bid) { Array.from(__cat.keys()).forEach(function (k) { if (k.indexOf(bid + '|') === 0) __cat.delete(k); }); }   /* fix148-reserve: band qilingan miqdor darhol ko'rinsin */
 function shopInfo(cat, cfg, now) {
   const b = cat.biz || {};
   return { name: str(b.businessName || (b.settings && b.settings.businessName) || 'Savdo Pos', 80), address: str(b.businessAddress, 200), phone: str(b.businessPhone, 40),
-    cur: str(b.currency || 'UZS', 6), note: cfg.note, pickup: cfg.pickup, delivery: cfg.delivery, fee: cfg.fee, freeFrom: cfg.freeFrom, minOrder: cfg.minOrder,
+    cur: str(b.currency || 'UZS', 6), note: cfg.note, pickup: cfg.pickup, delivery: cfg.delivery, fee: money(cfg.fee, M.decOf(str(b.currency || 'UZS', 6))), freeFrom: money(cfg.freeFrom, M.decOf(str(b.currency || 'UZS', 6))), minOrder: money(cfg.minOrder, M.decOf(str(b.currency || 'UZS', 6))),
     hours: cfg.hours, open: isOpen(cfg, now) && !cfg.paused, paused: cfg.paused };
 }
 
@@ -296,6 +310,7 @@ async function applyStatus(deps, bid, oid, to, extra, actor) {
   });
   if (res.code) return res;
   if (res.same) return { o: res.o, same: true };
+  dropCatalog(bid);
   const o = res.o, l = S.lg(res.lang), chat = o.tgUser && o.tgUser.id;
   if (chat) {
     let text = '';
@@ -420,24 +435,26 @@ async function handleWebApp(deps, body) {
     agg[k].q = round3(agg[k].q + q);
   }
   const items = []; let subtotal = 0;
+  const D = M.decOf(str((cat.biz && cat.biz.currency) || 'UZS', 6));   /* fix149-cents */
   for (let i = 0; i < order.length; i++) {
     const a = agg[order[i]], it = a.e.it, v = a.v;
     const max = v ? v.m : it.m;
     if (!cat.oversell && (v ? !v.s : !it.s)) return errBody(409, 'out_of_stock', { id: it.id, v: v ? v.id : '' });
     if (!cat.oversell && max != null && a.q > max) return errBody(409, 'out_of_stock', { id: it.id, v: v ? v.id : '', max: max });
-    const price = v ? v.p : it.p, sum = Math.round(price * a.q);
-    subtotal += sum;
+    const price = v ? v.p : it.p, sum = M.rnd(price * a.q, D);
+    subtotal = M.rnd(subtotal + sum, D);
     const line = { id: it.id, name: it.n, price: price, qty: a.q, unit: it.u, sum: sum };
     if (v) { line.v = v.id; line.vName = v.n; }
     items.push(line);
   }
-  if (cfg.minOrder > 0 && subtotal < cfg.minOrder) return errBody(400, 'min_order', { min: cfg.minOrder });
-  const fee = mode === 'delivery' ? ((cfg.freeFrom > 0 && subtotal >= cfg.freeFrom) ? 0 : cfg.fee) : 0;
+  const minO = money(cfg.minOrder, D), freeF = money(cfg.freeFrom, D);
+  if (minO > 0 && subtotal < minO) return errBody(400, 'min_order', { min: minO });
+  const fee = mode === 'delivery' ? ((freeF > 0 && subtotal >= freeF) ? 0 : money(cfg.fee, D)) : 0;
   const info = shopInfo(cat, cfg, now);
   const base = {
     id: oid, bid: bid, slug: cfg.slug, branchId: effBranch(cfg.branchId), status: 'new', createdAt: now, updatedAt: now,
     tgUser: { id: u.id, username: u.username, first: u.first, last: u.last }, name: name, phone: phone, phoneOk: phoneOk,
-    items: items, subtotal: subtotal, fee: fee, total: subtotal + fee, cur: info.cur, mode: mode,
+    items: items, subtotal: subtotal, fee: fee, total: M.rnd(subtotal + fee, D), cur: info.cur, mode: mode,
     address: mode === 'delivery' ? address : '', loc: mode === 'delivery' ? loc : null, comment: str(body.comment, 300),
     pay: body.pay === 'card' ? 'card' : 'cash', shop: info.name, shopAddr: info.address, lang: lang,
     history: [{ s: 'new', at: now, by: 'customer' }]
@@ -468,6 +485,7 @@ async function handleWebApp(deps, body) {
   });
   if (res.again) return okBody({ order: custSummary(res.again), again: true });
   if (res.busy) return errBody(429, 'busy');
+  dropCatalog(bid);
   const o = res.o;
   await send(deps, u.id, S.t('created', lang, { no: o.no, shop: esc(o.shop), body: orderBodyHtml(o, lang, false) }),
     { inline_keyboard: [[{ text: S.t('btnCancel', lang), callback_data: 'bo:c:' + oid }], [webBtn(lang, cfg.slug, 'btnShop')]] });
@@ -681,4 +699,4 @@ async function productImage(deps, slug, pid) {
 }
 
 module.exports = { handleSub, ownerMenu, hubBtn, hubUrl, handleWebApp, handleAppApi, onStart, onContact, onCallback, fallbackPrompt, applyStatus, cleanupOld, productImage, verifyInitData, webKeyFromToken,
-  normCfg, buildCatalog, isOpen, INBOX_MAX_BYTES, normPhone, orderIdFor, pruneInbox, clearCatalogCache, shopUrl, SLUG_RE, MAX_ACTIVE_PER_CUST, ORDERS_PER_HOUR, INBOX_MAX };
+  normCfg, buildCatalog, reservedFrom, isOpen, INBOX_MAX_BYTES, normPhone, orderIdFor, pruneInbox, clearCatalogCache, shopUrl, SLUG_RE, MAX_ACTIVE_PER_CUST, ORDERS_PER_HOUR, INBOX_MAX };

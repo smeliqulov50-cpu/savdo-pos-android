@@ -86,6 +86,15 @@ function fmt(n) {   /* ilovadagi kabi: 1 234 567 (bo'sh joy bilan), manfiy — "
   const s = String(Math.abs(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   return v < 0 ? '−' + s : s;
 }
+/* fix149-cents: USD va EUR — 2 xonali kasr ($2.50); qolgan valyutalar avvalgidek butun son */
+function decOf(cur) { return (cur === 'USD' || cur === 'EUR') ? 2 : 0; }
+function rnd(n, d) { const v = Number(n) || 0; return d ? Math.round(v * 100 + (v >= 0 ? 1e-7 : -1e-7)) / 100 : Math.round(v); }
+function fmtC(cur, n) {
+  const d = decOf(cur); if (!d) return fmt(n);
+  const v = rnd(n, d), a = Math.abs(v).toFixed(d).split('.');
+  const s = a[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + '.' + a[1];
+  return v < 0 ? '−' + s : s;
+}
 function qty(n) { const v = Number(n) || 0; return Number.isInteger(v) ? fmt(v) : String(Math.round(v * 100) / 100).replace('.', ','); }
 /* Ilovadagi CURRENCY_OPTIONS bilan bir xil (belgisi va joyi) */
 const CUR = {
@@ -100,8 +109,8 @@ function unitOf(lang, cur) {
   return c.all || c[lg(lang)] || c.uz;
 }
 function money(lang, cur, n, plus) {
-  const c = CUR[cur || 'UZS'] || {}, sym = unitOf(lang, cur), v = Math.round(Number(n) || 0);
-  const sign = v < 0 ? '−' : (plus && v > 0 ? '+' : ''), num = fmt(Math.abs(v));
+  const c = CUR[cur || 'UZS'] || {}, sym = unitOf(lang, cur), v = rnd(n, decOf(cur));   /* fix149-cents */
+  const sign = v < 0 ? '−' : (plus && v > 0 ? '+' : ''), num = fmtC(cur, Math.abs(v));
   return sign + (c.before ? sym + num : num + ' ' + sym);
 }
 function unitLabel(lang, u) { const m = W(lang).units; return m[u] || m.dona; }
@@ -119,26 +128,26 @@ function dailyText(lang, d, ctx) {
   } else {
     lines.push('💰 ' + esc(w.sales) + ': <b>' + money(lang, cur, d.revenue) + '</b>');
     lines.push('🧾 ' + esc(w.receipts) + ': ' + fmt(d.count));
-    lines.push('📈 ' + esc(w.profit) + ': ' + fmt(d.profit) + ' · ' + esc(w.expenses) + ': ' + fmt(d.expenses));
+    lines.push('📈 ' + esc(w.profit) + ': ' + fmtC(cur, d.profit) + ' · ' + esc(w.expenses) + ': ' + fmtC(cur, d.expenses));
     lines.push('✅ ' + esc(w.net) + ': <b>' + money(lang, cur, d.net) + '</b>');
     lines.push('');
-    lines.push('💵 ' + esc(w.cash) + ': ' + fmt(d.cash));
-    lines.push('💳 ' + esc(w.card) + ': ' + fmt(d.card));
-    lines.push('📝 ' + esc(w.credit) + ': ' + fmt(d.credit));
-    if (d.refundCount) lines.push('↩️ ' + esc(w.refunds) + ': ' + fmt(d.refundCount) + ' · ' + fmt(d.refundTotal));
-    if (d.debtPaid) lines.push('🤝 ' + esc(w.debtPaid) + ': ' + fmt(d.debtPaid));
+    lines.push('💵 ' + esc(w.cash) + ': ' + fmtC(cur, d.cash));
+    lines.push('💳 ' + esc(w.card) + ': ' + fmtC(cur, d.card));
+    lines.push('📝 ' + esc(w.credit) + ': ' + fmtC(cur, d.credit));
+    if (d.refundCount) lines.push('↩️ ' + esc(w.refunds) + ': ' + fmt(d.refundCount) + ' · ' + fmtC(cur, d.refundTotal));
+    if (d.debtPaid) lines.push('🤝 ' + esc(w.debtPaid) + ': ' + fmtC(cur, d.debtPaid));
   }
   lines.push('👥 ' + esc(w.totalDebt) + ': ' + money(lang, cur, d.totalDebt));
   if (d.top && d.top.length) {
     lines.push('');
     lines.push('🏆 <b>' + esc(w.top) + '</b>');
-    d.top.forEach(function (t, i) { lines.push((i + 1) + '. ' + esc(t.name) + ' — ×' + qty(t.qty) + ' — ' + fmt(t.sum)); });
+    d.top.forEach(function (t, i) { lines.push((i + 1) + '. ' + esc(t.name) + ' — ×' + qty(t.qty) + ' — ' + fmtC(cur, t.sum)); });
   }
   if (d.branches && d.branches.length > 1) {
     lines.push('');
     lines.push('🏬 <b>' + esc(w.branches) + '</b>');
     d.branches.forEach(function (b) {
-      lines.push('• ' + esc(b.name) + ': <b>' + fmt(b.revenue) + '</b> (' + esc(w.receipts) + ': ' + fmt(b.count) + ') · ' + esc(w.profit) + ': ' + fmt(b.profit) + (b.expenses ? ' · ' + esc(w.expenses) + ': ' + fmt(b.expenses) : ''));
+      lines.push('• ' + esc(b.name) + ': <b>' + fmtC(cur, b.revenue) + '</b> (' + esc(w.receipts) + ': ' + fmt(b.count) + ') · ' + esc(w.profit) + ': ' + fmtC(cur, b.profit) + (b.expenses ? ' · ' + esc(w.expenses) + ': ' + fmtC(cur, b.expenses) : ''));
     });
   }
   if (ctx.test) { lines.push(''); lines.push('<i>' + esc(w.testData) + '</i>'); }
@@ -154,13 +163,13 @@ function shiftText(lang, sh, ctx) {
   if (ctx.timeRange) lines.push('🕐 ' + esc(ctx.timeRange));
   const total = (Number(sh.cashTotal) || 0) + (Number(sh.cardTotal) || 0) + (Number(sh.creditTotal) || 0);
   lines.push('🧾 ' + esc(w.receipts) + ': ' + fmt(sh.salesCount) + ' · ' + esc(w.total) + ': <b>' + money(lang, cur, total) + '</b>');
-  lines.push('💵 ' + esc(w.cash) + ': ' + fmt(sh.cashTotal) + ' · 💳 ' + esc(w.card) + ': ' + fmt(sh.cardTotal) + ' · 📝 ' + esc(w.credit) + ': ' + fmt(sh.creditTotal));
-  if (Number(sh.discountTotal) > 0) lines.push('🏷 ' + esc(w.discounts) + ': ' + fmt(sh.discountTotal));
-  if (Number(sh.refundedTotal) > 0) lines.push('↩️ ' + esc(w.refunds) + ': ' + fmt(sh.refundedTotal));
+  lines.push('💵 ' + esc(w.cash) + ': ' + fmtC(cur, sh.cashTotal) + ' · 💳 ' + esc(w.card) + ': ' + fmtC(cur, sh.cardTotal) + ' · 📝 ' + esc(w.credit) + ': ' + fmtC(cur, sh.creditTotal));
+  if (Number(sh.discountTotal) > 0) lines.push('🏷 ' + esc(w.discounts) + ': ' + fmtC(cur, sh.discountTotal));
+  if (Number(sh.refundedTotal) > 0) lines.push('↩️ ' + esc(w.refunds) + ': ' + fmtC(cur, sh.refundedTotal));
   lines.push('💰 ' + esc(w.expected) + ': ' + money(lang, cur, sh.expectedCash));
   if (!sh.autoClosed) {
     lines.push('✍️ ' + esc(w.counted) + ': ' + money(lang, cur, sh.endCash));
-    const diff = Math.round((Number(sh.endCash) || 0) - (Number(sh.expectedCash) || 0));
+    const diff = rnd((Number(sh.endCash) || 0) - (Number(sh.expectedCash) || 0), decOf(cur));
     if (diff === 0) lines.push('✅ ' + esc(w.diffNone));
     else if (diff < 0) lines.push('⚠️ ' + esc(w.diff) + ': <b>' + money(lang, cur, diff) + '</b> (' + esc(w.short) + ')');
     else lines.push('➕ ' + esc(w.diff) + ': <b>' + money(lang, cur, diff, true) + '</b> (' + esc(w.over) + ')');
@@ -220,4 +229,4 @@ function rcptText(lang, a, ctx) {
   return lines.join('\n');
 }
 
-module.exports = { L, LANGS, lg, W, fmt, qty, unitOf, money, CUR, unitLabel, dailyText, shiftText, lowText, discText, rcptText, LOW_MAX };
+module.exports = { L, LANGS, lg, W, fmt, fmtC, decOf, rnd, qty, unitOf, money, CUR, unitLabel, dailyText, shiftText, lowText, discText, rcptText, LOW_MAX };

@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Savdo Pos — Maxfiylik siyosati</title>
 <style>body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:760px;margin:0 auto;padding:24px 18px;line-height:1.55;color:#16233b}h1{font-size:24px}h2{font-size:18px;margin-top:26px}</style></head><body>
-<h1>Savdo Pos — Maxfiylik siyosati</h1><p><i>Yangilangan sana: 2026-yil oktabr</i></p><!-- fix116-terms -->
+<h1>Savdo Pos — Maxfiylik siyosati</h1><p><i>Yangilangan sana: 2026-yil 20-oktabr</i></p><!-- fix116-terms -->
 <p>Savdo Pos — do'konlar va restoranlar uchun savdo hisobi ilovasi. Ushbu siyosat ilova qanday ma'lumotlarni to'plashi, nima uchun va qanday saqlashini tushuntiradi.</p>
 <h2>1. Qanday ma'lumotlar to'planadi</h2><ul>
 <li><b>Akkaunt:</b> biznes egasining email manzili (kirish uchun), biznes nomi, manzili, telefoni.</li>
@@ -14,6 +14,10 @@
 <p><b>Do'konlararo qarzlar:</b> agar mijoz ham Savdo Pos ishlatsa va ilovada o'z telefon raqamini bog'lagan bo'lsa, do'kon shu raqam bilan yozgan qarz, to'lovlar tarixi va nasiya cheklari (mahsulot nomi, soni, narxi, summa), do'kon nomi va telefoni o'sha mijozga faqat ko'rish uchun ko'rsatiladi; qarz yozilganda yoki to'langanda unga bildirishnoma yuboriladi. Do'konning tannarxlari, xodimlar ismi va boshqa ma'lumotlari ko'rsatilmaydi. Bitta raqam faqat bitta akkauntga bog'lanadi.</p>
 <h2>3. Saqlash va xavfsizlik</h2><p>Ma'lumotlar Google Firebase (Cloud Firestore) serverlarida shifrlangan ulanish orqali saqlanadi; har bir biznes faqat o'z ma'lumotlarini ko'ra oladi. Nusxasi foydalanuvchi qurilmasida ham saqlanadi (internetsiz ishlash uchun).</p>
 <h2>4. Onlayn buyurtma sahifasi</h2><p>Agar biznes egasi onlayn do'konni yoqsa, mahsulot nomlari, narxlari va do'kon aloqa ma'lumotlari ochiq sahifada ko'rinadi. Buni sozlamalardan istalgan payt o'chirish mumkin.</p>
+<h2>4.1. Telegram bot</h2><!-- fix147-privacy -->
+<p><b>Egasi uchun hisobotlar.</b> Biznes egasi o'zi ulagan Telegram chatlarga savdo hisobotlari, smena, qoldiq va boshqa xabarlar yuboriladi. Faqat ulangan chatlar oladi; ulanishni ilovada yoki botda <code>/stop</code> bilan uzish mumkin.</p>
+<p><b>Obuna to'lovi.</b> Bot orqali to'lovni Telegram Payments va Click amalga oshiradi. Karta ma'lumotlari Click/Telegram'da qayta ishlanadi, ilova va bizning server karta raqamini ko'rmaydi va saqlamaydi; faqat to'lov summasi, tarif va to'lov identifikatori saqlanadi.</p>
+<p><b>Mijozlarning buyurtmalari.</b> Do'kon bot orqali buyurtmani yoqsa, buyurtma beruvchi mijozdan quyidagilar olinadi: Telegram ismi, foydalanuvchi nomi va ID raqami, telefon raqami (mijoz o'zi yuboradi yoki yozadi), yetkazib berish manzili va mijoz o'zi qo'shsa joylashuvi, buyurtma tarkibi, izoh va to'lov usuli. Bu ma'lumotlar faqat o'sha do'konga buyurtmani bajarish uchun ko'rsatiladi va buyurtma holati haqida mijozga bot orqali xabar berish uchun ishlatiladi. Buyurtmalar 90 kundan keyin serverdan o'chiriladi; do'kon akkaunti o'chirilganda ularning hammasi ham o'chadi. Mijoz istalgan payt botni to'xtatishi (bloklashi) mumkin.</p>
 <h2>5. Ma'lumotlarni o'chirish</h2><p>Biznes egasi ilovada <b>Sozlamalar → Hisob va email → Akkauntni o'chirish</b> orqali akkaunt va barcha ma'lumotlarni butunlay o'chira oladi. Batafsil: <a href="delete-account.html">delete-account.html</a>.</p>
 <h2>6. Bog'lanish</h2><p>Savollar bo'yicha: <b>smeliqulov50@gmail.com</b> yoki ilova ichidagi "Yordam kerakmi?" bo'limi.</p>
 <p style="margin-top:22px"><a href="terms-of-service.html?lang=uz">Foydalanish shartlari</a></p>

@@ -475,7 +475,7 @@ test('egasi: ulanganda, /yordam va /obuna da pastki menyu "Do\'konim"; mijoz odd
   assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.web_app.url.endsWith('?v=me')));
   tg.calls.length = 0;
   await core.handleUpdate(deps, m('/obuna'));
-  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.text === "Do'konim"));
+  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.text === "💳 Obuna · Do'konim"));
   const last = tg.sent[tg.sent.length - 1];
   assert.ok(last.reply_markup.inline_keyboard.pop()[0].web_app.url.endsWith('?v=me'));
   const c = mk();
@@ -483,4 +483,52 @@ test('egasi: ulanganda, /yordam va /obuna da pastki menyu "Do\'konim"; mijoz odd
   c.tg.calls.length = 0;
   await core.handleUpdate(c.deps, { message: { message_id: 2, chat: { id: CUST2, type: 'private' }, from: { id: CUST2, language_code: 'uz' }, text: 'salom' } });
   assert.ok(c.tg.calls.some(x => x.method === 'setChatMenuButton' && x.params.menu_button.web_app.url.endsWith('?s=sardor')));
+});
+
+test('fix148-reserve: faol buyurtmadagi miqdor band — boshqa mijoz ololmaydi; rad etilsa bo\'shaydi; variant ham', async () => {
+  const { deps } = mk();
+  const a = await order(deps, { items: [{ id: 'p2', q: 2 }, { id: 'p6', v: 'v1', q: 1 }] });
+  assert.equal(a.body.ok, true);
+  let cat = await shop.handleWebApp(deps, { initData: ID2, action: 'catalog', slug: 'sardor' });
+  const p2 = cat.body.items.find(x => x.id === 'p2'), p6 = cat.body.items.find(x => x.id === 'p6');
+  assert.equal(p2.m, 1); assert.equal(p6.v.find(v => v.id === 'v1').s, 0); assert.equal(p6.s, 0);
+  assert.equal((await order(deps, { items: [{ id: 'p2', q: 2 }] }, ID2)).body.code, 'out_of_stock');
+  assert.equal((await order(deps, { items: [{ id: 'p2', q: 1 }] }, ID2)).body.ok, true);
+  assert.equal((await order(deps, { items: [{ id: 'p2', q: 1 }] }, ID2)).body.code, 'out_of_stock');
+  await shop.handleAppApi(deps, { bid: BID, owner: true }, BID, 'boSet', { oid: a.body.order.id, to: 'rejected', reason: 'x' });
+  cat = await shop.handleWebApp(deps, { initData: ID2, action: 'catalog', slug: 'sardor' });
+  assert.equal(cat.body.items.find(x => x.id === 'p2').m, 2);
+  assert.equal(cat.body.items.find(x => x.id === 'p6').v.find(v => v.id === 'v1').s, 1);
+});
+test('fix148-reserve: boshqa filial buyurtmasi va yakunlangan buyurtma band qilmaydi', () => {
+  const r = shop.reservedFrom({ a: { status: 'accepted', branchId: 'main', items: [{ id: 'p1', qty: 2 }] }, b: { status: 'done', branchId: 'main', items: [{ id: 'p1', qty: 5 }] }, c: { status: 'new', branchId: 'b2', items: [{ id: 'p1', qty: 7 }] }, d: { status: 'new', items: [{ id: 'p1', v: 'v1', qty: 1.5 }] } }, 'main');
+  assert.deepEqual(r, { 'p1|': 2, 'p1|v1': 1.5 });
+});
+
+test('fix149-cents: dollarda narx, yetkazish va jami tiyin bilan; so\'mda butun son', async () => {
+  const sd = seed();
+  sd['businesses/' + BID].currency = 'USD';
+  sd['tgShop/' + BID] = Object.assign({}, sd['tgShop/' + BID], { fee: 1.5, freeFrom: 50, minOrder: 2.25 });
+  sd['businesses/' + BID + '/products/p1'] = prod('p1', { name: 'Cola 1L', price: 1.99 });
+  sd['businesses/' + BID + '/products/p3'] = prod('p3', { name: 'Shakar', price: 1.333, unit: 'kg', stock: 2.5 });
+  sd['businesses/' + BID + '/products/p6'] = prod('p6', { name: 'Futbolka', price: 0, variants: [{ id: 'v1', name: 'S', price: 0.004, stock: 1 }, { id: 'v2', name: 'M', price: 12.5, stock: 3 }] });
+  const { deps, db, tg } = mk(sd);
+  const c = await shop.handleWebApp(deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  assert.equal(c.body.items.find(x => x.id === 'p1').p, 1.99);
+  assert.equal(c.body.items.find(x => x.id === 'p3').p, 1.33);
+  assert.deepEqual(c.body.items.find(x => x.id === 'p6').v.map(v => v.id), ['v2']);   // 0.004$ — narxsiz hisoblanadi
+  assert.equal(c.body.shop.fee, 1.5); assert.equal(c.body.shop.minOrder, 2.25); assert.equal(c.body.shop.cur, 'USD');
+  const small = await order(deps, { items: [{ id: 'p1', q: 1 }] });
+  assert.equal(small.body.code, 'min_order'); assert.equal(small.body.min, 2.25);
+  const r = await order(deps, { items: [{ id: 'p1', q: 3 }, { id: 'p3', q: 1.25 }, { id: 'p6', v: 'v2', q: 1 }], mode: 'delivery', address: 'Chilonzor 1' });
+  assert.equal(r.body.ok, true, JSON.stringify(r.body));
+  const o = db.store['tgOrders/' + r.body.order.id];
+  assert.deepEqual(o.items.map(x => x.sum), [5.97, 1.66, 12.5]);
+  assert.equal(o.subtotal, 20.13); assert.equal(o.fee, 1.5); assert.equal(o.total, 21.63);
+  const txt = ownerMsgs(tg).map(m => m.text).join('\n');
+  assert.ok(txt.indexOf('$21.63') !== -1 && txt.indexOf('$5.97') !== -1, txt);
+  const { deps: d2, db: db2 } = mk(seed({ ['businesses/' + BID + '/products/p3']: prod('p3', { name: 'Shakar', price: 14000.4, unit: 'kg', stock: 2.5 }) }));
+  const r2 = await order(d2, { items: [{ id: 'p3', q: 1.25 }] });
+  const o2 = db2.store['tgOrders/' + r2.body.order.id];
+  assert.equal(o2.items[0].price, 14000); assert.equal(o2.items[0].sum, 17500); assert.equal(o2.total, 17500);   // so'mda avvalgidek butun
 });

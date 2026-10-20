@@ -283,6 +283,7 @@ exports.telegramTick = onSchedule({ schedule: 'every 10 minutes', timeZone: 'Asi
   try {
     const st = await __TGR.runTick(__tgDepsLite(), new Date());
     if (st.daily || st.low || st.errors) console.log('telegramTick', JSON.stringify(st));
+    const __tn = new Date(); if ((__tn.getUTCHours() + 5) % 24 === 10 && __tn.getUTCMinutes() < 10) { try { const r = await require('./src/telegram/pay').subRemind(__tgDepsLite(), Date.now()); if (r.sent || r.failed) console.log('subRemind', JSON.stringify(r)); } catch (e) { console.error('subRemind xatosi', e && e.message); } }   /* fix150-subbot */
     if (new Date().getMinutes() < 10) { try { const n = await require('./src/telegram/shop').cleanupOld(__tgDepsLite()); if (n) console.log('botShopCleanup', n); } catch (e) { console.error('botShopCleanup xatosi', e && e.message); } }   /* fix145-botshop: 90 kundan eski buyurtmalar */
   } catch (e) { console.error('telegramTick xatosi', e && e.message); }
 });
