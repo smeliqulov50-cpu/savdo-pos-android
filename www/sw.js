@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sardor-pos-v1792587686866';
+const CACHE_NAME = 'sardor-pos-v1792588229288';
 const CORE_ASSETS = ['./manifest.json', './icon-192.png', './icon-512.png'];
 
 // --- Firebase Cloud Messaging (background push) ------------------------
