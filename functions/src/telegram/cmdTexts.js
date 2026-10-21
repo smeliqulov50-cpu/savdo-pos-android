@@ -4,14 +4,15 @@ const { esc } = require('./texts');
 const LANGS = ['uz', 'ru', 'en', 'kk', 'ky', 'tg'];
 const LANG_NAMES = { uz: "🇺🇿 O'zbekcha", ru: '🇷🇺 Русский', en: '🇬🇧 English', kk: '🇰🇿 Қазақша', ky: '🇰🇬 Кыргызча', tg: '🇹🇯 Тоҷикӣ' };
 /* Buyruq nomlari: o'zbekcha va xalqaro (boshqa tillar menyusida). Ikkalasi ham har doim ishlaydi. */
-const NAMES_UZ = { today: 'bugun', yday: 'kecha', debts: 'qarzlar', low: 'kam_qolgan', pay: 'obuna', lang: 'til', help: 'yordam', stop: 'stop' };
-const NAMES_INT = { today: 'today', yday: 'yesterday', debts: 'debts', low: 'low', pay: 'pay', lang: 'lang', help: 'help', stop: 'stop' };
+const NAMES_UZ = { today: 'bugun', yday: 'kecha', debts: 'qarzlar', low: 'kam_qolgan', pay: 'obuna', my: 'mening', lang: 'til', help: 'yordam', stop: 'stop' };   /* fix155-custbot: /mening */
+const NAMES_INT = { today: 'today', yday: 'yesterday', debts: 'debts', low: 'low', pay: 'pay', my: 'my', lang: 'lang', help: 'help', stop: 'stop' };
 function names(lang) { return lang === 'uz' ? NAMES_UZ : NAMES_INT; }
 const T = {
   dToday: { uz: 'Bugungi savdo (hozirgacha)', ru: 'Продажи за сегодня (на текущий момент)', en: "Today's sales (so far)", kk: 'Бүгінгі сауда (қазірге дейін)', ky: 'Бүгүнкү соода (азырга чейин)', tg: 'Савдои имрӯз (то ҳозир)' },
   dYday: { uz: 'Kechagi hisobot', ru: 'Отчёт за вчера', en: "Yesterday's report", kk: 'Кешегі есеп', ky: 'Кечээки отчёт', tg: 'Ҳисоботи дирӯз' },
   dDebts: { uz: 'Qarzlar: mijozlar va yetkazib beruvchilar', ru: 'Долги: клиенты и поставщики', en: 'Debts: customers and suppliers', kk: 'Қарыздар: клиенттер және жеткізушілер', ky: 'Карыздар: кардарлар жана жеткирүүчүлөр', tg: 'Қарзҳо: мизоҷон ва таъминкунандагон' },
   dLow: { uz: 'Kam qolgan tovarlar', ru: 'Заканчивающиеся товары', en: 'Low-stock items', kk: 'Азайған тауарлар', ky: 'Азайып калган товарлар', tg: 'Молҳои камбоқимонда' },
+  dMy: { uz: 'Mening sahifam: qarz, xaridlar, buyurtmalar', ru: 'Моя страница: долг, покупки, заказы', en: 'My page: debt, purchases, orders', kk: 'Менің бетім: қарыз, сатып алулар', ky: 'Менин барагым: карыз, сатып алуулар', tg: 'Саҳифаи ман: қарз, харидҳо' },   /* fix155-custbot */
   dPay: { uz: "Obunani to'lash", ru: 'Оплатить подписку', en: 'Pay for the subscription', kk: 'Жазылымды төлеу', ky: 'Жазылууну төлөө', tg: 'Пардохти обуна' },
   dLang: { uz: 'Tilni tanlash', ru: 'Выбрать язык', en: 'Choose language', kk: 'Тілді таңдау', ky: 'Тилди тандоо', tg: 'Интихоби забон' },
   dHelp: { uz: 'Yordam va menyu', ru: 'Помощь и меню', en: 'Help and menu', kk: 'Көмек және мәзір', ky: 'Жардам жана меню', tg: 'Ёрӣ ва меню' },

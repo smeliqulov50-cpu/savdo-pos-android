@@ -283,7 +283,8 @@ exports.telegramTick = onSchedule({ schedule: 'every 10 minutes', timeZone: 'Asi
   try {
     const st = await __TGR.runTick(__tgDepsLite(), new Date());
     if (st.daily || st.low || st.errors) console.log('telegramTick', JSON.stringify(st));
-    const __tn = new Date(); if ((__tn.getUTCHours() + 5) % 24 === 10 && __tn.getUTCMinutes() < 10) { try { const r = await require('./src/telegram/pay').subRemind(__tgDepsLite(), Date.now()); if (r.sent || r.failed) console.log('subRemind', JSON.stringify(r)); } catch (e) { console.error('subRemind xatosi', e && e.message); } }   /* fix150-subbot */
+    const __tn = new Date(); if ((__tn.getUTCHours() + 5) % 24 === 10 && __tn.getUTCMinutes() < 10) { try { const r = await require('./src/telegram/pay').subRemind(__tgDepsLite(), Date.now()); if (r.sent || r.failed) console.log('subRemind', JSON.stringify(r)); } catch (e) { console.error('subRemind xatosi', e && e.message); }
+      try { const r2 = await require('./src/telegram/cust').remindTick(__tgDepsLite(), Date.now()); if (r2.sent) console.log('custRemind', JSON.stringify(r2)); } catch (e) { console.error('custRemind xatosi', e && e.message); } }   /* fix150-subbot; fix155-custbot */
     if (new Date().getMinutes() < 10) { try { const n = await require('./src/telegram/shop').cleanupOld(__tgDepsLite()); if (n) console.log('botShopCleanup', n); } catch (e) { console.error('botShopCleanup xatosi', e && e.message); } }   /* fix145-botshop: 90 kundan eski buyurtmalar */
   } catch (e) { console.error('telegramTick xatosi', e && e.message); }
 });
@@ -293,7 +294,14 @@ exports.telegramSaleAlert = onDocumentCreated({ document: 'businesses/{bizId}/sa
   try {
     const r = await __TGR.handleSaleCreated(__tgDepsLite(), event.params.bizId, event.params.saleId, snap.data());
     if (r && r.alert) console.log('telegramSaleAlert', JSON.stringify(r));
+    try { const c = await require('./src/telegram/cust').onSale(__tgDepsLite(), event.params.bizId, snap.data()); if (c && c.sent) console.log('custReceipt', event.params.saleId); } catch (e) { console.error('custReceipt xatosi', e && e.message); }   /* fix155-custbot */
   } catch (e) { console.error('telegramSaleAlert xatosi', e && e.message); }
+});
+/* fix155-custbot: qarz to'lovi — mijozga tasdiq */
+exports.telegramLedgerAlert = onDocumentCreated({ document: 'businesses/{bizId}/ledger/{entryId}', secrets: __tgSecrets }, async function (event) {
+  const snap = event.data;
+  if (!snap) return;
+  try { const r = await require('./src/telegram/cust').onLedger(__tgDepsLite(), event.params.bizId, snap.data()); if (r && r.sent) console.log('custPaid', event.params.entryId); } catch (e) { console.error('telegramLedgerAlert xatosi', e && e.message); }
 });
 exports.telegramAuditAlert = onDocumentCreated({ document: 'businesses/{bizId}/audit/{auditId}', secrets: __tgSecrets }, async function (event) {
   const snap = event.data;

@@ -91,6 +91,7 @@ async function handleApi(deps, uid, body) {
     return okBody(out);
   }
   if (/^bo[A-Z]/.test(action)) return require('./shop').handleAppApi(deps, caller, uid, action, body);   /* fix145-botshop: bot orqali buyurtma */
+  if (/^cu[A-Z]/.test(action)) return require('./cust').handleAppApi(deps, caller, uid, action, body);   /* fix155-custbot */
   if (!caller.owner) return errBody(403, 'owner_only');
   if (action === 'prefs' || action === 'test') return require('./reports').handleAction(deps, caller, action, body);   /* fix121-tg2: xabar sozlamalari, sinov */
   if (action === 'link') {
@@ -194,6 +195,7 @@ async function handleUpdate(deps, upd) {
     const cq = upd.callback_query; if (!cq.message || !cq.message.chat || cq.message.chat.type !== 'private') return { ignored: true };
     const cl = await __cmd.chatLang(deps, cq.message.chat.id, cq.from && cq.from.language_code);
     if (/^bo:/.test(String(cq.data || ''))) { const r0 = await require('./shop').onCallback(deps, cq, cl); if (r0) return r0; }   /* fix145-botshop */
+    if (/^cu:/.test(String(cq.data || ''))) { const r1 = await require('./cust').onCallback(deps, cq, cl); if (r1) return r1; }   /* fix155-custbot */
     const r = await __cmd.onCallback(deps, cq, cl);
     if (r) return r;
     return __pay.onCallback(deps, cq, cl);
@@ -217,6 +219,7 @@ async function handleUpdate(deps, upd) {
   if (msg.contact) return require('./shop').onContact(deps, msg, lang);   /* fix145-botshop: mijoz raqami */
   const m = /^\/start(?:@[A-Za-z0-9_]+)?(?:\s+([A-Za-z0-9_-]{4,64}))?$/.exec(text);
   if (m && m[1] && /^s_/.test(m[1])) return require('./shop').onStart(deps, msg, m[1].slice(2), lang);   /* fix145-botshop: do'kon havolasi */
+  if (m && m[1] && /^c_/.test(m[1])) return require('./cust').linkByCode(deps, msg, m[1].slice(2), lang);   /* fix155-custbot: mijoz havolasi */
   if (/^\/start(?:@[A-Za-z0-9_]+)?\s+pay$/.test(text)) return __cmd.run(deps, msg.chat.id, 'pay', lang);   /* fix150-subbot: t.me/<bot>?start=pay — tariflar */
   const kind = __cmd.parse(text);
   let out;
@@ -229,7 +232,7 @@ async function handleUpdate(deps, upd) {
   } else {
     const ch = await getData(deps.db.collection('tgChats').doc(String(msg.chat.id)));
     const bids = ch && Array.isArray(ch.bids) ? ch.bids : [];
-    const __cm = await require('./shop').onCustomerText(deps, msg, lang);   /* fix154-iso: do'kon egasi ham boshqa do'konda mijoz bo'lishi mumkin */
+    const __cm = (await require('./cust').onText(deps, msg, lang)) || (await require('./shop').onCustomerText(deps, msg, lang));   /* fix155-custbot: chek bo'yicha savol */   /* fix154-iso: do'kon egasi ham boshqa do'konda mijoz bo'lishi mumkin */
     if (__cm) out = __cm;
     else if (bids.length) {
       const names = [];

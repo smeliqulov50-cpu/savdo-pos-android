@@ -76,14 +76,17 @@ function normCfg(raw) {
     seq: Math.max(0, Math.floor(num(raw.seq))),
     allProducts: raw.allProducts === true,   /* fix153-boplus: hamma mahsulot botda (o'chirilganlardan tashqari) */
     autoAccept: raw.autoAccept === true,
-    autoEta: Math.max(0, Math.min(240, Math.round(num(raw.autoEta))))
+    autoEta: Math.max(0, Math.min(240, Math.round(num(raw.autoEta)))),
+    custReceipts: raw.custReceipts !== false,   /* fix155-custbot */
+    custByPhone: raw.custByPhone !== false,
+    debtRemind: { on: !!(raw.debtRemind && raw.debtRemind.on === true), days: Math.max(3, Math.min(60, Math.round(num(raw.debtRemind && raw.debtRemind.days)) || 7)), minDebt: money(raw.debtRemind && raw.debtRemind.minDebt, 2), lastRun: Math.max(0, num(raw.debtRemind && raw.debtRemind.lastRun)) }
   };
   if (!c.pickup && !c.delivery) c.pickup = true;
   return c;
 }
 function publicCfg(c) {
   return { enabled: c.enabled, slug: c.slug, branchId: c.branchId, pickup: c.pickup, delivery: c.delivery, fee: c.fee, freeFrom: c.freeFrom, minOrder: c.minOrder,
-    note: c.note, hours: c.hours, paused: c.paused, notifyTg: c.notifyTg, tz: c.tz, allProducts: c.allProducts, autoAccept: c.autoAccept, autoEta: c.autoEta };
+    note: c.note, hours: c.hours, paused: c.paused, notifyTg: c.notifyTg, tz: c.tz, allProducts: c.allProducts, autoAccept: c.autoAccept, autoEta: c.autoEta, custReceipts: c.custReceipts, custByPhone: c.custByPhone, debtRemind: c.debtRemind };
 }
 function localHm(tz, ms) {
   try {
@@ -461,6 +464,7 @@ async function handleWebApp(deps, body) {
   const u = auth.user, db = deps.db;
   const action = str(body.action, 20);
   if (action === 'subInfo' || action === 'subPay') return handleSub(deps, u, action, body);   /* fix146-tgsub */
+  if (/^my[A-Z]/.test(action)) return require('./cust').handleMy(deps, u, action, body, S.LANGS.indexOf(body.lang) !== -1 ? body.lang : S.lg(String(u.lang || '').slice(0, 2)));   /* fix155-custbot */
   const shop = await resolveSlug(db, body.slug);
   if (!shop || !shop.cfg.enabled) return errBody(404, 'closed');
   const bid = shop.bid, cfg = shop.cfg;
@@ -777,6 +781,14 @@ async function onContact(deps, msg, lang) {
   const kb = { remove_keyboard: true };
   await send(deps, msg.chat.id, S.t('phoneSaved', l, { phone: esc(phone) }), kb);
   if (cust.lastShop) await send(deps, msg.chat.id, S.t('fallback', l, { shop: esc(await shopNameBySlug(deps, cust.lastShop)) }), { inline_keyboard: [[webBtn(l, cust.lastShop)]] });
+  /* fix155-custbot: raqam do'kon ro'yxatida bo'lsa — mijoz sifatida ulanadi */
+  try {
+    const CU = require('./cust');
+    const bids = (Array.isArray(cust.recent) ? cust.recent : []).map(function (r) { return r && r.bid; }).filter(Boolean);
+    if (cust.lastShop) { const m = await getData(deps.db.collection('tgSlug').doc(String(cust.lastShop))); if (m && m.bid) bids.push(String(m.bid)); }
+    const hits = await CU.matchByPhone(deps, msg.from.id, bids);
+    for (let i = 0; i < hits.length; i++) { const b = (await getData(deps.db.collection('businesses').doc(hits[i].bid))) || {}; await send(deps, msg.chat.id, require('./custTexts').txt('linked', l, { shop: esc(str(b.businessName || 'Savdo Pos', 80)) }), { inline_keyboard: [[CU.myBtn(l)]] }); }
+  } catch (e) {}
   return { contact: 'saved' };
 }
 async function shopNameBySlug(deps, slug) {

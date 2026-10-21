@@ -117,6 +117,27 @@ header{position:sticky;top:0;z-index:5;background:var(--surface);padding:12px 14
 .hub-ok b{font-size:18px;animation:hubUp .4s .5s both}
 .hub-ok i{position:absolute;top:0;width:8px;height:14px;border-radius:2px;animation:hubFall 1.9s cubic-bezier(.3,.6,.5,1) forwards}
 @media (prefers-reduced-motion:reduce){.hub-anim>header,.hub-anim>.sec,.hub-anim>.banner,.hub-best .addb,.hub-dot,.hub-ok,.hub-ok svg,.hub-ok b{animation:none!important}.hub-ok circle,.hub-ok path{animation:none!important;stroke-dashoffset:0}.hub-ok i{display:none}}
+/* fix155-custbot: mijozning sahifasi (?v=my) */
+.my-head{padding:14px 14px 4px}.my-head h1{margin:0;font-size:20px}
+.my-card{background:var(--surface);border-radius:18px;margin:10px 14px;padding:14px;animation:hubUp .4s cubic-bezier(.2,.8,.2,1) both}
+.my-card.debt{background:linear-gradient(135deg,color-mix(in srgb,var(--btn) 14%,var(--surface)),var(--surface))}
+.my-big{font-size:28px;font-weight:800;letter-spacing:-.5px;margin:4px 0 2px}
+.my-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.my-row:first-of-type{border-top:none}
+.my-bar{height:8px;border-radius:999px;background:var(--line);overflow:hidden;margin:8px 0 4px}.my-bar i{display:block;height:100%;border-radius:999px;background:var(--ok);transition:width .6s ease}
+.my-bar i.w{background:#e3a008}.my-bar i.d{background:var(--danger)}
+.my-badge{display:inline-block;font-size:12px;font-weight:800;border-radius:999px;padding:4px 10px;background:var(--soft);color:var(--link)}
+.my-badge.ok{background:color-mix(in srgb,var(--ok) 14%,var(--surface));color:var(--ok)}.my-badge.warn{background:#fff6e5;color:#b7791f}
+.my-acts{display:flex;gap:8px;margin-top:10px}.my-acts .btn2{flex:1;margin:0}
+.my-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);cursor:pointer}
+.my-item:first-child{border-top:none}.my-ic{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--soft);flex-shrink:0}
+.my-ic.p{background:color-mix(in srgb,var(--ok) 14%,var(--surface))}.my-ic.c{background:#fff6e5}
+.my-it{flex:1;min-width:0}.my-it b{display:block;font-size:14px}.my-it .muted{font-size:12px}
+.my-sum{font-weight:800;white-space:nowrap}.my-sum.p{color:var(--ok)}
+.my-lines{margin:0 0 6px 48px;font-size:13px;color:var(--hint);display:none}.my-item.open + .my-lines{display:block}
+.my-empty{text-align:center;padding:40px 20px;color:var(--hint)}
+.my-tog{position:relative;width:44px;height:26px;border-radius:999px;background:var(--line);border:none;flex-shrink:0;transition:background .2s}.my-tog.on{background:var(--ok)}
+.my-tog::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .2s}.my-tog.on::after{left:21px}
 </style>
 </head>
 <body>
@@ -217,6 +238,29 @@ var I = {
  clear:["Savatni tozalash","Очистить корзину","Clear cart","Себетті тазалау","Себетти тазалоо","Тоза кардани сабад"],
  qtyP:["Miqdorni kiriting","Введите количество","Enter quantity","Санын енгізіңіз","Санын жазыңыз","Миқдорро ворид кунед"],
  itemsN:["{n} ta","{n} шт.","{n} items","{n} дана","{n} даана","{n} адад"],
+ myTitle:["Mening sahifam","Моя страница","My page","Менің бетім","Менин барагым","Саҳифаи ман"],
+ myDebt:["Qarzim","Мой долг","My debt","Қарызым","Карызым","Қарзи ман"],
+ myNoDebt:["Qarzingiz yo'q 🎉","Долга нет 🎉","No debt 🎉","Қарыз жоқ 🎉","Карыз жок 🎉","Қарз нест 🎉"],
+ myLimit:["Limit","Лимит","Limit","Лимит","Чек","Ҳад"],
+ myLeft:["{sum} qoldi","осталось {sum}","{sum} left","{sum} қалды","{sum} калды","{sum} монд"],
+ myBonus:["Bonus","Бонус","Bonus","Бонус","Бонус","Бонус"],
+ myGood:["Ishonchli mijoz","Надёжный клиент","Trusted customer","Сенімді клиент","Ишенимдүү кардар","Мизоҷи боэътимод"],
+ myNear:["Limitga yaqin","Близко к лимиту","Near the limit","Лимитке жақын","Чекке жакын","Наздик ба ҳад"],
+ myOver:["Limitdan oshgan","Лимит превышен","Over the limit","Лимиттен асқан","Чектен ашкан","Аз ҳад гузашт"],
+ myHist:["Xaridlar va to'lovlar","Покупки и платежи","Purchases and payments","Сатып алулар мен төлемдер","Сатып алуулар жана төлөмдөр","Харидҳо ва пардохтҳо"],
+ myHistNone:["Hali xarid yo'q","Покупок пока нет","No purchases yet","Әзірге сатып алу жоқ","Азырынча сатып алуу жок","Ҳанӯз харид нест"],
+ myPay:["To'lov","Платёж","Payment","Төлем","Төлөм","Пардохт"],
+ myReceipt:["Chek №{n}","Чек №{n}","Receipt #{n}","Чек №{n}","Чек №{n}","Чек №{n}"],
+ myCredit:["nasiya {sum}","в долг {sum}","on credit {sum}","қарызға {sum}","карызга {sum}","ба қарз {sum}"],
+ myNotify:["Chek va eslatmalar botga kelsin","Чеки и напоминания в бот","Receipts and reminders in the bot","Чектер мен еске салулар ботқа","Чектер жана эскертүүлөр ботко","Чекҳо ва ёдовариҳо ба бот"],
+ myCall:["📞 Qo'ng'iroq","📞 Позвонить","📞 Call","📞 Қоңырау","📞 Чалуу","📞 Занг"],
+ myCat:["🛍 Katalog","🛍 Каталог","🛍 Catalog","🛍 Каталог","🛍 Каталог","🛍 Каталог"],
+ myOrders:["📦 Buyurtmalarim","📦 Мои заказы","📦 My orders","📦 Тапсырыстарым","📦 Буйрутмаларым","📦 Фармоишҳоям"],
+ myUnlink:["Do'kondan uzilish","Отключиться от магазина","Unlink from the shop","Дүкеннен ажырау","Дүкөндөн ажыроо","Аз мағоза ҷудо шудан"],
+ myUnlinkQ:["Bu do'kon ma'lumotlari botda ko'rinmaydi. Davom etasizmi?","Данные этого магазина перестанут показываться в боте. Продолжить?","This shop's data will no longer show in the bot. Continue?","Бұл дүкен деректері ботта көрінбейді. Жалғастыру?","Бул дүкөн маалыматы ботто көрүнбөйт. Улантасызбы?","Маълумоти ин мағоза дар бот нишон дода намешавад. Давом?"],
+ myNone:["Siz hali hech bir do'konga mijoz sifatida ulanmagansiz.","Вы ещё не подключены ни к одному магазину.","You are not linked to any shop yet.","Сіз әлі ешбір дүкенге қосылмағансыз.","Сиз азырынча эч бир дүкөнгө туташа элексиз.","Шумо ҳанӯз ба ягон мағоза пайваст нашудаед."],
+ myNoneHow:["Do'kondan havola so'rang yoki botga telefon raqamingizni yuboring (📎 → Kontakt): raqamingiz do'kon ro'yxatida bo'lsa, o'zi ulanadi.","Попросите у магазина ссылку или отправьте боту свой номер (📎 → Контакт): если он есть в списке магазина, подключение произойдёт само.","Ask the shop for a link or send the bot your phone (📎 → Contact): if it is in the shop's list, you get linked automatically.","Дүкеннен сілтеме сұраңыз немесе ботқа нөміріңізді жіберіңіз (📎 → Контакт).","Дүкөндөн шилтеме сураңыз же ботко номериңизди жөнөтүңүз (📎 → Контакт).","Аз мағоза пайванд пурсед ё рақамро ба бот фиристед (📎 → Контакт)."],
+ mySince:["{d} dan beri mijoz","клиент с {d}","customer since {d}","{d} бастап клиент","{d} баштап кардар","мизоҷ аз {d}"],
  hubTitle:["Do'konim","Мой магазин","My shop","Менің дүкенім","Менин дүкөнүм","Мағозаи ман"],
  tabSub:["Obuna","Подписка","Subscription","Жазылым","Жазылуу","Обуна"],
  tabCat:["Katalog","Каталог","Catalog","Каталог","Каталог","Феҳрист"],
@@ -322,6 +366,7 @@ function applyCatalog(j){
 }
 /* ---------- fix146-tgsub: egasining sahifasi — obuna tariflari va o'z katalogi (?v=me) ---------- */
 var HUB = qs.get('v') === 'me';
+var MY = qs.get('v') === 'my';   /* fix155-custbot */
 var H = { data:null, tab: 'sub', shop: 0, busy:'', msg:'', msgOk:false, anim:true };   /* fix150-subbot: anim — kirish animatsiyasi */
 function hubDate(ms){ if(!ms) return '—'; var d = new Date(ms), z = function(n){ return (n < 10 ? '0' : '') + n; }; return z(d.getDate()) + '.' + z(d.getMonth() + 1) + '.' + d.getFullYear(); }
 function hubMoney(n){ return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' ' + ((CUR.UZS.l[LI]) || "so'm"); }
@@ -413,12 +458,62 @@ function hubBind(){
   };
   try{ if(TG && TG.BackButton) TG.BackButton.hide(); }catch(e){}
 }
+/* ---------- fix155-custbot: mijozning sahifasi ---------- */
+var Y = { data:null, shop:0, hist:{}, open:{} };
+function myMoney(n, cur){ var d = (cur === 'USD' || cur === 'EUR') ? 2 : 0; var v = d ? Math.round((Number(n) || 0) * 100) / 100 : Math.round(Number(n) || 0); var a = d ? Math.abs(v).toFixed(d).split('.') : [String(Math.abs(v))]; var str = a[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + (d ? '.' + a[1] : ''); var c = CUR[cur || 'UZS'] || CUR.UZS, sym = c.s || (c.l ? (c.l[LI] || c.l[0]) : ''); return (v < 0 ? '−' : '') + (c.b ? sym + str : str + ' ' + sym); }
+function myLoad(){ api('myHome').then(function(j){ if(!j.ok){ S.err = errText(j); S.view = 'fatal'; render(); return; } Y.data = j; if(Y.shop >= (j.shops || []).length) Y.shop = 0; myRender(); if(j.shops && j.shops.length) myHist(); }); }
+function myHist(){ var sh = Y.data.shops[Y.shop]; if(!sh || Y.hist[sh.h]) return; api('myHist', { h: sh.h }).then(function(j){ if(j.ok){ Y.hist[sh.h] = j.rows || []; myRender(); } }); }
+function myRender(){
+  var app = document.getElementById('app'), d = Y.data;
+  if(!d){ app.innerHTML = '<div class="spin"></div>'; return; }
+  var h = '<div class="my-head"><h1>' + esc(t('myTitle')) + '</h1></div>';
+  if(!d.shops.length){ app.innerHTML = h + '<div class="my-card"><div style="font-size:40px;text-align:center;">🔗</div><p style="margin:8px 0 4px;font-weight:700;text-align:center;">' + esc(t('myNone')) + '</p><p class="muted" style="margin:0;text-align:center;">' + esc(t('myNoneHow')) + '</p></div>'; myBind(); return; }
+  if(d.shops.length > 1) h += '<div class="chips">' + d.shops.map(function(x, i){ return '<button class="chip' + (Y.shop === i ? ' on' : '') + '" data-myshop="' + i + '">' + esc(x.name) + '</button>'; }).join('') + '</div>';
+  var sh = d.shops[Y.shop], cur = sh.cur;
+  var pct = sh.limit > 0 ? Math.min(100, Math.round(sh.debt / sh.limit * 100)) : 0, cls = pct >= 100 ? 'd' : pct >= 80 ? 'w' : '';
+  var badge = sh.debt <= 0 ? '<span class="my-badge ok">⭐ ' + esc(t('myGood')) + '</span>' : pct >= 100 ? '<span class="my-badge" style="background:#fdecec;color:var(--danger)">' + esc(t('myOver')) + '</span>' : pct >= 80 ? '<span class="my-badge warn">' + esc(t('myNear')) + '</span>' : '';
+  h += '<div class="my-card debt"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><div style="font-weight:800;font-size:16px;">' + esc(sh.name) + '</div><div class="muted">' + esc(sh.me) + '</div></div>' + badge + '</div>'
+    + '<div class="muted" style="margin-top:10px;">' + esc(t('myDebt')) + '</div><div class="my-big" style="color:' + (sh.debt > 0 ? 'var(--danger)' : 'var(--ok)') + '">' + esc(sh.debt > 0 ? myMoney(sh.debt, cur) : t('myNoDebt')) + '</div>'
+    + (sh.limit > 0 ? '<div class="my-bar"><i class="' + cls + '" style="width:' + pct + '%"></i></div><div class="muted" style="display:flex;justify-content:space-between;"><span>' + esc(t('myLimit')) + ': ' + esc(myMoney(sh.limit, cur)) + '</span><span>' + esc(t('myLeft', { sum: myMoney(Math.max(0, sh.limit - sh.debt), cur) })) + '</span></div>' : '')
+    + (sh.loyalty ? '<div class="my-row" style="margin-top:8px;"><span>🎁 ' + esc(t('myBonus')) + '</span><b>' + esc(myMoney(sh.bonus, cur)) + '</b></div>' : '')
+    + '<div class="my-acts">' + (sh.phone ? '<a class="btn2" href="tel:' + esc(sh.phone) + '" style="text-align:center;text-decoration:none;">' + esc(t('myCall')) + '</a>' : '') + (sh.slug ? '<button class="btn2" data-mycat="' + esc(sh.slug) + '">' + esc(t('myCat')) + '</button><button class="btn2" data-myord="' + esc(sh.slug) + '">' + esc(t('myOrders')) + '</button>' : '') + '</div></div>';
+  var rows = Y.hist[sh.h];
+  h += '<div class="my-card"><div style="font-weight:800;font-size:15px;margin-bottom:4px;">' + esc(t('myHist')) + '</div>';
+  if(!rows) h += '<div class="spin" style="margin:16px auto;"></div>';
+  else if(!rows.length) h += '<div class="my-empty">' + esc(t('myHistNone')) + '</div>';
+  else rows.forEach(function(r0, i){
+    var dt = new Date(r0.at), ds = (dt.getDate() < 10 ? '0' : '') + dt.getDate() + '.' + (dt.getMonth() < 9 ? '0' : '') + (dt.getMonth() + 1) + '.' + dt.getFullYear();
+    if(r0.k === 'p') h += '<div class="my-item"><div class="my-ic p">✅</div><div class="my-it"><b>' + esc(t('myPay')) + '</b><span class="muted">' + ds + (r0.note ? ' · ' + esc(r0.note) : '') + '</span></div><div class="my-sum p">−' + esc(myMoney(r0.total, cur)) + '</div></div>';
+    else h += '<div class="my-item' + (Y.open[r0.id] ? ' open' : '') + '" data-myopen="' + esc(r0.id) + '"><div class="my-ic' + (r0.credit > 0 ? ' c' : '') + '">' + (r0.credit > 0 ? '📝' : '🧾') + '</div><div class="my-it"><b>' + esc(t('myReceipt', { n: r0.no })) + '</b><span class="muted">' + ds + (r0.credit > 0 ? ' · ' + esc(t('myCredit', { sum: myMoney(r0.credit, cur) })) : '') + '</span></div><div class="my-sum">' + esc(myMoney(r0.total, cur)) + '</div></div>'
+      + '<div class="my-lines">' + r0.items.map(function(it){ return esc(it.n) + ' × ' + esc(qtyStr(it.q)) + (it.u !== 'dona' ? ' ' + esc(unitL(it.u)) : '') + ' — ' + esc(myMoney(it.p * it.q, cur)); }).join('<br>') + '</div>';
+  });
+  h += '</div>';
+  h += '<div class="my-card"><div class="my-row"><span>' + esc(t('myNotify')) + '</span><button class="my-tog' + (sh.notify ? ' on' : '') + '" data-mynotify="1" aria-label="toggle"></button></div><button class="btn2" data-myunlink="1" style="margin-top:8px;color:var(--danger);background:transparent;">' + esc(t('myUnlink')) + '</button></div>';
+  app.innerHTML = h; myBind();
+}
+function myBind(){
+  var app = document.getElementById('app');
+  app.onclick = function(e){
+    var b = e.target.closest('button,[data-myopen]'); if(!b) return; var v;
+    if(b.id === 'b-retry'){ Y.data = null; myRender(); myLoad(); return; }
+    if((v = b.getAttribute('data-myshop')) !== null && v !== undefined){ Y.shop = Number(v) || 0; myRender(); myHist(); return; }
+    if((v = b.getAttribute('data-myopen'))){ Y.open[v] = !Y.open[v]; myRender(); return; }
+    if((v = b.getAttribute('data-mycat'))){ location.href = location.pathname + '?s=' + encodeURIComponent(v) + '&lang=' + LANG; return; }
+    if((v = b.getAttribute('data-myord'))){ location.href = location.pathname + '?s=' + encodeURIComponent(v) + '&lang=' + LANG + '&view=orders'; return; }
+    var sh = Y.data && Y.data.shops[Y.shop]; if(!sh) return;
+    if(b.hasAttribute('data-mynotify')){ var on = !sh.notify; sh.notify = on; myRender(); api('myNotify', { h: sh.h, on: on }).then(function(j){ if(!j.ok){ sh.notify = !on; myRender(); toast(errText(j)); } }); return; }
+    if(b.hasAttribute('data-myunlink')){ var go = function(){ api('myUnlink', { h: sh.h }).then(function(){ Y.data = null; Y.hist = {}; myRender(); myLoad(); }); }; try{ if(TG && TG.showConfirm){ TG.showConfirm(t('myUnlinkQ'), function(ok){ if(ok) go(); }); return; } }catch(e){} if(confirm(t('myUnlinkQ'))) go(); return; }
+  };
+  try{ if(TG && TG.BackButton) TG.BackButton.hide(); }catch(e){}
+}
 function load(){
+  if(MY){ if(!INIT){ renderOutside(); return; } myRender(); myLoad(); return; }
   if(HUB){ if(!INIT){ renderOutside(); return; } hubRender(); hubLoad(); return; }
   if(!INIT || !SLUG){ renderOutside(); return; }
   api('catalog').then(function(j){
     if(!j.ok){ S.err = errText(j); S.view = 'fatal'; render(); return; }
-    applyCatalog(j); render();
+    applyCatalog(j); if(qs.get('view') === 'orders'){ S.view = 'orders'; S.orders = null; render(); loadOrders(); return; }   /* fix155-custbot */
+    render();
   });
 }
 function lineKey(id, v){ return id + '|' + (v || ''); }
