@@ -213,7 +213,7 @@ test('ulash: "Ulandi" xabari tugmali menyu bilan; oddiy matn — menyu', async (
   delete db.store['tgChats/8001'];
   await core.handleUpdate(deps, msg('/start ABCDEFGHJK', '8001'));
   assert.match(last(tg).text, /Ulandi/); assert.ok(last(tg).reply_markup && last(tg).reply_markup.inline_keyboard.length === 4);   /* fix146-tgsub: +"Do'konim" */
-  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.web_app.url.endsWith('?v=me')));
+  assert.ok(tg.calls.some(c => c.method === 'setChatMenuButton' && c.params.menu_button.type === 'commands'));   /* fix152-cmdmenu */
   await core.handleUpdate(deps, msg('salom'));
   assert.match(last(tg).text, /ulangan: Sardor Market/); assert.ok(last(tg).reply_markup);
   await core.handleUpdate(deps, msg('salom', '9999'));

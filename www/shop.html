@@ -52,10 +52,30 @@ input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-
 .footer{text-align:center;font-size:11px;color:var(--ink-faint);padding:20px}
 .footer a{color:var(--accent)}
 .err{color:var(--danger);font-size:13px;margin-top:6px;display:none}
+/* fix151-weborder: buyurtma to'g'ridan-to'g'ri do'kon ilovasiga */
+.go{width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:14px;font-weight:800;font-size:16px;cursor:pointer;transition:transform .12s ease,opacity .2s}
+.go:active{transform:scale(.98)}.go[disabled]{opacity:.6}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px;gap:3px;margin-top:12px}
+.seg button{flex:1;border:none;background:transparent;padding:9px 6px;border-radius:9px;font-weight:700;font-size:14px;color:var(--ink-soft);cursor:pointer}
+.seg button.on{background:var(--surface);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.more{display:block;margin:12px auto 0;background:none;border:none;color:var(--ink-faint);text-decoration:underline;font-size:13px;cursor:pointer}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+@keyframes wUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes wPop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@keyframes wDraw{to{stroke-dashoffset:0}}
+.done{text-align:center;padding:8px 0 4px;animation:wUp .35s both}
+.done svg{width:78px;height:78px;animation:wPop .5s cubic-bezier(.2,.9,.3,1.3) both}
+.done circle{stroke:#1b8f5a;stroke-width:5;fill:none;stroke-dasharray:252;stroke-dashoffset:252;animation:wDraw .55s .1s ease-out forwards}
+.done path{stroke:#1b8f5a;stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:wDraw .35s .55s ease-out forwards}
+.st{display:inline-block;margin-top:8px;padding:5px 12px;border-radius:999px;font-weight:800;font-size:13px;background:var(--bg)}
+.st.s-new{color:#b7791f;background:#fff6e5}.st.s-accepted,.st.s-ready,.st.s-delivering{color:#2563eb;background:#e8f0ff}.st.s-done{color:#1b8f5a;background:#e7f7ef}.st.s-rejected,.st.s-cancelled{color:var(--danger);background:#fdecec}
+.ord{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+.myo{position:absolute;right:14px;top:calc(12px + env(safe-area-inset-top,0px));background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:700;font-size:12.5px;color:var(--accent);cursor:pointer}
+@media (prefers-reduced-motion:reduce){.done,.done svg{animation:none}.done circle,.done path{animation:none;stroke-dashoffset:0}}
 </style>
 </head>
 <body>
-<header><h1 id="shop-name">…</h1><div class="sub" id="shop-sub"></div></header>
+<header style="position:sticky"><h1 id="shop-name">…</h1><div class="sub" id="shop-sub"></div><button class="myo" id="my-btn" style="display:none"></button></header>
 <div class="search"><input id="q" placeholder="Qidirish..."></div>
 <div class="chips" id="chips"></div>
 <div class="grid" id="grid"></div>
@@ -71,16 +91,18 @@ input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-
   <label id="l-phone">Telefon</label><input id="f-phone" inputmode="tel" autocomplete="tel">
   <label id="l-addr">Manzil / izoh</label><textarea id="f-addr" rows="2"></textarea>
   <div class="err" id="f-err"></div>
+  <input class="hp" id="f-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
   <div class="send" id="send"></div>
 </div>
 <script>
 const T = {
-  uz:{search:'Qidirish...', all:'Barchasi', add:'Qo\'shish', out:'Tugagan', order:'Buyurtma berish', items:'ta mahsulot', total:'Jami', name:'Ismingiz', phone:'Telefon', addr:'Manzil / izoh', tg:'Telegram orqali yuborish', wa:'WhatsApp orqali yuborish', copy:'Matnni nusxalash', copied:'Nusxalandi', need:'Ism va telefonni kiriting', notfound:'Do\'kon topilmadi yoki hali nashr qilinmagan', orderT:'Buyurtma', tgHint:'Telegram ochilganda do\'kon chatini tanlang — matn tayyor bo\'ladi.'},
-  ru:{search:'Поиск...', all:'Все', add:'Добавить', out:'Нет в наличии', order:'Оформить заказ', items:'товаров', total:'Итого', name:'Ваше имя', phone:'Телефон', addr:'Адрес / комментарий', tg:'Отправить в Telegram', wa:'Отправить в WhatsApp', copy:'Скопировать текст', copied:'Скопировано', need:'Введите имя и телефон', notfound:'Магазин не найден или ещё не опубликован', orderT:'Заказ', tgHint:'В Telegram выберите чат магазина — текст уже готов.'}
+  uz:{search:'Qidirish...', all:'Barchasi', add:'Qo\'shish', out:'Tugagan', order:'Buyurtma berish', items:'ta mahsulot', total:'Jami', name:'Ismingiz', phone:'Telefon', addr:'Manzil / izoh', tg:'Telegram orqali yuborish', wa:'WhatsApp orqali yuborish', copy:'Matnni nusxalash', copied:'Nusxalandi', need:'Ism va telefonni kiriting', notfound:'Do\'kon topilmadi yoki hali nashr qilinmagan', orderT:'Buyurtma', tgHint:'Telegram ochilganda do\'kon chatini tanlang — matn tayyor bo\'ladi.', send:'Buyurtma yuborish', sending:'Yuborilmoqda…', other:'Boshqa usul bilan yuborish', pickup:'Olib ketaman', delivery:'Yetkazib bering', addrD:'Manzil', addrP:'Izoh (ixtiyoriy)', needAddr:'Manzilni yozing', sent:'Buyurtma yuborildi!', no:'Buyurtma #{n}', my:'Buyurtmalarim', cancel:'Bekor qilish', back:'Katalogga qaytish', eta:'taxminan {m} daqiqada', st_new:'Do\'kon ko\'rib chiqmoqda', st_accepted:'Qabul qilindi', st_ready:'Tayyor', st_delivering:'Yo\'lda', st_done:'Yakunlandi', st_rejected:'Rad etildi', st_cancelled:'Bekor qilindi', e_too_many:'Juda ko\'p buyurtma. Birozdan keyin urinib ko\'ring.', e_too_many_active:'Sizda tugallanmagan buyurtmalar ko\'p. Avvalgisini kuting.', e_out_of_stock:'Ba\'zi mahsulot tugab qoldi. Savatni tekshiring.', e_changed:'Katalog o\'zgardi. Sahifani yangilang.', e_net:'Internet bilan muammo. Qayta urinib ko\'ring.', e_off:'Do\'kon hozir buyurtma qabul qilmayapti.', e_phone:'Telefon raqamini to\'g\'ri yozing', keep:'Holatini shu sahifada ko\'rib turasiz.'},
+  ru:{search:'Поиск...', all:'Все', add:'Добавить', out:'Нет в наличии', order:'Оформить заказ', items:'товаров', total:'Итого', name:'Ваше имя', phone:'Телефон', addr:'Адрес / комментарий', tg:'Отправить в Telegram', wa:'Отправить в WhatsApp', copy:'Скопировать текст', copied:'Скопировано', need:'Введите имя и телефон', notfound:'Магазин не найден или ещё не опубликован', orderT:'Заказ', tgHint:'В Telegram выберите чат магазина — текст уже готов.', send:'Отправить заказ', sending:'Отправка…', other:'Отправить другим способом', pickup:'Заберу сам', delivery:'Доставка', addrD:'Адрес', addrP:'Комментарий (необязательно)', needAddr:'Укажите адрес', sent:'Заказ отправлен!', no:'Заказ #{n}', my:'Мои заказы', cancel:'Отменить', back:'Вернуться в каталог', eta:'примерно через {m} мин', st_new:'Магазин рассматривает', st_accepted:'Принят', st_ready:'Готов', st_delivering:'В пути', st_done:'Завершён', st_rejected:'Отклонён', st_cancelled:'Отменён', e_too_many:'Слишком много заказов. Попробуйте позже.', e_too_many_active:'У вас много незавершённых заказов. Дождитесь предыдущего.', e_out_of_stock:'Часть товаров закончилась. Проверьте корзину.', e_changed:'Каталог изменился. Обновите страницу.', e_net:'Проблема с интернетом. Попробуйте ещё раз.', e_off:'Магазин сейчас не принимает заказы.', e_phone:'Укажите правильный номер телефона', keep:'Статус можно смотреть на этой странице.'}
 };
 let L = T.uz, shop = null, cart = {}, cat = '';
 const $ = (id)=>document.getElementById(id);
-const fmt = (n)=>Math.round(n||0).toLocaleString('ru-RU') + ' ' + ((shop && shop.currency) || "so'm");
+const dec = ()=> (shop && (shop.cur === 'USD' || shop.cur === 'EUR')) ? 2 : 0;   /* fix151-weborder: dollar va evroda tiyin */
+const fmt = (n)=>{ const d = dec(); const v = d ? Math.round((n||0) * 100) / 100 : Math.round(n||0); return v.toLocaleString('ru-RU', d ? {minimumFractionDigits: d, maximumFractionDigits: d} : undefined) + ' ' + ((shop && shop.currency) || "so'm"); };
 function slugFromUrl(){
   const m = location.pathname.match(/\/s\/([a-z0-9-]+)/i); if(m) return m[1].toLowerCase();
   const q = new URLSearchParams(location.search).get('s'); if(q) return q.toLowerCase();
@@ -104,6 +126,7 @@ async function load(){
   try{ cart = JSON.parse(localStorage.getItem('cart_'+slug)||'{}'); }catch(e){}
   renderChips(); render();
   $('q').addEventListener('input', render);
+  myBtn();
 }
 function showEmpty(t){ $('empty').style.display='block'; $('empty').textContent = t; $('shop-name').textContent = 'Savdo Pos'; }
 function cats(){ return [...new Set(shop.products.map(p=>p.category).filter(Boolean))]; }
@@ -152,6 +175,7 @@ function openSheet(){
   if(shop.telegram) btns.push(`<button class="tg" id="b-tg">${L.tg}</button>`);
   if(shop.whatsapp) btns.push(`<button class="wa" id="b-wa">${L.wa}</button>`);
   btns.push(`<button class="cp" id="b-cp">${L.copy}</button>`);
+  if(shop.orders === true) return openOrderSheet(btns);   /* fix151-weborder */
   $('send').innerHTML = btns.join('') + (shop.telegram ? `<div style="flex-basis:100%;font-size:12px;color:var(--ink-faint);margin-top:4px;">${L.tgHint}</div>` : '');
   if($('b-tg')) $('b-tg').addEventListener('click', ()=>{ if(!validate()) return; const txt = orderText(); const u = shop.telegram.replace(/^@/,'');
     window.open(`https://t.me/share/url?url=${encodeURIComponent('https://t.me/'+u)}&text=${encodeURIComponent(txt)}`, '_blank'); });
@@ -159,8 +183,97 @@ function openSheet(){
   $('b-cp').addEventListener('click', async()=>{ if(!validate()) return; try{ await navigator.clipboard.writeText(orderText()); $('b-cp').textContent = L.copied; }catch(e){} });
   $('sheet-bg').classList.add('on'); $('sheet').classList.add('on');
 }
+function bindOld(){
+  if($('b-tg')) $('b-tg').addEventListener('click', ()=>{ if(!validate()) return; const txt = orderText(); const u = shop.telegram.replace(/^@/,'');
+    window.open(`https://t.me/share/url?url=${encodeURIComponent('https://t.me/'+u)}&text=${encodeURIComponent(txt)}`, '_blank'); });
+  if($('b-wa')) $('b-wa').addEventListener('click', ()=>{ if(!validate()) return; window.open(`https://wa.me/${String(shop.whatsapp).replace(/\D/g,'')}?text=${encodeURIComponent(orderText())}`, '_blank'); });
+  if($('b-cp')) $('b-cp').addEventListener('click', async()=>{ if(!validate()) return; try{ await navigator.clipboard.writeText(orderText()); $('b-cp').textContent = L.copied; }catch(e){} });
+}
+/* ---------- fix151-weborder: buyurtma do'kon ilovasiga ---------- */
+const FN_URL = 'https://us-central1-sardor-pos.cloudfunctions.net/telegramShop';
+let mode = 'pickup', busy = false, pollT = null;
+function setMode(m){ mode = m; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on', b.dataset.mode === m)); $('l-addr').textContent = m === 'delivery' ? L.addrD : L.addrP; }
+function openOrderSheet(oldBtns){
+  for(const id of ['l-name','f-name','l-phone','f-phone','l-addr','f-addr']) $(id).style.display = '';
+  const segHtml = `<div class="seg" id="seg"><button type="button" data-mode="pickup">${esc(L.pickup)}</button><button type="button" data-mode="delivery">${esc(L.delivery)}</button></div>`;
+  if(!$('seg')) $('l-name').insertAdjacentHTML('beforebegin', segHtml);
+  $('seg').querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click', ()=>setMode(b.dataset.mode)));
+  setMode(mode);
+  $('send').innerHTML = `<button class="go" id="b-go">${esc(L.send)}</button>` + (oldBtns.length ? `<button type="button" class="more" id="b-more">${esc(L.other)}</button><div id="old-send" style="display:none;flex-wrap:wrap;gap:8px;width:100%;margin-top:8px;">${oldBtns.join('')}${shop.telegram ? `<div style="flex-basis:100%;font-size:12px;color:var(--ink-faint);margin-top:4px;">${L.tgHint}</div>` : ''}</div>` : '');
+  $('b-go').addEventListener('click', sendOrder);
+  if($('b-more')) $('b-more').addEventListener('click', ()=>{ $('old-send').style.display = 'flex'; $('b-more').style.display = 'none'; });
+  bindOld();
+  $('sheet-bg').classList.add('on'); $('sheet').classList.add('on');
+}
+function showErr(t){ $('f-err').textContent = t; $('f-err').style.display = 'block'; }
+function cid(){ try{ let c = sessionStorage.getItem('wcid_' + slugFromUrl()); if(!c){ c = 'w' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); sessionStorage.setItem('wcid_' + slugFromUrl(), c); } return c; }catch(e){ return 'w' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10); } }
+function myList(){ try{ return JSON.parse(localStorage.getItem('orders_' + slugFromUrl()) || '[]'); }catch(e){ return []; } }
+function mySave(a){ try{ localStorage.setItem('orders_' + slugFromUrl(), JSON.stringify(a.slice(-10))); }catch(e){} }
+function myBtn(){ const b = $('my-btn'); if(!b) return; const n = myList().length; b.style.display = n ? '' : 'none'; b.textContent = L.my + (n ? ' (' + n + ')' : ''); b.onclick = ()=>showOrders(null); }
+async function api(body){
+  const r = await fetch(FN_URL, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+  let j = null; try{ j = await r.json(); }catch(e){}
+  if(!j) throw new Error('net'); return j;
+}
+async function sendOrder(){
+  if(busy) return;
+  if(!validate()) return;
+  const ph = $('f-phone').value.replace(/\D/g, '');
+  if(ph.length < 9){ showErr(L.e_phone); return; }
+  const txt = $('f-addr').value.trim();
+  if(mode === 'delivery' && txt.length < 3){ showErr(L.needAddr); return; }
+  busy = true; const b = $('b-go'); b.disabled = true; b.textContent = L.sending;
+  const items = Object.entries(cart).map(([k, c])=>{ const i = k.indexOf('::'); return {id: i < 0 ? k : k.slice(0, i), vn: i < 0 ? '' : k.slice(i + 2), q: c.qty}; });
+  try{
+    const j = await api({action: 'siteOrder', slug: slugFromUrl(), clientId: cid(), items, name: $('f-name').value.trim(), phone: $('f-phone').value.trim(), mode, address: mode === 'delivery' ? txt : '', comment: mode === 'delivery' ? '' : txt, hp: $('f-hp').value});
+    if(!j.ok){ busy = false; b.disabled = false; b.textContent = L.send;
+      showErr(j.code === 'too_many' || j.code === 'busy' ? L.e_too_many : j.code === 'too_many_active' ? L.e_too_many_active : j.code === 'out_of_stock' ? L.e_out_of_stock : j.code === 'changed' ? L.e_changed : (j.code === 'orders_off' || j.code === 'closed') ? L.e_off : j.code === 'need_phone' ? L.e_phone : j.code === 'need_address' ? L.needAddr : L.e_net); return; }
+    const a = myList().filter(x=>x.id !== j.order.id); a.push({id: j.order.id, t: j.t, no: j.order.no, at: Date.now()}); mySave(a);
+    try{ sessionStorage.removeItem('wcid_' + slugFromUrl()); }catch(e){}
+    cart = {}; save(); render(); myBtn();
+    busy = false; showOrders(j.order);
+  }catch(e){ busy = false; b.disabled = false; b.textContent = L.send; showErr(L.e_net); }
+}
+function ordHtml(o){
+  return `<div class="ord" data-oid="${esc(o.id)}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;"><b>${esc(L.no.replace('{n}', o.no))}</b><b>${esc(fmt(o.total))}</b></div>
+    <div class="st s-${esc(o.status)}">${esc(L['st_' + o.status] || o.status)}${o.status === 'accepted' && o.eta ? ' · ' + esc(L.eta.replace('{m}', o.eta)) : ''}</div>
+    ${o.status === 'new' ? `<button type="button" class="more" data-cancel="${esc(o.id)}" style="margin:8px 0 0;">${esc(L.cancel)}</button>` : ''}</div>`;
+}
+async function showOrders(fresh){
+  for(const id of ['l-name','f-name','l-phone','f-phone','l-addr','f-addr','f-err']) $(id).style.display = 'none';
+  if($('seg')) $('seg').remove();
+  $('sh-items').innerHTML = ''; $('sh-total').textContent = ''; $('sh-tot-l').textContent = '';
+  $('sh-title').textContent = fresh ? '' : L.my;
+  $('send').innerHTML = (fresh ? `<div class="done" style="width:100%"><svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="40"/><path d="M30 49l12 12 24-26"/></svg><h2 style="margin:8px 0 2px;">${esc(L.sent)}</h2><div style="font-size:13px;color:var(--ink-faint);">${esc(L.keep)}</div></div>` : '')
+    + `<div id="ord-list" style="width:100%"></div><button class="go" id="b-back" style="margin-top:14px;">${esc(L.back)}</button>`;
+  $('b-back').addEventListener('click', closeSheet);
+  $('sheet-bg').classList.add('on'); $('sheet').classList.add('on');
+  if(fresh) $('ord-list').innerHTML = ordHtml(fresh);
+  await refreshOrders();
+  if(pollT) clearInterval(pollT);
+  pollT = setInterval(()=>{ if(!$('ord-list') || !$('sheet').classList.contains('on')){ clearInterval(pollT); pollT = null; return; } if(document.visibilityState !== 'hidden') refreshOrders(); }, 8000);
+}
+async function refreshOrders(){
+  const a = myList(); if(!a.length || !$('ord-list')) return;
+  try{
+    const j = await api({action: 'siteStatus', orders: a.slice().reverse().map(x=>({id: x.id, t: x.t}))});
+    if(!j.ok || !$('ord-list')) return;
+    $('ord-list').innerHTML = (j.orders || []).sort((x, y)=>(y.createdAt || 0) - (x.createdAt || 0)).map(ordHtml).join('');
+    $('ord-list').querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click', async ()=>{
+      const x = myList().find(z=>z.id === b.dataset.cancel); if(!x) return; b.disabled = true;
+      try{ await api({action: 'siteCancel', id: x.id, t: x.t}); }catch(e){}
+      refreshOrders();
+    }));
+  }catch(e){}
+}
+function closeSheet(){
+  $('sheet-bg').classList.remove('on'); $('sheet').classList.remove('on');
+  if(pollT){ clearInterval(pollT); pollT = null; }
+  for(const id of ['l-name','f-name','l-phone','f-phone','l-addr','f-addr']) $(id).style.display = '';
+  $('sh-title').textContent = L.orderT; $('sh-tot-l').textContent = L.total;
+}
 $('bar-btn').addEventListener('click', openSheet);
-$('sheet-bg').addEventListener('click', ()=>{ $('sheet-bg').classList.remove('on'); $('sheet').classList.remove('on'); });
+$('sheet-bg').addEventListener('click', closeSheet);
 load();
 </script>
 </body>
