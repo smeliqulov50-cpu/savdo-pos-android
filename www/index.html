@@ -1315,6 +1315,12 @@ const T = {
   inTransfer:{uz:"Tovarni bir filialdan boshqasiga o'tkazish — qoldiq ikkala filialda o'zi tuzatiladi.",ru:"Перемещение товара между филиалами — остатки обновятся в обоих.",en:"Move goods between branches — stock updates in both.",kk:"Тауарды бір филиалдан екіншісіне өткізу — қалдық екеуінде де түзетіледі.",ky:"Товарды бир филиалдан экинчисине өткөрүү — калдык экөөндө тең оңдолот.",tg:"Интиқоли мол аз як филиал ба дигар — боқимонда дар ҳарду ислоҳ мешавад."},
   inPromo:{uz:"Chegirma aksiyalari va sovg'a kartalari — kassada o'zi qo'llanadi.",ru:"Акции со скидкой и подарочные карты — применяются на кассе автоматически.",en:"Discount promotions and gift cards — applied at the register automatically.",kk:"Жеңілдік акциялары мен сыйлық карталары — кассада өзі қолданылады.",ky:"Арзандатуу акциялары жана белек карталары — кассада өзү колдонулат.",tg:"Аксияҳои тахфиф ва кортҳои тӯҳфа — дар касса худаш татбиқ мешавад."},
   boPriceHint:{uz:"Narx rejimi (chakana / ulgurji / blok), katalog tili va tugagan mahsulotlarni ko'rsatish yuqoridagi veb katalog sozlamasidan olinadi — bot va sayt bir xil.",ru:"Режим цен (розница / опт / блок) и язык каталога берутся из настроек веб-каталога выше — бот и сайт одинаковы.",en:"Price mode (retail / wholesale / box) and catalog language come from the web catalog settings above — bot and site match.",kk:"Баға режимі мен каталог тілі жоғарыдағы веб-каталог баптауларынан алынады.",ky:"Баа режими жана каталог тили жогорудагы веб-каталог жөндөөлөрүнөн алынат.",tg:"Реҷаи нарх ва забони каталог аз танзимоти каталоги веб дар боло гирифта мешавад."},   /* fix174-botprice */
+  sfCommission:{uz:"Sotuvdan ish haqi foizi (%)",ru:"Процент от продаж (%)",en:"Commission from sales (%)",kk:"Сатудан пайыз (%)",ky:"Сатуудан пайыз (%)",tg:"Фоиз аз фурӯш (%)"},
+  sfCommissionHint:{uz:"Bo'sh qoldirsangiz — standart foiz ({n}%) ishlatiladi.",ru:"Если оставить пустым — применяется стандартный процент ({n}%).",en:"Leave empty to use the default rate ({n}%).",kk:"Бос қалдырсаңыз — стандартты пайыз ({n}%) қолданылады.",ky:"Бош калтырсаңыз — стандарттык пайыз ({n}%) колдонулат.",tg:"Агар холӣ монад — фоизи стандартӣ ({n}%) истифода мешавад."},
+  stDefaultComm:{uz:"Standart ish haqi foizi (savdodan %)",ru:"Стандартный процент от продаж (%)",en:"Default commission (% of sales)",kk:"Стандартты пайыз (сатудан %)",ky:"Стандарттык пайыз (сатуудан %)",tg:"Фоизи стандартӣ (аз фурӯш %)"},
+  stDefaultCommHint:{uz:"Xodim kartasida o'z foizi yozilmagan bo'lsa, shu foiz hisoblanadi.",ru:"Если в карточке сотрудника свой процент не указан — считается этот.",en:"Used for staff without their own rate in the staff card.",kk:"Қызметкер картасында өз пайызы болмаса — осы пайыз.",ky:"Кызматкер картасында өз пайызы болбосо — ушул пайыз.",tg:"Агар дар корти корманд фоизи худ набошад — ин фоиз."},
+  stCommonTitle:{uz:"Umumiy",ru:"Общие",en:"General",kk:"Жалпы",ky:"Жалпы",tg:"Умумӣ"},
+  r4CommStaff:{uz:"Ish haqi foizi har xodimning kartasida (Sozlamalar → Xodimlar)",ru:"Процент вознаграждения — в карточке каждого сотрудника (Настройки → Сотрудники)",en:"Commission rate is set per staff member (Settings → Staff)",kk:"Пайыз — әр қызметкер картасында (Баптаулар → Қызметкерлер)",ky:"Пайыз — ар кызматкердин картасында (Жөндөөлөр → Кызматкерлер)",tg:"Фоиз — дар корти ҳар корманд (Танзимот → Кормандон)"},   /* fix175-staffpay */
   boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
@@ -4129,7 +4135,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.52';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.53';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -16399,7 +16405,7 @@ function renderReportsCategory(container, cat){
     const rows = state.staff.map(st=>{
       const sales = monthSales.filter(s=>s.cashierId===st.id || (!s.cashierId && s.cashierName===st.name)).reduce((a,s)=>a+(s.total||0),0);
       const fixed = parseFloat(st.salary)||0;
-      const commission = sales*pct/100;
+      const commission = sales*staffCommissionPct(st)/100;   /* fix175-staffpay */
       const pays = monthSalaryExp.filter(e=>e.salaryStaffId===st.id || (!e.salaryStaffId && e.note && e.note.trim().toLowerCase()===st.name.trim().toLowerCase()));
       const paid = pays.reduce((a,e)=>a+(e.amount||0),0);
       return {st, sales, fixed, commission, accrued: fixed+commission, paid, remaining: fixed+commission-paid, pays};
@@ -16414,7 +16420,7 @@ function renderReportsCategory(container, cat){
       <div class="card" style="padding:12px 14px;margin-bottom:10px;">
         <div class="row"><strong>${escapeHtml(r.st.name)}</strong><span class="badge badge-clear" style="color:${r.remaining>0?'var(--danger)':'var(--teal)'};">${tr('prRemaining')}: ${fmt(r.remaining)}</span></div>
         <div class="row" style="font-size:13px;"><span class="subtle">${tr('prFixed')}</span><span>${fmt(r.fixed)}</span></div>
-        ${pct>0 ? `<div class="row" style="font-size:13px;"><span class="subtle">${tr('prCommission')} (${pct}% × ${fmt(r.sales)})</span><span>${fmt(r.commission)}</span></div>` : ''}
+        ${staffCommissionPct(r.st)>0 ? `<div class="row" style="font-size:13px;"><span class="subtle">${tr('prCommission')} (${staffCommissionPct(r.st)}% × ${fmt(r.sales)})</span><span>${fmt(r.commission)}</span></div>` : ''}
         <div class="row" style="font-size:13px;font-weight:700;"><span>${tr('prAccrued')}</span><span>${fmt(r.accrued)}</span></div>
         <div class="row" style="font-size:13px;"><span class="subtle">${tr('prPaid')}</span><span style="color:var(--teal);">${fmt(r.paid)}</span></div>
         ${r.pays.length ? `<div class="subtle" style="font-size:11.5px;margin-top:4px;">${tr('prPayments')}: ${r.pays.map(p=>fmtDate(p.date)+' — '+fmt(p.amount)).join(' · ')}</div>` : ''}
@@ -16640,7 +16646,7 @@ function renderReportsCategory(container, cat){
           <div class="row"><strong>${i===0?icI('trophy')+' ':''}${i+1}. ${escapeHtml(r.name)}</strong><span class="badge badge-clear">${fmt(r.total)}</span></div>
           <div class="row"><span class="subtle">${tr('salesCountLabel')}</span><span>${r.count}</span></div>
           <div class="row"><span class="subtle">${tr('totalProfit')}</span><span style="color:${r.profit>=0?'var(--success)':'var(--danger)'};">${fmt(r.profit)}</span></div>
-          ${commissionPct>0 ? `<div class="row"><span class="subtle">${tr('commissionEarned')}</span><strong style="color:var(--accent-dark);">${fmt(r.total*commissionPct/100)}</strong></div>` : ''}
+          ${staffPctByName(r.name)>0 ? `<div class="row"><span class="subtle">${tr('commissionEarned')} (${staffPctByName(r.name)}%)</span><strong style="color:var(--accent-dark);">${fmt(r.total*staffPctByName(r.name)/100)}</strong></div>` : ''}
         </div>
       `).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>
       ${ranked.length>1 ? `<div class="card" style="background:var(--warm-bg);"><div class="row"><span class="subtle">${tr('lowestPerformer')}</span><span>${ranked[ranked.length-1].name} — ${fmt(ranked[ranked.length-1].total)}</span></div></div>` : ''}
@@ -17691,7 +17697,6 @@ function settingsMenuItems(){   /* fix172-setgroups: mavzu bo'yicha 10 guruh */
     {id:'deletedCustomers', icon:ICONS.trash, color:'var(--danger)', label:tr('deletedCustomersSection'), show:(isAdmin() && state.customers.some(c=>c.hidden)), group:'cust'},
     {id:'stockalerts', icon:ICONS.boxWarning, color:'var(--warm)', label:tr('ssStockSection'), show:canBusinessSettings(), group:'stock'},
     {id:'staff', icon:ICONS.peopleIcon, color:'var(--teal)', label:tr('staffSection'), show:(isAdmin() || hasPerm('staffManage')), group:'staff'},
-    {id:'staffrules', icon:ICONS.gear, color:'var(--violet)', label:tr('ssStaffSection'), show:canBusinessSettings(), group:'staff'},
     {id:'agentmap', icon:ICONS.mapPin, color:'var(--violet)', label:tr('agentMapLabel'), show:agent, group:'staff'},
     {id:'agentplans', icon:ICONS.target, color:'var(--warm)', label:tr('agentPlansLabel'), show:agent, group:'staff'},
     {id:'visitroute', icon:ICONS.route, color:'var(--teal)', label:tr('visitRouteLabel'), show:agent, group:'staff'},
@@ -17801,7 +17806,7 @@ function __renderSettingsCategoryInner(container, cat){
   if(cat==='salerules') return renderSettingsSaleRules(container);
   if(cat==='custrules') return renderSettingsSaleRules(container, 'cust');   /* fix172-setgroups */
   if(cat==='telegram') return renderSettingsTelegram(container);
-  if(cat==='staffrules') return renderSettingsStaffRules(container);
+  if(cat==='staffrules'){ state.settingsCategory = 'staff'; return renderSettingsStaff(container); }   /* fix175-staffpay: eski yo'l → Xodimlar */
   if(cat==='lowstock') return renderSettingsLowStock(container);
   if(cat==='expiry') return renderSettingsExpiry(container);
   if(cat==='catalog') return renderSettingsCatalog(container);
@@ -18436,10 +18441,18 @@ function renderSettingsBusiness(container){
 }
 
 /* --- Staff --- */
+/* fix175-staffpay: xodimning foizi (kartasida bo'lsa — o'zi, bo'lmasa standart) */
+function staffCommissionPct(st){ const v = st && st.commissionPercent; return (v !== undefined && v !== null && v !== '' && isFinite(Number(v))) ? Number(v) : (Number(state.settings.staffCommissionPercent) || 0); }
+function staffPctByName(name){ const st = (state.staff || []).find(x=>x && x.name === name); return st ? staffCommissionPct(st) : (Number(state.settings.staffCommissionPercent) || 0); }
 function renderSettingsStaff(container){
+  const __canRules = canBusinessSettings();
   container.innerHTML = `
     ${settingsBackHeader(tr('staffSection'))}
     <button class="btn btn-accent" style="margin-bottom:10px;" id="add-staff-btn">${ICONS.plus} ${tr('addStaff')}</button>
+    ${__canRules ? `<div class="card" id="st-common" style="margin-bottom:12px;"><div style="font-weight:800;margin-bottom:4px;">${tr('stCommonTitle')}</div>
+      <div class="checkbox-row"><input type="checkbox" id="st-pdf" ${state.settings.staffCanExportDebtPdf !== false ? 'checked' : ''}><span>${tr('staffExportPdfLabel')}</span></div>
+      <div class="field" style="margin-top:8px;"><label class="field-label">${tr('stDefaultComm')}</label><input type="number" id="st-comm" min="0" max="100" step="any" inputmode="decimal" value="${Number(state.settings.staffCommissionPercent) || 0}"></div>
+      <p class="subtle" style="margin:0;font-size:12px;">${tr('stDefaultCommHint')}</p></div>` : ''}
     <div id="staff-list">
       ${state.staff.length ? state.staff.map(s=>`
         <div class="list-item">
@@ -18455,6 +18468,8 @@ function renderSettingsStaff(container){
     </div>
   `;
   bindSettingsBack(container);
+  { const pdf = document.getElementById('st-pdf'); if(pdf) pdf.addEventListener('change', ()=>{ state.settings.staffCanExportDebtPdf = pdf.checked; saveSettings(); showToast(tr('ssSaved')); });
+    const cm = document.getElementById('st-comm'); if(cm) cm.addEventListener('change', ()=>{ const v = parseFloat(cm.value); if(!(isFinite(v) && v >= 0 && v <= 100)){ cm.value = Number(state.settings.staffCommissionPercent) || 0; showToast(tr('r4CommBad')); return; } state.settings.staffCommissionPercent = v; saveSettings(); showToast(tr('ssSaved')); }); }   /* fix175-staffpay */
   document.getElementById('add-staff-btn').addEventListener('click', ()=>openStaffForm(null));
   container.querySelectorAll('[data-act="edit-staff"]').forEach(btn=>btn.addEventListener('click', ()=>openStaffForm(btn.dataset.id)));
   container.querySelectorAll('[data-act="del-staff"]').forEach(btn=>btn.addEventListener('click', ()=>{
@@ -19288,7 +19303,7 @@ function renderSettingsExpiry(container){
 
 /* --- fix123-setgrp: sozlamalar mavzu bo'yicha + darhol saqlash --- */
 const SS_CATS = ['stockalerts', 'salerules', 'staffrules', 'custrules'];   /* fix172-setgroups */
-const SS_OLD = {lowstock: ['stockalerts', 'ss-low'], expiry: ['stockalerts', 'ss-exp'], credit: ['custrules', 'ss-credit'], charges: ['salerules', 'ss-charges']};   /* fix172-setgroups */
+const SS_OLD = {lowstock: ['stockalerts', 'ss-low'], expiry: ['stockalerts', 'ss-exp'], credit: ['custrules', 'ss-credit'], charges: ['salerules', 'ss-charges'], staffrules: ['staff', 'st-common']};   /* fix175-staffpay */   /* fix172-setgroups */
 let __ssPend = {};
 let __ssChain = Promise.resolve(true);
 function __ssRemap(){
@@ -20685,7 +20700,7 @@ function __r4Staff(container, ranked, commissionPct){
   container.innerHTML = `
       ${reportsBackHeader(tr('staffReportSection'))}
       <div class="r3-chips" id="staff-report-period">${PP.map(x=>__r3Chip('data-period', x[0], x[1], state.staffReportPeriod === x[0])).join('')}</div>
-      <div class="r3-box" id="r4-comm"><div class="row" style="gap:10px;"><span style="min-width:0;"><b>${escapeHtml(tr('commissionPercent'))}: ${commissionPct}%</b><br><small class="subtle">${escapeHtml(tr('commissionHint'))}</small></span>${canSet ? `<button class="btn btn-outline btn-sm" id="r4-comm-edit" style="flex-shrink:0;">${escapeHtml(tr('r4CommEdit'))}</button>` : ''}</div></div>
+      <div class="r3-box" id="r4-comm"><div class="row" style="gap:10px;"><span style="min-width:0;"><b>${escapeHtml(tr('commissionPercent'))}</b><br><small class="subtle">${escapeHtml(tr('r4CommStaff'))}</small></span>${canSet ? `<button class="btn btn-outline btn-sm" id="r4-comm-edit" style="flex-shrink:0;">${escapeHtml(tr('r4CommEdit'))}</button>` : ''}</div></div>
       <div>${ranked.length ? ranked.map((r,i)=>`
         <div class="card">
           <div class="row"><strong>${i===0?icI('trophy')+' ':''}${i+1}. ${escapeHtml(r.name)}</strong><span class="badge badge-clear">${fmt(r.total)}</span></div>
@@ -20694,7 +20709,7 @@ function __r4Staff(container, ranked, commissionPct){
           <div class="row"><span class="subtle">${tr('salesCountLabel')}</span><span>${r.count}</span></div>
           <div class="row"><span class="subtle">${tr('r3AvgCheck')}</span><span>${fmt(r.count ? r.total / r.count : 0)}</span></div>
           <div class="row"><span class="subtle">${tr('totalProfit')}</span><span style="color:${r.profit>=0?'var(--success)':'var(--danger)'};">${fmt(r.profit)}</span></div>
-          ${commissionPct>0 ? `<div class="row"><span class="subtle">${tr('commissionEarned')}</span><strong style="color:var(--accent-dark);">${fmt(r.total*commissionPct/100)}</strong></div>` : ''}
+          ${staffPctByName(r.name)>0 ? `<div class="row"><span class="subtle">${tr('commissionEarned')} (${staffPctByName(r.name)}%)</span><strong style="color:var(--accent-dark);">${fmt(r.total*staffPctByName(r.name)/100)}</strong></div>` : ''}
         </div>
       `).join('') : `<div class="empty-state">${tr('noData')}</div>`}</div>
       ${ranked.length>1 ? `<div class="card" style="background:var(--warm-bg);"><div class="row"><span class="subtle">${tr('lowestPerformer')}</span><span>${escapeHtml(ranked[ranked.length-1].name)} — ${fmt(ranked[ranked.length-1].total)}</span></div></div>` : ''}
@@ -20702,7 +20717,7 @@ function __r4Staff(container, ranked, commissionPct){
   bindReportsBack();
   container.querySelectorAll('#staff-report-period [data-period]').forEach(el=>el.addEventListener('click', ()=>{ state.staffReportPeriod = el.dataset.period; renderReportsCategory(container,'staff'); }));
   const eb = document.getElementById('r4-comm-edit');
-  if(eb) eb.addEventListener('click', ()=>{ state.__r4FocusComm = true; state.reportsCategory = null; state.view = 'settings'; state.settingsCategory = 'staffrules'; renderAll(); });
+  if(eb) eb.addEventListener('click', ()=>{ state.reportsCategory = null; state.view = 'settings'; state.settingsCategory = 'staff'; renderAll(); });   /* fix175-staffpay */
 }
 /* ---- 3.14 Ombor harakati ---- */
 var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete', 'supplierReturn']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']], ['transfer', 'trMenu', ['transferOut', 'transferIn', 'transferBack']]];
@@ -23908,6 +23923,7 @@ function renderSettingsTelegram(container){
   __tgMount(container);
 }
 function __tgLinkCard(container){
+  return;   /* fix175-staffpay: Telegram faqat «Onlayn va Telegram»da */
   if(!isAdmin() || document.getElementById('tg-link-card')) return;
   const card = document.createElement('div'); card.className = 'card'; card.id = 'tg-link-card';
   card.innerHTML = '<div style="display:flex;align-items:center;gap:10px;"><span class="tg-lg">' + TG_SVG + '</span><div style="flex:1;min-width:0;"><div class="nf-ttl">' + escapeHtml(tr('tgTitle')) + '</div><div class="nf-sub">' + escapeHtml(tr('nfTgMoved')) + '</div></div><button type="button" class="btn btn-outline btn-sm" id="tg-goto" style="width:auto;">' + escapeHtml(tr('nfTgOpen')) + '</button></div>';
@@ -24241,6 +24257,7 @@ function openStaffForm(staffId){
     <div class="field"><label class="field-label">${tr('staffName')}</label><input type="text" id="sf-name" value="${editing?editing.name:''}"></div>
     <div class="field"><label class="field-label">${tr('pinCode')}</label><input type="text" inputmode="numeric" maxlength="4" id="sf-pin" value="${editing?editing.pin:''}"></div>
     <div class="field"><label class="field-label">${tr('staffSalaryLabel')}</label><input type="text" inputmode="numeric" id="sf-salary" value="${editing&&editing.salary?formatMoneyInputValue(editing.salary):''}" placeholder="${tr('staffSalaryPlaceholder')}"></div>
+    ${canBusinessSettings() ? `<div class="field"><label class="field-label">${tr('sfCommission')}</label><input type="number" id="sf-commission" min="0" max="100" step="any" inputmode="decimal" value="${(editing && editing.commissionPercent !== undefined && editing.commissionPercent !== null && editing.commissionPercent !== '') ? editing.commissionPercent : ''}" placeholder="${Number(state.settings.staffCommissionPercent) || 0}"><p class="subtle" style="margin:4px 0 0;font-size:12px;">${tr('sfCommissionHint').replace('{n}', Number(state.settings.staffCommissionPercent) || 0)}</p></div>` : ''}
     <div class="field"><label class="field-label">${tr('role')}</label>
       <select id="sf-role">
         <option value="cashier" ${editing&&editing.role==='cashier'?'selected':''}>${tr('roleCashier')}</option>
@@ -24386,6 +24403,8 @@ function openStaffForm(staffId){
     };
     const salaryEl = document.getElementById('sf-salary');
     const salary = salaryEl && salaryEl.value ? (parseMoneyInput(salaryEl.value)||0) : 0;
+    const __cmEl = document.getElementById('sf-commission');   /* fix175-staffpay */
+    const commissionPercent = __cmEl ? (String(__cmEl.value).trim() === '' ? null : Math.max(0, Math.min(100, parseFloat(__cmEl.value) || 0))) : (editing ? (editing.commissionPercent === undefined ? null : editing.commissionPercent) : null);
     // Creating the real, per-staff Firebase identity is the one part of
     // saving a staff member that needs a network round-trip — everything
     // else here stays exactly as offline-friendly as before. Only truly
@@ -24415,9 +24434,9 @@ function openStaffForm(staffId){
       }
       finalStaffId = newStaffId;
     }
-    if(editing){ editing.name=name; editing.pin=pin; editing.role=role; editing.jobTitle=jobTitle; editing.branchId=branchId; editing.permissions=permissions; editing.salary=salary; }
+    if(editing){ editing.name=name; editing.pin=pin; editing.role=role; editing.jobTitle=jobTitle; editing.branchId=branchId; editing.permissions=permissions; editing.salary=salary; editing.commissionPercent=commissionPercent; }   /* fix175-staffpay */
     if(editing && editing.authUid){ syncStaffAuthRecord(editing).then(ok=>{ if(!ok) showToast(tr('staffCloudSyncFailed')); }); }
-    else state.staff.push({id: finalStaffId || uid(), name, pin, role, jobTitle, branchId, permissions, salary, authUid: newStaffAuthUid, authSecret: newStaffAuthSecret});
+    else if(!editing) state.staff.push({id: finalStaffId || uid(), name, pin, role, jobTitle, branchId, permissions, salary, commissionPercent, authUid: newStaffAuthUid, authSecret: newStaffAuthSecret});   /* fix175-staffpay: bulut hisobi yo'q xodimni tahrirlashda nusxa paydo bo'lmasin (eski xato) */
     if(jobTitle==='agent'){
       const dailyEl = document.getElementById('sf-plan-daily');
       const monthlyEl = document.getElementById('sf-plan-monthly');
