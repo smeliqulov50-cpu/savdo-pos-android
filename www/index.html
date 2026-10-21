@@ -4135,7 +4135,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.53';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.54';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -9628,8 +9628,8 @@ function receiptImageBlob(sale, customer){
     cy = headerHeight + 20;
 
     ctx.textAlign = 'left'; ctx.font = '13px Arial'; ctx.fillStyle = '#51677E';
-    ctx.fillText(new Date(sale.date).toLocaleString(), padding, cy); cy += smallLineH;
     if(sale.receiptNumber){ ctx.fillText(trR('receiptNumberLabel')+': '+sale.receiptNumber, padding, cy); cy += smallLineH; } /* fix76 */
+    ctx.fillText(__rcDateStr(sale.date), padding, cy); cy += smallLineH;   /* fix176-receipt */
     if(sale.tableName){ ctx.fillText(tableWord()+': '+sale.tableName, padding, cy); cy += smallLineH; }
     if(sale.orderType){ ctx.fillText(sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway'), padding, cy); cy += smallLineH; }
     if(sale.cashierName){ ctx.fillText(trR('cashier')+': '+sale.cashierName, padding, cy); cy += smallLineH; }
@@ -10010,6 +10010,19 @@ function __wrapCanvasText(ctx, text, maxW){
   if(cur) lines.push(cur);
   return lines.length ? lines : [''];
 }
+/* fix176-receipt: sana «21.10.2026 20:32» (soniyasiz, qisqa); chiziqlarni tartiblash */
+function __rcDateStr(d){ const x = new Date(d); if(isNaN(x)) return ''; const p = n=>String(n).padStart(2, '0'); return p(x.getDate()) + '.' + p(x.getMonth() + 1) + '.' + x.getFullYear() + ' ' + p(x.getHours()) + ':' + p(x.getMinutes()); }
+function __rcTidy(lines, sep, dropLeading){
+  const out = [];
+  lines.forEach(l=>{
+    const isSep = l === sep, isEmpty = String(l).trim() === '';
+    if(isSep && (!out.length ? dropLeading : out[out.length - 1] === sep)) return;
+    if(isEmpty && (!out.length || String(out[out.length - 1]).trim() === '')) return;
+    out.push(l);
+  });
+  while(out.length && (out[out.length - 1] === sep || String(out[out.length - 1]).trim() === '')) out.pop();
+  return out;
+}
 function buildReceiptText(...a){ return withReceiptLang(()=>buildReceiptTextInner(...a)); }
 function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   const s = state.settings;
@@ -10026,8 +10039,8 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   if(s.businessAddress) lines.push(s.businessAddress);
   if(s.businessPhone) lines.push(s.businessPhone);
   lines.push(sep);
-  lines.push(new Date(sale.date).toLocaleString());
-  if(sale.receiptNumber) lines.push(trR('receiptNumberLabel')+': '+sale.receiptNumber);
+  if(sale.receiptNumber) lines.push(trR('receiptNumberLabel')+': '+sale.receiptNumber);   /* fix176-receipt: avval raqam, keyin sana */
+  lines.push(__rcDateStr(sale.date));
   if(sale.tableName) lines.push(tableWord()+': '+sale.tableName);
   if(sale.cashierName) lines.push(trR('cashier')+': '+sale.cashierName);
   if(customer) __custReceiptLines(customer, t=>wrapText(t, width)).forEach(l=>lines.push(l));   /* fix104-custline */
@@ -10048,14 +10061,14 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   }
   lines.push(padLine(trR('total'), fmt(sale.total), width));
   if(sale.giftCard && sale.giftPaid > 0 && sale.giftCard.balanceAfter != null) lines.push(padLine(trR('gftLeft') + ' ' + __gftShow(sale.giftCard.code), fmt(sale.giftCard.balanceAfter), width));   /* fix140-gift */
-  lines.push(`${trR('paymentType')}: ${paymentTypeDisplayText(sale)}`);
+  wrapText(`${trR('paymentType')}: ${paymentTypeDisplayText(sale)}`, width).forEach(l=>lines.push(l));   /* fix176-receipt: aralash to'lov qatori kenglikka sig'adi */
   if(sale.cashTendered > 0){
     lines.push(padLine(trR('cashTenderedLabel'), fmt(sale.cashTendered), width));
     lines.push(padLine(trR('changeDueLabel'), fmt(sale.changeDue||0), width));
   }
   if(s.receiptFooter){ lines.push(sep); lines.push(centerLine(s.receiptFooter, width)); }
   if(s.showSardorBranding!==false){ lines.push(''); lines.push(centerLine(trR('sardorBrandingLine'), width)); }
-  return lines.join('\n');
+  return __rcTidy(lines, sep, !!skipBusinessName).join('\n');   /* fix176-receipt: ortiqcha chiziqlar yo'q */
 }
 // Decides which kitchen printer a product's items should route to.
 // Returns null if this product shouldn't print to any kitchen at all.
@@ -10426,8 +10439,8 @@ function buildReceiptHtmlInner(sale, customer){
     ${s.businessPhone?`<div style="text-align:${align};font-weight:${bizWeight};font-size:${bizSize};">${escapeHtml(s.businessPhone)}</div>`:''}
     </div>
     <hr style="${hrStyle}">
-    <div>${new Date(sale.date).toLocaleString()}</div>
     ${sale.receiptNumber?`<div>${trR('receiptNumberLabel')}: ${escapeHtml(String(sale.receiptNumber))}</div>`:''}
+    <div>${__rcDateStr(sale.date)}</div>
     ${sale.tableName?`<div>${tableWord()}: ${escapeHtml(sale.tableName)}</div>`:''}
     ${sale.orderType?`<div>${sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway')}</div>`:''}
     ${sale.cashierName?`<div>${trR('cashier')}: ${escapeHtml(sale.cashierName)}</div>`:''}
