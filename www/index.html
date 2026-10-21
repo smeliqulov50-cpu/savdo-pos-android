@@ -1093,6 +1093,9 @@ const T = {
   actSharePdf:{uz:"PDF ulashish",ru:"Поделиться PDF",en:"Share PDF",kk:"PDF бөлісу",ky:"PDF бөлүшүү",tg:"Мубодилаи PDF"},
   actInvoice:{uz:"Hisob-faktura A4",ru:"Счёт-фактура A4",en:"Invoice A4",kk:"Шот-фактура A4",ky:"Эсеп-фактура A4",tg:"Ҳисобнома A4"},
   actEdit:{uz:"Tahrirlash",ru:"Изменить",en:"Edit",kk:"Өзгерту",ky:"Өзгөртүү",tg:"Таҳрир"},
+  rgAnalysis:{uz:"Mahsulotlar tahlili",ru:"Анализ товаров",en:"Product analysis",kk:"Тауарлар талдауы",ky:"Товарлар анализи",tg:"Таҳлили молҳо"},
+  rgCustomers:{uz:"Mijozlar",ru:"Клиенты",en:"Customers",kk:"Клиенттер",ky:"Кардарлар",tg:"Мизоҷон"},
+  rgStaff:{uz:"Xodimlar",ru:"Сотрудники",en:"Staff",kk:"Қызметкерлер",ky:"Кызматкерлер",tg:"Кормандон"},   /* fix171-repgroups */
   rgSales:{uz:"Savdo",ru:"Продажи",en:"Sales",kk:"Сату",ky:"Сатуу",tg:"Фурӯш"},
   rgFinance:{uz:"Moliya",ru:"Финансы",en:"Finance",kk:"Қаржы",ky:"Каржы",tg:"Молия"},
   rgStock:{uz:"Ombor",ru:"Склад",en:"Inventory",kk:"Қойма",ky:"Кампа",tg:"Анбор"},
@@ -4098,7 +4101,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.48';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.49';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -15766,17 +15769,21 @@ function renderReportsMenu(container){
     <h2 class="section-title">${ICONS.reports} ${tr('navReports')}</h2>
     ${alertCount ? `<div class="card alert-soft" style="cursor:pointer;" id="alerts-shortcut"><p style="margin:0;color:var(--danger);font-weight:700;">${icI('alert')} ${escapeHtml(stockCountsText(__sc, expiringCount))}</p></div>` : ''}
     ${(()=>{
-      const G = {receipts:['sales','receiptIcon','#2563eb'], today:['sales','sale','#16a34a'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
-        pnl:['finance','percent','#0f9d8a'], productprofit:['finance','percent','#12a37f'], expenses:['finance','creditCard','#d97706'], payroll:['finance','peopleIcon','#7c5cfc'], mydebts:['finance','book','#c2410c'],
-        inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], suppliers:['stock','truck','#0f766e'], promos:['sales','tag','#db2777'], products:['sales','products','#0891b2'],
-        customers:['people','customers','#8b5cf6'], staff:['people','peopleIcon','#a855f7'], branches:['people','mapPin','#6366f1'],
-        audit:['control','target','#475569']};
-      const order = [['sales','rgSales'],['finance','rgFinance'],['stock','rgStock'],['people','rgPeople'],['control','rgControl']];
+      /* fix171-repgroups: guruh → [guruh, belgi, rang]; tartib — ko'p ishlatiladigan oldin */
+      const G = {today:['sales','sale','#16a34a'], receipts:['sales','receiptIcon','#2563eb'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
+        products:['analysis','products','#0891b2'], productprofit:['analysis','percent','#12a37f'], promos:['analysis','tag','#db2777'],
+        pnl:['finance','percent','#0f9d8a'], expenses:['finance','creditCard','#d97706'],
+        customers:['cust','customers','#8b5cf6'],
+        staff:['staffg','peopleIcon','#a855f7'], payroll:['staffg','peopleIcon','#7c5cfc'],
+        inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], suppliers:['stock','truck','#0f766e'], mydebts:['stock','book','#c2410c'],
+        audit:['control','target','#475569'], branches:['control','mapPin','#6366f1']};
+      const ORD = Object.keys(G);
+      const order = [['sales','rgSales'],['analysis','rgAnalysis'],['finance','rgFinance'],['cust','rgCustomers'],['staffg','rgStaff'],['stock','rgStock'],['control','rgControl']];   /* fix171-repgroups */
       const items = reportsMenuItems().concat((isAdmin() || hasPerm('myDebts')) ? [{id: 'mydebts', label: tr('myDebtsLabel')}] : []);   /* fix128-main */
       const known = new Set(Object.keys(G));
       const extra = items.filter(it=>!known.has(it.id));
       return order.map(([g,lbl])=>{
-        const list = items.filter(it=>G[it.id] && G[it.id][0]===g).concat(g==='control' ? extra : []);
+        const list = items.filter(it=>G[it.id] && G[it.id][0]===g).sort((a, b)=>ORD.indexOf(a.id) - ORD.indexOf(b.id)).concat(g==='control' ? extra : []);   /* fix171-repgroups */
         if(!list.length) return '';
         return `<p class="menu-group-title">${tr(lbl)}</p><div class="settings-menu-grid">${list.map(it=>{ const m = G[it.id] || ['control','reports','#475569']; return `
           <div class="list-item" data-cat="${it.id}" style="cursor:pointer;">
