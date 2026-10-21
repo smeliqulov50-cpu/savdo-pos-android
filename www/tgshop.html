@@ -304,7 +304,7 @@ function money(n){
   return (v < 0 ? '−' : '') + (c.b ? sym + s : s + ' ' + sym);
 }
 function qtyStr(q){ q = Math.round(q * 1000) / 1000; return Number.isInteger(q) ? String(q) : String(q).replace('.', ','); }
-function unitL(u){ return t('u_' + (I['u_' + u] ? u : 'dona')); }
+function unitL(u){ if(u && !I['u_' + u] && String(u).trim()) return String(u).trim(); return t('u_' + (I['u_' + u] ? u : 'dona')); }   /* fix174-botprice: blok nomi o'zi */
 function haptic(kind){ try{ if(TG && TG.HapticFeedback){ if(kind === 'ok' || kind === 'err') TG.HapticFeedback.notificationOccurred(kind === 'ok' ? 'success' : 'error'); else TG.HapticFeedback.impactOccurred('light'); } }catch(e){} }
 var toastT = 0;
 function toast(m){ var el = document.getElementById('toast'); el.textContent = m; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function(){ el.classList.remove('on'); }, 3200); }
@@ -512,6 +512,7 @@ function load(){
   if(!INIT || !SLUG){ renderOutside(); return; }
   api('catalog').then(function(j){
     if(!j.ok){ S.err = errText(j); S.view = 'fatal'; render(); return; }
+    if(j.shop && j.shop.lang && LANGS.indexOf(j.shop.lang) !== -1 && j.shop.lang !== LANG && !qs.get('lang')){ location.replace(location.pathname + '?s=' + encodeURIComponent(SLUG) + '&lang=' + j.shop.lang + (qs.get('view') ? '&view=' + encodeURIComponent(qs.get('view')) : '')); return; }   /* fix174-botprice: do'kon tili */
     applyCatalog(j); if(qs.get('view') === 'orders'){ S.view = 'orders'; S.orders = null; render(); loadOrders(); return; }   /* fix155-custbot */
     render();
   });
@@ -693,8 +694,8 @@ function pickVariant(id){
     var h = '<h3>' + esc(it.n) + '</h3><div class="muted" style="margin:-6px 0 8px;">' + esc(t('pick')) + '</div>';
     (it.v || []).forEach(function(v){
       var q = cartQty(id, v.id);
-      h += '<div class="line"><div class="lt"><div class="ln">' + esc(v.n) + '</div><div class="lp">' + esc(money(v.p)) + (v.s ? '' : ' · <span style="color:var(--danger)">' + esc(t('out')) + '</span>') + '</div></div>'
-        + (v.s ? (q > 0 ? '<div class="step"><button data-vdec="' + esc(v.id) + '">−</button><span class="qv">' + esc(qtyStr(q)) + '</span><button data-vinc="' + esc(v.id) + '">+</button></div>' : '<button class="addb" style="width:118px;margin:0" data-vinc="' + esc(v.id) + '">' + esc(t('add')) + '</button>') : '') + '</div>';
+      h += '<div class="line"><div class="lt"><div class="ln">' + esc(v.n) + '</div><div class="lp">' + esc(money(v.p)) + (v.bl ? ' / ' + esc(v.bl) : '') + (v.s ? '' : ' · <span style="color:var(--danger)">' + esc(t('out')) + '</span>') + '</div></div>'
+        + (v.s ? (q > 0 ? '<div class="step"><button data-vdec="' + esc(v.id) + '">−</button><button class="qv" data-vqty="' + esc(v.id) + '">' + esc(qtyStr(q)) + '</button><button data-vinc="' + esc(v.id) + '">+</button></div>' : '<button class="addb" style="width:118px;margin:0" data-vinc="' + esc(v.id) + '">' + esc(t('add')) + '</button>') : '') + '</div>';
     });
     h += '<button class="addb" id="v-done" style="margin-top:14px;height:46px;">' + esc(t('done2')) + '</button>';
     return h;
@@ -703,19 +704,20 @@ function pickVariant(id){
     sh.onclick = function(e){
       var b = e.target.closest('button'); if(!b) return;
       if(b.id === 'v-done'){ closeSheet(); refreshGrid(); return; }
-      var vi = b.getAttribute('data-vinc'), vd = b.getAttribute('data-vdec');
+      var vi = b.getAttribute('data-vinc'), vd = b.getAttribute('data-vdec'), vq = b.getAttribute('data-vqty');
+      if(vq){ askQty(id, vq, function(){ pickVariant(id); }); return; }   /* fix174-botprice: miqdorni yozish */
       if(vi) setQty(id, vi, cartQty(id, vi) + stepOf(it));
       if(vd) setQty(id, vd, cartQty(id, vd) - stepOf(it));
       if(vi || vd){ sh.innerHTML = draw(); refreshGrid(); }
     };
   });
 }
-function askQty(id, v){
+function askQty(id, v, after){
   var it = S.byId[id]; if(!it) return;
   var cur = cartQty(id, v);
   openSheet('<h3>' + esc(it.n) + '</h3><div class="fld" style="margin-top:0"><label for="qv-in">' + esc(t('qtyP')) + ' (' + esc(unitL(it.u)) + ')</label><input id="qv-in" type="text" inputmode="decimal" value="' + esc(qtyStr(cur)) + '"></div><button class="addb" id="qv-ok" style="margin-top:14px;height:46px;">' + esc(t('done2')) + '</button>', function(sh){
     var inp = sh.querySelector('#qv-in'); setTimeout(function(){ try{ inp.focus(); inp.select(); }catch(e){} }, 50);
-    sh.querySelector('#qv-ok').onclick = function(){ var q = parseFloat(String(inp.value).replace(',', '.')); if(isFinite(q) && q >= 0){ setQty(id, v, Math.min(q, 9999)); } closeSheet(); if(S.view === 'cart') render(); else refreshGrid(); };
+    sh.querySelector('#qv-ok').onclick = function(){ var q = parseFloat(String(inp.value).replace(',', '.')); if(isFinite(q) && q >= 0){ setQty(id, v, Math.min(q, 9999)); } closeSheet(); if(S.view === 'cart') render(); else refreshGrid(); if(after) after(); };
   });
 }
 function getLocation(){

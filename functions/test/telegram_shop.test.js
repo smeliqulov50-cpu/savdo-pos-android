@@ -649,3 +649,53 @@ test('fix154-iso: ikki do\'konda faol buyurtma — mijoz xabari aralashmaydi (ta
   assert.equal(r5.custMsg, o2.body.order.id);
   assert.ok(tg.sent.some(x => String(x.chat_id) === '5550002' && /Men ham mijozman/.test(x.text || '')));
 });
+
+/* fix174-botprice: narx rejimi (chakana/ulgurji/blok) va til — veb katalog bilan bir xil; blok savdosi */
+test('fix174: ulgurji rejim — ulgurji narx, narxsiz mahsulot yashirin; blok rejim — blok narxi, blok birligi, qoldiq blokda; buyurtma blokda, band dona hisobida', async () => {
+  const sd = seed();
+  sd['businesses/' + BID + '/products/p1'].wholesalePrice = 11000;
+  sd['businesses/' + BID + '/products/p1'].boxPrice = 120000; sd['businesses/' + BID + '/products/p1'].unitsPerBox = 12; sd['businesses/' + BID + '/products/p1'].boxLabel = 'Blok'; sd['businesses/' + BID + '/products/p1'].stock = 30;
+  sd['businesses/' + BID + '/products/p2'].wholesalePrice = 4500;
+  sd['tgShop/' + BID].priceMode = 'wholesale'; sd['tgShop/' + BID].lang = 'uz';
+  let s = mk(sd);
+  let r = await shop.handleWebApp(s.deps, { initData: ID1, action: 'catalog', slug: 'sardor', lang: 'ru' });
+  assert.equal(r.body.shop.lang, 'uz'); assert.equal(r.body.shop.priceMode, 'wholesale');
+  const by = {}; r.body.items.forEach(i => { by[i.id] = i; });
+  assert.equal(by.p1.p, 11000); assert.equal(by.p2.p, 4500);
+  assert.ok(!by.p3, 'ulgurji narxi yo\'q — yashirin');
+  assert.equal(by.p6.p, 50000, 'variant: ulgurji narx yo\'q bo\'lsa oddiy narx');
+  // blok rejim
+  s.db.store['tgShop/' + BID].priceMode = 'box'; shop.clearCatalogCache();
+  r = await shop.handleWebApp(s.deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  const b1 = r.body.items.find(i => i.id === 'p1'), b2 = r.body.items.find(i => i.id === 'p2');
+  assert.equal(b1.p, 120000); assert.equal(b1.b, 12); assert.equal(b1.u, 'Blok'); assert.equal(b1.m, 2, '30 dona = 2 blok'); assert.equal(b1.f, 0);
+  assert.equal(b2.p, 4500, 'blok narxi yo\'q — ulgurji narx');
+  // buyurtma: 2 blok
+  const o = await order(s.deps, { items: [{ id: 'p1', q: 2 }] });
+  assert.ok(o.body.ok, JSON.stringify(o.body));
+  const line = o.body.order.items[0];
+  assert.equal(line.qty, 2); assert.equal(line.b, 12); assert.equal(line.unit, 'Blok'); assert.equal(line.sum, 240000);
+  // band: 24 dona — endi 0 blok qoldi
+  shop.clearCatalogCache();
+  r = await shop.handleWebApp(s.deps, { initData: ID2, action: 'catalog', slug: 'sardor' });
+  const after = r.body.items.find(i => i.id === 'p1');
+  assert.equal(after.m, 0); assert.equal(after.s, 0, '6 dona qoldi — bir blokka yetmaydi');
+  const o2 = await order(s.deps, { items: [{ id: 'p1', q: 1 }] }, ID2);
+  assert.equal(o2.body.code, 'out_of_stock');
+  // matnda blok birligi
+  const M = require('../src/telegram/msgs');
+  assert.equal(M.unitLabel('uz', 'Blok'), 'Blok'); assert.equal(M.unitLabel('uz', 'kg'), M.unitLabel('uz', 'kg'));
+  // chakana — avvalgidek
+  s.db.store['tgShop/' + BID].priceMode = 'retail'; shop.clearCatalogCache();
+  r = await shop.handleWebApp(s.deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  assert.equal(r.body.items.find(i => i.id === 'p1').p, 12000); assert.ok(r.body.items.find(i => i.id === 'p3'));
+});
+test('fix174: showOut=false — tugagan mahsulot bot katalogida yashirin (veb kabi); standart — ko\'rinadi', async () => {
+  const sd = seed(); sd['tgShop/' + BID].showOut = false;
+  const s = mk(sd);
+  let r = await shop.handleWebApp(s.deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  assert.ok(!r.body.items.find(i => i.id === 'p7'), 'tugagan yashirin');
+  s.db.store['tgShop/' + BID].showOut = true; shop.clearCatalogCache();
+  r = await shop.handleWebApp(s.deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  assert.ok(r.body.items.find(i => i.id === 'p7'), 'ko\'rinadi (Tugagan belgisi bilan)');
+});

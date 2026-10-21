@@ -1314,6 +1314,7 @@ const T = {
   inMyDebts:{uz:"Tovar yoki pul qarz bergan odamlar va ularga qancha qarzingiz borligi.",ru:"Кому вы должны за товар или деньги и сколько.",en:"People you owe for goods or money, and how much.",kk:"Тауар немесе ақша қарыз берген адамдар және оларға қанша қарызыңыз бар.",ky:"Товар же акча карыз берген адамдар жана аларга канча карызыңыз бар.",tg:"Одамоне, ки ба шумо мол ё пул қарз додаанд ва чӣ қадар қарздоред."},
   inTransfer:{uz:"Tovarni bir filialdan boshqasiga o'tkazish — qoldiq ikkala filialda o'zi tuzatiladi.",ru:"Перемещение товара между филиалами — остатки обновятся в обоих.",en:"Move goods between branches — stock updates in both.",kk:"Тауарды бір филиалдан екіншісіне өткізу — қалдық екеуінде де түзетіледі.",ky:"Товарды бир филиалдан экинчисине өткөрүү — калдык экөөндө тең оңдолот.",tg:"Интиқоли мол аз як филиал ба дигар — боқимонда дар ҳарду ислоҳ мешавад."},
   inPromo:{uz:"Chegirma aksiyalari va sovg'a kartalari — kassada o'zi qo'llanadi.",ru:"Акции со скидкой и подарочные карты — применяются на кассе автоматически.",en:"Discount promotions and gift cards — applied at the register automatically.",kk:"Жеңілдік акциялары мен сыйлық карталары — кассада өзі қолданылады.",ky:"Арзандатуу акциялары жана белек карталары — кассада өзү колдонулат.",tg:"Аксияҳои тахфиф ва кортҳои тӯҳфа — дар касса худаш татбиқ мешавад."},
+  boPriceHint:{uz:"Narx rejimi (chakana / ulgurji / blok), katalog tili va tugagan mahsulotlarni ko'rsatish yuqoridagi veb katalog sozlamasidan olinadi — bot va sayt bir xil.",ru:"Режим цен (розница / опт / блок) и язык каталога берутся из настроек веб-каталога выше — бот и сайт одинаковы.",en:"Price mode (retail / wholesale / box) and catalog language come from the web catalog settings above — bot and site match.",kk:"Баға режимі мен каталог тілі жоғарыдағы веб-каталог баптауларынан алынады.",ky:"Баа режими жана каталог тили жогорудагы веб-каталог жөндөөлөрүнөн алынат.",tg:"Реҷаи нарх ва забони каталог аз танзимоти каталоги веб дар боло гирифта мешавад."},   /* fix174-botprice */
   boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
@@ -4128,7 +4129,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.51';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.52';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -22759,7 +22760,7 @@ function __boHdrBind(){ var b = document.getElementById('bo-hdr-btn'); if(b) b.a
 
 /* ---------- buyurtmalar ekrani ---------- */
 function __boStLabel(s){ return tr('boSt_' + s); }
-function __boUnit(u){ return u && u !== 'dona' ? ' ' + unitLabel(u) : ''; }
+function __boUnit(u){ if(u && !({dona:1,kg:1,litr:1,paket:1})[u]) return ' ' + String(u); return u && u !== 'dona' ? ' ' + unitLabel(u) : ''; }   /* fix174-botprice: blok nomi */
 function __boQty(q){ q = Math.round((Number(q) || 0) * 1000) / 1000; return Number.isInteger(q) ? String(q) : String(q).replace('.', ','); }
 function __boCardHtml(o){
   var h = '<div class="card bo-card s-' + escapeHtml(o.status) + '" data-bo="' + escapeHtml(o.id) + '">';
@@ -22946,15 +22947,17 @@ function __boSell(o){
     var p = state.products.find(function(x){ return x.id === it.id; });
     if(!p){ missing.push(it.name); return; }
     var line = {productId: p.id, qty: it.qty, boOid: o.id};
-    var cur;
+    var cur, units = it.qty;
+    var isBox = Number(it.b) > 0;   /* fix174-botprice: blok savdosi */
+    if(isBox){ line.saleMode = 'box'; line.unitsPerBox = Number(it.b); line.boxLabel = it.unit || p.boxLabel || tr('boxDefaultLabel'); units = it.qty * Number(it.b); }
     if(it.v){
       var v = (p.variants || []).find(function(x){ return x.id === it.v; });
       if(!v){ missing.push(it.name + (it.vName ? ' — ' + it.vName : '')); return; }
-      line.variantId = v.id; cur = v.price;
-      if(!state.settings.allowOversell && (v.stock || 0) < it.qty) short.push(p.name + ' — ' + v.name);
+      line.variantId = v.id; cur = isBox ? v.boxPrice : v.price;
+      if(!state.settings.allowOversell && (v.stock || 0) < units) short.push(p.name + ' — ' + v.name);
     } else {
-      cur = p.price;
-      if(!state.settings.allowOversell && (p.stock || 0) < it.qty) short.push(p.name);
+      cur = isBox ? p.boxPrice : p.price;
+      if(!state.settings.allowOversell && (p.stock || 0) < units) short.push(p.name);
     }
     if(Number(it.price) >= 0 && Number(it.price) !== Number(cur)) line.priceOverride = Number(it.price);
     lines.push(line);
@@ -23037,7 +23040,8 @@ function __boCfgRender(){
   var el = document.getElementById('bo-cfg-card'); if(!el) return;
   var head = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">' + icI('bot') + '<b style="font-size:15.5px;flex:1;">' + escapeHtml(tr('boSetTitle')) + '</b>'
     + (__bo.cfg ? '<span class="tg-bd ' + (__bo.cfg.enabled ? 'on' : 'off') + '">' + escapeHtml(tr(__bo.cfg.enabled ? 'boOnB' : 'boOffB')) + '</span>' : '') + '</div>'
-    + '<p class="subtle" style="margin:0 0 10px;font-size:12.5px;">' + escapeHtml(tr('boIntro')) + '</p>';
+    + '<p class="subtle" style="margin:0 0 10px;font-size:12.5px;">' + escapeHtml(tr('boIntro')) + '</p>'
+    + '<p class="subtle" style="margin:0 0 10px;font-size:12px;">' + escapeHtml(tr('boPriceHint')) + '</p>';   /* fix174-botprice */
   if(!__boCan()){ el.innerHTML = head + '<p class="subtle" style="margin:0;">' + escapeHtml(tr('boNeedLogin')) + '</p>'; return; }
   if(__bo.cfgBusy && !__bo.cfg){ el.innerHTML = head + '<p class="subtle">…</p>'; return; }
   if(__bo.cfgErr === 'not_ready'){ el.innerHTML = head + '<p class="subtle" style="margin:0;">' + escapeHtml(tr('boNotReady')) + '</p>'; return; }
@@ -23112,7 +23116,8 @@ function __boCfgRender(){
       fee: mv('bo-fee'), freeFrom: mv('bo-free'), minOrder: mv('bo-min'), note: $('bo-note').value.trim(), notifyTg: $('bo-ntg').checked, allProducts: !!($('bo-allp') && $('bo-allp').checked), autoAccept: !!($('bo-auto') && $('bo-auto').checked), autoEta: $('bo-auto-eta') ? (Number($('bo-auto-eta').value) || 0) : 0,   /* fix153-boplus */
       custReceipts: !!($('cu-rc') && $('cu-rc').checked), custByPhone: !!($('cu-ph') && $('cu-ph').checked), debtRemind: {on: !!($('cu-dr') && $('cu-dr').checked), days: $('cu-dr-days') ? (Number($('cu-dr-days').value) || 7) : 7, minDebt: mv('cu-dr-min'), lastRun: (__bo.cfg && __bo.cfg.debtRemind && __bo.cfg.debtRemind.lastRun) || 0},   /* fix155-custbot */
       hours: {on: $('bo-hr').checked, from: $('bo-from').value || '09:00', to: $('bo-to').value || '21:00'}, paused: !!(__bo.cfg && __bo.cfg.paused),
-      tz: state.settings.timeZone || deviceTimeZone() || 'Asia/Tashkent'};
+      tz: state.settings.timeZone || deviceTimeZone() || 'Asia/Tashkent',
+      priceMode: onlineShopCfg().priceMode || 'retail', lang: onlineShopCfg().lang || '', showOut: onlineShopCfg().showOut !== false};   /* fix174-botprice: veb katalog bilan bir xil */
     if(!cfg.pickup && !cfg.delivery){ err.textContent = tr('boNeedMode'); return; }
     if(cfg.enabled && !__boBotCount()){ err.textContent = tr('boNoProducts'); }
     sv.disabled = true;
@@ -23311,6 +23316,7 @@ function renderSettingsCatalog(container){
     pubBtn.disabled = true;
     const ok = await publishOnlineShop(false);
     pubBtn.disabled = false;
+    try{ if(ok && __bo.cfg && __boOwner()){ const c2 = Object.assign({}, __bo.cfg, {priceMode: onlineShopCfg().priceMode || 'retail', lang: onlineShopCfg().lang || '', showOut: onlineShopCfg().showOut !== false}); if(c2.priceMode !== __bo.cfg.priceMode || c2.lang !== __bo.cfg.lang || c2.showOut !== __bo.cfg.showOut){ __tgApi('boSave', {cfg: c2}).then(function(r){ __bo.cfg = r.cfg; }).catch(function(){}); } } }catch(e){}   /* fix174-botprice: bot ham yangilansin */
     if(ok && prev.slug && prev.slug !== slug) unpublishOnlineShop(prev.slug);
     if(!ok) state.settings.onlineShop = Object.assign({}, state.settings.onlineShop, {lastPublishedAt: prev.lastPublishedAt||null});
     renderSettingsCatalog(container);

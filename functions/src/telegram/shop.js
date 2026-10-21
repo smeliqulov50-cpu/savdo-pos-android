@@ -78,6 +78,9 @@ function normCfg(raw) {
     autoAccept: raw.autoAccept === true,
     autoEta: Math.max(0, Math.min(240, Math.round(num(raw.autoEta)))),
     custReceipts: raw.custReceipts !== false,   /* fix155-custbot */
+    priceMode: ['retail', 'wholesale', 'box'].indexOf(raw.priceMode) !== -1 ? raw.priceMode : 'retail',   /* fix174-botprice: veb katalog bilan bir xil */
+    lang: S.LANGS.indexOf(raw.lang) !== -1 ? raw.lang : '',
+    showOut: raw.showOut !== false,
     custByPhone: raw.custByPhone !== false,
     debtRemind: { on: !!(raw.debtRemind && raw.debtRemind.on === true), days: Math.max(3, Math.min(60, Math.round(num(raw.debtRemind && raw.debtRemind.days)) || 7)), minDebt: money(raw.debtRemind && raw.debtRemind.minDebt, 2), lastRun: Math.max(0, num(raw.debtRemind && raw.debtRemind.lastRun)) }
   };
@@ -86,7 +89,7 @@ function normCfg(raw) {
 }
 function publicCfg(c) {
   return { enabled: c.enabled, slug: c.slug, branchId: c.branchId, pickup: c.pickup, delivery: c.delivery, fee: c.fee, freeFrom: c.freeFrom, minOrder: c.minOrder,
-    note: c.note, hours: c.hours, paused: c.paused, notifyTg: c.notifyTg, tz: c.tz, allProducts: c.allProducts, autoAccept: c.autoAccept, autoEta: c.autoEta, custReceipts: c.custReceipts, custByPhone: c.custByPhone, debtRemind: c.debtRemind };
+    note: c.note, hours: c.hours, paused: c.paused, notifyTg: c.notifyTg, tz: c.tz, allProducts: c.allProducts, autoAccept: c.autoAccept, autoEta: c.autoEta, custReceipts: c.custReceipts, custByPhone: c.custByPhone, debtRemind: c.debtRemind, priceMode: c.priceMode || 'retail', lang: c.lang || '', showOut: c.showOut !== false };   /* fix174-botprice */
 }
 function localHm(tz, ms) {
   try {
@@ -140,7 +143,7 @@ function reservedFrom(orders, branchId) {
   Object.keys(orders || {}).forEach(function (k) {
     const o = orders[k];
     if (!o || ACTIVE.indexOf(o.status) === -1 || effBranch(o.branchId) !== effBranch(branchId)) return;
-    (o.items || []).forEach(function (x) { const key = String(x.id) + '|' + String(x.v || ''); r[key] = round3((r[key] || 0) + num(x.qty)); });
+    (o.items || []).forEach(function (x) { const key = String(x.id) + '|' + String(x.v || ''); r[key] = round3((r[key] || 0) + num(x.qty) * (num(x.b) > 0 ? num(x.b) : 1)); });   /* fix174-botprice: blok → dona */
   });
   return r;
 }
@@ -155,20 +158,33 @@ function buildCatalog(docs, biz, cfg, reserved) {
     if (effBranch(p.branchId) !== effBranch(cfg.branchId)) return;
     const name = str(p.name, 120); if (!name) return;
     const unit = ['dona', 'kg', 'litr', 'paket'].indexOf(p.unit) !== -1 ? p.unit : 'dona';
-    const vs = (Array.isArray(p.variants) ? p.variants.filter(function (v) { return v && v.id && str(v.name, 80) && money(v.price, D) > 0; }) : [])
+    /* fix174-botprice: narx rejimi veb katalog bilan bir xil (chakana / ulgurji / blok) */
+    const mode = cfg.priceMode || 'retail', perBox = money(p.unitsPerBox, 3), boxLbl = str(p.boxLabel, 40);
+    const pickP = function (o, isVar) {
+      if (mode === 'box' && money(o.boxPrice, D) > 0 && perBox > 0) return { p: money(o.boxPrice, D), b: perBox };
+      if (mode === 'box' || mode === 'wholesale') { const w = money(o.wholesalePrice, D); if (w > 0) return { p: w, b: 0 }; return isVar && money(o.price, D) > 0 ? { p: money(o.price, D), b: 0 } : null; }
+      return money(o.price, D) > 0 ? { p: money(o.price, D), b: 0 } : null;
+    };
+    const vs = (Array.isArray(p.variants) ? p.variants.filter(function (v) { return v && v.id && str(v.name, 80) && !!pickP(v, true); }) : [])
       .map(function (v) { return Object.assign({}, v, { stock: num(v.stock) - (reserved[String(p.id) + '|' + String(v.id)] || 0) }); });   /* fix148-reserve */
     if (Array.isArray(p.variants) && p.variants.length && !vs.length) return;
-    if (!vs.length && !(money(p.price, D) > 0)) return;
+    const pp = vs.length ? null : pickP(p, false);
+    if (!vs.length && !pp) return;
     const stock = vs.length ? vs.reduce(function (a, v) { return a + Math.max(0, num(v.stock)); }, 0) : num(p.stock) - (reserved[String(p.id) + '|'] || 0);   /* fix148-reserve */
-    const it = { id: String(p.id), n: name, p: vs.length ? Math.min.apply(null, vs.map(function (v) { return money(v.price, D); })) : money(p.price, D), u: unit,
+    const boxOf = function (b) { return b > 0 ? (boxLbl || 'blok') : ''; };
+    const it = { id: String(p.id), n: name, p: vs.length ? Math.min.apply(null, vs.map(function (v) { return pickP(v, true).p; })) : pp.p, u: unit,
       c: str(p.category, 60), f: FRACTION_UNITS.indexOf(unit) !== -1 ? 1 : 0, s: oversell || stock > 0 ? 1 : 0 };
-    if (!oversell && !vs.length) it.m = Math.max(0, Math.min(MAX_QTY, round3(stock)));
+    if (pp && pp.b > 0) { it.b = pp.b; it.bl = boxOf(pp.b); it.u = it.bl; it.f = 0; it.s = oversell || stock >= pp.b ? 1 : 0; }
+    if (!oversell && !vs.length) it.m = Math.max(0, Math.min(MAX_QTY, it.b ? Math.floor(stock / it.b) : round3(stock)));
     if (hasImg(p)) it.i = imgVer(p);
     if (vs.length) it.v = vs.map(function (v) {
-      const o = { id: String(v.id), n: str(v.name, 80), p: money(v.price, D), s: oversell || num(v.stock) > 0 ? 1 : 0 };
-      if (!oversell) o.m = Math.max(0, Math.min(MAX_QTY, round3(num(v.stock))));
+      const vp = pickP(v, true);
+      const o = { id: String(v.id), n: str(v.name, 80), p: vp.p, s: oversell || num(v.stock) > 0 ? 1 : 0 };
+      if (vp.b > 0) { o.b = vp.b; o.bl = boxOf(vp.b); o.s = oversell || num(v.stock) >= vp.b ? 1 : 0; }
+      if (!oversell) o.m = Math.max(0, Math.min(MAX_QTY, vp.b ? Math.floor(num(v.stock) / vp.b) : round3(num(v.stock))));
       return o;
     });
+    if (cfg.showOut === false && !it.s) return;   /* fix174-botprice: veb kabi — tugaganlar yashirin */
     if (it.c && cats.indexOf(it.c) === -1) cats.push(it.c);
     items.push(it);
     byId[it.id] = { it: it, raw: p };
@@ -197,7 +213,7 @@ function shopInfo(cat, cfg, now) {
   const b = cat.biz || {};
   return { name: str(b.businessName || (b.settings && b.settings.businessName) || 'Savdo Pos', 80), address: str(b.businessAddress, 200), phone: str(b.businessPhone, 40),
     cur: str(b.currency || 'UZS', 6), note: cfg.note, pickup: cfg.pickup, delivery: cfg.delivery, fee: money(cfg.fee, M.decOf(str(b.currency || 'UZS', 6))), freeFrom: money(cfg.freeFrom, M.decOf(str(b.currency || 'UZS', 6))), minOrder: money(cfg.minOrder, M.decOf(str(b.currency || 'UZS', 6))),
-    hours: cfg.hours, open: isOpen(cfg, now) && !cfg.paused, paused: cfg.paused };
+    hours: cfg.hours, open: isOpen(cfg, now) && !cfg.paused, paused: cfg.paused, lang: cfg.lang || '', priceMode: cfg.priceMode || 'retail' };   /* fix174-botprice */
 }
 
 /* ---------- matnlar ---------- */
@@ -450,7 +466,7 @@ async function forwardCustomerText(deps, cust, uid, o0, text, l) {
 /* ---------- mini ilova so'rovlari ---------- */
 function custSummary(o) {
   return { id: o.id, no: o.no, status: o.status, createdAt: o.createdAt, total: o.total, cur: o.cur, mode: o.mode, n: (o.items || []).length,
-    items: (o.items || []).slice(0, 30).map(function (x) { return { name: x.name, vName: x.vName || '', qty: x.qty, sum: x.sum }; }), eta: o.eta || 0, reason: o.reason || '' };
+    items: (o.items || []).slice(0, 30).map(function (x) { const l = { name: x.name, vName: x.vName || '', qty: x.qty, sum: x.sum }; if (x.b > 0) { l.b = x.b; l.unit = x.unit; } return l; }), eta: o.eta || 0, reason: o.reason || '' };   /* fix174-botprice */
 }
 function orderIdFor(bid, uid, clientId) { return 'bo' + crypto.createHash('sha256').update(bid + '|' + uid + '|' + clientId).digest('hex').slice(0, 22); }
 
@@ -547,7 +563,7 @@ async function handleWebApp(deps, body) {
     if (!e) return errBody(409, 'changed', { id: pid });
     let q = num(r.q);
     if (!(q > 0) || q > MAX_QTY) return errBody(400, 'bad_qty', { id: pid });
-    q = e.it.f ? round3(q) : Math.round(q);
+    q = (e.it.f && !e.it.b) ? round3(q) : Math.round(q);   /* fix174-botprice */
     if (!(q > 0)) return errBody(400, 'bad_qty', { id: pid });
     let v = null;
     if (e.it.v) { v = e.it.v.find(function (x) { return x.id === vid; }); if (!v) return errBody(409, 'changed', { id: pid }); }
@@ -567,6 +583,7 @@ async function handleWebApp(deps, body) {
     subtotal = M.rnd(subtotal + sum, D);
     const line = { id: it.id, name: it.n, price: price, qty: a.q, unit: it.u, sum: sum };
     if (v) { line.v = v.id; line.vName = v.n; }
+    { const bb = v ? v.b : it.b; if (bb > 0) { line.b = bb; line.unit = (v ? v.bl : it.bl) || 'blok'; } }   /* fix174-botprice: blok savdosi */
     items.push(line);
   }
   const minO = money(cfg.minOrder, D), freeF = money(cfg.freeFrom, D);

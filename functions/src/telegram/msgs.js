@@ -113,7 +113,7 @@ function money(lang, cur, n, plus) {
   const sign = v < 0 ? '−' : (plus && v > 0 ? '+' : ''), num = fmtC(cur, Math.abs(v));
   return sign + (c.before ? sym + num : num + ' ' + sym);
 }
-function unitLabel(lang, u) { const m = W(lang).units; return m[u] || m.dona; }
+function unitLabel(lang, u) { const m = W(lang).units; return m[u] || (typeof u === 'string' && u.trim() ? u.trim() : m.dona); }   /* fix174-botprice: blok nomi */
 function head(icon, title, shop, extra) { return icon + ' <b>' + esc(title) + '</b> · ' + esc(shop) + (extra ? ' ' + extra : ''); }
 function tpl(s, vars) { Object.keys(vars || {}).forEach(function (k) { s = s.split('{' + k + '}').join(String(vars[k])); }); return s; }
 
