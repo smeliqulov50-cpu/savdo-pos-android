@@ -270,7 +270,9 @@ async function onSale(deps, bid, sale) {
   return { sent: sent, credit: credit };
 }
 async function onLedger(deps, bid, entry) {
-  if (!deps.key || !deps.tg || !entry || entry.type !== 'payment' || !entry.method || !entry.customerId) return { skipped: 'not_payment' };
+  if (!deps.key || !deps.tg || !entry || !entry.customerId) return { skipped: 'not_payment' };
+  if (entry.type === 'sale' && !entry.saleId && num(entry.amount) > 0) return onManualDebt(deps, bid, entry);   /* fix158-custfull: qo'lda yozilgan qarz */
+  if (entry.type !== 'payment' || !entry.method) return { skipped: 'not_payment' };
   const db = deps.db;
   const cfg = (await getData(db.collection('tgShop').doc(bid))) || {};
   if (cfg.custReceipts === false) return { skipped: 'off' };
@@ -281,6 +283,19 @@ async function onLedger(deps, bid, entry) {
   const c = await custDoc(db, bid, entry.customerId); const debt = c ? num(c.debt) : 0;
   const text = C.txt('paid', l, { shop: esc(s.name), date: fmtDT(t, s.tz), sum: M.money(l, s.cur, num(entry.amount)), note: entry.note ? ' · ' + esc(str(entry.note, 80)) : '', debt: M.money(l, s.cur, debt), thanks: debt <= 0 ? C.txt('paidAll', l) : '' });
   return { sent: await send(deps, link.uid, text) };
+}
+/* fix158-custfull: ilovada mijoz kartasidan qo'lda qarz yozilganda (sotuvsiz) */
+async function onManualDebt(deps, bid, entry) {
+  const db = deps.db;
+  const cfg = (await getData(db.collection('tgShop').doc(bid))) || {};
+  if (cfg.custReceipts === false) return { skipped: 'off' };
+  const link = (await linkFor(db, bid, entry.customerId)) || (await autoLink(deps, bid, String(entry.customerId), cfg));
+  if (!link) return { skipped: 'not_linked' };
+  const t = Date.parse(entry.date); if (!isFinite(t) || t < deps.nowMs() - 12 * HOUR) return { skipped: 'old' };
+  const s = await shopOf(db, bid), l = await langOf(db, link.uid);
+  const c = await custDoc(db, bid, entry.customerId); const debt = c ? num(c.debt) : 0;
+  const text = C.txt('debtAdded', l, { shop: esc(s.name), date: fmtDT(t, s.tz), sum: M.money(l, s.cur, num(entry.amount)), note: entry.note ? ' · ' + esc(str(entry.note, 80)) : '', debt: M.money(l, s.cur, debt) });
+  return { sent: await send(deps, link.uid, text, { inline_keyboard: [[myBtn(l)]] }), manualDebt: true };
 }
 async function remindOne(deps, bid, cid, opt) {
   opt = opt || {};
@@ -379,14 +394,23 @@ async function onText(deps, msg, lang) {
   try { const ctx = await require('./reports').loadCtx(deps, a.bid); for (const ch of ctx.chats) { if (await send(deps, ch.id, C.txt('qOwner', ch.lang || 'uz', { who: who, no: esc(a.no), text: esc(text) }))) n++; } } catch (e) {}
   return { reply: C.txt('qSent', l, { shop: esc(s.name) }), custQ: a.sid, n: n };
 }
+/* fix158-custfull: raqam so'rash (bir bosishda kontakt) */
+function phoneKb(l) { return { keyboard: [[{ text: C.txt('phoneBtn', l), request_contact: true }]], resize_keyboard: true, one_time_keyboard: true }; }
+async function askPhone(deps, chatId, lang) {
+  const cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || {};
+  const l = S.lg(cust.lang || lang);
+  await send(deps, chatId, C.txt('phoneAsk', l), phoneKb(l));
+  return { askPhone: true };
+}
 /* /mening buyrug'i yoki "Mening sahifam" */
 async function sendMy(deps, chatId, lang) {
   let cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || {};
   if (cust.phoneOk && cust.phone) { try { if ((await matchByPhone(deps, chatId, [])).length) cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || cust; } catch (e) {} }   /* fix157-custuni */
   const l = S.lg(cust.lang || lang);
   const has = cust.shops && Object.keys(cust.shops).length;
-  await send(deps, chatId, has ? C.txt('myHint', l) : C.txt('myNone', l), { inline_keyboard: [[myBtn(l)]] });
+  if (!has && !cust.phoneOk) { await send(deps, chatId, C.txt('myNone', l) + '\n\n' + C.txt('phoneAsk', l), phoneKb(l)); return { my: false, askPhone: true }; }   /* fix158-custfull */
+  await send(deps, chatId, has ? C.txt('myHint', l) : C.txt('phoneNone', l), { inline_keyboard: [[myBtn(l)]] });
   return { my: !!has };
 }
 
-module.exports = { shopsByPhone, autoLink, intlKey, linkByCode, matchByPhone, handleMy, handleAppApi, onSale, onLedger, remindOne, remindTick, onCallback, onText, sendMy, myBtn, myUrl, phoneKey, linkId, creditOf, payKind, LINK_TTL_MS };
+module.exports = { askPhone, phoneKb, shopsByPhone, autoLink, intlKey, linkByCode, matchByPhone, handleMy, handleAppApi, onSale, onLedger, remindOne, remindTick, onCallback, onText, sendMy, myBtn, myUrl, phoneKey, linkId, creditOf, payKind, LINK_TTL_MS };

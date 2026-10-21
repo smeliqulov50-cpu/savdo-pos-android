@@ -14,10 +14,10 @@ const DR = require('../push/dailyReport');
 const HOUR = 3600 * 1000;
 const CMD_PER_HOUR = 30;
 const MAX_SHOPS = 3;
-const KINDS = ['today', 'yday', 'debts', 'low', 'pay', 'my', 'lang', 'help'];   /* fix155-custbot */
+const KINDS = ['today', 'yday', 'debts', 'low', 'pay', 'my', 'phone', 'lang', 'help'];   /* fix158-custfull */   /* fix155-custbot */
 const DATA_KINDS = ['today', 'yday', 'debts', 'low'];
 const ALIASES = { today: ['bugun', 'today'], yday: ['kecha', 'yesterday'], debts: ['qarzlar', 'debts'], low: ['kam_qolgan', 'low'],
-  pay: ['obuna', 'pay'], my: ['mening', 'my', 'me'], lang: ['til', 'lang'], help: ['yordam', 'help', 'menu', 'menyu'] };   /* fix155-custbot */
+  pay: ['obuna', 'pay'], my: ['mening', 'my', 'me'], phone: ['raqam', 'phone', 'nomer', 'номер'], lang: ['til', 'lang'], help: ['yordam', 'help', 'menu', 'menyu'] };   /* fix155-custbot */
 const TOP_CUST = 10, TOP_SUP = 5;
 
 async function getData(ref) { const s = await ref.get(); return s && s.exists ? (s.data() || {}) : null; }
@@ -53,8 +53,8 @@ async function send(deps, chatId, text, kb) {
 }
 function cmdList(deps, lang) {
   const n = C.names(lang);
-  const ks = ['today', 'yday', 'debts', 'low'].concat(deps.payToken ? ['pay'] : []).concat(['my', 'lang', 'help', 'stop']);   /* fix155-custbot */
-  const D = { today: 'dToday', yday: 'dYday', debts: 'dDebts', low: 'dLow', pay: 'dPay', my: 'dMy', lang: 'dLang', help: 'dHelp', stop: 'dStop' };
+  const ks = ['today', 'yday', 'debts', 'low'].concat(deps.payToken ? ['pay'] : []).concat(['my', 'phone', 'lang', 'help', 'stop']);   /* fix158-custfull */   /* fix155-custbot */
+  const D = { today: 'dToday', yday: 'dYday', debts: 'dDebts', low: 'dLow', pay: 'dPay', my: 'dMy', phone: 'dPhone', lang: 'dLang', help: 'dHelp', stop: 'dStop' };
   return ks.map(function (k) { return { command: n[k], description: C.T[D[k]][C.lg(lang)] }; });
 }
 function helpHtml(deps, lang, linked) {
@@ -133,6 +133,7 @@ async function run(deps, chatId, kind, lang) {
   if (KINDS.indexOf(kind) === -1) return { ignored: true };
   if (kind === 'lang') { await send(deps, chatId, C.t('langPick', lang), langKb()); return { langMenu: true }; }
   if (kind === 'my') return require('./cust').sendMy(deps, chatId, lang);   /* fix155-custbot */
+  if (kind === 'phone') return require('./cust').askPhone(deps, chatId, lang);   /* fix158-custfull */
   if (kind === 'pay') {
     const out = await P().sendMenu(deps, chatId, lang);
     if (out && out.reply) await send(deps, chatId, out.reply);

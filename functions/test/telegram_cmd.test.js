@@ -217,7 +217,7 @@ test('ulash: "Ulandi" xabari tugmali menyu bilan; oddiy matn — menyu', async (
   await core.handleUpdate(deps, msg('salom'));
   assert.match(last(tg).text, /ulangan: Sardor Market/); assert.ok(last(tg).reply_markup);
   await core.handleUpdate(deps, msg('salom', '9999'));
-  assert.match(last(tg).text, /Salom/); assert.match(last(tg).text, /\/til/); assert.ok(!last(tg).reply_markup);
+  assert.match(last(tg).text, /Salom/); assert.match(last(tg).text, /\/til/); assert.match(last(tg).text, /Mijozmisiz/); assert.ok(last(tg).reply_markup && last(tg).reply_markup.keyboard[0][0].request_contact === true);   /* fix158-custfull */
 });
 
 test('webhook o\'rnatilganda: menyu buyruqlari har bir tilda (Telegram talablariga mos)', async () => {
@@ -228,7 +228,7 @@ test('webhook o\'rnatilganda: menyu buyruqlari har bir tilda (Telegram talablari
     assert.equal(r.commands, 7); assert.equal(sc.length, 7);
     assert.deepEqual(sc.map(p => p.language_code || '-').sort(), ['-', 'en', 'kk', 'ky', 'ru', 'tg', 'uz']);
     sc.forEach(function (p) {
-      assert.equal(p.commands.length, pt ? 9 : 8);   /* fix155-custbot: +/mening */
+      assert.equal(p.commands.length, pt ? 10 : 9);   /* fix158-custfull: +/raqam */
       p.commands.forEach(function (c) { assert.match(c.command, /^[a-z0-9_]{1,32}$/); assert.ok(c.description.length >= 3 && c.description.length <= 256, c.description); });
     });
     assert.equal(sc.find(p => !p.language_code).commands[0].command, 'bugun');

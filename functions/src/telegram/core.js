@@ -239,7 +239,7 @@ async function handleUpdate(deps, upd) {
       const names = [];
       for (let i = 0; i < bids.length && i < 5; i++) names.push(await shopName(deps.db, bids[i]));
       out = { reply: txt('linkedInfo', lang, { shop: names.join(', ') }) + (deps.payToken ? '\n' + require('./payTexts').txt('payHint', lang) : '') + '\n\n' + require('./cmdTexts').t('menu', lang), kb: __cmd.menuKb(deps, lang) };
-    } else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) ||   /* fix153-boplus: faol buyurtmasi bor mijozning matni do'konga */ { reply: txt('welcome', lang) + '\n\n' + require('./cmdTexts').t('langHint', lang, { cmd: require('./cmdTexts').names(lang).lang }) };
+    } else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) ||   /* fix153-boplus: faol buyurtmasi bor mijozning matni do'konga */ { reply: txt('welcome', lang) + require('./custTexts').txt('custWelcome', lang) + '\n\n' + require('./cmdTexts').t('langHint', lang, { cmd: require('./cmdTexts').names(lang).lang }) , kb: require('./cust').phoneKb(lang) };   /* fix158-custfull */
   }
   if (out && out.reply) await sendText(deps, msg.chat.id, out.reply, out.kb);
   if (out && out.payAfter) { try { await __pay.sendMenu(deps, msg.chat.id, out.lang || lang); } catch (e) {} }   /* fix150-subbot */

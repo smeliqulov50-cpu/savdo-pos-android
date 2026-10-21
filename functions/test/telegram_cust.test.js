@@ -143,7 +143,7 @@ test('to\'lov tasdig\'i: summa, qoldiq; to\'liq yopilsa — rahmat; oddiy "sale"
   s.db.store['businesses/' + BID + '/customers/c1'].debt = 0;
   await CU.onLedger(s.deps, BID, { id: 'l10', customerId: 'c1', type: 'payment', method: 'card', amount: 120000, date: new Date(NOW).toISOString() });
   assert.ok(/🎉/.test(to(s.tg, CUST).pop().text));
-  assert.equal((await CU.onLedger(s.deps, BID, { id: 'l11', customerId: 'c1', type: 'sale', amount: 5000, date: new Date(NOW).toISOString() })).skipped, 'not_payment');
+  assert.equal((await CU.onLedger(s.deps, BID, { id: 'l11', customerId: 'c1', type: 'sale', amount: 5000, saleId: 'sX', date: new Date(NOW).toISOString() })).skipped, 'not_payment');   /* fix158: sotuvga bog'liq yozuv — chek alohida keladi */
 });
 
 test('eslatma: ilovadan bir mijozga (matn bilan); jadval bo\'yicha — faqat yoqilgan do\'kon, 3 kundan tez emas, limitga yaqin ogohlantirish, egaga hisobot', async () => {
@@ -239,4 +239,34 @@ test('universal: mijoz do\'kondan uzilsa — sotuvda qayta avtomatik ulanmaydi; 
   s2.db.store['debtLinks/' + BID + '__c1'] = { bid: BID, cid: 'c1', phoneKey: '998935556677' };
   const m = await CU.sendMy(s2.deps, CUST, 'uz');
   assert.equal(m.my, true); assert.equal(s2.db.store['tgCustLink/' + BID + '_c1'].by, 'phone');
+});
+
+/* fix158-custfull: /raqam, kutib olish, qo'lda qarz */
+test('fix158: /raqam — kontakt tugmasi (uz/ru); raqam yuborilgach klaviatura olinadi; /mening raqamsiz — tugma, raqam bor do\'kon yo\'q — "topilmadi"', async () => {
+  const s = mk();
+  let r = await core.handleUpdate(s.deps, { message: { message_id: 1, chat: { id: CUST, type: 'private' }, from: { id: CUST, language_code: 'uz' }, text: '/raqam' } });
+  assert.ok(r.askPhone); let m = to(s.tg, CUST).pop();
+  assert.match(m.text, /raqamingizni yuboring/); assert.equal(m.reply_markup.keyboard[0][0].request_contact, true);
+  r = await core.handleUpdate(s.deps, { message: { message_id: 2, chat: { id: CUST, type: 'private' }, from: { id: CUST, language_code: 'ru' }, text: '/phone' } });
+  assert.ok(r.askPhone);
+  r = await core.handleUpdate(s.deps, { message: { message_id: 3, chat: { id: CUST, type: 'private' }, from: { id: CUST }, text: '/mening' } });
+  assert.equal(r.askPhone, true); m = to(s.tg, CUST).pop(); assert.match(m.text, /ulanmagansiz/); assert.ok(m.reply_markup.keyboard);
+  await core.handleUpdate(s.deps, { message: { message_id: 4, chat: { id: CUST, type: 'private' }, from: { id: CUST }, contact: { user_id: CUST, phone_number: '+998935556677' } } });
+  m = to(s.tg, CUST).find(x => /saqlandi/.test(x.text)); assert.equal(m.reply_markup.remove_keyboard, true);
+  assert.equal(s.db.store['tgPhone/935556677'].uid, String(CUST));
+  const s2 = mk(); s2.db.store['tgCust/' + CUST] = { phone: '+998900000001', phoneOk: true };
+  r = await CU.sendMy(s2.deps, CUST, 'uz'); assert.equal(r.my, false); assert.match(to(s2.tg, CUST).pop().text, /topilmadi/);
+});
+test('fix158: qo\'lda yozilgan qarz (sotuvsiz "sale" yozuvi) ulangan mijozga keladi; 12 soatdan eski — yo\'q; do\'kon o\'chirsa — yo\'q', async () => {
+  const s = mk();
+  s.db.store['tgCust/' + CUST] = { lang: 'uz', shops: { [BID]: { cid: 'c1', at: 1 } } };
+  s.db.store['tgCustLink/' + BID + '_c1'] = { uid: String(CUST), bid: BID, cid: 'c1', at: 1, by: 'code', notify: true };
+  const e = { id: 'l20', customerId: 'c1', type: 'sale', amount: 50000, note: 'Osh', date: new Date(NOW).toISOString() };
+  const r = await CU.onLedger(s.deps, BID, e);
+  assert.ok(r.sent && r.manualDebt, JSON.stringify(r));
+  const m = to(s.tg, CUST).pop();
+  assert.match(m.text, /qarz yozildi/); assert.match(m.text, /50 000/); assert.match(m.text, /Osh/); assert.match(m.text, /120 000/); assert.ok(m.reply_markup.inline_keyboard);
+  assert.equal((await CU.onLedger(s.deps, BID, Object.assign({}, e, { id: 'l21', date: new Date(NOW - 13 * 3600000).toISOString() }))).skipped, 'old');
+  s.db.store['tgShop/' + BID].custReceipts = false;
+  assert.equal((await CU.onLedger(s.deps, BID, Object.assign({}, e, { id: 'l22' }))).skipped, 'off');
 });
