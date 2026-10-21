@@ -55,7 +55,8 @@ function cmdList(deps, lang) {
   const n = C.names(lang);
   const ks = ['today', 'yday', 'debts', 'low'].concat(deps.payToken ? ['pay'] : []).concat(['my', 'phone', 'lang', 'help', 'stop']);   /* fix158-custfull */   /* fix155-custbot */
   const D = { today: 'dToday', yday: 'dYday', debts: 'dDebts', low: 'dLow', pay: 'dPay', my: 'dMy', phone: 'dPhone', lang: 'dLang', help: 'dHelp', stop: 'dStop' };
-  return ks.map(function (k) { return { command: n[k], description: C.T[D[k]][C.lg(lang)] }; });
+  const E = { today: '📊', yday: '📅', debts: '👥', low: '📦', pay: '💳', my: '👤', phone: '📱', lang: '🌐', help: '❓', stop: '🔌' };   /* fix161-cmdicons */
+  return ks.map(function (k) { return { command: n[k], description: E[k] + ' ' + C.T[D[k]][C.lg(lang)] }; });
 }
 function helpHtml(deps, lang, linked) {
   const lines = [C.t('helpTitle', lang), ''];

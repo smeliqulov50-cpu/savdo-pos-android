@@ -1282,6 +1282,8 @@ const T = {
   shiftNotOpen:{uz:"Smena ochilmagan",ru:"Смена не открыта",en:"No shift is open",kk:"Ауысым ашылмаған",ky:"Смена ачылган эмес",tg:"Смена кушода нашудааст"},
   shiftAdopted:{uz:"Smena boshqa qurilmada allaqachon ochilgan — shu kassa davom etadi",ru:"Смена уже открыта на другом устройстве — продолжается та же касса",en:"A shift is already open on another device — the same register continues",kk:"Ауысым басқа құрылғыда ашылған — сол касса жалғасады",ky:"Смена башка түзмөктө ачылган — ошол касса улантылат",tg:"Смена дар дастгоҳи дигар кушода шудааст — ҳамон касса идома меёбад"},
   gcSyncDenied:{uz:"Bulut yozishni rad etdi ({k}) — qurilmalar o'rtasida sinxron to'xtadi. Internetni va obunani tekshiring; takrorlansa, dasturchiga ayting.",ru:"Облако отклонило запись ({k}) — синхронизация между устройствами остановлена. Проверьте интернет и подписку; если повторится, сообщите разработчику.",en:"The cloud rejected a write ({k}) — sync between devices stopped. Check the internet and subscription; if it repeats, tell the developer.",kk:"Бұлт жазуды қабылдамады ({k}) — құрылғылар арасындағы синхрондау тоқтады.",ky:"Булут жазууну четке какты ({k}) — түзмөктөр ортосундагы синхрондоо токтоду.",tg:"Абр навиштанро рад кард ({k}) — ҳамоҳангсозӣ байни дастгоҳҳо қатъ шуд."},   /* fix160-oneshift */
+  boOnNow:{uz:"Bot orqali buyurtma yoqildi",ru:"Приём заказов через бота включён",en:"Bot orders enabled",kk:"Бот арқылы тапсырыс қосылды",ky:"Бот аркылуу буюртма күйгүзүлдү",tg:"Фармоиш тавассути бот фаъол шуд"},
+  boOffNow:{uz:"Bot orqali buyurtma o'chirildi",ru:"Приём заказов через бота выключен",en:"Bot orders disabled",kk:"Бот арқылы тапсырыс өшірілді",ky:"Бот аркылуу буюртма өчүрүлдү",tg:"Фармоиш тавассути бот хомӯш шуд"},   /* fix162-botoggle */
   boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
@@ -4094,7 +4096,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.46';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.47';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -22961,8 +22963,10 @@ function __boCfgMount(container){
   el.className = 'card'; el.id = 'bo-cfg-card';
   var first = container.querySelector('.card');
   if(first) first.parentNode.insertBefore(el, first); else container.appendChild(el);
+  __bo.dirty = false;   /* fix162-botoggle: foydalanuvchi formani o'zgartirgan bo'lsa, kech kelgan sozlama uni qayta chizmaydi */
+  el.addEventListener('input', function(){ __bo.dirty = true; }); el.addEventListener('change', function(){ __bo.dirty = true; });
   __boCfgRender();
-  if(__boCan() && !__bo.cfgBusy) __boLoadCfg().then(__boCfgRender, __boCfgRender);
+  if(__boCan() && !__bo.cfgBusy) __boLoadCfg().then(function(){ if(!__bo.dirty) __boCfgRender(); }, function(){ if(!__bo.dirty) __boCfgRender(); });
 }
 function __boCfgRender(){
   var el = document.getElementById('bo-cfg-card'); if(!el) return;
@@ -23033,7 +23037,8 @@ function __boCfgRender(){
   var shb = $('bo-share'); if(shb) shb.addEventListener('click', function(){ shareTextNative(state.settings.businessName || 'Savdo Pos', __bo.link); });
   var qr = $('bo-qr'); if(qr) qr.addEventListener('click', function(){ __boQr(__bo.link); });
   var sv = $('bo-save');
-  if(sv) sv.addEventListener('click', function(){
+  var __doSave = function(fromToggle){   /* fix162-botoggle */
+    if(!sv) return;
     var err = $('bo-err'); err.textContent = '';
     var s = $('bo-slug').value.trim();
     if(!validSlug(s)){ err.textContent = tr('boSlugBad'); return; }
@@ -23047,11 +23052,13 @@ function __boCfgRender(){
     if(cfg.enabled && !__boBotCount()){ err.textContent = tr('boNoProducts'); }
     sv.disabled = true;
     __tgApi('boSave', {cfg: cfg}).then(function(r){
-      __bo.cfg = r.cfg; __bo.link = r.link || ''; __bo.bot = r.bot || __bo.bot;
+      __bo.cfg = r.cfg; __bo.link = r.link || ''; __bo.bot = r.bot || __bo.bot; __bo.dirty = false;
       state.settings.botShopOn = !!r.cfg.enabled; state.settings.botAllProducts = !!r.cfg.allProducts; saveSettings();   /* fix153-boplus */
-      showToast(tr('boSaved')); __boCfgRender(); try{ renderHeader(); }catch(e){}
-    }).catch(function(e){ sv.disabled = false; err.textContent = __boErrText(e); });
-  });
+      showToast(fromToggle ? tr(r.cfg.enabled ? 'boOnNow' : 'boOffNow') : tr('boSaved')); __boCfgRender(); try{ renderHeader(); }catch(e){}
+    }).catch(function(e){ sv.disabled = false; err.textContent = __boErrText(e); showToast(__boErrText(e)); if(fromToggle){ var en = $('bo-en'); if(en) en.checked = !!(__bo.cfg && __bo.cfg.enabled); } });
+  };
+  if(sv) sv.addEventListener('click', function(){ __doSave(false); });
+  var enx = $('bo-en'); if(enx && sv) enx.addEventListener('change', function(){ __doSave(true); });   /* fix162-botoggle: tugma — darhol saqlanadi */
 }
 function __boPickProducts(){
   var list = visibleProducts().filter(function(p){ return p && p.name; }).slice().sort(function(a, b){ return String(a.category || '').localeCompare(String(b.category || '')) || String(a.name).localeCompare(String(b.name)); });
