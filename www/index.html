@@ -1287,6 +1287,23 @@ const T = {
   gcSyncDenied:{uz:"Bulut yozishni rad etdi ({k}) — qurilmalar o'rtasida sinxron to'xtadi. Internetni va obunani tekshiring; takrorlansa, dasturchiga ayting.",ru:"Облако отклонило запись ({k}) — синхронизация между устройствами остановлена. Проверьте интернет и подписку; если повторится, сообщите разработчику.",en:"The cloud rejected a write ({k}) — sync between devices stopped. Check the internet and subscription; if it repeats, tell the developer.",kk:"Бұлт жазуды қабылдамады ({k}) — құрылғылар арасындағы синхрондау тоқтады.",ky:"Булут жазууну четке какты ({k}) — түзмөктөр ортосундагы синхрондоо токтоду.",tg:"Абр навиштанро рад кард ({k}) — ҳамоҳангсозӣ байни дастгоҳҳо қатъ шуд."},   /* fix160-oneshift */
   boOnNow:{uz:"Bot orqali buyurtma yoqildi",ru:"Приём заказов через бота включён",en:"Bot orders enabled",kk:"Бот арқылы тапсырыс қосылды",ky:"Бот аркылуу буюртма күйгүзүлдү",tg:"Фармоиш тавассути бот фаъол шуд"},
   boOffNow:{uz:"Bot orqali buyurtma o'chirildi",ru:"Приём заказов через бота выключен",en:"Bot orders disabled",kk:"Бот арқылы тапсырыс өшірілді",ky:"Бот аркылуу буюртма өчүрүлдү",tg:"Фармоиш тавассути бот хомӯш шуд"},   /* fix162-botoggle */
+  /* fix172-setgroups */
+  sgAcct:{uz:"Hisob va qurilmalar",ru:"Аккаунт и устройства",en:"Account & devices",kk:"Аккаунт және құрылғылар",ky:"Аккаунт жана түзмөктөр",tg:"Ҳисоб ва дастгоҳҳо"},
+  sgBiz:{uz:"Biznes va filiallar",ru:"Бизнес и филиалы",en:"Business & branches",kk:"Бизнес және филиалдар",ky:"Бизнес жана филиалдар",tg:"Бизнес ва филиалҳо"},
+  sgSale:{uz:"Sotuv qoidalari",ru:"Правила продаж",en:"Sales rules",kk:"Сату ережелері",ky:"Сатуу эрежелери",tg:"Қоидаҳои фурӯш"},
+  sgCust:{uz:"Mijozlar va qarz qoidalari",ru:"Клиенты и правила долга",en:"Customers & debt rules",kk:"Клиенттер және қарыз ережелері",ky:"Кардарлар жана карыз эрежелери",tg:"Мизоҷон ва қоидаҳои қарз"},
+  sgStock:{uz:"Ombor va ogohlantirishlar",ru:"Склад и предупреждения",en:"Stock & alerts",kk:"Қойма және ескертулер",ky:"Кампа жана эскертүүлөр",tg:"Анбор ва огоҳиномаҳо"},
+  sgStaff:{uz:"Xodimlar",ru:"Сотрудники",en:"Staff",kk:"Қызметкерлер",ky:"Кызматкерлер",tg:"Кормандон"},
+  sgNotif:{uz:"Bildirishnomalar",ru:"Уведомления",en:"Notifications",kk:"Хабарламалар",ky:"Билдирмелер",tg:"Огоҳиномаҳо"},
+  sgOnline:{uz:"Onlayn va Telegram",ru:"Онлайн и Telegram",en:"Online & Telegram",kk:"Онлайн және Telegram",ky:"Онлайн жана Telegram",tg:"Онлайн ва Telegram"},
+  sgHelp:{uz:"Yordam va zaxira",ru:"Помощь и резервная копия",en:"Help & backup",kk:"Көмек және резервтік көшірме",ky:"Жардам жана резервдик көчүрмө",tg:"Кӯмак ва нусхаи захиравӣ"},
+  custRulesTitle:{uz:"Qarz qoidalari",ru:"Правила долга",en:"Debt rules",kk:"Қарыз ережелері",ky:"Карыз эрежелери",tg:"Қоидаҳои қарз"},
+  custRulesIntro:{uz:"Mijozga qarzga sotish limiti va eski qarz muddati shu yerda.",ru:"Лимит продажи в долг клиенту и срок старого долга — здесь.",en:"Customer credit limit and old-debt period are set here.",kk:"Клиентке қарызға сату лимиті және ескі қарыз мерзімі осында.",ky:"Кардарга карызга сатуу чеги жана эски карыз мөөнөтү ушул жерде.",tg:"Ҳадди фурӯши қарзӣ ба мизоҷ ва мӯҳлати қарзи кӯҳна дар ин ҷо."},
+  tgIntro:{uz:"Do'kon hisobotlari, ogohlantirishlar va buyurtmalar Telegram'ga keladi — botni bir marta ulang.",ru:"Отчёты, предупреждения и заказы магазина приходят в Telegram — подключите бота один раз.",en:"Shop reports, alerts and orders arrive in Telegram — connect the bot once.",kk:"Дүкен есептері, ескертулер мен тапсырыстар Telegram-ға келеді — ботты бір рет қосыңыз.",ky:"Дүкөн отчёттору, эскертүүлөр жана буйрутмалар Telegram'га келет — ботту бир жолу туташтырыңыз.",tg:"Ҳисоботҳо, огоҳиномаҳо ва фармоишҳо ба Telegram меоянд — ботро як бор пайваст кунед."},
+  nfTgMoved:{uz:"Telegram bot sozlamalari: Sozlamalar → Onlayn va Telegram",ru:"Настройки Telegram-бота: Настройки → Онлайн и Telegram",en:"Telegram bot settings: Settings → Online & Telegram",kk:"Telegram бот баптаулары: Баптаулар → Онлайн және Telegram",ky:"Telegram бот жөндөөлөрү: Жөндөөлөр → Онлайн жана Telegram",tg:"Танзимоти боти Telegram: Танзимот → Онлайн ва Telegram"},
+  nfTgOpen:{uz:"Ochish",ru:"Открыть",en:"Open",kk:"Ашу",ky:"Ачуу",tg:"Кушодан"},
+  olGateIntro:{uz:"Mijozlar telefondan buyurtma beradigan do'kon sahifasi va Telegram bot orqali buyurtmalar. Hozir o'chiq — yoqsangiz, barcha sozlamalar ochiladi.",ru:"Страница магазина для заказов с телефона и заказы через Telegram-бот. Сейчас выключено — включите, и откроются все настройки.",en:"A shop page for phone orders and orders via the Telegram bot. Currently off — turn it on to see all settings.",kk:"Телефоннан тапсырыс беретін дүкен беті және Telegram бот арқылы тапсырыстар. Қазір өшірулі — қоссаңыз, барлық баптаулар ашылады.",ky:"Телефондон буйрутма берүүчү дүкөн барагы жана Telegram бот аркылуу буйрутмалар. Азыр өчүк — күйгүзсөңүз, бардык жөндөөлөр ачылат.",tg:"Саҳифаи мағоза барои фармоиш аз телефон ва фармоишҳо тавассути боти Telegram. Ҳоло хомӯш — фаъол кунед, ҳамаи танзимот кушода мешавад."},
+  olGateBtn:{uz:"Yoqish",ru:"Включить",en:"Turn on",kk:"Қосу",ky:"Күйгүзүү",tg:"Фаъол кардан"},
   boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
@@ -4101,7 +4118,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.49';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.50';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -17639,45 +17656,40 @@ function openExternalUrl(url){
   }
   window.open(url, '_blank');
 }
-function settingsMenuItems(){
+function settingsMenuItems(){   /* fix172-setgroups: mavzu bo'yicha 10 guruh */
+  const agent = isAdmin() && state.staff.some(st=>st.jobTitle==='agent');
   return [
-    {id:'superadmin', icon:'★', color:'var(--gradient-brand)', label:tr('superAdminSection'), show:saMenuVisible(), group:'admin'},
-    {id:'account', icon:ICONS.building, color:'var(--accent)', label:tr('accountSection'), show:isAdmin(), group:'general'},
-    {id:'devices', icon:ICONS.phoneCall, color:'var(--teal)', label:tr('devicesSection'), show:isAdmin(), group:'general'},
-    {id:'language', icon:ICONS.translate, color:'var(--ink-soft)', label:tr('languageLabel'), show:true, group:'general'},
-    {id:'notifications', icon:ICONS.bell, color:'var(--warm)', label:tr('notifSection'), show:true, group:'general'},
-    {id:'business', icon:ICONS.building, color:'var(--accent)', label:tr('menuBusiness'), show:canBusinessSettings(), group:'business'},
-    {id:'branches', icon:ICONS.mapPin, color:'var(--violet)', label:tr('branchesSection'), show:isAdmin(), group:'business'},
-    {id:'loyalty', icon:ICONS.percent, color:'var(--warm)', label:tr('loyaltySection'), show:isAdmin(), group:'business'},
+    {id:'account', icon:ICONS.building, color:'var(--accent)', label:tr('accountSection'), show:isAdmin(), group:'acct'},
+    {id:'devices', icon:ICONS.phoneCall, color:'var(--teal)', label:tr('devicesSection'), show:isAdmin(), group:'acct'},
+    {id:'language', icon:ICONS.translate, color:'var(--ink-soft)', label:tr('languageLabel'), show:true, group:'acct'},
+    {id:'business', icon:ICONS.building, color:'var(--accent)', label:tr('menuBusiness'), show:canBusinessSettings(), group:'biz'},
+    {id:'branches', icon:ICONS.mapPin, color:'var(--violet)', label:tr('branchesSection'), show:isAdmin(), group:'biz'},
+    {id:'salerules', icon:ICONS.sale, color:'var(--accent)', label:tr('ssSaleSection'), show:canBusinessSettings(), group:'sale'},
+    {id:'custrules', icon:ICONS.creditCard, color:'var(--danger)', label:tr('custRulesTitle'), show:canBusinessSettings(), group:'cust'},
+    {id:'loyalty', icon:ICONS.percent, color:'var(--warm)', label:tr('loyaltySection'), show:isAdmin(), group:'cust'},
+    {id:'deletedCustomers', icon:ICONS.trash, color:'var(--danger)', label:tr('deletedCustomersSection'), show:(isAdmin() && state.customers.some(c=>c.hidden)), group:'cust'},
+    {id:'stockalerts', icon:ICONS.boxWarning, color:'var(--warm)', label:tr('ssStockSection'), show:canBusinessSettings(), group:'stock'},
     {id:'staff', icon:ICONS.peopleIcon, color:'var(--teal)', label:tr('staffSection'), show:(isAdmin() || hasPerm('staffManage')), group:'staff'},
-    {id:'staffrules', icon:ICONS.gear, color:'var(--violet)', label:tr('ssStaffSection'), show:canBusinessSettings(), group:'staff'},   /* fix123-setgrp */
-    {id:'agentmap', icon:ICONS.mapPin, color:'var(--violet)', label:tr('agentMapLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
-    {id:'agentplans', icon:ICONS.target, color:'var(--warm)', label:tr('agentPlansLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
-    {id:'visitroute', icon:ICONS.route, color:'var(--teal)', label:tr('visitRouteLabel'), show:(isAdmin() && state.staff.some(s=>s.jobTitle==='agent')), group:'staff'},
+    {id:'staffrules', icon:ICONS.gear, color:'var(--violet)', label:tr('ssStaffSection'), show:canBusinessSettings(), group:'staff'},
+    {id:'agentmap', icon:ICONS.mapPin, color:'var(--violet)', label:tr('agentMapLabel'), show:agent, group:'staff'},
+    {id:'agentplans', icon:ICONS.target, color:'var(--warm)', label:tr('agentPlansLabel'), show:agent, group:'staff'},
+    {id:'visitroute', icon:ICONS.route, color:'var(--teal)', label:tr('visitRouteLabel'), show:agent, group:'staff'},
     {id:'printer', icon:ICONS.printer, color:'var(--ink-soft)', label:tr('printerSettings'), show:canPrinterSetup(), group:'receipt'},
     {id:'receipt', icon:ICONS.receiptIcon, color:'var(--accent-dark)', label:tr('receiptDesign'), show:canBusinessSettings(), group:'receipt'},
-    {id:'stockalerts', icon:ICONS.boxWarning, color:'var(--warm)', label:tr('ssStockSection'), show:canBusinessSettings(), group:'limits'},   /* fix123-setgrp: eski "Kam qolgan" + "Yaroqlilik muddati" */
-    {id:'salerules', icon:ICONS.sale, color:'var(--accent)', label:tr('ssSaleSection'), show:canBusinessSettings(), group:'limits'},   /* fix123-setgrp: eski "Qarz limiti" + "Qo'shimcha to'lovlar" + tugaganni sotish */
-    {id:'catalog', icon:ICONS.globe, color:'var(--teal)', label:tr('osTitle'), show:canBusinessSettings(), group:'other'},
-    {id:'deletedCustomers', icon:ICONS.trash, color:'var(--danger)', label:tr('deletedCustomersSection'), show:(isAdmin() && state.customers.some(c=>c.hidden)), group:'other'},
-    {id:'backup', icon:ICONS.cloud, color:'var(--accent)', label:tr('backupSection'), show:canBackup(), group:'other'},
-    {id:'support', icon:ICONS.chat, color:'var(--violet)', label:tr('supportSection'), show:true, group:'other'},
-    {id:'website', icon:ICONS.globe, color:'var(--accent)', label:tr('websiteMenu'), show:canBusinessSettings(), group:'other'},
+    {id:'notifications', icon:ICONS.bell, color:'var(--warm)', label:tr('notifSection'), show:true, group:'notif'},
+    {id:'telegram', icon:ICONS.chat, color:'#2aabee', label:tr('tgTitle'), show:isAdmin(), group:'online'},
+    {id:'catalog', icon:ICONS.globe, color:'var(--teal)', label:tr('osTitle'), show:canBusinessSettings(), group:'online'},
+    {id:'website', icon:ICONS.globe, color:'var(--accent)', label:tr('websiteMenu'), show:canBusinessSettings(), group:'online'},
+    {id:'support', icon:ICONS.chat, color:'var(--violet)', label:tr('supportSection'), show:true, group:'help'},
+    {id:'backup', icon:ICONS.cloud, color:'var(--accent)', label:tr('backupSection'), show:canBackup(), group:'help'},
+    {id:'superadmin', icon:'★', color:'var(--gradient-brand)', label:tr('superAdminSection'), show:saMenuVisible(), group:'help'},
   ].filter(i=>i.show);
 }
 
 function renderSettingsMenu(container){
   const items = settingsMenuItems();
-  const groupOrder = ['admin','general','business','staff','receipt','limits','other'];
-  const groupLabels = {
-    admin: null, // no header — a single, unmistakable entry on its own
-    general: tr('settingsGroupGeneral'),
-    business: tr('settingsGroupBusiness'),
-    staff: tr('settingsGroupStaff'),
-    receipt: tr('settingsGroupReceipt'),
-    limits: tr('settingsGroupLimits'),
-    other: tr('settingsGroupOther')
-  };
+  const groupOrder = ['acct','biz','sale','cust','stock','staff','receipt','notif','online','help'];   /* fix172-setgroups */
+  const groupLabels = { acct: tr('sgAcct'), biz: tr('sgBiz'), sale: tr('sgSale'), cust: tr('sgCust'), stock: tr('sgStock'), staff: tr('sgStaff'), receipt: tr('settingsGroupReceipt'), notif: tr('sgNotif'), online: tr('sgOnline'), help: tr('sgHelp') };
   function renderGroup(groupId){
     const groupItems = items.filter(i=>i.group===groupId);
     if(!groupItems.length) return '';
@@ -17761,6 +17773,8 @@ function renderSettingsCategory(container, cat){
   if(cat==='credit') return renderSettingsCredit(container);
   if(cat==='stockalerts') return renderSettingsStockAlerts(container);   /* fix123-setgrp */
   if(cat==='salerules') return renderSettingsSaleRules(container);
+  if(cat==='custrules') return renderSettingsSaleRules(container, 'cust');   /* fix172-setgroups */
+  if(cat==='telegram') return renderSettingsTelegram(container);
   if(cat==='staffrules') return renderSettingsStaffRules(container);
   if(cat==='lowstock') return renderSettingsLowStock(container);
   if(cat==='expiry') return renderSettingsExpiry(container);
@@ -19247,8 +19261,8 @@ function renderSettingsExpiry(container){
 }
 
 /* --- fix123-setgrp: sozlamalar mavzu bo'yicha + darhol saqlash --- */
-const SS_CATS = ['stockalerts', 'salerules', 'staffrules'];
-const SS_OLD = {lowstock: ['stockalerts', 'ss-low'], expiry: ['stockalerts', 'ss-exp'], credit: ['salerules', 'ss-credit'], charges: ['salerules', 'ss-charges']};
+const SS_CATS = ['stockalerts', 'salerules', 'staffrules', 'custrules'];   /* fix172-setgroups */
+const SS_OLD = {lowstock: ['stockalerts', 'ss-low'], expiry: ['stockalerts', 'ss-exp'], credit: ['custrules', 'ss-credit'], charges: ['salerules', 'ss-charges']};   /* fix172-setgroups */
 let __ssPend = {};
 let __ssChain = Promise.resolve(true);
 function __ssRemap(){
@@ -19463,7 +19477,31 @@ function renderSettingsStockAlerts(container){
 }
 
 /* Sotuv qoidalari */
-function renderSettingsSaleRules(container){
+function renderSettingsSaleRules(container, mode){   /* fix172-setgroups: mode='cust' — faqat qarz qoidalari */
+  const __creditCard = `
+    <div class="card" id="ss-credit" style="margin-top:14px;">
+      <h3 class="sub-title" style="margin:0 0 6px;">${tr('creditLimitSection')}</h3>
+      <p class="subtle" style="margin:0 0 12px;">${tr('creditLimitHint')}</p>
+      <div class="field">${__ssLbl('climit', tr('defaultCreditLimit'))}<input type="text" inputmode="numeric" id="s-credit-limit" value="${formatMoneyInputValue(state.settings.defaultCreditLimit||0)}">${__ssErr('climit')}</div>
+      <div class="field">${__ssLbl('olddebt', tr('oldDebtDaysLabel'))}<input type="number" id="s-old-debt-days" min="1" step="any" inputmode="decimal" value="${state.settings.oldDebtDays||30}">${__ssErr('olddebt')}</div>
+      ${__ssExBox('credit')}
+    </div>`;
+  if(mode === 'cust'){
+    __ssPage(container, tr('custRulesTitle'), `<p class="subtle" style="margin:0 0 10px;font-size:12.5px;">${tr('custRulesIntro')}</p>` + __creditCard.replace('margin-top:14px;', ''));
+    attachMoneyInputsById('s-credit-limit');
+    __ssBindField('climit', 's-credit-limit', {
+      read: raw=>{ if(raw.trim() === '') return {ok: true, v: 0}; const v = parseMoneyInput(raw); return (isFinite(v) && v >= 0) ? {ok: true, v} : {ok: false, msg: tr('ssBadMoney')}; },
+      same: v=>v === Number(state.settings.defaultCreditLimit || 0),
+      apply: v=>{ state.settings.defaultCreditLimit = v; }
+    });
+    __ssBindField('olddebt', 's-old-debt-days', {
+      read: raw=>{ const v = __ssNum(raw); return (isFinite(v) && v >= 1) ? {ok: true, v} : {ok: false, msg: tr('ssMinOne')}; },
+      same: v=>v === Number(state.settings.oldDebtDays || 30),
+      apply: v=>{ state.settings.oldDebtDays = v; }
+    });
+    __ssBindGo(container); __ssExRefresh(); __ssFocusCard();
+    return;
+  }
   const scPresets = state.settings.serviceChargePresets && state.settings.serviceChargePresets.length ? state.settings.serviceChargePresets : (state.settings.defaultServiceChargePercent ? [state.settings.defaultServiceChargePercent] : [5,10,15]);
   const dfPresets = state.settings.deliveryFeePresets && state.settings.deliveryFeePresets.length ? state.settings.deliveryFeePresets : (state.settings.defaultDeliveryFee ? [state.settings.defaultDeliveryFee] : [10000,15000,20000]);
   __ssPage(container, tr('ssSaleSection'), `
@@ -19471,13 +19509,6 @@ function renderSettingsSaleRules(container){
       ${__ssChk('oversell', 's-allow-oversell', state.settings.allowOversell !== false, tr('allowOversellLabel'))}
       <p class="subtle" style="margin:6px 0 0;">${tr('allowOversellHint')}</p>
       ${__ssExBox('minus')}
-    </div>
-    <div class="card" id="ss-credit" style="margin-top:14px;">
-      <h3 class="sub-title" style="margin:0 0 6px;">${tr('creditLimitSection')}</h3>
-      <p class="subtle" style="margin:0 0 12px;">${tr('creditLimitHint')}</p>
-      <div class="field">${__ssLbl('climit', tr('defaultCreditLimit'))}<input type="text" inputmode="numeric" id="s-credit-limit" value="${formatMoneyInputValue(state.settings.defaultCreditLimit||0)}">${__ssErr('climit')}</div>
-      <div class="field">${__ssLbl('olddebt', tr('oldDebtDaysLabel'))}<input type="number" id="s-old-debt-days" min="1" step="any" inputmode="decimal" value="${state.settings.oldDebtDays||30}">${__ssErr('olddebt')}</div>
-      ${__ssExBox('credit')}
     </div>
     <div class="card" id="ss-charges" style="margin-top:14px;">
       <h3 class="sub-title" style="margin:0 0 6px;">${tr('additionalChargesSection')}</h3>
@@ -23190,6 +23221,12 @@ function scheduleShopRepublish(){
 }
 function renderSettingsCatalog(container){
   const cfg = onlineShopCfg();
+  if(!cfg.enabled && !state.settings.botShopOn && !state.__olShow){   /* fix172-setgroups: ikkalasi o'chiq — bitta tugma */
+    container.innerHTML = settingsBackHeader(tr('osTitle')) + '<div class="card"><p class="subtle" style="margin:0 0 12px;font-size:12.5px;">' + escapeHtml(tr('olGateIntro')) + '</p><button class="btn btn-primary btn-block" id="ol-gate-on">' + escapeHtml(tr('olGateBtn')) + '</button></div>';
+    bindSettingsBack(container);
+    document.getElementById('ol-gate-on').addEventListener('click', ()=>{ state.__olShow = true; renderSettings(); });
+    return;
+  }
   const url = validSlug(cfg.slug) ? onlineShopUrl(cfg.slug) : '';
   container.innerHTML = `
     ${settingsBackHeader(tr('osTitle'))}
@@ -23830,8 +23867,22 @@ document.addEventListener('visibilitychange', ()=>{ try{ if(document.visibilityS
 (function(){
   if(typeof renderSettingsNotifications !== 'function') return;
   const __tgOrigNotif = renderSettingsNotifications;
-  renderSettingsNotifications = function(container){ const r = __tgOrigNotif.apply(this, arguments); try{ __tgMount(container); }catch(e){ try{ console.error('fix120-tg', e); }catch(_e){} } return r; };
+  renderSettingsNotifications = function(container){ const r = __tgOrigNotif.apply(this, arguments); try{ __tgLinkCard(container); }catch(e){ try{ console.error('fix120-tg', e); }catch(_e){} } return r; };   /* fix172-setgroups */
 })();
+/* fix172-setgroups: Telegram bot — alohida sahifa (Onlayn va Telegram guruhida) */
+function renderSettingsTelegram(container){
+  container.innerHTML = settingsBackHeader(tr('tgTitle')) + '<p class="subtle" style="margin:0 0 10px;font-size:12.5px;">' + escapeHtml(tr('tgIntro')) + '</p>';
+  bindSettingsBack(container);
+  if(!isAdmin()){ container.insertAdjacentHTML('beforeend', '<p class="subtle">' + escapeHtml(tr('tgOwnerOnly')) + '</p>'); return; }
+  __tgMount(container);
+}
+function __tgLinkCard(container){
+  if(!isAdmin() || document.getElementById('tg-link-card')) return;
+  const card = document.createElement('div'); card.className = 'card'; card.id = 'tg-link-card';
+  card.innerHTML = '<div style="display:flex;align-items:center;gap:10px;"><span class="tg-lg">' + TG_SVG + '</span><div style="flex:1;min-width:0;"><div class="nf-ttl">' + escapeHtml(tr('tgTitle')) + '</div><div class="nf-sub">' + escapeHtml(tr('nfTgMoved')) + '</div></div><button type="button" class="btn btn-outline btn-sm" id="tg-goto" style="width:auto;">' + escapeHtml(tr('nfTgOpen')) + '</button></div>';
+  container.appendChild(card);
+  document.getElementById('tg-goto').addEventListener('click', ()=>{ state.settingsCategory = 'telegram'; renderSettings(); });
+}
 /* fix121-tg2: Telegram bot — 2-bosqich: qaysi xabarlar kelsin (har biri alohida; hammasi standart holatda o'chiq) + "Sinab ko'rish". */
 var __tgPf = {saving:false, again:false, timer:0};
 var TG_PF_ROWS = [
