@@ -1280,6 +1280,8 @@ const T = {
   bkEvery:{uz:"Har {n} kunda",ru:"Каждые {n} дн.",en:"Every {n} days",kk:"Әр {n} күнде",ky:"Ар {n} күндө",tg:"Ҳар {n} рӯз"},
   bkLast:{uz:"Oxirgi zaxira nusxa: {d}",ru:"Последняя копия: {d}",en:"Last backup: {d}",kk:"Соңғы көшірме: {d}",ky:"Акыркы көчүрмө: {d}",tg:"Нусхаи охирин: {d}"},
   shiftNotOpen:{uz:"Smena ochilmagan",ru:"Смена не открыта",en:"No shift is open",kk:"Ауысым ашылмаған",ky:"Смена ачылган эмес",tg:"Смена кушода нашудааст"},
+  shiftAdopted:{uz:"Smena boshqa qurilmada allaqachon ochilgan — shu kassa davom etadi",ru:"Смена уже открыта на другом устройстве — продолжается та же касса",en:"A shift is already open on another device — the same register continues",kk:"Ауысым басқа құрылғыда ашылған — сол касса жалғасады",ky:"Смена башка түзмөктө ачылган — ошол касса улантылат",tg:"Смена дар дастгоҳи дигар кушода шудааст — ҳамон касса идома меёбад"},
+  gcSyncDenied:{uz:"Bulut yozishni rad etdi ({k}) — qurilmalar o'rtasida sinxron to'xtadi. Internetni va obunani tekshiring; takrorlansa, dasturchiga ayting.",ru:"Облако отклонило запись ({k}) — синхронизация между устройствами остановлена. Проверьте интернет и подписку; если повторится, сообщите разработчику.",en:"The cloud rejected a write ({k}) — sync between devices stopped. Check the internet and subscription; if it repeats, tell the developer.",kk:"Бұлт жазуды қабылдамады ({k}) — құрылғылар арасындағы синхрондау тоқтады.",ky:"Булут жазууну четке какты ({k}) — түзмөктөр ортосундагы синхрондоо токтоду.",tg:"Абр навиштанро рад кард ({k}) — ҳамоҳангсозӣ байни дастгоҳҳо қатъ шуд."},   /* fix160-oneshift */
   boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
@@ -3452,6 +3454,7 @@ async function storGet(key){
   }catch(e){ try{ if(/timeout/.test(String((e && e.message) || e))) (window.__idbTimedOut = window.__idbTimedOut || {})[key] = 1; }catch(_){} return null; }   /* fix115-offline */
 }
 async function storSet(key,val){
+  if(key === STORAGE_KEYS.sales && !window.__svRaw && typeof saveSales === 'function'){ if(Array.isArray(val) && val !== state.sales) state.sales = val; return saveSales(true); }   /* fix159-salesroute: sotuvlar faqat oylik saqlashga */
   if(window.__idbTimedOut && window.__idbTimedOut[key]) return;   /* fix115-offline: eski ma'lumot hali o'qilmagan — ustidan yozilmaydi */
   try{
     if(useClaudeStorage){ await window.storage.set(key, JSON.stringify(val)); return; }
@@ -4091,7 +4094,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.45';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.46';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6121,6 +6124,7 @@ function logIn(person){
   startAgentLocationTracking();
   if(!staffNeedsShiftTracking(person)){ renderAll(); return; }
   try{ __osApply(); }catch(e){}   /* fix137-cash: boshqa qurilmadagi ochiq smena */
+  try{ __osFetchOnce(); }catch(e){}   /* fix160-oneshift */
     if(state.currentShift && new Date(state.currentShift.startTime).toDateString() !== new Date().toDateString()){ autoCloseStaleShift(state.currentShift); }
   try{ __osApply(); }catch(e){}
   const myOpenShift = state.currentShift && (state.currentShift.staffId === person.id || effectiveBranchId(state.currentShift.branchId) === effectiveBranchId(state.currentBranchId)) ? state.currentShift : null;
@@ -21061,7 +21065,7 @@ function __gcK(){
   });
 }
 function __gcOff(kind){ try{ return localStorage.getItem('sp_gc_off_' + kind) === '1'; }catch(e){ return false; } }
-function __gcOffSet(kind){ try{ localStorage.setItem('sp_gc_off_' + kind, '1'); }catch(e){} }
+function __gcOffSet(kind){ try{ localStorage.setItem('sp_gc_off_' + kind, '1'); }catch(e){} try{ if(!window.__gcWarned){ window.__gcWarned = 1; showToast(tr('gcSyncDenied').replace('{k}', kind)); } }catch(e){} }   /* fix160-oneshift */
 function __gcPerm(e){ return /permission|insufficient/i.test(String((e && (e.code || e.message)) || '')); }
 function __gcSave(kind){ const g = __gcK()[kind]; if(g) storSet(g.store, (state[g.key] || []).slice(-1500)); }
 function __gcPush(kind, doc){
@@ -21777,7 +21781,7 @@ function __osApply(){
     if(loc && (!__osPrev || __osPrev.id !== loc.id)) __osPublish();
     return 'none';
   }
-  if(!loc){ if(__osToday(rs)){ __osAdopt(rs); return 'adopt'; } return 'stale'; }
+  if(!loc){ __osAdopt(rs); return 'adopt'; }   /* fix160-oneshift: bulutdagi ochiq smena — kuni qanday bo'lmasin, bitta kassa */
   if(loc.id === rs.id){
     const m = Array.from(new Set([].concat(loc.merged || [], rs.merged || [])));
     if(m.length !== (loc.merged || []).length){ loc.merged = m; try{ storSet(STORAGE_KEYS.currentShift, loc); }catch(e){} }
@@ -21787,7 +21791,7 @@ function __osApply(){
   if(rs.prevId === loc.id || (rs.merged || []).indexOf(loc.id) >= 0){ __osAdopt(rs); return 'adopt'; }
   if(loc.prevId === rs.id || (loc.merged || []).indexOf(rs.id) >= 0){ __osPublish(); return 'mine'; }
   if(!__osToday(rs) && __osToday(loc)){ __osPublish(); return 'mine'; }
-  if(__osToday(rs) && !__osToday(loc)) return 'stale';
+  if(__osToday(rs) && !__osToday(loc)){ __osAdopt(rs); return 'adopt'; }   /* fix160-oneshift: eski mahalliy smena o'rniga bulutdagi bugungi */
   if(__osWins(rs, loc)){
     const w = JSON.parse(JSON.stringify(rs)); w.merged = Array.from(new Set([].concat(w.merged || [], [loc.id], loc.merged || [])));
     __osAdopt(w); __osPublish(); return 'merged';
@@ -21796,11 +21800,27 @@ function __osApply(){
   try{ storSet(STORAGE_KEYS.currentShift, loc); }catch(e){}
   __osPublish(); return 'merged';
 }
+/* fix160-oneshift: kirishda bulutdan ochiq smena to'g'ridan-to'g'ri o'qiladi (snapshot kechiksa ham ikkinchi kassa ochilmaydi) */
+function __osFetchOnce(){
+  if(!fbUser || !fbDb || typeof businessDocRef !== 'function' || __gcOff('openShift')) return;
+  const b = effectiveBranchId(state.currentBranchId);
+  if(__osRec(b) && __osRec(b).shift) return;
+  businessDocRef().collection('openShifts').doc(String(b)).get().then(d=>{
+    const rec = d && d.exists ? d.data() : null; if(!rec || !rec.id) return;
+    state.openShifts = state.openShifts || [];
+    const i = state.openShifts.findIndex(r=>r && r.id === rec.id);
+    const cur = i >= 0 ? state.openShifts[i] : null;
+    if(cur && String(cur.updatedAt || '') >= String(rec.updatedAt || '')) return;
+    if(i >= 0) state.openShifts[i] = rec; else state.openShifts.push(rec);
+    __gcSave('openShift'); __osOnCloud();
+  }).catch(()=>{});
+}
 function __osOnCloud(){
   let r = 'none';
   try{ r = __osApply(); }catch(e){ return; }
   try{
     if(r === 'closed' && state.currentStaff && staffNeedsShiftTracking(state.currentStaff) && !document.getElementById('modal-root').children.length){ openStartShiftModal(); return; }
+    if((r === 'adopt' || r === 'merged') && document.getElementById('start-cash-input') && state.currentShift){ closeModal(); renderAll(); showToast(tr('shiftAdopted')); return; }   /* fix160-oneshift: boshqa qurilma allaqachon ochgan */
     if(r === 'adopt' || r === 'merged' || r === 'closed'){
       const busy = document.getElementById('modal-root').children.length || (document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName));
       if(!busy && state.view === 'reports') renderAll();
