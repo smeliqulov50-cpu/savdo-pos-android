@@ -179,3 +179,64 @@ test('/mening buyrug\'i: ulanmagan — yo\'riqnoma, ulangan — sahifa tugmasi; 
   const cmds = require('../src/telegram/cmds').cmdList(s.deps, 'uz');
   assert.ok(cmds.some(c => c.command === 'mening'));
 });
+
+/* fix157-custuni: universal — raqam bo'yicha barcha do'konlar (indeks), sotuv/to'lovda o'zi ulanish, uzilgan qayta ulanmaydi */
+test('universal: kontakt yuborilsa indeksdagi barcha do\'konlarga ulanadi; o\'chirilgan do\'kon va raqami mos kelmagan yozuv o\'tkazib yuboriladi', async () => {
+  const s = mk();
+  s.db.store['debtLinks/' + BID + '__c1'] = { bid: BID, cid: 'c1', phoneKey: '998935556677', name: 'Dilnoza' };
+  s.db.store['debtLinks/' + BID2 + '__x1'] = { bid: BID2, cid: 'x1', phoneKey: '998935556677', name: 'Dilnoza B' };
+  s.db.store['debtLinks/bizC__z1'] = { bid: 'bizC', cid: 'z1', phoneKey: '998935556677' };
+  s.db.store['businesses/bizC'] = { businessName: 'C' }; s.db.store['businesses/bizC/customers/z1'] = { id: 'z1', phone: '+998 90 000 00 00' };
+  s.db.store['debtLinks/bizD__d1'] = { bid: 'bizD', cid: 'd1', phoneKey: '998935556677' };
+  s.db.store['businesses/bizD'] = { businessName: 'D' }; s.db.store['businesses/bizD/customers/d1'] = { id: 'd1', phone: '935556677' }; s.db.store['tgShop/bizD'] = { custByPhone: false };
+  s.db.store['tgCust/' + CUST] = { lang: 'uz' };
+  const r = await core.handleUpdate(s.deps, { message: { message_id: 2, chat: { id: CUST, type: 'private' }, from: { id: CUST, language_code: 'uz' }, contact: { user_id: CUST, phone_number: '+998935556677', first_name: 'Dilnoza' } } });
+  assert.equal(r.contact, 'saved');
+  assert.equal(s.db.store['tgCustLink/' + BID + '_c1'].by, 'phone');
+  assert.equal(s.db.store['tgCustLink/' + BID2 + '_x1'].by, 'phone', 'muomala qilmagan do\'kon ham — indeks orqali');
+  assert.ok(!s.db.store['tgCustLink/bizC_z1'], 'raqami mos emas');
+  assert.ok(!s.db.store['tgCustLink/bizD_d1'], 'do\'kon raqam bo\'yicha ulanishni o\'chirgan');
+  const msgs = to(s.tg, CUST).filter(m => /ulandingiz/.test(m.text));
+  assert.equal(msgs.length, 2); assert.ok(msgs.some(m => /Boshqa/.test(m.text)));
+  assert.equal(CU.intlKey('+998 93 555 66 77'), '998935556677'); assert.equal(CU.intlKey('935556677'), '998935556677'); assert.equal(CU.intlKey('0099893'), '');
+});
+test('universal: do\'kon nasiya sotuv yozganda ulanmagan mijoz raqami botdagi raqamga mos kelsa — o\'zi ulanadi va chek keladi; to\'lovda ham; raqam yo\'q bo\'lsa — yo\'q', async () => {
+  const s = mk();
+  s.db.store['tgCust/' + CUST] = { lang: 'uz', phone: '+998935556677', phoneOk: true };
+  s.db.store['tgPhone/935556677'] = { uid: String(CUST), at: 1 };
+  const sale = { id: 's9', receiptNumber: 'B-7', date: new Date(NOW).toISOString(), total: 50000, paymentType: 'credit', customerId: 'x1', items: [{ name: 'Osh', qty: 1, price: 50000 }] };
+  const r = await CU.onSale(s.deps, BID2, sale);
+  assert.ok(r.sent, JSON.stringify(r));
+  assert.equal(s.db.store['tgCustLink/' + BID2 + '_x1'].by, 'phone');
+  assert.ok(to(s.tg, CUST).some(m => /ulandingiz/.test(m.text) && /Boshqa/.test(m.text)));
+  assert.ok(to(s.tg, CUST).some(m => /50 000/.test(m.text) && /B-7/.test(m.text)), 'chek');
+  const r2 = await CU.onLedger(s.deps, BID2, { id: 'l9', customerId: 'x1', type: 'payment', method: 'cash', amount: 100, date: new Date(NOW).toISOString() });
+  assert.ok(r2.sent);
+  const r3 = await CU.onSale(s.deps, BID, Object.assign({}, sale, { id: 's10', customerId: 'c2' }));
+  assert.equal(r3.skipped, 'not_linked', 'c2 raqami (901234567) botda yo\'q');
+  assert.ok(!s.db.store['tgCustLink/' + BID + '_c2']);
+});
+test('universal: mijoz do\'kondan uzilsa — sotuvda qayta avtomatik ulanmaydi; havola bilan qayta ulansa — yana ishlaydi; /mening raqam bor bo\'lsa indeksdan topadi', async () => {
+  const s = mk();
+  s.db.store['tgCust/' + CUST] = { lang: 'uz', phone: '+998935556677', phoneOk: true, shops: { [BID2]: { cid: 'x1', at: 1 } } };
+  s.db.store['tgPhone/935556677'] = { uid: String(CUST), at: 1 };
+  s.db.store['tgCustLink/' + BID2 + '_x1'] = { uid: String(CUST), bid: BID2, cid: 'x1', at: 1, by: 'phone', notify: true };
+  const u = await CU.handleMy(s.deps, { id: CUST }, 'myUnlink', { bid: BID2, h: require('crypto').createHash('sha256').update('my|' + BID2 + '|' + CUST).digest('hex').slice(0, 12) });
+  assert.ok(u.body.removed, JSON.stringify(u));
+  const sale = { id: 's9', receiptNumber: 'B-8', date: new Date(NOW).toISOString(), total: 500, paymentType: 'credit', customerId: 'x1', items: [] };
+  assert.equal((await CU.onSale(s.deps, BID2, sale)).skipped, 'not_linked');
+  assert.ok(!s.db.store['tgCustLink/' + BID2 + '_x1']);
+  // egadan havola bilan qayta ulash
+  const l = await core.handleApi(s.deps, BID2, { action: 'cuLink', customerId: 'x1' });
+  const code = l.body.url.split('start=c_')[1];
+  await core.handleUpdate(s.deps, { message: { message_id: 3, chat: { id: CUST, type: 'private' }, from: { id: CUST }, text: '/start c_' + code } });
+  assert.equal(s.db.store['tgCustLink/' + BID2 + '_x1'].by, 'code');
+  assert.ok(!s.db.store['tgCust/' + CUST].noAuto[BID2]);
+  assert.ok((await CU.onSale(s.deps, BID2, Object.assign({}, sale, { id: 's11' }))).sent);
+  // /mening: do'kon yo'q, raqam bor — indeksdan
+  const s2 = mk();
+  s2.db.store['tgCust/' + CUST] = { lang: 'uz', phone: '+998935556677', phoneOk: true };
+  s2.db.store['debtLinks/' + BID + '__c1'] = { bid: BID, cid: 'c1', phoneKey: '998935556677' };
+  const m = await CU.sendMy(s2.deps, CUST, 'uz');
+  assert.equal(m.my, true); assert.equal(s2.db.store['tgCustLink/' + BID + '_c1'].by, 'phone');
+});

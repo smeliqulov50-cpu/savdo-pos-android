@@ -52,7 +52,8 @@ async function setLink(deps, uid, bid, cid, by, lang) {
   await lRef.set(Object.assign({}, prev || {}, { uid: String(uid), bid: bid, cid: String(cid), at: (prev && prev.at) || now, by: by, notify: prev ? prev.notify !== false : true }));
   const cust = (await getData(cRef)) || {};
   const shops = Object.assign({}, cust.shops || {}); shops[bid] = { cid: String(cid), at: now };
-  await cRef.set(Object.assign({}, cust, { shops: shops, lang: cust.lang || lang }));
+  const na = Object.assign({}, cust.noAuto || {}); delete na[bid];   /* fix157-custuni */
+  await cRef.set(Object.assign({}, cust, { shops: shops, noAuto: na, lang: cust.lang || lang }));
   return { prev: !!prev };
 }
 async function linkByCode(deps, msg, code, lang) {
@@ -71,6 +72,35 @@ async function linkByCode(deps, msg, code, lang) {
   return { custLinked: c.bid, cid: c.cid };
 }
 /* Tasdiqlangan raqam bo'yicha: mijoz muomala qilgan do'konlar (buyurtma bergan / katalog ochgan) ichida qidiriladi */
+/* fix157-custuni: xalqaro raqam kaliti (debtLinks indeksi bilan bir xil: "998901234567") */
+function intlKey(p) {
+  const raw = String(p || '').trim(); let d = raw.replace(/\D/g, '');
+  if (raw.indexOf('00') === 0) d = d.replace(/^00/, '');
+  if (d.length === 9) d = '998' + d;
+  return d.length >= 11 && d.length <= 15 ? d : '';
+}
+/* Ilovadagi «Mening qarzlarim» indeksi (debtLinks/{bid__cid}: phoneKey) — raqam qaysi do'konlarda mijoz ekanini beradi */
+async function shopsByPhone(db, phone) {
+  const key = intlKey(phone); if (!key) return [];
+  let docs = []; try { docs = (await db.collection('debtLinks').where('phoneKey', '==', key).limit(50).get()).docs.map(function (x) { return x.data() || {}; }); } catch (e) { docs = []; }
+  return docs.filter(function (l) { return l && l.bid && l.cid; });
+}
+function noAuto(cust, bid) { return !!(cust && cust.noAuto && cust.noAuto[bid]); }
+/* Do'kon sotuv/to'lov yozganda: ulanmagan mijozning raqami botga raqam yuborgan odamniki bo'lsa — o'zi ulanadi */
+async function autoLink(deps, bid, cid, cfg) {
+  if (!cfg || cfg.custByPhone === false) return null;
+  const db = deps.db;
+  const c = await custDoc(db, bid, cid);
+  if (!c || c.hidden || c._deleted) return null;
+  const key = phoneKey(c.phone); if (!key) return null;
+  const ph = await getData(db.collection('tgPhone').doc(key));
+  if (!ph || !ph.uid) return null;
+  const cust = (await getData(db.collection('tgCust').doc(String(ph.uid)))) || {};
+  if (noAuto(cust, bid)) return null;
+  await setLink(deps, ph.uid, bid, cid, 'phone', cust.lang || 'uz');
+  try { const b = (await getData(db.collection('businesses').doc(bid))) || {}; await send(deps, ph.uid, C.txt('linked', S.lg(cust.lang), { shop: esc(str(b.businessName || 'Savdo Pos', 80)) }), { inline_keyboard: [[myBtn(S.lg(cust.lang))]] }); } catch (e) {}
+  return linkFor(db, bid, cid);
+}
 async function matchByPhone(deps, uid, bids) {
   const db = deps.db, now = deps.nowMs();
   const cust = (await getData(db.collection('tgCust').doc(String(uid)))) || {};
@@ -79,8 +109,20 @@ async function matchByPhone(deps, uid, bids) {
   try { await db.collection('tgPhone').doc(key).set({ uid: String(uid), at: now }); } catch (e) {}
   const out = [];
   const seen = {};
+  /* fix157-custuni: avval indeks — raqam qaysi do'konlarda bo'lsa, hammasiga */
+  const idx = await shopsByPhone(db, cust.phone);
+  for (const l of idx) {
+    const bid = String(l.bid);
+    if (seen[bid] || (cust.shops && cust.shops[bid]) || noAuto(cust, bid)) continue;
+    const cfg = await getData(db.collection('tgShop').doc(bid));
+    if (cfg && cfg.custByPhone === false) continue;
+    const c = await custDoc(db, bid, l.cid);
+    if (!c || c.hidden || c._deleted || phoneKey(c.phone) !== key) continue;
+    seen[bid] = 1;
+    await setLink(deps, uid, bid, String(l.cid), 'phone', cust.lang || 'uz'); out.push({ bid: bid, cid: String(l.cid) });
+  }
   for (const bid of (bids || []).slice(0, 10)) {
-    if (!bid || seen[bid] || (cust.shops && cust.shops[bid])) continue; seen[bid] = 1;
+    if (!bid || seen[bid] || (cust.shops && cust.shops[bid]) || noAuto(cust, bid)) continue; seen[bid] = 1;
     const cfg = await getData(db.collection('tgShop').doc(bid));
     if (cfg && cfg.custByPhone === false) continue;
     let snap = null; try { snap = await db.collection('businesses').doc(bid).collection('customers').limit(4000).get(); } catch (e) { snap = null; }
@@ -158,7 +200,8 @@ async function handleMy(deps, u, action, body, lang) {
   if (action === 'myUnlink') {
     await db.collection('tgCustLink').doc(linkId(bid, cid)).delete();
     const shops = Object.assign({}, cust.shops || {}); delete shops[bid];
-    await cRef.set(Object.assign({}, cust, { shops: shops }));
+    const na = Object.assign({}, cust.noAuto || {}); na[bid] = true;   /* fix157-custuni */
+    await cRef.set(Object.assign({}, cust, { shops: shops, noAuto: na }));
     return ok({ removed: true });
   }
   return err(400, 'bad_action');
@@ -186,7 +229,7 @@ async function handleAppApi(deps, caller, uid, action, body) {
   if (action === 'cuUnlink') {
     if (!cid) return err(400, 'bad_request');
     const l = await getData(db.collection('tgCustLink').doc(linkId(bid, cid)));
-    if (l) { await db.collection('tgCustLink').doc(linkId(bid, cid)).delete(); const cRef = db.collection('tgCust').doc(String(l.uid)); const c = await getData(cRef); if (c && c.shops && c.shops[bid]) { const sh = Object.assign({}, c.shops); delete sh[bid]; await cRef.set(Object.assign({}, c, { shops: sh })); } }
+    if (l) { await db.collection('tgCustLink').doc(linkId(bid, cid)).delete(); const cRef = db.collection('tgCust').doc(String(l.uid)); const c = await getData(cRef); const sh = Object.assign({}, (c && c.shops) || {}); delete sh[bid]; const na = Object.assign({}, (c && c.noAuto) || {}); na[bid] = true; await cRef.set(Object.assign({}, c || {}, { shops: sh, noAuto: na }));   /* fix157-custuni */ }
     return ok({ removed: !!l });
   }
   if (action === 'cuRemind') {
@@ -212,7 +255,7 @@ async function onSale(deps, bid, sale) {
   const db = deps.db;
   const cfg = (await getData(db.collection('tgShop').doc(bid))) || {};
   if (cfg.custReceipts === false) return { skipped: 'off' };
-  const link = await linkFor(db, bid, sale.customerId);
+  const link = (await linkFor(db, bid, sale.customerId)) || (await autoLink(deps, bid, String(sale.customerId), cfg));   /* fix157-custuni */
   if (!link) return { skipped: 'not_linked' };
   const t = Date.parse(sale.date); if (!isFinite(t) || t < deps.nowMs() - 12 * HOUR) return { skipped: 'old' };
   const s = await shopOf(db, bid), l = await langOf(db, link.uid);
@@ -231,7 +274,7 @@ async function onLedger(deps, bid, entry) {
   const db = deps.db;
   const cfg = (await getData(db.collection('tgShop').doc(bid))) || {};
   if (cfg.custReceipts === false) return { skipped: 'off' };
-  const link = await linkFor(db, bid, entry.customerId);
+  const link = (await linkFor(db, bid, entry.customerId)) || (await autoLink(deps, bid, String(entry.customerId), cfg));   /* fix157-custuni */
   if (!link) return { skipped: 'not_linked' };
   const t = Date.parse(entry.date); if (!isFinite(t) || t < deps.nowMs() - 12 * HOUR) return { skipped: 'old' };
   const s = await shopOf(db, bid), l = await langOf(db, link.uid);
@@ -338,11 +381,12 @@ async function onText(deps, msg, lang) {
 }
 /* /mening buyrug'i yoki "Mening sahifam" */
 async function sendMy(deps, chatId, lang) {
-  const cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || {};
+  let cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || {};
+  if (cust.phoneOk && cust.phone) { try { if ((await matchByPhone(deps, chatId, [])).length) cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || cust; } catch (e) {} }   /* fix157-custuni */
   const l = S.lg(cust.lang || lang);
   const has = cust.shops && Object.keys(cust.shops).length;
   await send(deps, chatId, has ? C.txt('myHint', l) : C.txt('myNone', l), { inline_keyboard: [[myBtn(l)]] });
   return { my: !!has };
 }
 
-module.exports = { linkByCode, matchByPhone, handleMy, handleAppApi, onSale, onLedger, remindOne, remindTick, onCallback, onText, sendMy, myBtn, myUrl, phoneKey, linkId, creditOf, payKind, LINK_TTL_MS };
+module.exports = { shopsByPhone, autoLink, intlKey, linkByCode, matchByPhone, handleMy, handleAppApi, onSale, onLedger, remindOne, remindTick, onCallback, onText, sendMy, myBtn, myUrl, phoneKey, linkId, creditOf, payKind, LINK_TTL_MS };
