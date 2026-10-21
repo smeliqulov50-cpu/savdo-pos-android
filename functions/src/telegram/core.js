@@ -220,6 +220,7 @@ async function handleUpdate(deps, upd) {
   const m = /^\/start(?:@[A-Za-z0-9_]+)?(?:\s+([A-Za-z0-9_-]{4,64}))?$/.exec(text);
   if (m && m[1] && /^s_/.test(m[1])) return require('./shop').onStart(deps, msg, m[1].slice(2), lang);   /* fix145-botshop: do'kon havolasi */
   if (m && m[1] && /^c_/.test(m[1])) return require('./cust').linkByCode(deps, msg, m[1].slice(2), lang);   /* fix155-custbot: mijoz havolasi */
+  if (m && m[1] && /^w_/.test(m[1])) return require('./webshop').linkTg(deps, msg, m[1].slice(2), lang);   /* fix156-webtg: sayt buyurtmasi Telegram'ga */
   if (/^\/start(?:@[A-Za-z0-9_]+)?\s+pay$/.test(text)) return __cmd.run(deps, msg.chat.id, 'pay', lang);   /* fix150-subbot: t.me/<bot>?start=pay — tariflar */
   const kind = __cmd.parse(text);
   let out;

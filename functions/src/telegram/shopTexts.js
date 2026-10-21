@@ -153,6 +153,16 @@ const T = {
     tg: "❌ Мизоҷ <b>фармоиши #{no}</b>-ро бекор кард · {shop}"
   },
   btnPlans: { uz: "🧾 Tariflar katalogi", ru: "🧾 Каталог тарифов", en: "🧾 Plans catalog", kk: "🧾 Тарифтер каталогы", ky: "🧾 Тарифтер каталогу", tg: "🧾 Феҳристи тарифҳо" },
+  /* fix156-webtg */
+  webTgOk: { uz: "🔔 <b>Buyurtma #{no}</b> · {shop}\nHolati: {status} · {total}\nEndi holat o'zgarishi shu yerga keladi.", ru: "🔔 <b>Заказ #{no}</b> · {shop}\nСтатус: {status} · {total}\nТеперь изменения статуса будут приходить сюда.", en: "🔔 <b>Order #{no}</b> · {shop}\nStatus: {status} · {total}\nStatus updates will now come here.", kk: "🔔 <b>Тапсырыс #{no}</b> · {shop}\nКүйі: {status} · {total}\nЕнді күй өзгерісі осында келеді.", ky: "🔔 <b>Буйрутма #{no}</b> · {shop}\nАбалы: {status} · {total}\nЭми абал өзгөрүшү ушул жерге келет.", tg: "🔔 <b>Фармоиш #{no}</b> · {shop}\nҲолат: {status} · {total}\nАкнун тағйири ҳолат ба ин ҷо меояд." },
+  webTgBad: { uz: "❌ Havola noto'g'ri yoki eskirgan.", ru: "❌ Ссылка неверна или устарела.", en: "❌ The link is wrong or expired.", kk: "❌ Сілтеме қате немесе ескірген.", ky: "❌ Шилтеме туура эмес же эскирген.", tg: "❌ Пайванд нодуруст ё кӯҳна аст." },
+  boSt_new: { uz: "do'kon ko'rib chiqmoqda", ru: "магазин рассматривает", en: "the shop is reviewing", kk: "дүкен қарап жатыр", ky: "дүкөн карап жатат", tg: "мағоза дида мебарояд" },
+  boSt_accepted: { uz: "qabul qilindi", ru: "принят", en: "accepted", kk: "қабылданды", ky: "кабыл алынды", tg: "қабул шуд" },
+  boSt_ready: { uz: "tayyor", ru: "готов", en: "ready", kk: "дайын", ky: "даяр", tg: "тайёр" },
+  boSt_delivering: { uz: "yo'lda", ru: "в пути", en: "on the way", kk: "жолда", ky: "жолдо", tg: "дар роҳ" },
+  boSt_done: { uz: "yakunlandi", ru: "завершён", en: "completed", kk: "аяқталды", ky: "аяктады", tg: "анҷом ёфт" },
+  boSt_rejected: { uz: "rad etildi", ru: "отклонён", en: "rejected", kk: "қабылданбады", ky: "четке кагылды", tg: "рад шуд" },
+  boSt_cancelled: { uz: "bekor qilindi", ru: "отменён", en: "cancelled", kk: "бас тартылды", ky: "жокко чыгарылды", tg: "бекор шуд" },
   srcWeb: { uz: "🌐 saytdan", ru: "🌐 с сайта", en: "🌐 from the website", kk: "🌐 сайттан", ky: "🌐 сайттан", tg: "🌐 аз сайт" },   /* fix151-weborder */
   btnHub: { uz: "💳 Obuna · Do'konim", ru: "💳 Подписка · Магазин", en: "💳 Plan · My shop", kk: "💳 Жазылым · Дүкен", ky: "💳 Жазылуу · Дүкөн", tg: "💳 Обуна · Мағоза" },   /* fix150-subbot */
   btnHubFull: { uz: "📱 Do'konim: obuna va katalog", ru: "📱 Мой магазин: подписка и каталог", en: "📱 My shop: subscription and catalog", kk: "📱 Менің дүкенім: жазылым және каталог", ky: "📱 Менин дүкөнүм: жазылуу жана каталог", tg: "📱 Мағозаи ман: обуна ва феҳрист" },

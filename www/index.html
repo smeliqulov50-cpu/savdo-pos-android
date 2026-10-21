@@ -949,6 +949,7 @@ function showFatalError(msg) {
 <div id="debt-export-root"></div>
 <div id="creditor-export-root"></div>
 <div id="sub-reminder-root"></div>
+<div id="bk-root"></div><!-- fix156-backup -->
 <div id="changelog-root"></div>
 <div id="subscription-root"></div>
 <div class="toast" id="toast"></div>
@@ -1267,6 +1268,18 @@ const T = {
   cuSetMin:{uz:"Minimal qarz",ru:"Минимальный долг",en:"Minimum debt",kk:"Ең аз қарыз",ky:"Эң аз карыз",tg:"Қарзи ҳадди ақал"},
   cuSetRemindHint:{uz:"Har kuni soat 10:00 da: qarzi minimal summadan katta va oxirgi N kunda xarid qilmagan ulangan mijozlarga eslatma boradi; sizga nechta yuborilgani yoziladi.",ru:"Каждый день в 10:00: напоминание получают подключённые клиенты с долгом выше минимума, не покупавшие последние N дней; вам приходит отчёт.",en:"Every day at 10:00: linked customers whose debt is above the minimum and who have not bought in the last N days get a reminder; you get a summary.",kk:"Күн сайын 10:00-де: қарызы минимумнан жоғары, соңғы N күнде сатып алмаған қосылған клиенттерге еске салу барады.",ky:"Күн сайын 10:00дө: карызы минимумдан жогору, акыркы N күндө сатып албаган туташкан кардарларга эскертүү барат.",tg:"Ҳар рӯз соати 10:00: мизоҷони пайвастшуда бо қарзи аз ҳадди ақал зиёд, ки дар N рӯзи охир харид накардаанд, ёдоварӣ мегиранд."},
   cuDays:{uz:"{n} kun",ru:"{n} дн.",en:"{n} days",kk:"{n} күн",ky:"{n} күн",tg:"{n} рӯз"},
+  /* fix156 */
+  bkTitle:{uz:"Zaxira nusxa vaqti keldi",ru:"Пора сделать резервную копию",en:"Time for a backup",kk:"Резервтік көшірме уақыты",ky:"Резервдик көчүрмө убактысы",tg:"Вақти нусхаи захиравӣ"},
+  bkText:{uz:"Oxirgi zaxira nusxa: {d}. Ma'lumotlar bulutda ham saqlanadi, lekin o'zingizda ham bir nusxa tursin — bir bosish kifoya. Faylni Telegram'dagi «Saqlangan xabarlar» ga yuborish qulay.",ru:"Последняя копия: {d}. Данные хранятся и в облаке, но держите копию у себя — одно нажатие. Удобно отправить файл в «Избранное» в Telegram.",en:"Last backup: {d}. Your data is also in the cloud, but keep a copy yourself — one tap. Sending the file to Telegram “Saved Messages” works well.",kk:"Соңғы көшірме: {d}. Деректер бұлтта да сақталады, бірақ өзіңізде де көшірме болсын.",ky:"Акыркы көчүрмө: {d}. Маалымат булутта да сакталат, бирок өзүңүздө да көчүрмө болсун.",tg:"Нусхаи охирин: {d}. Маълумот дар абр ҳам ҳаст, аммо дар худатон ҳам нусха бошад."},
+  bkNever:{uz:"hali yo'q",ru:"ещё нет",en:"none yet",kk:"әлі жоқ",ky:"азырынча жок",tg:"ҳанӯз нест"},
+  bkNow:{uz:"Zaxira nusxani ulashish",ru:"Поделиться копией",en:"Share the backup",kk:"Көшірмені бөлісу",ky:"Көчүрмөнү бөлүшүү",tg:"Мубодилаи нусха"},
+  bkLater:{uz:"Keyinroq",ru:"Позже",en:"Later",kk:"Кейінірек",ky:"Кийинчерээк",tg:"Баъдтар"},
+  bkDone:{uz:"Zaxira nusxa tayyor",ru:"Копия готова",en:"Backup ready",kk:"Көшірме дайын",ky:"Көчүрмө даяр",tg:"Нусха тайёр"},
+  bkRemind:{uz:"Zaxira nusxa eslatmasi",ru:"Напоминание о копии",en:"Backup reminder",kk:"Көшірме еске салуы",ky:"Көчүрмө эскертүүсү",tg:"Ёдоварии нусха"},
+  bkRemindOff:{uz:"O'chirilgan",ru:"Выключено",en:"Off",kk:"Өшірулі",ky:"Өчүк",tg:"Хомӯш"},
+  bkEvery:{uz:"Har {n} kunda",ru:"Каждые {n} дн.",en:"Every {n} days",kk:"Әр {n} күнде",ky:"Ар {n} күндө",tg:"Ҳар {n} рӯз"},
+  bkLast:{uz:"Oxirgi zaxira nusxa: {d}",ru:"Последняя копия: {d}",en:"Last backup: {d}",kk:"Соңғы көшірме: {d}",ky:"Акыркы көчүрмө: {d}",tg:"Нусхаи охирин: {d}"},
+  shiftNotOpen:{uz:"Smena ochilmagan",ru:"Смена не открыта",en:"No shift is open",kk:"Ауысым ашылмаған",ky:"Смена ачылган эмес",tg:"Смена кушода нашудааст"},
   boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
@@ -3487,7 +3500,7 @@ function seedProducts(){
 
 async function loadAll(){
   const [p,c,s,l,lang,settings,staff,shifts,curShift,tables,setupDone,cart,visits,creditors,creditorLedger,kitchenStations,saleMode,expenses,deviceHasNoPrinter,businessId,reservations] = await Promise.all([
-    storGet(STORAGE_KEYS.products), storGet(STORAGE_KEYS.customers), storGet(STORAGE_KEYS.sales),
+    storGet(STORAGE_KEYS.products), storGet(STORAGE_KEYS.customers), loadSalesV2(),   /* fix156-salestore */
     storGet(STORAGE_KEYS.ledger), storGet(STORAGE_KEYS.lang), storGetSettingsResilient(),
     storGet(STORAGE_KEYS.staff), storGet(STORAGE_KEYS.shifts), storGet(STORAGE_KEYS.currentShift),
     storGet(STORAGE_KEYS.tables), storGet(STORAGE_KEYS.setupDone), storGet(STORAGE_KEYS.cart),
@@ -3595,7 +3608,57 @@ async function __idbRecoverRun(){
 }
 function saveProducts(){ storSet(STORAGE_KEYS.products, state.products); syncProductsDoc(); scheduleShopRepublish(); }
 function saveCustomers(){ storSet(STORAGE_KEYS.customers, state.customers); syncCustomersDoc(); }
-function saveSales(){ storSet(STORAGE_KEYS.sales, state.sales); }
+/* fix156-salestore: sotuvlar oylar bo'yicha (sales_v2:YYYY-MM) — har sotuvda faqat o'zgargan oy yoziladi.
+   Eski bitta kalit birinchi saqlashda ko'chiriladi. Eski oy o'zgarsa (qaytarish, tahrir) — markSaleDirty yoki soni o'zgargani
+   orqali aniqlanadi; ehtiyot uchun ilova yopilganda / 5 daqiqada bir to'liq saqlanadi. */
+const __SV2 = 'sales_v2:';
+let __svSaved = null, __svLegacyCleared = false, __svLastFull = 0, __svTimer = null;
+const __svDirty = new Set();
+function __svMonth(x){ const d = x && x.date ? String(x.date).slice(0, 7) : ''; return /^\d{4}-\d{2}$/.test(d) ? d : 'other'; }
+function markSaleDirty(x){ try{ __svDirty.add(__svMonth(x)); }catch(e){} }
+function __svGroup(list){ const g = {}; (list || []).forEach(x=>{ if(!x) return; const m = __svMonth(x); (g[m] = g[m] || []).push(x); }); return g; }
+async function storDel(key){ try{ if(useClaudeStorage){ await window.storage.delete(key); return; } await idbDel(key); }catch(e){} }
+function idbDel(key){
+  return getIDB().then(db=>new Promise((resolve,reject)=>{
+    let settled = false; const timer = setTimeout(()=>{ if(!settled){ settled = true; reject(new Error('idb-del-timeout')); } }, 3000);
+    const tx = db.transaction('kv','readwrite'); tx.objectStore('kv').delete(key);
+    tx.oncomplete = ()=>{ if(!settled){ settled = true; clearTimeout(timer); resolve(true); } };
+    tx.onerror = ()=>{ if(!settled){ settled = true; clearTimeout(timer); reject(tx.error); } };
+  }));
+}
+async function loadSalesV2(){
+  const idx = await storGet(__SV2 + 'idx');
+  if(!idx || !Array.isArray(idx.months)){ const legacy = await storGet(STORAGE_KEYS.sales); return legacy; }
+  const parts = await Promise.all(idx.months.map(m=>storGet(__SV2 + m)));
+  let timedOut = false; parts.forEach((p, i)=>{ if(p === null && window.__idbTimedOut && window.__idbTimedOut[__SV2 + idx.months[i]]) timedOut = true; });
+  if(timedOut){ (window.__idbTimedOut = window.__idbTimedOut || {})[STORAGE_KEYS.sales] = 1; return null; }
+  const order = idx.months.slice().sort((a, b)=> a === 'other' ? -1 : b === 'other' ? 1 : a.localeCompare(b));
+  const byM = {}; idx.months.forEach((m, i)=>{ byM[m] = parts[i] || []; });
+  const all = []; order.forEach(m=>{ byM[m].forEach(x=>{ if(x) all.push(x); }); });
+  __svSaved = {months: {}}; order.forEach(m=>{ __svSaved.months[m] = byM[m].length; });
+  __svLegacyCleared = true; __svLastFull = Date.now();
+  return all;
+}
+function saveSales(full){
+  if(window.__idbTimedOut && window.__idbTimedOut[STORAGE_KEYS.sales]) return Promise.resolve();
+  const g = __svGroup(state.sales), months = Object.keys(g), now = Date.now();
+  if(!full && __svSaved && now - __svLastFull > 5 * 60000) full = true;
+  let dirty;
+  if(full || !__svSaved){ dirty = new Set(months); Object.keys((__svSaved && __svSaved.months) || {}).forEach(m=>dirty.add(m)); __svLastFull = now; }
+  else {
+    dirty = new Set(__svDirty);
+    dirty.add(__svMonth({date: new Date().toISOString()}));
+    months.forEach(m=>{ if((__svSaved.months[m] || 0) !== g[m].length) dirty.add(m); });
+    Object.keys(__svSaved.months).forEach(m=>{ if(!g[m]) dirty.add(m); });
+  }
+  __svDirty.clear();
+  __svSaved = {months: {}}; months.forEach(m=>{ __svSaved.months[m] = g[m].length; });
+  const ops = [];
+  dirty.forEach(m=>{ ops.push(g[m] ? storSet(__SV2 + m, g[m]) : storDel(__SV2 + m)); });
+  ops.push(storSet(__SV2 + 'idx', {v: 2, months: months, at: now}));
+  return Promise.all(ops).then(()=>{ if(!__svLegacyCleared){ __svLegacyCleared = true; storDel(STORAGE_KEYS.sales); } }).catch(()=>{});
+}
+try{ document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'hidden' && __svSaved) saveSales(true); }); window.addEventListener('pagehide', ()=>{ if(__svSaved) saveSales(true); }); }catch(e){}
 function saveExpenses(){ storSet(STORAGE_KEYS.expenses, state.expenses); }
 function saveReservations(){ storSet(STORAGE_KEYS.reservations, state.reservations); }
 function saveLedger(){ storSet(STORAGE_KEYS.ledger, state.ledger); }
@@ -4028,7 +4091,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.44';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.45';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -5581,7 +5644,7 @@ async function loadCloudData(){
         const __changed = {}; refundedSnap.docs.concat(editedSnap.docs).forEach(d=>{ const x = d.data(); if(x && x.id) __changed[x.id] = x; });
         if(Object.keys(__changed).length) state.sales = state.sales.map(x=> (x && __changed[x.id]) ? __changed[x.id] : x);
         // Mark synced only after the data is safely in local storage.
-        Promise.all([storSet(STORAGE_KEYS.sales, state.sales), storSet(STORAGE_KEYS.ledger, state.ledger)]).then(()=>markHistSynced(__histStart)).catch(()=>{}); }
+        Promise.all([saveSales(true), storSet(STORAGE_KEYS.ledger, state.ledger)]).then(()=>markHistSynced(__histStart)).catch(()=>{}); }   /* fix156-salestore */
         state.visits = visitsSnap.docs.map(d=>d.data());
         state.creditors = creditorsSnap.docs.map(d=>d.data());
         state.creditorLedger = creditorLedgerSnap.docs.map(d=>d.data());
@@ -5673,7 +5736,7 @@ async function loadCloudData(){
 function persistAllLocal(){
   storSet(STORAGE_KEYS.products, state.products);
   storSet(STORAGE_KEYS.customers, state.customers);
-  storSet(STORAGE_KEYS.sales, state.sales);
+  saveSales(true);   /* fix156-salestore */
   storSet(STORAGE_KEYS.ledger, state.ledger);
   storSet(STORAGE_KEYS.visits, state.visits);
   storSet(STORAGE_KEYS.creditors, state.creditors);
@@ -6134,6 +6197,7 @@ function openStartShiftModal(){
 
 function openEndShiftModal(){
   const shift = state.currentShift;
+  if(!shift){ showToast(tr('shiftNotOpen')); return; }   /* fix156: smena ochilmagan */
   const shiftSales = state.sales.filter(s=> __shIn(shift, s.shiftId) && !s.refunded);
   const shiftRefunds = state.sales.filter(s=> __shIn(shift, s.shiftId) && s.refunded);
   const cashTotal = sumSalesByMethod(shiftSales, 'cash');
@@ -10398,12 +10462,13 @@ function requestRelayPrint(sale){
   sale.printed = false;
   const inState = state.sales.find(s=>s.id===sale.id);
   if(inState) inState.printed = false;
+  markSaleDirty(sale);   /* fix156-salestore */
   saveSales();
   addSaleDoc(sale);
   showToast(tr('willPrintOnOtherDevice'));
 }
 function markSalePrinted(sale){
-  sale.printed = true;
+  sale.printed = true; markSaleDirty(sale);   /* fix156-salestore */
   const inState = state.sales.find(s=>s.id===sale.id);
   if(inState) inState.printed = true;
   saveSales();
@@ -14328,7 +14393,7 @@ function refundSale(saleId, afterDone){
       }
     }
     // 3. Mark the sale as refunded (keep history, never delete)
-    sale.refunded = true;
+    sale.refunded = true; markSaleDirty(sale);   /* fix156-salestore */
     auditLog('saleRefund', `№ ${sale.receiptNumber||sale.id} — ${fmt(sale.total)}`, {saleId: sale.id});
     sale.refundedAt = new Date().toISOString();
     sale.refundedBy = state.currentStaff ? state.currentStaff.name : '';
@@ -16398,7 +16463,7 @@ function renderReportsCategory(container, cat){
           if(monthKeyOf(sl.date)!==state.pnlMonth || effectiveBranchId(sl.branchId)!==effectiveBranchId(state.currentBranchId)) return;
           let ch = false;
           (sl.items||[]).forEach(it=>{ if(it.productId===pid && String(it.variantId||'')===String(vid||'') && it.costPrice!==newCost){ it.costPrice = newCost; ch = true; } });
-          if(ch){ n++; addSaleDoc(sl); }
+          if(ch){ n++; markSaleDirty(sl); addSaleDoc(sl); }   /* fix156-salestore */
         });
         if(n){ saveSales(); try{ auditLog('saleEdit', tr('pnlRecostDone').replace('{n}', n), {}); }catch(e){} }
         showToast(tr('pnlRecostDone').replace('{n}', n)); renderReports();
@@ -23176,13 +23241,16 @@ function renderSettingsBackup(container){
     <div class="card">
       <p class="subtle" style="margin:0 0 12px;">${tr('backupHint')}</p>
       <button class="btn btn-accent btn-block" id="download-backup-btn" style="margin-bottom:8px;">${tr('downloadBackup')}</button>
+      <div class="field"><label class="field-label">${tr('bkRemind')}</label><select id="bk-days">${[0,3,7,14,30].map(n=>`<option value="${n}" ${__bkDays()===n?'selected':''}>${n ? escapeHtml(tr('bkEvery').replace('{n}', n)) : escapeHtml(tr('bkRemindOff'))}</option>`).join('')}</select></div>
+      <p class="subtle" style="margin:0 0 10px;font-size:12px;">${escapeHtml(tr('bkLast').replace('{d}', state.settings.lastBackupAt ? fmtDateTime(state.settings.lastBackupAt) : tr('bkNever')))}</p>
       <input type="file" accept="application/json" id="restore-input" class="visually-hidden-input">
       <button class="btn btn-outline btn-block" id="restore-backup-btn">${tr('restoreBackup')}</button>
       <p class="subtle" style="margin:10px 0 0;">${tr('lastBackupNote')}</p>
     </div>
   `;
   bindSettingsBack(container);
-  document.getElementById('download-backup-btn').addEventListener('click', downloadBackup);
+  document.getElementById('download-backup-btn').addEventListener('click', ()=>downloadBackup(false));
+  { const bd = document.getElementById('bk-days'); if(bd) bd.addEventListener('change', ()=>{ state.settings.backupRemindDays = Number(bd.value) || 0; saveSettings(); }); }   /* fix156-backup */
   document.getElementById('restore-backup-btn').addEventListener('click', ()=>document.getElementById('restore-input').click());
   document.getElementById('restore-input').addEventListener('change', (e)=>{
     const file = e.target.files[0];
@@ -24247,8 +24315,8 @@ function openStaffForm(staffId){
 }
 
 /* ---------- BACKUP / RESTORE ---------- */
-function downloadBackup(){
-  const payload = {
+function __bkPayload(){
+  return {
     __sardorBackup: true,
     version: 1,
     exportedAt: new Date().toISOString(),
@@ -24265,16 +24333,46 @@ function downloadBackup(){
     shifts: state.shifts,
     tables: state.tables
   };
+}
+/* fix156-backup: bir funksiya — yuklab olish yoki ulashish (telefonda ulashish oynasi: Telegram, Drive...) */
+async function downloadBackup(share){
+  const payload = __bkPayload();
   const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const datePart = new Date().toISOString().slice(0,10);
-  a.href = url;
-  a.download = `sardor-backup-${datePart}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const datePart = new Date().toISOString().slice(0,10), name = `sardor-backup-${datePart}.json`;
+  let ok = false;
+  if(share || isNativeApp()){ try{ await shareFileNative(blob, name, 'Savdo Pos', tr('bkDone')); ok = true; }catch(e){ ok = false; } }
+  if(!ok){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+  state.settings.lastBackupAt = new Date().toISOString(); saveSettingsLocalOnly();
+  try{ const r = document.getElementById('bk-root'); if(r) r.innerHTML = ''; }catch(e){}
+}
+function __bkDays(){ const v = state.settings.backupRemindDays; return v === 0 ? 0 : (Number(v) || 7); }
+function checkBackupReminder(){
+  const root = document.getElementById('bk-root'); if(!root) return false;
+  root.innerHTML = '';
+  if(!isAdmin() || isSuperAdmin()) return false;
+  const days = __bkDays(); if(!days) return false;
+  const last = state.settings.lastBackupAt ? Date.parse(state.settings.lastBackupAt) : 0;
+  const first = state.settings.firstRunAt ? Date.parse(state.settings.firstRunAt) : 0;
+  const base = last || first || 0;
+  if(!base){ state.settings.firstRunAt = new Date().toISOString(); saveSettingsLocalOnly(); return false; }
+  if(Date.now() - base < days * 86400000) return false;
+  if(!(state.sales || []).length && !(state.products || []).length) return false;
+  if((state.cart || []).length) return false;
+  let snooze = 0; try{ snooze = Number(localStorage.getItem('savdo_bk_snooze') || 0); }catch(e){}
+  if(Date.now() - snooze < 86400000) return false;
+  root.innerHTML = `<div class="card" id="bk-bar" style="position:fixed;left:12px;right:12px;bottom:calc(68px + env(safe-area-inset-bottom,0px));z-index:54;border:1px solid var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.18);animation:sxUp .35s both;">
+    <div style="font-weight:800;">💾 ${tr('bkTitle')}</div>
+    <p class="subtle" style="margin:4px 0 10px;font-size:12.5px;">${escapeHtml(tr('bkText').replace('{d}', last ? fmtDate(state.settings.lastBackupAt) : tr('bkNever')))}</p>
+    <div class="btn-row"><button type="button" class="btn btn-primary" id="bk-now" style="flex:1;">${tr('bkNow')}</button><button type="button" class="btn btn-ghost" id="bk-later" style="width:auto;">${tr('bkLater')}</button></div></div>`;
+  document.getElementById('bk-now').addEventListener('click', ()=>{ downloadBackup(true); });
+  document.getElementById('bk-later').addEventListener('click', ()=>{ try{ localStorage.setItem('savdo_bk_snooze', String(Date.now())); }catch(e){} root.innerHTML = ''; });
+  return true;
 }
 
 function restoreBackup(data){
@@ -24413,6 +24511,7 @@ function renderAll(){
   checkDailyCreditorExport();
   const changelogShown = checkChangelog();
   if(!changelogShown) checkSubscriptionReminder();
+  try{ checkBackupReminder(); }catch(e){}   /* fix156-backup */
 }
 
 function waitForFirebaseLib(callback, attemptsLeft){

@@ -163,7 +163,7 @@ async function handle(deps, body, meta) {
     tx.set(wRef, { t: t.concat([now]), ph: phm, ip: ipm });
     return { o: o };
   });
-  if (res.again) return ok({ order: summary(res.again), t: tokenFor(deps, oid), again: true });
+  if (res.again) return ok({ order: summary(res.again), t: tokenFor(deps, oid), again: true, bot: deps.botName || '' });
   if (res.many) return err(429, 'too_many');
   if (res.manyActive) return err(429, 'too_many_active');
   if (res.busy) return err(429, 'busy');
@@ -171,7 +171,28 @@ async function handle(deps, body, meta) {
   let o = res.o;
   try { o = await SH.autoAccept(deps, bid, SH.normCfg(await getData(sRef)), o); } catch (e) {}   /* fix153-boplus */
   try { await SH.notifyOwner(deps, bid, 'new', o); } catch (e) {}
-  return ok({ order: summary(o), t: tokenFor(deps, oid) });
+  return ok({ order: summary(o), t: tokenFor(deps, oid), bot: deps.botName || '' });
+}
+/* fix156-webtg: saytdan buyurtma bergan mijoz Telegram'da xabar olishni xohlasa — t.me/<bot>?start=w_<oid>_<token> */
+async function linkTg(deps, msg, param, lang) {
+  const m = /^(bo[0-9a-f]{22})_([0-9a-f]{24})$/.exec(String(param || ''));
+  const S = require('./shopTexts');
+  if (!m) return { reply: S.t('webTgBad', lang) };
+  const db = deps.db, uid = String(msg.from && msg.from.id || msg.chat.id);
+  const oRef = db.collection('tgOrders').doc(m[1]);
+  const o = await getData(oRef);
+  if (!o || o.src !== 'web' || !tokOk(deps, m[1], m[2])) return { reply: S.t('webTgBad', lang) };
+  if (o.tgUser && o.tgUser.id && String(o.tgUser.id) !== uid) return { reply: S.t('webTgBad', lang) };
+  const now = deps.nowMs();
+  const n = Object.assign({}, o, { tgUser: { id: uid, username: str(msg.from && msg.from.username, 40), first: str(msg.from && msg.from.first_name, 60) }, lang: lang, updatedAt: now });
+  await oRef.set(n);
+  const iRef = db.collection('businesses').doc(o.bid).collection('meta').doc('botInbox');
+  try { const ib = (await getData(iRef)) || {}; const orders = Object.assign({}, ib.orders || {}); if (orders[o.id]) { orders[o.id] = SH.inboxEntry(n); await iRef.set({ orders: orders, updatedAt: now }); } } catch (e) {}
+  try { const cRef = db.collection('tgCust').doc(uid); const c = (await getData(cRef)) || {}; const act = Object.assign({}, c.active || {}); if (ACTIVE.indexOf(o.status) !== -1) act[o.id] = o.bid; const recent = (Array.isArray(c.recent) ? c.recent : []).filter(function (r) { return r && r.id !== o.id; }).concat([{ id: o.id, bid: o.bid, at: now }]).slice(-30); await cRef.set(Object.assign({}, c, { active: act, recent: recent, lang: c.lang || lang, name: c.name || str(o.name, 80) })); } catch (e) {}
+  const M = require('./msgs');
+  const text = S.t('webTgOk', lang, { no: o.no, shop: String(o.shop || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'), status: S.t('boSt_' + o.status, lang), total: M.money(lang, o.cur, o.total) });
+  try { await deps.tg('sendMessage', { chat_id: uid, parse_mode: 'HTML', text: text, reply_markup: o.status === 'new' ? { inline_keyboard: [[{ text: S.t('btnCancel', lang), callback_data: 'bo:c:' + o.id }]] } : undefined }); } catch (e) {}
+  return { webTg: o.id };
 }
 
-module.exports = { handle, tokenFor, loadShop };
+module.exports = { handle, tokenFor, loadShop, linkTg };

@@ -27,7 +27,7 @@ function seed(pl) {
     'tgBiz/bizW': { chats: { [CHAT]: { name: 'Ega', at: 1, sig: core.sigOf(KEY, BID, CHAT) } }, lang: 'uz' }
   };
 }
-function mk(s) { const db = fakeDb(s || seed()); const tg = fakeTg(); let now = NOW; return { db, tg, deps: { db, tg, key: KEY, webKey: WEBKEY, nowMs: () => now }, setNow: (t) => { now = t; } }; }
+function mk(s) { const db = fakeDb(s || seed()); const tg = fakeTg(); let now = NOW; return { db, tg, deps: { db, tg, key: KEY, webKey: WEBKEY, botName: 'savdo_pos_bot', nowMs: () => now }, setNow: (t) => { now = t; } }; }
 let n = 0;
 const req = (deps, extra, ip) => W.handle(deps, Object.assign({ action: 'siteOrder', slug: 'salqin', clientId: 'cl' + (++n) + 'abcdefgh', name: 'Ali Valiyev', phone: '90 123 45 67', items: [{ id: 'p1', q: 2 }] }, extra || {}), { ip: ip || '1.2.3.4' });
 
@@ -121,4 +121,30 @@ test('band qilish: sayt buyurtmasi bot katalogidagi qoldiqdan ham ayiriladi', as
   const res = shop.reservedFrom(s.db.store['businesses/bizW/meta/botInbox'].orders, 'main');
   assert.equal(res['p2|v1'], 2, JSON.stringify(res));
   assert.ok(r.body.order.id);
+});
+
+test('fix156-webtg: sayt buyurtmasi Telegram\'ga ulanadi — holat xabarlari botga, bekor qilish tugmasi; begona token rad', async () => {
+  const s = mk();
+  const r = await req(s.deps);
+  assert.equal(r.body.bot, 'savdo_pos_bot');
+  const msgOf = (chat, text) => ({ message: { message_id: 1, chat: { id: chat, type: 'private' }, from: { id: chat, first_name: 'Ali', username: 'ali_v', language_code: 'ru' }, text } });
+  const bad = await core.handleUpdate(s.deps, msgOf(4242, '/start w_' + r.body.order.id + '_' + 'f'.repeat(24)));
+  assert.match(bad.reply, /неверна|noto/);
+  const ok1 = await core.handleUpdate(s.deps, msgOf(4242, '/start w_' + r.body.order.id + '_' + r.body.t));
+  assert.equal(ok1.webTg, r.body.order.id);
+  const m = s.tg.sent.filter(x => String(x.chat_id) === '4242').pop();
+  assert.ok(/Заказ #\d+/.test(m.text) && /рассматривает/.test(m.text) && /bo:c:/.test(JSON.stringify(m.reply_markup)), m.text);
+  const o = s.db.store['tgOrders/' + r.body.order.id];
+  assert.equal(String(o.tgUser.id), '4242'); assert.equal(o.src, 'web');
+  assert.equal(s.db.store['businesses/bizW/meta/botInbox'].orders[o.id].canMsg, true);
+  const other = await core.handleUpdate(s.deps, msgOf(4343, '/start w_' + r.body.order.id + '_' + r.body.t));
+  assert.match(other.reply, /неверна|noto/, 'boshqa chat ulana olmaydi');
+  await shop.handleAppApi(s.deps, { bid: BID, owner: true }, BID, 'boSet', { oid: o.id, to: 'accepted', eta: 15 });
+  const m2 = s.tg.sent.filter(x => String(x.chat_id) === '4242').pop();
+  assert.ok(/принят/.test(m2.text) && /15/.test(m2.text), m2.text);
+  const msgR = await shop.handleAppApi(s.deps, { bid: BID, owner: true }, BID, 'boMsg', { oid: o.id, text: 'Выезжаем' });
+  assert.equal(msgR.status, 200);
+  const cb = { callback_query: { id: 'q1', data: 'bo:c:' + o.id, from: { id: 4242 }, message: { message_id: 7, chat: { id: 4242, type: 'private' } } } };
+  const c = await core.handleUpdate(s.deps, cb);
+  assert.equal(c.cb, 'late', 'qabul qilingach bekor qilinmaydi');
 });
