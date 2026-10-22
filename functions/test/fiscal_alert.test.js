@@ -14,7 +14,7 @@ const KEY = core.keyFromToken('123:TEST');
 const BID = 'OWNER1', NOW = Date.parse('2026-10-22T06:00:00Z'), H = 3600000, IK = '01234567890123456';
 function chatsFor(bid, ids) { const c = {}; ids.forEach(function (id, i) { c[id] = { name: 'Chat ' + id, username: '', at: 1000 + i, sig: core.sigOf(KEY, bid, id) }; }); return c; }
 function seed(withChats) {
-  const s = { 'businesses/OWNER1': { businessName: 'Do\'kon <A&B>', currency: 'UZS', timeZone: 'Asia/Tashkent', fiscalMode: true, fiscalProvider: 'mock' } };
+  const s = { 'businesses/OWNER1': { businessName: 'Do\'kon <A&B>', currency: 'UZS', timeZone: 'Asia/Tashkent', fiscalMode: true, fiscalProvider: 'mock', businessInn: '123456789' } };
   if (withChats !== false) { s['tgBiz/OWNER1'] = { chats: chatsFor(BID, ['111']), lang: 'uz' }; s['tgChats/111'] = { bids: [BID] }; }
   return s;
 }
@@ -55,21 +55,29 @@ test('3 marta urinish: bitta xabar (chek raqami, sabab); takror yuborilmaydi; 1-
   d.setNow(NOW + 10 * 60000); await E.retryTick(d); assert.equal(om(d).a1.a, 3);
   r = await R.runFiscal(d); assert.equal(r.alerts, 1); assert.equal(d.tg.sent.length, 1);
   const txt = d.tg.sent[0].text;
-  assert.match(txt, /Soliqqa yuborilmagan cheklar/); assert.match(txt, /Chek №A1 — 3 marta urinildi: operator_busy/); assert.match(txt, /Do'kon &lt;A&amp;B&gt;/); assert.match(txt, /Fiskal kassa/);
+  assert.match(txt, /Soliqqa yuborilmagan cheklar/); assert.match(txt, /Chek №A1 — 3 marta urinildi: operator yoki internet vaqtincha javob bermadi/); assert.match(txt, /Do'kon &lt;A&amp;B&gt;/); assert.match(txt, /Fiskal kassa/);
   r = await R.runFiscal(d); assert.equal(r.alerts, 0); assert.equal(d.tg.sent.length, 1, 'takror yo\'q');
   d.mock.opts.mode = 'ok'; d.setNow(NOW + 40 * 60000); await E.retryTick(d);
   assert.equal(om(d).a1, undefined, 'yuborilgach ro\'yxatdan chiqdi'); assert.equal(d.db.store['fiscalBiz/' + BID].openCount, 0);
 });
 
-test('operator rad etgan chek (avtomatik qayta urinilmaydi) — 24 soatdan keyin xabar; yangi chek qo\'shilsa — yana bitta xabar', async () => {
+test('operator rad etgan chek (avtomatik qayta urinilmaydi) — DARHOL xabar (fix190); yangi chek qo\'shilsa — yana bitta xabar', async () => {
   const d = mk({ mode: 'error' }); await prefs(d, { fisc: true });
   await E.processSale(d, BID, sale('b1'));
+  let r = await R.runFiscal(d); assert.equal(r.alerts, 1);
+  assert.match(d.tg.sent[0].text, /Chek №B1 — operator rad etdi: tovarning IKPU kodi noto'g'ri yoki topilmadi/);
+  r = await R.runFiscal(d); assert.equal(r.alerts, 0, 'takror yo\'q');
+  d.setNow(NOW + 30 * 60000); await E.processSale(d, BID, sale('b2'));
+  r = await R.runFiscal(d); assert.equal(r.alerts, 1);
+  assert.match(d.tg.sent[1].text, /2 ta chek/); assert.match(d.tg.sent[1].text, /№B1/); assert.match(d.tg.sent[1].text, /№B2/);
+});
+
+test('operator band (qayta urinadi) — 24 soat navbatda tursa xabar', async () => {
+  const d = mk({ mode: 'fail' }); await prefs(d, { fisc: true });
+  await E.processSale(d, BID, sale('k1'));
   d.setNow(NOW + 23 * H); let r = await R.runFiscal(d); assert.equal(r.alerts, 0);
   d.setNow(NOW + 24 * H + 60000); r = await R.runFiscal(d); assert.equal(r.alerts, 1);
-  assert.match(d.tg.sent[0].text, /Chek №B1 — 24 soatdan beri navbatda: rejected: IKPU not found/);
-  await E.processSale(d, BID, sale('b2'));
-  d.setNow(NOW + 48 * H + 2 * 60000); r = await R.runFiscal(d); assert.equal(r.alerts, 1);
-  assert.match(d.tg.sent[1].text, /2 ta chek/); assert.match(d.tg.sent[1].text, /№B1/); assert.match(d.tg.sent[1].text, /№B2/);
+  assert.match(d.tg.sent[0].text, /Chek №K1 — 24 soatdan beri navbatda/);
 });
 
 test('chat ulanmagan — belgilanmaydi; ulangach xabar boradi', async () => {

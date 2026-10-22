@@ -27,7 +27,15 @@ function saleRef(db, bid, sid) { return db.collection('businesses').doc(bid).col
 function backoff(attempts) { return BACKOFF_MIN[Math.min(BACKOFF_MIN.length - 1, Math.max(0, attempts - 1))] * 60000; }
 function pub(d) {
   if (!d) return { status: 'none' };
-  return { status: d.status, sign: d.sign || '', number: d.number || '', qr: d.qr || '', error: d.lastError || '', retryable: !!d.retryable, attempts: d.attempts || 0, test: !!d.test, sentAt: d.sentAt || null, kind: d.kind || 'sale' };
+  return { status: d.status, sign: d.sign || '', number: d.number || '', qr: d.qr || '', error: d.lastError || '', retryable: !!d.retryable, attempts: d.attempts || 0, test: !!d.test, sentAt: d.sentAt || null, kind: d.kind || 'sale', vat: (d.rc && typeof d.rc.vat === 'number') ? d.rc.vat : null };
+}
+/* fix190-fiscal7: soliqqa HECH NARSA yuborilmaydi, agar: fiskal rejim o'chiq, biznes turi «Ombor», yoki STIR (INN) yo'q/noto'g'ri (9 yoki 14 raqam) */
+function innOk(biz) { return /^(\d{9}|\d{14})$/.test(String((biz && biz.businessInn) || '').replace(/\s/g, '')); }
+function fiscalBlock(biz) {
+  if (!biz || biz.fiscalMode !== true) return 'fiscal_off';
+  if (biz.businessType === 'warehouse') return 'warehouse';
+  if (!innOk(biz)) return 'no_inn';
+  return '';
 }
 function productsFromItems(sale) {
   const m = {};
@@ -81,6 +89,7 @@ async function runOp(deps, bid, id, meta, prepare, opts) {
   } else {
     let res;
     if (!prep || !prep.ok) res = { ok: false, error: (prep && prep.error) || 'prepare_failed', retryable: prep ? prep.retryable !== false : true };
+    else if (fiscalBlock(biz)) res = { ok: false, error: fiscalBlock(biz), retryable: true };   // fix190-fiscal7: operatorga hech narsa ketmaydi
     else {
       const es = await ensureShift(deps, bid, biz, bkOf(prep.receipt.branchId));   // fix188-fiscal5: chek ochiq smenaga
       if (!es.ok) res = { ok: false, error: es.error, retryable: es.retryable !== false };
@@ -326,6 +335,7 @@ async function tally(deps, bid, fsid) {
   return z;
 }
 async function openShiftNow(deps, bid, biz, bk, appShiftId) {
+  if (fiscalBlock(biz)) return { ok: false, error: fiscalBlock(biz), retryable: true };   // fix190-fiscal7
   for (let i = 0; i < 8; i++) {
     const now = deps.nowMs();
     const lk = await shTx(deps, bid, bk, function (e) {
@@ -362,6 +372,7 @@ async function ensureShift(deps, bid, biz, bk) {
 }
 async function closeShiftNow(deps, bid, biz, bk, o) {
   o = o || {};
+  if (!innOk(biz)) return { ok: false, error: 'no_inn', retryable: true };   // fix190-fiscal7: INN yo'q — operatorga hech narsa ketmaydi
   const now = deps.nowMs();
   const lk = await shTx(deps, bid, bk, function (e) {
     if (!e || !e.fsid) return { none: true };
@@ -491,10 +502,11 @@ async function api(deps, caller, body) {
   if (a === 'ping') {
     const biz = (await getData(db.collection('businesses').doc(bid))) || {};
     const pname = String(biz.fiscalProvider || '');
+    const blk = fiscalBlock(biz); if (blk) return { status: 200, body: { ok: true, result: { ok: false, error: blk, provider: pname } } };   // fix190-fiscal7
     const r = await provOf(deps, pname, biz).checkConnection();
     return { status: 200, body: { ok: true, result: r.ok ? { ok: true, provider: pname } : { ok: false, error: r.error, provider: pname } } };
   }
   return { status: 400, body: { ok: false, code: 'bad_action' } };
 }
 
-module.exports = { ensureShift, openShiftNow, closeShiftNow, tally, shiftApi, SHIFT_MAX_MS, processSale, processRefund, processEditRefund, processVersion, processCreditPay, onSaleCreated, onSaleWritten, onSaleEdited, onSaleDeleted, onLedgerCreated, isCreditPay, retryDoc, retryTick, api, backoff, pub, productsFromItems, LOCK_MS };
+module.exports = { fiscalBlock, innOk, ensureShift, openShiftNow, closeShiftNow, tally, shiftApi, SHIFT_MAX_MS, processSale, processRefund, processEditRefund, processVersion, processCreditPay, onSaleCreated, onSaleWritten, onSaleEdited, onSaleDeleted, onLedgerCreated, isCreditPay, retryDoc, retryTick, api, backoff, pub, productsFromItems, LOCK_MS };

@@ -319,7 +319,7 @@ async function runTick(deps, now) {
 /* ---------- fix189-fiscal6: soliqqa yuborilmagan cheklar (3 marta urinish yoki 24 soat navbatda) ----------
    Faqat ega yoqqan bizneslar (tgPrefs.fx == true). Har bir chek uchun bir marta xabar (tgSent.fxKeys). Bir xabarda hammasi. */
 function fiscDue(om, now) {
-  return Object.keys(om || {}).map(function (id) { const x = om[id] || {}; return ((x.a || 0) >= FX_TRIES || now - (x.t || now) >= FX_OLD_MS) ? { id: id, k: x.k || 'sale', n: x.n || '', e: x.e || '', a: x.a || 0, t: x.t || now } : null; })
+  return Object.keys(om || {}).map(function (id) { const x = om[id] || {}; return ((x.a || 0) >= FX_TRIES || x.r === 0 || now - (x.t || now) >= FX_OLD_MS) ? { id: id, k: x.k || 'sale', n: x.n || '', e: x.e || '', a: x.a || 0, t: x.t || now, r: x.r } : null; })   /* fix190: operator rad etgani — darhol */
     .filter(Boolean).sort(function (a, b) { return a.t - b.t; });
 }
 async function runFiscal(deps) {

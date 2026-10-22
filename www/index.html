@@ -1399,6 +1399,24 @@ const T = {
   rcPortions:{uz:"{n} porsiya",ru:"{n} порц.",en:"{n} portions",kk:"{n} порция",ky:"{n} порция",tg:"{n} порсия"},
   rcNoNest:{uz:"Retseptli taomni xomashyo qilib bo'lmaydi",ru:"Блюдо с техкартой нельзя сделать ингредиентом",en:"A dish with a recipe cannot be an ingredient",kk:"Техкартасы бар тағамды шикізат етуге болмайды",ky:"Техкартасы бар тамакты чийки зат кылууга болбойт",tg:"Таоми дорои харитаро ашё кардан мумкин нест"},
   smRecipe:{uz:"Retsept (xomashyo)",ru:"Техкарта (сырьё)",en:"Recipe (ingredient)",kk:"Техкарта (шикізат)",ky:"Техкарта (чийки зат)",tg:"Харита (ашё)"},
+  rcVatIncl:{uz:"Shu jumladan QQS",ru:"В том числе НДС",en:"Incl. VAT",kk:"Соның ішінде ҚҚС",ky:"Анын ичинде КНС",tg:"Аз ҷумла ААИ"},
+  typeWarehouse:{uz:"Ombor / ulgurji savdo",ru:"Склад / оптовая торговля",en:"Warehouse / wholesale",kk:"Қойма / көтерме сауда",ky:"Кампа / дүң соода",tg:"Анбор / савдои яклухт"},
+  fsWhNote:{uz:"Biznes turi «Ombor / ulgurji savdo»: kassa cheki majburiy emas — soliqqa hech narsa yuborilmaydi, ilova avvalgidek ishlaydi. (Ulgurji savdoda hujjat — elektron hisob-faktura.)",ru:"Тип бизнеса «Склад / опт»: кассовый чек не обязателен — в налоговую ничего не отправляется, приложение работает как прежде. (В опте документ — электронный счёт-фактура.)",en:"Business type «Warehouse / wholesale»: a cash receipt is not required — nothing is sent to tax, the app works as before. (Wholesale uses an electronic invoice.)",kk:"Бизнес түрі «Қойма / көтерме»: касса чегі міндетті емес — салыққа ештеңе жіберілмейді, қолданба бұрынғыдай жұмыс істейді. (Көтерме саудада құжат — электрондық шот-фактура.)",ky:"Бизнес түрү «Кампа / дүң»: касса чеги милдеттүү эмес — салыкка эч нерсе жөнөтүлбөйт, тиркеме мурдагыдай иштейт. (Дүң соодада документ — электрондук эсеп-фактура.)",tg:"Навъи бизнес «Анбор / яклухт»: чеки касса ҳатмӣ нест — ба андоз ҳеҷ чиз фиристода намешавад, барнома мисли пештара кор мекунад. (Дар савдои яклухт ҳуҷҷат — ҳисобнома-фактураи электронӣ.)"},
+  fsInnNeed:{uz:"⚠️ STIR (INN) kiritilmagan — soliqqa HECH NARSA yuborilmaydi, ilova avvalgidek ishlaydi. Pastda STIRni kiriting: shundan keyin cheklar yuborila boshlaydi.",ru:"⚠️ ИНН не указан — в налоговую НИЧЕГО не отправляется, приложение работает как прежде. Укажите ИНН ниже: после этого чеки начнут отправляться.",en:"⚠️ Tax ID (INN) is not set — NOTHING is sent to tax, the app works as before. Enter the INN below: receipts will start being sent after that.",kk:"⚠️ СТН (ИНН) енгізілмеген — салыққа ЕШТЕҢЕ жіберілмейді, қолданба бұрынғыдай жұмыс істейді. Төменде СТН енгізіңіз: содан кейін чектер жіберіле бастайды.",ky:"⚠️ СТН (ИНН) киргизилген жок — салыкка ЭЧ НЕРСЕ жөнөтүлбөйт, тиркеме мурдагыдай иштейт. Төмөндө СТНди киргизиңиз: андан кийин чектер жөнөтүлө баштайт.",tg:"⚠️ РМА (ИНН) ворид нашудааст — ба андоз ҲЕҶ ЧИЗ фиристода намешавад, барнома мисли пештара кор мекунад. Дар поён РМА-ро ворид кунед: баъд аз он чекҳо фиристода мешаванд."},
+  fsInnBad:{uz:"STIR — 9 raqam (yuridik shaxs) yoki JShShIR — 14 raqam (YaTT)",ru:"ИНН — 9 цифр (юр. лицо) или ПИНФЛ — 14 цифр (ИП)",en:"INN — 9 digits (company) or PINFL — 14 digits (sole proprietor)",kk:"СТН — 9 сан (заңды тұлға) немесе ЖСН — 14 сан (ЖК)",ky:"СТН — 9 сан (юридикалык жак) же ЖЖИН — 14 сан (ЖИ)",tg:"РМА — 9 рақам (шахси ҳуқуқӣ) ё РМШ — 14 рақам (соҳибкори инфиродӣ)"},
+  fsErrRej:{uz:"Operator rad etdi",ru:"Оператор отклонил",en:"Rejected by the operator",kk:"Оператор қабылдамады",ky:"Оператор четке какты",tg:"Оператор рад кард"},
+  fsErrNet:{uz:"Operator yoki internet vaqtincha javob bermadi — o'zi qayta yuboriladi",ru:"Оператор или интернет временно не ответил — отправится повторно сам",en:"Operator or internet did not respond — will be resent automatically",kk:"Оператор немесе интернет уақытша жауап бермеді — өзі қайта жіберіледі",ky:"Оператор же интернет убактылуу жооп берген жок — өзү кайра жөнөтүлөт",tg:"Оператор ё интернет муваққатан ҷавоб надод — худаш дубора фиристода мешавад"},
+  fsErrIkpu:{uz:"Tovarning IKPU kodi noto'g'ri yoki topilmadi — mahsulotni tahrirlang",ru:"ИКПУ товара неверный или не найден — исправьте товар",en:"Product IKPU code is wrong or not found — edit the product",kk:"Тауардың ИКПУ коды қате немесе табылмады — тауарды түзетіңіз",ky:"Товардын ИКПУ коду туура эмес же табылган жок — товарды оңдоңуз",tg:"Рамзи ИКПУ-и мол нодуруст ё ёфт нашуд — молро ислоҳ кунед"},
+  fsErrPkg:{uz:"Qadoq kodi yo'q yoki noto'g'ri — mahsulotni tahrirlang",ru:"Нет или неверный код упаковки — исправьте товар",en:"Package code missing or wrong — edit the product",kk:"Қаптама коды жоқ немесе қате — тауарды түзетіңіз",ky:"Таңгак коду жок же туура эмес — товарды оңдоңуз",tg:"Рамзи бастабандӣ нест ё нодуруст — молро ислоҳ кунед"},
+  fsErrNc:{uz:"Provayder hali ulanmagan (operator hujjati kutilmoqda)",ru:"Провайдер ещё не подключён (ждём документацию оператора)",en:"Provider not connected yet (waiting for operator documentation)",kk:"Провайдер әлі қосылмаған (оператор құжаты күтілуде)",ky:"Провайдер азырынча туташкан жок (оператордун документи күтүлүүдө)",tg:"Провайдер ҳоло пайваст нашудааст (ҳуҷҷати оператор интизор аст)"},
+  fsErrInn:{uz:"STIR (INN) kiritilmagan — soliqqa yuborilmaydi",ru:"ИНН не указан — в налоговую не отправляется",en:"INN not set — not sent to tax",kk:"СТН (ИНН) енгізілмеген — салыққа жіберілмейді",ky:"СТН (ИНН) киргизилген жок — салыкка жөнөтүлбөйт",tg:"РМА (ИНН) ворид нашудааст — ба андоз фиристода намешавад"},
+  fsErrOff:{uz:"Fiskal rejim o'chirilgan — yuborilmaydi",ru:"Фискальный режим выключен — не отправляется",en:"Fiscal mode is off — not sent",kk:"Фискалдық режим өшірілген — жіберілмейді",ky:"Фискалдык режим өчүрүлгөн — жөнөтүлбөйт",tg:"Реҷаи фискалӣ хомӯш аст — фиристода намешавад"},
+  fsErrWh:{uz:"Biznes turi «Ombor» — yuborilmaydi",ru:"Тип бизнеса «Склад» — не отправляется",en:"Business type «Warehouse» — not sent",kk:"Бизнес түрі «Қойма» — жіберілмейді",ky:"Бизнес түрү «Кампа» — жөнөтүлбөйт",tg:"Навъи бизнес «Анбор» — фиристода намешавад"},
+  fsErrShift:{uz:"Soliq smenasini ochib bo'lmadi — o'zi qayta urinadi",ru:"Не удалось открыть налоговую смену — повторит сам",en:"Could not open the tax shift — will retry",kk:"Салық ауысымын ашу мүмкін болмады — өзі қайталайды",ky:"Салык сменасын ачуу мүмкүн болгон жок — өзү кайталайт",tg:"Басти андозро кушодан нашуд — худаш такрор мекунад"},
+  fsErrOrig:{uz:"Asl chek hali yuborilmagan — undan keyin o'zi yuboriladi",ru:"Исходный чек ещё не отправлен — отправится после него",en:"Original receipt not sent yet — will be sent after it",kk:"Бастапқы чек әлі жіберілмеген — одан кейін өзі жіберіледі",ky:"Баштапкы чек азырынча жөнөтүлгөн жок — андан кийин өзү жөнөтүлөт",tg:"Чеки аслӣ ҳоло фиристода нашудааст — баъд аз он худаш фиристода мешавад"},
+  fsErrSum:{uz:"Chek summasi mos kelmadi — chekni tekshiring",ru:"Сумма чека не сходится — проверьте чек",en:"Receipt total mismatch — check the receipt",kk:"Чек сомасы сәйкес емес — чекті тексеріңіз",ky:"Чектин суммасы туура келбейт — чекти текшериңиз",tg:"Маблағи чек мувофиқ нест — чекро санҷед"},
+  fsErrOther:{uz:"Operator xatosi",ru:"Ошибка оператора",en:"Operator error",kk:"Оператор қатесі",ky:"Оператордун катасы",tg:"Хатои оператор"},
+  tableOne:{uz:"Stol",ru:"Стол",en:"Table",kk:"Үстел",ky:"Стол",tg:"Миз"},
   fsShiftTitle:{uz:"Fiskal smena va Z-hisobotlar",ru:"Фискальная смена и Z-отчёты",en:"Fiscal shift and Z reports",kk:"Фискалдық ауысым және Z-есептер",ky:"Фискалдык смена жана Z-отчеттор",tg:"Басти фискалӣ ва Z-ҳисоботҳо"},
   fsShiftHint:{uz:"Soliq smenasi ilovadagi smena bilan birga ochiladi va yopiladi (smena ochilmagan bo'lsa — birinchi chek bilan o'zi ochiladi). Qonun bo'yicha smena 24 soatdan oshmaydi — server eski smenani o'zi yopadi.",ru:"Налоговая смена открывается и закрывается вместе со сменой в приложении (если смена не открыта — открывается сама с первым чеком). По закону смена не дольше 24 часов — сервер сам закрывает старую смену.",en:"The tax shift opens and closes together with the app shift (if no shift is open, the first receipt opens it). By law a shift lasts at most 24 hours — the server closes an old shift itself.",kk:"Салық ауысымы қолданбадағы ауысыммен бірге ашылып, жабылады (ауысым ашылмаса — бірінші чекпен өзі ашылады). Заң бойынша ауысым 24 сағаттан аспайды — сервер ескі ауысымды өзі жабады.",ky:"Салык сменасы тиркемедеги смена менен бирге ачылып, жабылат (смена ачылбаса — биринчи чек менен өзү ачылат). Мыйзам боюнча смена 24 сааттан ашпайт — сервер эски сменаны өзү жабат.",tg:"Басти андоз бо басти барнома якҷоя кушода ва баста мешавад (агар баст кушода набошад — бо чеки аввал худаш кушода мешавад). Мувофиқи қонун баст аз 24 соат зиёд намешавад — сервер басти кӯҳнаро худаш мебандад."},
   fsShiftOpen:{uz:"🟢 Ochiq smena: {t} dan",ru:"🟢 Открытая смена: с {t}",en:"🟢 Open shift: since {t}",kk:"🟢 Ашық ауысым: {t} бастап",ky:"🟢 Ачык смена: {t} тартып",tg:"🟢 Басти кушода: аз {t}"},
@@ -4284,7 +4302,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.65';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.66';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6009,6 +6027,8 @@ function activeTable(){
   return state.tables.find(t=>t.id===state.activeTableId) || null;
 }
 function tableWord(){ return state.settings.tableUnitName || tr('tablesSection'); }
+/* fix190: chek va sarlavhalarda birlik («Stol: 5-stol»); nom bo'sh yoki standart ko'plik («Stollar») bo'lsa — «Stol» */
+function tableWordOne(){ const n = String(state.settings.tableUnitName || '').trim(); const pl = T.tablesSection ? Object.keys(T.tablesSection).map(k=>T.tablesSection[k]) : []; return (!n || pl.indexOf(n) !== -1) ? tr('tableOne') : n; }
 function ensureDefaultTables(){
   // Checked against the CURRENT branch's own tables, not the global
   // list — otherwise a brand-new branch would never get its starting six
@@ -6833,7 +6853,7 @@ function renderSale(){
   const isTakeawayFromGrid = state.settings.restaurantMode && !tbl && state.takeawayMode;
   const categories = Array.from(new Set(visibleProducts().map(p=>p.category).filter(Boolean)));
   container.innerHTML = `
-    ${tbl ? `<div class="back-row"><button id="back-to-tables-btn">${ICONS.arrowLeft}</button><span class="t-title">${tableWord()}: ${escapeHtml(tbl.name)}</span></div>` : ''}
+    ${tbl ? `<div class="back-row"><button id="back-to-tables-btn">${ICONS.arrowLeft}</button><span class="t-title">${tableWordOne()}: ${escapeHtml(tbl.name)}</span></div>` : ''}
     ${isTakeawayFromGrid ? `<div class="back-row"><button id="back-to-tables-btn">${ICONS.arrowLeft}</button><span class="t-title">${icI('bag')} ${tr('orderTypeTakeaway')}</span></div>` : ''}
     ${(state.settings.printerMode==='bluetooth' && ((!getBtCharacteristic('main') && !loadRememberedBtDevices().main) || window.__spBtOff)) ? `
     <div class="card" style="margin-bottom:10px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--danger);">
@@ -9904,7 +9924,7 @@ function receiptImageBlob(sale, customer){
     }
     y += 30; // total
     y += smallLineH; // payment type
-    if(sale.fiscal && (sale.fiscal.sign || sale.fiscal.number)) y += 10 + smallLineH * ((s.businessInn?1:0) + (sale.fiscal.number?1:0) + (sale.fiscal.sign?1:0) + (sale.fiscal.qr?1:0));   /* fix182-fiscal1 */
+    if(sale.fiscal && (sale.fiscal.sign || sale.fiscal.number)) y += 10 + smallLineH * ((s.businessInn?1:0) + (sale.fiscal.number?1:0) + (sale.fiscal.sign?1:0) + (__rcVatLine(sale)?1:0)) + (sale.fiscal.qr ? 168 : 0);   /* fix190: QQS + QR rasm */   /* fix182-fiscal1 */
     if(s.receiptFooter) y += smallLineH + 10;
     if(s.showSardorBranding!==false) y += 24;
     y += padding;
@@ -9958,7 +9978,7 @@ function receiptImageBlob(sale, customer){
     if(sale.receiptNumber){ ctx.fillText(trR('receiptNumberLabel')+': '+sale.receiptNumber, padding, cy); cy += smallLineH; } /* fix76 */
     ctx.fillText(sale.receiptNumber ? __rcDateStr(sale.date) : __rcH.solo, padding, cy); cy += smallLineH;   /* fix176-receipt */
     }
-    if(sale.tableName){ ctx.fillText(tableWord()+': '+sale.tableName, padding, cy); cy += smallLineH; }
+    if(sale.tableName){ ctx.fillText(tableWordOne()+': '+sale.tableName, padding, cy); cy += smallLineH; }
     if(sale.orderType){ ctx.fillText(sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway'), padding, cy); cy += smallLineH; }
     if(sale.cashierName){ ctx.fillText(trR('cashier')+': '+sale.cashierName, padding, cy); cy += smallLineH; }
     if(customer){ __custLines.forEach(l=>{ ctx.fillText(l, padding, cy); cy += smallLineH; }); }   /* fix104-custline */
@@ -10008,10 +10028,13 @@ function receiptImageBlob(sale, customer){
     ctx.fillText(`${trR('paymentType')}: ${paymentTypeDisplayText(sale)}`, padding, cy); cy += smallLineH;
 
     if(sale.fiscal && (sale.fiscal.sign || sale.fiscal.number)){ cy += 10; ctx.textAlign = 'left'; ctx.font = '12px Arial'; ctx.fillStyle = '#51677E';   /* fix182-fiscal1 */
+      if(__rcVatLine(sale)){ ctx.fillText(trR('rcVatIncl') + ': ' + __rcVatLine(sale), padding, cy); cy += smallLineH; }   /* fix190 */
       if(s.businessInn){ ctx.fillText(trR('invInn') + ': ' + s.businessInn, padding, cy); cy += smallLineH; }
       if(sale.fiscal.number){ ctx.fillText(trR('rcFiscalNo') + ': ' + sale.fiscal.number, padding, cy); cy += smallLineH; }
       if(sale.fiscal.sign){ ctx.fillText(trR('rcFiscalSign') + ': ' + sale.fiscal.sign, padding, cy); cy += smallLineH; }
-      if(sale.fiscal.qr){ ctx.fillText(String(sale.fiscal.qr).slice(0, 60), padding, cy); cy += smallLineH; } }
+      if(sale.fiscal.qr){ let __qc = null; try{ __qc = __qrCanvas(String(sale.fiscal.qr), 160); }catch(e){}
+        if(__qc){ const __qs = Math.min(160, __qc.height); cy += 2; ctx.drawImage(__qc, Math.round((canvas.width - __qs) / 2), cy - 12, __qs, __qs); cy += __qs + 2; }
+        else { ctx.fillText(String(sale.fiscal.qr).slice(0, 60), padding, cy); cy += smallLineH; } } }   /* fix190-fiscal7: QR rasm */
     if(s.receiptFooter){ cy += 10; centerText(s.receiptFooter, cy, '13px Arial', '#51677E'); cy += smallLineH; }
     if(s.showSardorBranding!==false){ cy += 14; centerText(trR('sardorBrandingLine'), cy, '11px Arial', '#93A7BC'); }
 
@@ -10362,6 +10385,36 @@ function __rcHeadLine(sale, width){
   if(h.one) return [h.left + ' '.repeat(Math.max(3, w - h.left.length - h.no.length)) + h.no];
   return [h.no, h.ds];
 }
+/* fix190-fiscal7: fiskal chekdagi QR kod — rasm (printer, rasmli chek, brauzer). Matnli ulashishda — havola. */
+var __rcQrMark = false;
+const __RC_QR_MK = '@@FXQR@@';
+function __rcVatLine(sale){ return (sale && sale.fiscal && typeof sale.fiscal.vat === 'number' && sale.fiscal.vat > 0) ? fmt(rM(sale.fiscal.vat / 100)) : ''; }
+function __qrCanvas(text, target){
+  const M = __qrMatrix(text), n = M.length, q = 4, mods = n + q * 2, sc = Math.max(2, Math.floor(target / mods)), size = mods * sc, w = Math.ceil(size / 8) * 8;
+  const c = document.createElement('canvas'); c.width = w; c.height = size;
+  const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, w, size); x.fillStyle = '#000';
+  const off = Math.floor((w - size) / 2);
+  for(let y = 0; y < n; y++) for(let xx = 0; xx < n; xx++) if(M[y][xx]) x.fillRect(off + (xx + q) * sc, (y + q) * sc, sc, sc);
+  return c;
+}
+function __rcQrSvg(t, px){ try{ return __qrSvg(t, px); }catch(e){ return ''; } }
+async function __prnQr(text, slot){
+  try{
+    const c = __qrCanvas(text, Math.min(300, Math.round(printerDotsWidth() * 0.62)));
+    await sendRawBytes(new Uint8Array([0x1B,0x61,0x01]), slot);
+    await sendImageRaster(c.toDataURL('image/png'), slot, 100);
+    await sendRawBytes(new Uint8Array([0x1B,0x61,0x00]), slot);
+    return true;
+  }catch(e){ return false; }
+}
+async function __prnTextQr(str, slot, o, qr){
+  const i = str.indexOf(__RC_QR_MK);
+  if(i < 0) return __prnText(str, slot, o);
+  const before = str.slice(0, i), after = str.slice(i + __RC_QR_MK.length).replace(/^\n/, '');
+  if(before) await __prnText(before, slot, o);
+  if(!(await __prnQr(qr, slot))) await __prnText(wrapText(String(qr), (state.settings.printerCharsPerLine || 32)).join('\n') + '\n', slot, o);
+  if(after) await __prnText(after, slot, o);
+}
 function __rcTidy(lines, sep, dropLeading){
   const out = [];
   lines.forEach(l=>{
@@ -10390,7 +10443,7 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   if(s.businessPhone) lines.push(s.businessPhone);
   lines.push(sep);
   __rcHeadLine(sale, width).forEach(l=>lines.push(l));   /* fix187-rchead (fix176: tor qog'ozda avval raqam, keyin sana) */
-  if(sale.tableName) lines.push(tableWord()+': '+sale.tableName);
+  if(sale.tableName) lines.push(tableWordOne()+': '+sale.tableName);
   if(sale.cashierName) lines.push(trR('cashier')+': '+sale.cashierName);
   if(customer) __custReceiptLines(customer, t=>wrapText(t, width)).forEach(l=>lines.push(l));   /* fix104-custline */
   lines.push(sep);
@@ -10415,7 +10468,7 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
     lines.push(padLine(trR('cashTenderedLabel'), fmt(sale.cashTendered), width));
     lines.push(padLine(trR('changeDueLabel'), fmt(sale.changeDue||0), width));
   }
-  if(sale.fiscal && (sale.fiscal.sign || sale.fiscal.number)){ lines.push(sep); if(s.businessInn) lines.push(trR('invInn') + ': ' + s.businessInn); if(sale.fiscal.number) lines.push(trR('rcFiscalNo') + ': ' + sale.fiscal.number); if(sale.fiscal.sign) lines.push(trR('rcFiscalSign') + ': ' + sale.fiscal.sign); if(sale.fiscal.qr) wrapText(String(sale.fiscal.qr), width).forEach(l=>lines.push(l)); }   /* fix182-fiscal1 */
+  if(sale.fiscal && (sale.fiscal.sign || sale.fiscal.number)){ lines.push(sep); if(__rcVatLine(sale)) lines.push(padLine(trR('rcVatIncl'), __rcVatLine(sale), width)); if(s.businessInn) lines.push(trR('invInn') + ': ' + s.businessInn); if(sale.fiscal.number) lines.push(trR('rcFiscalNo') + ': ' + sale.fiscal.number); if(sale.fiscal.sign) lines.push(trR('rcFiscalSign') + ': ' + sale.fiscal.sign); if(sale.fiscal.qr){ if(__rcQrMark) lines.push(__RC_QR_MK); else wrapText(String(sale.fiscal.qr), width).forEach(l=>lines.push(l)); } }   /* fix182-fiscal1 + fix190-fiscal7: QQS, QR rasm */
   if(s.receiptFooter){ lines.push(sep); lines.push(centerLine(s.receiptFooter, width)); }
   if(s.showSardorBranding!==false){ lines.push(''); lines.push(centerLine(trR('sardorBrandingLine'), width)); }
   return __rcTidy(lines, sep, !!skipBusinessName).join('\n');   /* fix176-receipt: ortiqcha chiziqlar yo'q */
@@ -10475,7 +10528,7 @@ function buildKitchenTicketTextInner(items, tableName, cashierName, stationName)
   // character but the printer's alignment for everything printed after
   // it in the same job. ASCII-only markers (***) give the same visual
   // emphasis without that risk.
-  lines.push(tableName ? `${tableWord()}: ${tableName}` : centerLine(`*** ${trR('orderTypeTakeaway').toUpperCase()} ***`, width));
+  lines.push(tableName ? `${tableWordOne()}: ${tableName}` : centerLine(`*** ${trR('orderTypeTakeaway').toUpperCase()} ***`, width));
   lines.push(new Date().toLocaleTimeString());
   if(cashierName) lines.push(`${trR('cashier')}: ${cashierName}`);
   lines.push(sep);
@@ -10502,7 +10555,7 @@ function buildKitchenTicketHtmlInner(items, tableName, cashierName, stationName)
       <td style="padding:6px 0;font-size:22px;font-weight:900;">${escapeHtml(it.name)}</td>
     </tr>`).join('');
   const takeawayOrTable = tableName
-    ? `${escapeHtml(tableWord())}: ${escapeHtml(tableName)}`
+    ? `${escapeHtml(tableWordOne())}: ${escapeHtml(tableName)}`
     : `*** ${escapeHtml(trR('orderTypeTakeaway').toUpperCase())} ***`;
   const hr = `border:none;border-top:3px dashed #000;margin:10px 0;`;
   return `
@@ -10794,7 +10847,7 @@ function buildReceiptHtmlInner(sale, customer){
       if(!h.no) return `<div style="white-space:pre;">${escapeHtml(h.solo)}</div>`;
       return `<div>${trR('receiptNumberLabel')}: ${escapeHtml(String(sale.receiptNumber))}</div>
     <div>${__rcDateStr(sale.date)}</div>`; })()}
-    ${sale.tableName?`<div>${tableWord()}: ${escapeHtml(sale.tableName)}</div>`:''}
+    ${sale.tableName?`<div>${tableWordOne()}: ${escapeHtml(sale.tableName)}</div>`:''}
     ${sale.orderType?`<div>${sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway')}</div>`:''}
     ${sale.cashierName?`<div>${trR('cashier')}: ${escapeHtml(sale.cashierName)}</div>`:''}
     ${customer?`<div>${trR('customerName')}: ${escapeHtml(__custNamePhone(customer))}</div>`:''}${(customer && __custAddress(customer))?`<div>${trR('customerAddress')}: ${escapeHtml(__custAddress(customer))}</div>`:''}   <!-- fix104-custline -->
@@ -10816,7 +10869,7 @@ function buildReceiptHtmlInner(sale, customer){
     <div style="margin-top:4px;">${trR('paymentType')}: ${paymentTypeDisplayText(sale)}</div>
     ${(sale.giftCard && sale.giftPaid > 0 && sale.giftCard.balanceAfter != null) ? `<div style="margin-top:2px;">${trR('gftLeft')} ${escapeHtml(__gftShow(sale.giftCard.code))}: ${fmt(sale.giftCard.balanceAfter)}</div>` : ''}
     ${sale.cashTendered > 0 ? `<div style="margin-top:2px;">${trR('cashTenderedLabel')}: ${fmt(sale.cashTendered)} &nbsp;·&nbsp; ${trR('changeDueLabel')}: ${fmt(sale.changeDue||0)}</div>` : ''}
-    ${(sale.fiscal && (sale.fiscal.sign || sale.fiscal.number)) ? `<hr style="${hrStyle}"><div style="font-size:11px;">${s.businessInn ? `${trR('invInn')}: ${escapeHtml(s.businessInn)}<br>` : ''}${sale.fiscal.number ? `${trR('rcFiscalNo')}: ${escapeHtml(String(sale.fiscal.number))}<br>` : ''}${sale.fiscal.sign ? `${trR('rcFiscalSign')}: ${escapeHtml(String(sale.fiscal.sign))}<br>` : ''}${sale.fiscal.qr ? `<a href="${escapeHtml(String(sale.fiscal.qr))}" style="word-break:break-all;">${escapeHtml(String(sale.fiscal.qr))}</a>` : ''}</div>` : ''}
+    ${(sale.fiscal && (sale.fiscal.sign || sale.fiscal.number)) ? `<hr style="${hrStyle}"><div style="font-size:11px;">${__rcVatLine(sale) ? `${trR('rcVatIncl')}: ${__rcVatLine(sale)}<br>` : ''}${s.businessInn ? `${trR('invInn')}: ${escapeHtml(s.businessInn)}<br>` : ''}${sale.fiscal.number ? `${trR('rcFiscalNo')}: ${escapeHtml(String(sale.fiscal.number))}<br>` : ''}${sale.fiscal.sign ? `${trR('rcFiscalSign')}: ${escapeHtml(String(sale.fiscal.sign))}<br>` : ''}${sale.fiscal.qr ? (__rcQrSvg(String(sale.fiscal.qr), 120) ? `<div style="text-align:center;margin-top:6px;"><a href="${escapeHtml(String(sale.fiscal.qr))}" style="display:inline-block;line-height:0;">${__rcQrSvg(String(sale.fiscal.qr), 120)}</a></div>` : `<a href="${escapeHtml(String(sale.fiscal.qr))}" style="word-break:break-all;">${escapeHtml(String(sale.fiscal.qr))}</a>`) : ''}</div>` : ''}
     ${s.receiptFooter?`<hr style="${hrStyle}"><div style="text-align:${align};">${escapeHtml(s.receiptFooter)}</div>`:''}
     ${s.footerImage ? `<div style="text-align:center;margin-top:8px;"><img src="${s.footerImage}" style="width:${s.footerImageScalePercent||100}%;max-width:100%;"></div>` : ''}
     ${s.showSardorBranding!==false ? `<div style="text-align:center;margin-top:10px;font-size:10px;color:#999;">${trR('sardorBrandingLine')}</div>` : ''}
@@ -11732,7 +11785,8 @@ async function __sendReceiptRawFix74(sale, customer){
     const __pSz = getPrinterSizeMultipliers();
     const __pSi = printerSizeByteAndWidth(__pSz.width, __pSz.height, state.settings.printerCharsPerLine || 32);
     const __pBiz = state.settings.receiptBusinessUppercase ? (state.settings.businessName||'Savdo Pos').toUpperCase() : (state.settings.businessName||'Savdo Pos');
-    const __pText = buildReceiptText(sale, customer, true, __pSi.width);
+    let __pText; __rcQrMark = true; try{ __pText = buildReceiptText(sale, customer, true, __pSi.width); } finally { __rcQrMark = false; }   /* fix190-fiscal7: QR joyi belgilanadi */
+    const __pQr = sale.fiscal && sale.fiscal.qr;
     const __pp = __prnPlan([__pBiz, __pText]);
     const __pHm = getHeaderSizeMultipliers();
     const __pBold = state.settings.printerBold !== false;
@@ -11780,13 +11834,13 @@ async function __sendReceiptRawFix74(sale, customer){
         const before = textLines.slice(0, totalIdx).join('\n');
         const totalLine = textLines[totalIdx];
         const after = textLines.slice(totalIdx+1).join('\n');
-        if(before) await __prnText(before + '\n', null, __pBo);
+        if(before) await __prnTextQr(before + '\n', null, __pBo, __pQr);
         await sendRawBytes(new Uint8Array([0x1D,0x21,0x11]));
         await __prnText(totalLine + '\n', null, {plan:__pp, w:2, h:2, bold:__pBold, align:'left'});
         await sendRawBytes(new Uint8Array([0x1D,0x21,bodySizeByte]));
-        if(after) await __prnText(after + '\n', null, __pBo);
+        if(after) await __prnTextQr(after + '\n', null, __pBo, __pQr);
       } else {
-        await __prnText(text + '\n', null, __pBo);
+        await __prnTextQr(text + '\n', null, __pBo, __pQr);
       }
     await sendRawBytes(new Uint8Array([0x1D,0x21,0x00]));
     await sendRawBytes(new Uint8Array([0x1B,0x45,0x00]));
@@ -18964,6 +19018,7 @@ function renderSettingsBusiness(container){
         <option value="retail" ${state.settings.businessType==='retail'?'selected':''}>${tr('typeRetail')}</option>
         <option value="cafe" ${state.settings.businessType==='cafe'?'selected':''}>${tr('typeCafe')}</option>
         <option value="pharmacy" ${state.settings.businessType==='pharmacy'?'selected':''}>${tr('typePharmacy')}</option>
+        <option value="warehouse" ${state.settings.businessType==='warehouse'?'selected':''}>${tr('typeWarehouse')}</option>
         <option value="service" ${state.settings.businessType==='service'?'selected':''}>${tr('typeService')}</option>
         <option value="other" ${state.settings.businessType==='other'?'selected':''}>${tr('typeOther')}</option>
       </select>
@@ -19101,7 +19156,7 @@ function renderSettingsBusiness(container){
       renderSettingsBusiness(container);
     });
   });
-  container.querySelectorAll('[data-tbl-more]').forEach(btn=>btn.addEventListener('click', ()=>{ const t = state.tables.find(x=>x.id===btn.dataset.tblMore); if(t) __dzSheet(tableWord() + ': ' + t.name, '', tr('dzDelete'), '[data-act="del-table"][data-id="' + t.id + '"]'); }));   /* fix127-ds1c */
+  container.querySelectorAll('[data-tbl-more]').forEach(btn=>btn.addEventListener('click', ()=>{ const t = state.tables.find(x=>x.id===btn.dataset.tblMore); if(t) __dzSheet(tableWordOne() + ': ' + t.name, '', tr('dzDelete'), '[data-act="del-table"][data-id="' + t.id + '"]'); }));   /* fix127-ds1c */
   container.querySelectorAll('[data-act="del-table"]').forEach(btn=>btn.addEventListener('click', ()=>{
     const t = state.tables.find(x=>x.id===btn.dataset.id);
     if(t && t.cart.length){ showToast(tr('tableNotEmpty')); return; }
@@ -20265,7 +20320,30 @@ function __ssBindGo(container){
 }
 /* fix182-fiscal1: Fiskal kassa sozlamalari — majburiy emas, standart o'chiq */
 const FS_PROVIDERS = [['', 'fsProviderNone'], ['epos', 'E-POS'], ['rahmat', 'Rahmat POS'], ['uzkassa', 'UZKASSA'], ['qpos', 'QPos'], ['other', 'Boshqa / Другой'], ['mock', 'fsProviderMock']];   /* fix185-fiscal3: sinov */
-function fiscalOn(){ return !!(state.settings && state.settings.fiscalMode); }
+/* fix190-fiscal7: fiskal rejim faqat STIR (9 raqam) yoki JShShIR (14 raqam) to'g'ri kiritilganda va biznes turi «Ombor» bo'lmaganda ishlaydi — aks holda soliqqa hech narsa ketmaydi */
+function __fsInnOk(){ return /^(\d{9}|\d{14})$/.test(String((state.settings && state.settings.businessInn) || '').replace(/\s/g, '')); }
+function fiscalOn(){ return !!(state.settings && state.settings.fiscalMode && state.settings.businessType !== 'warehouse' && __fsInnOk()); }
+function __fsBlockHtml(){
+  if(!state.settings || !state.settings.fiscalMode) return '';
+  const t = state.settings.businessType === 'warehouse' ? tr('fsWhNote') : (!__fsInnOk() ? tr('fsInnNeed') : '');
+  return t ? `<div class="card alert-soft" style="margin:0 0 12px;"><p style="margin:0;color:var(--warm);font-weight:700;font-size:13px;">${escapeHtml(t)}</p></div>` : '';
+}
+function __fsBlockUpd(){ const b = document.getElementById('fs-block-note'); if(b) b.innerHTML = __fsBlockHtml(); }
+function __fxErrText(e){
+  const x = String(e || ''); if(!x) return '';
+  if(/IKPU|ikpu|mxik/i.test(x)) return tr('fsErrIkpu');
+  if(/package|qadoq|pkg/i.test(x)) return tr('fsErrPkg');
+  if(x === 'no_inn') return tr('fsErrInn');
+  if(x === 'fiscal_off') return tr('fsErrOff');
+  if(x === 'warehouse') return tr('fsErrWh');
+  if(/_not_configured$/.test(x)) return tr('fsErrNc');
+  if(/^shift_/.test(x)) return tr('fsErrShift');
+  if(/^original_/.test(x)) return tr('fsErrOrig');
+  if(/sum_mismatch|pay_mismatch|discount_exceeds/.test(x)) return tr('fsErrSum');
+  if(/operator_busy|timeout|network|ECONN|empty_response|no_fiscal_sign|bad_response/i.test(x)) return tr('fsErrNet');
+  if(/^rejected/i.test(x)) return tr('fsErrRej') + ': ' + x.replace(/^rejected:\s*/i, '').slice(0, 80);
+  return tr('fsErrOther') + ': ' + x.slice(0, 80);
+}
 function __fsExpired(p){
   if(!state.settings || !state.settings.blockExpiredSale || !p || !p.expiryDate) return false;
   const t = new Date(p.expiryDate).getTime(); return isFinite(t) && t < Date.now();
@@ -20306,7 +20384,7 @@ function __fxStamp(sale, keep){
 }
 function __fxApply(id, r){
   if(!id || !r || !r.status || r.status === 'skip' || r.status === 'none') return;
-  __fxMap()[id] = {status: r.status, sign: r.sign || '', number: r.number || '', qr: r.qr || '', error: r.error || '', retryable: r.retryable !== false, test: !!r.test, at: new Date().toISOString()};
+  __fxMap()[id] = {vat: (typeof r.vat === 'number') ? r.vat : null, status: r.status, sign: r.sign || '', number: r.number || '', qr: r.qr || '', error: r.error || '', retryable: r.retryable !== false, test: !!r.test, at: new Date().toISOString()};
   __fxSave();
 }
 async function __fxCall(action, payload){
@@ -20330,7 +20408,7 @@ function __fxSend(sale){
 }
 function __fxPending(id){ return !!__fxP[id]; }
 function __fxWait(id, ms){ const p = __fxP[id]; if(!p) return Promise.resolve(null); return Promise.race([p, new Promise(r=>setTimeout(()=>r(null), ms))]); }
-function __fxAttach(sale){ if(!sale || sale.fx !== 1) return; const f = __fxMap()[sale.id]; if(f && f.status === 'sent') sale.fiscal = {sign: f.sign, number: f.number, qr: f.qr}; }
+function __fxAttach(sale){ if(!sale || sale.fx !== 1) return; const f = __fxMap()[sale.id]; if(f && f.status === 'sent') sale.fiscal = {sign: f.sign, number: f.number, qr: f.qr, vat: (typeof f.vat === 'number') ? f.vat : null}; }
 function __fxStateOf(s){ if(!s || s.fx !== 1) return null; const f = __fxMap()[s.id]; return f ? f.status : 'pending'; }
 function __fxBadge(s){
   if(s && s.fx === 1 && s.refunded){   /* fix186-fiscal4: qaytarilgan chek — qaytarish chekining holati */
@@ -20369,12 +20447,12 @@ function __fxUnsentHtml(){
   const ops = (state.__fxOpen || []).filter(x=>x && x.kind && x.kind !== 'sale');   /* fix186-fiscal4 */
   const opsHtml = ops.slice(0, 30).map(x=>{ const kl = x.kind === 'refund' ? tr('fsKindRefund') : (x.kind === 'credit' ? tr('fsKindCredit') : tr('fsKindEdit'));
     const ls = x.saleId ? (state.sales.find(y=>y.id === x.saleId) || null) : null, le = x.entryId ? (state.ledger.find(y=>y.id === x.entryId) || null) : null, lc = le ? (state.customers.find(y=>y.id === le.customerId) || null) : null, no = x.receiptNo || (ls && ls.receiptNumber) || '';
-    return `<div class="list-item" style="padding:9px 12px 9px 14px;gap:8px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">${escapeHtml(kl)}${no ? ' · №' + escapeHtml(String(no)) : ''}${le ? ' · ' + fmt(le.amount) + (lc ? ' · ' + escapeHtml(lc.name || '') : '') : ''}</div><div class="meta"><span style="color:${x.status === 'failed' ? 'var(--danger)' : 'var(--warm)'};font-weight:700;">${x.status === 'failed' ? tr('fsStFailed') + (x.error ? ': ' + escapeHtml(String(x.error).slice(0, 80)) : '') : tr('fsStPending')}</span></div></div><button class="btn btn-outline btn-sm" type="button" data-fx-retry="${escapeHtml(x.id)}">${tr('fsResend')}</button></div>`; }).join('');
+    return `<div class="list-item" style="padding:9px 12px 9px 14px;gap:8px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">${escapeHtml(kl)}${no ? ' · №' + escapeHtml(String(no)) : ''}${le ? ' · ' + fmt(le.amount) + (lc ? ' · ' + escapeHtml(lc.name || '') : '') : ''}</div><div class="meta"><span style="color:${x.status === 'failed' ? 'var(--danger)' : 'var(--warm)'};font-weight:700;">${x.status === 'failed' ? tr('fsStFailed') + (x.error ? ': ' + escapeHtml(__fxErrText(x.error)) : '') : tr('fsStPending')}</span></div></div><button class="btn btn-outline btn-sm" type="button" data-fx-retry="${escapeHtml(x.id)}">${tr('fsResend')}</button></div>`; }).join('');
   if(!list.length && !ops.length) return h + `<p style="margin:0;font-weight:700;color:var(--teal);">${tr('fsUnsentNone')}</p>`;
   if(!list.length) return h + `<div class="btn-row" style="margin-bottom:8px;"><button class="btn btn-primary btn-sm" id="fx-send-all" type="button">${tr('fsSendAll')} (${ops.length})</button></div><p class="subtle" id="fx-send-res" style="margin:0 0 6px;font-size:12.5px;font-weight:600;"></p>` + opsHtml;
   h += `<div class="btn-row" style="margin-bottom:8px;"><button class="btn btn-primary btn-sm" id="fx-send-all" type="button">${tr('fsSendAll')} (${list.length + ops.length})</button></div><p class="subtle" id="fx-send-res" style="margin:0 0 6px;font-size:12.5px;font-weight:600;"></p>`;
   h += list.slice(0, 30).map(s=>{ const f = __fxMap()[s.id] || {}; const st = __fxStateOf(s);
-    return `<div class="list-item" style="padding:9px 12px 9px 14px;gap:8px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">№${escapeHtml(String(s.receiptNumber || ''))} · ${fmt(s.total)}</div><div class="meta">${fmtDateTime(s.date)} · <span style="color:${st === 'failed' ? 'var(--danger)' : 'var(--warm)'};font-weight:700;">${st === 'failed' ? tr('fsStFailed') + (f.error ? ': ' + escapeHtml(String(f.error).slice(0, 80)) : '') : tr('fsStPending')}</span></div></div><button class="btn btn-outline btn-sm" type="button" data-fx-resend="${escapeHtml(s.id)}">${tr('fsResend')}</button></div>`; }).join('');
+    return `<div class="list-item" style="padding:9px 12px 9px 14px;gap:8px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">№${escapeHtml(String(s.receiptNumber || ''))} · ${fmt(s.total)}</div><div class="meta">${fmtDateTime(s.date)} · <span style="color:${st === 'failed' ? 'var(--danger)' : 'var(--warm)'};font-weight:700;">${st === 'failed' ? tr('fsStFailed') + (f.error ? ': ' + escapeHtml(__fxErrText(f.error)) : '') : tr('fsStPending')}</span></div></div><button class="btn btn-outline btn-sm" type="button" data-fx-resend="${escapeHtml(s.id)}">${tr('fsResend')}</button></div>`; }).join('');
   return h + opsHtml;   /* fix186-fiscal4 */
 }
 async function __fxSendIds(ids){
@@ -20392,7 +20470,7 @@ function __fxBindPage(container){
   const pb = document.getElementById('fs-ping');
   if(pb) pb.addEventListener('click', async ()=>{
     const out = document.getElementById('fs-ping-res'); if(pb.disabled) return; pb.disabled = true; out.textContent = '…';
-    try{ const d = await __fxCall('ping', {}); out.textContent = d.result && d.result.ok ? tr('fsPingOk') : tr('fsPingFail').replace('{e}', (d.result && d.result.error) || '?'); out.style.color = d.result && d.result.ok ? 'var(--teal)' : 'var(--danger)'; }
+    try{ const d = await __fxCall('ping', {}); out.textContent = d.result && d.result.ok ? tr('fsPingOk') : tr('fsPingFail').replace('{e}', __fxErrText(d.result && d.result.error) || '?'); out.style.color = d.result && d.result.ok ? 'var(--teal)' : 'var(--danger)'; }
     catch(e){ out.textContent = tr('fsPingFail').replace('{e}', (e && (e.code === 'offline' || e.code === 'login')) ? tr('fsNeedNet') : ((e && e.code) || '?')); out.style.color = 'var(--danger)'; }
     finally{ pb.disabled = false; }
   });
@@ -20447,7 +20525,7 @@ function __fxShiftHtml(){
   const op = (inf.open || []).filter(x=>x && x.id);
   h += op.length ? op.map(x=>`<p style="margin:0 0 6px;font-weight:700;color:var(--teal);">${escapeHtml(tr('fsShiftOpen').replace('{t}', fmtDateTime(new Date(x.openedAt).toISOString())))}</p>`).join('') : `<p class="subtle" style="margin:0 0 6px;">${tr('fsShiftNone')}</p>`;
   const pend = (state.shifts || []).filter(x=>x && x.fx === 1 && x.fz && (x.fz.status === 'pending' || x.fz.status === 'close_failed')).slice(-5);
-  h += pend.map(x=>`<p style="margin:0 0 6px;color:var(--warm);font-weight:700;font-size:12.5px;">${escapeHtml(fmtDateTime(x.endTime))} · ${escapeHtml(x.fz.status === 'pending' ? tr('fsZPending') : tr('fsZFailed').replace('{e}', String(x.fz.error || '').slice(0, 60)))}</p>`).join('');
+  h += pend.map(x=>`<p style="margin:0 0 6px;color:var(--warm);font-weight:700;font-size:12.5px;">${escapeHtml(fmtDateTime(x.endTime))} · ${escapeHtml(x.fz.status === 'pending' ? tr('fsZPending') : tr('fsZFailed').replace('{e}', __fxErrText(x.fz.error)))}</p>`).join('');
   const rc = (inf.recent || []).slice(0, 10);
   if(!rc.length) return h + `<p class="subtle" style="margin:0;font-size:12.5px;">${tr('fsZNone')}</p>`;
   return h + rc.map(x=>{ const z = (x.test || !x.z) ? x.zApp : x.z; return `<div class="list-item" style="padding:9px 12px 9px 14px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">Z${x.z && x.z.number ? ' №' + escapeHtml(String(x.z.number)) : ''} · ${escapeHtml(fmtDateTime(new Date(x.closedAt).toISOString()))} · ${fmt(rM(((z && z.total) || 0) / 100))}${x.test ? ' (' + tr('fsStTest') + ')' : ''}</div>${__fxZHtml(x)}${x.reason === '24h' ? `<div class="meta" style="font-size:12px;color:var(--warm);">${tr('fsZAuto')}</div>` : ''}</div></div>`; }).join('');
@@ -20455,7 +20533,7 @@ function __fxShiftHtml(){
 async function __fxLoadShift(){ try{ await __fxShiftFlush(); const ids = (state.shifts || []).filter(x=>x && x.fx === 1).slice(-10).map(x=>x.id); const d = await __fxCall('shiftInfo', {ids}); state.__fxShiftInfo = {open: d.open || [], recent: d.recent || []}; Object.keys(d.map || {}).forEach(k=>__fxShiftSaveZ(k, d.map[k])); }catch(e){} }
 async function __fxLoadOpen(){ try{ const d = await __fxCall('open', {}); state.__fxOpen = d.list || []; (d.list || []).forEach(x=>{ if(x.kind === 'refund' && x.saleId) __fxApply(x.id, x); }); }catch(e){} }
 function renderSettingsFiscal(container){
-  const on = fiscalOn();
+  const on = !!state.settings.fiscalMode;   /* fix190-fiscal7: sahifada — tanlangan rejim; ishlashi — fiscalOn() (STIR bilan) */
   __ssPage(container, tr('fsTitle'), `
     <div class="card" id="ss-fs">
       <p class="subtle" style="margin:0 0 12px;">${tr('fsHint')}</p>
@@ -20464,7 +20542,7 @@ function renderSettingsFiscal(container){
         <div class="toggle-opt ${on ? '' : 'active'}" data-fs-mode="off">${tr('fsOff')}</div>
         <div class="toggle-opt ${on ? 'active' : ''}" data-fs-mode="on">${tr('fsOn')}</div>
       </div>
-      <div id="fs-box" style="${on ? '' : 'display:none;'}margin-top:12px;">
+      <div id="fs-box" style="${on ? '' : 'display:none;'}margin-top:12px;"><div id="fs-block-note">${__fsBlockHtml()}</div>
         <div class="field"><label class="field-label">${tr('fsProvider')} ${__ssOk('fsprov')}</label><select id="s-fs-provider">${FS_PROVIDERS.map(([v, l])=>`<option value="${v}" ${(state.settings.fiscalProvider||'')===v?'selected':''}>${(v && v !== 'mock') ? l : tr(l)}</option>`).join('')}</select></div>
         <div class="field">${__ssLbl('fsinn', tr('invInn'))}<input type="text" inputmode="numeric" id="s-fs-inn" value="${escapeHtml(state.settings.businessInn||'')}">${__ssErr('fsinn')}</div>
         <div class="field">${__ssLbl('fskassa', tr('fsKassaId'))}<input type="text" id="s-fs-kassa" value="${escapeHtml(state.settings.fiscalKassaId||'')}">${__ssErr('fskassa')}</div>
@@ -20489,15 +20567,16 @@ function renderSettingsFiscal(container){
     </div>
   `);
   container.querySelectorAll('[data-fs-mode]').forEach(b=>b.addEventListener('click', async ()=>{
-    const m = b.dataset.fsMode === 'on'; if(m === fiscalOn()) return;
+    const m = b.dataset.fsMode === 'on'; if(m === !!state.settings.fiscalMode) return;   /* fix190 */
     state.settings.fiscalMode = m;
     container.querySelectorAll('[data-fs-mode]').forEach(x=>x.classList.toggle('active', (x.dataset.fsMode === 'on') === m));
     document.getElementById('fs-box').style.display = m ? '' : 'none';
+    __fsBlockUpd();
     const ok = await __ssSave(); if(ok) __ssTick('fsmode'); else showToast(tr('ssSaveFail'));
   }));
   const prov = document.getElementById('s-fs-provider');
   if(prov) prov.addEventListener('change', async ()=>{ state.settings.fiscalProvider = prov.value; const ok = await __ssSave(); if(ok) __ssTick('fsprov'); else showToast(tr('ssSaveFail')); });
-  __ssBindField('fsinn', 's-fs-inn', { read: raw=>{ const v = String(raw||'').replace(/\s/g,''); return (v === '' || /^\d{9}$/.test(v)) ? {ok:true, v} : {ok:false, msg: tr('fillFields')}; }, same: v=>v === String(state.settings.businessInn||''), apply: v=>{ state.settings.businessInn = v; } });
+  __ssBindField('fsinn', 's-fs-inn', { read: raw=>{ const v = String(raw||'').replace(/\s/g,''); return (v === '' || /^(\d{9}|\d{14})$/.test(v)) ? {ok:true, v} : {ok:false, msg: tr('fsInnBad')}; }, same: v=>v === String(state.settings.businessInn||''), apply: v=>{ state.settings.businessInn = v; setTimeout(__fsBlockUpd, 0); } });
   __ssBindField('fskassa', 's-fs-kassa', { read: raw=>({ok:true, v:String(raw||'').trim()}), same: v=>v === String(state.settings.fiscalKassaId||''), apply: v=>{ state.settings.fiscalKassaId = v; } });
   __ssBindField('fsaddr', 's-fs-addr', { read: raw=>({ok:true, v:String(raw||'').trim()}), same: v=>v === String(state.settings.fiscalAddress||''), apply: v=>{ state.settings.fiscalAddress = v; } });
   /* fix184-fiscal2: xizmat/yetkazish IKPU, QQS, tayyorlik kartochkasi */
@@ -20508,7 +20587,7 @@ function renderSettingsFiscal(container){
   const sv = document.getElementById('s-fs-svat');
   if(sv) sv.addEventListener('change', async ()=>{ state.settings.fiscalServiceVat = sv.value === '' ? null : Number(sv.value); const ok = await __ssSave(); if(ok) __ssTick('fssvat'); else showToast(tr('ssSaveFail')); });
   const __rd = document.getElementById('ss-fs-ready');
-  container.querySelectorAll('[data-fs-mode]').forEach(b=>b.addEventListener('click', ()=>{ if(__rd){ __rd.style.display = fiscalOn() ? '' : 'none'; __rd.innerHTML = __fsReadyHtml(); } }));
+  container.querySelectorAll('[data-fs-mode]').forEach(b=>b.addEventListener('click', ()=>{ if(__rd){ __rd.style.display = state.settings.fiscalMode ? '' : 'none'; __rd.innerHTML = __fsReadyHtml(); } }));
   if(__rd) __rd.addEventListener('click', (e)=>{ const b = e.target.closest('[data-fsfix]'); if(!b) return; openProductForm(b.dataset.fsfix); });
   try{ __fxBindPage(container); }catch(e){ console.error('fix185 page', e); }   /* fix185-fiscal3 */
   const be = document.getElementById('s-fs-block-exp');

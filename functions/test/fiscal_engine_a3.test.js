@@ -10,7 +10,7 @@ const M = require('../src/fiscal/mock');
 
 const BID = 'bizF', NOW = Date.UTC(2026, 9, 22, 9, 0, 0), IK = '01234567890123456';
 function mk(mockOpts, biz) {
-  const s0 = {}; s0['businesses/' + BID] = Object.assign({ fiscalMode: true, fiscalProvider: 'mock', fiscalCreditIkpu: '44444444444444444' }, biz || {});
+  const s0 = {}; s0['businesses/' + BID] = Object.assign({ fiscalMode: true, fiscalProvider: 'mock', businessInn: '123456789', fiscalCreditIkpu: '44444444444444444' }, biz || {});
   const db = fakeDb(s0); let now = NOW;
   const rt = db.runTransaction; let chain = Promise.resolve();
   db.runTransaction = function (fn) { const r = chain.then(function () { return rt(fn); }); chain = r.catch(function () {}); return r; };
