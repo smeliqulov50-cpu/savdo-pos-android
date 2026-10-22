@@ -387,3 +387,25 @@ exports.fiscalTick = onSchedule({ schedule: 'every 10 minutes', timeZone: 'Asia/
   try { const r = await __FX.retryTick(__fxDeps()); if (r.tried) console.log('fiscalTick', JSON.stringify(r)); }
   catch (e) { console.error('fiscalTick xatosi', e && e.message); }
 });
+
+/* ---------- fix186-fiscal4: qaytarish, chekni tahrirlash, o'chirish, qarz to'lovi («Кредит» cheki) ----------
+   fiscalSaleChange — savdo o'zgarganda/o'chirilganda (yaratilish — fiscalSaleSync). fx bo'lmasa hech narsa o'qilmaydi.
+   fiscalLedgerSync — qarz to'lovi yozilganda (faqat fiskal rejimda belgilangan haqiqiy to'lovlar). */
+exports.fiscalSaleChange = onDocumentWritten({ document: 'businesses/{bizId}/sales/{saleId}' }, async function (event) {
+  const ch = event.data;
+  if (!ch) return;
+  const before = ch.before && ch.before.exists ? ch.before.data() : null;
+  const after = ch.after && ch.after.exists ? ch.after.data() : null;
+  if (!before) return;
+  if (!((before && before.fx === 1) || (after && after.fx === 1))) return;
+  try { const r = await __FX.onSaleWritten(__fxDeps(), event.params.bizId, event.params.saleId, before, after); if (r && r.status !== 'skip') console.log('fiscalSaleChange', event.params.saleId, r.status); }
+  catch (e) { console.error('fiscalSaleChange xatosi', e && e.message); }
+});
+exports.fiscalLedgerSync = onDocumentCreated({ document: 'businesses/{bizId}/ledger/{entryId}' }, async function (event) {
+  const snap = event.data;
+  if (!snap) return;
+  const d = snap.data();
+  if (!d || d.fx !== 1) return;
+  try { const r = await __FX.onLedgerCreated(__fxDeps(), event.params.bizId, event.params.entryId, d); if (r && r.status !== 'skip') console.log('fiscalLedger', event.params.entryId, r.status); }
+  catch (e) { console.error('fiscalLedgerSync xatosi', e && e.message); }
+});

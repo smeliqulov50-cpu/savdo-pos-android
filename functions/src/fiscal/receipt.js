@@ -103,7 +103,8 @@ function buildReceipt(sale, products, settings) {
     id: String(sale.id), number: str(sale.receiptNumber, 40), time: str(sale.date, 40), branchId: sale.branchId || null,
     cashier: str(sale.cashierName || sale.staffName || '', 80), customerId: sale.customerId || null,
     lines: all, total: total, vat: all.reduce(function (a, l) { return a + l.vat; }, 0), payments: pay,
-    refund: !!sale.__refund, original: sale.__original || null
+    refund: !!sale.__refund, original: sale.__original || null,
+    type: sale.__refund ? 'refund' : 'sale'   /* fix186-fiscal4: «Продажа» — nasiya bo'lsa ham to'liq summaga (Soliq qo'mitasi, 2022/2023) */
   };
   return { ok: true, receipt: receipt, missing: missing };
 }
@@ -118,4 +119,24 @@ function buildRefund(sale, products, settings, originalFiscal) {
   return r;
 }
 
-module.exports = { buildReceipt, buildRefund, allocate, tiyin, vatOf, payParts };
+/* fix186-fiscal4: yuborilgan chek nusxasidan qaytarish cheki (aynan o'sha qatorlar va to'lovlar) */
+function refundOf(rc, newId, originalFiscal) {
+  const r = JSON.parse(JSON.stringify(rc || {}));
+  r.id = String(newId); r.refund = true; r.type = 'refund';
+  r.original = originalFiscal ? { sign: originalFiscal.sign || '', number: originalFiscal.number || '', time: originalFiscal.sentAt || originalFiscal.at || '' } : null;
+  return r;
+}
+/* fix186-fiscal4: qarz to'lovi cheki — «Рассрочка / Кредит» turi, to'langan summaga (QR va fiskal belgi bo'lmaydi,
+   soliq hisobotiga tushmaydi, lekin berish majburiy: UP-5813 5-band, VM 943 1-ilova 6–7-bandlar; Soliq qo'mitasi 17.02.2022, 18.10.2023). */
+function creditPayReceipt(entry, settings) {
+  settings = settings || {};
+  const amt = tiyin(entry && entry.amount);
+  if (!entry || !entry.id || amt <= 0) return { ok: false, error: 'bad_payment' };
+  const ln = { kind: 'service', sub: 'credit', name: str(settings.fiscalCreditName || "Qarz to'lovi", 128), ikpu: digits(settings.fiscalCreditIkpu), packageCode: digits(settings.fiscalCreditPkg), unit: 'xizmat', qty: 1, price: amt, gross: amt, discount: 0, total: amt, vatRate: null, vat: 0 };
+  const m = entry.method === 'card' ? 'card' : entry.method === 'cash' || !entry.method ? 'cash' : 'other';
+  const pay = { cash: 0, card: 0, credit: 0, other: 0 }; pay[m] = amt;
+  const missing = ln.ikpu.length === 17 ? [] : [{ productId: null, variantId: null, name: ln.name, field: 'creditIkpu' }];   // IKPU ixtiyoriy: kredit chekida operator talab qilsa (B qismi)
+  return { ok: true, missing: missing, receipt: { id: 'pay_' + String(entry.id), number: '', time: str(entry.date, 40), branchId: entry.branchId || null, cashier: str(entry.staffName || '', 80), customerId: entry.customerId || null, lines: [ln], total: amt, vat: 0, payments: pay, refund: false, original: null, type: 'credit', saleNo: str(entry.receiptNo || '', 40) } };
+}
+
+module.exports = { buildReceipt, buildRefund, refundOf, creditPayReceipt, allocate, tiyin, vatOf, payParts };

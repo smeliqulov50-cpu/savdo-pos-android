@@ -29,6 +29,7 @@ function create(opts) {
     if (st.receipts[rc.id]) return Object.assign({ dup: true }, st.receipts[rc.id]);
     st.seq++;
     const r = { ok: true, sign: 'MOCK' + String(st.seq).padStart(8, '0'), number: 'FM-TEST/' + st.seq, qr: 'https://ofd.soliq.uz/check?t=MOCK' + st.seq, at: new Date().toISOString() };
+    if (rc.type === 'credit') { r.sign = ''; r.qr = ''; r.number = 'KR-TEST/' + st.seq; }   /* fix186-fiscal4: kredit cheki — QR va fiskal belgisiz (qonun bo'yicha) */
     st.receipts[rc.id] = Object.assign({ rc: rc, shift: st.shift && st.shift.id }, r);
     return r;
   }
@@ -57,6 +58,7 @@ function create(opts) {
       const z = { number: st.shiftSeq, sales: 0, refunds: 0, total: 0, cash: 0, card: 0, other: 0 };
       Object.keys(st.receipts).forEach(function (k) {
         const x = st.receipts[k]; if (sid && x.shift !== sid) return;
+        if (x.rc.type === 'credit') { z.credits = (z.credits || 0) + 1; z.creditSum = (z.creditSum || 0) + x.rc.total; return; }   /* soliq hisobotiga tushmaydi */
         const sg = x.rc.refund ? -1 : 1;
         if (x.rc.refund) z.refunds++; else z.sales++;
         z.total += sg * x.rc.total; z.cash += sg * (x.rc.payments.cash || 0); z.card += sg * (x.rc.payments.card || 0); z.other += sg * ((x.rc.payments.other || 0) + (x.rc.payments.credit || 0));

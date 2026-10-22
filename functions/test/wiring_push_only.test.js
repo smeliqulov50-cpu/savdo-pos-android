@@ -34,3 +34,13 @@ test('fiskal: fiscalApi (cors), fiscalSaleSync (savdo yaratilganda), fiscalTick 
   assert.equal(fns.fiscalSaleSync.__path.document, 'businesses/{bizId}/sales/{saleId}');
   assert.equal(fns.fiscalTick.__opts.schedule, 'every 10 minutes');
 });
+
+/* fix186-fiscal4: savdo o'zgarishi va qarz to'lovi triggerlari */
+test('fiskal A3: fiscalSaleChange (savdo yozilganda/ochirilganda), fiscalLedgerSync (ledger); fx yoq — hech narsa qilinmaydi', async () => {
+  assert.equal(fns.fiscalSaleChange.__path.document, 'businesses/{bizId}/sales/{saleId}');
+  assert.equal(fns.fiscalLedgerSync.__path.document, 'businesses/{bizId}/ledger/{entryId}');
+  const mk = (d) => ({ exists: !!d, data: () => d });
+  assert.equal(await fns.fiscalSaleChange({ data: { before: mk(null), after: mk({ fx: 1 }) }, params: { bizId: 'b', saleId: 's' } }), undefined);
+  assert.equal(await fns.fiscalSaleChange({ data: { before: mk({ total: 5 }), after: mk(null) }, params: { bizId: 'b', saleId: 's' } }), undefined);
+  assert.equal(await fns.fiscalLedgerSync({ data: { data: () => ({ type: 'payment', amount: 5 }) }, params: { bizId: 'b', entryId: 'e' } }), undefined);
+});

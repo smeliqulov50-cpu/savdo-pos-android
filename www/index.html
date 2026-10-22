@@ -1399,6 +1399,12 @@ const T = {
   rcPortions:{uz:"{n} porsiya",ru:"{n} порц.",en:"{n} portions",kk:"{n} порция",ky:"{n} порция",tg:"{n} порсия"},
   rcNoNest:{uz:"Retseptli taomni xomashyo qilib bo'lmaydi",ru:"Блюдо с техкартой нельзя сделать ингредиентом",en:"A dish with a recipe cannot be an ingredient",kk:"Техкартасы бар тағамды шикізат етуге болмайды",ky:"Техкартасы бар тамакты чийки зат кылууга болбойт",tg:"Таоми дорои харитаро ашё кардан мумкин нест"},
   smRecipe:{uz:"Retsept (xomashyo)",ru:"Техкарта (сырьё)",en:"Recipe (ingredient)",kk:"Техкарта (шикізат)",ky:"Техкарта (чийки зат)",tg:"Харита (ашё)"},
+  fsKindRefund:{uz:"Qaytarish",ru:"Возврат",en:"Refund",kk:"Қайтару",ky:"Кайтаруу",tg:"Баргардонӣ"},
+  fsKindEdit:{uz:"Chek tahriri",ru:"Исправление чека",en:"Receipt correction",kk:"Чекті түзету",ky:"Чекти оңдоо",tg:"Ислоҳи чек"},
+  fsKindCredit:{uz:"Qarz to'lovi (kredit cheki)",ru:"Оплата долга (кредитный чек)",en:"Debt payment (credit receipt)",kk:"Қарыз төлемі (кредит чегі)",ky:"Карыз төлөмү (кредит чеги)",tg:"Пардохти қарз (чеки кредитӣ)"},
+  fsRefundLbl:{uz:"qaytarish",ru:"возврат",en:"refund",kk:"қайтару",ky:"кайтаруу",tg:"баргардонӣ"},
+  fsCreditHint:{uz:"Qonun bo'yicha: nasiyaga sotilganda — to'liq summaga savdo cheki (QR va fiskal belgi bilan); qarzning har bir to'lovida — to'langan summaga «Kredit» cheki (QR/belgisiz). Ilova ikkalasini o'zi yuboradi.",ru:"По закону: при продаже в долг — чек продажи на полную сумму (с QR и фискальным признаком); при каждой оплате долга — чек «Кредит» на сумму оплаты (без QR/признака). Приложение отправляет оба сама.",en:"By law: a credit sale gets a full-amount sale receipt (with QR and fiscal sign); each debt payment gets a “Credit” receipt for the paid amount (no QR/sign). The app sends both automatically.",kk:"Заң бойынша: қарызға сатқанда — толық сомаға сату чегі (QR және фискалдық белгімен); қарыздың әр төлемінде — төленген сомаға «Кредит» чегі (QR/белгісіз). Қолданба екеуін де өзі жібереді.",ky:"Мыйзам боюнча: карызга сатканда — толук суммага сатуу чеги (QR жана фискалдык белги менен); карыздын ар бир төлөмүндө — төлөнгөн суммага «Кредит» чеги (QR/белгисиз). Тиркеме экөөнү тең өзү жөнөтөт.",tg:"Мувофиқи қонун: ҳангоми фурӯш ба қарз — чеки фурӯш ба маблағи пурра (бо QR ва аломати фискалӣ); ҳангоми ҳар пардохти қарз — чеки «Кредит» ба маблағи пардохт (бе QR/аломат). Барнома ҳардуро худаш мефиристад."},
+  fsCreditIkpu:{uz:"Qarz to'lovi cheki uchun IKPU (operator talab qilsa)",ru:"ИКПУ для чека оплаты долга (если требует оператор)",en:"IKPU for debt payment receipt (if the operator requires it)",kk:"Қарыз төлемі чегі үшін ИКПУ (оператор талап етсе)",ky:"Карыз төлөмү чеги үчүн ИКПУ (оператор талап кылса)",tg:"ИКПУ барои чеки пардохти қарз (агар оператор талаб кунад)"},
   fsProviderMock:{uz:"🧪 Sinov (soliqqa yuborilmaydi)",ru:"🧪 Тест (в налоговую не отправляется)",en:"🧪 Test (not sent to tax)",kk:"🧪 Сынақ (салыққа жіберілмейді)",ky:"🧪 Сыноо (салыкка жөнөтүлбөйт)",tg:"🧪 Санҷиш (ба андоз фиристода намешавад)"},
   fsMockHint:{uz:"Sinov rejimi: cheklar «MOCK…» belgisini oladi, soliqqa bormaydi. Butun yo'lni (sotuv → belgi → chek) tekshirish uchun.",ru:"Тестовый режим: чеки получают признак «MOCK…», в налоговую не уходят. Для проверки всей цепочки (продажа → признак → чек).",en:"Test mode: receipts get a “MOCK…” sign and are not sent to tax. For checking the whole flow (sale → sign → receipt).",kk:"Сынақ режимі: чектер «MOCK…» белгісін алады, салыққа бармайды. Бүкіл жолды (сату → белгі → чек) тексеру үшін.",ky:"Сыноо режими: чектер «MOCK…» белгисин алат, салыкка барбайт. Бүт жолду (сатуу → белги → чек) текшерүү үчүн.",tg:"Реҷаи санҷиш: чекҳо аломати «MOCK…» мегиранд, ба андоз намераванд. Барои санҷиши тамоми роҳ (фурӯш → аломат → чек)."},
   fsPing:{uz:"Ulanishni tekshirish",ru:"Проверить подключение",en:"Check connection",kk:"Қосылымды тексеру",ky:"Туташууну текшерүү",tg:"Санҷиши пайваст"},
@@ -4265,7 +4271,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.61';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.62';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -7858,6 +7864,7 @@ function openCustomerHub(opts){
       var entry = { id: uid(), customerId: c.id, type: 'payment', amount: amount, date: new Date().toISOString(), note: document.getElementById('ch-p-note').value.trim(),
         staffName: state.currentStaff ? state.currentStaff.name : '', method: method, createdAt: new Date().toISOString(),
         shiftId: state.currentShift ? state.currentShift.id : null, branchId: state.currentBranchId };
+      if(fiscalOn()) entry.fx = 1;   /* fix186-fiscal4: qarz to'lovi — «Кредит» cheki */
       state.ledger.push(entry);
       saveCustomers(); saveLedger(); addLedgerDoc(entry);
       try{ auditLog('debtPayment', c.name + ': ' + fmt(amount) + ' (' + method + ')', {customerId: c.id}); }catch(_e){} /* fix100 */
@@ -15742,6 +15749,7 @@ function saveEditedReceipt(){
   if(!sale.edited){ sale.originalTotal = oldTotal; }
   sale.edited = true;
   sale.editedAt = new Date().toISOString();
+  if(sale.fx === 1){ __fxStamp(sale, true); __fxApply(sale.id, {status: 'pending'}); }   /* fix186-fiscal4: server eski versiyani qaytarib, yangisini yuboradi; eski belgi endi chekda chiqmaydi */
   sale.editedBy = state.currentStaff ? state.currentStaff.name : '';
   auditLog('saleEdit', `№ ${sale.receiptNumber||sale.id}: ${fmt(oldTotal)} → ${fmt(newTotal)}`, {saleId: sale.id});
 
@@ -16121,6 +16129,7 @@ function openLedgerForm(customerId, type){
     let ledgerEntry;
     if(type==='payment'){ __spDebtSet(cust, Math.max(0,(cust.debt||0)-amount)); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'payment',amount,date:iso,note,staffName, method: (((document.getElementById('lf-method')||{}).value)||'cash'), createdAt: new Date().toISOString(), shiftId: state.currentShift ? state.currentShift.id : null, branchId: state.currentBranchId}; /* fix81 */ }
     else { __spDebtSet(cust, (cust.debt||0)+amount); /* fix78 */ ledgerEntry = {id:uid(),customerId,type:'sale',amount,date:iso,note,staffName}; }
+    if(type==='payment' && fiscalOn()) ledgerEntry.fx = 1;   /* fix186-fiscal4 */
     state.ledger.push(ledgerEntry);
     saveCustomers(); saveLedger(); addLedgerDoc(ledgerEntry);
     try{ auditLog(type==='payment' ? 'debtPayment' : 'debtManual', cust.name + ': ' + fmt(amount), {customerId: cust.id}); }catch(_e){} /* fix100 */
@@ -20246,9 +20255,10 @@ function __fsReadyHtml(){
 const __fxP = {};
 function __fxMap(){ return state.fiscalMap || (state.fiscalMap = {}); }
 function __fxSave(){ try{ const m = __fxMap(), ks = Object.keys(m); if(ks.length > 3000){ ks.sort((a, b)=>String((m[a]||{}).at||'').localeCompare(String((m[b]||{}).at||''))).slice(0, ks.length - 3000).forEach(k=>{ delete m[k]; }); } storSet('sardor_fiscal_v1', m); }catch(e){} }
-function __fxStamp(sale){
+function __fxStamp(sale, keep){
   sale.fx = 1;
   (sale.items || []).forEach(it=>{
+    if(keep && it.ikpu !== undefined) return;   /* fix186-fiscal4: tahrirda eski qatorlar sotuv paytidagi qiymatini saqlaydi */
     const p = state.products.find(x=>x.id === it.productId) || {};
     it.ikpu = String(p.ikpu || ''); it.pkg = String(p.packageCode || ''); it.vat = (p.vat === undefined || p.vat === null || p.vat === '') ? null : Number(p.vat);
   });
@@ -20282,6 +20292,11 @@ function __fxWait(id, ms){ const p = __fxP[id]; if(!p) return Promise.resolve(nu
 function __fxAttach(sale){ if(!sale || sale.fx !== 1) return; const f = __fxMap()[sale.id]; if(f && f.status === 'sent') sale.fiscal = {sign: f.sign, number: f.number, qr: f.qr}; }
 function __fxStateOf(s){ if(!s || s.fx !== 1) return null; const f = __fxMap()[s.id]; return f ? f.status : 'pending'; }
 function __fxBadge(s){
+  if(s && s.fx === 1 && s.refunded){   /* fix186-fiscal4: qaytarilgan chek — qaytarish chekining holati */
+    const r = __fxMap()[s.id + '~R'], rs = r ? r.status : 'pending';
+    const c = rs === 'sent' ? 'var(--teal)' : (rs === 'failed' ? 'var(--danger)' : 'var(--warm)');
+    return ' · <span style="color:' + c + ';font-weight:700;">🧾 ' + tr('fsRefundLbl') + ': ' + (rs === 'sent' ? tr('fsStSent') : (rs === 'failed' ? tr('fsStFailed') : tr('fsStPending'))) + '</span>';
+  }
   const st = __fxStateOf(s); if(!st) return '';
   const f = __fxMap()[s.id] || {};
   if(st === 'sent') return ' · <span style="color:var(--teal);font-weight:700;">🧾 ' + tr('fsStSent') + (f.test ? ' (' + tr('fsStTest') + ')' : '') + '</span>';
@@ -20296,7 +20311,8 @@ let __fxLastRefresh = 0;
 function __fxRefresh(after){
   if(!fbUser || (typeof navigator !== 'undefined' && navigator.onLine === false)) return;
   if(Date.now() - __fxLastRefresh < 30000) return;
-  const ids = __fxUnsent().map(s=>s.id).slice(0, 100); if(!ids.length) return;
+  const __rf = (state.sales || []).filter(s=>s && s.fx === 1 && s.refunded && (!__fxMap()[s.id + '~R'] || __fxMap()[s.id + '~R'].status !== 'sent')).map(s=>s.id + '~R');   /* fix186-fiscal4 */
+  const ids = __fxUnsent().map(s=>s.id).concat(__rf).slice(0, 100); if(!ids.length) return;
   __fxLastRefresh = Date.now();
   __fxCall('status', {ids}).then(d=>{ let ch = false; Object.keys(d.map || {}).forEach(k=>{ const r = d.map[k]; if(r && r.status && r.status !== 'none'){ const o = __fxMap()[k]; if(!o || o.status !== r.status || o.sign !== (r.sign || '')){ __fxApply(k, r); ch = true; } } }); if(ch && after) after(); }).catch(()=>{});
 }
@@ -20309,11 +20325,16 @@ function __fxAlertHtml(){
 function __fxUnsentHtml(){
   const list = __fxUnsent();
   let h = `<h3 class="sub-title" style="margin:0 0 6px;">${tr('fsUnsentTitle')}</h3><p class="subtle" style="margin:0 0 8px;font-size:12px;">${tr('fsUnsentHint')}</p>`;
-  if(!list.length) return h + `<p style="margin:0;font-weight:700;color:var(--teal);">${tr('fsUnsentNone')}</p>`;
-  h += `<div class="btn-row" style="margin-bottom:8px;"><button class="btn btn-primary btn-sm" id="fx-send-all" type="button">${tr('fsSendAll')} (${list.length})</button></div><p class="subtle" id="fx-send-res" style="margin:0 0 6px;font-size:12.5px;font-weight:600;"></p>`;
+  const ops = (state.__fxOpen || []).filter(x=>x && x.kind && x.kind !== 'sale');   /* fix186-fiscal4 */
+  const opsHtml = ops.slice(0, 30).map(x=>{ const kl = x.kind === 'refund' ? tr('fsKindRefund') : (x.kind === 'credit' ? tr('fsKindCredit') : tr('fsKindEdit'));
+    const ls = x.saleId ? (state.sales.find(y=>y.id === x.saleId) || null) : null, le = x.entryId ? (state.ledger.find(y=>y.id === x.entryId) || null) : null, lc = le ? (state.customers.find(y=>y.id === le.customerId) || null) : null, no = x.receiptNo || (ls && ls.receiptNumber) || '';
+    return `<div class="list-item" style="padding:9px 12px 9px 14px;gap:8px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">${escapeHtml(kl)}${no ? ' · №' + escapeHtml(String(no)) : ''}${le ? ' · ' + fmt(le.amount) + (lc ? ' · ' + escapeHtml(lc.name || '') : '') : ''}</div><div class="meta"><span style="color:${x.status === 'failed' ? 'var(--danger)' : 'var(--warm)'};font-weight:700;">${x.status === 'failed' ? tr('fsStFailed') + (x.error ? ': ' + escapeHtml(String(x.error).slice(0, 80)) : '') : tr('fsStPending')}</span></div></div><button class="btn btn-outline btn-sm" type="button" data-fx-retry="${escapeHtml(x.id)}">${tr('fsResend')}</button></div>`; }).join('');
+  if(!list.length && !ops.length) return h + `<p style="margin:0;font-weight:700;color:var(--teal);">${tr('fsUnsentNone')}</p>`;
+  if(!list.length) return h + `<div class="btn-row" style="margin-bottom:8px;"><button class="btn btn-primary btn-sm" id="fx-send-all" type="button">${tr('fsSendAll')} (${ops.length})</button></div><p class="subtle" id="fx-send-res" style="margin:0 0 6px;font-size:12.5px;font-weight:600;"></p>` + opsHtml;
+  h += `<div class="btn-row" style="margin-bottom:8px;"><button class="btn btn-primary btn-sm" id="fx-send-all" type="button">${tr('fsSendAll')} (${list.length + ops.length})</button></div><p class="subtle" id="fx-send-res" style="margin:0 0 6px;font-size:12.5px;font-weight:600;"></p>`;
   h += list.slice(0, 30).map(s=>{ const f = __fxMap()[s.id] || {}; const st = __fxStateOf(s);
     return `<div class="list-item" style="padding:9px 12px 9px 14px;gap:8px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">№${escapeHtml(String(s.receiptNumber || ''))} · ${fmt(s.total)}</div><div class="meta">${fmtDateTime(s.date)} · <span style="color:${st === 'failed' ? 'var(--danger)' : 'var(--warm)'};font-weight:700;">${st === 'failed' ? tr('fsStFailed') + (f.error ? ': ' + escapeHtml(String(f.error).slice(0, 80)) : '') : tr('fsStPending')}</span></div></div><button class="btn btn-outline btn-sm" type="button" data-fx-resend="${escapeHtml(s.id)}">${tr('fsResend')}</button></div>`; }).join('');
-  return h;
+  return h + opsHtml;   /* fix186-fiscal4 */
 }
 async function __fxSendIds(ids){
   let n = 0;
@@ -20341,12 +20362,22 @@ function __fxBindPage(container){
     if(!all && !one) return;
     const btn = all || one; if(btn.disabled) return; btn.disabled = true;
     const ids = all ? __fxUnsent().map(s=>s.id) : [one.dataset.fxResend];
+    if(!ids.length){ btn.disabled = false; return; }   /* fix186-fiscal4: faqat server cheklari — pastdagi ishlovchi */
     try{ const n = await __fxSendIds(ids); redraw(); const r = document.getElementById('fx-send-res'); if(r) r.textContent = tr('fsSentN').replace('{n}', n).replace('{t}', Math.min(ids.length, 20)); else showToast(tr('fsSentN').replace('{n}', n).replace('{t}', Math.min(ids.length, 20))); }
     catch(err){ showToast(tr('fsNeedNet')); btn.disabled = false; }
   });
+  if(box) box.addEventListener('click', async (e)=>{   /* fix186-fiscal4: serverdagi qaytarish/tahrir/kredit cheklari */
+    const one = e.target.closest('[data-fx-retry]'), all = e.target.closest('#fx-send-all');
+    if(!one && !all) return;
+    const ids = one ? [one.dataset.fxRetry] : (state.__fxOpen || []).filter(x=>x.kind && x.kind !== 'sale').map(x=>x.id);
+    if(!ids.length) return;
+    try{ const d = await __fxCall('retry', {ids}); Object.keys(d.map || {}).forEach(k=>__fxApply(k, d.map[k])); await __fxLoadOpen(); redraw(); if(one) showToast(tr('fsSentN').replace('{n}', d.sent || 0).replace('{t}', d.tried || 0)); }
+    catch(err){ showToast(tr('fsNeedNet')); }
+  });
   container.querySelectorAll('[data-fs-mode]').forEach(b=>b.addEventListener('click', ()=>setTimeout(redraw, 50)));
-  if(fiscalOn()){ __fxLastRefresh = 0; __fxRefresh(redraw); }
+  if(fiscalOn()){ __fxLastRefresh = 0; __fxRefresh(redraw); __fxLoadOpen().then(redraw).catch(()=>{}); }   /* fix186-fiscal4 */
 }
+async function __fxLoadOpen(){ try{ const d = await __fxCall('open', {}); state.__fxOpen = d.list || []; (d.list || []).forEach(x=>{ if(x.kind === 'refund' && x.saleId) __fxApply(x.id, x); }); }catch(e){} }
 function renderSettingsFiscal(container){
   const on = fiscalOn();
   __ssPage(container, tr('fsTitle'), `
@@ -20365,6 +20396,8 @@ function renderSettingsFiscal(container){
         <div class="field">${__ssLbl('fssvc', tr('fsSvcIkpu'))}<input type="text" inputmode="numeric" maxlength="17" id="s-fs-svc" value="${escapeHtml(state.settings.fiscalServiceIkpu||'')}">${__ssErr('fssvc')}</div>
         <div class="field">${__ssLbl('fsdlv', tr('fsDlvIkpu'))}<input type="text" inputmode="numeric" maxlength="17" id="s-fs-dlv" value="${escapeHtml(state.settings.fiscalDeliveryIkpu||'')}">${__ssErr('fsdlv')}</div>
         <div class="field"><label class="field-label">${tr('fsSvcVat')} ${__ssOk('fssvat')}</label><select id="s-fs-svat"><option value="" ${(state.settings.fiscalServiceVat==null)?'selected':''}>${tr('pfVatNone')}</option>${[0,12,15].map(v=>`<option value="${v}" ${String(state.settings.fiscalServiceVat)===String(v)?'selected':''}>${v}%</option>`).join('')}</select></div>
+        <div class="field">${__ssLbl('fscrd', tr('fsCreditIkpu'))}<input type="text" inputmode="numeric" maxlength="17" id="s-fs-crd" value="${escapeHtml(state.settings.fiscalCreditIkpu||'')}">${__ssErr('fscrd')}</div>
+        <p class="subtle" style="margin:0 0 8px;font-size:12px;">${tr('fsCreditHint')}</p>
         <p class="subtle" id="fs-mock-hint" style="margin:0 0 8px;font-size:12px;${state.settings.fiscalProvider === 'mock' ? '' : 'display:none;'}">${tr('fsMockHint')}</p>
         <p class="subtle" style="margin:0;font-size:12px;">${tr('fsStage2')}</p>
         <button class="btn btn-outline btn-sm" id="fs-ping" type="button" style="margin-top:10px;">${tr('fsPing')}</button>
@@ -20394,6 +20427,7 @@ function renderSettingsFiscal(container){
   const __ik17 = raw=>{ const v = String(raw||'').replace(/\s/g,''); return (v === '' || /^\d{17}$/.test(v)) ? {ok:true, v} : {ok:false, msg: tr('fsIkpuBad')}; };
   __ssBindField('fssvc', 's-fs-svc', { read: __ik17, same: v=>v === String(state.settings.fiscalServiceIkpu||''), apply: v=>{ state.settings.fiscalServiceIkpu = v; } });
   __ssBindField('fsdlv', 's-fs-dlv', { read: __ik17, same: v=>v === String(state.settings.fiscalDeliveryIkpu||''), apply: v=>{ state.settings.fiscalDeliveryIkpu = v; } });
+  __ssBindField('fscrd', 's-fs-crd', { read: __ik17, same: v=>v === String(state.settings.fiscalCreditIkpu||''), apply: v=>{ state.settings.fiscalCreditIkpu = v; } });   /* fix186-fiscal4 */
   const sv = document.getElementById('s-fs-svat');
   if(sv) sv.addEventListener('change', async ()=>{ state.settings.fiscalServiceVat = sv.value === '' ? null : Number(sv.value); const ok = await __ssSave(); if(ok) __ssTick('fssvat'); else showToast(tr('ssSaveFail')); });
   const __rd = document.getElementById('ss-fs-ready');
