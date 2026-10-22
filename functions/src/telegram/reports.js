@@ -335,7 +335,7 @@ async function handleSaleCreated(deps, bid, sid, sale) {
 }
 async function handleAuditCreated(deps, bid, aid, entry) {
   if (!deps.key || !deps.tg) return { skipped: 'no_key' };
-  if (!entry || (entry.action !== 'saleDelete' && entry.action !== 'saleRefund')) return { skipped: 'other' };
+  if (!entry || (entry.action !== 'saleDelete' && entry.action !== 'saleRefund' && entry.action !== 'writeOff')) return { skipped: 'other' };   /* fix181-woalert */
   if (!entry.staffId) return { skipped: 'owner' };
   if (!recent(deps, entry.date)) return { skipped: 'old' };
   const p = await getPrefs(deps, bid);

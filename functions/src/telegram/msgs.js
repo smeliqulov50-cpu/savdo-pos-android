@@ -12,7 +12,7 @@ const L = {
     expected: "Kassada bo'lishi kerak", counted: 'Sanab kiritildi', diff: 'Farq', diffNone: "Farq yo'q", short: 'kam', over: 'ortiqcha',
     low: 'Kam qolgan tovarlar', threshold: 'Kam qoldi chegarasi', autoRule: 'Qoida: {d} kunlik savdoga yetmasa', thresholdFb: 'Sotilmagan tovarlar uchun chegara', out: 'tugagan', more: '… yana {n} ta', lowNone: "Kam qolgan tovar yo'q 👍",
     disc: 'Katta chegirma', receipt: 'Chek', discount: 'Chegirma', sum: 'Chek summasi',
-    del: "Chek o'chirildi", refund: 'Chek qaytarildi', by: 'Kim',
+    del: "Chek o'chirildi", refund: 'Chek qaytarildi', by: 'Kim', wo: 'Tovar hisobdan chiqarildi',
     testNote: "🧪 Sinov xabari: haqiqiy xabar shunday ko'rinadi.", testData: "🧪 Sinov: hozirgacha bo'lgan haqiqiy ma'lumot.",
     mainBranch: 'Bosh filial', sampleCashier: 'Namuna kassir', units: { dona: 'dona', kg: 'kg', litr: 'litr', paket: 'paket' }, money: "so'm"
   },
@@ -24,7 +24,7 @@ const L = {
     expected: 'Должно быть в кассе', counted: 'Пересчитано', diff: 'Разница', diffNone: 'Разницы нет', short: 'недостача', over: 'излишек',
     low: 'Заканчивающиеся товары', threshold: 'Порог «мало осталось»', autoRule: 'Правило: не хватит на {d} дн. продаж', thresholdFb: 'Порог для товаров без продаж', out: 'закончился', more: '… ещё {n}', lowNone: 'Заканчивающихся товаров нет 👍',
     disc: 'Большая скидка', receipt: 'Чек', discount: 'Скидка', sum: 'Сумма чека',
-    del: 'Чек удалён', refund: 'Возврат чека', by: 'Кто',
+    del: 'Чек удалён', refund: 'Возврат чека', by: 'Кто', wo: 'Списание товара',
     testNote: '🧪 Тестовое сообщение: так будет выглядеть настоящее.', testData: '🧪 Тест: реальные данные на текущий момент.',
     mainBranch: 'Главный филиал', sampleCashier: 'Пример кассира', units: { dona: 'шт', kg: 'кг', litr: 'литр', paket: 'уп.' }, money: 'сум'
   },
@@ -36,7 +36,7 @@ const L = {
     expected: 'Expected cash', counted: 'Counted', diff: 'Difference', diffNone: 'No difference', short: 'short', over: 'over',
     low: 'Low stock', threshold: 'Low stock threshold', autoRule: "Rule: won't last {d} days of sales", thresholdFb: 'Threshold for items with no sales', out: 'out of stock', more: '… {n} more', lowNone: 'Nothing is running low 👍',
     disc: 'Large discount', receipt: 'Receipt', discount: 'Discount', sum: 'Receipt total',
-    del: 'Receipt deleted', refund: 'Receipt refunded', by: 'By',
+    del: 'Receipt deleted', refund: 'Receipt refunded', by: 'By', wo: 'Stock written off',
     testNote: '🧪 Test message: this is how the real one will look.', testData: '🧪 Test: real data so far.',
     mainBranch: 'Main branch', sampleCashier: 'Sample cashier', units: { dona: 'pcs', kg: 'kg', litr: 'liter', paket: 'pack' }, money: 'UZS'
   },
@@ -48,7 +48,7 @@ const L = {
     expected: 'Кассада болуы керек', counted: 'Саналды', diff: 'Айырма', diffNone: 'Айырма жоқ', short: 'кем', over: 'артық',
     low: 'Аз қалған тауарлар', threshold: 'Аз қалды шегі', autoRule: 'Ереже: {d} күндік сатуға жетпесе', thresholdFb: 'Сатылмаған тауарлар шегі', out: 'таусылды', more: '… тағы {n}', lowNone: 'Аз қалған тауар жоқ 👍',
     disc: 'Үлкен жеңілдік', receipt: 'Чек', discount: 'Жеңілдік', sum: 'Чек сомасы',
-    del: 'Чек жойылды', refund: 'Чек қайтарылды', by: 'Кім',
+    del: 'Чек жойылды', refund: 'Чек қайтарылды', by: 'Кім', wo: 'Тауар есептен шығарылды',
     testNote: '🧪 Сынақ хабары: нақты хабар осылай көрінеді.', testData: '🧪 Сынақ: қазіргі сәттегі нақты деректер.',
     mainBranch: 'Бас филиал', sampleCashier: 'Үлгі кассир', units: { dona: 'дана', kg: 'кг', litr: 'литр', paket: 'пакет' }, money: 'сом'
   },
@@ -60,7 +60,7 @@ const L = {
     expected: 'Кассада болушу керек', counted: 'Саналды', diff: 'Айырма', diffNone: 'Айырма жок', short: 'кем', over: 'ашык',
     low: 'Аз калган товарлар', threshold: 'Аз калды чеги', autoRule: 'Эреже: {d} күндүк сатууга жетпесе', thresholdFb: 'Сатылбаган товарлар үчүн чек', out: 'түгөндү', more: '… дагы {n}', lowNone: 'Аз калган товар жок 👍',
     disc: 'Чоң жеңилдик', receipt: 'Чек', discount: 'Жеңилдик', sum: 'Чектин суммасы',
-    del: 'Чек өчүрүлдү', refund: 'Чек кайтарылды', by: 'Ким',
+    del: 'Чек өчүрүлдү', refund: 'Чек кайтарылды', by: 'Ким', wo: 'Товар эсептен чыгарылды',
     testNote: '🧪 Сыноо билдирүүсү: чыныгы билдирүү ушундай көрүнөт.', testData: '🧪 Сыноо: азыркы учурдагы чыныгы маалымат.',
     mainBranch: 'Башкы филиал', sampleCashier: 'Үлгү кассир', units: { dona: 'даана', kg: 'кг', litr: 'литр', paket: 'пакет' }, money: 'сом'
   },
@@ -72,7 +72,7 @@ const L = {
     expected: 'Бояд дар кассо бошад', counted: 'Шумурда шуд', diff: 'Фарқ', diffNone: 'Фарқ нест', short: 'кам', over: 'зиёдатӣ',
     low: 'Молҳои кам монда', threshold: 'Ҳадди «кам монд»', autoRule: 'Қоида: ба фурӯши {d} рӯз нарасад', thresholdFb: 'Ҳадд барои молҳои нафурӯхта', out: 'тамом шуд', more: '… боз {n}', lowNone: 'Моли кам монда нест 👍',
     disc: 'Тахфифи калон', receipt: 'Чек', discount: 'Тахфиф', sum: 'Маблағи чек',
-    del: 'Чек нест карда шуд', refund: 'Чек баргардонида шуд', by: 'Кӣ',
+    del: 'Чек нест карда шуд', refund: 'Чек баргардонида шуд', by: 'Кӣ', wo: 'Мол аз ҳисоб бароварда шуд',
     testNote: '🧪 Паёми санҷишӣ: паёми воқеӣ ҳамин тавр менамояд.', testData: '🧪 Санҷиш: маълумоти воқеӣ то ҳозир.',
     mainBranch: 'Филиали асосӣ', sampleCashier: 'Кассири намунавӣ', units: { dona: 'дона', kg: 'кг', litr: 'литр', paket: 'баста' }, money: 'сомонӣ'
   }
@@ -221,8 +221,8 @@ function discText(lang, a, ctx) {
 /* ---------- chek o'chirildi / qaytarildi ---------- */
 function rcptText(lang, a, ctx) {
   const w = W(lang);
-  const del = a.action === 'saleDelete';
-  const lines = [head(del ? '🗑' : '↩️', del ? w.del : w.refund, ctx.shop)];
+  const del = a.action === 'saleDelete', wo = a.action === 'writeOff';   /* fix181-woalert */
+  const lines = [head(wo ? '📦' : (del ? '🗑' : '↩️'), wo ? w.wo : (del ? w.del : w.refund), ctx.shop)];
   if (a.detail) lines.push('🧾 ' + esc(a.detail));
   lines.push('👤 ' + esc(w.by) + ': ' + esc(a.staffName || '—') + (ctx.timeStr ? ' · ' + esc(ctx.timeStr) : ''));
   if (ctx.test) { lines.push(''); lines.push('<i>' + esc(w.testNote) + '</i>'); }

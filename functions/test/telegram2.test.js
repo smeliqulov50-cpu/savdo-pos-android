@@ -259,6 +259,18 @@ test('chek o\'chirildi/qaytarildi: faqat xodim, yoqilgan bo\'lsa; matn xavfsiz',
   r = await R.handleAuditCreated(d, BID, 'a1', e); assert.equal(r.skipped, 'dup');
 });
 
+/* fix181-woalert: hisobdan chiqarish ham shu sozlama bilan */
+test('hisobdan chiqarish: xodim bo\'lsa xabar, matn xavfsiz, 6 tilda so\'z bor', async () => {
+  const d = mk(seedBase());
+  const e = { action: 'writeOff', detail: "Singan / buzilgan: Cola 1L ×2 — 18 000 so'm <y>", date: new Date(NOW - 5000).toISOString(), staffId: 'st1', staffName: 'Vali' };
+  let r = await R.handleAuditCreated(d, BID, 'w1', e); assert.equal(r.skipped, 'off');
+  await prefs(d, { rcpt: true });
+  r = await R.handleAuditCreated(d, BID, 'w1', e); assert.equal(r.alert, 'writeOff');
+  assert.match(d.tg.sent[0].text, /Tovar hisobdan chiqarildi/); assert.match(d.tg.sent[0].text, /&lt;y&gt;/); assert.match(d.tg.sent[0].text, /Kim: Vali/); assert.match(d.tg.sent[0].text, /📦/);
+  r = await R.handleAuditCreated(d, BID, 'w2', Object.assign({}, e, { staffId: null })); assert.equal(r.skipped, 'owner');
+  ['uz', 'ru', 'en', 'kk', 'ky', 'tg'].forEach(function (l) { assert.ok(M.W(l).wo && M.W(l).wo.length > 3, l); assert.match(M.rcptText(l, e, { shop: 'S' }), /📦/); });
+});
+
 /* ---------- smena ---------- */
 function shift(over) { return Object.assign({ id: 'sh1', staffName: 'Ali', startTime: new Date(NOW - 8 * 3600e3).toISOString(), endTime: new Date(NOW - 60000).toISOString(), startCash: 100000,
   salesCount: 34, cashTotal: 1300000, cardTotal: 600000, creditTotal: 200000, expectedCash: 1450000, endCash: 1420000, branchId: 'main' }, over || {}); }
