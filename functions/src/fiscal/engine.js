@@ -17,7 +17,7 @@ const P = require('./providers');
 
 const LOCK_MS = 90 * 1000;
 const BACKOFF_MIN = [1, 5, 15, 30, 60];
-const MAX_IDS = 100, RETRY_PER_RUN = 20, BIZ_PER_TICK = 50;
+const MAX_IDS = 100, RETRY_PER_RUN = 20, BIZ_PER_TICK = 50, OPEN_MAP_MAX = 300;
 
 async function getData(ref) { const s = await ref.get(); return s && s.exists ? (s.data() || {}) : null; }
 function fCol(db, bid) { return db.collection('businesses').doc(bid).collection('fiscal'); }
@@ -36,13 +36,20 @@ function productsFromItems(sale) {
 }
 function provOf(deps, pname, biz) { return deps.provider ? deps.provider(pname, biz) : P.create(pname, deps.secrets || null, deps.providerOpts || null); }
 
-async function setQueue(deps, bid, id, nextAt) {
+async function setQueue(deps, bid, id, nextAt, open) {
   const ref = qRef(deps.db, bid);
   await deps.db.runTransaction(async function (tx) {
     const s = await tx.get(ref); const d = (s && s.exists ? s.data() : null) || {};
     const p = Object.assign({}, d.pending || {});
     if (nextAt) p[id] = nextAt; else delete p[id];
-    tx.set(ref, Object.assign({}, d, { pending: p, pendingCount: Object.keys(p).length, updatedAt: deps.nowMs() }));   // fix188: boshqa maydonlar (smena) saqlanadi
+    const n = Object.assign({}, d, { pending: p, pendingCount: Object.keys(p).length, updatedAt: deps.nowMs() });   // fix188: boshqa maydonlar (smena) saqlanadi
+    if (open !== undefined) {   // fix189-fiscal6: yuborilmagan cheklar ro'yxati (Telegram ogohlantirishi uchun) — {opId: {t: birinchi urinish, a: urinishlar, k, n, e}}
+      const om = Object.assign({}, d.openMap || {});
+      if (open) om[id] = open; else delete om[id];
+      const ks = Object.keys(om); if (ks.length > OPEN_MAP_MAX) ks.sort(function (a, b) { return (om[a].t || 0) - (om[b].t || 0); }).slice(0, ks.length - OPEN_MAP_MAX).forEach(function (k) { delete om[k]; });
+      n.openMap = om; n.openCount = Object.keys(om).length;
+    }
+    tx.set(ref, n);
   });
 }
 
@@ -56,7 +63,7 @@ async function runOp(deps, bid, id, meta, prepare, opts) {
     if (d && d.status === 'sending' && (d.lockAt || 0) > now - LOCK_MS) return { busy: d };
     if (d && d.status === 'failed' && !opts.force && d.retryable === false) return { done: d };
     if (d && d.status === 'failed' && !opts.force && (d.nextAt || 0) > now) return { done: d };
-    const n = Object.assign({}, meta || {}, d || {}, { status: 'sending', open: true, lockAt: now, attempts: ((d && d.attempts) || 0) + 1, updatedAt: now });
+    const n = Object.assign({}, meta || {}, d || {}, { status: 'sending', open: true, lockAt: now, attempts: ((d && d.attempts) || 0) + 1, firstAt: (d && d.firstAt) || now, updatedAt: now });
     tx.set(ref, n);
     return { go: n };
   });
@@ -90,7 +97,8 @@ async function runOp(deps, bid, id, meta, prepare, opts) {
   const cur = await getData(ref);
   if (cur) ['cur', 'editSeq', 'edits'].forEach(function (k) { if (cur[k] !== undefined) out[k] = cur[k]; });
   await ref.set(out);
-  try { await setQueue(deps, bid, id, out.status === 'failed' && out.retryable ? out.nextAt : null); } catch (e) {}
+  const om = out.open ? { t: out.firstAt || t, a: out.attempts || 0, k: out.kind || 'sale', n: String(out.receiptNo || '').slice(0, 40), e: String(out.lastError || '').slice(0, 120), r: out.retryable !== false ? 1 : 0 } : null;   // fix189-fiscal6
+  try { await setQueue(deps, bid, id, out.status === 'failed' && out.retryable ? out.nextAt : null, om); } catch (e) {}
   return pub(out);
 }
 
@@ -130,7 +138,7 @@ async function processRefund(deps, bid, sid, opts) {
     const sale = await getData(saleRef(deps.db, bid, sid));
     const o = await ensureOriginal(deps, bid, sid, sale);
     if (o.missing) {   // savdo o'chirilgan va asl chek hech qachon yuborilmagan — fiskal jihatdan savdo bo'lmagan
-      if (o.base && o.base.status !== 'cancelled') { await fRef(deps.db, bid, sid).set(Object.assign({}, o.base, { status: 'cancelled', open: false, retryable: false, nextAt: null, updatedAt: deps.nowMs() })); try { await setQueue(deps, bid, sid, null); } catch (e) {} }
+      if (o.base && o.base.status !== 'cancelled') { await fRef(deps.db, bid, sid).set(Object.assign({}, o.base, { status: 'cancelled', open: false, retryable: false, nextAt: null, updatedAt: deps.nowMs() })); try { await setQueue(deps, bid, sid, null, null); } catch (e) {} }
       return { cancel: true, reason: 'original_never_sent' };
     }
     if (o.base && o.base.status === 'cancelled') return { cancel: true, reason: 'original_cancelled' };
@@ -144,7 +152,7 @@ async function onSaleDeleted(deps, bid, sid, before) {
   if (!base) return { status: 'skip' };
   if (base.status === 'sent') return processRefund(deps, bid, sid);
   if (base.status === 'sending') { await setQueue(deps, bid, sid + '~R', deps.nowMs() + 60000); return { status: 'queued' }; }
-  if (base.status !== 'cancelled') { await fRef(deps.db, bid, sid).set(Object.assign({}, base, { status: 'cancelled', open: false, retryable: false, nextAt: null, lastError: 'sale_deleted', updatedAt: deps.nowMs() })); try { await setQueue(deps, bid, sid, null); } catch (e) {} }
+  if (base.status !== 'cancelled') { await fRef(deps.db, bid, sid).set(Object.assign({}, base, { status: 'cancelled', open: false, retryable: false, nextAt: null, lastError: 'sale_deleted', updatedAt: deps.nowMs() })); try { await setQueue(deps, bid, sid, null, null); } catch (e) {} }
   return { status: 'cancelled' };
 }
 
@@ -224,7 +232,7 @@ async function retryDoc(deps, bid, id, opts) {
   if ((m = /^shift~(.+)$/.exec(id))) return retryShiftClose(deps, bid, m[1]);   // fix188-fiscal5
   if ((m = /^pay_(.+)$/.exec(id))) {
     const e = await getData(db.collection('businesses').doc(bid).collection('ledger').doc(m[1]));
-    if (!isCreditPay(e)) { await setQueue(deps, bid, id, null); return { status: 'no_source' }; }
+    if (!isCreditPay(e)) { await setQueue(deps, bid, id, null, null); return { status: 'no_source' }; }
     return processCreditPay(deps, bid, m[1], e, opts);
   }
   if ((m = /^(.+)~R$/.exec(id))) return processRefund(deps, bid, m[1], opts);
@@ -234,9 +242,9 @@ async function retryDoc(deps, bid, id, opts) {
   if (!sale) {
     const base = await getData(fRef(db, bid, id));
     if (base && base.status !== 'sent') return onSaleDeleted(deps, bid, id, { fx: 1 });
-    await setQueue(deps, bid, id, null); return { status: 'no_sale' };
+    await setQueue(deps, bid, id, null, null); return { status: 'no_sale' };
   }
-  if (sale.fx !== 1) { await setQueue(deps, bid, id, null); return { status: 'skip' }; }
+  if (sale.fx !== 1) { await setQueue(deps, bid, id, null, null); return { status: 'skip' }; }
   return processSale(deps, bid, Object.assign({ id: id }, sale), opts);
 }
 

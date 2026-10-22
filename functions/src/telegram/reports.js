@@ -17,8 +17,10 @@ const WINDOW_MIN = 120;              // belgilangan vaqtdan keyin shuncha daqiqa
 const RECENT_MS = 12 * HOUR;         // eski ma'lumot (zaxiradan tiklash) uchun ogohlantirish yuborilmaydi
 const ALERTS_PER_HOUR = 40;
 const TESTS_PER_HOUR = 12;
-const DEF = { daily: false, dailyTime: '21:00', shift: false, low: false, lowTime: '09:00', disc: false, discPct: 20, rcpt: false };
-const KINDS = ['daily', 'shift', 'low', 'disc', 'rcpt'];
+const DEF = { daily: false, dailyTime: '21:00', shift: false, low: false, lowTime: '09:00', disc: false, discPct: 20, rcpt: false, fisc: false };
+const KINDS = ['daily', 'shift', 'low', 'disc', 'rcpt', 'fisc'];
+const FT = require('./fiscalTexts');   /* fix189-fiscal6 */
+const FX_TRIES = 3, FX_OLD_MS = 24 * 60 * 60 * 1000;
 const DEFAULT_TZ = 'Asia/Tashkent';
 
 async function getData(ref) { const s = await ref.get(); return s && s.exists ? (s.data() || {}) : null; }
@@ -38,7 +40,8 @@ function normPrefs(p) {
     shift: p.shift === true,
     low: p.low === true, lowTime: clampTime(p.lowTime, DEF.lowTime, 0, 23 * 60 + 50),
     disc: p.disc === true, discPct: (isFinite(pct) && pct >= 1) ? Math.min(90, pct) : DEF.discPct,
-    rcpt: p.rcpt === true
+    rcpt: p.rcpt === true,
+    fisc: p.fisc === true   /* fix189-fiscal6: soliqqa yuborilmagan cheklar */
   };
 }
 async function getPrefs(deps, bid) {
@@ -313,6 +316,48 @@ async function runTick(deps, now) {
   return st;
 }
 
+/* ---------- fix189-fiscal6: soliqqa yuborilmagan cheklar (3 marta urinish yoki 24 soat navbatda) ----------
+   Faqat ega yoqqan bizneslar (tgPrefs.fx == true). Har bir chek uchun bir marta xabar (tgSent.fxKeys). Bir xabarda hammasi. */
+function fiscDue(om, now) {
+  return Object.keys(om || {}).map(function (id) { const x = om[id] || {}; return ((x.a || 0) >= FX_TRIES || now - (x.t || now) >= FX_OLD_MS) ? { id: id, k: x.k || 'sale', n: x.n || '', e: x.e || '', a: x.a || 0, t: x.t || now } : null; })
+    .filter(Boolean).sort(function (a, b) { return a.t - b.t; });
+}
+async function runFiscal(deps) {
+  const st = { checked: 0, alerts: 0, sent: 0, failed: 0, removed: 0, errors: 0 };
+  if (!deps.key || !deps.tg) { st.noKey = true; return st; }
+  const now = deps.nowMs(), db = deps.db;
+  const snap = await db.collection('tgPrefs').where('fx', '==', true).get();
+  const docs = snap && snap.docs ? snap.docs : [];
+  for (let i = 0; i < docs.length; i++) {
+    const bid = docs[i].id; st.checked++;
+    try {
+      const q = await getData(db.collection('fiscalBiz').doc(bid));
+      if (!q || !q.openCount) continue;                        // yuborilmagan chek yo'q — boshqa hech narsa o'qilmaydi
+      const due = fiscDue(q.openMap, now);
+      if (!due.length) continue;
+      const ref = db.collection('tgSent').doc(bid);
+      const pre = await getData(ref); const known = (pre && Array.isArray(pre.fxKeys)) ? pre.fxKeys : [];
+      if (!due.some(function (x) { return known.indexOf(x.id) === -1; })) continue;
+      const ctx = await loadCtx(deps, bid);
+      if (!ctx.chats.length) continue;                         // chat ulanmagan — belgilanmaydi, ulanganda xabar boradi
+      const go = await db.runTransaction(async function (tx) {
+        const s = await tx.get(ref); const d = s && s.exists ? (s.data() || {}) : {};
+        const keys = Array.isArray(d.fxKeys) ? d.fxKeys : [];
+        const nw = due.filter(function (x) { return keys.indexOf(x.id) === -1; });
+        if (!nw.length) return false;
+        const win = (Array.isArray(d.win) ? d.win : []).filter(function (t) { return t > now - HOUR; });
+        if (win.length >= ALERTS_PER_HOUR) return false;
+        tx.set(ref, Object.assign({}, d, { fxKeys: keys.concat(nw.map(function (x) { return x.id; })).slice(-300), win: win.concat([now]) }));
+        return true;
+      });
+      if (!go) continue;
+      addSt(st, await sendAll(deps, ctx.chats, function (l) { return FT.fiscText(l, { items: due, total: due.length }, { shop: ctx.shop, now: now }); }));
+      st.alerts++;
+    } catch (e) { st.errors++; try { console.error('fiscalAlert xatosi', bid, e && e.message); } catch (_e) {} }
+  }
+  return st;
+}
+
 /* ---------- darhol ogohlantirishlar (Firestore hodisalari) ---------- */
 async function handleSaleCreated(deps, bid, sid, sale) {
   if (!deps.key || !deps.tg) return { skipped: 'no_key' };
@@ -375,7 +420,7 @@ async function readPrefsForStatus(deps, bid) { return normPrefs(await getData(de
 async function actPrefs(deps, bid, body) {
   const p = normPrefs(body && body.prefs);
   const biz = (await getData(deps.db.collection('businesses').doc(bid))) || {};
-  const doc = Object.assign({}, p, { sched: p.daily || p.low, any: p.daily || p.low || p.shift || p.disc || p.rcpt, tz: DR.validTz(biz.timeZone) ? biz.timeZone : DEFAULT_TZ, at: deps.nowMs() });
+  const doc = Object.assign({}, p, { sched: p.daily || p.low, fx: p.fisc, any: p.daily || p.low || p.shift || p.disc || p.rcpt || p.fisc, tz: DR.validTz(biz.timeZone) ? biz.timeZone : DEFAULT_TZ, at: deps.nowMs() });
   await deps.db.collection('tgPrefs').doc(bid).set(doc);
   if (deps.cache) deps.cache.delete(bid);
   return okBody({ prefs: p });
@@ -420,6 +465,8 @@ async function actTest(deps, bid, body) {
       text = M.shiftText(l, sh, shiftCtx(cx, sh, { test: true }));
     } else if (kind === 'disc') {
       text = M.discText(l, { receiptNumber: '1001', discountAmount: 50000, pct: 25, total: 150000, cashierName: w.sampleCashier }, { shop: ctx.shop, cur: ctx.cur, timeStr: hm(now, ctx.tz), test: true });
+    } else if (kind === 'fisc') {   /* fix189-fiscal6 */
+      text = FT.fiscText(l, { items: [{ k: 'sale', n: '1001', a: 3, e: 'operator_busy', t: now - 2 * HOUR }, { k: 'refund', n: '998', a: 1, e: 'rejected: IKPU not found', t: now - 26 * HOUR }], total: 2 }, { shop: ctx.shop, now: now, test: true, testNote: w.testNote });
     } else {
       text = M.rcptText(l, { action: 'saleDelete', detail: '№ 1001 — ' + M.money(l, ctx.cur, 150000), staffName: w.sampleCashier }, { shop: ctx.shop, timeStr: hm(now, ctx.tz), test: true });
     }
@@ -434,6 +481,6 @@ async function handleAction(deps, caller, action, body) {
   return errBody(400, 'bad_action');
 }
 
-module.exports = { loadCtx, inLang, dailyIn, lowIn, hm, dmy, dmyOfYmd, branchName, multiBranch, docsOf,   /* fix144-tgcmd */
+module.exports = { runFiscal, fiscDue, FX_TRIES, FX_OLD_MS, loadCtx, inLang, dailyIn, lowIn, hm, dmy, dmyOfYmd, branchName, multiBranch, docsOf,   /* fix144-tgcmd */
   normPrefs, getPrefs, runTick, handleSaleCreated, handleAuditCreated, handleCatalogWrite, handleAction, readPrefsForStatus,
   computeDaily, computeLow, lowThresholdOf, lowModeOf, lowAutoDaysOf, minStockOf, salesVel, sendAll, gate, newClosedShifts, discInfo, DEF, KINDS, WINDOW_MIN, RECENT_MS, ALERTS_PER_HOUR, TESTS_PER_HOUR };

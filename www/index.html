@@ -2124,6 +2124,8 @@ const T = {
   tgPDisc:{uz:"Katta chegirma",ru:"Большая скидка",en:"Large discount",kk:"Үлкен жеңілдік",ky:"Чоң жеңилдик",tg:"Тахфифи калон"},
   tgPDiscSub:{uz:"Xodim chek summasining {p}% yoki undan ko'p chegirma bersa",ru:"Если сотрудник дал скидку {p}% и больше от суммы чека",en:"When a staff member gives {p}% or more off a receipt",kk:"Қызметкер чек сомасының {p}% немесе одан көп жеңілдік берсе",ky:"Кызматкер чектин суммасынын {p}% же андан көп жеңилдик берсе",tg:"Агар корманд {p}% ё бештар аз маблағи чек тахфиф диҳад"},
   tgPPct:{uz:"Foiz",ru:"Процент",en:"Percent",kk:"Пайыз",ky:"Пайыз",tg:"Фоиз"},
+  tgPFisc:{uz:"Chek soliqqa yuborilmasa",ru:"Чек не отправлен в налоговую",en:"Receipt not sent to tax",kk:"Чек салыққа жіберілмесе",ky:"Чек салыкка жөнөтүлбөсө",tg:"Агар чек ба андоз фиристода нашавад"},
+  tgPFiscSub:{uz:"3 marta urinishdan keyin ham yoki 24 soatdan beri navbatda bo'lsa (fiskal rejim)",ru:"После 3 попыток или если в очереди больше 24 часов (фискальный режим)",en:"After 3 attempts or if queued for over 24 hours (fiscal mode)",kk:"3 әрекеттен кейін немесе 24 сағаттан артық кезекте болса (фискалдық режим)",ky:"3 аракеттен кийин же 24 сааттан ашык кезекте болсо (фискалдык режим)",tg:"Пас аз 3 кӯшиш ё агар зиёда аз 24 соат дар навбат бошад (реҷаи фискалӣ)"},
   tgPRcpt:{uz:"Chek o'chirilsa yoki qaytarilsa",ru:"Удаление или возврат чека",en:"Receipt deleted or refunded",kk:"Чек жойылса немесе қайтарылса",ky:"Чек өчүрүлсө же кайтарылса",tg:"Нест кардан ё баргардонидани чек"},
   tgPRcptSub:{uz:"Xodim chekni o'chirsa yoki qaytarsa — darhol",ru:"Сотрудник удалил или вернул чек — сразу",en:"A staff member deletes or refunds a receipt — instantly",kk:"Қызметкер чекті жойса немесе қайтарса — бірден",ky:"Кызматкер чекти өчүрсө же кайтарса — дароо",tg:"Корманд чекро нест кунад ё баргардонад — фавран"},
   tgAlertNote:{uz:"Xodimning qurilmasida internet bo'lmasa, ogohlantirish internet qaytgach keladi.",ru:"Если у сотрудника нет интернета, предупреждение придёт, когда интернет появится.",en:"If a staff device is offline, the alert arrives once it's back online.",kk:"Қызметкердің құрылғысында интернет болмаса, ескерту интернет қосылғанда келеді.",ky:"Кызматкердин түзмөгүндө интернет болбосо, эскертүү интернет келгенде келет.",tg:"Агар дар дастгоҳи корманд интернет набошад, огоҳӣ баъди пайдо шудани интернет меояд."},
@@ -4282,7 +4284,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.64';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.65';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -25008,7 +25010,8 @@ var TG_PF_ROWS = [
   {k:'shift', ic:ICONS.lock, bg:'#EDE9FE', t:'tgPShift', s:'tgPShiftSub'},
   {k:'low', ic:ICONS.package, bg:'#FEF3C7', t:'tgPLow', s:'tgPLowSub', time:'lowTime'},
   {k:'disc', ic:ICONS.tag, bg:'#FCE7F3', t:'tgPDisc', s:'tgPDiscSub', pct:true},
-  {k:'rcpt', ic:ICONS.trash, bg:'#FEE2E2', t:'tgPRcpt', s:'tgPRcptSub'}
+  {k:'rcpt', ic:ICONS.trash, bg:'#FEE2E2', t:'tgPRcpt', s:'tgPRcptSub'},
+  {k:'fisc', ic:ICONS.receiptIcon, bg:'#DCFCE7', t:'tgPFisc', s:'tgPFiscSub'}   /* fix189-fiscal6: faqat fiskal rejimda ko'rinadi */
 ];
 function __tgPfSub(r, p){
   if(r.k === 'low') return lowStockMode() === 'auto' ? __tgT('tgPLowSubAuto', {d: lowStockAutoDays()}) : __tgT(r.s, {n: lowStockThresholdValue()});   /* fix122-stock, fix124-smart */
@@ -25021,6 +25024,7 @@ function __tgPrefsHtml(d, chats){
   const p = d.prefs;
   let h = '<div class="tg-pf" id="tg-pf"><div class="tg-pf-h">' + escapeHtml(tr('tgMsgsTitle')) + '</div><p class="tg-pf-hint">' + escapeHtml(tr('tgMsgsHint')) + '</p>';
   TG_PF_ROWS.forEach(r=>{
+    if(r.k === 'fisc' && !(typeof fiscalOn === 'function' && fiscalOn()) && p.fisc !== true) return;   /* fix189-fiscal6 */
     const on = p[r.k] === true;
     h += '<div class="tg-pr' + (on ? ' on' : '') + '" data-tg-row="' + r.k + '"><div class="nf-row"><div class="nf-ic" style="background:' + r.bg + ';">' + r.ic + '</div>'
       + '<div class="nf-txt"><div class="nf-ttl">' + escapeHtml(tr(r.t)) + '</div><div class="nf-sub" data-tg-sub="' + r.k + '">' + escapeHtml(__tgPfSub(r, p)) + '</div></div>'

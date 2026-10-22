@@ -44,3 +44,9 @@ test('fiskal A3: fiscalSaleChange (savdo yozilganda/ochirilganda), fiscalLedgerS
   assert.equal(await fns.fiscalSaleChange({ data: { before: mk({ total: 5 }), after: mk(null) }, params: { bizId: 'b', saleId: 's' } }), undefined);
   assert.equal(await fns.fiscalLedgerSync({ data: { data: () => ({ type: 'payment', amount: 5 }) }, params: { bizId: 'b', entryId: 'e' } }), undefined);
 });
+
+/* fix189-fiscal6: telegramTick soliqqa yuborilmagan cheklarni ham tekshiradi */
+test('fiskal A5: telegramTick runFiscal ni chaqiradi', () => {
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.js'), 'utf8');
+  assert.match(src, /__TGR\.runFiscal\(__tgDepsLite\(\)\)/);
+});

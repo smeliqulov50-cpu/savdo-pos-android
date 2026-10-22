@@ -283,6 +283,7 @@ exports.telegramTick = onSchedule({ schedule: 'every 10 minutes', timeZone: 'Asi
   try {
     const st = await __TGR.runTick(__tgDepsLite(), new Date());
     if (st.daily || st.low || st.errors) console.log('telegramTick', JSON.stringify(st));
+    try { const f = await __TGR.runFiscal(__tgDepsLite()); if (f.alerts || f.errors) console.log('fiscalAlert', JSON.stringify(f)); } catch (e) { console.error('fiscalAlert xatosi', e && e.message); }   /* fix189-fiscal6: soliqqa yuborilmagan cheklar */
     const __tn = new Date(); if ((__tn.getUTCHours() + 5) % 24 === 10 && __tn.getUTCMinutes() < 10) { try { const r = await require('./src/telegram/pay').subRemind(__tgDepsLite(), Date.now()); if (r.sent || r.failed) console.log('subRemind', JSON.stringify(r)); } catch (e) { console.error('subRemind xatosi', e && e.message); }
       try { const r2 = await require('./src/telegram/cust').remindTick(__tgDepsLite(), Date.now()); if (r2.sent) console.log('custRemind', JSON.stringify(r2)); } catch (e) { console.error('custRemind xatosi', e && e.message); } }   /* fix150-subbot; fix155-custbot */
     if (new Date().getMinutes() < 10) { try { const n = await require('./src/telegram/shop').cleanupOld(__tgDepsLite()); if (n) console.log('botShopCleanup', n); } catch (e) { console.error('botShopCleanup xatosi', e && e.message); } }   /* fix145-botshop: 90 kundan eski buyurtmalar */
