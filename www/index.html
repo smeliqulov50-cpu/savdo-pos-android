@@ -4332,12 +4332,15 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.71';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.72';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
    ru:["Кнопка супер-админа (★) убрана из верхнего заголовка и перенесена в меню «Настройки» \u2014 по-прежнему видна только супер-админу. Меню настроек разбито на логические группы (Общее, Бизнес, Сотрудники, Чек/принтер, Лимиты, Другое) \u2014 ни одна панель не удалена, только упорядочена"],
-   en:["The super-admin (★) button was removed from the top header and moved into the Settings menu \u2014 still visible only to the super admin. The Settings menu is now grouped into logical sections (General, Business, Staff, Receipt/Printer, Limits, Other) \u2014 no panel was removed, just organized"]},
+   en:["The super-admin (★) button was removed from the top header and moved into the Settings menu \u2014 still visible only to the super admin. The Settings menu is now grouped into logical sections (General, Business, Staff, Receipt/Printer, Limits, Other) \u2014 no panel was removed, just organized"],
+   kk:["Супер-админ (★) батырмасы жоғарғы тақырыптан алынып, «Баптаулар» мәзіріне көшірілді \u2014 бұрынғыдай тек супер-админге көрінеді. Баптаулар мәзірі логикалық топтарға бөлінді (Жалпы, Бизнес, Қызметкерлер, Чек/принтер, Шектеулер, Басқа) \u2014 ешбір панель алынбады, тек ретке келтірілді"],
+   ky:["Супер-админ (★) баскычы жогорку аталыштан алынып, «Жөндөөлөр» менюсуна көчүрүлдү \u2014 мурдагыдай супер-админге гана көрүнөт. Жөндөөлөр менюсу логикалык топторго бөлүндү (Жалпы, Бизнес, Кызматкерлер, Чек/принтер, Чектөөлөр, Башка) \u2014 эч бир панель алынган жок, жөн гана иреттелди"],
+   tg:["Тугмаи супер-админ (★) аз сарлавҳаи боло бардошта шуда, ба менюи «Танзимот» гузаронида шуд \u2014 мисли пештара танҳо ба супер-админ намоён аст. Менюи танзимот ба гурӯҳҳои мантиқӣ ҷудо карда шуд (Умумӣ, Бизнес, Кормандон, Чек/принтер, Маҳдудиятҳо, Дигар) \u2014 ягон панел нест карда нашуд, танҳо ба тартиб оварда шуд"]},
   {version:109,
    uz:["Tozalash: vaqtinchalik debug log va \"Bulutni hozir tekshirish\" diagnostika paneli olib tashlandi \u2014 saqlash muammosi tasdiqlangan holda tuzatilgan, endi kerak emas edi"],
    ru:["Уборка: временный debug-лог и панель диагностики «Проверить облако сейчас» удалены \u2014 проблема с сохранением подтверждённо исправлена, больше не нужны"],
@@ -4478,11 +4481,12 @@ const CHANGELOG = [
    en:["Added modern colored icons across product and settings screens","On tablets, settings and reports menus now lay out properly","Added a single place to view all receipts","Accidental pull-to-refresh while scrolling is now fixed","Accidental two-finger zoom is now blocked"]}
 ];
 const SUBSCRIPTION_PLANS = {
-  monthly:  {days:30,  price:150000,  label:{uz:"Oylik",ru:"Месячный",en:"Monthly"}},
-  sixmonth: {days:182, price:750000,  label:{uz:"6 oylik",ru:"6 месяцев",en:"6-month"}},
-  yearly:   {days:365, price:1300000, label:{uz:"Yillik",ru:"Годовой",en:"Yearly"}}
+  monthly:  {days:30,  price:150000,  label:{uz:"Oylik",ru:"Месячный",en:"Monthly",kk:"Айлық",ky:"Айлык",tg:"Моҳона"}},
+  sixmonth: {days:182, price:750000,  label:{uz:"6 oylik",ru:"6 месяцев",en:"6-month",kk:"6 айлық",ky:"6 айлык",tg:"6-моҳа"}},
+  yearly:   {days:365, price:1300000, label:{uz:"Yillik",ru:"Годовой",en:"Yearly",kk:"Жылдық",ky:"Жылдык",tg:"Солона"}}
 };
 const TRIAL_DAYS = 15;
+/* fix196-planlang: obuna tariflari nomi 6 tilda; «Yangi nimalar» (v110) oynasi ham */
 function planLabelFor(planKey){
   const p = SUBSCRIPTION_PLANS[planKey];
   if(!p) return planKey;
