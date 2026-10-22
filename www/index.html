@@ -4327,7 +4327,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.67';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.68';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -8269,7 +8269,21 @@ async function buildInvoicePdf(sale){
   const W = 1240, H = 1754, M = 80;
   const pages = [];
   const perPage = 28;
-  for(let i=0;i<Math.max(1, Math.ceil(lines.length/perPage)); i++) pages.push(lines.slice(i*perPage, (i+1)*perPage));
+  { /* fix192-item2: uzun nom qirqilmaydi — 2 qatorga o'raladi; sahifa balandlik bo'yicha to'ldiriladi (avvalgi 28 qator × 36 px) */
+    const __mc = document.createElement('canvas').getContext('2d'); __mc.font = '18px Arial, sans-serif';
+    const __fit = (t)=>{ let x = t; while(__mc.measureText(x).width > 500 && x.length > 3) x = x.slice(0, -1); return x; };
+    lines.forEach(l=>{
+      const nm = String(l.name || ''); if(__mc.measureText(nm).width <= 500){ l.__nl = [nm]; return; }
+      const ws = nm.split(' '); let a = '';
+      for(let k = 0; k < ws.length; k++){ const t = a ? a + ' ' + ws[k] : ws[k]; if(__mc.measureText(t).width > 500 && a){ break; } a = t; }
+      if(__mc.measureText(a).width > 500) a = __fit(a);
+      let b = nm.slice(a.length).trim(); const bb = __fit(b); if(bb !== b) b = bb + '…';
+      l.__nl = b ? [a, b] : [a];
+    });
+    let cur = [], h = 0;
+    lines.forEach(l=>{ const rh = l.__nl.length > 1 ? 58 : 36; if(cur.length && h + rh > perPage * 36){ pages.push(cur); cur = []; h = 0; } cur.push(l); h += rh; });
+    pages.push(cur);
+  }
   const doc = new jsPDF({unit:'pt', format:'a4'});
   const pageW = doc.internal.pageSize.getWidth(), pageH = doc.internal.pageSize.getHeight();
   const number = sale.receiptNumber || sale.id.slice(0,8).toUpperCase();
@@ -8293,13 +8307,14 @@ async function buildInvoicePdf(sale){
     ctx.fillStyle = '#e8eef9'; ctx.fillRect(M, y, W-2*M, 40); ctx.fillStyle = '#000';
     txt('#', cols[0]+10, y+10, 18, true); txt(trR('invItem'), cols[1]+10, y+10, 18, true); txt(trR('invUnit'), cols[2]+10, y+10, 18, true); txt(trR('invQty'), cols[4]-10, y+10, 18, true, 'right'); txt(trR('invPrice'), cols[5]-10, y+10, 18, true, 'right'); txt(trR('invSum'), cols[6]-10, y+10, 18, true, 'right');
     y += 40; ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+    const __before = pages.slice(0, pi).reduce((a, p)=>a + p.length, 0);   /* fix192-item2 */
     chunk.forEach((l, i)=>{
-      const idx = pi*perPage + i + 1;
-      ctx.beginPath(); ctx.moveTo(M, y+36); ctx.lineTo(W-M, y+36); ctx.stroke();
+      const idx = __before + i + 1, __rh = (l.__nl && l.__nl.length > 1) ? 58 : 36;
+      ctx.beginPath(); ctx.moveTo(M, y+__rh); ctx.lineTo(W-M, y+__rh); ctx.stroke();
       txt(idx, cols[0]+10, y+8, 18); ctx.font = '18px Arial, sans-serif'; ctx.textAlign='left';
-      let nm = l.name; while(ctx.measureText(nm).width > 500 && nm.length > 3) nm = nm.slice(0,-1); if(nm !== l.name) nm += '…';
-      txt(nm, cols[1]+10, y+8, 18); txt(l.unit, cols[2]+10, y+8, 18); txt(l.qty, cols[4]-10, y+8, 18, false, 'right'); txt(fmt(l.price), cols[5]-10, y+8, 18, false, 'right'); txt(fmt(l.sum), cols[6]-10, y+8, 18, false, 'right');
-      y += 36;
+      const __nl = l.__nl || [l.name];   /* fix192-item2: 1 yoki 2 qator */
+      __nl.forEach((t, k)=>txt(t, cols[1]+10, y+8+k*22, 18)); txt(l.unit, cols[2]+10, y+8, 18); txt(l.qty, cols[4]-10, y+8, 18, false, 'right'); txt(fmt(l.price), cols[5]-10, y+8, 18, false, 'right'); txt(fmt(l.sum), cols[6]-10, y+8, 18, false, 'right');
+      y += __rh;
     });
     if(pi === pages.length-1){
       y += 16;
@@ -9885,6 +9900,11 @@ function wrapCanvasText(ctx, text, maxWidth){
 function computeReceiptItemLayout(ctx, it, canvasWidth, padding){
   ctx.font = '14px Arial';
   const maxWidth = canvasWidth - padding*2;
+  { /* fix192-item2: nomi (o'raladi) + oxirgi qatorda «narx x miqdor» va o'ngda jami */
+    const __nl = wrapCanvasText(ctx, String(it.name || ''), maxWidth);
+    __nl.push(fmt(it.price) + ' x' + it.qty);
+    return {sameLine:false, mergeLast:true, nameLines: __nl, priceStr: fmt(it.price*it.qty)};
+  }
   const nameQty = `${it.name} x${it.qty}`;
   const priceStr = fmt(it.price*it.qty);
   const priceWidth = ctx.measureText(priceStr).width;
@@ -10332,6 +10352,13 @@ function wrapText(text, width){
 // word boundaries, and the price is attached to the LAST wrapped line
 // whenever it still fits there — so a long name never leaves a confusing,
 // price-only trailing line unless it truly has to.
+/* fix192-item2: mahsulot — 2 qator: nomi (o'raladi), keyin «narx x miqdor» chapda, jami o'ngda */
+function __rcQtyStr(q){ return String(q); }
+function __rcItemLines(name, price, qty, total, width){
+  const out = wrapText(String(name || '').replace(/—/g, '-'), width);
+  buildItemReceiptLines(fmt(price) + ' x' + __rcQtyStr(qty), fmt(total), width).forEach(l=>out.push(l));
+  return out;
+}
 function buildItemReceiptLines(nameQtyText, priceStr, width){
   if(nameQtyText.length + 1 + priceStr.length <= width){
     return [padLine(nameQtyText, priceStr, width)];
@@ -10476,9 +10503,7 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   if(customer) __custReceiptLines(customer, t=>wrapText(t, width)).forEach(l=>lines.push(l));   /* fix104-custline */
   lines.push(sep);
   sale.items.forEach(it=>{
-    const amount = fmt(it.price*it.qty);
-    const safeName = it.name.replace(/—/g, '-');
-    buildItemReceiptLines(`${safeName} x${it.qty}`, amount, width).forEach(line=>lines.push(line));
+    __rcItemLines(it.name, it.price, it.qty, it.price*it.qty, width).forEach(line=>lines.push(line));   /* fix192-item2 */
   });
   lines.push(sep);
   if(sale.serviceChargeAmount || sale.deliveryFee || sale.discountAmount || sale.bonusUsed || sale.promoDiscount){
@@ -10855,7 +10880,8 @@ function buildReceiptHtmlInner(sale, customer){
   const bizFontFamily = s.receiptFontFamily==='serif' ? 'Georgia, serif' : 'inherit';
   const bizNameText = s.receiptBusinessUppercase ? (s.businessName||'Savdo Pos').toUpperCase() : (s.businessName||'Savdo Pos');
   const bizNameStyle = `text-align:${align};font-weight:${bizWeight};font-size:${bizSize};font-family:${bizFontFamily};letter-spacing:${s.receiptBusinessUppercase?'1px':'normal'};background:linear-gradient(135deg,#1F4FB8,#7C5CFC);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#1F4FB8;`;
-  const rows = sale.items.map((it,i)=>`<tr style="${i%2===1?'background:#F3F9FE;':''}"><td style="padding:4px 2px;">${escapeHtml(it.name)} x${it.qty}</td><td style="text-align:right;padding:4px 2px;">${fmt(it.price*it.qty)}</td></tr>`).join('');
+  const rows = sale.items.map((it,i)=>`<tr style="${i%2===1?'background:#F3F9FE;':''}"><td colspan="2" style="padding:4px 2px 0;">${escapeHtml(it.name)}</td></tr><tr style="${i%2===1?'background:#F3F9FE;':''}"><td style="padding:0 2px 4px;opacity:.8;">${fmt(it.price)} x${it.qty}</td><td style="text-align:right;padding:0 2px 4px;">${fmt(it.price*it.qty)}</td></tr>`).join('');   /* fix192-item2 */
+  const __rowsOld = sale.items.map((it,i)=>`<tr style="${i%2===1?'background:#F3F9FE;':''}"><td style="padding:4px 2px;">${escapeHtml(it.name)} x${it.qty}</td><td style="text-align:right;padding:4px 2px;">${fmt(it.price*it.qty)}</td></tr>`).join('');
   const bodySizeMult = getPrinterSizeMultipliers();
   const bodyFontSize = (12 * bodySizeMult.height) + 'px';
   const bodyFontWeight = s.printerBold!==false ? '700' : '400';
@@ -19658,7 +19684,7 @@ function renderSettingsPrinter(container){
           state.settings.businessName || 'Savdo Pos',
           '-'.repeat(sizeInfo.width),
           new Date().toLocaleString(),
-          ...buildItemReceiptLines(`${tr('testPrintSampleItem')} x2`, fmt(25000), sizeInfo.width),
+          ...__rcItemLines(tr('testPrintSampleItem'), 12500, 2, 25000, sizeInfo.width),   /* fix192-item2 */
           '-'.repeat(sizeInfo.width),
           tr('testPrint'),
           '-'.repeat(sizeInfo.width)
