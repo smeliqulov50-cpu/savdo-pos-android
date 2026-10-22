@@ -4213,7 +4213,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.57';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.58';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -8002,13 +8002,14 @@ async function loadCloudAudit(limit){ /* fix96: oxirgi 30 kun, yangisi tepada */
   }catch(e){ return localList.slice(0, lim); }
 }
 /* fix179-recipe: texnologik karta — taom sotilsa xomashyo kamayadi, taom qoldig'i = porsiyalar soni */
-const __RC_REASONS = {sale:1, refund:1, delete:1, edit:1};
+const __RC_REASONS = {sale:1, refund:1, delete:1, edit:1, writeOff:1};   /* fix180-rcfix */
 function __rcHas(p){ return !!(p && p.recipe && p.recipe.length); }
 function __rcLines(p){
   const out = [];
   (p && p.recipe || []).forEach(l=>{
     if(!l || !l.productId) return;
     const ip = state.products.find(x=>x.id === l.productId); if(!ip || __rcHas(ip)) return;
+    if(effectiveBranchId(ip.branchId) !== effectiveBranchId(p.branchId)) return;   /* fix180-rcfix: faqat o'z filiali */
     const iv = l.variantId ? getVariant(ip, l.variantId) : null; if(l.variantId && !iv) return;
     const q = Number(l.qty) || 0; if(q <= 0) return;
     out.push({p: ip, v: iv, qty: q, name: ip.name + (iv ? ' — ' + iv.name : '')});
@@ -17454,7 +17455,7 @@ function stocktakeDiffs(){
 function renderStocktakeList(){
   const listEl = document.getElementById('st-list'); if(!listEl) return;
   const q = (state.stSearch||'').toLowerCase();
-  let rows = stocktakeRows().filter(r=>!q || r.name.toLowerCase().includes(q));
+  let rows = stocktakeRows().filter(r=>!__rcHas(r.p)).filter(r=>!q || r.name.toLowerCase().includes(q));   /* fix180-rcfix: taom porsiyadan hisoblanadi */
   if(stocktakeOnlyDiff) rows = rows.filter(r=>stocktakeDraft[r.key]!==undefined && stocktakeDraft[r.key]!==r.stock);
   else if(__stF() === 'todo') rows = rows.filter(r=>stocktakeDraft[r.key]===undefined);   /* fix138-ds5 */
   listEl.innerHTML = rows.length ? rows.slice(0, 400).map(r=>{
@@ -18555,8 +18556,25 @@ function renderSettingsBranches(container){
         copy.branchId = newBranch.id;
         copy.stock = 0;
         if(copy.variants) copy.variants.forEach(v=>{ v.id = uid(); v.stock = 0; });
+        copy.__srcId = p.id; copy.__srcVars = (p.variants || []).map(v=>v.id);
         state.products.push(copy);
       });
+      try{ /* fix180-rcfix: retseptlar yangi filial tovarlariga bog'lanadi */
+        const copies = state.products.filter(x=>x.__srcId && effectiveBranchId(x.branchId) === newBranch.id);
+        const byOld = {}; copies.forEach(c=>{ byOld[c.__srcId] = c; });
+        copies.forEach(c=>{
+          if(c.recipe && c.recipe.length){
+            c.recipe = c.recipe.map(l=>{
+              const np = byOld[l.productId]; if(!np) return null;
+              let vid = null;
+              if(l.variantId){ const i = (np.__srcVars || []).indexOf(l.variantId); if(i < 0 || !np.variants || !np.variants[i]) return null; vid = np.variants[i].id; }
+              return {productId: np.id, variantId: vid, qty: l.qty};
+            }).filter(Boolean);
+            if(!c.recipe.length) c.recipeCost = false;
+          }
+        });
+        copies.forEach(c=>{ delete c.__srcId; delete c.__srcVars; });
+      }catch(e){ console.error('fix180 copy', e); }
       saveProducts();
     }
     saveSettings();
@@ -22291,6 +22309,7 @@ function __trEnsure(l, toB){
     np = JSON.parse(JSON.stringify(src));
     np.stock = 0; delete np.batches; delete np.expiryDate;
     if(np.variants) np.variants.forEach(v=>{ v.__src = v.id; v.id = uid(); v.stock = 0; });
+    delete np.recipe; delete np.recipeCost;   /* fix180-rcfix: xomashyosi boshqa filialda */
   } else {
     np = {name: S.name, price: S.price, costPrice: S.costPrice, stock: 0, unit: S.unit || 'dona', category: S.category, barcode: S.barcode, wholesalePrice: S.wholesalePrice, supplierName: S.supplierName, unitsPerBox: S.unitsPerBox, boxPrice: S.boxPrice, boxLabel: S.boxLabel, variants: []};
     if(S.v) np.variants.push({id: uid(), name: S.v.name, price: S.v.price, stock: 0, wholesalePrice: S.v.wholesalePrice, boxPrice: S.v.boxPrice});
