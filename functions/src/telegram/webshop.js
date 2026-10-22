@@ -31,8 +31,16 @@ function tokenFor(deps, oid) { return crypto.createHmac('sha256', deps.webKey).u
 function tokOk(deps, oid, t) { const a = Buffer.from(tokenFor(deps, oid)), b = Buffer.from(String(t || '')); return a.length === b.length && crypto.timingSafeEqual(a, b); }
 function recent(arr, now) { return (Array.isArray(arr) ? arr : []).filter(function (x) { return x > now - HOUR; }); }
 function pruneMap(m, now) { const o = {}; Object.keys(m || {}).forEach(function (k) { const r = recent(m[k], now); if (r.length) o[k] = r; }); return o; }
+/* fix194-webrules: bot sozlamasi (tgShop/{bid}, egasi saqlagan — slug bor) saytga ham tegishli: olib ketish / yetkazib berish,
+   yetkazish narxi, «… dan oshsa bepul», minimal buyurtma, ish vaqti, to'xtatish. Sozlanmagan do'kon — avvalgidek (ikkala usul, narx 0). */
+function botRules(raw) { return raw && SH.SLUG_RE.test(String(raw.slug || '')) ? SH.normCfg(raw) : null; }
+function rulesInfo(cfg, D, now) {
+  if (!cfg) return { configured: false };
+  return { configured: true, pickup: cfg.pickup, delivery: cfg.delivery, fee: SH.money(cfg.fee, D), freeFrom: SH.money(cfg.freeFrom, D), minOrder: SH.money(cfg.minOrder, D),
+    hours: cfg.hours, paused: cfg.paused, open: !cfg.paused && SH.isOpen(cfg, now) };
+}
 function summary(o) {
-  return { id: o.id, no: o.no, status: o.status, createdAt: o.createdAt, total: o.total, cur: o.cur, mode: o.mode, eta: o.eta || 0, reason: o.reason || '',
+  return { id: o.id, no: o.no, status: o.status, createdAt: o.createdAt, total: o.total, fee: o.fee || 0, cur: o.cur, mode: o.mode, eta: o.eta || 0, reason: o.reason || '',
     items: (o.items || []).slice(0, 30).map(function (x) { return { name: x.name, vName: x.vName || '', qty: x.qty, sum: x.sum }; }) };
 }
 async function loadShop(db, slug) {
@@ -72,6 +80,13 @@ async function handle(deps, body, meta) {
     if (r.code) return err(409, r.code, { status: r.status || o.status });
     return ok({ order: summary(r.o) });
   }
+  if (action === 'siteInfo') {   /* fix194-webrules */
+    const sh = await loadShop(db, body.slug);
+    if (!sh) return err(404, 'closed');
+    const bz = (await getData(db.collection('businesses').doc(sh.bid))) || {};
+    const cfg = botRules(await getData(db.collection('tgShop').doc(sh.bid)));
+    return ok(Object.assign({ cur: str(bz.currency || 'UZS', 6) }, rulesInfo(cfg, M.decOf(str(bz.currency || 'UZS', 6)), now)));
+  }
   if (action !== 'siteOrder') return err(400, 'bad_action');
   if (str(body.hp, 50)) return err(400, 'bad_request');   // tuzoq maydon (odam ko'rmaydi)
   const shop = await loadShop(db, body.slug);
@@ -90,6 +105,13 @@ async function handle(deps, body, meta) {
   if (prev) return ok({ order: summary(prev), t: tokenFor(deps, oid), again: true });
   const mode = body.mode === 'delivery' ? 'delivery' : 'pickup';
   const address = str(body.address, 300), comment = str(body.comment, 300);
+  const rules = botRules(await getData(db.collection('tgShop').doc(bid)));   /* fix194-webrules */
+  if (rules) {
+    if (mode === 'delivery' && !rules.delivery) return err(400, 'no_delivery');
+    if (mode === 'pickup' && !rules.pickup) return err(400, 'no_pickup');
+    if (rules.paused) return err(409, 'paused');
+    if (!SH.isOpen(rules, now)) return err(409, 'closed_hours', { hours: rules.hours });
+  }
   if (mode === 'delivery' && address.length < 3) return err(400, 'need_address');
   const biz = (await getData(db.collection('businesses').doc(bid))) || {};
   const cur = str(biz.currency || 'UZS', 6), D = M.decOf(cur);
@@ -137,11 +159,17 @@ async function handle(deps, body, meta) {
     }
     items.push(line);
   }
+  let fee = 0;   /* fix194-webrules: minimal buyurtma va yetkazish narxi — botdagidek */
+  if (rules) {
+    const minO = SH.money(rules.minOrder, D), freeF = SH.money(rules.freeFrom, D);
+    if (minO > 0 && subtotal < minO) return err(400, 'min_order', { min: minO, cur: cur });
+    if (mode === 'delivery') fee = (freeF > 0 && subtotal >= freeF) ? 0 : SH.money(rules.fee, D);
+  }
   const ip = h12(meta.ip || 'none'), ph = h12(phone);
   const sRef = db.collection('tgShop').doc(bid), iRef = db.collection('businesses').doc(bid).collection('meta').doc('botInbox'), wRef = db.collection('tgWeb').doc(bid);
   const base = {
     id: oid, bid: bid, slug: shop.slug, src: 'web', branchId: str(P.branchId, 60) || 'main', status: 'new', createdAt: now, updatedAt: now,
-    name: name, phone: phone, phoneOk: false, items: items, subtotal: subtotal, fee: 0, total: subtotal, cur: cur, mode: mode,
+    name: name, phone: phone, phoneOk: false, items: items, subtotal: subtotal, fee: fee, total: M.rnd(subtotal + fee, D), cur: cur, mode: mode,
     address: mode === 'delivery' ? address : '', comment: comment, pay: body.pay === 'card' ? 'card' : 'cash',
     shop: str(P.name || biz.businessName || 'Savdo Pos', 80), shopAddr: str(P.address || biz.businessAddress, 200), lang: P.lang === 'ru' ? 'ru' : 'uz',
     history: [{ s: 'new', at: now, by: 'customer' }]

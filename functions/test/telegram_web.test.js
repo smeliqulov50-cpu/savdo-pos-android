@@ -164,3 +164,68 @@ test('fix193: sayt — blok va dona tanlovi buyurtmada haqiqiy variant (v) va bl
   const o = Object.values(s.db.store).find(x => x && x.src === 'web' && x.items);
   assert.deepEqual(o.items.map(x => [x.id, x.v || '', x.vName || '', x.qty, x.b || 0, x.unit, x.price]), [['p5', 'g0', 'Gazsiz', 2, 12, 'Blok', 33000], ['p5', 'g0', 'Gazsiz', 3, 0, 'dona', 2800], ['p6', '', '', 1, 12, 'Blok', 120000]]);
 });
+
+/* fix194-webrules: bot sozlamasi saytga ham tegishli; sozlanmagan do'kon — avvalgidek */
+const CFG = (x) => Object.assign({ slug: 'salqinbot', enabled: true, pickup: true, delivery: true, fee: 15000, freeFrom: 100000, minOrder: 0, seq: 5 }, x || {});
+test('fix194: bot sozlanmagan (yoki faqat seq) — sayt avvalgidek: ikkala usul, yetkazish bepul', async () => {
+  for (const st of [null, { seq: 3 }]) {
+    const s = mk(); if (st) s.db.store['tgShop/bizW'] = st;
+    const i = await W.handle(s.deps, { action: 'siteInfo', slug: 'salqin' }, {});
+    assert.equal(i.status, 200); assert.equal(i.body.configured, false);
+    const r = await req(s.deps, { mode: 'delivery', address: 'Yunusobod 4' });
+    assert.equal(r.status, 200, JSON.stringify(r.body));
+    const o = s.db.store['tgOrders/' + r.body.order.id];
+    assert.equal(o.fee, 0); assert.equal(o.total, 24000); assert.equal(o.mode, 'delivery');
+    assert.equal((await req(s.deps, { mode: 'pickup' })).status, 200);
+  }
+});
+test('fix194: yetkazib berish o\'chiq — no_delivery; olib ketish o\'chiq — no_pickup', async () => {
+  let s = mk(); s.db.store['tgShop/bizW'] = CFG({ delivery: false });
+  assert.equal((await req(s.deps, { mode: 'delivery', address: 'Yunusobod 4' })).body.code, 'no_delivery');
+  assert.equal((await req(s.deps, { mode: 'pickup' })).status, 200);
+  const i = await W.handle(s.deps, { action: 'siteInfo', slug: 'salqin' }, {});
+  assert.equal(i.body.configured, true); assert.equal(i.body.delivery, false); assert.equal(i.body.pickup, true); assert.equal(i.body.open, true);
+  s = mk(); s.db.store['tgShop/bizW'] = CFG({ pickup: false });
+  assert.equal((await req(s.deps, { mode: 'pickup' })).body.code, 'no_pickup');
+  assert.equal((await req(s.deps, { mode: 'delivery', address: 'Yunusobod 4' })).status, 200);
+  assert.equal(Object.keys(s.db.store).filter(k => k.indexOf('tgOrders/') === 0).length, 1);
+});
+test('fix194: yetkazish narxi va «… dan oshsa bepul»; olib ketishda narx yo\'q; raqam davom etadi', async () => {
+  const s = mk(); s.db.store['tgShop/bizW'] = CFG();
+  let r = await req(s.deps, { mode: 'delivery', address: 'Yunusobod 4', items: [{ id: 'p1', q: 2 }] });
+  let o = s.db.store['tgOrders/' + r.body.order.id];
+  assert.equal(o.subtotal, 24000); assert.equal(o.fee, 15000); assert.equal(o.total, 39000); assert.equal(r.body.order.total, 39000); assert.equal(o.no, 6);
+  assert.equal(s.db.store['tgShop/bizW'].slug, 'salqinbot', 'sozlama saqlanib qoladi'); assert.equal(s.db.store['tgShop/bizW'].fee, 15000);
+  r = await req(s.deps, { mode: 'delivery', address: 'Yunusobod 4', items: [{ id: 'p1', q: 9 }] }, '5.5.5.5');
+  o = s.db.store['tgOrders/' + r.body.order.id];
+  assert.equal(o.subtotal, 108000); assert.equal(o.fee, 0); assert.equal(o.total, 108000);
+  r = await req(s.deps, { mode: 'pickup', items: [{ id: 'p1', q: 2 }] }, '6.6.6.6');
+  o = s.db.store['tgOrders/' + r.body.order.id];
+  assert.equal(o.fee, 0); assert.equal(o.total, 24000);
+  const ib = s.db.store['businesses/bizW/meta/botInbox'].orders;
+  assert.ok(Object.values(ib).some(x => x.fee === 15000 && x.total === 39000));
+});
+test('fix194: minimal buyurtma, to\'xtatilgan, ish vaqtidan tashqari', async () => {
+  let s = mk(); s.db.store['tgShop/bizW'] = CFG({ minOrder: 30000 });
+  let r = await req(s.deps, { mode: 'pickup' });
+  assert.equal(r.status, 400); assert.equal(r.body.code, 'min_order'); assert.equal(r.body.min, 30000);
+  assert.equal((await req(s.deps, { mode: 'pickup', items: [{ id: 'p1', q: 3 }] })).status, 200);
+  s = mk(); s.db.store['tgShop/bizW'] = CFG({ paused: true });
+  assert.equal((await req(s.deps, { mode: 'pickup' })).body.code, 'paused');
+  let i = await W.handle(s.deps, { action: 'siteInfo', slug: 'salqin' }, {});
+  assert.equal(i.body.paused, true); assert.equal(i.body.open, false);
+  s = mk(); s.db.store['tgShop/bizW'] = CFG({ hours: { on: true, from: '18:00', to: '23:00' } });   /* NOW = 14:00 Toshkent */
+  r = await req(s.deps, { mode: 'pickup' });
+  assert.equal(r.status, 409); assert.equal(r.body.code, 'closed_hours'); assert.equal(r.body.hours.from, '18:00');
+  i = await W.handle(s.deps, { action: 'siteInfo', slug: 'salqin' }, {});
+  assert.equal(i.body.open, false); assert.equal(i.body.hours.on, true);
+  s.setNow(NOW + 5 * 3600 * 1000);
+  assert.equal((await req(s.deps, { mode: 'pickup' })).status, 200);
+  assert.equal(Object.keys(s.db.store).filter(k => k.indexOf('tgOrders/') === 0).length, 1);
+});
+test('fix194: siteInfo — narxlar, noma\'lum do\'kon', async () => {
+  const s = mk(); s.db.store['tgShop/bizW'] = CFG({ minOrder: 20000 });
+  const i = await W.handle(s.deps, { action: 'siteInfo', slug: 'salqin' }, {});
+  assert.deepEqual([i.body.fee, i.body.freeFrom, i.body.minOrder, i.body.cur], [15000, 100000, 20000, 'UZS']);
+  assert.equal((await W.handle(s.deps, { action: 'siteInfo', slug: 'yoq-dokon' }, {})).body.code, 'closed');
+});
