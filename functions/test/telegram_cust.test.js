@@ -252,7 +252,7 @@ test('fix158: /raqam — kontakt tugmasi (uz/ru); raqam yuborilgach klaviatura o
   r = await core.handleUpdate(s.deps, { message: { message_id: 3, chat: { id: CUST, type: 'private' }, from: { id: CUST }, text: '/mening' } });
   assert.equal(r.askPhone, true); m = to(s.tg, CUST).pop(); assert.match(m.text, /ulanmagansiz/); assert.ok(m.reply_markup.keyboard);
   await core.handleUpdate(s.deps, { message: { message_id: 4, chat: { id: CUST, type: 'private' }, from: { id: CUST }, contact: { user_id: CUST, phone_number: '+998935556677' } } });
-  m = to(s.tg, CUST).find(x => /saqlandi/.test(x.text)); assert.equal(m.reply_markup.remove_keyboard, true);
+  m = to(s.tg, CUST).find(x => /saqlandi/.test(x.text)); assert.ok(m.reply_markup.keyboard && /Mening sahifam/.test(m.reply_markup.keyboard[0][0].text) && m.reply_markup.keyboard[0][0].web_app);   /* fix183-custeasy: doimiy klaviatura */
   assert.equal(s.db.store['tgPhone/935556677'].uid, String(CUST));
   const s2 = mk(); s2.db.store['tgCust/' + CUST] = { phone: '+998900000001', phoneOk: true };
   r = await CU.sendMy(s2.deps, CUST, 'uz'); assert.equal(r.my, false); assert.match(to(s2.tg, CUST).pop().text, /topilmadi/);
@@ -269,4 +269,35 @@ test('fix158: qo\'lda yozilgan qarz (sotuvsiz "sale" yozuvi) ulangan mijozga kel
   assert.equal((await CU.onLedger(s.deps, BID, Object.assign({}, e, { id: 'l21', date: new Date(NOW - 13 * 3600000).toISOString() }))).skipped, 'old');
   s.db.store['tgShop/' + BID].custReceipts = false;
   assert.equal((await CU.onLedger(s.deps, BID, Object.assign({}, e, { id: 'l22' }))).skipped, 'off');
+});
+
+/* fix183-custeasy: mijoz uchun sodda bot */
+test('fix183: /start havolasiz — mijoz uchun 2 qadam + raqam tugmasi; /ega — egasi ko\'rsatmasi; ega chatida eski javob', async () => {
+  const s = mk();
+  let r = await core.handleUpdate(s.deps, msg(CUST2, '/start'));
+  assert.equal(r.custStart, 'new'); let m = to(s.tg, CUST2).pop();
+  assert.match(m.text, /1️⃣/); assert.match(m.text, /\/ega/); assert.equal(m.reply_markup.keyboard[0][0].request_contact, true);
+  const sc = s.tg.calls.filter(c => c.method === 'setMyCommands' && c.params.scope && String(c.params.scope.chat_id) === String(CUST2));
+  assert.ok(sc.length && sc[0].params.commands.map(c => c.command).join(',') === 'mening,raqam,til,yordam,stop');
+  r = await core.handleUpdate(s.deps, msg(CUST2, '/ega')); assert.ok(r.owner); assert.match(to(s.tg, CUST2).pop().text, /Sozlamalar/);
+  r = await core.handleUpdate(s.deps, msg(CUST2, 'salom'));
+  assert.equal(r.custStart, 'new');
+  r = await core.handleUpdate(s.deps, msg(Number(OWNER), '/start'));
+  assert.ok(!r.custStart); assert.ok(!/1️⃣/.test(to(s.tg, Number(OWNER)).pop().text));
+});
+test('fix183: raqam yuborilgach doimiy klaviatura (Mening sahifam, Buyurtma, Yordam, Til); tugmalar ishlaydi; /yordam mijozga oddiy; til tanlansa klaviatura o\'sha tilda', async () => {
+  const s = mk();
+  s.db.store['tgCust/' + CUST] = { lastShop: 'salqin' };
+  await core.handleUpdate(s.deps, { message: { message_id: 4, chat: { id: CUST, type: 'private' }, from: { id: CUST }, contact: { user_id: CUST, phone_number: '+998935556677' } } });
+  let m = to(s.tg, CUST).find(x => /saqlandi/.test(x.text)); const kb = m.reply_markup.keyboard;
+  assert.ok(kb[0][0].web_app.url.endsWith('?v=my')); assert.match(kb[1][0].text, /Buyurtma/); assert.ok(/s=salqin/.test(kb[1][0].web_app.url)); assert.equal(kb[2][0].text, '❓ Yordam'); assert.equal(kb[2][1].text, '🌐 Til');
+  let r = await core.handleUpdate(s.deps, msg(CUST, '❓ Yordam')); assert.ok(r.custHelp); m = to(s.tg, CUST).pop(); assert.match(m.text, /Qanday ishlaydi/); assert.ok(m.reply_markup.keyboard);
+  r = await core.handleUpdate(s.deps, msg(CUST, '/yordam')); assert.ok(r.custHelp);
+  r = await core.handleUpdate(s.deps, msg(CUST, '🌐 Til')); assert.ok(r.langMenu);
+  r = await core.handleUpdate(s.deps, { callback_query: { id: 'q1', from: { id: CUST }, message: { chat: { id: CUST, type: 'private' } }, data: 'l|ru' } });
+  m = to(s.tg, CUST).pop(); assert.ok(m.reply_markup.keyboard); assert.equal(m.reply_markup.keyboard[2][0].text, '❓ Помощь');
+  assert.equal(s.db.store['tgCust/' + CUST].lang, 'ru');
+  r = await core.handleUpdate(s.deps, msg(CUST, '/start')); assert.equal(r.custStart, 'back'); assert.match(to(s.tg, CUST).pop().text, /С возвращением/);
+  // egasi: /yordam avvalgidek, klaviatura o'zgarmaydi
+  r = await core.handleUpdate(s.deps, msg(Number(OWNER), '/yordam')); assert.ok(r.help && r.linked);
 });

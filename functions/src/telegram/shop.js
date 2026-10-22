@@ -784,6 +784,7 @@ async function onStart(deps, msg, slug, lang) {
   const __ch = await getData(deps.db.collection('tgChats').doc(chatId));   /* fix152-cmdmenu: do'kon egasining chatida buyruqlar menyusi qoladi */
   if (!(__ch && Array.isArray(__ch.bids) && __ch.bids.length)) { try { await deps.tg('setChatMenuButton', { chat_id: chatId, menu_button: { type: 'web_app', text: S.t('btnShop', l).replace(/^\S+\s/, ''), web_app: { url: shopUrl(shop.cfg.slug) } } }); } catch (e) { /* ixtiyoriy */ } }
   await send(deps, chatId, S.t('start', l, { shop: esc(name) }), { inline_keyboard: [[webBtn(l, shop.cfg.slug)]] });
+  try { if (!(__ch && Array.isArray(__ch.bids) && __ch.bids.length)) await require('./cust').custCommands(deps, chatId, l); } catch (e) {}   /* fix183-custeasy */
   return { shopStart: shop.cfg.slug };
 }
 async function onContact(deps, msg, lang) {
@@ -795,7 +796,8 @@ async function onContact(deps, msg, lang) {
   const cust = (await getData(ref)) || {};
   await ref.set(Object.assign({}, cust, { phone: phone, phoneOk: true, phoneAt: deps.nowMs(), name: cust.name || str([c.first_name, c.last_name].filter(Boolean).join(' '), 80) }));
   const l = cust.lang || lang;
-  const kb = { remove_keyboard: true };
+  const kb = require('./cust').custKb(deps, Object.assign({}, cust, { phone: phone, phoneOk: true }), l);   /* fix183-custeasy: doimiy mijoz klaviaturasi */
+  try { await require('./cust').custCommands(deps, msg.chat.id, l); } catch (e) {}
   await send(deps, msg.chat.id, S.t('phoneSaved', l, { phone: esc(phone) }), kb);
   if (cust.lastShop) await send(deps, msg.chat.id, S.t('fallback', l, { shop: esc(await shopNameBySlug(deps, cust.lastShop)) }), { inline_keyboard: [[webBtn(l, cust.lastShop)]] });
   /* fix155-custbot: raqam do'kon ro'yxatida bo'lsa — mijoz sifatida ulanadi */
@@ -882,7 +884,7 @@ async function productImage(deps, slug, pid) {
   return { type: m[1], buf: Buffer.from(m[2], 'base64') };
 }
 
-module.exports = { handleSub, ownerMenu, hubBtn, hubUrl, handleWebApp, handleAppApi, onStart, onContact, onCallback, fallbackPrompt, applyStatus, cleanupOld, productImage, verifyInitData, webKeyFromToken,
+module.exports = { shopUrl, handleSub, ownerMenu, hubBtn, hubUrl, handleWebApp, handleAppApi, onStart, onContact, onCallback, fallbackPrompt, applyStatus, cleanupOld, productImage, verifyInitData, webKeyFromToken,
   inboxEntry, notifyOwner, dropCatalog, money,   /* fix151-weborder */
   autoAccept, editOrder, addMsg, onCustomerText,   /* fix153-boplus */
   normCfg, buildCatalog, reservedFrom, isOpen, INBOX_MAX_BYTES, normPhone, orderIdFor, pruneInbox, clearCatalogCache, shopUrl, SLUG_RE, MAX_ACTIVE_PER_CUST, ORDERS_PER_HOUR, INBOX_MAX };

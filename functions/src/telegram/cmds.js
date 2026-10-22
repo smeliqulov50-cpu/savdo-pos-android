@@ -14,10 +14,10 @@ const DR = require('../push/dailyReport');
 const HOUR = 3600 * 1000;
 const CMD_PER_HOUR = 30;
 const MAX_SHOPS = 3;
-const KINDS = ['today', 'yday', 'debts', 'low', 'pay', 'my', 'phone', 'lang', 'help'];   /* fix158-custfull */   /* fix155-custbot */
+const KINDS = ['today', 'yday', 'debts', 'low', 'pay', 'my', 'phone', 'lang', 'help', 'owner'];   /* fix183-custeasy: /ega */   /* fix158-custfull */   /* fix155-custbot */
 const DATA_KINDS = ['today', 'yday', 'debts', 'low'];
 const ALIASES = { today: ['bugun', 'today'], yday: ['kecha', 'yesterday'], debts: ['qarzlar', 'debts'], low: ['kam_qolgan', 'low'],
-  pay: ['obuna', 'pay'], my: ['mening', 'my', 'me'], phone: ['raqam', 'phone', 'nomer', 'номер'], lang: ['til', 'lang'], help: ['yordam', 'help', 'menu', 'menyu'] };   /* fix155-custbot */
+  pay: ['obuna', 'pay'], my: ['mening', 'my', 'me'], phone: ['raqam', 'phone', 'nomer', 'номер'], lang: ['til', 'lang'], help: ['yordam', 'help', 'menu', 'menyu'], owner: ['ega', 'owner'] };   /* fix155-custbot */
 const TOP_CUST = 10, TOP_SUP = 5;
 
 async function getData(ref) { const s = await ref.get(); return s && s.exists ? (s.data() || {}) : null; }
@@ -133,6 +133,7 @@ async function run(deps, chatId, kind, lang) {
   chatId = String(chatId);
   if (KINDS.indexOf(kind) === -1) return { ignored: true };
   if (kind === 'lang') { await send(deps, chatId, C.t('langPick', lang), langKb()); return { langMenu: true }; }
+  if (kind === 'owner') { await send(deps, chatId, require('./texts').txt('welcome', lang)); return { owner: true }; }   /* fix183-custeasy: egasi uchun ko'rsatma */
   if (kind === 'my') return require('./cust').sendMy(deps, chatId, lang);   /* fix155-custbot */
   if (kind === 'phone') return require('./cust').askPhone(deps, chatId, lang);   /* fix158-custfull */
   if (kind === 'pay') {
@@ -141,6 +142,7 @@ async function run(deps, chatId, kind, lang) {
     return Object.assign({ cmd: 'pay' }, out);
   }
   const bids = await P().linkedBids(deps, chatId);
+  if (kind === 'help' && !bids.length) return require('./cust').custHelp(deps, chatId, lang);   /* fix183-custeasy: mijoz uchun oddiy yordam */
   if (kind === 'help') { if (bids.length) await require('./shop').ownerMenu(deps, chatId, lang); await send(deps, chatId, helpHtml(deps, lang, bids.length > 0), bids.length ? menuKb(deps, lang) : null); return { help: true, linked: bids.length }; }
   if (!bids.length) { await send(deps, chatId, C.t('notLinked', lang)); return { notLinked: true }; }
   if (!(await allow(deps, chatId))) { await send(deps, chatId, C.t('tooMany', lang)); return { tooMany: true }; }
@@ -172,8 +174,11 @@ async function onCallback(deps, cq, lang) {
     await deps.db.collection('tgChats').doc(chatId).set({ ulang: l }, { merge: true });
     await answer('');
     const bids = await P().linkedBids(deps, chatId);
-    await send(deps, chatId, C.t('langSet', l, { name: C.LANG_NAMES[l] }), bids.length ? menuKb(deps, l) : null);
-    try { await deps.tg('setMyCommands', { commands: cmdList(deps, l), scope: { type: 'chat', chat_id: Number(chatId) } }); } catch (e) {}
+    const __cu = require('./cust'); let __ck = null;   /* fix183-custeasy: mijoz tilini ham saqlash, klaviatura o'sha tilda */
+    if (!bids.length) { try { const cr = deps.db.collection('tgCust').doc(chatId); const cd = (await getData(cr)) || {}; await cr.set(Object.assign({}, cd, { lang: l })); __ck = __cu.custKb(deps, cd, l); } catch (e) {} }
+    await send(deps, chatId, C.t('langSet', l, { name: C.LANG_NAMES[l] }), bids.length ? menuKb(deps, l) : __ck);
+    if (bids.length) { try { await deps.tg('setMyCommands', { commands: cmdList(deps, l), scope: { type: 'chat', chat_id: Number(chatId) } }); } catch (e) {} }
+    else { try { await __cu.custCommands(deps, chatId, l); } catch (e) {} }
     return { lang: l };
   }
   return null;   // boshqa tugma (masalan, to'lov) — keyingi ishlovchiga

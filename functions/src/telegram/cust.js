@@ -1,4 +1,5 @@
 'use strict';
+const { LANGS } = require('./texts');   /* fix183-custeasy */
 /* fix155-custbot: mijoz boti 2-bosqich — mijoz o'z qarzi, limiti, bonusi, xaridlari va to'lovlarini botda ko'radi;
    chek va to'lov tasdig'i botga keladi; qarz eslatmalari; chek bo'yicha "to'g'ri / savolim bor".
    Ma'lumot (faqat server, Admin SDK):
@@ -404,6 +405,7 @@ async function askPhone(deps, chatId, lang) {
 }
 /* /mening buyrug'i yoki "Mening sahifam" */
 async function sendMy(deps, chatId, lang) {
+  try { await custCommands(deps, chatId, S.lg(lang)); } catch (e) {}   /* fix183-custeasy */
   let cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || {};
   if (cust.phoneOk && cust.phone) { try { if ((await matchByPhone(deps, chatId, [])).length) cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || cust; } catch (e) {} }   /* fix157-custuni */
   const l = S.lg(cust.lang || lang);
@@ -413,4 +415,45 @@ async function sendMy(deps, chatId, lang) {
   return { my: !!has };
 }
 
-module.exports = { askPhone, phoneKb, shopsByPhone, autoLink, intlKey, linkByCode, matchByPhone, handleMy, handleAppApi, onSale, onLedger, remindOne, remindTick, onCallback, onText, sendMy, myBtn, myUrl, phoneKey, linkId, creditOf, payKind, LINK_TTL_MS };
+/* fix183-custeasy: mijoz uchun doimiy pastki klaviatura va «/» menyusi */
+function custKb(deps, cust, l) {
+  const rows = [[{ text: C.txt('btnMy', l), web_app: { url: myUrl() } }]];
+  if (cust && cust.lastShop) { try { rows.push([{ text: C.txt('kbShop', l), web_app: { url: require('./shop').shopUrl(cust.lastShop) } }]); } catch (e) {} }
+  rows.push([{ text: C.txt('kbHelp', l) }, { text: C.txt('kbLang', l) }]);
+  return { keyboard: rows, resize_keyboard: true, is_persistent: true };
+}
+function kbKind(text) {
+  const t = String(text || '').trim(); if (!t) return null;
+  for (const l of LANGS) { if (C.txt('kbHelp', l) === t) return 'help'; if (C.txt('kbLang', l) === t) return 'lang'; }
+  return null;
+}
+async function isOwnerChat(deps, chatId) {
+  try { const ch = await getData(deps.db.collection('tgChats').doc(String(chatId))); return !!(ch && Array.isArray(ch.bids) && ch.bids.length); } catch (e) { return false; }
+}
+function custCmdList(l) {
+  const n = require('./cmdTexts').names(l), D = require('./cmdTexts').T;
+  const lg = LANGS.indexOf(l) !== -1 ? l : 'uz';
+  return [{ command: n.my, description: '👤 ' + D.dMy[lg] }, { command: n.phone, description: '📱 ' + D.dPhone[lg] }, { command: n.lang, description: '🌐 ' + D.dLang[lg] }, { command: n.help, description: '❓ ' + D.dHelp[lg] }, { command: 'stop', description: '🔌 ' + C.txt('dStop', l) }];
+}
+async function custCommands(deps, chatId, l) {
+  if (await isOwnerChat(deps, chatId)) return false;
+  try { await deps.tg('setMyCommands', { commands: custCmdList(l), scope: { type: 'chat', chat_id: Number(chatId) } }); return true; } catch (e) { return false; }
+}
+/* /start (havolasiz) yoki tushunarsiz matn — ega bo'lmagan chat */
+async function custStart(deps, chatId, lang) {
+  const cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || {};
+  const l = S.lg(cust.lang || lang);
+  const has = !!(cust.phoneOk || (cust.shops && Object.keys(cust.shops).length));
+  await custCommands(deps, chatId, l);
+  if (has) { await send(deps, chatId, C.txt('custBack', l), custKb(deps, cust, l)); return { custStart: 'back' }; }
+  await send(deps, chatId, C.txt('custStart', l), phoneKb(l));
+  return { custStart: 'new', askPhone: true };
+}
+async function custHelp(deps, chatId, lang) {
+  const cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || {};
+  const l = S.lg(cust.lang || lang);
+  await custCommands(deps, chatId, l);
+  await send(deps, chatId, C.txt('custHelp', l), custKb(deps, cust, l));
+  return { custHelp: true };
+}
+module.exports = { custKb, kbKind, custStart, custHelp, custCommands, custCmdList, isOwnerChat, askPhone, phoneKb, shopsByPhone, autoLink, intlKey, linkByCode, matchByPhone, handleMy, handleAppApi, onSale, onLedger, remindOne, remindTick, onCallback, onText, sendMy, myBtn, myUrl, phoneKey, linkId, creditOf, payKind, LINK_TTL_MS };

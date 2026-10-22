@@ -168,7 +168,7 @@ test('/yordam: buyruqlar ro\'yxati; ulanmagan chatga ulash yo\'li', async () => 
   assert.ok(last(a.tg).reply_markup);
   await core.handleUpdate(a.deps, msg('/help', '999', 'en'));
   t = last(a.tg).text;
-  assert.match(t, /\/today — /); assert.match(t, /connect this chat/); assert.ok(!last(a.tg).reply_markup);
+  assert.match(t, /How it works/); assert.ok(last(a.tg).reply_markup && last(a.tg).reply_markup.keyboard);   /* fix183-custeasy: ulanmagan chat = mijoz yordami */
   const b = mk(seed(), { payToken: 'P:TEST' });
   await core.handleUpdate(b.deps, msg('/yordam'));
   assert.match(last(b.tg).text, /\/obuna — /);
@@ -217,7 +217,7 @@ test('ulash: "Ulandi" xabari tugmali menyu bilan; oddiy matn — menyu', async (
   await core.handleUpdate(deps, msg('salom'));
   assert.match(last(tg).text, /ulangan: Sardor Market/); assert.ok(last(tg).reply_markup);
   await core.handleUpdate(deps, msg('salom', '9999'));
-  assert.match(last(tg).text, /Salom/); assert.match(last(tg).text, /\/til/); assert.match(last(tg).text, /Mijozmisiz/); assert.ok(last(tg).reply_markup && last(tg).reply_markup.keyboard[0][0].request_contact === true);   /* fix158-custfull */
+  assert.match(last(tg).text, /Salom/); assert.match(last(tg).text, /1️⃣/); assert.match(last(tg).text, /\/ega/); assert.ok(last(tg).reply_markup && last(tg).reply_markup.keyboard[0][0].request_contact === true);   /* fix183-custeasy */
 });
 
 test('webhook o\'rnatilganda: menyu buyruqlari har bir tilda (Telegram talablariga mos)', async () => {

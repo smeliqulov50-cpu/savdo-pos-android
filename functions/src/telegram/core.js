@@ -222,7 +222,7 @@ async function handleUpdate(deps, upd) {
   if (m && m[1] && /^c_/.test(m[1])) return require('./cust').linkByCode(deps, msg, m[1].slice(2), lang);   /* fix155-custbot: mijoz havolasi */
   if (m && m[1] && /^w_/.test(m[1])) return require('./webshop').linkTg(deps, msg, m[1].slice(2), lang);   /* fix156-webtg: sayt buyurtmasi Telegram'ga */
   if (/^\/start(?:@[A-Za-z0-9_]+)?\s+pay$/.test(text)) return __cmd.run(deps, msg.chat.id, 'pay', lang);   /* fix150-subbot: t.me/<bot>?start=pay — tariflar */
-  const kind = __cmd.parse(text);
+  const kind = __cmd.parse(text) || require('./cust').kbKind(text);   /* fix183-custeasy: «❓ Yordam» / «🌐 Til» tugmalari */
   let out;
   if (m && m[1]) { out = await tryLink(deps, msg, m[1], lang); if (out && out.linked) { out.kb = __cmd.menuKb(deps, lang); await require('./shop').ownerMenu(deps, msg.chat.id, lang); } }   /* fix146-tgsub: pastki menyuda "Do'konim" */
   else if (kind) return __cmd.run(deps, msg.chat.id, kind, lang);   /* fix144-tgcmd (/obuna ham shu yerda) */
@@ -239,7 +239,8 @@ async function handleUpdate(deps, upd) {
       const names = [];
       for (let i = 0; i < bids.length && i < 5; i++) names.push(await shopName(deps.db, bids[i]));
       out = { reply: txt('linkedInfo', lang, { shop: names.join(', ') }) + (deps.payToken ? '\n' + require('./payTexts').txt('payHint', lang) : '') + '\n\n' + require('./cmdTexts').t('menu', lang), kb: __cmd.menuKb(deps, lang) };
-    } else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) ||   /* fix153-boplus: faol buyurtmasi bor mijozning matni do'konga */ { reply: txt('welcome', lang) + require('./custTexts').txt('custWelcome', lang) + '\n\n' + require('./cmdTexts').t('langHint', lang, { cmd: require('./cmdTexts').names(lang).lang }) , kb: require('./cust').phoneKb(lang) };   /* fix158-custfull */
+    } else if (m || !text) out = await require('./cust').custStart(deps, msg.chat.id, lang);   /* fix183-custeasy: /start — mijoz uchun 2 qadam */
+    else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) || (await require('./cust').custStart(deps, msg.chat.id, lang));   /* fix183-custeasy */
   }
   if (out && out.reply) await sendText(deps, msg.chat.id, out.reply, out.kb);
   if (out && out.payAfter) { try { await __pay.sendMenu(deps, msg.chat.id, out.lang || lang); } catch (e) {} }   /* fix150-subbot */

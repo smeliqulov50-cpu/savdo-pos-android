@@ -293,7 +293,7 @@ test('bot: /start s_<havola> — tugma va menyu tugmasi; o\'chiq do\'kon; raqam 
   out = await core.handleUpdate(deps, m('salom'));
   assert.ok(out.kb && out.kb.inline_keyboard[0][0].web_app);
   out = await core.handleUpdate(deps, m('/start'));
-  assert.ok(out.kb && out.kb.inline_keyboard[0][0].web_app);
+  assert.equal(out.custStart, 'back'); { const lm = tg.sent[tg.sent.length - 1]; assert.ok(lm.reply_markup.keyboard[0][0].web_app && /s=/.test(lm.reply_markup.keyboard[1][0].web_app.url)); }   /* fix183-custeasy: doimiy klaviatura (sahifa + do'kon) */
   // ega kodi bilan ulanish avvalgidek ishlaydi (s_ bilan boshlanmaydi)
   out = await core.handleUpdate(deps, m('/start ABCDEFGHJK'));
   assert.ok(out && out.reply && !out.shopStart);
