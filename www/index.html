@@ -1333,6 +1333,62 @@ const T = {
   prnDotsLabel:{uz:"Qog'oz kengligi (rasm va logotip uchun)",ru:"Ширина бумаги (для картинок и логотипа)",en:"Paper width (for images and logo)",kk:"Қағаз ені (сурет пен логотип үшін)",ky:"Кагаз туурасы (сүрөт жана логотип үчүн)",tg:"Паҳнои коғаз (барои тасвир ва логотип)"},
   prnDotsAuto:{uz:"Avto (qator belgilari bo'yicha)",ru:"Авто (по символам в строке)",en:"Auto (by chars per line)",kk:"Авто (жолдағы таңба бойынша)",ky:"Авто (саптагы белги боюнча)",tg:"Авто (аз рӯи аломатҳои сатр)"},
   prnTestLangs:{uz:"6 til sinovi",ru:"Проверка 6 языков",en:"6-language test",kk:"6 тіл сынағы",ky:"6 тил сыноосу",tg:"Санҷиши 6 забон"},
+  psPaper:{uz:"Qog'oz o'lchami",ru:"Размер бумаги",en:"Paper size",kk:"Қағаз өлшемі",ky:"Кагаз өлчөмү",tg:"Андозаи коғаз"},
+  psModel:{uz:"Printer modeli (ixtiyoriy)",ru:"Модель принтера (необязательно)",en:"Printer model (optional)",kk:"Принтер үлгісі (міндетті емес)",ky:"Принтер модели (милдеттүү эмес)",tg:"Модели принтер (ихтиёрӣ)"},
+  psPaperOther:{uz:"Boshqa",ru:"Другой",en:"Other",kk:"Басқа",ky:"Башка",tg:"Дигар"},
+  psPaperHint:{uz:"58 mm — 32 belgi, 58 mm HD — 42, 80 mm — 48. Rasm va logotip kengligi ham o'zi moslashadi. Aniq modelni pastdagi ro'yxatdan tanlashingiz mumkin.",ru:"58 мм — 32 символа, 58 мм HD — 42, 80 мм — 48. Ширина картинок и логотипа подстраивается сама. Точную модель можно выбрать в списке ниже.",en:"58 mm — 32 characters, 58 mm HD — 42, 80 mm — 48. Image and logo width adjusts automatically. Pick the exact model in the list below.",kk:"58 мм — 32 таңба, 58 мм HD — 42, 80 мм — 48. Сурет пен логотип ені өзі бейімделеді. Нақты үлгіні төмендегі тізімнен таңдаңыз.",ky:"58 мм — 32 белги, 58 мм HD — 42, 80 мм — 48. Сүрөт жана логотип туурасы өзү ылайыкташат. Так моделди төмөнкү тизмеден тандаңыз.",tg:"58 мм — 32 аломат, 58 мм HD — 42, 80 мм — 48. Паҳнои тасвир ва логотип худаш мувофиқ мешавад. Модели дақиқро аз рӯйхати поён интихоб кунед."},
+  woTitle:{uz:"Hisobdan chiqarish",ru:"Списание",en:"Write-off",kk:"Есептен шығару",ky:"Эсептен чыгаруу",tg:"Аз ҳисоб баровардан"},
+  woHint:{uz:"Yaroqsiz, singan, o'z ehtiyojga ketgan yoki yo'qolgan tovarni ombordan chiqarish. Sabab bilan yoziladi, qoldiq kamayadi, foyda hisobotida zarar sifatida ko'rinadi.",ru:"Списать испорченный, разбитый, взятый для своих нужд или пропавший товар со склада. Записывается с причиной, остаток уменьшается, в отчёте о прибыли показывается как убыток.",en:"Remove spoiled, broken, own-use or missing goods from stock. Recorded with a reason, stock goes down, shown as a loss in the profit report.",kk:"Бүлінген, сынған, өз қажетіне кеткен немесе жоғалған тауарды қоймадан шығару. Себебімен жазылады, қалдық азаяды, пайда есебінде шығын ретінде көрінеді.",ky:"Бузулган, сынган, өз муктаждыгына кеткен же жоголгон товарды кампадан чыгаруу. Себеби менен жазылат, калдык азаят, пайда отчётунда чыгым катары көрүнөт.",tg:"Моли вайрон, шикаста, ба эҳтиёҷи худ рафта ё гумшударо аз анбор баровардан. Бо сабаб навишта мешавад, бақия кам мешавад, дар ҳисоботи фоида чун зарар нишон дода мешавад."},
+  woReason:{uz:"Sabab",ru:"Причина",en:"Reason",kk:"Себеп",ky:"Себеп",tg:"Сабаб"},
+  woRsExpired:{uz:"Muddati o'tgan",ru:"Просрочен",en:"Expired",kk:"Мерзімі өткен",ky:"Мөөнөтү өткөн",tg:"Мӯҳлаташ гузашта"},
+  woRsDamaged:{uz:"Singan / buzilgan",ru:"Разбит / испорчен",en:"Broken / damaged",kk:"Сынған / бүлінген",ky:"Сынган / бузулган",tg:"Шикаста / вайрон"},
+  woRsOwnUse:{uz:"O'z ehtiyoj",ru:"Свои нужды",en:"Own use",kk:"Өз қажеті",ky:"Өз муктаждыгы",tg:"Эҳтиёҷи худ"},
+  woRsShortage:{uz:"Kamomad / yo'qolgan",ru:"Недостача / пропал",en:"Shortage / missing",kk:"Кем шығу / жоғалған",ky:"Кем чыгуу / жоголгон",tg:"Камомад / гумшуда"},
+  woRsOther:{uz:"Boshqa",ru:"Другое",en:"Other",kk:"Басқа",ky:"Башка",tg:"Дигар"},
+  woNote:{uz:"Izoh (ixtiyoriy)",ru:"Примечание (необязательно)",en:"Note (optional)",kk:"Ескертпе (міндетті емес)",ky:"Эскертүү (милдеттүү эмес)",tg:"Эзоҳ (ихтиёрӣ)"},
+  woQty:{uz:"Miqdor",ru:"Кол-во",en:"Qty",kk:"Саны",ky:"Саны",tg:"Миқдор"},
+  woCost:{uz:"Tannarx",ru:"Себестоимость",en:"Cost",kk:"Өзіндік құн",ky:"Өздүк наркы",tg:"Арзиши аслӣ"},
+  woPick:{uz:"Tovar tanlang",ru:"Выберите товар",en:"Pick a product",kk:"Тауар таңдаңыз",ky:"Товар тандаңыз",tg:"Молро интихоб кунед"},
+  woAdd:{uz:"Tovar qo'shish",ru:"Добавить товар",en:"Add product",kk:"Тауар қосу",ky:"Товар кошуу",tg:"Илова кардани мол"},
+  woApply:{uz:"Hisobdan chiqarish",ru:"Списать",en:"Write off",kk:"Есептен шығару",ky:"Эсептен чыгаруу",tg:"Аз ҳисоб баровардан"},
+  woConfirm:{uz:"{n} ta tovar hisobdan chiqarilsinmi? Qoldiq kamayadi, zarar: {sum}.",ru:"Списать {n} товар(ов)? Остаток уменьшится, убыток: {sum}.",en:"Write off {n} item(s)? Stock will go down, loss: {sum}.",kk:"{n} тауар есептен шығарылсын ба? Қалдық азаяды, шығын: {sum}.",ky:"{n} товар эсептен чыгарылсынбы? Калдык азаят, чыгым: {sum}.",tg:"{n} мол аз ҳисоб бароварда шавад? Бақия кам мешавад, зарар: {sum}."},
+  woApplied:{uz:"Hisobdan chiqarildi: {n} ta tovar, {sum}",ru:"Списано: {n} товар(ов), {sum}",en:"Written off: {n} item(s), {sum}",kk:"Есептен шығарылды: {n} тауар, {sum}",ky:"Эсептен чыгарылды: {n} товар, {sum}",tg:"Аз ҳисоб бароварда шуд: {n} мол, {sum}"},
+  woEmpty:{uz:"Tovar qo'shilmagan",ru:"Товары не добавлены",en:"No items added",kk:"Тауар қосылмаған",ky:"Товар кошулган эмес",tg:"Мол илова нашудааст"},
+  woNoStock:{uz:"Omborda yetarli emas: {name} (bor: {q})",ru:"На складе недостаточно: {name} (есть: {q})",en:"Not enough in stock: {name} (have: {q})",kk:"Қоймада жеткіліксіз: {name} (бар: {q})",ky:"Кампада жетишсиз: {name} (бар: {q})",tg:"Дар анбор кофӣ нест: {name} (ҳаст: {q})"},
+  woHistory:{uz:"Oxirgi hisobdan chiqarishlar",ru:"Последние списания",en:"Recent write-offs",kk:"Соңғы есептен шығарулар",ky:"Акыркы эсептен чыгаруулар",tg:"Охирин аз ҳисоб баровардан"},
+  woMonth:{uz:"Shu oyda: {sum} (tannarxda)",ru:"В этом месяце: {sum} (по себестоимости)",en:"This month: {sum} (at cost)",kk:"Осы айда: {sum} (өзіндік құнмен)",ky:"Ушул айда: {sum} (өздүк наркы менен)",tg:"Дар ин моҳ: {sum} (бо арзиши аслӣ)"},
+  woExpOnly:{uz:"Muddati o'tganlar",ru:"Просроченные",en:"Expired only",kk:"Мерзімі өткендер",ky:"Мөөнөтү өткөндөр",tg:"Мӯҳлаташ гузаштаҳо"},
+  woLoss:{uz:"Zarar (tannarxda)",ru:"Убыток (по себестоимости)",en:"Loss (at cost)",kk:"Шығын (өзіндік құнмен)",ky:"Чыгым (өздүк наркы менен)",tg:"Зарар (бо арзиши аслӣ)"},
+  smWriteOff:{uz:"Hisobdan chiqarish",ru:"Списание",en:"Write-off",kk:"Есептен шығару",ky:"Эсептен чыгаруу",tg:"Аз ҳисоб баровардан"},
+  auWriteOff:{uz:"Hisobdan chiqarish",ru:"Списание",en:"Write-off",kk:"Есептен шығару",ky:"Эсептен чыгаруу",tg:"Аз ҳисоб баровардан"},
+  pnlWriteOff:{uz:"Hisobdan chiqarilgan tovar",ru:"Списанный товар",en:"Written-off goods",kk:"Есептен шығарылған тауар",ky:"Эсептен чыгарылган товар",tg:"Моли аз ҳисоб баровардашуда"},
+  cmTitle:{uz:"Tannarx hisoblash",ru:"Расчёт себестоимости",en:"Cost price method",kk:"Өзіндік құнды есептеу",ky:"Өздүк наркын эсептөө",tg:"Ҳисоби арзиши аслӣ"},
+  cmHint:{uz:"Tovar qabul qilishda «Tannarxni yangilash» belgilangan bo'lsa, tannarx qanday yangilanadi.",ru:"Как обновляется себестоимость при приёме товара, если отмечено «Обновить себестоимость».",en:"How the cost price is updated on goods-in when “Update cost” is ticked.",kk:"Тауар қабылдағанда «Өзіндік құнды жаңарту» белгіленсе, өзіндік құн қалай жаңарады.",ky:"Товар кабыл алууда «Өздүк наркын жаңыртуу» белгиленсе, өздүк наркы кантип жаңырат.",tg:"Ҳангоми қабули мол, агар «Навсозии арзиши аслӣ» қайд шуда бошад, арзиши аслӣ чӣ тавр нав мешавад."},
+  cmLast:{uz:"Oxirgi kirim narxi",ru:"Последняя цена прихода",en:"Last purchase price",kk:"Соңғы кіріс бағасы",ky:"Акыркы кирим баасы",tg:"Нархи охирин воридот"},
+  cmAvg:{uz:"O'rtacha",ru:"Средняя",en:"Average",kk:"Орташа",ky:"Орточо",tg:"Миёна"},
+  cmAvgHint:{uz:"O'rtacha: (eski qoldiq × eski tannarx + yangi miqdor × yangi narx) ÷ jami qoldiq. Har xil narxda olingan tovarda foyda aniqroq chiqadi. Qo'shimcha xotira talab qilmaydi.",ru:"Средняя: (старый остаток × старая себестоимость + новое кол-во × новая цена) ÷ общий остаток. Прибыль точнее при закупках по разным ценам. Дополнительной памяти не требует.",en:"Average: (old stock × old cost + new qty × new price) ÷ total stock. More accurate profit when buying at different prices. Needs no extra storage.",kk:"Орташа: (ескі қалдық × ескі өзіндік құн + жаңа саны × жаңа баға) ÷ жалпы қалдық. Әр түрлі бағамен алынған тауарда пайда дәлірек. Қосымша жад қажет емес.",ky:"Орточо: (эски калдык × эски өздүк наркы + жаңы саны × жаңы баа) ÷ жалпы калдык. Ар кандай баада алынган товарда пайда так чыгат. Кошумча эс талап кылбайт.",tg:"Миёна: (бақияи кӯҳна × арзиши кӯҳна + миқдори нав × нархи нав) ÷ бақияи умумӣ. Фоида дар моли бо нархҳои гуногун харидашуда дақиқтар мешавад. Хотираи иловагӣ намехоҳад."},
+  puUpdateCostAvg:{uz:"Tannarxni yangilash (o'rtacha)",ru:"Обновить себестоимость (средняя)",en:"Update cost (average)",kk:"Өзіндік құнды жаңарту (орташа)",ky:"Өздүк наркын жаңыртуу (орточо)",tg:"Навсозии арзиши аслӣ (миёна)"},
+  cfReport:{uz:"Pul oqimi",ru:"Движение денег",en:"Cash flow",kk:"Ақша қозғалысы",ky:"Акча кыймылы",tg:"Ҳаракати пул"},
+  cfHint:{uz:"Bu hisobot pulning harakatini ko'rsatadi: nima kirdi, nima chiqdi — naqd va karta/bank bo'yicha. Bu foyda emas: foyda uchun «Foyda va zarar» hisoboti.",ru:"Этот отчёт показывает движение денег: что пришло, что ушло — по наличным и карте/банку. Это не прибыль: для прибыли есть отчёт «Прибыль и убытки».",en:"This report shows money movement: what came in and went out — by cash and card/bank. It is not profit: see “Profit & loss” for that.",kk:"Бұл есеп ақша қозғалысын көрсетеді: не кірді, не шықты — қолма-қол және карта/банк бойынша. Бұл пайда емес: пайда үшін «Пайда мен шығын» есебі.",ky:"Бул отчёт акчанын кыймылын көрсөтөт: эмне кирди, эмне чыкты — накта жана карта/банк боюнча. Бул пайда эмес: пайда үчүн «Пайда жана чыгым» отчёту.",tg:"Ин ҳисобот ҳаракати пулро нишон медиҳад: чӣ даромад, чӣ баромад — нақд ва корт/бонк. Ин фоида нест: барои фоида ҳисоботи «Фоида ва зарар»."},
+  cfIn:{uz:"Kirim",ru:"Приход",en:"Money in",kk:"Кіріс",ky:"Кирим",tg:"Воридот"},
+  cfOut:{uz:"Chiqim",ru:"Расход",en:"Money out",kk:"Шығыс",ky:"Чыгым",tg:"Хароҷот"},
+  cfNet:{uz:"Farq (kirim − chiqim)",ru:"Разница (приход − расход)",en:"Net (in − out)",kk:"Айырма (кіріс − шығыс)",ky:"Айырма (кирим − чыгым)",tg:"Фарқ (воридот − хароҷот)"},
+  cfCash:{uz:"Naqd",ru:"Наличные",en:"Cash",kk:"Қолма-қол",ky:"Накта",tg:"Нақд"},
+  cfBank:{uz:"Karta / bank",ru:"Карта / банк",en:"Card / bank",kk:"Карта / банк",ky:"Карта / банк",tg:"Корт / бонк"},
+  cfSales:{uz:"Sotuvlar",ru:"Продажи",en:"Sales",kk:"Сатулар",ky:"Сатуулар",tg:"Фурӯшҳо"},
+  cfDebtPay:{uz:"Mijozlar qarz to'lovi",ru:"Оплата долгов клиентами",en:"Customer debt payments",kk:"Клиенттердің қарыз төлемі",ky:"Кардарлардын карыз төлөмү",tg:"Пардохти қарзи мизоҷон"},
+  cfGift:{uz:"Sertifikat sotuvi",ru:"Продажа сертификатов",en:"Gift card sales",kk:"Сертификат сатуы",ky:"Сертификат сатуу",tg:"Фурӯши сертификат"},
+  cfPurchase:{uz:"Tovar xaridi",ru:"Закупка товара",en:"Goods purchased",kk:"Тауар сатып алу",ky:"Товар сатып алуу",tg:"Хариди мол"},
+  cfSupplierPay:{uz:"Ta'minotchiga to'lov (qarzdan)",ru:"Оплата поставщику (долг)",en:"Supplier payments (debt)",kk:"Жеткізушіге төлем (қарыз)",ky:"Жеткирүүчүгө төлөм (карыз)",tg:"Пардохт ба таъминкунанда (қарз)"},
+  cfRefunds:{uz:"Mijozga qaytarilgan (chek qaytarish)",ru:"Возвраты клиентам",en:"Refunds to customers",kk:"Клиентке қайтарылған",ky:"Кардарга кайтарылган",tg:"Баргардонӣ ба мизоҷ"},
+  cfExpenses:{uz:"Xarajatlar",ru:"Расходы",en:"Expenses",kk:"Шығындар",ky:"Чыгымдар",tg:"Хароҷот"},
+  cfWhere:{uz:"Pul qayerda (hozir)",ru:"Где деньги (сейчас)",en:"Where the money is (now)",kk:"Ақша қайда (қазір)",ky:"Акча кайда (азыр)",tg:"Пул куҷост (ҳозир)"},
+  cfInRegister:{uz:"Kassadagi naqd",ru:"Наличные в кассе",en:"Cash in register",kk:"Кассадағы қолма-қол",ky:"Кассадагы накта",tg:"Нақд дар касса"},
+  cfReceivable:{uz:"Mijozlar qarzi (sizga)",ru:"Долги клиентов (вам)",en:"Customers owe you",kk:"Клиенттер қарызы (сізге)",ky:"Кардарлар карызы (сизге)",tg:"Қарзи мизоҷон (ба шумо)"},
+  cfPayable:{uz:"Ta'minotchilarga qarz (sizdan)",ru:"Долг поставщикам (ваш)",en:"You owe suppliers",kk:"Жеткізушілерге қарыз (сізден)",ky:"Жеткирүүчүлөргө карыз (сизден)",tg:"Қарз ба таъминкунандагон (аз шумо)"},
+  cfStockValue:{uz:"Ombordagi tovar (tannarxda)",ru:"Товар на складе (по себестоимости)",en:"Stock on hand (at cost)",kk:"Қоймадағы тауар (өзіндік құнмен)",ky:"Кампадагы товар (өздүк наркы менен)",tg:"Моли анбор (бо арзиши аслӣ)"},
+  cfCreditSales:{uz:"Shu oyda nasiyaga sotilgan (pul hali kelmagan)",ru:"Продано в долг в этом месяце (деньги ещё не пришли)",en:"Sold on credit this month (not yet paid)",kk:"Осы айда қарызға сатылған (ақша әлі келмеген)",ky:"Ушул айда карызга сатылган (акча али келген жок)",tg:"Дар ин моҳ ба қарз фурӯхта шуд (пул ҳанӯз наомадааст)"},
+  cfNoShift:{uz:"smena ochilmagan — oxirgi yopilgan smena bo'yicha",ru:"смена не открыта — по последней закрытой смене",en:"no open shift — from the last closed shift",kk:"ауысым ашылмаған — соңғы жабылған ауысым бойынша",ky:"смена ачылган эмес — акыркы жабылган смена боюнча",tg:"баст кушода нашудааст — аз рӯи басти охирин"},
   boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
@@ -4147,7 +4203,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.55';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.56';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -4728,7 +4784,7 @@ function startLiveListeners(){
   refundWatchReady = false;
   printRelaySeenIds = new Set();
   printRelayReady = false;
-  try{ ['supplyOrder','supplyReturn','openShift','promo','transfer'].forEach(k=>localStorage.removeItem('sp_gc_off_' + k)); localStorage.removeItem('sp_pu_cloud_off_v1'); }catch(e){}   /* fix143b-cloud: qoidalar yangilangach bulut qayta yoqiladi (ruxsat bo'lmasa yana o'chadi) */
+  try{ ['supplyOrder','supplyReturn','openShift','promo','transfer','writeOff'].forEach(k=>localStorage.removeItem('sp_gc_off_' + k)); localStorage.removeItem('sp_pu_cloud_off_v1'); }catch(e){}   /* fix143b-cloud: qoidalar yangilangach bulut qayta yoqiladi (ruxsat bo'lmasa yana o'chadi) */
 
   if(catalogDeltaOk()){
     const __from = Date.now() - 10*60*1000;
@@ -6500,6 +6556,9 @@ function prepareReceiptImage(file, cb, onError){
   reader.readAsDataURL(file);
 }
 /* fix177-prnlang: 42 belgili 58 mm (HD) printerlar ham 384 nuqta; «Qog'oz kengligi» sozlamasi ustun */
+/* fix178-erp: qog'oz o'lchami — belgilar sonidan */
+function __psPaperKey(){ const c = state.settings.printerCharsPerLine; return (c === 32 || c === 42 || c === 48) ? String(c) : 'custom'; }
+function __psPaperMm(){ const k = __psPaperKey(); return k === '32' ? '58 mm' : (k === '42' ? '58 mm HD' : (k === '48' ? '80 mm' : tr('psPaperOther'))); }
 function printerDotsWidth(){ const d = parseInt(state.settings && state.settings.printerDots, 10); if(d === 384 || d === 512 || d === 576) return d; const cpl = state.settings.printerCharsPerLine || 32; return cpl <= 42 ? 384 : 576; }
 /* fix177-prnlang: printer matni — lotin: oddiy; ruscha: ESC t + CP866/1251; qolgan harflar (kk/ky/tg, o'zbek krill): rasm */
 const __PRN_NORM = {'\u02BB':"'", '\u02BC':"'", '\u2018':"'", '\u2019':"'", '`':"'", '\u00B4':"'", '\u201C':'"', '\u201D':'"', '\u00AB':'"', '\u00BB':'"', '\u2012':'-', '\u2013':'-', '\u2014':'-', '\u2011':'-', '\u2026':'...', '\u00A0':' ', '\u2009':' ', '\u202F':' ', '\u00D7':'x', '\u2022':'*'};
@@ -11594,6 +11653,7 @@ function renderProducts(){
     const ex = __moreExtra(), pick = (t)=>ex.filter(x=>x.label.indexOf(t) === 0);
     const it = [];
     if(document.getElementById('stocktake-btn')) it.push({icon: ICONS.target, label: tr('stTitle'), sel: '#stocktake-btn'});
+    if(isAdmin() || hasPerm('products')) it.push({icon: ICONS.boxWarning, label: tr('woTitle'), fn: ()=>{ state.view = 'writeoff'; renderAll(); }});   /* fix178-erp */
     it.push.apply(it, pick(tr('soMenu')));
     if(isAdmin() || hasPerm('myDebts')) it.push({icon: ICONS.book, label: tr('myDebtsLabel'), fn: ()=>{ state.__mdFrom = 'products'; state.view = 'myDebts'; renderAll(); }});
     if(hasPerm('reports')) it.push({icon: ICONS.box, label: tr('inventoryReport'), fn: ()=>{ state.view = 'reports'; state.reportsCategory = 'inventory'; renderAll(); }});
@@ -15926,6 +15986,7 @@ function reportsMenuItems(){
   if(state.currentStaff && state.currentStaff.role==='admin'){
     items.push({id:'refunds', label:tr('refundsReportSection')});
     items.push({id:'expenses', label:tr('expensesSection')});
+    items.push({id:'cashflow', label:tr('cfReport')});   /* fix178-erp */
     items.push({id:'payroll', label:tr('payrollReport')});
     items.push({id:'audit', label:tr('auditReport')});
     // Same admin-only reasoning as refunds above — seeing every branch's
@@ -15955,7 +16016,7 @@ function renderReportsMenu(container){
       /* fix171-repgroups: guruh → [guruh, belgi, rang]; tartib — ko'p ishlatiladigan oldin */
       const G = {today:['sales','sale','#16a34a'], receipts:['sales','receiptIcon','#2563eb'], total:['sales','reports','#7c3aed'], range:['sales','calendar','#0284c7'], daily:['sales','calendar','#4f46e5'], refunds:['sales','arrowLeft','#e5484d'],
         products:['analysis','products','#0891b2'], productprofit:['analysis','percent','#12a37f'], promos:['analysis','tag','#db2777'],
-        pnl:['finance','percent','#0f9d8a'], expenses:['finance','creditCard','#d97706'],
+        pnl:['finance','percent','#0f9d8a'], expenses:['finance','creditCard','#d97706'], cashflow:['finance','banknote','#0369a1'],
         customers:['cust','customers','#8b5cf6'],
         staff:['staffg','peopleIcon','#a855f7'], payroll:['staffg','peopleIcon','#7c5cfc'],
         inventory:['stock','box','#0ea5e9'], stockmoves:['stock','route','#0284c7'], suppliers:['stock','truck','#0f766e'], mydebts:['stock','book','#c2410c'],
@@ -16513,8 +16574,8 @@ function renderReportsCategory(container, cat){
 
   if(cat==='audit'){
     if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
-    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount', purchaseReturn:'puReturnBtn', transferSend:'trAuSend', transferReceive:'trAuRecv', transferCancel:'trMoveBack', promoSave:'auPromoSave', promoDelete:'auPromoDelete', giftSell:'auGiftSell'};
-    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)', purchaseReturn:'var(--warm)', transferSend:'var(--accent-dark)', transferReceive:'var(--teal)', transferCancel:'var(--warm)', promoSave:'var(--teal)', promoDelete:'var(--danger)', giftSell:'var(--accent-dark)'};
+    const labels = {customerDelete:'auCustomerDelete', customerRestore:'auCustomerRestore', priceChange:'auPriceChange', productDelete:'auProductDelete', saleDelete:'auSaleDelete', saleRefund:'auSaleRefund', saleEdit:'auSaleEdit', debtPayment:'auDebtPayment', debtManual:'auDebtManual', expenseDelete:'auExpenseDelete', staffDelete:'auStaffDelete', login:'auLogin', stockCount:'auStockCount', writeOff:'auWriteOff', purchaseReturn:'puReturnBtn', transferSend:'trAuSend', transferReceive:'trAuRecv', transferCancel:'trMoveBack', promoSave:'auPromoSave', promoDelete:'auPromoDelete', giftSell:'auGiftSell'};
+    const colors = {customerDelete:'var(--danger)', customerRestore:'var(--teal)', priceChange:'var(--warm)', productDelete:'var(--danger)', saleDelete:'var(--danger)', saleRefund:'var(--danger)', saleEdit:'var(--warm)', debtPayment:'var(--teal)', debtManual:'var(--danger)', expenseDelete:'var(--danger)', staffDelete:'var(--danger)', login:'var(--ink-faint)', stockCount:'var(--accent-dark)', writeOff:'var(--danger)', purchaseReturn:'var(--warm)', transferSend:'var(--accent-dark)', transferReceive:'var(--teal)', transferCancel:'var(--warm)', promoSave:'var(--teal)', promoDelete:'var(--danger)', giftSell:'var(--accent-dark)'};
     container.innerHTML = `${reportsBackHeader(tr('auditReport'))}<p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('auditHint')}</p>
       <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="audit-search" placeholder="${tr('search')}"></div>
       <div id="audit-list"><div class="empty-state">${R3_ON ? tr('r4Loading') : '…'}</div></div>`;
@@ -16605,9 +16666,10 @@ function renderReportsCategory(container, cat){
       const purchases = exps.filter(e=>e.category==='purchase').reduce((a,e)=>a+(e.amount||0),0);
       const byCat = {}; exps.filter(e=>e.category!=='purchase').forEach(e=>{ byCat[e.category||'other'] = (byCat[e.category||'other']||0)+(e.amount||0); });
       const opex = Object.values(byCat).reduce((a,b)=>a+b,0);
+      const writeOff = (typeof __woMonthLoss === 'function') ? __woMonthLoss(key) : 0;   /* fix178-erp */
       const gross = ok.reduce((a,s)=>a+saleProfit(s),0);
       const goods = ok.reduce((a,s)=>a+s.items.reduce((x,it)=>x+(it.price||0)*(it.qty||0),0),0); const serviceCharge = ok.reduce((a,s)=>a+(s.serviceChargeAmount||0),0); const delivery = ok.reduce((a,s)=>a+(s.deliveryFee||0),0); /* fix68 */
-      return {revenue, refunds, refundCount: ref.length, goods, serviceCharge, delivery, cogs, discounts, gross, byCat, opex, purchases, net: gross - opex, count: ok.length, acc: __acc};
+      return {revenue, refunds, refundCount: ref.length, goods, serviceCharge, delivery, cogs, discounts, gross, byCat, opex, purchases, net: gross - opex - writeOff, writeOff, count: ok.length, acc: __acc};
     };
     const cur = calc(state.pnlMonth);
     const prevD = new Date(py, pm-2, 1); const prevKey = prevD.getFullYear()+'-'+String(prevD.getMonth()+1).padStart(2,'0');
@@ -16633,6 +16695,7 @@ function renderReportsCategory(container, cat){
         ${row(tr('pnlGross'), cur.gross, {bold:true})}
         ${Object.keys(cur.byCat).sort((a,b)=>cur.byCat[b]-cur.byCat[a]).map(c=>row(expenseCategoryLabel(c), cur.byCat[c], {sub:true, neg:true})).join('')}
         ${row(tr('pnlOpex'), cur.opex, {neg:true})}
+        ${cur.writeOff ? row(tr('pnlWriteOff'), cur.writeOff, {neg:true}) : ''}
         ${row(tr('pnlNet'), cur.net, {bold:true, color: cur.net>=0?'var(--teal)':'var(--danger)'})}
         ${cur.purchases ? `<div class="subtle" style="font-size:11.5px;margin-top:8px;">${tr('pnlPurchasesInfo')}: ${fmt(cur.purchases)}</div>` : ''}
         ${cur.refunds ? `<div class="subtle" style="font-size:11.5px;margin-top:4px;">${tr('pnlRefundsInfo').replace('{n}', cur.refundCount)}: ${fmt(cur.refunds)}</div>` : ''}
@@ -16667,6 +16730,56 @@ function renderReportsCategory(container, cat){
         showToast(tr('pnlRecostDone').replace('{n}', n)); renderReports();
       }, tr('pnlRecost'));
     }));
+    return;
+  }
+  if(cat==='cashflow'){   /* fix178-erp: pul oqimi — kirim/chiqim naqd va karta/bank bo'yicha, pul qayerda */
+    if(!isAdmin()){ state.reportsCategory = null; renderReports(); return; }
+    if(!state.cfMonth){ const n = new Date(); state.cfMonth = n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0'); }
+    const [cy, cm] = state.cfMonth.split('-').map(Number);
+    const D = __cfCalc(state.cfMonth), W = __cfWhere();
+    const monthName = appMonthName(new Date(cy, cm-1, 1));
+    const r2 = (l, a, b, opts)=>{ opts = opts || {}; const sg = opts.neg ? '−' : '+'; const c = opts.neg ? 'var(--danger)' : 'var(--teal)'; return `<div class="row" style="padding:7px 0;border-bottom:1px solid var(--line);gap:8px;${opts.bold?'font-weight:800;':''}"><span style="flex:1;min-width:0;${opts.bold?'':'font-size:13px;'}">${l}</span><span style="white-space:nowrap;text-align:right;min-width:92px;${opts.bold?'':'font-size:13px;'}color:${a?c:'var(--ink-faint)'};">${a ? sg + fmt(a) : '—'}</span><span style="white-space:nowrap;text-align:right;min-width:92px;${opts.bold?'':'font-size:13px;'}color:${b?c:'var(--ink-faint)'};">${b ? sg + fmt(b) : '—'}</span></div>`; };
+    const head = `<div class="row" style="padding:4px 0 6px;gap:8px;"><span style="flex:1;"></span><span class="subtle" style="min-width:92px;text-align:right;font-size:11.5px;font-weight:700;">${tr('cfCash')}</span><span class="subtle" style="min-width:92px;text-align:right;font-size:11.5px;font-weight:700;">${tr('cfBank')}</span></div>`;
+    const netC = rM(D.inCash - D.outCash), netB = rM(D.inBank - D.outBank);
+    const netRow = (l, a, b)=>`<div class="row" style="padding:8px 0;gap:8px;font-weight:800;"><span style="flex:1;">${l}</span><span style="white-space:nowrap;text-align:right;min-width:92px;color:${a>=0?'var(--teal)':'var(--danger)'};">${a<0?'−':''}${fmt(Math.abs(a))}</span><span style="white-space:nowrap;text-align:right;min-width:92px;color:${b>=0?'var(--teal)':'var(--danger)'};">${b<0?'−':''}${fmt(Math.abs(b))}</span></div>`;
+    const wrow = (l, v, sub)=>`<div class="row" style="padding:7px 0;border-bottom:1px solid var(--line);gap:10px;"><span style="flex:1;min-width:0;font-size:13px;">${l}${sub ? `<div class="subtle" style="font-size:11px;">${sub}</div>` : ''}</span><strong style="white-space:nowrap;">${fmt(v)}</strong></div>`;
+    container.innerHTML = `
+      ${reportsBackHeader(tr('cfReport'))}
+      <div class="row" style="margin-bottom:12px;"><button class="icon-btn" id="cf-prev">&lsaquo;</button><strong style="text-transform:capitalize;">${monthName}</strong><button class="icon-btn" id="cf-next">&rsaquo;</button></div>
+      <div class="card" style="padding:14px 16px;text-align:center;margin-bottom:12px;">
+        <div class="subtle" style="font-size:12px;">${tr('cfNet')}</div>
+        <div style="font-size:30px;font-weight:800;color:${(netC + netB) >= 0 ? 'var(--teal)' : 'var(--danger)'};">${(netC + netB) < 0 ? '−' : ''}${fmt(Math.abs(rM(netC + netB)))}</div>
+        <div class="subtle" style="font-size:12px;">${tr('cfCash')}: ${netC < 0 ? '−' : ''}${fmt(Math.abs(netC))} &middot; ${tr('cfBank')}: ${netB < 0 ? '−' : ''}${fmt(Math.abs(netB))}</div>
+      </div>
+      <h3 class="sub-title">${tr('cfIn')}</h3>
+      <div class="card" style="padding:6px 14px 10px;margin-bottom:12px;">${head}
+        ${r2(tr('cfSales') + ` (${D.salesCount})`, D.salesCash, D.salesCard)}
+        ${(D.debtCash || D.debtCard) ? r2(tr('cfDebtPay'), D.debtCash, D.debtCard) : ''}
+        ${(D.giftCash || D.giftCard) ? r2(tr('cfGift'), D.giftCash, D.giftCard) : ''}
+        ${r2(tr('cfIn'), D.inCash, D.inBank, {bold:true})}
+      </div>
+      <h3 class="sub-title">${tr('cfOut')}</h3>
+      <div class="card" style="padding:6px 14px 10px;margin-bottom:12px;">${head}
+        ${(D.purCash || D.purBank) ? r2(tr('cfPurchase'), D.purCash, D.purBank, {neg:true}) : ''}
+        ${Object.keys(D.exp).sort((a,b)=>(D.exp[b].c + D.exp[b].b) - (D.exp[a].c + D.exp[a].b)).map(c=>r2(expenseCategoryLabel(c), D.exp[c].c, D.exp[c].b, {neg:true})).join('')}
+        ${(D.credCash || D.credBank) ? r2(tr('cfSupplierPay'), D.credCash, D.credBank, {neg:true}) : ''}
+        ${(D.refCash || D.refCard) ? r2(tr('cfRefunds'), D.refCash, D.refCard, {neg:true}) : ''}
+        ${r2(tr('cfOut'), D.outCash, D.outBank, {bold:true, neg:true})}
+        ${netRow(tr('cfNet'), netC, netB)}
+      </div>
+      ${D.creditSales ? `<p class="subtle" style="margin:-4px 0 12px;font-size:11.5px;">${tr('cfCreditSales')}: ${fmt(D.creditSales)}</p>` : ''}
+      <h3 class="sub-title">${tr('cfWhere')}</h3>
+      <div class="card" style="padding:6px 14px 10px;margin-bottom:12px;">
+        ${wrow(tr('cfInRegister'), W.register, W.registerNote)}
+        ${wrow(tr('cfReceivable'), W.receivable)}
+        ${wrow(tr('cfPayable'), W.payable)}
+        ${wrow(tr('cfStockValue'), W.stockValue)}
+      </div>
+      <p class="subtle" style="margin:12px 0 0;font-size:11.5px;">${tr('cfHint')}</p>`;
+    bindReportsBack();
+    const shiftM = (n)=>{ const d = new Date(cy, cm-1+n, 1); state.cfMonth = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); renderReports(); };
+    document.getElementById('cf-prev').addEventListener('click', ()=>shiftM(-1));
+    document.getElementById('cf-next').addEventListener('click', ()=>shiftM(1));
     return;
   }
   if(cat==='productprofit'){
@@ -16803,8 +16916,8 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='stockmoves'){
-    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount'), supplierReturn:tr('puReturnBtn'), transferOut:tr('trMoveOut'), transferIn:tr('trMoveIn'), transferBack:tr('trMoveBack')}[r] || r);
-    const reasonColor = (r)=>({sale:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)', count:'var(--warm)', transferOut:'var(--accent-dark)', transferIn:'var(--teal)', transferBack:'var(--warm)'}[r] || 'var(--ink)');
+    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount'), supplierReturn:tr('puReturnBtn'), writeOff:tr('smWriteOff'), transferOut:tr('trMoveOut'), transferIn:tr('trMoveIn'), transferBack:tr('trMoveBack')}[r] || r);
+    const reasonColor = (r)=>({sale:'var(--danger)', writeOff:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)', count:'var(--warm)', transferOut:'var(--accent-dark)', transferIn:'var(--teal)', transferBack:'var(--warm)'}[r] || 'var(--ink)');
     container.innerHTML = `
       ${reportsBackHeader(tr('stockMovesReport'))}
       <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('smHint')}</p>
@@ -16911,8 +17024,64 @@ function renderReportsCategory(container, cat){
   renderReportsMenu(container);
 }
 
+/* fix178-erp: pul oqimi hisob-kitobi */
+function __cfCalc(key){
+  const br = effectiveBranchId(state.currentBranchId);
+  const mk = (d)=>{ const x = new Date(d); return isNaN(x) ? '' : x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0'); };
+  const inBr = (b)=>!b || effectiveBranchId(b) === br;
+  const R = {salesCash:0, salesCard:0, salesCount:0, creditSales:0, debtCash:0, debtCard:0, giftCash:0, giftCard:0, purCash:0, purBank:0, exp:{}, credCash:0, credBank:0, refCash:0, refCard:0};
+  (state.sales || []).forEach(s=>{
+    if(!s || !inBr(s.branchId)) return;
+    const pb = salePaymentBreakdown(s);
+    if(mk(s.date) === key){ R.salesCount++; R.salesCash += pb.cash || 0; R.salesCard += pb.card || 0; R.creditSales += pb.credit || 0; }
+    if(s.refunded && mk(s.refundedAt || s.date) === key){ R.refCash += pb.cash || 0; R.refCard += pb.card || 0; }
+  });
+  (state.ledger || []).forEach(e=>{ if(!e || e.type !== 'payment' || !e.method || mk(e.date) !== key || !inBr(e.branchId)) return; const a = Number(e.amount) || 0; if(e.method === 'cash') R.debtCash += a; else R.debtCard += a; });
+  (state.giftCards || []).forEach(g=>{ if(!g || mk(g.soldAt) !== key || !inBr(g.branchId)) return; const a = Number(g.amount) || 0; if(g.payMethod === 'cash') R.giftCash += a; else R.giftCard += a; });
+  (state.creditorLedger || []).forEach(e=>{ if(!e || e.type !== 'payment' || mk(e.date) !== key || !inBr(e.branchId)) return; const a = Number(e.amount) || 0; if((e.method || 'cash') === 'cash') R.credCash += a; else R.credBank += a; });
+  visibleExpenses().forEach(e=>{
+    if(!e || mk(e.date) !== key) return;
+    const a = Number(e.amount) || 0, bank = e.paidFrom === 'other';
+    if(e.category === 'purchase'){ if(bank) R.purBank += a; else R.purCash += a; return; }
+    const c = e.category || 'other'; const o = R.exp[c] || (R.exp[c] = {c:0, b:0}); if(bank) o.b += a; else o.c += a;
+  });
+  const expC = Object.values(R.exp).reduce((a, o)=>a + o.c, 0), expB = Object.values(R.exp).reduce((a, o)=>a + o.b, 0);
+  R.inCash = rM(R.salesCash + R.debtCash + R.giftCash); R.inBank = rM(R.salesCard + R.debtCard + R.giftCard);
+  R.outCash = rM(R.purCash + expC + R.credCash + R.refCash); R.outBank = rM(R.purBank + expB + R.credBank + R.refCard);
+  Object.keys(R).forEach(k=>{ if(typeof R[k] === 'number') R[k] = rM(R[k]); });
+  return R;
+}
+function __cfWhere(){
+  const br = effectiveBranchId(state.currentBranchId);
+  let register = 0, registerNote = '';
+  const sh = state.currentShift;
+  if(sh && effectiveBranchId(sh.branchId) === br){
+    const shiftSales = state.sales.filter(s=>__shIn(sh, s.shiftId) && !s.refunded);
+    const cashTotal = sumSalesByMethod(shiftSales, 'cash');
+    const cashExp = state.expenses.filter(x=>__shIn(sh, x.shiftId) && x.paidFrom !== 'other').reduce((a, x)=>a + (Number(x.amount) || 0), 0);
+    const cx = shiftCashExtras(sh);
+    register = rM((Number(sh.startCash) || 0) + cashTotal + cx.debtCash + (cx.giftCash || 0) - cashExp - cx.credCash - cx.refundCash);
+  } else {
+    const last = (state.shifts || []).filter(x=>x && x.endTime && effectiveBranchId(x.branchId) === br).sort((a, b)=>String(a.endTime).localeCompare(String(b.endTime))).pop();
+    register = last ? rM(Number(last.endCash) || 0) : 0; registerNote = tr('cfNoShift');
+  }
+  const receivable = rM(visibleCustomers().reduce((a, c)=>a + Math.max(0, Number(c.debt) || 0), 0));
+  const payable = rM((state.creditors || []).filter(c=>c && !c.deleted).reduce((a, c)=>a + Math.max(0, Number(c.debt) || 0), 0));
+  const stockValue = rM(visibleProducts().reduce((a, p)=>{
+    if(p.variants && p.variants.length) return a + p.variants.reduce((x, v)=>x + Math.max(0, Number(v.stock) || 0) * (Number(v.costPrice || v.cost) || 0), 0);
+    return a + Math.max(0, Number(p.stock) || 0) * (Number(p.costPrice) || 0);
+  }, 0));
+  return {register, registerNote, receivable, payable, stockValue};
+}
 /* ---------- SUPER ADMIN ---------- */
 let purchaseDraft = {supplier:'', note:'', items:[], updateCost:true, payMode:'cash'};
+/* fix178-erp: tannarx usuli — 'last' (oxirgi kirim narxi, avvalgidek) yoki 'avg' (o'rtacha) */
+function costMethod(){ return (state.settings && state.settings.costMethod === 'avg') ? 'avg' : 'last'; }
+function __costNew(before, oldCost, qty, cost){
+  qty = Number(qty) || 0; cost = Number(cost) || 0; before = Number(before) || 0; oldCost = Number(oldCost) || 0;
+  if(costMethod() !== 'avg' || before <= 0 || oldCost <= 0 || qty <= 0) return cost;
+  return rM((before * oldCost + qty * cost) / (before + qty));
+}
 function savePurchases(){ storSet(STORAGE_KEYS.purchases, (state.purchases||[]).slice(-500)); }
 function purchaseLineSum(it){ const q = parseFloat(it.qty)||0; return q > 0 ? q*(parseFloat(it.cost)||0) : 0; }
 function purchaseTotal(){ return purchaseDraft.items.reduce((a,it)=>a + purchaseLineSum(it), 0); }
@@ -16940,7 +17109,7 @@ function renderPurchase(){
     <div class="field"><label class="field-label">${tr('puPayment')}</label>
       <div class="toggle-group" id="pu-pay-mode">${[['cash',tr('puPayCashS')],['bank',tr('puPayBank')],['credit',tr('puPayCreditS')]].map(([id,l])=>`<div class="toggle-opt ${(purchaseDraft.payMode||'cash')===id?'active':''}" data-pu-pay="${id}">${l}</div>`).join('')}</div>
       <p class="subtle pu-hint" id="pu-pay-hint">${__puHint(purchaseDraft.payMode)}</p></div>
-    <div class="checkbox-row"><input type="checkbox" id="pu-update-cost" ${purchaseDraft.updateCost?'checked':''}><span>${tr('puUpdateCost')}</span></div>
+    <div class="checkbox-row"><input type="checkbox" id="pu-update-cost" ${purchaseDraft.updateCost?'checked':''}><span>${costMethod() === 'avg' ? tr('puUpdateCostAvg') : tr('puUpdateCost')}</span></div>
     <div class="pu-dock"><div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin:8px 0 12px;"><strong>${tr('puTotal')}</strong><strong id="pu-total">${fmt(purchaseTotal())}</strong></div>
     <button class="btn btn-primary btn-block" id="pu-apply" ${purchaseDraft.items.length?'':'disabled'}>${tr('puApply')}</button></div>
     ${__puHistSlot()}${(recent.length && !window.__puHistOk) ? `<h3 class="sub-title" style="margin-top:18px;">${tr('puHistory')}</h3>${recent.map(x=>`
@@ -16971,12 +17140,12 @@ function openPurchasePicker(){
   const renderList = ()=>{
     const q = (document.getElementById('pu-pick-search').value||'').toLowerCase();
     const list = rows.filter(r=>!q || r.name.toLowerCase().includes(q) || (r.p.barcode||'').includes(q)).slice(0, 60);
-    document.getElementById('pu-pick-list').innerHTML = list.map(r=>`<div class="list-item" style="cursor:pointer;padding:10px 12px 10px 16px;" data-pu-pick="${r.key}"><div class="info"><div class="name">${escapeHtml(r.name)}</div><div class="meta">${tr('stock')}: ${r.stock} &middot; ${tr('puCost')}: ${fmt((r.v&&r.v.cost)||r.p.costPrice||0)}</div></div></div>`).join('') || `<div class="empty-state">${tr('noData')}</div>`;
+    document.getElementById('pu-pick-list').innerHTML = list.map(r=>`<div class="list-item" style="cursor:pointer;padding:10px 12px 10px 16px;" data-pu-pick="${r.key}"><div class="info"><div class="name">${escapeHtml(r.name)}</div><div class="meta">${tr('stock')}: ${r.stock} &middot; ${tr('puCost')}: ${fmt(__woCost(r.p, r.v))}</div></div></div>`).join('') || `<div class="empty-state">${tr('noData')}</div>`;
     document.querySelectorAll('[data-pu-pick]').forEach(el=>el.addEventListener('click', ()=>{
       const r = rows.find(x=>x.key===el.dataset.puPick); if(!r) return;
       const existing = purchaseDraft.items.find(it=>it.productId===r.p.id && (it.variantId||'')===(r.v?r.v.id:''));
       if(existing) existing.qty = (parseFloat(existing.qty)||0) + 1;
-      else purchaseDraft.items.push({productId:r.p.id, variantId: r.v?r.v.id:null, name:r.name, qty:1, cost:(r.v&&r.v.cost)||r.p.costPrice||0});
+      else purchaseDraft.items.push({productId:r.p.id, variantId: r.v?r.v.id:null, name:r.name, qty:1, cost:__woCost(r.p, r.v)});
       closeModal(); renderPurchase();
       setTimeout(()=>{ const q = document.querySelector(`[data-pu-qty="${purchaseDraft.items.length-1}"]`); if(q && !existing){ q.focus(); q.select(); } }, 80);
     }));
@@ -17009,8 +17178,9 @@ function applyPurchase(){
   doc.items.forEach(it=>{
     const p = state.products.find(x=>x.id===it.productId); if(!p) return;
     const v = it.variantId ? getVariant(p, it.variantId) : null;
+    const __before = v ? (Number(v.stock) || 0) : (Number(p.stock) || 0), __oldCost = v ? (Number(v.costPrice) || Number(v.cost) || 0) : (Number(p.costPrice) || 0);   /* fix178-erp */
     stockChange(p, v, it.qty, 'receive', doc.id);
-    if(purchaseDraft.updateCost && it.cost > 0){ if(v) v.cost = it.cost; else p.costPrice = it.cost; }
+    if(purchaseDraft.updateCost && it.cost > 0){ const __nc = __costNew(__before, __oldCost, it.qty, it.cost); if(v){ v.costPrice = __nc; v.cost = __nc; } else p.costPrice = __nc; }   /* fix178-erp: variantda ilova hamma joyda costPrice o'qiydi — ikkalasi ham yoziladi (eski xato: faqat cost yozilardi, foyda hisobotiga tushmasdi) */
     if(doc.supplier && !p.supplierName) p.supplierName = doc.supplier;
   });
   saveProducts();
@@ -17020,6 +17190,106 @@ function applyPurchase(){
   purchaseDraft = {supplier:'', note:'', items:[], updateCost:true, payMode:'cash'};
   showToast(tr('puApplied')+': '+fmt(doc.total));
   renderPurchase();
+}
+/* fix178-erp: Hisobdan chiqarish — Ombor menyusida. Qoldiq kamayadi, jurnal + nazorat + foyda-zarar + bulut */
+let woDraft = {reason:'expired', note:'', items:[]};
+const WO_REASONS = [['expired','woRsExpired'],['damaged','woRsDamaged'],['ownuse','woRsOwnUse'],['shortage','woRsShortage'],['other','woRsOther']];
+function __woReasonLabel(r){ const x = WO_REASONS.find(a=>a[0] === r); return tr(x ? x[1] : 'woRsOther'); }
+function __woCost(p, v){ return Number((v && (v.costPrice || v.cost)) || (p && p.costPrice) || 0) || 0; }
+function __woLineSum(it){ const q = parseFloat(it.qty) || 0; return q > 0 ? rM(q * (parseFloat(it.cost) || 0)) : 0; }
+function __woTotal(){ return rM(woDraft.items.reduce((a, it)=>a + __woLineSum(it), 0)); }
+function __woList(){ return (state.writeOffs || []).filter(d=>d && !d.deleted && effectiveBranchId(d.branchId) === effectiveBranchId(state.currentBranchId)); }
+function __woMonthKey(d){ const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0'); }
+function __woMonthLoss(key){ return rM(__woList().filter(d=>__woMonthKey(d.date) === key).reduce((a, d)=>a + (Number(d.total) || 0), 0)); }
+function __woExpired(p){ if(!p || !p.expiryDate) return false; const t = new Date(p.expiryDate).getTime(); return isFinite(t) && t < Date.now(); }
+function renderWriteOff(){
+  const container = document.getElementById('view-container');
+  const recent = __woList().slice().sort((a, b)=>String(b.date).localeCompare(String(a.date))).slice(0, 20);
+  const monthSum = __woMonthLoss(__woMonthKey(new Date()));
+  container.innerHTML = `
+    <div class="back-row"><button id="wo-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('woTitle')}</span></div>
+    <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('woHint')}</p>
+    <div class="card" style="padding:12px 14px;margin-bottom:10px;">
+      <div class="field"><label class="field-label">${tr('woReason')}</label>
+        <div class="r3-chips" id="wo-reason" style="flex-wrap:wrap;">${WO_REASONS.map(([id, k])=>`<button type="button" class="r3-chip ${woDraft.reason === id ? 'on fav-chip-active' : ''}" data-wo-reason="${id}">${tr(k)}</button>`).join('')}</div></div>
+      <div class="field"><label class="field-label">${tr('woNote')}</label><input type="text" id="wo-note" value="${escapeHtml(woDraft.note)}"></div>
+    </div>
+    <div class="pu-h"><b>${tr('puItemsH')}</b><span>${woDraft.items.length ? escapeHtml(tr('puItemsCount').replace('{n}', woDraft.items.length)) : ''}</span></div>
+    <div id="wo-items">${woDraft.items.length ? woDraft.items.map((it, i)=>`
+      <div class="card" style="padding:10px 12px;margin-bottom:8px;">
+        <div class="row" style="gap:8px;align-items:center;"><div style="flex:1;min-width:0;font-weight:800;">${escapeHtml(it.name)}</div><span class="subtle" style="font-size:11.5px;white-space:nowrap;">${tr('stock')}: ${it.stock}</span><button class="icon-btn" data-wo-del="${i}" style="color:var(--danger);">${ICONS.trash}</button></div>
+        <div style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;margin-top:8px;align-items:end;">
+          <div><label class="field-label">${tr('woQty')}</label><input type="number" inputmode="decimal" data-wo-qty="${i}" value="${it.qty}" style="text-align:center;"></div>
+          <div><label class="field-label">${tr('woCost')}</label><input type="text" inputmode="numeric" data-money data-wo-cost="${i}" value="${formatMoneyInputValue(it.cost)}"></div>
+          <div class="subtle" style="text-align:right;font-weight:800;padding-bottom:10px;" data-wo-line="${i}">${fmt(__woLineSum(it))}</div>
+        </div>
+      </div>`).join('') : `<div class="empty-state">${tr('woEmpty')}</div>`}</div>
+    <button class="btn btn-outline btn-block" id="wo-add" style="margin-bottom:10px;">${tr('woAdd')}</button>
+    <div class="pu-dock"><div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin:8px 0 12px;"><strong>${tr('woLoss')}</strong><strong id="wo-total" style="color:var(--danger);">${fmt(__woTotal())}</strong></div>
+    <button class="btn btn-primary btn-block" id="wo-apply" ${woDraft.items.length ? '' : 'disabled'}>${tr('woApply')}</button></div>
+    ${recent.length ? `<h3 class="sub-title" style="margin-top:18px;">${tr('woHistory')}</h3><p class="subtle" style="margin:0 0 8px;font-size:12px;">${escapeHtml(tr('woMonth').replace('{sum}', fmt(monthSum)))}</p>${recent.map(x=>`
+      <div class="card" style="padding:10px 12px;margin-bottom:8px;">
+        <div class="row"><div style="min-width:0;"><div style="font-weight:800;">${escapeHtml(__woReasonLabel(x.reason))}</div><div class="subtle" style="font-size:11.5px;">${fmtDateTime(x.date)}${x.staffName ? (' &middot; ' + escapeHtml(x.staffName)) : ''}${x.note ? (' &middot; ' + escapeHtml(x.note)) : ''}</div></div><strong style="color:var(--danger);white-space:nowrap;">${fmt(x.total || 0)}</strong></div>
+        <div class="subtle" style="font-size:12px;margin-top:4px;">${(x.items || []).map(it=>escapeHtml(it.name) + ' ×' + it.qty).join(', ')}</div>
+      </div>`).join('')}` : ''}`;
+  document.getElementById('wo-back-btn').addEventListener('click', ()=>{ state.view = 'products'; renderAll(); });
+  document.getElementById('wo-note').addEventListener('input', (e)=>{ woDraft.note = e.target.value; });
+  container.querySelectorAll('[data-wo-reason]').forEach(el=>el.addEventListener('click', ()=>{ woDraft.reason = el.dataset.woReason; container.querySelectorAll('[data-wo-reason]').forEach(x=>{ x.classList.toggle('on', x === el); x.classList.toggle('fav-chip-active', x === el); }); }));
+  document.getElementById('wo-add').addEventListener('click', openWriteOffPicker);
+  document.getElementById('wo-apply').addEventListener('click', applyWriteOff);
+  container.querySelectorAll('[data-wo-del]').forEach(b=>b.addEventListener('click', ()=>{ woDraft.items.splice(parseInt(b.dataset.woDel, 10), 1); renderWriteOff(); }));
+  const refreshLine = (i)=>{ const it = woDraft.items[i]; const el = container.querySelector(`[data-wo-line="${i}"]`); if(el) el.textContent = fmt(__woLineSum(it)); document.getElementById('wo-total').textContent = fmt(__woTotal()); };
+  container.querySelectorAll('[data-wo-qty]').forEach(inp=>inp.addEventListener('input', ()=>{ woDraft.items[inp.dataset.woQty].qty = parseFloat(String(inp.value).replace(',', '.')) || 0; refreshLine(parseInt(inp.dataset.woQty, 10)); }));
+  container.querySelectorAll('[data-wo-cost]').forEach(inp=>{ attachMoneyInputFormatting(inp); inp.addEventListener('input', ()=>{ const v = parseMoneyInput(inp.value); woDraft.items[inp.dataset.woCost].cost = isNaN(v) ? 0 : v; refreshLine(parseInt(inp.dataset.woCost, 10)); }); });
+}
+function openWriteOffPicker(){
+  openModal(`<div class="modal-title">${tr('woPick')}</div>
+    <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="wo-pick-search" placeholder="${tr('search')}"></div>
+    <div class="r3-chips" style="margin-bottom:8px;"><button type="button" class="r3-chip" id="wo-pick-exp" data-on="0">${tr('woExpOnly')}</button></div>
+    <div id="wo-pick-list" style="max-height:55vh;overflow:auto;"></div>`);
+  const rows = stocktakeRows();
+  const renderList = ()=>{
+    const q = (document.getElementById('wo-pick-search').value || '').toLowerCase();
+    const expOnly = document.getElementById('wo-pick-exp').dataset.on === '1';
+    const list = rows.filter(r=>(!expOnly || __woExpired(r.p)) && (!q || r.name.toLowerCase().includes(q) || (r.p.barcode || '').includes(q))).slice(0, 60);
+    document.getElementById('wo-pick-list').innerHTML = list.length ? list.map(r=>`<div class="list-item" style="cursor:pointer;padding:10px 12px 10px 16px;" data-wo-pick="${r.key}"><div class="info"><div class="name">${escapeHtml(r.name)}</div><div class="meta">${tr('stock')}: ${r.stock} &middot; ${tr('woCost')}: ${fmt(__woCost(r.p, r.v))}${__woExpired(r.p) ? ' &middot; <span style="color:var(--danger);font-weight:700;">' + tr('woRsExpired') + '</span>' : ''}</div></div></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`;
+    document.querySelectorAll('[data-wo-pick]').forEach(el=>el.addEventListener('click', ()=>{
+      const r = rows.find(x=>x.key === el.dataset.woPick); if(!r) return;
+      const existing = woDraft.items.find(it=>it.productId === r.p.id && (it.variantId || '') === (r.v ? r.v.id : ''));
+      if(existing) existing.qty = (parseFloat(existing.qty) || 0) + 1;
+      else woDraft.items.push({productId: r.p.id, variantId: r.v ? r.v.id : null, name: r.name, qty: 1, cost: __woCost(r.p, r.v), stock: r.stock});
+      closeModal(); renderWriteOff();
+      setTimeout(()=>{ const q = document.querySelector(`[data-wo-qty="${woDraft.items.length - 1}"]`); if(q && !existing){ q.focus(); q.select(); } }, 80);
+    }));
+  };
+  document.getElementById('wo-pick-search').addEventListener('input', renderList);
+  document.getElementById('wo-pick-exp').addEventListener('click', (e)=>{ const b = e.currentTarget; b.dataset.on = b.dataset.on === '1' ? '0' : '1'; b.classList.toggle('on', b.dataset.on === '1'); b.classList.toggle('fav-chip-active', b.dataset.on === '1'); renderList(); });
+  renderList();
+  setTimeout(()=>document.getElementById('wo-pick-search').focus(), 60);
+}
+function applyWriteOff(){
+  const items = woDraft.items.filter(it=>(parseFloat(it.qty) || 0) > 0 && state.products.some(x=>x.id === it.productId));
+  if(!items.length){ showToast(tr('woEmpty')); return; }
+  for(const it of items){
+    const p = state.products.find(x=>x.id === it.productId); const v = it.variantId ? getVariant(p, it.variantId) : null;
+    const have = v ? (Number(v.stock) || 0) : (Number(p.stock) || 0);
+    if((parseFloat(it.qty) || 0) > have + 1e-9){ showToast(tr('woNoStock').replace('{name}', it.name).replace('{q}', have)); return; }
+  }
+  const total = rM(items.reduce((a, it)=>a + __woLineSum(it), 0));
+  confirmDialog(tr('woConfirm').replace('{n}', items.length).replace('{sum}', fmt(total)), ()=>{
+    const doc = {id: uid(), date: new Date().toISOString(), reason: woDraft.reason || 'other', note: (woDraft.note || '').trim(), items: items.map(it=>({productId: it.productId, variantId: it.variantId || null, name: it.name, qty: parseFloat(it.qty) || 0, cost: parseFloat(it.cost) || 0, sum: __woLineSum(it)})), total, branchId: state.currentBranchId, staffId: state.currentStaff ? state.currentStaff.id : null, staffName: state.currentStaff ? state.currentStaff.name : ''};
+    doc.items.forEach(it=>{
+      const p = state.products.find(x=>x.id === it.productId); if(!p) return;
+      const v = it.variantId ? getVariant(p, it.variantId) : null;
+      stockChange(p, v, -it.qty, 'writeOff', doc.id);
+    });
+    saveProducts();
+    (state.writeOffs = state.writeOffs || []).push(doc); __gcPush('writeOff', doc);
+    try{ auditLog('writeOff', __woReasonLabel(doc.reason) + ': ' + doc.items.map(it=>it.name + ' ×' + it.qty).join(', ') + ' — ' + fmt(total) + (doc.note ? (' · ' + doc.note) : ''), {writeOffId: doc.id, total}); }catch(e){}
+    woDraft = {reason: 'expired', note: '', items: []};
+    showToast(tr('woApplied').replace('{n}', doc.items.length).replace('{sum}', fmt(total)));
+    renderWriteOff();
+  }, tr('woApply'));
 }
 let stocktakeDraft = {};
 let stocktakeOnlyDiff = false;
@@ -17795,7 +18065,7 @@ async function deleteBusinessCompletely(businessId){
     const snap = await bizRef.collection(name).get();
     await Promise.all(snap.docs.map(d=>d.ref.delete()));
   }
-  for(const name of ['expenses','reservations','devices','audit','pushTokens','purchases','supplyOrders','supplyReturns','transfers','openShifts','promos','giftCards','kitchenJobs']){   /* fix143-kjrelay */
+  for(const name of ['expenses','reservations','devices','audit','pushTokens','purchases','supplyOrders','supplyReturns','transfers','openShifts','promos','giftCards','kitchenJobs','writeOffs']){   /* fix143-kjrelay */
     try{ const snap = await bizRef.collection(name).get(); await Promise.all(snap.docs.map(d=>d.ref.delete())); }catch(e){}
   }
   await bizRef.collection('meta').doc('catalog').delete().catch(()=>{});
@@ -18242,7 +18512,7 @@ async function deleteMyAccountAndData(password){
   try{ stopLiveListeners(); }catch(e){}
   try{ pendingSyncQueue.length = 0; }catch(e){}
   const biz = fbDb.collection('businesses').doc(bizId);
-  const subs = ['sales','ledger','products','customers','expenses','creditors','creditorLedger','tables','visits','reservations','kitchenStations','agentLocations','support','devices','audit','errors','meta','kitchenJobs','purchases','supplyOrders','supplyReturns','transfers','openShifts','promos','giftCards','pushTokens'];   /* fix143-kjrelay: hisob o'chirilganda yangi bo'limlar ham o'chadi */
+  const subs = ['sales','ledger','products','customers','expenses','creditors','creditorLedger','tables','visits','reservations','kitchenStations','agentLocations','support','devices','audit','errors','meta','kitchenJobs','purchases','supplyOrders','supplyReturns','transfers','openShifts','promos','giftCards','pushTokens','writeOffs'];   /* fix143-kjrelay: hisob o'chirilganda yangi bo'limlar ham o'chadi */
   for(const c of subs){
     for(let guard=0; guard<200; guard++){
       let snap; try{ snap = await biz.collection(c).limit(300).get(); }catch(e){ break; }
@@ -18848,11 +19118,14 @@ function renderSettingsPrinter(container){
         </div></details>
       </div>
     </div>
-    <details class="set-section" data-sec="font" ${__psOpen.font?'open':''}><summary><span>${tr('printerFontSizeLabel')}<span class="ss-sub">${state.settings.printerCharsPerLine||32} ${tr('charsPerLine')} &middot; ${getPrinterSizeMultipliers().width}x / ${getPrinterSizeMultipliers().height}x${state.settings.printerBold!==false?' &middot; '+tr('psBoldOn'):''}</span></span><span class="ss-chev">&#9662;</span></summary>
+    <details class="set-section" data-sec="font" ${__psOpen.font?'open':''}><summary><span>${tr('printerFontSizeLabel')}<span class="ss-sub">${__psPaperMm()} &middot; ${state.settings.printerCharsPerLine||32} ${tr('charsPerLine')} &middot; ${getPrinterSizeMultipliers().width}x / ${getPrinterSizeMultipliers().height}x${state.settings.printerBold!==false?' &middot; '+tr('psBoldOn'):''}</span></span><span class="ss-chev">&#9662;</span></summary>
     <div class="card">
       <p class="subtle" style="margin:0 0 12px;">${tr('printerAppearanceHint')}</p>
       <div class="field">
-        <label class="field-label">${tr('paperWidth')}</label>
+        <label class="field-label">${tr('psPaper')}</label>
+        <div class="toggle-group" id="paper-size-group" style="margin-bottom:6px;">${[['32','58 mm'],['42','58 mm HD'],['48','80 mm'],['custom',tr('psPaperOther')]].map(([v,l])=>`<div class="toggle-opt ${__psPaperKey()===v?'active':''}" data-paper="${v}">${l}</div>`).join('')}</div>
+        <p class="subtle" style="margin:0 0 12px;font-size:12px;">${tr('psPaperHint')}</p>
+        <label class="field-label">${tr('psModel')}</label>
         <select id="printer-preset-select">
           <optgroup label="58mm (32)">
             <option value="32" ${(state.settings.printerCharsPerLine===32 && (!state.settings.printerModelLabel || state.settings.printerModelLabel==='Xprinter XP-58 / P58'))?'selected':''}>Xprinter XP-58 / P58</option>
@@ -19090,6 +19363,21 @@ function renderSettingsPrinter(container){
       renderSettingsPrinter(container);
     }
   });
+  /* fix178-erp: qog'oz o'lchami tugmalari — belgilar soni, model va rasm kengligi o'zi moslashadi */
+  container.querySelectorAll('[data-paper]').forEach(b=>b.addEventListener('click', ()=>{
+    const v = b.dataset.paper;
+    if(v === 'custom'){
+      state.settings.printerModelLabel = null;
+      if([32,42,48].includes(state.settings.printerCharsPerLine)) state.settings.printerCharsPerLine = (state.settings.printerCharsPerLine === 48) ? 64 : 24;
+    } else {
+      const n = parseInt(v, 10);
+      if(state.settings.printerCharsPerLine !== n){ state.settings.printerCharsPerLine = n; state.settings.printerModelLabel = null; }
+      delete state.settings.printerDots;   /* rasm kengligi: avto (32/42 → 384, 48 → 576) */
+    }
+    saveSettings();
+    renderSettingsPrinter(container);
+    try{ __psOpen.font = true; const d = container.querySelector('details[data-sec="font"]'); if(d) d.open = true; }catch(e){}
+  }));
   const customCharsInput = document.getElementById('printer-chars-input');
   __asDebounce(['printer-chars-input']);   /* fix125-ds1a */
   if(customCharsInput) customCharsInput.addEventListener('change', (e)=>{
@@ -19183,7 +19471,7 @@ function renderSettingsPrinter(container){
     const note = document.getElementById('printer-wrap-width-note');
     if(note) note.textContent = `${tr('charsPerLine')}: ${info.width}`;
     const fsum = document.querySelector('details[data-sec="font"] .ss-sub');
-    if(fsum) fsum.innerHTML = `${state.settings.printerCharsPerLine||32} ${tr('charsPerLine')} &middot; ${curBodyW}x / ${curBodyH}x${(document.getElementById('s-printer-bold')||{}).checked!==false?' &middot; '+tr('psBoldOn'):''}`;
+    if(fsum) fsum.innerHTML = `${__psPaperMm()} &middot; ${state.settings.printerCharsPerLine||32} ${tr('charsPerLine')} &middot; ${curBodyW}x / ${curBodyH}x${(document.getElementById('s-printer-bold')||{}).checked!==false?' &middot; '+tr('psBoldOn'):''}`;
   }
   const widthGroup = document.getElementById('printer-width-group');
   if(widthGroup){
@@ -19707,7 +19995,22 @@ function renderSettingsStockAlerts(container){
       <div class="field">${__ssLbl('exp', tr('expiryWarningDaysLabel'))}<input type="number" id="s-expiry-days" min="1" step="any" inputmode="decimal" value="${state.settings.expiryWarningDays||7}">${__ssErr('exp')}</div>
       ${__ssExBox('exp')}
     </div>
+    <div class="card" id="ss-cm" style="margin-top:14px;">
+      <h3 class="sub-title" style="margin:0 0 6px;">${tr('cmTitle')}</h3>
+      <p class="subtle" style="margin:0 0 12px;">${tr('cmHint')}</p>
+      <div class="toggle-group" id="ss-cm-group">
+        <div class="toggle-opt ${costMethod() === 'avg' ? '' : 'active'}" data-ss-cm="last">${tr('cmLast')}</div>
+        <div class="toggle-opt ${costMethod() === 'avg' ? 'active' : ''}" data-ss-cm="avg">${tr('cmAvg')}</div>
+      </div>
+      <p class="subtle" style="margin:8px 0 0;font-size:12px;">${tr('cmAvgHint')}</p>
+    </div>
   `);
+  container.querySelectorAll('[data-ss-cm]').forEach(b=>b.addEventListener('click', async ()=>{   /* fix178-erp */
+    const m = b.dataset.ssCm; if(m === costMethod()) return;
+    state.settings.costMethod = m;
+    container.querySelectorAll('[data-ss-cm]').forEach(x=>x.classList.toggle('active', x.dataset.ssCm === m));
+    const ok = await __ssSave(); if(!ok) showToast(tr('ssSaveFail'));
+  }));
   __ssBindField('low', 's-low-stock', {
     read: raw=>{ const v = __ssNum(raw); return (isFinite(v) && v >= 0) ? {ok: true, v} : {ok: false, msg: tr('ssLowBad')}; },
     same: v=>(v === lowStockThresholdValue() && state.settings.lowStockSetV2 === true),
@@ -20942,7 +21245,7 @@ function __r4Staff(container, ranked, commissionPct){
   if(eb) eb.addEventListener('click', ()=>{ state.reportsCategory = null; state.view = 'settings'; state.settingsCategory = 'staff'; renderAll(); });   /* fix175-staffpay */
 }
 /* ---- 3.14 Ombor harakati ---- */
-var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete', 'supplierReturn']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']], ['transfer', 'trMenu', ['transferOut', 'transferIn', 'transferBack']]];
+var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete', 'supplierReturn']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']], ['writeoff', 'smWriteOff', ['writeOff']], ['transfer', 'trMenu', ['transferOut', 'transferIn', 'transferBack']]];
 function __r4SmOk(m){ const g = SM_GROUPS.find(x=>x[0] === (state.__r4SmG || '')); return !g || !g[2] || g[2].indexOf(m.reason) >= 0; }
 function __r4SmChips(container, renderList){
   const s = document.getElementById('sm-search'); if(!s) return;
@@ -21025,7 +21328,7 @@ function __fsSafe(){
   try{
     const mr = document.getElementById('modal-root'); if(mr && mr.children.length) return false;
     const ae = document.activeElement; if(ae && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return false;
-    if(['purchase', 'stocktake'].indexOf(state.view) >= 0) return false;
+    if(['purchase', 'stocktake', 'writeoff'].indexOf(state.view) >= 0) return false;
     if(typeof __ssPend !== 'undefined' && Object.keys(__ssPend).length) return false;
     if(document.getElementById('dp-layer') && document.getElementById('dp-layer').children.length) return false;
     return true;
@@ -21803,6 +22106,7 @@ function __supDetail(name){
 
 /* fix136-trf: filiallararo ko'chirish */
 __gcK().transfer = {col: 'transfers', key: 'transfers', store: 'sardor_transfers_v1'};
+__gcK().writeOff = {col: 'writeOffs', key: 'writeOffs', store: 'sardor_write_offs_v1'};   /* fix178-erp */
 function canTransfer(){ return (isAdmin() || hasPerm('transfer')) && branchList().length > 1; }
 function __trAll(){ return (state.transfers || []).filter(t=>t && !t.deleted); }
 function __trFind(id){ return (state.transfers || []).find(t=>t && t.id === id); }
@@ -24845,6 +25149,7 @@ function renderAll(){
   if(state.view==='superadmin' && !window.__saUnlocked) state.view='sale'; /* fix79 */
   if(state.view==='stocktake' && !(isAdmin() || hasPerm('products'))) state.view='products';
   if(state.view==='purchase' && !(isAdmin() || hasPerm('products'))) state.view='products';
+  if(state.view==='writeoff' && !(isAdmin() || hasPerm('products'))) state.view='products';   /* fix178-erp */
   renderHeader();
   renderNav();
   const container = document.getElementById('view-container');
@@ -24874,6 +25179,7 @@ function renderAll(){
   else if(state.view==='superadmin') renderSuperAdmin();
   else if(state.view==='stocktake') renderStocktake();
   else if(state.view==='purchase') renderPurchase();
+  else if(state.view==='writeoff') renderWriteOff();   /* fix178-erp */
   else if(state.view==='supply') renderSupply();   /* fix135-sup */
   else if(state.view==='transfer') renderTransfer();   /* fix136-trf */
   else if(state.view==='promo') renderPromo();   /* fix139-promo */
