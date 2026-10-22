@@ -1389,6 +1389,16 @@ const T = {
   cfStockValue:{uz:"Ombordagi tovar (tannarxda)",ru:"Товар на складе (по себестоимости)",en:"Stock on hand (at cost)",kk:"Қоймадағы тауар (өзіндік құнмен)",ky:"Кампадагы товар (өздүк наркы менен)",tg:"Моли анбор (бо арзиши аслӣ)"},
   cfCreditSales:{uz:"Shu oyda nasiyaga sotilgan (pul hali kelmagan)",ru:"Продано в долг в этом месяце (деньги ещё не пришли)",en:"Sold on credit this month (not yet paid)",kk:"Осы айда қарызға сатылған (ақша әлі келмеген)",ky:"Ушул айда карызга сатылган (акча али келген жок)",tg:"Дар ин моҳ ба қарз фурӯхта шуд (пул ҳанӯз наомадааст)"},
   cfNoShift:{uz:"smena ochilmagan — oxirgi yopilgan smena bo'yicha",ru:"смена не открыта — по последней закрытой смене",en:"no open shift — from the last closed shift",kk:"ауысым ашылмаған — соңғы жабылған ауысым бойынша",ky:"смена ачылган эмес — акыркы жабылган смена боюнча",tg:"баст кушода нашудааст — аз рӯи басти охирин"},
+  rcTitle:{uz:"Tarkibi (texnologik karta)",ru:"Состав (техкарта)",en:"Ingredients (recipe)",kk:"Құрамы (техкарта)",ky:"Курамы (техкарта)",tg:"Таркиб (харитаи технологӣ)"},
+  rcHint:{uz:"Taom sotilganda shu xomashyolar ombordan o'zi kamayadi (qaytarilsa — qaytadi). Taom qoldig'i = necha porsiya tayyorlash mumkin, xomashyodan o'zi hisoblanadi.",ru:"При продаже блюда эти продукты списываются со склада сами (при возврате — возвращаются). Остаток блюда = сколько порций можно приготовить, считается из сырья.",en:"When the dish is sold, these ingredients are deducted from stock automatically (and returned on refund). The dish stock = how many portions can be made, computed from ingredients.",kk:"Тағам сатылғанда осы шикізат қоймадан өзі шығарылады (қайтарылса — қайтады). Тағам қалдығы = қанша порция дайындауға болады, шикізаттан есептеледі.",ky:"Тамак сатылганда бул чийки зат кампадан өзү чыгарылат (кайтарылса — кайтат). Тамактын калдыгы = канча порция даярдоого болот, чийки заттан эсептелет.",tg:"Ҳангоми фурӯши таом ин ашё аз анбор худаш кам мешавад (ҳангоми баргардонӣ — бармегардад). Бақияи таом = чанд порсия тайёр кардан мумкин, аз ашё ҳисоб мешавад."},
+  rcAdd:{uz:"Xomashyo qo'shish",ru:"Добавить продукт",en:"Add ingredient",kk:"Шикізат қосу",ky:"Чийки зат кошуу",tg:"Илова кардани ашё"},
+  rcPick:{uz:"Xomashyo tanlang",ru:"Выберите продукт",en:"Pick an ingredient",kk:"Шикізат таңдаңыз",ky:"Чийки зат тандаңыз",tg:"Ашёро интихоб кунед"},
+  rcQty:{uz:"1 porsiyaga",ru:"На 1 порцию",en:"Per portion",kk:"1 порцияға",ky:"1 порцияга",tg:"Ба 1 порсия"},
+  rcEmpty:{uz:"Xomashyo qo'shilmagan — oddiy tovar sifatida ishlaydi",ru:"Состав не задан — работает как обычный товар",en:"No ingredients — behaves like a normal product",kk:"Құрамы жоқ — қарапайым тауар ретінде жұмыс істейді",ky:"Курамы жок — жөнөкөй товар катары иштейт",tg:"Таркиб нест — чун моли оддӣ кор мекунад"},
+  rcCostAuto:{uz:"Tannarxni tarkibdan hisoblash",ru:"Себестоимость из состава",en:"Cost price from ingredients",kk:"Өзіндік құн құрамнан",ky:"Өздүк наркы курамдан",tg:"Арзиши аслӣ аз таркиб"},
+  rcPortions:{uz:"{n} porsiya",ru:"{n} порц.",en:"{n} portions",kk:"{n} порция",ky:"{n} порция",tg:"{n} порсия"},
+  rcNoNest:{uz:"Retseptli taomni xomashyo qilib bo'lmaydi",ru:"Блюдо с техкартой нельзя сделать ингредиентом",en:"A dish with a recipe cannot be an ingredient",kk:"Техкартасы бар тағамды шикізат етуге болмайды",ky:"Техкартасы бар тамакты чийки зат кылууга болбойт",tg:"Таоми дорои харитаро ашё кардан мумкин нест"},
+  smRecipe:{uz:"Retsept (xomashyo)",ru:"Техкарта (сырьё)",en:"Recipe (ingredient)",kk:"Техкарта (шикізат)",ky:"Техкарта (чийки зат)",tg:"Харита (ашё)"},
   boSrcWeb:{uz:"Sayt",ru:"Сайт",en:"Website",kk:"Сайт",ky:"Сайт",tg:"Сайт"},
   osShowOut:{uz:"Tugagan mahsulotlarni ham ko'rsatish",ru:"Показывать и отсутствующие товары",en:"Show out-of-stock products too",kk:"Таусылған тауарларды да көрсету",ky:"Түгөнгөн товарларды да көрсөтүү",tg:"Маҳсулоти тамомшударо низ нишон додан"},
   osLang:{uz:"Do'kon sahifasi tili",ru:"Язык страницы магазина",en:"Shop page language",kk:"Дүкен бетінің тілі",ky:"Дүкөн барагынын тили",tg:"Забони саҳифаи мағоза"},
@@ -4203,7 +4213,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.56';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.57';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -7962,7 +7972,7 @@ function logStockMove(p, v, delta, before, after, reason, refId){
   state.stockMoves.push(entry);
   if(state.stockMoves.length > 3000) state.stockMoves = state.stockMoves.slice(-3000);
   storSet(STORAGE_KEYS.stockMoves, state.stockMoves);
-  if(reason==='sale' && !refId) __pendingSaleMoves.push(entry);
+  if((reason==='sale' || reason==='recipe') && !refId) __pendingSaleMoves.push(entry);   /* fix179-recipe */
   return entry;
 }
 function auditLog(action, detail, meta){
@@ -7991,14 +8001,63 @@ async function loadCloudAudit(limit){ /* fix96: oxirgi 30 kun, yangisi tepada */
     return merged.slice(0, lim);
   }catch(e){ return localList.slice(0, lim); }
 }
+/* fix179-recipe: texnologik karta — taom sotilsa xomashyo kamayadi, taom qoldig'i = porsiyalar soni */
+const __RC_REASONS = {sale:1, refund:1, delete:1, edit:1};
+function __rcHas(p){ return !!(p && p.recipe && p.recipe.length); }
+function __rcLines(p){
+  const out = [];
+  (p && p.recipe || []).forEach(l=>{
+    if(!l || !l.productId) return;
+    const ip = state.products.find(x=>x.id === l.productId); if(!ip || __rcHas(ip)) return;
+    const iv = l.variantId ? getVariant(ip, l.variantId) : null; if(l.variantId && !iv) return;
+    const q = Number(l.qty) || 0; if(q <= 0) return;
+    out.push({p: ip, v: iv, qty: q, name: ip.name + (iv ? ' — ' + iv.name : '')});
+  });
+  return out;
+}
+function __rcPortions(p){
+  const ls = __rcLines(p); if(!ls.length) return null;
+  let m = Infinity;
+  ls.forEach(l=>{ const st = Number(l.v ? l.v.stock : l.p.stock) || 0; m = Math.min(m, st / l.qty); });
+  return isFinite(m) ? Math.max(0, Math.floor(m + 1e-9)) : 0;
+}
+function __rcCostOf(recipe){
+  let c = 0;
+  (recipe || []).forEach(l=>{
+    if(!l || !l.productId) return;
+    const ip = state.products.find(x=>x.id === l.productId); if(!ip) return;
+    const iv = l.variantId ? getVariant(ip, l.variantId) : null;
+    c += (Number(l.qty) || 0) * (typeof __woCost === 'function' ? __woCost(ip, iv) : (Number(ip.costPrice) || 0));
+  });
+  return rM(c);
+}
+function __rcCost(p){ return __rcCostOf(p && p.recipe); }
+function __rcCostLive(p, v){ if(__rcHas(p) && p.recipeCost) return __rcCost(p); return v ? (v.costPrice||p.costPrice||0) : (p.costPrice||0); }
+function __rcSyncOne(p){
+  const n = __rcPortions(p); if(n === null) return false;
+  let ch = false;
+  if(p.variants && p.variants.length){ p.variants.forEach(v=>{ if(v.stock !== n){ v.stock = n; ch = true; } }); }
+  if(p.stock !== n){ p.stock = n; ch = true; }
+  if(p.recipeCost){ const c = __rcCost(p); if(p.costPrice !== c){ p.costPrice = c; ch = true; } }
+  return ch;
+}
+function __rcSyncAll(){ let ch = false; (state.products || []).forEach(p=>{ if(__rcHas(p) && __rcSyncOne(p)) ch = true; }); return ch; }
+function __rcRecostAll(){ (state.products || []).forEach(p=>{ if(__rcHas(p) && p.recipeCost) p.costPrice = __rcCost(p); }); }
+function __rcApply(p, delta, reason, refId){
+  __rcLines(p).forEach(l=>{ stockChange(l.p, l.v, Math.round(delta * l.qty * 1e4) / 1e4, 'recipe', refId); const st = l.v || l.p; if(typeof st.stock === 'number') st.stock = Math.round(st.stock * 1e4) / 1e4; });   /* kasr yig'ilmasin: 4 xona */
+  __rcSyncOne(p);
+}
 function stockChange(p, v, delta, reason, refId){
   if(!p || !delta) return;
+  if(__rcHas(p) && __RC_REASONS[reason]){ __rcApply(p, delta, reason, refId); return; }   /* fix179-recipe: taom — xomashyo kamayadi, o'z qoldig'i porsiyadan hisoblanadi */
+  if(__rcHas(p)){ __rcSyncOne(p); return; }   /* retseptli taomning qoldig'i qo'lda o'zgarmaydi — porsiyadan */
   const before = v ? (v.stock||0) : (p.stock||0);
   if(v){ v.stock = (v.stock||0) + delta; }
   else if(delta < 0){ deductProductStock(p, -delta); }
   else { restoreProductStock(p, delta); }
   const after = v ? (v.stock||0) : (p.stock||0);
   logStockMove(p, v, delta, before, after, reason, refId);
+  if(reason !== 'recipe') try{ (state.products || []).forEach(d=>{ if(__rcHas(d) && d.recipe.some(l=>l && l.productId === p.id)) __rcSyncOne(d); }); }catch(e){}   /* fix179-recipe */
 }
 function tagPendingStockMoves(saleId){
   __pendingSaleMoves.forEach(e=>{ e.refId = saleId; });
@@ -9399,7 +9458,7 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     const name = v
       ? `${p.name} — ${v.name}${isBox ? ` (${c.boxLabel||tr('boxDefaultLabel')})` : (isWholesaleUnit ? ` (${tr('wholesaleModeShort')})` : '')}${takeawaySuffix}`
       : (isBox ? `${p.name} (${c.boxLabel||tr('boxDefaultLabel')})${takeawaySuffix}` : (isWholesaleUnit ? `${p.name} (${tr('wholesaleModeShort')})${takeawaySuffix}` : `${p.name}${takeawaySuffix}`));
-    const costPrice = v ? (v.costPrice||p.costPrice||0) : (p.costPrice||0);
+    const costPrice = __rcCostLive(p, v);   /* fix179-recipe */
     const item = {productId:p.id, variantId:c.variantId||null, name, qty:c.qty, price:cartItemPrice(c,p), costPrice};
     try{ const _k = p.id+'|'+(c.variantId||''); const _units = isBox ? c.qty*(c.unitsPerBox||1) : c.qty; const _avail = Math.max(0, (v ? (v.stock||0) : (p.stock||0)) - (__ovUsed[_k]||0)); __ovUsed[_k] = (__ovUsed[_k]||0) + _units; if(_units > _avail) item.oversoldUnits = _units - _avail; }catch(_e){} /* fix77 */
     if(isBox){ item.saleMode = 'box'; item.unitsPerBox = c.unitsPerBox||1; }
@@ -11815,6 +11874,7 @@ function __delProduct(id){
 function openProductForm(productId, draft){
   const editing = state.products.find(p=>p.id===productId);
   const d = draft || editing || {};
+  __rcDraft = ((d.recipe || []).map(x=>({productId: x.productId, variantId: x.variantId || null, qty: Number(x.qty) || 0})));   /* fix179-recipe */
   let currentImage = 'image' in d ? d.image : (editing ? editing.image : null);
   openModal(`
     <div class="back-row"><button onclick="closeModal()">${ICONS.arrowLeft}</button><span class="t-title">${editing ? tr('editProduct') : tr('addProduct')}</span></div>
@@ -11881,6 +11941,11 @@ function openProductForm(productId, draft){
     <button class="btn btn-outline btn-sm" id="pf-add-variant-btn" type="button" style="margin-bottom:10px;">${ICONS.plus} ${tr('addVariant')}</button>
     <h3 class="sub-title">${tr('additionalInfo')}</h3>
     <div class="field"><label class="field-label">${tr('costPrice')}</label><input type="text" inputmode="numeric" id="pf-cost" value="${d.costPrice?formatMoneyInputValue(d.costPrice):''}"></div>
+    ${(state.settings.restaurantMode || __rcDraft.length) ? `<h3 class="sub-title">${tr('rcTitle')}</h3>
+    <p class="subtle" style="margin:0 0 8px;font-size:12px;">${tr('rcHint')}</p>
+    <div id="pf-recipe-list"></div>
+    <button class="btn btn-outline btn-sm" id="pf-recipe-add" type="button" style="margin-bottom:10px;">${ICONS.plus} ${tr('rcAdd')}</button>
+    <div class="checkbox-row"><input type="checkbox" id="pf-recipe-cost" ${d.recipeCost?'checked':''}><span>${tr('rcCostAuto')} <span class="subtle" id="pf-recipe-cost-val"></span></span></div>` : ''}
     <div class="field"><label class="field-label">${tr('supplierInfo')} — ${tr('supplierName')}</label><input type="text" id="pf-supplier-name" value="${escapeHtml(d.supplierName||'')}"></div>
     <div class="field"><label class="field-label">${tr('supplierInfo')} — ${tr('supplierPhone')}</label><input type="text" id="pf-supplier-phone" placeholder="+998901234567" value="${escapeHtml(d.supplierPhone||'')}"></div>
     <div class="field"><label class="field-label">${tr('expiryDate')}</label><input type="date" id="pf-expiry" value="${d.expiryDate||''}" ${(editing && editing.batches && editing.batches.length)?'disabled':''}></div>
@@ -12010,6 +12075,7 @@ function openProductForm(productId, draft){
     });
   }
 
+  try{ __rcBindForm(productId, ()=>readFormSnapshot()); }catch(e){ console.error('fix179 form', e); }   /* fix179-recipe */
   function readFormSnapshot(){
     const variants = Array.from(variantsListEl.querySelectorAll('.field')).map(row=>({
       id: uid(),
@@ -12036,7 +12102,9 @@ function openProductForm(productId, draft){
       quickAccess: document.getElementById('pf-quick-access').checked,
       botSell: document.getElementById('pf-bot-sell') ? document.getElementById('pf-bot-sell').checked : d.botSell,   /* fix145-botshop; fix153: belgilanmagan holat saqlanadi */
       variants,
-      image: currentImage
+      image: currentImage,
+      recipe: __rcDraft.map(x=>({...x})),   /* fix179-recipe */
+      recipeCost: document.getElementById('pf-recipe-cost') ? document.getElementById('pf-recipe-cost').checked : !!d.recipeCost
     };
   }
 
@@ -12116,6 +12184,13 @@ function openProductForm(productId, draft){
     if(variants.length===0 && stock < 0){ errEl.textContent = tr('fillFields'); return; }
     const data = {name, price: price||0, stock: stock||0, unit, category, image:currentImage, barcode, costPrice, supplierName, supplierPhone, expiryDate: finalExpiryDate, showInCatalog, quickAccess, kitchenPrint, kitchenStationId, wholesalePrice, unitsPerBox, boxPrice, boxLabel, variants};
     if(batches) data.batches = batches;
+    { /* fix179-recipe */
+      const __rcEl = document.getElementById('pf-recipe-cost');
+      data.recipe = __rcDraft.filter(x=>x && x.productId && (Number(x.qty) || 0) > 0).map(x=>({productId: x.productId, variantId: x.variantId || null, qty: Number(x.qty) || 0}));
+      data.recipeCost = __rcEl ? __rcEl.checked : !!d.recipeCost;
+      if(!data.recipe.length) data.recipeCost = false;
+      if(data.recipeCost) data.costPrice = __rcCostOf(data.recipe);
+    }
     { const __bs = document.getElementById('pf-bot-sell'); if(__bs) data.botSell = __bs.checked; }   /* fix145-botshop */
     { const __mEl = document.getElementById('pf-min-stock');   /* fix124-smart: bo'sh = umumiy qoida */
       if(__mEl){ const __mr = String(__mEl.value || '').trim().replace(',', '.');
@@ -12447,6 +12522,7 @@ function __invTotals(rows, mode){
   let vR = 0, vW = 0, c = 0, noWh = 0, noCost = 0;
   rows.forEach(r=>{
     const q = Math.max(0, r.stock); if(q <= 0) return;
+    if(r.p && __rcHas(r.p)) return;   /* fix179-recipe: taom qiymati xomashyoda hisoblangan */
     vR += q * r.retail; vW += q * (r.wh > 0 ? r.wh : r.retail); c += q * r.cost;
     if(!(r.wh > 0)) noWh++;
     if(!(r.cost > 0)) noCost++;
@@ -15466,7 +15542,7 @@ function openAddProductToReceiptPickerLegacy(){
           const base = v ? `${p.name} — ${v.name}` : p.name;
           const name = isBox ? `${base} (${label})` : (isWh ? `${base} (${tr('wholesaleModeShort')})` : base);
           const price = isBox ? (v ? v.boxPrice : p.boxPrice) : (isWh ? (v ? (v.wholesalePrice > 0 ? v.wholesalePrice : v.price) : p.wholesalePrice) : (v ? v.price : p.price));
-          const costPrice = v ? (v.costPrice||p.costPrice||0) : (p.costPrice||0);
+          const costPrice = __rcCostLive(p, v);   /* fix179-recipe */
           const item = {productId:p.id, variantId:variantId||null, name, qty:1, price, costPrice, _isOriginal:false};
           if(isBox){ item.saleMode = 'box'; item.unitsPerBox = p.unitsPerBox || 1; }
           if(isWh){ item.priceTier = 'wholesale'; }
@@ -16916,8 +16992,8 @@ function renderReportsCategory(container, cat){
   }
 
   if(cat==='stockmoves'){
-    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount'), supplierReturn:tr('puReturnBtn'), writeOff:tr('smWriteOff'), transferOut:tr('trMoveOut'), transferIn:tr('trMoveIn'), transferBack:tr('trMoveBack')}[r] || r);
-    const reasonColor = (r)=>({sale:'var(--danger)', writeOff:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)', count:'var(--warm)', transferOut:'var(--accent-dark)', transferIn:'var(--teal)', transferBack:'var(--warm)'}[r] || 'var(--ink)');
+    const reasonLabel = (r)=>({sale:tr('smSale'), refund:tr('smRefund'), delete:tr('smDelete'), edit:tr('smEdit'), receive:tr('smReceive'), adjust:tr('smAdjust'), initial:tr('smInitial'), count:tr('smCount'), supplierReturn:tr('puReturnBtn'), writeOff:tr('smWriteOff'), recipe:tr('smRecipe'), transferOut:tr('trMoveOut'), transferIn:tr('trMoveIn'), transferBack:tr('trMoveBack')}[r] || r);
+    const reasonColor = (r)=>({sale:'var(--danger)', writeOff:'var(--danger)', recipe:'var(--danger)', refund:'var(--teal)', delete:'var(--teal)', edit:'var(--accent-dark)', receive:'var(--teal)', adjust:'var(--warm)', initial:'var(--ink-soft)', count:'var(--warm)', transferOut:'var(--accent-dark)', transferIn:'var(--teal)', transferBack:'var(--warm)'}[r] || 'var(--ink)');
     container.innerHTML = `
       ${reportsBackHeader(tr('stockMovesReport'))}
       <p class="subtle" style="margin:0 0 10px;font-size:12px;">${tr('smHint')}</p>
@@ -17068,12 +17144,61 @@ function __cfWhere(){
   const receivable = rM(visibleCustomers().reduce((a, c)=>a + Math.max(0, Number(c.debt) || 0), 0));
   const payable = rM((state.creditors || []).filter(c=>c && !c.deleted).reduce((a, c)=>a + Math.max(0, Number(c.debt) || 0), 0));
   const stockValue = rM(visibleProducts().reduce((a, p)=>{
+    if(__rcHas(p)) return a;   /* fix179-recipe */
     if(p.variants && p.variants.length) return a + p.variants.reduce((x, v)=>x + Math.max(0, Number(v.stock) || 0) * (Number(v.costPrice || v.cost) || 0), 0);
     return a + Math.max(0, Number(p.stock) || 0) * (Number(p.costPrice) || 0);
   }, 0));
   return {register, registerNote, receivable, payable, stockValue};
 }
 /* ---------- SUPER ADMIN ---------- */
+/* fix179-recipe: forma ichidagi retsept ro'yxati */
+let __rcDraft = [];
+function __rcRenderList(){
+  const el = document.getElementById('pf-recipe-list'); if(!el) return;
+  const rows = __rcDraft.map((l, i)=>{
+    const ip = state.products.find(x=>x.id === l.productId); const iv = ip && l.variantId ? getVariant(ip, l.variantId) : null;
+    const name = ip ? (ip.name + (iv ? ' — ' + iv.name : '')) : '?';
+    const st = ip ? (Number(iv ? iv.stock : ip.stock) || 0) : 0;
+    return `<div class="row" style="gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);">
+      <div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:13px;">${escapeHtml(name)}</div><div class="subtle" style="font-size:11.5px;">${tr('stock')}: ${st} ${ip ? unitLabel(ip.unit) : ''} &middot; ${tr('woCost')}: ${fmt(ip ? __woCost(ip, iv) : 0)}</div></div>
+      <div style="text-align:center;"><div class="subtle" style="font-size:10.5px;">${tr('rcQty')}</div><input type="number" inputmode="decimal" step="any" min="0" data-rc-qty="${i}" value="${l.qty || ''}" style="width:76px;text-align:center;padding:7px 4px;font-weight:700;"></div>
+      <button class="icon-btn" type="button" data-rc-del="${i}" style="color:var(--danger);">${ICONS.trash}</button></div>`;
+  }).join('');
+  el.innerHTML = rows || `<p class="subtle" style="margin:0 0 8px;font-size:12px;">${tr('rcEmpty')}</p>`;
+  el.querySelectorAll('[data-rc-qty]').forEach(inp=>inp.addEventListener('input', ()=>{ const v = parseFloat(String(inp.value).replace(',', '.')); __rcDraft[parseInt(inp.dataset.rcQty, 10)].qty = isNaN(v) ? 0 : v; __rcCostVal(); }));
+  el.querySelectorAll('[data-rc-del]').forEach(b=>b.addEventListener('click', ()=>{ __rcDraft.splice(parseInt(b.dataset.rcDel, 10), 1); __rcRenderList(); __rcCostVal(); }));
+  __rcCostVal();
+}
+function __rcCostVal(){ const el = document.getElementById('pf-recipe-cost-val'); if(!el) return; const c = __rcCostOf(__rcDraft); const n = __rcPortions({recipe: __rcDraft}); el.textContent = __rcDraft.length ? '(' + fmt(c) + (n === null ? '' : ' · ' + tr('rcPortions').replace('{n}', n)) + ')' : ''; const cb = document.getElementById('pf-recipe-cost'); const ci = document.getElementById('pf-cost'); if(cb && cb.checked && ci && __rcDraft.length) ci.value = formatMoneyInputValue(c); }
+function __rcBindForm(productId, snap){
+  if(!document.getElementById('pf-recipe-list')) return;
+  __rcRenderList();
+  const cb = document.getElementById('pf-recipe-cost'); if(cb) cb.addEventListener('change', __rcCostVal);
+  document.getElementById('pf-recipe-add').addEventListener('click', ()=>{
+    const sn = snap();
+    openModal(`<div class="back-row"><button type="button" id="rc-pick-back">${ICONS.arrowLeft}</button><span class="t-title">${tr('rcPick')}</span></div>
+      <div class="search-bar" style="margin-bottom:8px;">${ICONS.search}<input type="text" id="rc-pick-search" placeholder="${tr('search')}"></div>
+      <div id="rc-pick-list" style="max-height:55vh;overflow:auto;"></div>`);
+    const rows = stocktakeRows().filter(r=>r.p.id !== productId);
+    const back = ()=>{ closeModal(); sn.recipe = __rcDraft.map(x=>({...x})); openProductForm(productId, sn); };
+    const renderList = ()=>{
+      const q = (document.getElementById('rc-pick-search').value || '').toLowerCase();
+      const list = rows.filter(r=>!q || r.name.toLowerCase().includes(q) || (r.p.barcode || '').includes(q)).slice(0, 60);
+      document.getElementById('rc-pick-list').innerHTML = list.length ? list.map(r=>`<div class="list-item" style="cursor:pointer;padding:10px 12px 10px 16px;${__rcHas(r.p) ? 'opacity:.5;' : ''}" data-rc-pick="${r.key}"><div class="info"><div class="name">${escapeHtml(r.name)}</div><div class="meta">${tr('stock')}: ${r.stock} ${unitLabel(r.p.unit)} &middot; ${tr('woCost')}: ${fmt(__woCost(r.p, r.v))}${__rcHas(r.p) ? ' &middot; ' + tr('rcTitle') : ''}</div></div></div>`).join('') : `<div class="empty-state">${tr('noData')}</div>`;
+      document.querySelectorAll('[data-rc-pick]').forEach(el=>el.addEventListener('click', ()=>{
+        const r = rows.find(x=>x.key === el.dataset.rcPick); if(!r) return;
+        if(__rcHas(r.p)){ showToast(tr('rcNoNest')); return; }
+        const ex = __rcDraft.find(l=>l.productId === r.p.id && (l.variantId || null) === (r.v ? r.v.id : null));
+        if(!ex) __rcDraft.push({productId: r.p.id, variantId: r.v ? r.v.id : null, qty: 1});
+        back();
+      }));
+    };
+    document.getElementById('rc-pick-search').addEventListener('input', renderList);
+    document.getElementById('rc-pick-back').addEventListener('click', back);
+    renderList();
+    setTimeout(()=>{ const i = document.getElementById('rc-pick-search'); if(i) i.focus(); }, 60);
+  });
+}
 let purchaseDraft = {supplier:'', note:'', items:[], updateCost:true, payMode:'cash'};
 /* fix178-erp: tannarx usuli — 'last' (oxirgi kirim narxi, avvalgidek) yoki 'avg' (o'rtacha) */
 function costMethod(){ return (state.settings && state.settings.costMethod === 'avg') ? 'avg' : 'last'; }
@@ -17183,6 +17308,7 @@ function applyPurchase(){
     if(purchaseDraft.updateCost && it.cost > 0){ const __nc = __costNew(__before, __oldCost, it.qty, it.cost); if(v){ v.costPrice = __nc; v.cost = __nc; } else p.costPrice = __nc; }   /* fix178-erp: variantda ilova hamma joyda costPrice o'qiydi — ikkalasi ham yoziladi (eski xato: faqat cost yozilardi, foyda hisobotiga tushmasdi) */
     if(doc.supplier && !p.supplierName) p.supplierName = doc.supplier;
   });
+  try{ __rcRecostAll(); }catch(e){}   /* fix179-recipe: xomashyo narxi o'zgardi — taom tannarxi ham */
   saveProducts();
   if(__soId) doc.orderId = __soId;   /* fix135-sup */
   state.purchases = (state.purchases||[]); state.purchases.push(doc); savePurchases(); try{ addPurchaseDoc(doc); }catch(e){}   /* fix133-pur */
@@ -21245,7 +21371,7 @@ function __r4Staff(container, ranked, commissionPct){
   if(eb) eb.addEventListener('click', ()=>{ state.reportsCategory = null; state.view = 'settings'; state.settingsCategory = 'staff'; renderAll(); });   /* fix175-staffpay */
 }
 /* ---- 3.14 Ombor harakati ---- */
-var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete', 'supplierReturn']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']], ['writeoff', 'smWriteOff', ['writeOff']], ['transfer', 'trMenu', ['transferOut', 'transferIn', 'transferBack']]];
+var SM_GROUPS = [['', 'r3PAll', null], ['sale', 'smSale', ['sale', 'recipe']], ['receive', 'smReceive', ['receive', 'initial']], ['refund', 'smRefund', ['refund', 'delete', 'supplierReturn']], ['adjust', 'smAdjust', ['adjust', 'edit']], ['count', 'smCount', ['count']], ['writeoff', 'smWriteOff', ['writeOff']], ['transfer', 'trMenu', ['transferOut', 'transferIn', 'transferBack']]];
 function __r4SmOk(m){ const g = SM_GROUPS.find(x=>x[0] === (state.__r4SmG || '')); return !g || !g[2] || g[2].indexOf(m.reason) >= 0; }
 function __r4SmChips(container, renderList){
   const s = document.getElementById('sm-search'); if(!s) return;
@@ -25126,6 +25252,7 @@ function __shortHints(container){
 }
 function renderAll(){
   try{ applyTimeZone(); }catch(_e){} /* fix101-tz */
+  try{ if(__rcSyncAll()) saveProducts(); }catch(_e){}   /* fix179-recipe: taom qoldig'i (porsiya) va tannarxi xomashyodan */
   document.getElementById('brand-label').innerHTML = 'Savdo Pos<span>.</span>';
   renderLoginIfNeeded();
   if(!state.setupDone && state.staff.length===0) return;
