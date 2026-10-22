@@ -350,3 +350,40 @@ exports.telegramShop = onRequest({ cors: true, secrets: __tgHookSecrets, memory:
     res.status(500).json({ ok: false, code: 'internal' });
   }
 });
+
+/* ---------- fix185-fiscal3: fiskalizatsiya (ixtiyoriy; faqat fx === 1 belgili savdolar) ----------
+   fiscalApi      — ilova: send (darhol yuborish), status, open (yuborilmaganlar), retry, ping. Firebase ID token bilan.
+   fiscalSaleSync — savdo bulutga yozilganda (oflayn navbatdan ham) — yuborilmagan bo'lsa yuboradi.
+   fiscalTick     — har 10 daqiqada: navbatdagi (internet/operator xatosi) cheklarni qayta yuborish.
+   Operator kalitlari (B qismi) faqat Secret Manager'da; hozir "mock" (sinov) va boshqalar "sozlanmagan". */
+const __FX = require('./src/fiscal/engine');
+function __fxDeps() { return { db: __fbAdmin.firestore(), nowMs: nowMs }; }
+exports.fiscalApi = onRequest({ cors: true }, async function (req, res) {
+  try {
+    if (req.method !== 'POST') { res.status(405).json({ ok: false, code: 'method-not-allowed' }); return; }
+    const m = /^Bearer\s+(.+)$/i.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    let decoded;
+    try { decoded = await __fbAdmin.auth().verifyIdToken(m[1]); }
+    catch (e) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    const deps = __fxDeps();
+    const caller = await __TG.resolveCaller(deps.db, decoded.uid);
+    const out = await __FX.api(deps, caller, req.body || {});
+    res.status(out.status || 200).json(out.body);
+  } catch (e) {
+    console.error('fiscalApi xatosi', e && e.message);
+    res.status(500).json({ ok: false, code: 'internal' });
+  }
+});
+exports.fiscalSaleSync = onDocumentCreated({ document: 'businesses/{bizId}/sales/{saleId}' }, async function (event) {
+  const snap = event.data;
+  if (!snap) return;
+  const d = snap.data();
+  if (!d || d.fx !== 1) return;   // fiskal rejim o'chiq paytdagi savdo — tegilmaydi
+  try { const r = await __FX.onSaleCreated(__fxDeps(), event.params.bizId, event.params.saleId, d); if (r && r.status !== 'skip') console.log('fiscalSale', event.params.saleId, r.status); }
+  catch (e) { console.error('fiscalSaleSync xatosi', e && e.message); }
+});
+exports.fiscalTick = onSchedule({ schedule: 'every 10 minutes', timeZone: 'Asia/Tashkent' }, async function () {
+  try { const r = await __FX.retryTick(__fxDeps()); if (r.tried) console.log('fiscalTick', JSON.stringify(r)); }
+  catch (e) { console.error('fiscalTick xatosi', e && e.message); }
+});

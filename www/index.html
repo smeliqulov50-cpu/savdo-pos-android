@@ -1399,6 +1399,23 @@ const T = {
   rcPortions:{uz:"{n} porsiya",ru:"{n} порц.",en:"{n} portions",kk:"{n} порция",ky:"{n} порция",tg:"{n} порсия"},
   rcNoNest:{uz:"Retseptli taomni xomashyo qilib bo'lmaydi",ru:"Блюдо с техкартой нельзя сделать ингредиентом",en:"A dish with a recipe cannot be an ingredient",kk:"Техкартасы бар тағамды шикізат етуге болмайды",ky:"Техкартасы бар тамакты чийки зат кылууга болбойт",tg:"Таоми дорои харитаро ашё кардан мумкин нест"},
   smRecipe:{uz:"Retsept (xomashyo)",ru:"Техкарта (сырьё)",en:"Recipe (ingredient)",kk:"Техкарта (шикізат)",ky:"Техкарта (чийки зат)",tg:"Харита (ашё)"},
+  fsProviderMock:{uz:"🧪 Sinov (soliqqa yuborilmaydi)",ru:"🧪 Тест (в налоговую не отправляется)",en:"🧪 Test (not sent to tax)",kk:"🧪 Сынақ (салыққа жіберілмейді)",ky:"🧪 Сыноо (салыкка жөнөтүлбөйт)",tg:"🧪 Санҷиш (ба андоз фиристода намешавад)"},
+  fsMockHint:{uz:"Sinov rejimi: cheklar «MOCK…» belgisini oladi, soliqqa bormaydi. Butun yo'lni (sotuv → belgi → chek) tekshirish uchun.",ru:"Тестовый режим: чеки получают признак «MOCK…», в налоговую не уходят. Для проверки всей цепочки (продажа → признак → чек).",en:"Test mode: receipts get a “MOCK…” sign and are not sent to tax. For checking the whole flow (sale → sign → receipt).",kk:"Сынақ режимі: чектер «MOCK…» белгісін алады, салыққа бармайды. Бүкіл жолды (сату → белгі → чек) тексеру үшін.",ky:"Сыноо режими: чектер «MOCK…» белгисин алат, салыкка барбайт. Бүт жолду (сатуу → белги → чек) текшерүү үчүн.",tg:"Реҷаи санҷиш: чекҳо аломати «MOCK…» мегиранд, ба андоз намераванд. Барои санҷиши тамоми роҳ (фурӯш → аломат → чек)."},
+  fsPing:{uz:"Ulanishni tekshirish",ru:"Проверить подключение",en:"Check connection",kk:"Қосылымды тексеру",ky:"Туташууну текшерүү",tg:"Санҷиши пайваст"},
+  fsPingOk:{uz:"✅ Provayder javob berdi",ru:"✅ Провайдер ответил",en:"✅ Provider responded",kk:"✅ Провайдер жауап берді",ky:"✅ Провайдер жооп берди",tg:"✅ Провайдер ҷавоб дод"},
+  fsPingFail:{uz:"❌ Ulanmadi: {e}",ru:"❌ Не подключено: {e}",en:"❌ Not connected: {e}",kk:"❌ Қосылмады: {e}",ky:"❌ Туташкан жок: {e}",tg:"❌ Пайваст нашуд: {e}"},
+  fsNeedNet:{uz:"Internet va hisobga kirish kerak",ru:"Нужны интернет и вход в аккаунт",en:"Internet and sign-in required",kk:"Интернет және аккаунтқа кіру керек",ky:"Интернет жана аккаунтка кирүү керек",tg:"Интернет ва воридшавӣ лозим"},
+  fsUnsentTitle:{uz:"Yuborilmagan cheklar",ru:"Неотправленные чеки",en:"Unsent receipts",kk:"Жіберілмеген чектер",ky:"Жөнөтүлбөгөн чектер",tg:"Чекҳои нафиристода"},
+  fsUnsentNone:{uz:"✅ Hamma cheklar yuborilgan.",ru:"✅ Все чеки отправлены.",en:"✅ All receipts are sent.",kk:"✅ Барлық чектер жіберілген.",ky:"✅ Бардык чектер жөнөтүлгөн.",tg:"✅ Ҳамаи чекҳо фиристода шудаанд."},
+  fsUnsentHint:{uz:"Savdo to'xtamaydi: chek yuborilmasa navbatda qoladi va internet qaytganda o'zi yuboriladi (server har 10 daqiqada qayta urinadi).",ru:"Продажи не останавливаются: неотправленный чек остаётся в очереди и уходит сам, когда появится интернет (сервер повторяет каждые 10 минут).",en:"Sales never stop: an unsent receipt stays queued and goes out by itself when the internet is back (the server retries every 10 minutes).",kk:"Сату тоқтамайды: жіберілмеген чек кезекте қалады және интернет келгенде өзі жіберіледі (сервер әр 10 минут сайын қайталайды).",ky:"Сатуу токтобойт: жөнөтүлбөгөн чек кезекте калат жана интернет келгенде өзү жөнөтүлөт (сервер ар 10 мүнөттө кайталайт).",tg:"Фурӯш қатъ намешавад: чеки нафиристода дар навбат мемонад ва ҳангоми пайдо шудани интернет худаш меравад (сервер ҳар 10 дақиқа такрор мекунад)."},
+  fsStPending:{uz:"kutilmoqda",ru:"ожидает",en:"pending",kk:"күтуде",ky:"күтүлүүдө",tg:"дар интизор"},
+  fsStSent:{uz:"soliqqa yuborildi",ru:"отправлен в налоговую",en:"sent to tax",kk:"салыққа жіберілді",ky:"салыкка жөнөтүлдү",tg:"ба андоз фиристода шуд"},
+  fsStFailed:{uz:"xato",ru:"ошибка",en:"error",kk:"қате",ky:"ката",tg:"хато"},
+  fsStTest:{uz:"sinov",ru:"тест",en:"test",kk:"сынақ",ky:"сыноо",tg:"санҷиш"},
+  fsSendAll:{uz:"Hammasini yuborish",ru:"Отправить все",en:"Send all",kk:"Барлығын жіберу",ky:"Баарын жөнөтүү",tg:"Ҳамаро фиристодан"},
+  fsResend:{uz:"Qayta yuborish",ru:"Отправить снова",en:"Resend",kk:"Қайта жіберу",ky:"Кайра жөнөтүү",tg:"Аз нав фиристодан"},
+  fsSentN:{uz:"Yuborildi: {n} / {t}",ru:"Отправлено: {n} / {t}",en:"Sent: {n} / {t}",kk:"Жіберілді: {n} / {t}",ky:"Жөнөтүлдү: {n} / {t}",tg:"Фиристода шуд: {n} / {t}"},
+  fsUnsentAlert:{uz:"🧾 {n} ta chek soliqqa yuborilmagan — Fiskal kassa",ru:"🧾 {n} чеков не отправлено в налоговую — Фискальная касса",en:"🧾 {n} receipts not sent to tax — Fiscal register",kk:"🧾 {n} чек салыққа жіберілмеген — Фискалдық касса",ky:"🧾 {n} чек салыкка жөнөтүлгөн жок — Фискалдык касса",tg:"🧾 {n} чек ба андоз нафиристода — Кассаи фискалӣ"},
   pfPkg:{uz:"Qadoq / o'lchov kodi (tasnif.soliq.uz)",ru:"Код упаковки / ед. измерения (tasnif.soliq.uz)",en:"Package / unit code (tasnif.soliq.uz)",kk:"Қаптама / өлшем коды (tasnif.soliq.uz)",ky:"Таңгак / өлчөм коду (tasnif.soliq.uz)",tg:"Рамзи борпеч / воҳид (tasnif.soliq.uz)"},
   pfPkgHint:{uz:"IKPU tanlanganda katalogda ko'rsatiladi (masalan 1495086). Bo'sh qoldirsa bo'ladi.",ru:"Указан в каталоге при выборе ИКПУ (например 1495086). Можно оставить пустым.",en:"Shown in the catalog next to the IKPU (e.g. 1495086). May be left empty.",kk:"ИКПУ таңдалғанда каталогта көрсетіледі (мысалы 1495086). Бос қалдыруға болады.",ky:"ИКПУ тандалганда каталогдо көрсөтүлөт (мисалы 1495086). Бош калтырса болот.",tg:"Ҳангоми интихоби ИКПУ дар каталог нишон дода мешавад (масалан 1495086). Холӣ гузоштан мумкин."},
   pfPkgBad:{uz:"Qadoq kodi faqat raqamlardan iborat bo'lishi kerak",ru:"Код упаковки — только цифры",en:"Package code must be digits only",kk:"Қаптама коды — тек сандар",ky:"Таңгак коду — сандар гана",tg:"Рамзи борпеч — танҳо рақамҳо"},
@@ -3690,6 +3707,7 @@ async function loadAll(){
   try{ state.giftCards = (await storGet(GFT_STORE)) || []; }catch(e){}   /* fix140-gift */
   state.subCloudCheck = (await storGet(STORAGE_KEYS.subCloudCheck)) || 0;
   state.stockMoves = (await storGet(STORAGE_KEYS.stockMoves)) || [];
+  try{ state.fiscalMap = (await storGet('sardor_fiscal_v1')) || {}; }catch(e){ state.fiscalMap = {}; }   /* fix185-fiscal3 */
   state.heldCarts = (await storGet(STORAGE_KEYS.heldCarts)) || [];
   state.visits = visits || [];
   state.creditors = creditors || [];
@@ -4247,7 +4265,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.60';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.61';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -9657,7 +9675,9 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     customerForBonus.creditLimit += earnedCreditBoost;
     saveCustomers();
   }
+  if(fiscalOn()) __fxStamp(sale);   /* fix185-fiscal3: fiskal rejimda — sotuv paytidagi IKPU/qadoq/QQS savdoga */
   saveProducts(); saveSales(); addSaleDoc(sale);
+  if(fiscalOn()) __fxSend(sale);   /* fix185-fiscal3: fonda; savdoni to'xtatmaydi */
   if(state.settings.restaurantMode && anyKitchenPrinterConfigured() && !__boSkipKitchen(sale)){   /* fix145-botshop: qabul qilinganda yuborilgan bo'lsa qayta chiqmaydi */
     if(tbl){
       await printKitchenDelta(tbl);
@@ -9709,6 +9729,7 @@ function openPostSaleModal(sale, custDebtAfter){
     if(state.settings.printerMode === 'bluetooth' && !getBtCharacteristic('main') && !loadRememberedBtDevices().main){
       await connectBluetoothPrinter();
     }
+    if(sale.fx === 1 && __fxPending(sale.id)) await __fxWait(sale.id, 3000);   /* fix185-fiscal3 */
     printReceipt(sale, customer);
   });
   const smsBtn = document.getElementById('sms-btn');
@@ -9733,7 +9754,8 @@ function openPostSaleModal(sale, custDebtAfter){
     /* fix97-autoprint: printer har chekdan keyin bo'shatiladi, shuning uchun 'hozir ulangan' sharti o'rniga 'eslab qolingan printer bor' sharti ham qabul qilinadi;
        printReceipt() o'zi jim ulanadi (qurilma tanlash oynasisiz). Printer umuman sozlanmagan bo'lsa — avvalgidek hech narsa chiqmaydi. */
     if(getBtCharacteristic('main') || state.settings.printerMode !== 'bluetooth' || loadRememberedBtDevices().main){
-      printReceipt(sale, customer);
+      if(sale.fx === 1 && __fxPending(sale.id)) __fxWait(sale.id, 3000).then(()=>printReceipt(sale, customer));   /* fix185-fiscal3 */
+      else printReceipt(sale, customer);
     }
   }
 }
@@ -9814,6 +9836,7 @@ function canvasRoundRectPath(ctx, x, y, w, h, r){
   ctx.closePath();
 }
 function receiptImageBlob(sale, customer){
+  try{ __fxAttach(sale); }catch(e){}   /* fix185-fiscal3 */
   return new Promise((resolve)=>{
     const s = state.settings;
     const width = 420;
@@ -10304,7 +10327,7 @@ function __rcTidy(lines, sep, dropLeading){
   while(out.length && (out[out.length - 1] === sep || String(out[out.length - 1]).trim() === '')) out.pop();
   return out;
 }
-function buildReceiptText(...a){ return withReceiptLang(()=>buildReceiptTextInner(...a)); }
+function buildReceiptText(...a){ try{ __fxAttach(a[0]); }catch(e){} return withReceiptLang(()=>buildReceiptTextInner(...a)); }
 function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   const s = state.settings;
   const width = widthOverride || s.printerCharsPerLine || 32;
@@ -10697,7 +10720,7 @@ function paymentTypeDisplayText(sale){
   return paymentTypeLabel(sale.paymentType, true);
 }
 
-function buildReceiptHtml(...a){ return withReceiptLang(()=>buildReceiptHtmlInner(...a)); }
+function buildReceiptHtml(...a){ try{ __fxAttach(a[0]); }catch(e){} return withReceiptLang(()=>buildReceiptHtmlInner(...a)); }
 function buildReceiptHtmlInner(sale, customer){
   const s = state.settings;
   const align = s.receiptAlign === 'left' ? 'left' : 'center';
@@ -12346,6 +12369,7 @@ function __custById(id){
   return __cbiC.m.get(id) || a.find(c=>c && c.id===id) || null;
 }
 function renderReceiptsListItems(sales){
+  try{ if(fiscalOn() || (sales || []).some(x=>x && x.fx === 1)) __fxRefresh(()=>{ const el = document.getElementById('receipts-list'); if(el) renderReceiptsListItems(sales); }); }catch(e){}   /* fix185-fiscal3 */
   const listEl = document.getElementById('receipts-list');
   if(!listEl) return;
   listEl.innerHTML = sales.length ? sales.map(s=>{
@@ -12359,7 +12383,7 @@ function renderReceiptsListItems(sales){
           <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
           <div>
             <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${fmtDateTime(s.date)}</span></div>
-            <div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${cust?(' · '+escapeHtml(cust.name)):''}${s.cashierName?(' · '+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · '+icI('edit')+' '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>
+            <div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${cust?(' · '+escapeHtml(cust.name)):''}${s.cashierName?(' · '+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${__fxBadge(s)}${s.edited?(' · '+icI('edit')+' '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>
           </div>
         </div>
         <span class="rcpt-chev">›</span>
@@ -15836,7 +15860,7 @@ function openCustomerPurchases(customerId){
         <div class="row" style="padding-left:6px;">
           <div class="info" style="display:flex;align-items:center;gap:10px;">
             <span style="font-size:20px;line-height:1;">${paymentTypeIcon(s.paymentType)}</span>
-            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${fmtDateTime(s.date)}</span>${(s.receiptNumber||s.cashierName)?(`<div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${s.cashierName?((s.receiptNumber?' · ':'')+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${s.edited?(' · '+icI('edit')+' '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>`):''}</div>
+            <div class="name" style="font-weight:800;">${fmt(s.total)}<span style="font-weight:500;color:var(--ink-soft);font-size:12px;"> · ${fmtDateTime(s.date)}</span>${(s.receiptNumber||s.cashierName)?(`<div class="meta">${s.receiptNumber?('№'+s.receiptNumber):''}${s.cashierName?((s.receiptNumber?' · ':'')+tr('cashier')+': '+escapeHtml(s.cashierName)):''}${__fxBadge(s)}${s.edited?(' · '+icI('edit')+' '+tr('receiptEditedLabel')):''}${s.refunded?` · <span style="color:var(--danger);font-weight:700;">${tr('refunded')}</span>`:''}</div>`):''}</div>
           </div>
           <span class="rcpt-chev">›</span>
         </div>
@@ -16159,6 +16183,7 @@ function renderReportsMenu(container){
   const alertCount = lowStockItems.length + expiringCount;
   container.innerHTML = `
     <h2 class="section-title">${ICONS.reports} ${tr('navReports')}</h2>
+    ${__fxAlertHtml()}
     ${alertCount ? `<div class="card alert-soft" style="cursor:pointer;" id="alerts-shortcut"><p style="margin:0;color:var(--danger);font-weight:700;">${icI('alert')} ${escapeHtml(stockCountsText(__sc, expiringCount))}</p></div>` : ''}
     ${(()=>{
       /* fix171-repgroups: guruh → [guruh, belgi, rang]; tartib — ko'p ishlatiladigan oldin */
@@ -16189,6 +16214,7 @@ function renderReportsMenu(container){
     })()}
     ${historyWindowDays() ? `<p class="subtle" style="margin-top:12px;font-size:12px;">${tr('historyWindowNote').replace('{days}', historyWindowDays())}</p>` : ''}
   `;
+  try{ const __fa = document.getElementById('fx-alert'); if(__fa) __fa.addEventListener('click', ()=>{ state.view = 'settings'; state.settingsCategory = 'fiscal'; state.reportsCategory = null; renderAll(); }); if(fiscalOn()) __fxRefresh(()=>{ if(state.view === 'reports' && !state.reportsCategory) renderReports(); }); }catch(e){}   /* fix185-fiscal3 */
   if(R3_ON){ try{ __r4Home(container); }catch(e){ console.error('fix130 home', e); } }   /* fix130-rep2 */
   try{ __s4Span(container); }catch(e){}   /* fix131-set */
   container.querySelectorAll('[data-cat]').forEach(el=>{
@@ -20188,7 +20214,7 @@ function __ssBindGo(container){
   }));
 }
 /* fix182-fiscal1: Fiskal kassa sozlamalari — majburiy emas, standart o'chiq */
-const FS_PROVIDERS = [['', 'fsProviderNone'], ['epos', 'E-POS'], ['rahmat', 'Rahmat POS'], ['uzkassa', 'UZKASSA'], ['qpos', 'QPos'], ['other', 'Boshqa / Другой']];
+const FS_PROVIDERS = [['', 'fsProviderNone'], ['epos', 'E-POS'], ['rahmat', 'Rahmat POS'], ['uzkassa', 'UZKASSA'], ['qpos', 'QPos'], ['other', 'Boshqa / Другой'], ['mock', 'fsProviderMock']];   /* fix185-fiscal3: sinov */
 function fiscalOn(){ return !!(state.settings && state.settings.fiscalMode); }
 function __fsExpired(p){
   if(!state.settings || !state.settings.blockExpiredSale || !p || !p.expiryDate) return false;
@@ -20216,6 +20242,111 @@ function __fsReadyHtml(){
   if(svcNeed) h += `<p style="margin:8px 0 0;font-size:12.5px;color:var(--warm);font-weight:600;">${tr('fsReadySvc')}</p>`;
   return h;
 }
+/* fix185-fiscal3: fiskal holatlar (server yozadi, ilova o'qiydi). Savdo HECH QACHON to'xtamaydi. */
+const __fxP = {};
+function __fxMap(){ return state.fiscalMap || (state.fiscalMap = {}); }
+function __fxSave(){ try{ const m = __fxMap(), ks = Object.keys(m); if(ks.length > 3000){ ks.sort((a, b)=>String((m[a]||{}).at||'').localeCompare(String((m[b]||{}).at||''))).slice(0, ks.length - 3000).forEach(k=>{ delete m[k]; }); } storSet('sardor_fiscal_v1', m); }catch(e){} }
+function __fxStamp(sale){
+  sale.fx = 1;
+  (sale.items || []).forEach(it=>{
+    const p = state.products.find(x=>x.id === it.productId) || {};
+    it.ikpu = String(p.ikpu || ''); it.pkg = String(p.packageCode || ''); it.vat = (p.vat === undefined || p.vat === null || p.vat === '') ? null : Number(p.vat);
+  });
+}
+function __fxApply(id, r){
+  if(!id || !r || !r.status || r.status === 'skip' || r.status === 'none') return;
+  __fxMap()[id] = {status: r.status, sign: r.sign || '', number: r.number || '', qr: r.qr || '', error: r.error || '', retryable: r.retryable !== false, test: !!r.test, at: new Date().toISOString()};
+  __fxSave();
+}
+async function __fxCall(action, payload){
+  if(!fbUser) throw {code: 'login'};
+  if(typeof navigator !== 'undefined' && navigator.onLine === false) throw {code: 'offline'};
+  const token = await fbUser.getIdToken();
+  const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  const to = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch(e){} }, 25000);
+  try{
+    const resp = await fetch(payFnUrl('fiscalApi'), {method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}, body: JSON.stringify(Object.assign({}, payload || {}, {action})), signal: ctrl ? ctrl.signal : undefined});
+    let data = null; try{ data = await resp.json(); }catch(e){}
+    if(!data) throw {code: resp.status === 404 ? 'no_server' : 'net'};
+    if(!data.ok) throw {code: data.code || 'internal'};
+    return data;
+  } finally { clearTimeout(to); }
+}
+function __fxSend(sale){
+  if(!sale || sale.fx !== 1 || __fxP[sale.id]) return;
+  const body = JSON.parse(JSON.stringify(sale));
+  __fxP[sale.id] = __fxCall('send', {sale: body}).then(d=>{ __fxApply(sale.id, d.result); return d.result; }).catch(()=>null).finally(()=>{ setTimeout(()=>{ delete __fxP[sale.id]; }, 1000); });
+}
+function __fxPending(id){ return !!__fxP[id]; }
+function __fxWait(id, ms){ const p = __fxP[id]; if(!p) return Promise.resolve(null); return Promise.race([p, new Promise(r=>setTimeout(()=>r(null), ms))]); }
+function __fxAttach(sale){ if(!sale || sale.fx !== 1) return; const f = __fxMap()[sale.id]; if(f && f.status === 'sent') sale.fiscal = {sign: f.sign, number: f.number, qr: f.qr}; }
+function __fxStateOf(s){ if(!s || s.fx !== 1) return null; const f = __fxMap()[s.id]; return f ? f.status : 'pending'; }
+function __fxBadge(s){
+  const st = __fxStateOf(s); if(!st) return '';
+  const f = __fxMap()[s.id] || {};
+  if(st === 'sent') return ' · <span style="color:var(--teal);font-weight:700;">🧾 ' + tr('fsStSent') + (f.test ? ' (' + tr('fsStTest') + ')' : '') + '</span>';
+  if(st === 'failed') return ' · <span style="color:var(--danger);font-weight:700;">🧾 ' + tr('fsStFailed') + '</span>';
+  return ' · <span style="color:var(--warm);font-weight:700;">🧾 ' + tr('fsStPending') + '</span>';
+}
+function __fxUnsent(){
+  const br = effectiveBranchId(state.currentBranchId), from = Date.now() - 60 * 86400000;
+  return (state.sales || []).filter(s=>s && s.fx === 1 && !s.refunded && effectiveBranchId(s.branchId) === br && new Date(s.date).getTime() >= from && __fxStateOf(s) !== 'sent').sort((a, b)=>String(b.date).localeCompare(String(a.date)));
+}
+let __fxLastRefresh = 0;
+function __fxRefresh(after){
+  if(!fbUser || (typeof navigator !== 'undefined' && navigator.onLine === false)) return;
+  if(Date.now() - __fxLastRefresh < 30000) return;
+  const ids = __fxUnsent().map(s=>s.id).slice(0, 100); if(!ids.length) return;
+  __fxLastRefresh = Date.now();
+  __fxCall('status', {ids}).then(d=>{ let ch = false; Object.keys(d.map || {}).forEach(k=>{ const r = d.map[k]; if(r && r.status && r.status !== 'none'){ const o = __fxMap()[k]; if(!o || o.status !== r.status || o.sign !== (r.sign || '')){ __fxApply(k, r); ch = true; } } }); if(ch && after) after(); }).catch(()=>{});
+}
+function __fxAlertHtml(){
+  if(!fiscalOn()) return '';
+  const n = __fxUnsent().filter(s=>Date.now() - new Date(s.date).getTime() > 5 * 60000).length;   /* yangi (5 daqiqadan yosh) chekni ogohlantirmaymiz */
+  if(!n) return '';
+  return `<div class="card alert-soft" style="cursor:pointer;" id="fx-alert"><p style="margin:0;color:var(--warm);font-weight:700;">${escapeHtml(tr('fsUnsentAlert').replace('{n}', n))}</p></div>`;
+}
+function __fxUnsentHtml(){
+  const list = __fxUnsent();
+  let h = `<h3 class="sub-title" style="margin:0 0 6px;">${tr('fsUnsentTitle')}</h3><p class="subtle" style="margin:0 0 8px;font-size:12px;">${tr('fsUnsentHint')}</p>`;
+  if(!list.length) return h + `<p style="margin:0;font-weight:700;color:var(--teal);">${tr('fsUnsentNone')}</p>`;
+  h += `<div class="btn-row" style="margin-bottom:8px;"><button class="btn btn-primary btn-sm" id="fx-send-all" type="button">${tr('fsSendAll')} (${list.length})</button></div><p class="subtle" id="fx-send-res" style="margin:0 0 6px;font-size:12.5px;font-weight:600;"></p>`;
+  h += list.slice(0, 30).map(s=>{ const f = __fxMap()[s.id] || {}; const st = __fxStateOf(s);
+    return `<div class="list-item" style="padding:9px 12px 9px 14px;gap:8px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">№${escapeHtml(String(s.receiptNumber || ''))} · ${fmt(s.total)}</div><div class="meta">${fmtDateTime(s.date)} · <span style="color:${st === 'failed' ? 'var(--danger)' : 'var(--warm)'};font-weight:700;">${st === 'failed' ? tr('fsStFailed') + (f.error ? ': ' + escapeHtml(String(f.error).slice(0, 80)) : '') : tr('fsStPending')}</span></div></div><button class="btn btn-outline btn-sm" type="button" data-fx-resend="${escapeHtml(s.id)}">${tr('fsResend')}</button></div>`; }).join('');
+  return h;
+}
+async function __fxSendIds(ids){
+  let n = 0;
+  for(const id of ids.slice(0, 20)){
+    const s = state.sales.find(x=>x.id === id); if(!s) continue;
+    try{ const d = await __fxCall('send', {sale: JSON.parse(JSON.stringify(s)), force: true}); __fxApply(id, d.result); if(d.result && d.result.status === 'sent') n++; }
+    catch(e){ if(e && (e.code === 'offline' || e.code === 'login')) throw e; }
+  }
+  return n;
+}
+function __fxBindPage(container){
+  const prov = document.getElementById('s-fs-provider');
+  if(prov) prov.addEventListener('change', ()=>{ const mh = document.getElementById('fs-mock-hint'); if(mh) mh.style.display = prov.value === 'mock' ? '' : 'none'; });
+  const pb = document.getElementById('fs-ping');
+  if(pb) pb.addEventListener('click', async ()=>{
+    const out = document.getElementById('fs-ping-res'); if(pb.disabled) return; pb.disabled = true; out.textContent = '…';
+    try{ const d = await __fxCall('ping', {}); out.textContent = d.result && d.result.ok ? tr('fsPingOk') : tr('fsPingFail').replace('{e}', (d.result && d.result.error) || '?'); out.style.color = d.result && d.result.ok ? 'var(--teal)' : 'var(--danger)'; }
+    catch(e){ out.textContent = tr('fsPingFail').replace('{e}', (e && (e.code === 'offline' || e.code === 'login')) ? tr('fsNeedNet') : ((e && e.code) || '?')); out.style.color = 'var(--danger)'; }
+    finally{ pb.disabled = false; }
+  });
+  const box = document.getElementById('ss-fs-unsent');
+  const redraw = ()=>{ const b = document.getElementById('ss-fs-unsent'); if(b){ b.innerHTML = __fxUnsentHtml(); b.style.display = (fiscalOn() || __fxUnsent().length) ? '' : 'none'; } };
+  if(box) box.addEventListener('click', async (e)=>{
+    const all = e.target.closest('#fx-send-all'), one = e.target.closest('[data-fx-resend]');
+    if(!all && !one) return;
+    const btn = all || one; if(btn.disabled) return; btn.disabled = true;
+    const ids = all ? __fxUnsent().map(s=>s.id) : [one.dataset.fxResend];
+    try{ const n = await __fxSendIds(ids); redraw(); const r = document.getElementById('fx-send-res'); if(r) r.textContent = tr('fsSentN').replace('{n}', n).replace('{t}', Math.min(ids.length, 20)); else showToast(tr('fsSentN').replace('{n}', n).replace('{t}', Math.min(ids.length, 20))); }
+    catch(err){ showToast(tr('fsNeedNet')); btn.disabled = false; }
+  });
+  container.querySelectorAll('[data-fs-mode]').forEach(b=>b.addEventListener('click', ()=>setTimeout(redraw, 50)));
+  if(fiscalOn()){ __fxLastRefresh = 0; __fxRefresh(redraw); }
+}
 function renderSettingsFiscal(container){
   const on = fiscalOn();
   __ssPage(container, tr('fsTitle'), `
@@ -20227,17 +20358,21 @@ function renderSettingsFiscal(container){
         <div class="toggle-opt ${on ? 'active' : ''}" data-fs-mode="on">${tr('fsOn')}</div>
       </div>
       <div id="fs-box" style="${on ? '' : 'display:none;'}margin-top:12px;">
-        <div class="field"><label class="field-label">${tr('fsProvider')} ${__ssOk('fsprov')}</label><select id="s-fs-provider">${FS_PROVIDERS.map(([v, l])=>`<option value="${v}" ${(state.settings.fiscalProvider||'')===v?'selected':''}>${v ? l : tr(l)}</option>`).join('')}</select></div>
+        <div class="field"><label class="field-label">${tr('fsProvider')} ${__ssOk('fsprov')}</label><select id="s-fs-provider">${FS_PROVIDERS.map(([v, l])=>`<option value="${v}" ${(state.settings.fiscalProvider||'')===v?'selected':''}>${(v && v !== 'mock') ? l : tr(l)}</option>`).join('')}</select></div>
         <div class="field">${__ssLbl('fsinn', tr('invInn'))}<input type="text" inputmode="numeric" id="s-fs-inn" value="${escapeHtml(state.settings.businessInn||'')}">${__ssErr('fsinn')}</div>
         <div class="field">${__ssLbl('fskassa', tr('fsKassaId'))}<input type="text" id="s-fs-kassa" value="${escapeHtml(state.settings.fiscalKassaId||'')}">${__ssErr('fskassa')}</div>
         <div class="field">${__ssLbl('fsaddr', tr('fsAddress'))}<input type="text" id="s-fs-addr" value="${escapeHtml(state.settings.fiscalAddress||'')}">${__ssErr('fsaddr')}</div>
         <div class="field">${__ssLbl('fssvc', tr('fsSvcIkpu'))}<input type="text" inputmode="numeric" maxlength="17" id="s-fs-svc" value="${escapeHtml(state.settings.fiscalServiceIkpu||'')}">${__ssErr('fssvc')}</div>
         <div class="field">${__ssLbl('fsdlv', tr('fsDlvIkpu'))}<input type="text" inputmode="numeric" maxlength="17" id="s-fs-dlv" value="${escapeHtml(state.settings.fiscalDeliveryIkpu||'')}">${__ssErr('fsdlv')}</div>
         <div class="field"><label class="field-label">${tr('fsSvcVat')} ${__ssOk('fssvat')}</label><select id="s-fs-svat"><option value="" ${(state.settings.fiscalServiceVat==null)?'selected':''}>${tr('pfVatNone')}</option>${[0,12,15].map(v=>`<option value="${v}" ${String(state.settings.fiscalServiceVat)===String(v)?'selected':''}>${v}%</option>`).join('')}</select></div>
+        <p class="subtle" id="fs-mock-hint" style="margin:0 0 8px;font-size:12px;${state.settings.fiscalProvider === 'mock' ? '' : 'display:none;'}">${tr('fsMockHint')}</p>
         <p class="subtle" style="margin:0;font-size:12px;">${tr('fsStage2')}</p>
+        <button class="btn btn-outline btn-sm" id="fs-ping" type="button" style="margin-top:10px;">${tr('fsPing')}</button>
+        <p class="subtle" id="fs-ping-res" style="margin:6px 0 0;font-size:12.5px;font-weight:600;"></p>
       </div>
     </div>
     <div class="card" id="ss-fs-ready" style="margin-top:14px;${on ? '' : 'display:none;'}">${__fsReadyHtml()}</div>
+    <div class="card" id="ss-fs-unsent" style="margin-top:14px;${(on || __fxUnsent().length) ? '' : 'display:none;'}">${__fxUnsentHtml()}</div>
     <div class="card" id="ss-fs-exp" style="margin-top:14px;">
       <div class="checkbox-row"><input type="checkbox" id="s-fs-block-exp" ${state.settings.blockExpiredSale?'checked':''}><span>${tr('fsBlockExpired')} ${__ssOk('fsexp')}</span></div>
       <p class="subtle" style="margin:6px 0 0;font-size:12px;">${tr('fsBlockExpiredHint')}</p>
@@ -20264,6 +20399,7 @@ function renderSettingsFiscal(container){
   const __rd = document.getElementById('ss-fs-ready');
   container.querySelectorAll('[data-fs-mode]').forEach(b=>b.addEventListener('click', ()=>{ if(__rd){ __rd.style.display = fiscalOn() ? '' : 'none'; __rd.innerHTML = __fsReadyHtml(); } }));
   if(__rd) __rd.addEventListener('click', (e)=>{ const b = e.target.closest('[data-fsfix]'); if(!b) return; openProductForm(b.dataset.fsfix); });
+  try{ __fxBindPage(container); }catch(e){ console.error('fix185 page', e); }   /* fix185-fiscal3 */
   const be = document.getElementById('s-fs-block-exp');
   if(be) be.addEventListener('change', async ()=>{ state.settings.blockExpiredSale = be.checked; const ok = await __ssSave(); if(ok) __ssTick('fsexp'); else showToast(tr('ssSaveFail')); });
   __ssBindGo(container);

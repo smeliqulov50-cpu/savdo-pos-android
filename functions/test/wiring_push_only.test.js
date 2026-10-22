@@ -26,3 +26,11 @@ test('push-only: maxfiy qiymat e\'lon qilinmaydi, hech bir funksiya secrets tala
   assert.equal(fns.sharedDebtIndex.__path, 'businesses/{bizId}/customers/{custId}');
   assert.equal(fns.sharedDebts.__opts.cors, true);
 });
+
+/* fix185-fiscal3: fiskal funksiyalar — maxfiy qiymatsiz, to'g'ri yo'llar */
+test('fiskal: fiscalApi (cors), fiscalSaleSync (savdo yaratilganda), fiscalTick (10 daq) — secrets yo\'q', () => {
+  ['fiscalApi', 'fiscalSaleSync', 'fiscalTick'].forEach(function (k) { assert.equal(typeof fns[k], 'function', k); });
+  assert.equal(fns.fiscalApi.__opts.cors, true);
+  assert.equal(fns.fiscalSaleSync.__path.document, 'businesses/{bizId}/sales/{saleId}');
+  assert.equal(fns.fiscalTick.__opts.schedule, 'every 10 minutes');
+});
