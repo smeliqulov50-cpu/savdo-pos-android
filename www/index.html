@@ -4271,7 +4271,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.62';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.63';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -9856,6 +9856,8 @@ function receiptImageBlob(sale, customer){
     const itemLayouts = sale.items.map(it=>computeReceiptItemLayout(ctx, it, width, padding));
     ctx.font = '13px Arial';
     const __custLines = customer ? __custReceiptLines(customer, t=>__wrapCanvasText(ctx, t, width - padding*2)) : [];   /* fix104-custline */
+    const __rcH = __rcHeadParts(sale, s.printerCharsPerLine || 32);   /* fix187-rchead */
+    const __rcOne = __rcH.one && (ctx.measureText(__rcH.left).width + 24 + ctx.measureText(__rcH.no).width <= width - padding*2);
 
     // First pass: measure total height
     let y = padding;
@@ -9866,7 +9868,7 @@ function receiptImageBlob(sale, customer){
     y += 16; // separator gap
     const headerHeight = y;
     y += smallLineH; // date
-    if(sale.receiptNumber) y += smallLineH; /* fix76 */
+    if(sale.receiptNumber && !__rcOne) y += smallLineH; /* fix76 + fix187-rchead */
     if(sale.tableName) y += smallLineH;
     if(sale.orderType) y += smallLineH;
     if(sale.cashierName) y += smallLineH;
@@ -9934,8 +9936,11 @@ function receiptImageBlob(sale, customer){
     cy = headerHeight + 20;
 
     ctx.textAlign = 'left'; ctx.font = '13px Arial'; ctx.fillStyle = '#51677E';
+    if(__rcOne){ ctx.fillText(__rcH.left, padding, cy); ctx.textAlign = 'right'; ctx.fillText(__rcH.no, canvas.width-padding, cy); ctx.textAlign = 'left'; cy += smallLineH; }   /* fix187-rchead */
+    else {
     if(sale.receiptNumber){ ctx.fillText(trR('receiptNumberLabel')+': '+sale.receiptNumber, padding, cy); cy += smallLineH; } /* fix76 */
-    ctx.fillText(__rcDateStr(sale.date), padding, cy); cy += smallLineH;   /* fix176-receipt */
+    ctx.fillText(sale.receiptNumber ? __rcDateStr(sale.date) : __rcH.solo, padding, cy); cy += smallLineH;   /* fix176-receipt */
+    }
     if(sale.tableName){ ctx.fillText(tableWord()+': '+sale.tableName, padding, cy); cy += smallLineH; }
     if(sale.orderType){ ctx.fillText(sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway'), padding, cy); cy += smallLineH; }
     if(sale.cashierName){ ctx.fillText(trR('cashier')+': '+sale.cashierName, padding, cy); cy += smallLineH; }
@@ -10323,6 +10328,23 @@ function __wrapCanvasText(ctx, text, maxW){
 }
 /* fix176-receipt: sana «21.10.2026 20:32» (soniyasiz, qisqa); chiziqlarni tartiblash */
 function __rcDateStr(d){ const x = new Date(d); if(isNaN(x)) return ''; const p = n=>String(n).padStart(2, '0'); return p(x.getDate()) + '.' + p(x.getMonth() + 1) + '.' + x.getFullYear() + ' ' + p(x.getHours()) + ':' + p(x.getMinutes()); }
+/* fix187-rchead: chek boshi — «22.10.2026   15:05   Chek raqami: B6DE-0067».
+   Bitta qator faqat keng qog'ozda (76/80 mm — printerDotsWidth >= 512) va qator kenglikka to'liq sig'sa; aks holda avvalgidek: raqam, keyin sana. */
+function __rcWidePaper(){ try{ return printerDotsWidth() >= 512; }catch(e){ return false; } }
+function __rcHeadParts(sale, width){
+  const ds = __rcDateStr(sale && sale.date), sp = ds.lastIndexOf(' ');
+  const left = sp > 0 ? ds.slice(0, sp) + '   ' + ds.slice(sp + 1) : ds;
+  const no = (sale && sale.receiptNumber) ? trR('receiptNumberLabel') + ': ' + sale.receiptNumber : '';
+  const wide = __rcWidePaper(), w = Number(width) || 32;
+  const one = !!no && wide && (left.length + 3 + no.length) <= w;
+  return {ds, left, no, one, wide, solo: no ? '' : ((wide && left.length <= w) ? left : ds)};
+}
+function __rcHeadLine(sale, width){
+  const h = __rcHeadParts(sale, width), w = Number(width) || 32;
+  if(!h.no) return [h.solo];
+  if(h.one) return [h.left + ' '.repeat(Math.max(3, w - h.left.length - h.no.length)) + h.no];
+  return [h.no, h.ds];
+}
 function __rcTidy(lines, sep, dropLeading){
   const out = [];
   lines.forEach(l=>{
@@ -10350,8 +10372,7 @@ function buildReceiptTextInner(sale, customer, skipBusinessName, widthOverride){
   if(s.businessAddress) lines.push(s.businessAddress);
   if(s.businessPhone) lines.push(s.businessPhone);
   lines.push(sep);
-  if(sale.receiptNumber) lines.push(trR('receiptNumberLabel')+': '+sale.receiptNumber);   /* fix176-receipt: avval raqam, keyin sana */
-  lines.push(__rcDateStr(sale.date));
+  __rcHeadLine(sale, width).forEach(l=>lines.push(l));   /* fix187-rchead (fix176: tor qog'ozda avval raqam, keyin sana) */
   if(sale.tableName) lines.push(tableWord()+': '+sale.tableName);
   if(sale.cashierName) lines.push(trR('cashier')+': '+sale.cashierName);
   if(customer) __custReceiptLines(customer, t=>wrapText(t, width)).forEach(l=>lines.push(l));   /* fix104-custline */
@@ -10751,8 +10772,11 @@ function buildReceiptHtmlInner(sale, customer){
     ${s.businessPhone?`<div style="text-align:${align};font-weight:${bizWeight};font-size:${bizSize};">${escapeHtml(s.businessPhone)}</div>`:''}
     </div>
     <hr style="${hrStyle}">
-    ${sale.receiptNumber?`<div>${trR('receiptNumberLabel')}: ${escapeHtml(String(sale.receiptNumber))}</div>`:''}
-    <div>${__rcDateStr(sale.date)}</div>
+    ${(()=>{ const h = __rcHeadParts(sale, s.printerCharsPerLine || 32);   /* fix187-rchead */
+      if(h.one) return `<div style="display:flex;justify-content:space-between;gap:8px;"><span style="white-space:pre;">${escapeHtml(h.left)}</span><span style="text-align:right;">${escapeHtml(h.no)}</span></div>`;
+      if(!h.no) return `<div style="white-space:pre;">${escapeHtml(h.solo)}</div>`;
+      return `<div>${trR('receiptNumberLabel')}: ${escapeHtml(String(sale.receiptNumber))}</div>
+    <div>${__rcDateStr(sale.date)}</div>`; })()}
     ${sale.tableName?`<div>${tableWord()}: ${escapeHtml(sale.tableName)}</div>`:''}
     ${sale.orderType?`<div>${sale.orderType==='dine_in'?trR('orderTypeDineIn'):trR('orderTypeTakeaway')}</div>`:''}
     ${sale.cashierName?`<div>${trR('cashier')}: ${escapeHtml(sale.cashierName)}</div>`:''}
