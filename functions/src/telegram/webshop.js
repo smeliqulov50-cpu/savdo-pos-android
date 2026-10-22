@@ -124,7 +124,12 @@ async function handle(deps, body, meta) {
     const per = Math.floor(num(p.perBox));
     const line = { id: pid, name: str(p.name, 120), price: a.price, qty: a.q, unit: ['dona', 'kg', 'litr', 'paket'].indexOf(p.unit) !== -1 ? p.unit : 'dona', sum: sum };
     if (per > 1 && !a.v) { line.qty = a.q * per; line.price = a.price / per; line.vName = a.q + ' × ' + str(p.unitLabel, 60); }   /* quti: ombordagi dona soni */
-    if (a.v) {
+    if (a.v && a.v.vid !== undefined) {   /* fix193-both: «blok va dona» — sahifadagi tanlov haqiqiy variant va blokka aylanadi */
+      if (a.v.vid) line.v = str(a.v.vid, 80);
+      if (str(a.v.bn, 80)) line.vName = str(a.v.bn, 80);
+      const pb = Math.floor(num(a.v.per));
+      if (pb > 1) { line.b = pb; line.unit = str(a.v.bl, 40) || 'blok'; }
+    } else if (a.v) {
       if (!(pid in prods)) prods[pid] = await getData(db.collection('businesses').doc(bid).collection('products').doc(pid));
       const real = prods[pid] && Array.isArray(prods[pid].variants) ? prods[pid].variants.find(function (x) { return x && x.name === a.v.name; }) : null;
       if (!real || !real.id) return err(409, 'changed', { id: pid });

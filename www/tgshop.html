@@ -533,13 +533,18 @@ function setQty(id, v, q){
   var src = v ? (it.v || []).find(function(x){ return x.id === v; }) : it;
   if(!src) return;
   q = Math.round(Math.max(0, q) * 1000) / 1000;
-  if(!it.f) q = Math.round(q);
-  if(src.m != null && q > src.m){ q = src.m; toast(t('left', { n: qtyStr(src.m), u: unitL(it.u) })); haptic('err'); }
+  if(!it.f || src.b) q = Math.round(q);   /* fix193-both: blok — butun son */
+  if(src.m != null && q > src.m){ q = src.m; toast(t('left', { n: qtyStr(src.m), u: src.b ? unitL(src.bl) : unitL(it.u) })); haptic('err'); }
   var k = lineKey(id, v);
   if(q > 0) S.cart[k] = { id: id, v: v || '', q: q }; else delete S.cart[k];
   saveCart(); haptic();
 }
 function stepOf(it){ return it.f ? 0.5 : 1; }
+/* fix193-both: «blok va dona» tanlovi — nom va o'lchov mijoz tilida */
+function vSrc(it, v){ return v ? (it.v || []).find(function(x){ return x.id === v; }) : null; }
+function vLabel(it, v){ if(!v) return ''; if(v.k === 'b') return (v.bn ? v.bn + ' · ' : '') + unitL(v.bl) + ' (' + v.b + ' ' + unitL(it.u) + ')'; if(v.k === 'u') return (v.bn ? v.bn + ' · ' : '') + unitL(it.u); return v.n; }
+function vUnit(it, v){ return v && v.b ? unitL(v.bl) : unitL(it.u); }
+function vStep(it, v){ return v && v.b ? 1 : stepOf(it); }
 
 /* ---------- ko'rinishlar ---------- */
 var IC = {
@@ -599,7 +604,7 @@ function renderCart(){
   keys.forEach(function(k){
     var c = S.cart[k], it = S.byId[c.id]; if(!it) return;
     var v = c.v ? (it.v || []).find(function(x){ return x.id === c.v; }) : null, pr = linePrice(c);
-    h += '<div class="line"><div class="lt"><div class="ln">' + esc(it.n) + (v ? ' · ' + esc(v.n) : '') + '</div><div class="lp">' + esc(money(pr)) + (it.u !== 'dona' ? ' / ' + esc(unitL(it.u)) : '') + ' · <b>' + esc(money(rnd(pr * c.q))) + '</b></div></div>'
+    h += '<div class="line"><div class="lt"><div class="ln">' + esc(it.n) + (v ? ' · ' + esc(vLabel(it, v)) : '') + '</div><div class="lp">' + esc(money(pr)) + ((v && v.k) ? ' / ' + esc(vUnit(it, v)) : (it.u !== 'dona' ? ' / ' + esc(unitL(it.u)) : '')) + ' · <b>' + esc(money(rnd(pr * c.q))) + '</b></div></div>'
       + '<div class="step"><button data-ldec="' + esc(k) + '">−</button><button class="qv" data-lqty="' + esc(k) + '">' + esc(qtyStr(c.q)) + '</button><button data-linc="' + esc(k) + '">+</button></div></div>';
   });
   h += '</div>';
@@ -694,7 +699,7 @@ function pickVariant(id){
     var h = '<h3>' + esc(it.n) + '</h3><div class="muted" style="margin:-6px 0 8px;">' + esc(t('pick')) + '</div>';
     (it.v || []).forEach(function(v){
       var q = cartQty(id, v.id);
-      h += '<div class="line"><div class="lt"><div class="ln">' + esc(v.n) + '</div><div class="lp">' + esc(money(v.p)) + (v.bl ? ' / ' + esc(v.bl) : '') + (v.s ? '' : ' · <span style="color:var(--danger)">' + esc(t('out')) + '</span>') + '</div></div>'
+      h += '<div class="line"><div class="lt"><div class="ln">' + esc(vLabel(it, v)) + '</div><div class="lp">' + esc(money(v.p)) + (v.k ? ' / ' + esc(vUnit(it, v)) : (v.bl ? ' / ' + esc(v.bl) : '')) + (v.s ? '' : ' · <span style="color:var(--danger)">' + esc(t('out')) + '</span>') + '</div></div>'
         + (v.s ? (q > 0 ? '<div class="step"><button data-vdec="' + esc(v.id) + '">−</button><button class="qv" data-vqty="' + esc(v.id) + '">' + esc(qtyStr(q)) + '</button><button data-vinc="' + esc(v.id) + '">+</button></div>' : '<button class="addb" style="width:118px;margin:0" data-vinc="' + esc(v.id) + '">' + esc(t('add')) + '</button>') : '') + '</div>';
     });
     h += '<button class="addb" id="v-done" style="margin-top:14px;height:46px;">' + esc(t('done2')) + '</button>';
@@ -706,8 +711,8 @@ function pickVariant(id){
       if(b.id === 'v-done'){ closeSheet(); refreshGrid(); return; }
       var vi = b.getAttribute('data-vinc'), vd = b.getAttribute('data-vdec'), vq = b.getAttribute('data-vqty');
       if(vq){ askQty(id, vq, function(){ pickVariant(id); }); return; }   /* fix174-botprice: miqdorni yozish */
-      if(vi) setQty(id, vi, cartQty(id, vi) + stepOf(it));
-      if(vd) setQty(id, vd, cartQty(id, vd) - stepOf(it));
+      if(vi) setQty(id, vi, cartQty(id, vi) + vStep(it, vSrc(it, vi)));   /* fix193-both */
+      if(vd) setQty(id, vd, cartQty(id, vd) - vStep(it, vSrc(it, vd)));
       if(vi || vd){ sh.innerHTML = draw(); refreshGrid(); }
     };
   });
@@ -715,7 +720,8 @@ function pickVariant(id){
 function askQty(id, v, after){
   var it = S.byId[id]; if(!it) return;
   var cur = cartQty(id, v);
-  openSheet('<h3>' + esc(it.n) + '</h3><div class="fld" style="margin-top:0"><label for="qv-in">' + esc(t('qtyP')) + ' (' + esc(unitL(it.u)) + ')</label><input id="qv-in" type="text" inputmode="decimal" value="' + esc(qtyStr(cur)) + '"></div><button class="addb" id="qv-ok" style="margin-top:14px;height:46px;">' + esc(t('done2')) + '</button>', function(sh){
+  var __vs = vSrc(it, v);   /* fix193-both */
+  openSheet('<h3>' + esc(it.n) + (__vs && __vs.k ? ' · ' + esc(vLabel(it, __vs)) : '') + '</h3><div class="fld" style="margin-top:0"><label for="qv-in">' + esc(t('qtyP')) + ' (' + esc(vUnit(it, __vs)) + ')</label><input id="qv-in" type="text" inputmode="decimal" value="' + esc(qtyStr(cur)) + '"></div><button class="addb" id="qv-ok" style="margin-top:14px;height:46px;">' + esc(t('done2')) + '</button>', function(sh){
     var inp = sh.querySelector('#qv-in'); setTimeout(function(){ try{ inp.focus(); inp.select(); }catch(e){} }, 50);
     sh.querySelector('#qv-ok').onclick = function(){ var __raw = String(inp.value).trim(); var q = __raw === '' ? 0 : parseFloat(__raw.replace(',', '.')); /* fix191-qty0: bo'sh yoki 0 — savatdan olib tashlash */ if(isFinite(q) && q >= 0){ setQty(id, v, Math.min(q, 9999)); } closeSheet(); if(S.view === 'cart') render(); else refreshGrid(); if(after) after(); };
   });
@@ -822,7 +828,7 @@ function bind(){
       readForm();
       var c = S.cart[lk]; if(!c) return; var it3 = S.byId[c.id];
       if(b.hasAttribute('data-lqty')){ askQty(c.id, c.v); return; }
-      setQty(c.id, c.v, c.q + (b.hasAttribute('data-linc') ? 1 : -1) * stepOf(it3));
+      setQty(c.id, c.v, c.q + (b.hasAttribute('data-linc') ? 1 : -1) * vStep(it3, vSrc(it3, c.v)));   /* fix193-both */
       render(); return;
     }
     if((id = b.getAttribute('data-mode'))){ readForm(); S.err = ''; S.form.mode = id; saveForm(); render(); return; }

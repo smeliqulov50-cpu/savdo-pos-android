@@ -699,3 +699,58 @@ test('fix174: showOut=false — tugagan mahsulot bot katalogida yashirin (veb ka
   r = await shop.handleWebApp(s.deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
   assert.ok(r.body.items.find(i => i.id === 'p7'), 'ko\'rinadi (Tugagan belgisi bilan)');
 });
+
+/* fix193-both: «Ulgurji: blok va dona — mijoz tanlaydi» */
+test('fix193: blok va dona — ikkalasi alohida tanlov; variant va variantsiz; narx, qoldiq, buyurtma qatori (haqiqiy variant + blok), birgalikda qoldiq, tahrir', async () => {
+  const sd = seed();
+  const P1 = sd['businesses/' + BID + '/products/p1'];
+  Object.assign(P1, { wholesalePrice: 11000, boxPrice: 120000, unitsPerBox: 12, boxLabel: 'Blok', stock: 30 });
+  sd['businesses/' + BID + '/products/p2'].wholesalePrice = 4500;   // faqat dona
+  sd['businesses/' + BID + '/products/p9'] = prod('p9', { name: 'Biolife 0,5L', price: 3000, unitsPerBox: 12, boxLabel: 'Blok', stock: 0,
+    variants: [{ id: 'g0', name: 'Gazsiz', price: 3000, wholesalePrice: 2800, boxPrice: 33000, stock: 40 }, { id: 'g1', name: 'Gazli', price: 3000, wholesalePrice: 2800, stock: 5 }] });
+  sd['tgShop/' + BID].priceMode = 'both';
+  const s = mk(sd);
+  let r = await shop.handleWebApp(s.deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  assert.equal(r.body.shop.priceMode, 'both');
+  const by = {}; r.body.items.forEach(i => { by[i.id] = i; });
+  assert.deepEqual(by.p1.v.map(v => [v.id, v.p, v.b || 0, v.m, v.k]), [['~u', 11000, 0, 30, 'u'], ['~b', 120000, 12, 2, 'b']]);
+  assert.equal(by.p1.p, 11000, 'kartada eng arzon (dona)');
+  assert.equal(by.p2.p, 4500); assert.ok(!by.p2.v, 'faqat dona — oddiy tovar');
+  assert.deepEqual(by.p9.v.map(v => [v.id, v.n, v.p, v.k || '']), [['g0', 'Gazsiz · dona', 2800, 'u'], ['g0~b', 'Gazsiz · Blok', 33000, 'b'], ['g1', 'Gazli', 2800, '']]);
+  assert.equal(by.p9.v[1].m, 3, '40 dona = 3 blok');
+  // buyurtma: 1 blok + 5 dona (p1), 2 blok Gazsiz + 3 dona Gazsiz
+  const o = await order(s.deps, { items: [{ id: 'p1', v: '~b', q: 1 }, { id: 'p1', v: '~u', q: 5 }, { id: 'p9', v: 'g0~b', q: 2 }, { id: 'p9', v: 'g0', q: 3 }] });
+  assert.ok(o.body.ok, JSON.stringify(o.body));
+  const L = s.db.store['tgOrders/' + o.body.order.id].items.map(x => [x.id, x.v || '', x.vName || '', x.qty, x.b || 0, x.unit, x.price, x.sum]);
+  assert.deepEqual(L, [['p1', '', '', 1, 12, 'Blok', 120000, 120000], ['p1', '', '', 5, 0, 'dona', 11000, 55000], ['p9', 'g0', 'Gazsiz', 2, 12, 'Blok', 33000, 66000], ['p9', 'g0', 'Gazsiz', 3, 0, 'dona', 2800, 8400]]);
+  // band: p1 — 12+5 = 17 dona, qoldi 13 → 1 blok, 13 dona
+  shop.clearCatalogCache();
+  r = await shop.handleWebApp(s.deps, { initData: ID2, action: 'catalog', slug: 'sardor' });
+  const p1b = r.body.items.find(i => i.id === 'p1');
+  assert.deepEqual(p1b.v.map(v => v.m), [13, 1]);
+  // birgalikda qoldiqdan oshmaydi: 1 blok (12) + 2 dona = 14 > 13
+  const o2 = await order(s.deps, { items: [{ id: 'p1', v: '~b', q: 1 }, { id: 'p1', v: '~u', q: 2 }] }, ID2);
+  assert.equal(o2.body.code, 'out_of_stock');
+  const o3 = await order(s.deps, { items: [{ id: 'p1', v: '~b', q: 1 }, { id: 'p1', v: '~u', q: 1 }] }, ID2);
+  assert.ok(o3.body.ok, JSON.stringify(o3.body));
+  // blok kasr miqdor bo'lmaydi
+  const o4 = await order(s.deps, { items: [{ id: 'p9', v: 'g0~b', q: 0.4 }] }, ID2);
+  assert.equal(o4.body.code, 'bad_qty');
+  // ega tahriri: bir tovarning blok va dona qatorlari alohida (b bilan)
+  const oid = o.body.order.id;
+  const e = await app(s.deps, 'boEdit', { oid: oid, items: [{ id: 'p1', v: '', b: 1, q: 2 }, { id: 'p1', v: '', b: 0, q: 5 }, { id: 'p9', v: 'g0', b: 1, q: 1 }, { id: 'p9', v: 'g0', b: 0, q: 3 }] });
+  assert.ok(e.body.ok, JSON.stringify(e.body));
+  const o5 = s.db.store['tgOrders/' + oid];
+  assert.deepEqual(o5.items.map(x => [x.id, x.b || 0, x.qty]), [['p1', 12, 2], ['p1', 0, 5], ['p9', 12, 1], ['p9', 0, 3]]);
+  // eski ilova (b yubormaydi) — avvalgidek ishlaydi
+  const e2 = await app(s.deps, 'boEdit', { oid: oid, items: [{ id: 'p2', q: 0 }, { id: 'p1', q: 3 }] });
+  assert.ok(e2.body.ok || e2.body.same, JSON.stringify(e2.body));
+});
+test('fix193: boshqa rejimlar o\'zgarmagan (blok rejimida variant faqat blok)', async () => {
+  const sd = seed();
+  sd['businesses/' + BID + '/products/p9'] = prod('p9', { name: 'Biolife', unitsPerBox: 12, boxLabel: 'Blok', variants: [{ id: 'g0', name: 'Gazsiz', price: 3000, wholesalePrice: 2800, boxPrice: 33000, stock: 40 }] });
+  sd['tgShop/' + BID].priceMode = 'box';
+  const s = mk(sd);
+  const r = await shop.handleWebApp(s.deps, { initData: ID1, action: 'catalog', slug: 'sardor' });
+  assert.deepEqual(r.body.items.find(i => i.id === 'p9').v.map(v => [v.id, v.p, v.b]), [['g0', 33000, 12]]);
+});

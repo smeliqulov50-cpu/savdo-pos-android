@@ -148,3 +148,19 @@ test('fix156-webtg: sayt buyurtmasi Telegram\'ga ulanadi — holat xabarlari bot
   const c = await core.handleUpdate(s.deps, cb);
   assert.equal(c.cb, 'late', 'qabul qilingach bekor qilinmaydi');
 });
+
+/* fix193-both: saytda «blok va dona» — virtual tanlov haqiqiy variant va blokka aylanadi */
+test('fix193: sayt — blok va dona tanlovi buyurtmada haqiqiy variant (v) va blok (b)', async () => {
+  const pl = payload({ products: [
+    { id: 'p5', name: 'Biolife', price: 0, unit: 'dona', inStock: true, variants: [
+      { name: 'Gazsiz · dona', price: 2800, inStock: true, vid: 'g0', bn: 'Gazsiz', per: 0 },
+      { name: 'Gazsiz · Blok (12 dona)', price: 33000, inStock: true, vid: 'g0', bn: 'Gazsiz', per: 12, bl: 'Blok' }] },
+    { id: 'p6', name: 'Cola', price: 0, unit: 'dona', inStock: true, variants: [
+      { name: 'Dona', price: 11000, inStock: true, vid: '', bn: '', per: 0 },
+      { name: 'Blok (12 dona)', price: 120000, inStock: true, vid: '', bn: '', per: 12, bl: 'Blok' }] }] });
+  const s = mk(seed(pl));
+  const r = await req(s.deps, { items: [{ id: 'p5', vn: 'Gazsiz · Blok (12 dona)', q: 2 }, { id: 'p5', vn: 'Gazsiz · dona', q: 3 }, { id: 'p6', vn: 'Blok (12 dona)', q: 1 }] });
+  assert.ok(r.body.ok, JSON.stringify(r.body));
+  const o = Object.values(s.db.store).find(x => x && x.src === 'web' && x.items);
+  assert.deepEqual(o.items.map(x => [x.id, x.v || '', x.vName || '', x.qty, x.b || 0, x.unit, x.price]), [['p5', 'g0', 'Gazsiz', 2, 12, 'Blok', 33000], ['p5', 'g0', 'Gazsiz', 3, 0, 'dona', 2800], ['p6', '', '', 1, 12, 'Blok', 120000]]);
+});

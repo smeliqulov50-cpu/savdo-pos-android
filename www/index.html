@@ -1224,6 +1224,9 @@ const T = {
   osPriceMode:{uz:"Sahifada ko'rsatiladigan narx",ru:"Какие цены показывать",en:"Prices to show",kk:"Көрсетілетін баға",ky:"Көрсөтүлүүчү баа",tg:"Нархи нишондода"},
   osPriceRetail:{uz:"Chakana (dona narxi)",ru:"Розница (за штуку)",en:"Retail (per unit)",kk:"Бөлшек (данасы)",ky:"Чекене (даанасы)",tg:"Чакана (дона)"},
   osPriceWholesale:{uz:"Ulgurji (dona narxi)",ru:"Опт (за штуку)",en:"Wholesale (per unit)",kk:"Көтерме (данасы)",ky:"Дүң (даанасы)",tg:"Яклухт (дона)"},
+  osPriceBoth:{uz:"Ulgurji: blok va dona — mijoz o'zi tanlaydi",ru:"Опт: блок и штука — клиент выбирает",en:"Wholesale: box and unit — customer chooses",kk:"Көтерме: блок және дана — клиент таңдайды",ky:"Дүң: блок жана даана — кардар тандайт",tg:"Яклухт: блок ва дона — мизоҷ интихоб мекунад"},
+  boModesTitle:{uz:"Buyurtmani olish usuli",ru:"Способ получения заказа",en:"How customers get orders",kk:"Тапсырысты алу тәсілі",ky:"Буйрутманы алуу жолу",tg:"Тарзи гирифтани фармоиш"},
+  boDlOffHint:{uz:"🚚 Yetkazib berish o'chiq — mijozlar faqat olib keta oladi. Yoqsangiz, mijoz manzil va joylashuvini yuboradi, yetkazish narxi va «… dan oshsa bepul» qo'shiladi.",ru:"🚚 Доставка выключена — клиенты могут только забрать сами. Если включить, клиент укажет адрес и геолокацию, добавится стоимость доставки и «бесплатно от …».",en:"🚚 Delivery is off — customers can only pick up. Turn it on and customers send an address and location; a delivery fee and «free from …» apply.",kk:"🚚 Жеткізу өшірулі — клиенттер тек өзі алып кете алады. Қоссаңыз, клиент мекенжай мен орнын жібереді, жеткізу құны және «… бастап тегін» қосылады.",ky:"🚚 Жеткирүү өчүк — кардарлар өзү гана алып кете алат. Күйгүзсөңүз, кардар дарек жана жайгашкан жерин жөнөтөт, жеткирүү баасы жана «… дан ашса бекер» кошулат.",tg:"🚚 Расонидан хомӯш — мизоҷон танҳо худашон гирифта метавонанд. Агар фаъол кунед, мизоҷ суроға ва ҷойгиршавиро мефиристад, нархи расонидан ва «аз … ройгон» илова мешавад."},
   osPriceBox:{uz:"Ulgurji: blok narxi (bloksiz mahsulotda ulgurji dona narxi)",ru:"Опт: цена за упаковку (без упаковки — оптовая за штуку)",en:"Wholesale: box price (unit wholesale price if no box)",kk:"Көтерме: қорап бағасы",ky:"Дүң: куту баасы",tg:"Яклухт: нархи қуттӣ"},
   osPriceHint:{uz:"Tanlangan narxi kiritilmagan mahsulotlar sahifada ko'rinmaydi.",ru:"Товары без выбранной цены на странице не показываются.",en:"Products without the selected price are hidden.",kk:"Таңдалған бағасы жоқ тауарлар көрсетілмейді.",ky:"Тандалган баасы жок товарлар көрсөтүлбөйт.",tg:"Маҳсулоти бе нархи интихобшуда нишон дода намешавад."},
   supportAutoReply:{uz:"Assalomu alaykum! Xabaringiz qabul qilindi — tez orada javob beramiz.",ru:"Здравствуйте! Ваше сообщение получено — скоро ответим.",en:"Hello! Your message has been received — we will reply shortly.",kk:"Сәлеметсіз бе! Хабарыңыз қабылданды — жақында жауап береміз.",ky:"Саламатсызбы! Билдирүүңүз кабыл алынды — жакында жооп беребиз.",tg:"Ассалому алайкум! Паёми шумо қабул шуд — ба зудӣ ҷавоб медиҳем."},
@@ -4327,7 +4330,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.68';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.69';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -24105,7 +24108,7 @@ function __boEditModal(o){
   var total = function(){ var t = 0; (o.items || []).forEach(function(it, i){ t = rM(t + rM((Number(it.price) || 0) * (q[i] || 0))); }); return rM(t + (Number(o.fee) || 0)); };
   function draw(){
     openModal('<div class="modal-title">' + escapeHtml(tr('boEdit')) + ' #' + escapeHtml(o.no) + '</div><p class="subtle" style="margin:0 0 8px;font-size:12.5px;">' + escapeHtml(tr('boEditHint')) + '</p>'
-      + (o.items || []).map(function(it, i){ return '<div class="bo-ed' + (q[i] > 0 ? '' : ' off') + '"><span class="n">' + escapeHtml(it.name) + (it.vName ? ' — ' + escapeHtml(it.vName) : '') + '<br><span class="subtle" style="font-size:12px;">' + escapeHtml(fmt(it.price)) + '</span></span>'
+      + (o.items || []).map(function(it, i){ return '<div class="bo-ed' + (q[i] > 0 ? '' : ' off') + '"><span class="n">' + escapeHtml(it.name) + (it.vName ? ' — ' + escapeHtml(it.vName) : '') + '<br><span class="subtle" style="font-size:12px;">' + escapeHtml(fmt(it.price)) + (Number(it.b) > 0 ? ' / ' + escapeHtml(it.unit || tr('boxDefaultLabel')) : '') + '</span></span>'
         + '<button type="button" data-ed-m="' + i + '">−</button><span class="q">' + escapeHtml(__boQty(q[i] || 0)) + '</span><button type="button" data-ed-p="' + i + '">+</button></div>'; }).join('')
       + '<div class="bo-it" style="font-size:15.5px;margin-top:10px;"><span><b>' + escapeHtml(tr('grandTotal')) + '</b></span><span id="bo-ed-tot">' + escapeHtml(fmt(total())) + '</span></div>'
       + '<div id="bo-ed-err" class="error-text"></div>'
@@ -24114,7 +24117,7 @@ function __boEditModal(o){
       var i = Number(b.getAttribute('data-ed-m') !== null ? b.getAttribute('data-ed-m') : b.getAttribute('data-ed-p')), it = o.items[i], st = frac(it) ? 0.5 : 1;
       var v = (q[i] || 0) + (b.hasAttribute('data-ed-p') ? st : -st); q[i] = Math.max(0, Math.round(v * 1000) / 1000); draw(); }); });
     document.getElementById('bo-ed-ok').addEventListener('click', function(){
-      var lines = (o.items || []).map(function(it, i){ return {id: it.id, v: it.v || '', q: q[i] || 0}; });
+      var lines = (o.items || []).map(function(it, i){ return {id: it.id, v: it.v || '', b: Number(it.b) > 0 ? 1 : 0, q: q[i] || 0}; });   /* fix193-both */
       if(!lines.some(function(x){ return x.q > 0; })){ document.getElementById('bo-ed-err').textContent = tr('boEditEmpty'); return; }
       var btn = document.getElementById('bo-ed-ok'); btn.disabled = true;
       __tgApi('boEdit', {oid: o.id, items: lines, by: state.currentStaff ? state.currentStaff.name : ''}).then(function(r){
@@ -24280,8 +24283,10 @@ function __boCfgRender(){
   h += '<div class="checkbox-row"><input type="checkbox" id="bo-en"' + (c.enabled ? ' checked' : '') + dis + '><span style="font-weight:700;">' + escapeHtml(tr('boEnable')) + '</span></div>';
   h += '<div class="field" style="margin-top:10px;"><label class="field-label">' + escapeHtml(tr('boSlug')) + '</label><input type="text" id="bo-slug" value="' + escapeHtml(slug) + '" autocapitalize="none" autocomplete="off" spellcheck="false" maxlength="30" placeholder="bunyodmarket"' + dis + '><p class="subtle" style="margin:4px 0 0;font-size:11.5px;">' + escapeHtml(tr('boSlugHint')) + '</p></div>';
   if(br.length > 1) h += '<div class="field"><label class="field-label">' + escapeHtml(tr('boBranch')) + '</label><select id="bo-br"' + dis + '>' + br.map(function(b){ return '<option value="' + escapeHtml(b.id) + '"' + ((c.branchId || effectiveBranchId(state.currentBranchId)) === b.id ? ' selected' : '') + '>' + escapeHtml(b.name) + '</option>'; }).join('') + '</select></div>';
+  h += '<div style="margin:12px 0 2px;font-weight:800;">' + escapeHtml(tr('boModesTitle')) + '</div>';   /* fix193-both */
   h += '<div class="checkbox-row"><input type="checkbox" id="bo-pk"' + (c.pickup !== false ? ' checked' : '') + dis + '><span>' + escapeHtml(tr('boPickup')) + '</span></div>';
-  h += '<div class="checkbox-row"><input type="checkbox" id="bo-dl"' + (c.delivery ? ' checked' : '') + dis + '><span>' + escapeHtml(tr('boDelivery')) + '</span></div>';
+  h += '<div class="checkbox-row"><input type="checkbox" id="bo-dl"' + (c.delivery ? ' checked' : '') + dis + '><span style="font-weight:700;">🚚 ' + escapeHtml(tr('boDelivery')) + '</span></div>';
+  h += '<p class="subtle" id="bo-dl-hint" style="' + (c.delivery ? 'display:none;' : '') + 'margin:0 0 8px 4px;font-size:12px;color:var(--warm);font-weight:600;">' + escapeHtml(tr('boDlOffHint')) + '</p>';   /* fix193-both */
   h += '<div id="bo-dl-f" style="' + (c.delivery ? '' : 'display:none;') + 'margin-left:4px;">'
     + '<div class="field"><label class="field-label">' + escapeHtml(tr('boFee')) + '</label><input type="text" inputmode="numeric" id="bo-fee" value="' + (c.fee ? formatMoneyInputValue(c.fee) : '') + '" placeholder="0"' + dis + '></div>'
     + '<div class="field"><label class="field-label">' + escapeHtml(tr('boFreeFrom')) + '</label><input type="text" inputmode="numeric" id="bo-free" value="' + (c.freeFrom ? formatMoneyInputValue(c.freeFrom) : '') + '" placeholder="0"' + dis + '></div></div>';
@@ -24321,7 +24326,7 @@ function __boCfgRender(){
   var $ = function(id){ return document.getElementById(id); };
   ['bo-fee','bo-free','bo-min'].forEach(function(id){ var i = $(id); if(i) attachMoneyInputFormatting(i); });
   var sl = $('bo-slug'); if(sl) sl.addEventListener('input', function(){ sl.value = sl.value.toLowerCase().replace(/[^a-z0-9-]/g, ''); });
-  var dl = $('bo-dl'); if(dl) dl.addEventListener('change', function(){ $('bo-dl-f').style.display = dl.checked ? '' : 'none'; });
+  var dl = $('bo-dl'); if(dl) dl.addEventListener('change', function(){ $('bo-dl-f').style.display = dl.checked ? '' : 'none'; var __dh = $('bo-dl-hint'); if(__dh) __dh.style.display = dl.checked ? 'none' : ''; });   /* fix193-both */
   var hrc = $('bo-hr'); if(hrc) hrc.addEventListener('change', function(){ $('bo-hr-f').style.display = hrc.checked ? 'flex' : 'none'; });
   var pk = $('bo-pick'); if(pk) pk.addEventListener('click', __boPickProducts);
   var au = $('bo-auto'); if(au) au.addEventListener('change', function(){ $('bo-auto-f').style.display = au.checked ? '' : 'none'; });   /* fix153-boplus */
@@ -24416,6 +24421,19 @@ function __boQr(link){
 
 /* --- Online catalog --- */
 const ONLINE_SHOP_BASE = 'https://savdo-pos.pages.dev/s/';
+/* fix193-both: saytda har tovar/variant uchun «dona» va «blok (N dona)» — alohida tanlov; buyurtmada haqiqiy variant (vid) va blok (per) */
+function __osBothVariants(p){
+  const per = Number(p.unitsPerBox) || 0, bl = p.boxLabel || tr('boxDefaultLabel'), ul = unitLabel(p.unit || 'dona'), out = [];
+  if(p.variants && p.variants.length){
+    p.variants.forEach(v=>{ if(!v || !v.id) return; const u = v.wholesalePrice || v.price || 0, x = per > 0 ? (Number(v.boxPrice) || 0) : 0, st = Number(v.stock) || 0;
+      if(u > 0) out.push({name: x > 0 ? v.name + ' · ' + ul : v.name, price: u, inStock: st > 0, vid: v.id, bn: v.name, per: 0});
+      if(x > 0) out.push({name: v.name + ' · ' + bl + ' (' + per + ' ' + ul + ')', price: x, inStock: st >= per, vid: v.id, bn: v.name, per: per, bl: bl}); });
+    return out.length ? out : null;
+  }
+  const u = Number(p.wholesalePrice) || 0, x = (per > 0 && p.boxPrice > 0) ? Number(p.boxPrice) : 0, st = productTotalStock(p);
+  if(!(u > 0 && x > 0)) return null;
+  return [{name: ul, price: u, inStock: st > 0, vid: '', bn: '', per: 0}, {name: bl + ' (' + per + ' ' + ul + ')', price: x, inStock: st >= per, vid: '', bn: '', per: per, bl: bl}];
+}
 function onlineShopCfg(){ return state.settings.onlineShop || {enabled:false, slug:'', telegram:'', whatsapp:'', showOut:false, lang:'', lastPublishedAt:null}; }
 function onlineShopUrl(slug){ return ONLINE_SHOP_BASE + slug; }
 function validSlug(v){ return /^[a-z0-9](?:[a-z0-9-]{1,28})[a-z0-9]$/.test(v||''); }
@@ -24424,7 +24442,7 @@ function buildShopPayload(){
   const cfg = onlineShopCfg();
   const mode = cfg.priceMode || 'retail';
   const pick = (p)=>{
-    if(mode==='box'){
+    if(mode==='box' || mode==='both'){   /* fix193-both: ikkalasi bo'lmasa — blok rejimi kabi */
       if(p.boxPrice > 0 && p.unitsPerBox > 0) return {price:p.boxPrice, unitLabel:(p.boxLabel||tr('boxDefaultLabel'))+' ('+p.unitsPerBox+' '+unitLabel(p.unit||'dona')+')', perBox:p.unitsPerBox};
       if(p.wholesalePrice > 0) return {price:p.wholesalePrice, unitLabel:unitLabel(p.unit||'dona'), perBox:0};
       return null;
@@ -24434,6 +24452,7 @@ function buildShopPayload(){
   };
   const products = visibleProducts().filter(p=>cfg.showOut || productTotalStock(p) > 0 || (p.variants&&p.variants.length)).map(p=>{
     const img = (p.image && typeof p.image==='string' && p.image.length < 24000) ? p.image : null;
+    if(mode==='both'){ const __bv = __osBothVariants(p); if(__bv) return {id:p.id, name:p.name, price:0, unitLabel:'', perBox:0, category:p.category||'', unit:p.unit||'dona', image:img, inStock: productTotalStock(p) > 0, variants: __bv}; }   /* fix193-both */
     const pr = pick(p);
     const hasVariants = p.variants && p.variants.length;
     if(!pr && !hasVariants) return null;
@@ -24497,7 +24516,7 @@ function renderSettingsCatalog(container){
         <div class="field"><label class="field-label">${tr('osTelegram')}</label><input type="text" id="os-tg" value="${escapeHtml(cfg.telegram||'')}" autocapitalize="none" placeholder="@bunyodmarket"></div>
         <div class="field"><label class="field-label">${tr('osWhatsapp')}</label><input type="tel" id="os-wa" value="${escapeHtml(cfg.whatsapp||'')}" placeholder="+998901234567"></div>
         <div class="field"><label class="field-label">${tr('osLang')}</label><select id="os-lang"><option value="" ${!cfg.lang?'selected':''}>${tr('receiptLanguageSameAsApp')}</option><option value="uz" ${cfg.lang==='uz'?'selected':''}>O'zbekcha</option><option value="ru" ${cfg.lang==='ru'?'selected':''}>Русский</option></select></div>
-        <div class="field"><label class="field-label">${tr('osPriceMode')}</label><select id="os-price-mode"><option value="retail" ${(cfg.priceMode||'retail')==='retail'?'selected':''}>${tr('osPriceRetail')}</option><option value="wholesale" ${cfg.priceMode==='wholesale'?'selected':''}>${tr('osPriceWholesale')}</option><option value="box" ${cfg.priceMode==='box'?'selected':''}>${tr('osPriceBox')}</option></select><p class="subtle" style="margin:4px 0 0;font-size:11.5px;">${tr('osPriceHint')}</p></div>
+        <div class="field"><label class="field-label">${tr('osPriceMode')}</label><select id="os-price-mode"><option value="retail" ${(cfg.priceMode||'retail')==='retail'?'selected':''}>${tr('osPriceRetail')}</option><option value="wholesale" ${cfg.priceMode==='wholesale'?'selected':''}>${tr('osPriceWholesale')}</option><option value="box" ${cfg.priceMode==='box'?'selected':''}>${tr('osPriceBox')}</option><option value="both" ${cfg.priceMode==='both'?'selected':''}>${tr('osPriceBoth')}</option></select><p class="subtle" style="margin:4px 0 0;font-size:11.5px;">${tr('osPriceHint')}</p></div>
         <div class="checkbox-row"><input type="checkbox" id="os-showout" ${cfg.showOut?'checked':''}><span>${tr('osShowOut')}</span></div>
         <div class="checkbox-row"><input type="checkbox" id="os-ordersin" ${cfg.ordersIn!==false?'checked':''}><span style="font-weight:700;">${tr('osOrdersIn')}</span></div>
         <p class="subtle" style="margin:2px 0 0;font-size:11.5px;">${tr('osOrdersInHint')}</p>

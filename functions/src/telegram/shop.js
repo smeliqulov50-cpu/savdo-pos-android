@@ -78,7 +78,7 @@ function normCfg(raw) {
     autoAccept: raw.autoAccept === true,
     autoEta: Math.max(0, Math.min(240, Math.round(num(raw.autoEta)))),
     custReceipts: raw.custReceipts !== false,   /* fix155-custbot */
-    priceMode: ['retail', 'wholesale', 'box'].indexOf(raw.priceMode) !== -1 ? raw.priceMode : 'retail',   /* fix174-botprice: veb katalog bilan bir xil */
+    priceMode: ['retail', 'wholesale', 'box', 'both'].indexOf(raw.priceMode) !== -1 ? raw.priceMode : 'retail',   /* fix193-both: blok va dona — mijoz tanlaydi */   /* fix174-botprice: veb katalog bilan bir xil */
     lang: S.LANGS.indexOf(raw.lang) !== -1 ? raw.lang : '',
     showOut: raw.showOut !== false,
     custByPhone: raw.custByPhone !== false,
@@ -147,6 +147,43 @@ function reservedFrom(orders, branchId) {
   });
   return r;
 }
+/* fix193-both: tovar (yoki variant) uchun «dona» va «blok» — alohida tanlovlar. Variant id: haqiqiy id (dona) va id + '~b' (blok);
+   variantsiz tovarda '~u' / '~b'. Buyurtma qatoriga HAQIQIY variant va blok (b) yoziladi — ilova, zaxira va hisob avvalgidek ishlaydi. */
+function bothItem(p, name, unit, perBox, boxLbl, D, oversell, reserved) {
+  const uP = function (o, isVar) { const w = money(o.wholesalePrice, D); if (w > 0) return w; return isVar && money(o.price, D) > 0 ? money(o.price, D) : 0; };
+  const bP = function (o) { return perBox > 0 ? money(o.boxPrice, D) : 0; };
+  const bl = boxLbl || 'blok', opts = [], stocks = {};
+  if (Array.isArray(p.variants) && p.variants.length) {
+    let pair = false;
+    p.variants.forEach(function (v) {
+      if (!v || !v.id || !str(v.name, 80)) return;
+      const vn = str(v.name, 80), st = num(v.stock) - (reserved[String(p.id) + '|' + String(v.id)] || 0), u = uP(v, true), x = bP(v);
+      stocks[String(v.id)] = st;
+      if (u > 0 && x > 0) pair = true;
+      if (u > 0) opts.push({ id: String(v.id), n: x > 0 ? vn + ' · dona' : vn, p: u, b: 0, st: st, k: x > 0 ? 'u' : '', bn: vn });
+      if (x > 0) opts.push({ id: String(v.id) + '~b', n: vn + ' · ' + bl, p: x, b: perBox, st: st, k: 'b', bn: vn });
+    });
+    if (!pair) return null;
+  } else {
+    const u = uP(p, false), x = bP(p);
+    if (!(u > 0 && x > 0)) return null;
+    const st = num(p.stock) - (reserved[String(p.id) + '|'] || 0);
+    stocks[''] = st;
+    opts.push({ id: '~u', n: 'dona', p: u, b: 0, st: st, k: 'u', bn: '' });
+    opts.push({ id: '~b', n: bl, p: x, b: perBox, st: st, k: 'b', bn: '' });
+  }
+  const it = { id: String(p.id), n: name, p: Math.min.apply(null, opts.map(function (o) { return o.p; })), u: unit, c: str(p.category, 60), f: FRACTION_UNITS.indexOf(unit) !== -1 ? 1 : 0, s: 0 };
+  it.v = opts.map(function (o) {
+    const vv = { id: o.id, n: o.n, p: o.p, s: oversell || (o.b ? o.st >= o.b : o.st > 0) ? 1 : 0 };
+    if (o.k) { vv.k = o.k; vv.bn = o.bn; }
+    if (o.b) { vv.b = o.b; vv.bl = bl; }
+    if (!oversell) vv.m = Math.max(0, Math.min(MAX_QTY, o.b ? Math.floor(o.st / o.b) : round3(o.st)));
+    return vv;
+  });
+  it.s = it.v.some(function (x) { return x.s; }) ? 1 : 0;
+  return { it: it, stocks: stocks };
+}
+function realOf(vid) { return String(vid || '').replace(/~b$/, '').replace(/^~u$/, ''); }
 function buildCatalog(docs, biz, cfg, reserved) {
   reserved = reserved || {};
   const oversell = !!(biz && biz.allowOversell);
@@ -159,7 +196,20 @@ function buildCatalog(docs, biz, cfg, reserved) {
     const name = str(p.name, 120); if (!name) return;
     const unit = ['dona', 'kg', 'litr', 'paket'].indexOf(p.unit) !== -1 ? p.unit : 'dona';
     /* fix174-botprice: narx rejimi veb katalog bilan bir xil (chakana / ulgurji / blok) */
-    const mode = cfg.priceMode || 'retail', perBox = money(p.unitsPerBox, 3), boxLbl = str(p.boxLabel, 40);
+    let mode = cfg.priceMode || 'retail';
+    const perBox = money(p.unitsPerBox, 3), boxLbl = str(p.boxLabel, 40);
+    if (mode === 'both') {   /* fix193-both: blok narxi ham, ulgurji dona narxi ham bo'lsa — ikkalasi alohida tanlov (virtual variant) */
+      const bt = bothItem(p, name, unit, perBox, boxLbl, D, oversell, reserved);
+      if (bt) {
+        if (cfg.showOut === false && !bt.it.s) return;
+        if (hasImg(p)) bt.it.i = imgVer(p);
+        if (bt.it.c && cats.indexOf(bt.it.c) === -1) cats.push(bt.it.c);
+        items.push(bt.it);
+        byId[bt.it.id] = { it: bt.it, raw: p, both: bt.stocks };
+        return;
+      }
+      mode = 'box';   // faqat bittasi bor — «blok narxi» rejimi kabi (blok bo'lsa blok, bo'lmasa ulgurji dona)
+    }
     const pickP = function (o, isVar) {
       if (mode === 'box' && money(o.boxPrice, D) > 0 && perBox > 0) return { p: money(o.boxPrice, D), b: perBox };
       if (mode === 'box' || mode === 'wholesale') { const w = money(o.wholesalePrice, D); if (w > 0) return { p: w, b: 0 }; return isVar && money(o.price, D) > 0 ? { p: money(o.price, D), b: 0 } : null; }
@@ -361,7 +411,8 @@ async function editOrder(deps, bid, oid, lines, by) {
   const db = deps.db, now = deps.nowMs();
   const oRef = db.collection('tgOrders').doc(oid), iRef = inboxRef(db, bid);
   const want = {};
-  (Array.isArray(lines) ? lines.slice(0, MAX_LINES) : []).forEach(function (x) { if (x) want[str(x.id, 80) + '|' + str(x.v, 80)] = num(x.q); });
+  const wantAny = {};   /* fix193-both: blok va dona qatorlari alohida (x.b); eski ilova b yubormasa — avvalgidek */
+  (Array.isArray(lines) ? lines.slice(0, MAX_LINES) : []).forEach(function (x) { if (!x) return; const k0 = str(x.id, 80) + '|' + str(x.v, 80); if (x.b === undefined || x.b === null) wantAny[k0] = num(x.q); else want[k0 + '|' + (x.b ? 'b' : '')] = num(x.q); });
   const res = await db.runTransaction(async function (tx) {
     const os = await tx.get(oRef); const o = os && os.exists ? (os.data() || {}) : null;
     if (!o || o.bid !== bid) return { code: 'not_found' };
@@ -369,8 +420,8 @@ async function editOrder(deps, bid, oid, lines, by) {
     const D = M.decOf(o.cur || 'UZS');
     const items = []; let subtotal = 0, changed = false;
     (o.items || []).forEach(function (it) {
-      const k = String(it.id) + '|' + String(it.v || '');
-      let q = k in want ? want[k] : num(it.qty);
+      const k = String(it.id) + '|' + String(it.v || ''), kb = k + '|' + (num(it.b) > 0 ? 'b' : '');
+      let q = kb in want ? want[kb] : (k in wantAny ? wantAny[k] : num(it.qty));
       if (!(q > 0)) { changed = true; return; }
       q = FRACTION_UNITS.indexOf(it.unit) !== -1 ? round3(q) : Math.round(q);
       if (!(q > 0)) { changed = true; return; }
@@ -563,14 +614,23 @@ async function handleWebApp(deps, body) {
     if (!e) return errBody(409, 'changed', { id: pid });
     let q = num(r.q);
     if (!(q > 0) || q > MAX_QTY) return errBody(400, 'bad_qty', { id: pid });
-    q = (e.it.f && !e.it.b) ? round3(q) : Math.round(q);   /* fix174-botprice */
-    if (!(q > 0)) return errBody(400, 'bad_qty', { id: pid });
     let v = null;
     if (e.it.v) { v = e.it.v.find(function (x) { return x.id === vid; }); if (!v) return errBody(409, 'changed', { id: pid }); }
     else if (vid) return errBody(409, 'changed', { id: pid });
+    q = (e.it.f && !e.it.b && !(v && v.b)) ? round3(q) : Math.round(q);   /* fix174-botprice + fix193-both: blok — butun son */
+    if (!(q > 0)) return errBody(400, 'bad_qty', { id: pid });
     const k = pid + '|' + (v ? v.id : '');
     if (!agg[k]) { agg[k] = { e: e, v: v, q: 0 }; order.push(k); }
     agg[k].q = round3(agg[k].q + q);
+  }
+  if (!cat.oversell) {   /* fix193-both: bir tovarning dona va blok qatorlari birgalikda ombordagi qoldiqdan oshmasin */
+    const used = {};
+    for (let i = 0; i < order.length; i++) {
+      const a = agg[order[i]]; if (!a.e.both || !a.v) continue;
+      const rk = a.e.it.id + '|' + realOf(a.v.id), lim = a.e.both[realOf(a.v.id)];
+      used[rk] = round3((used[rk] || 0) + a.q * (a.v.b > 0 ? a.v.b : 1));
+      if (lim != null && used[rk] > lim + 1e-9) return errBody(409, 'out_of_stock', { id: a.e.it.id, v: a.v.id, max: a.v.m });
+    }
   }
   const items = []; let subtotal = 0;
   const D = M.decOf(str((cat.biz && cat.biz.currency) || 'UZS', 6));   /* fix149-cents */
@@ -582,7 +642,8 @@ async function handleWebApp(deps, body) {
     const price = v ? v.p : it.p, sum = M.rnd(price * a.q, D);
     subtotal = M.rnd(subtotal + sum, D);
     const line = { id: it.id, name: it.n, price: price, qty: a.q, unit: it.u, sum: sum };
-    if (v) { line.v = v.id; line.vName = v.n; }
+    if (v && a.e.both) { const rv = realOf(v.id); if (rv) { line.v = rv; line.vName = v.bn || v.n; } }   /* fix193-both: haqiqiy variant */
+    else if (v) { line.v = v.id; line.vName = v.n; }
     { const bb = v ? v.b : it.b; if (bb > 0) { line.b = bb; line.unit = (v ? v.bl : it.bl) || 'blok'; } }   /* fix174-botprice: blok savdosi */
     items.push(line);
   }
@@ -884,7 +945,7 @@ async function productImage(deps, slug, pid) {
   return { type: m[1], buf: Buffer.from(m[2], 'base64') };
 }
 
-module.exports = { shopUrl, handleSub, ownerMenu, hubBtn, hubUrl, handleWebApp, handleAppApi, onStart, onContact, onCallback, fallbackPrompt, applyStatus, cleanupOld, productImage, verifyInitData, webKeyFromToken,
+module.exports = { bothItem, realOf, shopUrl, handleSub, ownerMenu, hubBtn, hubUrl, handleWebApp, handleAppApi, onStart, onContact, onCallback, fallbackPrompt, applyStatus, cleanupOld, productImage, verifyInitData, webKeyFromToken,
   inboxEntry, notifyOwner, dropCatalog, money,   /* fix151-weborder */
   autoAccept, editOrder, addMsg, onCustomerText,   /* fix153-boplus */
   normCfg, buildCatalog, reservedFrom, isOpen, INBOX_MAX_BYTES, normPhone, orderIdFor, pruneInbox, clearCatalogCache, shopUrl, SLUG_RE, MAX_ACTIVE_PER_CUST, ORDERS_PER_HOUR, INBOX_MAX };
