@@ -1399,6 +1399,20 @@ const T = {
   rcPortions:{uz:"{n} porsiya",ru:"{n} порц.",en:"{n} portions",kk:"{n} порция",ky:"{n} порция",tg:"{n} порсия"},
   rcNoNest:{uz:"Retseptli taomni xomashyo qilib bo'lmaydi",ru:"Блюдо с техкартой нельзя сделать ингредиентом",en:"A dish with a recipe cannot be an ingredient",kk:"Техкартасы бар тағамды шикізат етуге болмайды",ky:"Техкартасы бар тамакты чийки зат кылууга болбойт",tg:"Таоми дорои харитаро ашё кардан мумкин нест"},
   smRecipe:{uz:"Retsept (xomashyo)",ru:"Техкарта (сырьё)",en:"Recipe (ingredient)",kk:"Техкарта (шикізат)",ky:"Техкарта (чийки зат)",tg:"Харита (ашё)"},
+  pfPkg:{uz:"Qadoq / o'lchov kodi (tasnif.soliq.uz)",ru:"Код упаковки / ед. измерения (tasnif.soliq.uz)",en:"Package / unit code (tasnif.soliq.uz)",kk:"Қаптама / өлшем коды (tasnif.soliq.uz)",ky:"Таңгак / өлчөм коду (tasnif.soliq.uz)",tg:"Рамзи борпеч / воҳид (tasnif.soliq.uz)"},
+  pfPkgHint:{uz:"IKPU tanlanganda katalogda ko'rsatiladi (masalan 1495086). Bo'sh qoldirsa bo'ladi.",ru:"Указан в каталоге при выборе ИКПУ (например 1495086). Можно оставить пустым.",en:"Shown in the catalog next to the IKPU (e.g. 1495086). May be left empty.",kk:"ИКПУ таңдалғанда каталогта көрсетіледі (мысалы 1495086). Бос қалдыруға болады.",ky:"ИКПУ тандалганда каталогдо көрсөтүлөт (мисалы 1495086). Бош калтырса болот.",tg:"Ҳангоми интихоби ИКПУ дар каталог нишон дода мешавад (масалан 1495086). Холӣ гузоштан мумкин."},
+  pfPkgBad:{uz:"Qadoq kodi faqat raqamlardan iborat bo'lishi kerak",ru:"Код упаковки — только цифры",en:"Package code must be digits only",kk:"Қаптама коды — тек сандар",ky:"Таңгак коду — сандар гана",tg:"Рамзи борпеч — танҳо рақамҳо"},
+  fsSvcIkpu:{uz:"Xizmat haqi uchun IKPU",ru:"ИКПУ для платы за обслуживание",en:"IKPU for service charge",kk:"Қызмет ақысы үшін ИКПУ",ky:"Тейлөө акысы үчүн ИКПУ",tg:"ИКПУ барои ҳаққи хизмат"},
+  fsDlvIkpu:{uz:"Yetkazib berish uchun IKPU",ru:"ИКПУ для доставки",en:"IKPU for delivery",kk:"Жеткізу үшін ИКПУ",ky:"Жеткирүү үчүн ИКПУ",tg:"ИКПУ барои расонидан"},
+  fsSvcVat:{uz:"Xizmat va yetkazish QQS",ru:"НДС обслуживания и доставки",en:"VAT for service and delivery",kk:"Қызмет пен жеткізу ҚҚС",ky:"Тейлөө жана жеткирүү КНС",tg:"ААИ хизмат ва расонидан"},
+  fsIkpuBad:{uz:"IKPU — 17 ta raqam",ru:"ИКПУ — 17 цифр",en:"IKPU — 17 digits",kk:"ИКПУ — 17 сан",ky:"ИКПУ — 17 сан",tg:"ИКПУ — 17 рақам"},
+  fsReadyTitle:{uz:"Fiskal tayyorlik",ru:"Фискальная готовность",en:"Fiscal readiness",kk:"Фискалдық дайындық",ky:"Фискалдык даярдык",tg:"Омодагии фискалӣ"},
+  fsReadyOk:{uz:"✅ Barcha tovarlarda IKPU va qadoq kodi bor.",ru:"✅ У всех товаров есть ИКПУ и код упаковки.",en:"✅ All products have an IKPU and package code.",kk:"✅ Барлық тауарда ИКПУ және қаптама коды бар.",ky:"✅ Бардык товарда ИКПУ жана таңгак коду бар.",tg:"✅ Ҳамаи молҳо ИКПУ ва рамзи борпеч доранд."},
+  fsReadyMissing:{uz:"{n} ta tovarda ma'lumot yetishmaydi — fiskal chekda xato bo'lishi mumkin. Tovarni bosib to'ldiring:",ru:"У {n} товаров не хватает данных — фискальный чек может не пройти. Нажмите на товар и заполните:",en:"{n} products are missing data — the fiscal receipt may fail. Tap a product to fill it in:",kk:"{n} тауарда дерек жетіспейді — фискалдық чек өтпеуі мүмкін. Тауарды басып толтырыңыз:",ky:"{n} товарда маалымат жетишпейт — фискалдык чек өтпөй калышы мүмкүн. Товарды басып толтуруңуз:",tg:"Дар {n} мол маълумот намерасад — чеки фискалӣ метавонад нагузарад. Молро пахш карда пур кунед:"},
+  fsReadyNoIkpu:{uz:"IKPU yo'q",ru:"нет ИКПУ",en:"no IKPU",kk:"ИКПУ жоқ",ky:"ИКПУ жок",tg:"ИКПУ нест"},
+  fsReadyNoPkg:{uz:"qadoq kodi yo'q",ru:"нет кода упаковки",en:"no package code",kk:"қаптама коды жоқ",ky:"таңгак коду жок",tg:"рамзи борпеч нест"},
+  fsReadyMore:{uz:"… va yana {n} ta. Ko'p tovarni Excel orqali to'ldirish qulay (Ombor → Excel / CSV: «IKPU», «Qadoq kodi» ustunlari).",ru:"… и ещё {n}. Много товаров удобнее заполнить через Excel (Склад → Excel / CSV: столбцы «IKPU», «Qadoq kodi»).",en:"… and {n} more. For many products use Excel (Stock → Excel / CSV: “IKPU”, “Qadoq kodi” columns).",kk:"… және тағы {n}. Көп тауарды Excel арқылы толтыру ыңғайлы (Қойма → Excel / CSV: «IKPU», «Qadoq kodi» бағандары).",ky:"… жана дагы {n}. Көп товарды Excel аркылуу толтуруу ыңгайлуу (Кампа → Excel / CSV: «IKPU», «Qadoq kodi» мамычалары).",tg:"… ва боз {n}. Молҳои зиёдро тавассути Excel пур кардан қулай аст (Анбор → Excel / CSV: сутунҳои «IKPU», «Qadoq kodi»)."},
+  fsReadySvc:{uz:"Xizmat haqi / yetkazib berish uchun IKPU kiritilmagan (yuqorida).",ru:"Не указан ИКПУ для обслуживания / доставки (выше).",en:"IKPU for service / delivery is not set (above).",kk:"Қызмет / жеткізу үшін ИКПУ енгізілмеген (жоғарыда).",ky:"Тейлөө / жеткирүү үчүн ИКПУ киргизилген эмес (жогоруда).",tg:"ИКПУ барои хизмат / расонидан ворид нашудааст (дар боло)."},
   fsTitle:{uz:"Fiskal kassa",ru:"Фискальная касса",en:"Fiscal register",kk:"Фискалдық касса",ky:"Фискалдык касса",tg:"Кассаи фискалӣ"},
   fsHint:{uz:"Majburiy emas. «O'chiq» bo'lsa ilova avvalgidek ishlaydi — hech kim fiskalizatsiyaga majburlanmaydi. Yoqilsa, cheklar reyestrdagi virtual kassa provayderi orqali fiskallashtiriladi (ulash keyingi bosqichda).",ru:"Необязательно. Если «Выключено» — приложение работает как раньше, никого не принуждают к фискализации. Если включено, чеки фискализируются через провайдера виртуальной кассы из реестра (подключение на следующем этапе).",en:"Optional. When “Off”, the app works exactly as before — nobody is forced to fiscalize. When on, receipts are fiscalized through a registered virtual cash register provider (connection comes in the next stage).",kk:"Міндетті емес. «Өшірулі» болса қолданба бұрынғыдай жұмыс істейді — ешкім фискализацияға мәжбүрленбейді. Қосылса, чектер тізілімдегі виртуалды касса провайдері арқылы фискалданады (қосу келесі кезеңде).",ky:"Милдеттүү эмес. «Өчүк» болсо тиркеме мурдагыдай иштейт — эч ким фискализацияга мажбурланбайт. Күйгүзүлсө, чектер реестрдеги виртуалдык касса провайдери аркылуу фискалдаштырылат (туташтыруу кийинки этапта).",tg:"Ҳатмӣ нест. Агар «Хомӯш» бошад, барнома чун пештара кор мекунад — ҳеҷ кас ба фискализатсия маҷбур намешавад. Агар фаъол бошад, чекҳо тавассути провайдери кассаи виртуалии феҳрист фискалӣ мешаванд (пайвастшавӣ дар марҳилаи оянда)."},
   fsModeLabel:{uz:"Fiskal rejim",ru:"Фискальный режим",en:"Fiscal mode",kk:"Фискалдық режим",ky:"Фискалдык режим",tg:"Реҷаи фискалӣ"},
@@ -4233,7 +4247,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.59';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.60';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -11980,7 +11994,8 @@ function openProductForm(productId, draft){
     <div id="pf-recipe-list"></div>
     <button class="btn btn-outline btn-sm" id="pf-recipe-add" type="button" style="margin-bottom:10px;">${ICONS.plus} ${tr('rcAdd')}</button>
     <div class="checkbox-row"><input type="checkbox" id="pf-recipe-cost" ${d.recipeCost?'checked':''}><span>${tr('rcCostAuto')} <span class="subtle" id="pf-recipe-cost-val"></span></span></div>` : ''}
-    ${(state.settings.fiscalMode || d.ikpu || (d.vat !== undefined && d.vat !== null && d.vat !== '')) ? `<div class="field"><label class="field-label">${tr('pfIkpu')}</label><input type="text" inputmode="numeric" id="pf-ikpu" maxlength="17" value="${escapeHtml(d.ikpu||'')}"><p class="subtle" style="margin:4px 0 0;font-size:12px;">${tr('pfIkpuHint')}</p></div>
+    ${(state.settings.fiscalMode || d.ikpu || d.packageCode || (d.vat !== undefined && d.vat !== null && d.vat !== '')) ? `<div class="field"><label class="field-label">${tr('pfIkpu')}</label><input type="text" inputmode="numeric" id="pf-ikpu" maxlength="17" value="${escapeHtml(d.ikpu||'')}"><p class="subtle" style="margin:4px 0 0;font-size:12px;">${tr('pfIkpuHint')}</p></div>
+    <div class="field"><label class="field-label">${tr('pfPkg')}</label><input type="text" inputmode="numeric" id="pf-pkg" maxlength="20" value="${escapeHtml(d.packageCode||'')}"><p class="subtle" style="margin:4px 0 0;font-size:12px;">${tr('pfPkgHint')}</p></div>
     <div class="field"><label class="field-label">${tr('pfVat')}</label><select id="pf-vat"><option value="" ${(d.vat===undefined||d.vat===null||d.vat==='')?'selected':''}>${tr('pfVatNone')}</option>${[0,12,15].map(v=>`<option value="${v}" ${String(d.vat)===String(v)?'selected':''}>${v}%</option>`).join('')}</select></div>` : ''}
     <div class="field"><label class="field-label">${tr('supplierInfo')} — ${tr('supplierName')}</label><input type="text" id="pf-supplier-name" value="${escapeHtml(d.supplierName||'')}"></div>
     <div class="field"><label class="field-label">${tr('supplierInfo')} — ${tr('supplierPhone')}</label><input type="text" id="pf-supplier-phone" placeholder="+998901234567" value="${escapeHtml(d.supplierPhone||'')}"></div>
@@ -12142,6 +12157,7 @@ function openProductForm(productId, draft){
       recipe: __rcDraft.map(x=>({...x})),   /* fix179-recipe */
       ikpu: document.getElementById('pf-ikpu') ? document.getElementById('pf-ikpu').value : d.ikpu,   /* fix182-fiscal1 */
       vat: document.getElementById('pf-vat') ? document.getElementById('pf-vat').value : d.vat,
+      packageCode: document.getElementById('pf-pkg') ? document.getElementById('pf-pkg').value : d.packageCode,   /* fix184-fiscal2 */
       recipeCost: document.getElementById('pf-recipe-cost') ? document.getElementById('pf-recipe-cost').checked : !!d.recipeCost
     };
   }
@@ -12226,6 +12242,8 @@ function openProductForm(productId, draft){
       const __ik = document.getElementById('pf-ikpu'), __vt = document.getElementById('pf-vat');
       if(__ik){ const v = String(__ik.value || '').replace(/\s/g, ''); if(v && !/^\d{17}$/.test(v)){ errEl.textContent = tr('pfIkpuBad'); return; } data.ikpu = v; }
       if(__vt){ data.vat = __vt.value === '' ? null : Number(__vt.value); }
+      const __pk = document.getElementById('pf-pkg');   /* fix184-fiscal2 */
+      if(__pk){ const v = String(__pk.value || '').replace(/\s/g, ''); if(v && !/^\d{1,20}$/.test(v)){ errEl.textContent = tr('pfPkgBad'); return; } data.packageCode = v; }
     }
     { /* fix179-recipe */
       const __rcEl = document.getElementById('pf-recipe-cost');
@@ -13975,7 +13993,8 @@ const IE_COLS = [
   {key:'wholesalePrice', uz:'Ulgurji narx', aliases:['ulgurji narx','ulgurji','wholesale','wholesaleprice','опт','оптовая','көтерме','дүң','яклухт']},
   {key:'supplierName', uz:'Yetkazib beruvchi', aliases:['yetkazib beruvchi','supplier','поставщик','жеткізуші','жеткирүүчү','таъминкунанда']},
   {key:'ikpu', uz:'IKPU', aliases:['ikpu','икпу','mxik','мхик','tasnif','код икпу']},   /* fix182-fiscal1 */
-  {key:'vat', uz:'QQS %', aliases:['qqs','ндс','vat','ққс','кнс','ааи']}
+  {key:'vat', uz:'QQS %', aliases:['qqs','ндс','vat','ққс','кнс','ааи']},
+  {key:'packageCode', uz:'Qadoq kodi', aliases:['qadoq kodi','qadoq','packagecode','package','код упаковки','упаковка','қаптама','таңгак','борпеч']}   /* fix184-fiscal2 */
 ];
 function ieNormHeader(h){ return String(h||'').toLowerCase().replace(/[\s_"']+/g,'').replace(/[:.]/g,''); }
 function ieDetectColumns(headerRow){
@@ -14009,7 +14028,7 @@ function ieBuildPlan(rows){
   if(!rows.length) return {items:[], skipped:0};
   let map = ieDetectColumns(rows[0]);
   let body = rows.slice(1);
-  if(map.name===undefined || map.price===undefined){ map = {name:0, price:1, costPrice:2, stock:3, category:4, barcode:5, unit:6, wholesalePrice:7, supplierName:8, ikpu:9, vat:10}; body = rows.filter(r=>!isNaN(ieParseNumber(r[1]))); }
+  if(map.name===undefined || map.price===undefined){ map = {name:0, price:1, costPrice:2, stock:3, category:4, barcode:5, unit:6, wholesalePrice:7, supplierName:8, ikpu:9, vat:10, packageCode:11}; body = rows.filter(r=>!isNaN(ieParseNumber(r[1]))); }
   const items = []; let skipped = 0;
   body.forEach(r=>{
     const get = (k)=> map[k]===undefined ? undefined : r[map[k]];
@@ -14022,7 +14041,8 @@ function ieBuildPlan(rows){
   });
   items.forEach((it, i)=>{ const r = body[i]; if(!r) return; const get = (k)=> map[k]===undefined ? undefined : r[map[k]];   /* fix182-fiscal1 */
     const ik = get('ikpu'); if(ik !== undefined){ const v = String(ik||'').replace(/\D/g, ''); if(v.length === 17) it.ikpu = v; }
-    const vt = get('vat'); if(vt !== undefined && String(vt).trim() !== ''){ const n = ieParseNumber(vt); if(!isNaN(n)) it.vat = n; } });
+    const vt = get('vat'); if(vt !== undefined && String(vt).trim() !== ''){ const n = ieParseNumber(vt); if(!isNaN(n)) it.vat = n; }
+    const pk = get('packageCode'); if(pk !== undefined){ const v = String(pk||'').replace(/\D/g, ''); if(v) it.packageCode = v.slice(0, 20); } });   /* fix184-fiscal2 */
   return {items, skipped};
 }
 function ieApplyPlan(plan, stockMode){
@@ -14039,6 +14059,7 @@ function ieApplyPlan(plan, stockMode){
       if(it.supplierName!==undefined && it.supplierName!=='') p.supplierName = it.supplierName;
       if(it.ikpu!==undefined) p.ikpu = it.ikpu;   /* fix182-fiscal1 */
       if(it.vat!==undefined) p.vat = it.vat;
+      if(it.packageCode!==undefined) p.packageCode = it.packageCode;   /* fix184-fiscal2 */
       const hasVariants = p.variants && p.variants.length;
       if(!hasVariants && it.stock!==undefined && stockMode!=='keep'){
         if(stockMode==='add' && it.stock!==0) stockChange(p, null, it.stock, 'receive', null);
@@ -14047,7 +14068,7 @@ function ieApplyPlan(plan, stockMode){
       updated++;
     } else {
       const np = {id:uid(), branchId: state.currentBranchId, name: it.name, price: it.price, costPrice: it.costPrice||0, stock: 0, unit: it.unit||'dona', category: it.category||'', barcode: it.barcode||'', wholesalePrice: it.wholesalePrice||0, supplierName: it.supplierName||'', variants: []};
-      if(it.ikpu!==undefined) np.ikpu = it.ikpu; if(it.vat!==undefined) np.vat = it.vat;   /* fix182-fiscal1 */
+      if(it.ikpu!==undefined) np.ikpu = it.ikpu; if(it.vat!==undefined) np.vat = it.vat; if(it.packageCode!==undefined) np.packageCode = it.packageCode;   /* fix182-fiscal1 */
       state.products.push(np);
       const st = (stockMode==='keep' || it.stock===undefined) ? 0 : it.stock;
       if(st){ np.stock = st; logStockMove(np, null, st, 0, st, 'initial', null); }
@@ -14060,7 +14081,7 @@ function ieApplyPlan(plan, stockMode){
 function ieCsvEscape(v){ const t = String(v===undefined||v===null?'':v); return /[;"\n\r]/.test(t) ? '"'+t.replace(/"/g,'""')+'"' : t; }
 function ieBuildCsv(products){
   const head = IE_COLS.map(c=>c.uz).join(';');
-  const lines = products.map(p=>[p.name, p.price||0, p.costPrice||0, productTotalStock(p), p.category||'', p.barcode||'', p.unit||'dona', p.wholesalePrice||0, p.supplierName||'', p.ikpu||'', (p.vat===undefined||p.vat===null)?'':p.vat].map(ieCsvEscape).join(';'));
+  const lines = products.map(p=>[p.name, p.price||0, p.costPrice||0, productTotalStock(p), p.category||'', p.barcode||'', p.unit||'dona', p.wholesalePrice||0, p.supplierName||'', p.ikpu||'', (p.vat===undefined||p.vat===null)?'':p.vat, p.packageCode||''].map(ieCsvEscape).join(';'));
   return '\ufeff' + [head].concat(lines).join('\r\n');
 }
 async function ieShareText(text, fileName){
@@ -20173,6 +20194,28 @@ function __fsExpired(p){
   if(!state.settings || !state.settings.blockExpiredSale || !p || !p.expiryDate) return false;
   const t = new Date(p.expiryDate).getTime(); return isFinite(t) && t < Date.now();
 }
+/* fix184-fiscal2: IKPU / qadoq kodi yetishmaydigan tovarlar */
+function __fsMissing(){
+  const out = [];
+  visibleProducts().forEach(p=>{
+    const noI = !/^\d{17}$/.test(String(p.ikpu||'')), noP = !String(p.packageCode||'').trim();
+    if(noI || noP) out.push({p, noI, noP});
+  });
+  return out;
+}
+function __fsReadyHtml(){
+  const m = __fsMissing();
+  const svcNeed = (state.settings.restaurantMode || Number(state.settings.defaultDeliveryFee) > 0) && (!/^\d{17}$/.test(String(state.settings.fiscalServiceIkpu||'')) || !/^\d{17}$/.test(String(state.settings.fiscalDeliveryIkpu||'')));
+  let h = `<h3 class="sub-title" style="margin:0 0 6px;">${tr('fsReadyTitle')}</h3>`;
+  if(!m.length) h += `<p style="margin:0;font-weight:700;color:var(--teal);">${tr('fsReadyOk')}</p>`;
+  else {
+    h += `<p class="subtle" style="margin:0 0 8px;font-size:12.5px;">${escapeHtml(tr('fsReadyMissing').replace('{n}', m.length))}</p>`;
+    h += m.slice(0, 30).map(x=>`<div class="list-item" data-fsfix="${escapeHtml(x.p.id)}" style="cursor:pointer;padding:9px 12px 9px 14px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">${escapeHtml(x.p.name)}</div><div class="meta" style="color:var(--danger);">${[x.noI ? tr('fsReadyNoIkpu') : '', x.noP ? tr('fsReadyNoPkg') : ''].filter(Boolean).join(' · ')}</div></div><span class="subtle">›</span></div>`).join('');
+    if(m.length > 30) h += `<p class="subtle" style="margin:8px 0 0;font-size:12px;">${escapeHtml(tr('fsReadyMore').replace('{n}', m.length - 30))}</p>`;
+  }
+  if(svcNeed) h += `<p style="margin:8px 0 0;font-size:12.5px;color:var(--warm);font-weight:600;">${tr('fsReadySvc')}</p>`;
+  return h;
+}
 function renderSettingsFiscal(container){
   const on = fiscalOn();
   __ssPage(container, tr('fsTitle'), `
@@ -20188,9 +20231,13 @@ function renderSettingsFiscal(container){
         <div class="field">${__ssLbl('fsinn', tr('invInn'))}<input type="text" inputmode="numeric" id="s-fs-inn" value="${escapeHtml(state.settings.businessInn||'')}">${__ssErr('fsinn')}</div>
         <div class="field">${__ssLbl('fskassa', tr('fsKassaId'))}<input type="text" id="s-fs-kassa" value="${escapeHtml(state.settings.fiscalKassaId||'')}">${__ssErr('fskassa')}</div>
         <div class="field">${__ssLbl('fsaddr', tr('fsAddress'))}<input type="text" id="s-fs-addr" value="${escapeHtml(state.settings.fiscalAddress||'')}">${__ssErr('fsaddr')}</div>
+        <div class="field">${__ssLbl('fssvc', tr('fsSvcIkpu'))}<input type="text" inputmode="numeric" maxlength="17" id="s-fs-svc" value="${escapeHtml(state.settings.fiscalServiceIkpu||'')}">${__ssErr('fssvc')}</div>
+        <div class="field">${__ssLbl('fsdlv', tr('fsDlvIkpu'))}<input type="text" inputmode="numeric" maxlength="17" id="s-fs-dlv" value="${escapeHtml(state.settings.fiscalDeliveryIkpu||'')}">${__ssErr('fsdlv')}</div>
+        <div class="field"><label class="field-label">${tr('fsSvcVat')} ${__ssOk('fssvat')}</label><select id="s-fs-svat"><option value="" ${(state.settings.fiscalServiceVat==null)?'selected':''}>${tr('pfVatNone')}</option>${[0,12,15].map(v=>`<option value="${v}" ${String(state.settings.fiscalServiceVat)===String(v)?'selected':''}>${v}%</option>`).join('')}</select></div>
         <p class="subtle" style="margin:0;font-size:12px;">${tr('fsStage2')}</p>
       </div>
     </div>
+    <div class="card" id="ss-fs-ready" style="margin-top:14px;${on ? '' : 'display:none;'}">${__fsReadyHtml()}</div>
     <div class="card" id="ss-fs-exp" style="margin-top:14px;">
       <div class="checkbox-row"><input type="checkbox" id="s-fs-block-exp" ${state.settings.blockExpiredSale?'checked':''}><span>${tr('fsBlockExpired')} ${__ssOk('fsexp')}</span></div>
       <p class="subtle" style="margin:6px 0 0;font-size:12px;">${tr('fsBlockExpiredHint')}</p>
@@ -20208,6 +20255,15 @@ function renderSettingsFiscal(container){
   __ssBindField('fsinn', 's-fs-inn', { read: raw=>{ const v = String(raw||'').replace(/\s/g,''); return (v === '' || /^\d{9}$/.test(v)) ? {ok:true, v} : {ok:false, msg: tr('fillFields')}; }, same: v=>v === String(state.settings.businessInn||''), apply: v=>{ state.settings.businessInn = v; } });
   __ssBindField('fskassa', 's-fs-kassa', { read: raw=>({ok:true, v:String(raw||'').trim()}), same: v=>v === String(state.settings.fiscalKassaId||''), apply: v=>{ state.settings.fiscalKassaId = v; } });
   __ssBindField('fsaddr', 's-fs-addr', { read: raw=>({ok:true, v:String(raw||'').trim()}), same: v=>v === String(state.settings.fiscalAddress||''), apply: v=>{ state.settings.fiscalAddress = v; } });
+  /* fix184-fiscal2: xizmat/yetkazish IKPU, QQS, tayyorlik kartochkasi */
+  const __ik17 = raw=>{ const v = String(raw||'').replace(/\s/g,''); return (v === '' || /^\d{17}$/.test(v)) ? {ok:true, v} : {ok:false, msg: tr('fsIkpuBad')}; };
+  __ssBindField('fssvc', 's-fs-svc', { read: __ik17, same: v=>v === String(state.settings.fiscalServiceIkpu||''), apply: v=>{ state.settings.fiscalServiceIkpu = v; } });
+  __ssBindField('fsdlv', 's-fs-dlv', { read: __ik17, same: v=>v === String(state.settings.fiscalDeliveryIkpu||''), apply: v=>{ state.settings.fiscalDeliveryIkpu = v; } });
+  const sv = document.getElementById('s-fs-svat');
+  if(sv) sv.addEventListener('change', async ()=>{ state.settings.fiscalServiceVat = sv.value === '' ? null : Number(sv.value); const ok = await __ssSave(); if(ok) __ssTick('fssvat'); else showToast(tr('ssSaveFail')); });
+  const __rd = document.getElementById('ss-fs-ready');
+  container.querySelectorAll('[data-fs-mode]').forEach(b=>b.addEventListener('click', ()=>{ if(__rd){ __rd.style.display = fiscalOn() ? '' : 'none'; __rd.innerHTML = __fsReadyHtml(); } }));
+  if(__rd) __rd.addEventListener('click', (e)=>{ const b = e.target.closest('[data-fsfix]'); if(!b) return; openProductForm(b.dataset.fsfix); });
   const be = document.getElementById('s-fs-block-exp');
   if(be) be.addEventListener('change', async ()=>{ state.settings.blockExpiredSale = be.checked; const ok = await __ssSave(); if(ok) __ssTick('fsexp'); else showToast(tr('ssSaveFail')); });
   __ssBindGo(container);
