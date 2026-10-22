@@ -275,6 +275,30 @@
      layout while making sure the backdrop actually blocks the entire
      screen, not just a column in the middle of it. */
   .login-screen > *{width:100%;max-width:480px;}
+  /* fix191-qty0: miqdor oynasi ekranga moslashadi — tugmalar ekran balandligi va kengligiga qarab kichrayadi/kattalashadi */
+  .modal-sheet.qty-kp{max-width:420px;}
+  .qty-kp .modal-title{font-size:clamp(16px,2.6vh,20px);line-height:1.25;}
+  .qty-kp .kp-val{text-align:center;font-size:clamp(24px,5vh,34px);font-weight:800;margin:clamp(4px,1.4vh,16px) 0;line-height:1.15;}
+  .qty-kp .pin-pad{width:max(168px, min(320px, 78vw, calc((80vh - 250px) * 0.75)));width:max(168px, min(320px, 78vw, calc((80dvh - 250px) * 0.75)));max-width:none;gap:clamp(6px,1.2vh,10px);margin-top:clamp(2px,0.8vh,8px) !important;}
+  .qty-kp .pin-key{padding:0;font-size:clamp(17px,3vh,24px);}
+  .qty-kp #qty-cancel-btn{margin-top:clamp(8px,1.6vh,14px) !important;}
+  .qty-kp .kp-hint{text-align:center;font-size:12px;margin:0 0 4px;}
+  @media (max-height:520px){   /* yotiq telefon / juda past ekran */
+    .modal-overlay.center .modal-sheet.qty-kp{max-height:96vh;max-height:96dvh;padding-top:8px;padding-bottom:8px;}
+    .modal-overlay.center:has(.qty-kp){padding:6px;}
+    .qty-kp .modal-title{font-size:15px;margin-bottom:0;}
+    .qty-kp .subtle{font-size:12px;}
+    .qty-kp .kp-hint{display:none;}
+    .qty-kp .kp-val{font-size:22px;margin:2px 0;}
+    .qty-kp .pin-pad{width:max(150px, min(320px, 78vw, calc((96vh - 150px) * 0.75)));width:max(150px, min(320px, 78vw, calc((96dvh - 150px) * 0.75)));gap:5px;}
+    .qty-kp .pin-key{font-size:17px;}
+    .qty-kp #qty-cancel-btn{margin-top:6px !important;padding-top:7px;padding-bottom:7px;}
+  }
+  @media (orientation:landscape) and (max-height:560px){   /* yotiq telefon: chapda ma'lumot, o'ngda tugmalar */
+    .modal-sheet.qty-kp{max-width:680px;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:18px;align-content:center;}
+    .qty-kp > *{grid-column:1;}
+    .qty-kp .pin-pad{grid-column:2;grid-row:1 / span 8;align-self:center;width:max(150px, min(300px, calc((80vh - 44px) * 0.75)));width:max(150px, min(300px, calc((80dvh - 44px) * 0.75)));margin-top:0 !important;}
+  }
   .login-screen .pin-pad{max-width:250px;margin-left:auto;margin-right:auto;width:100%;}
   @media (max-height: 640px){
     .login-screen{justify-content:flex-start;padding-top:calc(16px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px)));}
@@ -1636,6 +1660,7 @@ const T = {
   note:{uz:"Izoh (ixtiyoriy)",ru:"Примечание (необязательно)",en:"Note (optional)",kk:"Ескертпе (міндетті емес)",ky:"Эскертүү (милдеттүү эмес)",tg:"Қайд (ихтиёрӣ)"},
   history:{uz:"Tarix",ru:"История",en:"History",kk:"Тарих",ky:"Тарых",tg:"Таърих"},
   noHistory:{uz:"Hali tarix yo'q",ru:"Пока нет истории",en:"No history yet",kk:"Әзірге тарих жоқ",ky:"Азырынча тарых жок",tg:"Ҳанӯз таърих нест"},
+  kpZeroHint:{uz:"0 — savatdan olib tashlash",ru:"0 — убрать из корзины",en:"0 — remove from cart",kk:"0 — себеттен алып тастау",ky:"0 — себеттен алып салуу",tg:"0 — аз сабад хориҷ кардан"},
   invalidAmount:{uz:"To'g'ri summa kiriting",ru:"Введите верную сумму",en:"Enter a valid amount",kk:"Дұрыс сома енгізіңіз",ky:"Туура сумманы киргизиңиз",tg:"Маблағи дурустро ворид кунед"},
   paymentExceedsDebt:{uz:"To'lov summasi qarzdan oshib ketdi. Joriy qarz",ru:"Сумма платежа больше долга. Текущий долг",en:"Payment exceeds the debt. Current debt",kk:"Төлем сомасы қарыздан асып кетті. Ағымдағы қарыз",ky:"Төлөм суммасы карыздан ашып кетти. Учурдагы карыз",tg:"Маблағи пардохт аз қарз зиёд аст. Қарзи ҷорӣ"},
   todaySales:{uz:"Bugungi savdo",ru:"Продажи сегодня",en:"Today's sales",kk:"Бүгінгі сату",ky:"Бүгүнкү сатуу",tg:"Фурӯши имрӯза"},
@@ -4302,7 +4327,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.66';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.67';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -7199,10 +7224,10 @@ function openAddQtyKeypad(productId){
   let entered = '';
   const root = document.getElementById('modal-root');
   function draw(err){
-    root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">
+    root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet qty-kp">
       <div class="modal-title">${escapeHtml(product.name)}</div>
       <div class="subtle${product.stock<=0?' stock-neg':''}">${tr('stock')}: ${product.stock} ${unitLabel(product.unit)}</div>
-      <div style="text-align:center;font-size:32px;font-weight:800;margin:16px 0;">${entered||'0'}</div>
+      <div class="kp-val">${entered||'0'}</div><div class="subtle kp-hint">${tr('kpZeroHint')}</div>
       ${err?`<div class="error-text" style="text-align:center;">${err}</div>`:''}
       <div class="pin-pad" style="margin-top:8px;">
         ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="pin-key" data-n="${n}">${n}</button>`).join('')}
@@ -7219,8 +7244,8 @@ function openAddQtyKeypad(productId){
     }));
     root.querySelector('[data-del]').addEventListener('click', ()=>{ entered = entered.slice(0,-1); draw(); });
     root.querySelector('[data-ok]').addEventListener('click', ()=>{
-      const qty = parseInt(entered,10);
-      if(isNaN(qty) || qty<=0){ entered=''; draw(tr('invalidAmount')); return; }
+      const qty = entered === '' ? 0 : parseInt(entered,10);   /* fix191-qty0: 0 (yoki bo'sh) — savatdan olib tashlash */
+      if(isNaN(qty) || qty<0){ entered=''; draw(tr('invalidAmount')); return; }
       closeModal();
       addFn(productId, qty, 'set');
     });
@@ -7403,8 +7428,8 @@ function addUnitToCart(productId, qty, mode){
   // it at 5, not silently add up to 25, which is what a plain tap already
   // does and is NOT what typing a fresh number should mean.
   const finalQty = mode==='set' ? qty : inCartQty + qty;
-  if(__fsExpired(product)){ showToast(tr('fsExpiredBlocked').replace('{name}', product.name)); return; }   /* fix182-fiscal1 */
-  if(!state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
+  if(!(mode==='set' && qty===0) && __fsExpired(product)){ showToast(tr('fsExpiredBlocked').replace('{name}', product.name)); return; }   /* fix182-fiscal1 + fix191-qty0 */
+  if(finalQty > 0 && !state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else cart.push({productId, qty:finalQty});
@@ -7422,8 +7447,8 @@ function addWholesaleUnitToCart(productId, qty, mode){
   const otherUnitsUsed = cart.filter(c=>c.productId===productId && c.saleMode!=='box' && c.priceTier!=='wholesale').reduce((s,c)=>s+c.qty,0);
   const inCartQty = existing ? existing.qty : 0;
   const finalQty = mode==='set' ? qty : inCartQty + qty;
-  if(__fsExpired(product)){ showToast(tr('fsExpiredBlocked').replace('{name}', product.name)); return; }   /* fix182-fiscal1 */
-  if(!state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
+  if(!(mode==='set' && qty===0) && __fsExpired(product)){ showToast(tr('fsExpiredBlocked').replace('{name}', product.name)); return; }   /* fix182-fiscal1 + fix191-qty0 */
+  if(finalQty > 0 && !state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else cart.push({productId, qty:finalQty, priceTier:'wholesale'});
@@ -7441,8 +7466,8 @@ function addBoxToCart(productId, qty, mode){
   const inCartBoxes = existing ? existing.qty : 0;
   const unitsAlreadyUsed = cart.filter(c=>c.productId===productId && c.saleMode!=='box').reduce((s,c)=>s+c.qty,0);
   const finalQty = mode==='set' ? qty : inCartBoxes + qty;
-  if(__fsExpired(product)){ showToast(tr('fsExpiredBlocked').replace('{name}', product.name)); return; }   /* fix182-fiscal1 */
-  if(!state.settings.allowOversell && finalQty*product.unitsPerBox + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
+  if(!(mode==='set' && qty===0) && __fsExpired(product)){ showToast(tr('fsExpiredBlocked').replace('{name}', product.name)); return; }   /* fix182-fiscal1 + fix191-qty0 */
+  if(finalQty > 0 && !state.settings.allowOversell && finalQty*product.unitsPerBox + __unitsOtherLines(cart, productId, null, existing) > product.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else cart.push({productId, qty:finalQty, saleMode:'box', unitsPerBox:product.unitsPerBox, boxLabel: product.boxLabel || tr('boxDefaultLabel')});
@@ -7515,14 +7540,14 @@ function addVariantToCart(productId, variantId, skipRerender, asWholesale, qty, 
   const product = state.products.find(p=>p.id===productId);
   const variant = product && product.variants.find(v=>v.id===variantId);
   if(!variant) return;
-  if(__fsExpired(product)){ showToast(tr('fsExpiredBlocked').replace('{name}', product.name)); return; }   /* fix182-fiscal1 */
+  if(!(mode==='set' && qty===0) && __fsExpired(product)){ showToast(tr('fsExpiredBlocked').replace('{name}', product.name)); return; }   /* fix182-fiscal1 + fix191-qty0 */
   const cart = activeCart();
   const useWholesale = asWholesale && variant.wholesalePrice>0;
   const existing = cart.find(c=>c.productId===productId && c.variantId===variantId && c.saleMode!=='box' && (useWholesale ? c.priceTier==='wholesale' : c.priceTier!=='wholesale') && !c.isTakeaway);
   const otherModeQty = cart.filter(c=>c.productId===productId && c.variantId===variantId && c.saleMode!=='box' && !(useWholesale ? c.priceTier==='wholesale' : c.priceTier!=='wholesale')).reduce((s,c)=>s+c.qty,0);
   const inCartQty = existing ? existing.qty : 0;
   const finalQty = mode==='set' ? qty : inCartQty + qty;
-  if(!state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, variantId, existing) > variant.stock){ showToast(tr('notEnoughStock')); return; }
+  if(finalQty > 0 && !state.settings.allowOversell && finalQty + __unitsOtherLines(cart, productId, variantId, existing) > variant.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else{
@@ -7545,7 +7570,7 @@ function addVariantBoxToCart(productId, variantId, skipRerender, qty, mode){
   const inCartBoxes = existing ? existing.qty : 0;
   const unitsAlreadyUsed = cart.filter(c=>c.productId===productId && c.variantId===variantId && c.saleMode!=='box').reduce((s,c)=>s+c.qty,0);
   const finalQty = mode==='set' ? qty : inCartBoxes + qty;
-  if(!state.settings.allowOversell && finalQty*product.unitsPerBox + __unitsOtherLines(cart, productId, variantId, existing) > variant.stock){ showToast(tr('notEnoughStock')); return; }
+  if(finalQty > 0 && !state.settings.allowOversell && finalQty*product.unitsPerBox + __unitsOtherLines(cart, productId, variantId, existing) > variant.stock){ showToast(tr('notEnoughStock')); return; }
   if(finalQty <= 0){ if(existing){ cart.splice(cart.indexOf(existing),1); } }
   else if(existing) existing.qty = finalQty;
   else cart.push({productId, variantId, qty:finalQty, saleMode:'box', unitsPerBox:product.unitsPerBox, boxLabel: product.boxLabel || tr('boxDefaultLabel')});
@@ -7571,10 +7596,10 @@ function openAddVariantQtyKeypad(product, variant, mode){
     ? `${Math.floor(variant.stock/(product.unitsPerBox||1))} ${product.boxLabel||tr('boxDefaultLabel')}`
     : `${variant.stock} ${unitLabel(product.unit)}`;
   function draw(err){
-    root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">
+    root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet qty-kp">
       <div class="modal-title">${escapeHtml(label)}</div>
       <div class="subtle${variant.stock<=0?' stock-neg':''}">${tr('stock')}: ${stockLabel}</div>
-      <div style="text-align:center;font-size:32px;font-weight:800;margin:16px 0;">${entered||'0'}</div>
+      <div class="kp-val">${entered||'0'}</div><div class="subtle kp-hint">${tr('kpZeroHint')}</div>
       ${err?`<div class="error-text" style="text-align:center;">${err}</div>`:''}
       <div class="pin-pad" style="margin-top:8px;">
         ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="pin-key" data-n="${n}">${n}</button>`).join('')}
@@ -7591,8 +7616,8 @@ function openAddVariantQtyKeypad(product, variant, mode){
     }));
     root.querySelector('[data-del]').addEventListener('click', ()=>{ entered = entered.slice(0,-1); draw(); });
     root.querySelector('[data-ok]').addEventListener('click', ()=>{
-      const qty = parseInt(entered,10);
-      if(isNaN(qty) || qty<=0){ entered=''; draw(tr('invalidAmount')); return; }
+      const qty = entered === '' ? 0 : parseInt(entered,10);   /* fix191-qty0 */
+      if(isNaN(qty) || qty<0){ entered=''; draw(tr('invalidAmount')); return; }
       if(isBox) addVariantBoxToCart(product.id, variant.id, true, qty, 'set');
       else addVariantToCart(product.id, variant.id, true, state.saleMode==='wholesale', qty, 'set');
       openVariantPicker(product);
@@ -8637,10 +8662,10 @@ function openQtyKeypad(key){
   let freshQty = true;
   const root = document.getElementById('modal-root');
   function draw(err){
-    root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">
+    root.innerHTML = `<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet qty-kp">
       <div class="modal-title">${label}</div>
       <div class="subtle">${tr('stock')}: ${maxStock} ${stockUnitLabel}</div>
-      <div style="text-align:center;font-size:32px;font-weight:800;margin:16px 0;">${entered||'0'}</div>
+      <div class="kp-val">${entered||'0'}</div><div class="subtle kp-hint">${tr('kpZeroHint')}</div>
       ${err?`<div class="error-text" style="text-align:center;">${err}</div>`:''}
       <div class="pin-pad" style="margin-top:8px;">
         ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="pin-key" data-n="${n}">${n}</button>`).join('')}
@@ -8658,10 +8683,13 @@ function openQtyKeypad(key){
     }));
     root.querySelector('[data-del]').addEventListener('click', ()=>{ freshQty = false; entered = entered.slice(0,-1); draw(); });
     root.querySelector('[data-ok]').addEventListener('click', ()=>{
-      const qty = parseInt(entered,10);
-      if(isNaN(qty) || qty<=0){ entered=''; freshQty = false; draw(tr('invalidAmount')); return; }
+      const qty = entered === '' ? 0 : parseInt(entered,10);   /* fix191-qty0: 0 — qator savatdan olib tashlanadi («−» tugmasi kabi) */
+      if(isNaN(qty) || qty<0){ entered=''; freshQty = false; draw(tr('invalidAmount')); return; }
+      if(qty === 0){ const __ac = activeCart(), __i = __ac.indexOf(c); if(__i >= 0) __ac.splice(__i, 1); }
+      else {
       if(!state.settings.allowOversell && qty > maxStock){ draw(tr('notEnoughStock')); return; }
       c.qty = qty;
+      }
       if(state.settings.restaurantMode){ saveTables(); syncActiveTable(); } else { saveCart(); }
       closeModal();
       renderCartModalContent();
@@ -14988,7 +15016,8 @@ function computeReceiptEditStockUnitsDelta(item){
 }
 function computeReceiptEditRestoreUnits(removedItem){
   const unitsPer = removedItem.saleMode==='box' ? (removedItem.unitsPerBox||1) : 1;
-  return removedItem.qty * unitsPer;
+  const q = (removedItem._isOriginal && removedItem._origQty != null) ? removedItem._origQty : removedItem.qty;   /* fix191-qty0: avval o'zgartirilgan bo'lsa ham — sotilgan miqdor */
+  return q * unitsPer;
 }
 
 function openEditReceiptModal(saleId, afterDone){
@@ -15387,6 +15416,10 @@ function erCartQty(productId){
 /* Klaviatura ("set"): qatorning umumiy miqdorini yozilgan songa tenglaydi */
 function erSetQty(productId, variantId, mode, qty){
   var cur = erFindLine(productId, variantId, mode);
+  if(qty === 0){   /* fix191-qty0: 0 — qator chekdan olib tashlanadi (asl qator bo'lsa, ombor qaytariladi) */
+    if(cur){ var __d = editReceiptDraft, __i = __d.items.indexOf(cur); if(__i >= 0) __d.items.splice(__i, 1); if(cur._isOriginal) __d.removedOriginals.push(cur); }
+    return true;
+  }
   var delta = qty - (cur ? cur.qty : 0);
   if(delta === 0) return true;
   if(delta > 0) return erAddToDraft(productId, variantId, mode, delta);
@@ -15422,10 +15455,10 @@ function erKeypad(title, stockText, onOk, onCancel){
   var entered = '';
   var root = document.getElementById('modal-root');
   function draw(err){
-    root.innerHTML = '<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet">'
+    root.innerHTML = '<div class="modal-overlay center" id="modal-overlay"><div class="modal-sheet qty-kp">'
       + '<div class="modal-title">' + escapeHtml(title) + '</div>'
       + '<div class="subtle">' + stockText + '</div>'
-      + '<div style="text-align:center;font-size:32px;font-weight:800;margin:16px 0;">' + (entered || '0') + '</div>'
+      + '<div class="kp-val">' + (entered || '0') + '</div><div class="subtle kp-hint">' + tr('kpZeroHint') + '</div>'
       + (err ? '<div class="error-text" style="text-align:center;">' + err + '</div>' : '')
       + '<div class="pin-pad" style="margin-top:8px;">'
       + [1,2,3,4,5,6,7,8,9].map(function(n){ return '<button class="pin-key" data-n="' + n + '">' + n + '</button>'; }).join('')
@@ -15444,8 +15477,8 @@ function erKeypad(title, stockText, onOk, onCancel){
     });
     root.querySelector('[data-del]').addEventListener('click', function(){ entered = entered.slice(0, -1); draw(); });
     root.querySelector('[data-ok]').addEventListener('click', function(){
-      var q = parseInt(entered, 10);
-      if(isNaN(q) || q <= 0){ entered = ''; draw(tr('invalidAmount')); return; }
+      var q = entered === '' ? 0 : parseInt(entered, 10);   /* fix191-qty0 */
+      if(isNaN(q) || q < 0){ entered = ''; draw(tr('invalidAmount')); return; }
       onOk(q);
     });
     root.querySelector('#qty-cancel-btn').addEventListener('click', onCancel);

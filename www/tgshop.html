@@ -717,7 +717,7 @@ function askQty(id, v, after){
   var cur = cartQty(id, v);
   openSheet('<h3>' + esc(it.n) + '</h3><div class="fld" style="margin-top:0"><label for="qv-in">' + esc(t('qtyP')) + ' (' + esc(unitL(it.u)) + ')</label><input id="qv-in" type="text" inputmode="decimal" value="' + esc(qtyStr(cur)) + '"></div><button class="addb" id="qv-ok" style="margin-top:14px;height:46px;">' + esc(t('done2')) + '</button>', function(sh){
     var inp = sh.querySelector('#qv-in'); setTimeout(function(){ try{ inp.focus(); inp.select(); }catch(e){} }, 50);
-    sh.querySelector('#qv-ok').onclick = function(){ var q = parseFloat(String(inp.value).replace(',', '.')); if(isFinite(q) && q >= 0){ setQty(id, v, Math.min(q, 9999)); } closeSheet(); if(S.view === 'cart') render(); else refreshGrid(); if(after) after(); };
+    sh.querySelector('#qv-ok').onclick = function(){ var __raw = String(inp.value).trim(); var q = __raw === '' ? 0 : parseFloat(__raw.replace(',', '.')); /* fix191-qty0: bo'sh yoki 0 — savatdan olib tashlash */ if(isFinite(q) && q >= 0){ setQty(id, v, Math.min(q, 9999)); } closeSheet(); if(S.view === 'cart') render(); else refreshGrid(); if(after) after(); };
   });
 }
 function getLocation(){
