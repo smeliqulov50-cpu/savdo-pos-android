@@ -89,7 +89,7 @@ test('operator rad etdi (qayta urinilmaydi) — ochiq ro\'yxatda; "Qayta yuboris
   const s = mk({ mode: 'error' });
   let r = await E.processSale(s.deps, BID, sale('e1')); assert.deepEqual([r.status, r.retryable], ['failed', false]); assert.match(r.error, /IKPU/);
   assert.equal(s.db.store['fiscalBiz/' + BID].pending.e1, undefined, 'avtomatik navbatda emas');
-  r = await E.processSale(s.deps, BID, sale('e1')); assert.equal(s.mock.state.calls.length, 1, 'force siz qayta yuborilmaydi');
+  r = await E.processSale(s.deps, BID, sale('e1')); assert.equal(s.mock.state.calls.filter(x => x === 'sale').length, 1, 'force siz qayta yuborilmaydi');   /* fix188: smena ochish chaqiruvi hisobga olinmaydi */
   s.db.store['businesses/' + BID + '/sales/e1'] = sale('e1');
   let o = await E.api(s.deps, { bid: BID }, { action: 'open' }); assert.deepEqual(o.body.list.map(x => [x.id, x.status, x.receiptNo]), [['e1', 'failed', 'E1']]);
   s.mock.opts.mode = 'ok';

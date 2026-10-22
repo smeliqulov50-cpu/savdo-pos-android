@@ -1399,6 +1399,17 @@ const T = {
   rcPortions:{uz:"{n} porsiya",ru:"{n} порц.",en:"{n} portions",kk:"{n} порция",ky:"{n} порция",tg:"{n} порсия"},
   rcNoNest:{uz:"Retseptli taomni xomashyo qilib bo'lmaydi",ru:"Блюдо с техкартой нельзя сделать ингредиентом",en:"A dish with a recipe cannot be an ingredient",kk:"Техкартасы бар тағамды шикізат етуге болмайды",ky:"Техкартасы бар тамакты чийки зат кылууга болбойт",tg:"Таоми дорои харитаро ашё кардан мумкин нест"},
   smRecipe:{uz:"Retsept (xomashyo)",ru:"Техкарта (сырьё)",en:"Recipe (ingredient)",kk:"Техкарта (шикізат)",ky:"Техкарта (чийки зат)",tg:"Харита (ашё)"},
+  fsShiftTitle:{uz:"Fiskal smena va Z-hisobotlar",ru:"Фискальная смена и Z-отчёты",en:"Fiscal shift and Z reports",kk:"Фискалдық ауысым және Z-есептер",ky:"Фискалдык смена жана Z-отчеттор",tg:"Басти фискалӣ ва Z-ҳисоботҳо"},
+  fsShiftHint:{uz:"Soliq smenasi ilovadagi smena bilan birga ochiladi va yopiladi (smena ochilmagan bo'lsa — birinchi chek bilan o'zi ochiladi). Qonun bo'yicha smena 24 soatdan oshmaydi — server eski smenani o'zi yopadi.",ru:"Налоговая смена открывается и закрывается вместе со сменой в приложении (если смена не открыта — открывается сама с первым чеком). По закону смена не дольше 24 часов — сервер сам закрывает старую смену.",en:"The tax shift opens and closes together with the app shift (if no shift is open, the first receipt opens it). By law a shift lasts at most 24 hours — the server closes an old shift itself.",kk:"Салық ауысымы қолданбадағы ауысыммен бірге ашылып, жабылады (ауысым ашылмаса — бірінші чекпен өзі ашылады). Заң бойынша ауысым 24 сағаттан аспайды — сервер ескі ауысымды өзі жабады.",ky:"Салык сменасы тиркемедеги смена менен бирге ачылып, жабылат (смена ачылбаса — биринчи чек менен өзү ачылат). Мыйзам боюнча смена 24 сааттан ашпайт — сервер эски сменаны өзү жабат.",tg:"Басти андоз бо басти барнома якҷоя кушода ва баста мешавад (агар баст кушода набошад — бо чеки аввал худаш кушода мешавад). Мувофиқи қонун баст аз 24 соат зиёд намешавад — сервер басти кӯҳнаро худаш мебандад."},
+  fsShiftOpen:{uz:"🟢 Ochiq smena: {t} dan",ru:"🟢 Открытая смена: с {t}",en:"🟢 Open shift: since {t}",kk:"🟢 Ашық ауысым: {t} бастап",ky:"🟢 Ачык смена: {t} тартып",tg:"🟢 Басти кушода: аз {t}"},
+  fsShiftNone:{uz:"Hozir ochiq soliq smenasi yo'q.",ru:"Сейчас открытой налоговой смены нет.",en:"No tax shift is open now.",kk:"Қазір ашық салық ауысымы жоқ.",ky:"Азыр ачык салык сменасы жок.",tg:"Ҳоло басти андози кушода нест."},
+  fsZNone:{uz:"Hali Z-hisobot yo'q.",ru:"Z-отчётов пока нет.",en:"No Z reports yet.",kk:"Әзірге Z-есеп жоқ.",ky:"Азырынча Z-отчет жок.",tg:"Ҳоло Z-ҳисобот нест."},
+  fsZLine:{uz:"Sotuv: {s} · Qaytarish: {r} · Naqd: {c} · Karta: {k}",ru:"Продажи: {s} · Возвраты: {r} · Наличные: {c} · Карта: {k}",en:"Sales: {s} · Refunds: {r} · Cash: {c} · Card: {k}",kk:"Сату: {s} · Қайтару: {r} · Қолма-қол: {c} · Карта: {k}",ky:"Сатуу: {s} · Кайтаруу: {r} · Накталай: {c} · Карта: {k}",tg:"Фурӯш: {s} · Баргардонӣ: {r} · Нақд: {c} · Корт: {k}"},
+  fsZCredit:{uz:"Kredit cheklari: {n} ta · {sum}",ru:"Кредитные чеки: {n} · {sum}",en:"Credit receipts: {n} · {sum}",kk:"Кредит чектері: {n} · {sum}",ky:"Кредит чектери: {n} · {sum}",tg:"Чекҳои кредитӣ: {n} · {sum}"},
+  fsZAuto:{uz:"24 soat — o'zi yopildi",ru:"24 часа — закрыта автоматически",en:"24 hours — closed automatically",kk:"24 сағат — өзі жабылды",ky:"24 саат — өзү жабылды",tg:"24 соат — худаш баста шуд"},
+  fsZPending:{uz:"Z-hisobot kutilmoqda (internet qaytganda)",ru:"Z-отчёт ожидается (когда появится интернет)",en:"Z report pending (when internet is back)",kk:"Z-есеп күтілуде (интернет болғанда)",ky:"Z-отчет күтүлүүдө (интернет болгондо)",tg:"Z-ҳисобот интизор аст (ҳангоми пайдо шудани интернет)"},
+  fsZFailed:{uz:"Soliq smenasi yopilmadi: {e} — server o'zi qayta urinadi",ru:"Налоговая смена не закрыта: {e} — сервер повторит сам",en:"Tax shift not closed: {e} — the server will retry",kk:"Салық ауысымы жабылмады: {e} — сервер өзі қайталайды",ky:"Салык сменасы жабылган жок: {e} — сервер өзү кайталайт",tg:"Басти андоз баста нашуд: {e} — сервер худаш такрор мекунад"},
+  fsShiftWarn:{uz:"🧾 {n} ta chek soliqqa hali yuborilmagan. Smena baribir yopiladi — cheklar keyin o'zi yuboriladi.",ru:"🧾 {n} чек(ов) ещё не отправлено в налоговую. Смена всё равно закроется — чеки отправятся позже сами.",en:"🧾 {n} receipt(s) not yet sent to tax. The shift will still close — receipts will be sent later automatically.",kk:"🧾 {n} чек салыққа әлі жіберілмеген. Ауысым бәрібір жабылады — чектер кейін өзі жіберіледі.",ky:"🧾 {n} чек салыкка азырынча жөнөтүлгөн жок. Смена баары бир жабылат — чектер кийин өзү жөнөтүлөт.",tg:"🧾 {n} чек ҳоло ба андоз фиристода нашудааст. Баст ба ҳар ҳол баста мешавад — чекҳо баъдтар худашон фиристода мешаванд."},
   fsKindRefund:{uz:"Qaytarish",ru:"Возврат",en:"Refund",kk:"Қайтару",ky:"Кайтаруу",tg:"Баргардонӣ"},
   fsKindEdit:{uz:"Chek tahriri",ru:"Исправление чека",en:"Receipt correction",kk:"Чекті түзету",ky:"Чекти оңдоо",tg:"Ислоҳи чек"},
   fsKindCredit:{uz:"Qarz to'lovi (kredit cheki)",ru:"Оплата долга (кредитный чек)",en:"Debt payment (credit receipt)",kk:"Қарыз төлемі (кредит чегі)",ky:"Карыз төлөмү (кредит чеги)",tg:"Пардохти қарз (чеки кредитӣ)"},
@@ -4271,7 +4282,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.63';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.64';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6354,6 +6365,7 @@ function autoCloseStaleShift(shift){
   saveShifts();
   state.currentShift = {id:uid(), staffId:shift.staffId, staffName:shift.staffName, startTime:new Date().toISOString(), startCash:expected, branchId:shift.branchId, prevId: shift.id};
   saveCurrentShift();
+  try{ if(fiscalOn() || shift.fx === 1){ const __r = __fxShiftRec(shift.id), __n = state.currentShift; (__r ? __fxShiftClosed(__r) : Promise.resolve()).then(()=>__fxShiftOpened(__n)); } }catch(e){}   /* fix188-fiscal5 */
 }
 
 function openStartShiftModal(){
@@ -6371,6 +6383,7 @@ function openStartShiftModal(){
     const __pvS = state.currentShift && effectiveBranchId(state.currentShift.branchId) === effectiveBranchId(state.currentBranchId) ? state.currentShift.id : null;   /* fix137-cash */
     state.currentShift = {id:uid(), staffId:state.currentStaff.id, staffName:state.currentStaff.name, startTime:new Date().toISOString(), startCash:cash, branchId: state.currentBranchId, prevId: __pvS};
     saveCurrentShift();
+    if(fiscalOn()) __fxShiftOpened(state.currentShift);   /* fix188-fiscal5: soliq smenasi ham (fon) */
     closeModal();
     renderAll();
   });
@@ -6427,6 +6440,7 @@ function openEndShiftModal(){
       ${__cxRowsHtml(__cx)}
       <div class="row" style="border-top:1px solid var(--border);padding-top:10px;margin-top:4px;"><span class="subtle">${tr('expectedCash')}</span><strong>${fmt(expected)}</strong></div>
     </div>
+    ${__fxShiftWarnHtml()}
     <div class="field">
       <label class="field-label">${tr('actualCash')}</label>
       <input type="text" inputmode="numeric" id="actual-cash-input" value="${formatMoneyInputValue(expected)}">
@@ -6455,6 +6469,7 @@ function openEndShiftModal(){
     const actual = parseMoneyInput(document.getElementById('actual-cash-input').value) || 0;
     state.shifts.push({...shift, endTime:new Date().toISOString(), endCash:actual, expectedCash:expected, cashTotal, cardTotal, creditTotal, discountTotal, serviceChargeTotal, deliveryFeeTotal, refundedTotal, cashExpensesTotal, profitTotal, salesCount: shiftSales.length});
     saveShifts();
+    try{ if(fiscalOn() || shift.fx === 1) __fxShiftClosed(state.shifts[state.shifts.length - 1]); }catch(e){}   /* fix188-fiscal5: soliq smenasi yopiladi, Z-hisobot shu smenaga (fon, kutdirmaydi) */
     state.currentShift = null;
     saveCurrentShift();
     stopAgentLocationTracking();
@@ -20399,8 +20414,43 @@ function __fxBindPage(container){
     catch(err){ showToast(tr('fsNeedNet')); }
   });
   container.querySelectorAll('[data-fs-mode]').forEach(b=>b.addEventListener('click', ()=>setTimeout(redraw, 50)));
-  if(fiscalOn()){ __fxLastRefresh = 0; __fxRefresh(redraw); __fxLoadOpen().then(redraw).catch(()=>{}); }   /* fix186-fiscal4 */
+  if(fiscalOn()){ __fxLastRefresh = 0; __fxRefresh(redraw); __fxLoadOpen().then(redraw).catch(()=>{}); __fxLoadShift().then(()=>{ const b = document.getElementById('ss-fs-shift'); if(b) b.innerHTML = __fxShiftHtml(); }).catch(()=>{}); }   /* fix186-fiscal4 + fix188-fiscal5 */
 }
+/* fix188-fiscal5: fiskal smena — ilova smenasi bilan birga; hech qachon kutdirmaydi (fon so'rovi) */
+function __fxShiftCall(action, sh, extra){ if(!sh || !sh.id) return Promise.resolve(null); return __fxCall(action, Object.assign({appShiftId: String(sh.id), branchId: sh.branchId || null}, extra || {})).then(d=>(d && d.result) || null).catch(()=>null); }
+function __fxShiftRec(id){ return (state.shifts || []).find(x=>x && x.id === id) || null; }
+function __fxShiftSaveZ(id, r){ const rec = __fxShiftRec(id); if(!rec || !r || !r.status) return; if(r.status === 'none'){ if(rec.fz && rec.fz.status === 'pending'){ rec.fz = {status: 'none'}; saveShifts(); } return; } rec.fz = {status: r.status, id: r.id || '', z: r.z || null, zApp: r.zApp || null, closedAt: r.closedAt || null, error: r.error || '', test: !!r.test}; saveShifts(); }
+async function __fxShiftClosed(rec){
+  if(!rec) return; rec.fx = 1; if(!rec.fz) rec.fz = {status: 'pending'}; saveShifts();
+  const r = await __fxShiftCall('shiftClose', rec, {endedAt: Date.parse(rec.endTime) || Date.now()}); if(r) __fxShiftSaveZ(rec.id, r);
+}
+async function __fxShiftFlush(){
+  const list = (state.shifts || []).filter(x=>x && x.fx === 1 && x.fz && (x.fz.status === 'pending' || x.fz.status === 'close_failed')).slice(-5);
+  for(const rec of list){ const r = await __fxShiftCall('shiftClose', rec, {endedAt: Date.parse(rec.endTime) || 0}); if(r) __fxShiftSaveZ(rec.id, r); }
+}
+async function __fxShiftOpened(sh){ if(!sh || !fiscalOn()) return; sh.fx = 1; try{ saveCurrentShift(); }catch(e){} await __fxShiftFlush(); await __fxShiftCall('shiftOpen', sh); }
+function __fxShiftWarnHtml(){
+  if(!fiscalOn()) return '';
+  const n = __fxUnsent().length + (state.__fxOpen || []).filter(x=>x && x.kind && x.kind !== 'sale').length;
+  return n ? `<div class="card alert-soft" style="margin-bottom:12px;"><p style="margin:0;color:var(--warm);font-weight:700;font-size:13px;">${escapeHtml(tr('fsShiftWarn').replace('{n}', n))}</p></div>` : '';
+}
+function __fxZHtml(x){
+  const z = (x.test || !x.z) ? x.zApp : x.z; if(!z) return '';
+  const m = v=>fmt(rM((Number(v) || 0) / 100));
+  return `<div class="meta" style="font-size:12.5px;">${escapeHtml(tr('fsZLine').replace('{s}', z.sales || 0).replace('{r}', z.refunds || 0).replace('{c}', m(z.cash)).replace('{k}', m(z.card)))}</div>` + ((x.zApp && x.zApp.credits) ? `<div class="meta" style="font-size:12px;">${escapeHtml(tr('fsZCredit').replace('{n}', x.zApp.credits).replace('{sum}', m(x.zApp.creditSum)))}</div>` : '');
+}
+function __fxShiftHtml(){
+  const inf = state.__fxShiftInfo || {open: [], recent: []};
+  let h = `<h3 class="sub-title" style="margin:0 0 6px;">${tr('fsShiftTitle')}</h3><p class="subtle" style="margin:0 0 8px;font-size:12px;">${tr('fsShiftHint')}</p>`;
+  const op = (inf.open || []).filter(x=>x && x.id);
+  h += op.length ? op.map(x=>`<p style="margin:0 0 6px;font-weight:700;color:var(--teal);">${escapeHtml(tr('fsShiftOpen').replace('{t}', fmtDateTime(new Date(x.openedAt).toISOString())))}</p>`).join('') : `<p class="subtle" style="margin:0 0 6px;">${tr('fsShiftNone')}</p>`;
+  const pend = (state.shifts || []).filter(x=>x && x.fx === 1 && x.fz && (x.fz.status === 'pending' || x.fz.status === 'close_failed')).slice(-5);
+  h += pend.map(x=>`<p style="margin:0 0 6px;color:var(--warm);font-weight:700;font-size:12.5px;">${escapeHtml(fmtDateTime(x.endTime))} · ${escapeHtml(x.fz.status === 'pending' ? tr('fsZPending') : tr('fsZFailed').replace('{e}', String(x.fz.error || '').slice(0, 60)))}</p>`).join('');
+  const rc = (inf.recent || []).slice(0, 10);
+  if(!rc.length) return h + `<p class="subtle" style="margin:0;font-size:12.5px;">${tr('fsZNone')}</p>`;
+  return h + rc.map(x=>{ const z = (x.test || !x.z) ? x.zApp : x.z; return `<div class="list-item" style="padding:9px 12px 9px 14px;"><div class="info" style="min-width:0;"><div class="name" style="font-size:13.5px;">Z${x.z && x.z.number ? ' №' + escapeHtml(String(x.z.number)) : ''} · ${escapeHtml(fmtDateTime(new Date(x.closedAt).toISOString()))} · ${fmt(rM(((z && z.total) || 0) / 100))}${x.test ? ' (' + tr('fsStTest') + ')' : ''}</div>${__fxZHtml(x)}${x.reason === '24h' ? `<div class="meta" style="font-size:12px;color:var(--warm);">${tr('fsZAuto')}</div>` : ''}</div></div>`; }).join('');
+}
+async function __fxLoadShift(){ try{ await __fxShiftFlush(); const ids = (state.shifts || []).filter(x=>x && x.fx === 1).slice(-10).map(x=>x.id); const d = await __fxCall('shiftInfo', {ids}); state.__fxShiftInfo = {open: d.open || [], recent: d.recent || []}; Object.keys(d.map || {}).forEach(k=>__fxShiftSaveZ(k, d.map[k])); }catch(e){} }
 async function __fxLoadOpen(){ try{ const d = await __fxCall('open', {}); state.__fxOpen = d.list || []; (d.list || []).forEach(x=>{ if(x.kind === 'refund' && x.saleId) __fxApply(x.id, x); }); }catch(e){} }
 function renderSettingsFiscal(container){
   const on = fiscalOn();
@@ -20430,6 +20480,7 @@ function renderSettingsFiscal(container){
     </div>
     <div class="card" id="ss-fs-ready" style="margin-top:14px;${on ? '' : 'display:none;'}">${__fsReadyHtml()}</div>
     <div class="card" id="ss-fs-unsent" style="margin-top:14px;${(on || __fxUnsent().length) ? '' : 'display:none;'}">${__fxUnsentHtml()}</div>
+    <div class="card" id="ss-fs-shift" style="margin-top:14px;${on ? '' : 'display:none;'}">${__fxShiftHtml()}</div>
     <div class="card" id="ss-fs-exp" style="margin-top:14px;">
       <div class="checkbox-row"><input type="checkbox" id="s-fs-block-exp" ${state.settings.blockExpiredSale?'checked':''}><span>${tr('fsBlockExpired')} ${__ssOk('fsexp')}</span></div>
       <p class="subtle" style="margin:6px 0 0;font-size:12px;">${tr('fsBlockExpiredHint')}</p>

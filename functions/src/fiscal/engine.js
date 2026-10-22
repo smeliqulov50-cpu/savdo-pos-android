@@ -8,7 +8,10 @@
      {sid}~r{n}     — tahrir n: oldingi versiyani qaytarish   |   {sid}~v{n} — tahrir n: yangi versiya cheki (r{n} dan keyin)
      pay_{entryId}  — qarz to'lovi cheki («Кредит», to'langan summaga; QR/fiskal belgisiz)
    Har hujjat: status sending|sent|failed|cancelled, open, attempts, lastError, retryable, sign, number, qr, nextAt, lockAt, kind, saleId.
-   fiscalBiz/{bid}.pending {opId: nextAt} — avtomatik qayta urinish navbati. 90 s qulf — bir operatsiya ikki marta yuborilmaydi. */
+   fiscalBiz/{bid}.pending {opId: nextAt} — avtomatik qayta urinish navbati. 90 s qulf — bir operatsiya ikki marta yuborilmaydi.
+   fix188-fiscal5 — smena: businesses/{bid}/fiscalShifts/{fsid} {status open|closed|close_failed, bk, openedAt, closedAt, z (provayder), zApp (o'z hisobimiz), apps}
+   fiscalBiz/{bid}.shifts {filial: {fsid, openedAt, opening|closing, lockAt}}, appMap {ilovaSmenaId: fsid}, zRecent [oxirgi 20 ta Z].
+   Chek yuborishdan oldin smena ochiq bo'lishi ta'minlanadi (ilova ochmagan bo'lsa ham); 23,5 soatdan eski smena yopilib, yangisi ochiladi. */
 const R = require('./receipt');
 const P = require('./providers');
 
@@ -39,7 +42,7 @@ async function setQueue(deps, bid, id, nextAt) {
     const s = await tx.get(ref); const d = (s && s.exists ? s.data() : null) || {};
     const p = Object.assign({}, d.pending || {});
     if (nextAt) p[id] = nextAt; else delete p[id];
-    tx.set(ref, { pending: p, pendingCount: Object.keys(p).length, updatedAt: deps.nowMs() });
+    tx.set(ref, Object.assign({}, d, { pending: p, pendingCount: Object.keys(p).length, updatedAt: deps.nowMs() }));   // fix188: boshqa maydonlar (smena) saqlanadi
   });
 }
 
@@ -62,7 +65,7 @@ async function runOp(deps, bid, id, meta, prepare, opts) {
   const st = lock.go;
   const biz = (await getData(db.collection('businesses').doc(bid))) || {};
   const pname = String(biz.fiscalProvider || '');
-  let prep;
+  let prep, fshift = null;
   try { prep = await prepare(biz, st); } catch (e) { prep = { ok: false, error: 'prepare: ' + (e && e.message || ''), retryable: true }; }
   const t = deps.nowMs();
   let out;
@@ -71,9 +74,13 @@ async function runOp(deps, bid, id, meta, prepare, opts) {
   } else {
     let res;
     if (!prep || !prep.ok) res = { ok: false, error: (prep && prep.error) || 'prepare_failed', retryable: prep ? prep.retryable !== false : true };
-    else { const pv = provOf(deps, pname, biz); res = prep.receipt.refund ? await pv.sendRefund(prep.receipt, prep.original) : await pv.sendSale(prep.receipt); }
+    else {
+      const es = await ensureShift(deps, bid, biz, bkOf(prep.receipt.branchId));   // fix188-fiscal5: chek ochiq smenaga
+      if (!es.ok) res = { ok: false, error: es.error, retryable: es.retryable !== false };
+      else { fshift = es.fsid; const pv = provOf(deps, pname, biz); res = prep.receipt.refund ? await pv.sendRefund(prep.receipt, prep.original) : await pv.sendSale(prep.receipt); }
+    }
     if (res.ok) {
-      out = Object.assign({}, st, { status: 'sent', open: false, sign: res.sign, number: res.number, qr: res.qr, providerId: res.providerId, test: pname === 'mock', sentAt: res.at || new Date(t).toISOString(), lastError: '', retryable: false, nextAt: null, lockAt: null, total: prep.receipt.total, rc: prep.receipt, updatedAt: t });
+      out = Object.assign({}, st, { fshift: fshift, status: 'sent', open: false, sign: res.sign, number: res.number, qr: res.qr, providerId: res.providerId, test: pname === 'mock', sentAt: res.at || new Date(t).toISOString(), lastError: '', retryable: false, nextAt: null, lockAt: null, total: prep.receipt.total, rc: prep.receipt, updatedAt: t });
     } else {
       const retry = res.retryable !== false;
       out = Object.assign({}, st, { status: 'failed', open: true, lastError: String(res.error || 'error').slice(0, 200), retryable: retry, nextAt: retry ? t + backoff(st.attempts) : null, lockAt: null, updatedAt: t });
@@ -214,6 +221,7 @@ async function onLedgerCreated(deps, bid, eid, entry) {
 /* ---------- qayta urinish: hujjat id bo'yicha yo'naltirish ---------- */
 async function retryDoc(deps, bid, id, opts) {
   const db = deps.db; let m;
+  if ((m = /^shift~(.+)$/.exec(id))) return retryShiftClose(deps, bid, m[1]);   // fix188-fiscal5
   if ((m = /^pay_(.+)$/.exec(id))) {
     const e = await getData(db.collection('businesses').doc(bid).collection('ledger').doc(m[1]));
     if (!isCreditPay(e)) { await setQueue(deps, bid, id, null); return { status: 'no_source' }; }
@@ -246,7 +254,183 @@ async function retryTick(deps) {
       if (r.status === 'sent') sent++;
     }
   }
-  return { tried: tried, sent: sent };
+  // fix188-fiscal5: 23,5 soatdan eski ochiq smenalar yopiladi (qonun: smena 24 soatdan oshmasin)
+  let closed = 0;
+  const ss = await deps.db.collection('fiscalBiz').where('shiftOpenCount', '>', 0).limit(BIZ_PER_TICK).get();
+  for (const d of ss.docs) {
+    const sh = (d.data() || {}).shifts || {};
+    for (const bk of Object.keys(sh)) {
+      const e = sh[bk];
+      if (!e || !e.fsid || now - (e.openedAt || now) < SHIFT_MAX_MS) continue;
+      const biz = (await getData(deps.db.collection('businesses').doc(d.id))) || {};
+      const r = await closeShiftNow(deps, d.id, biz, bk, { reason: '24h' });
+      if (r.ok && !r.none) closed++;
+    }
+  }
+  const res = { tried: tried, sent: sent }; if (closed) res.closed = closed;
+  return res;
+}
+
+
+/* ---------- fix188-fiscal5: smena (ochish / yopish / Z-hisobot) ---------- */
+const SHIFT_MAX_MS = 23.5 * 3600000, SHIFT_LOCK_MS = 60000, Z_RECENT = 20, APPMAP_MAX = 60;
+function shCol(db, bid) { return db.collection('businesses').doc(bid).collection('fiscalShifts'); }
+function bkOf(b) { return String(b || 'main').replace(/[\/.~]/g, '_').slice(0, 60) || 'main'; }
+function shPub(d) {
+  if (!d) return { status: 'none' };
+  return { id: d.id, status: d.status, branchKey: d.bk, openedAt: d.openedAt || null, closedAt: d.closedAt || null, z: d.z || null, zApp: d.zApp || null, reason: d.reason || '', error: d.lastError || '', test: !!d.test };
+}
+function sleepMs(deps, ms) { return deps.sleep ? deps.sleep(ms) : new Promise(function (r) { setTimeout(r, ms); }); }
+/* fiscalBiz/{bid}.shifts[bk] ni tranzaksiyada o'zgartirish. fn(entry, doc) → {set: obj|null (o'chirish)|undefined (tegmaslik), app: {appId: fsid}, recent: zYozuv, ...} */
+async function shTx(deps, bid, bk, fn) {
+  const ref = qRef(deps.db, bid);
+  return deps.db.runTransaction(async function (tx) {
+    const s = await tx.get(ref); const d = (s && s.exists ? s.data() : null) || {};
+    const r = fn((d.shifts || {})[bk] || null, d) || {};
+    if (r.set !== undefined || r.app || r.recent) {
+      const sh = Object.assign({}, d.shifts || {});
+      if (r.set !== undefined) { if (r.set) sh[bk] = r.set; else delete sh[bk]; }
+      const n = Object.assign({}, d, { shifts: sh, shiftOpenCount: Object.keys(sh).length, updatedAt: deps.nowMs() });
+      if (r.app) {
+        const am = Object.assign({}, d.appMap || {}); Object.keys(r.app).forEach(function (k) { delete am[k]; am[k] = r.app[k]; });
+        const ks = Object.keys(am); ks.slice(0, Math.max(0, ks.length - APPMAP_MAX)).forEach(function (k) { delete am[k]; });
+        n.appMap = am;
+      }
+      if (r.recent) n.zRecent = [r.recent].concat((d.zRecent || []).filter(function (x) { return x && x.id !== r.recent.id; })).slice(0, Z_RECENT);
+      tx.set(ref, n);
+    }
+    return r;
+  });
+}
+/* O'z hisobimiz: shu smenada yuborilgan cheklar (tiyin) */
+async function tally(deps, bid, fsid) {
+  const z = { sales: 0, refunds: 0, total: 0, cash: 0, card: 0, other: 0, credits: 0, creditSum: 0, vat: 0 };
+  const snap = await fCol(deps.db, bid).where('fshift', '==', fsid).limit(5000).get();
+  snap.docs.forEach(function (doc) {
+    const d = doc.data() || {}; const rc = d.rc;
+    if (d.status !== 'sent' || !rc) return;
+    if (rc.type === 'credit') { z.credits++; z.creditSum += rc.total || 0; return; }
+    const sg = rc.refund ? -1 : 1; const p = rc.payments || {};
+    if (rc.refund) z.refunds++; else z.sales++;
+    z.total += sg * (rc.total || 0); z.vat += sg * (rc.vat || 0);
+    z.cash += sg * (p.cash || 0); z.card += sg * (p.card || 0); z.other += sg * ((p.other || 0) + (p.credit || 0));
+  });
+  return z;
+}
+async function openShiftNow(deps, bid, biz, bk, appShiftId) {
+  for (let i = 0; i < 8; i++) {
+    const now = deps.nowMs();
+    const lk = await shTx(deps, bid, bk, function (e) {
+      if (e && e.fsid && !e.opening && !(e.closing && (e.lockAt || 0) > now - SHIFT_LOCK_MS)) return { use: e, set: e.closing ? Object.assign({}, e, { closing: false, lockAt: null }) : undefined };
+      if (e && (e.opening || e.closing) && (e.lockAt || 0) > now - SHIFT_LOCK_MS) return { busy: true };
+      return { go: true, set: { opening: true, lockAt: now } };
+    });
+    if (lk.use) return { ok: true, fsid: lk.use.fsid, openedAt: lk.use.openedAt, opened: false };
+    if (lk.busy) { await sleepMs(deps, 400); continue; }
+    const pname = String(biz.fiscalProvider || '');
+    const r = await provOf(deps, pname, biz).openShift({ branchId: bk, kassaId: String(biz.fiscalKassaId || ''), appShiftId: appShiftId || null });
+    if (!r || !r.ok) {
+      await shTx(deps, bid, bk, function (e) { return e && e.opening && !e.fsid ? { set: null } : {}; });
+      return { ok: false, error: String((r && r.error) || 'shift_open_failed').slice(0, 200), retryable: !r || r.retryable !== false };
+    }
+    const t = deps.nowMs();
+    const fsid = 'F' + t + '_' + bk.replace(/[^\w-]/g, '').slice(0, 20) + '_' + require('crypto').randomBytes(3).toString('hex');   // bir millisekundda ikki smena ham farqlanadi
+    const apps = {}; if (appShiftId) apps[appShiftId] = 1;
+    await shCol(deps.db, bid).doc(fsid).set({ id: fsid, bk: bk, status: 'open', openedAt: t, providerShiftId: String(r.shiftId || ''), apps: apps, auto: !appShiftId, test: pname === 'mock', updatedAt: t });
+    const app = {}; if (appShiftId) app[appShiftId] = fsid;
+    await shTx(deps, bid, bk, function () { return { set: { fsid: fsid, openedAt: t }, app: appShiftId ? app : null }; });
+    return { ok: true, fsid: fsid, openedAt: t, opened: true };
+  }
+  return { ok: false, error: 'shift_busy', retryable: true };
+}
+async function ensureShift(deps, bid, biz, bk) {
+  const q = (await getData(qRef(deps.db, bid))) || {};
+  const e = (q.shifts || {})[bk];
+  if (e && e.fsid && !e.opening && !e.closing && deps.nowMs() - (e.openedAt || 0) >= SHIFT_MAX_MS) {
+    const c = await closeShiftNow(deps, bid, biz, bk, { reason: '24h' });
+    if (!c.ok) return { ok: false, error: c.error, retryable: true };
+  }
+  return openShiftNow(deps, bid, biz, bk, null);
+}
+async function closeShiftNow(deps, bid, biz, bk, o) {
+  o = o || {};
+  const now = deps.nowMs();
+  const lk = await shTx(deps, bid, bk, function (e) {
+    if (!e || !e.fsid) return { none: true };
+    if ((e.opening || e.closing) && (e.lockAt || 0) > now - SHIFT_LOCK_MS) return { busy: true };
+    return { e: e, set: Object.assign({}, e, { closing: true, lockAt: now }) };
+  });
+  if (lk.none) return { ok: true, none: true };
+  if (lk.busy) return { ok: false, error: 'shift_busy', retryable: true };
+  const fsid = lk.e.fsid, ref = shCol(deps.db, bid).doc(fsid);
+  const doc = (await getData(ref)) || { id: fsid, bk: bk, status: 'open', openedAt: lk.e.openedAt, apps: {} };
+  if (o.appShiftId) { doc.apps = Object.assign({}, doc.apps || {}); doc.apps[o.appShiftId] = 1; }
+  const zApp = await tally(deps, bid, fsid);
+  const r = await provOf(deps, String(biz.fiscalProvider || ''), biz).closeShift({ branchId: bk, kassaId: String(biz.fiscalKassaId || ''), shiftId: doc.providerShiftId || '' });
+  const t = deps.nowMs();
+  const app = {}; if (o.appShiftId) app[o.appShiftId] = fsid;
+  if (!r || !r.ok) {
+    const att = (doc.attempts || 0) + 1, retry = !r || r.retryable !== false;
+    await ref.set(Object.assign({}, doc, { status: 'close_failed', lastError: String((r && r.error) || 'close_failed').slice(0, 200), attempts: att, zApp: zApp, updatedAt: t }));
+    await shTx(deps, bid, bk, function (e) { return { set: (e && e.fsid === fsid) ? Object.assign({}, e, { closing: false, lockAt: null }) : undefined, app: o.appShiftId ? app : null }; });
+    if (retry) { try { await setQueue(deps, bid, 'shift~' + fsid, t + backoff(att)); } catch (e) {} }
+    return { ok: false, error: String((r && r.error) || 'close_failed'), fsid: fsid, retryable: retry };
+  }
+  const out = Object.assign({}, doc, { status: 'closed', closedAt: t, z: r.z || null, zApp: zApp, reason: o.reason || 'app', lastError: '', updatedAt: t });
+  await ref.set(out);
+  await shTx(deps, bid, bk, function (e) {
+    return { set: (e && e.fsid === fsid) ? null : undefined, app: o.appShiftId ? app : null, recent: { id: fsid, bk: bk, openedAt: out.openedAt, closedAt: t, z: out.z, zApp: zApp, reason: out.reason, test: !!out.test } };
+  });
+  try { await setQueue(deps, bid, 'shift~' + fsid, null); } catch (e) {}
+  return { ok: true, fsid: fsid, shift: out };
+}
+async function retryShiftClose(deps, bid, fsid) {
+  const doc = await getData(shCol(deps.db, bid).doc(fsid));
+  const q = (await getData(qRef(deps.db, bid))) || {};
+  if (!doc || doc.status === 'closed' || !((q.shifts || {})[doc.bk] && q.shifts[doc.bk].fsid === fsid)) { await setQueue(deps, bid, 'shift~' + fsid, null); return { status: doc && doc.status === 'closed' ? 'sent' : 'skip' }; }
+  const biz = (await getData(deps.db.collection('businesses').doc(bid))) || {};
+  const r = await closeShiftNow(deps, bid, biz, doc.bk, { reason: doc.reason || 'retry' });
+  return { status: r.ok ? 'sent' : 'failed', error: r.error || '' };
+}
+async function shiftApi(deps, bid, a, body) {
+  const db = deps.db;
+  const app = typeof body.appShiftId === 'string' && /^[\w-]{1,80}$/.test(body.appShiftId) ? body.appShiftId : null;
+  const bk = bkOf(body.branchId);
+  const biz = (await getData(db.collection('businesses').doc(bid))) || {};
+  if (a === 'shiftOpen') {
+    if (!app) return { status: 400, body: { ok: false, code: 'bad_shift' } };
+    const q = (await getData(qRef(db, bid))) || {}; const e = (q.shifts || {})[bk];
+    if (e && e.fsid && deps.nowMs() - (e.openedAt || 0) >= SHIFT_MAX_MS) await closeShiftNow(deps, bid, biz, bk, { reason: '24h' });
+    const r = await openShiftNow(deps, bid, biz, bk, app);
+    if (r.ok && !r.opened) {   // ochiq smena bor (cheklar oldinroq ochgan) — ilova smenasi unga bog'lanadi
+      const ref = shCol(db, bid).doc(r.fsid); const d = (await getData(ref)) || {};
+      const apps = Object.assign({}, d.apps || {}); apps[app] = 1; await ref.set(Object.assign({}, d, { apps: apps }));
+      const m = {}; m[app] = r.fsid; await shTx(deps, bid, bk, function () { return { app: m }; });
+    }
+    return { status: 200, body: { ok: true, result: r.ok ? Object.assign(shPub(await getData(shCol(db, bid).doc(r.fsid))), { opened: !!r.opened }) : { status: 'failed', error: r.error } } };
+  }
+  if (a === 'shiftClose') {
+    if (!app) return { status: 400, body: { ok: false, code: 'bad_shift' } };
+    const q = (await getData(qRef(db, bid))) || {};
+    const known = (q.appMap || {})[app];
+    const e = (q.shifts || {})[bk];
+    const endedAt = Number(body.endedAt) || 0;
+    if (!e || !e.fsid || (known && e.fsid !== known) || (!known && endedAt && (e.openedAt || 0) > endedAt)) {   // bu ilova smenasining fiskal smenasi allaqachon yopilgan (yoki hozirgisi undan keyin ochilgan)
+      return { status: 200, body: { ok: true, result: known ? shPub(await getData(shCol(db, bid).doc(known))) : { status: 'none' } } };
+    }
+    const r = await closeShiftNow(deps, bid, biz, bk, { appShiftId: app, reason: 'app' });
+    if (r.ok && r.shift) return { status: 200, body: { ok: true, result: shPub(r.shift) } };
+    return { status: 200, body: { ok: true, result: r.fsid ? shPub(await getData(shCol(db, bid).doc(r.fsid))) : { status: 'failed', error: r.error } } };
+  }
+  if (a === 'shiftInfo') {
+    const q = (await getData(qRef(db, bid))) || {};
+    const ids = Array.isArray(body.ids) ? body.ids.filter(function (x) { return typeof x === 'string' && /^[\w-]{1,80}$/.test(x); }).slice(0, 30) : [];
+    const map = {};
+    for (const id of ids) { const f = (q.appMap || {})[id]; if (f) map[id] = shPub(await getData(shCol(db, bid).doc(f))); }
+    const open = Object.keys(q.shifts || {}).map(function (k) { const e = q.shifts[k]; return { branchKey: k, id: e.fsid || '', openedAt: e.openedAt || null, busy: !!(e.opening || e.closing) }; });
+    return { status: 200, body: { ok: true, open: open, recent: q.zRecent || [], map: map } };
+  }
+  return null;
 }
 
 /* ---------- ilova so'rovlari ---------- */
@@ -295,6 +479,7 @@ async function api(deps, caller, body) {
     for (const id of ids) { out[id] = await retryDoc(deps, bid, id, { force: true }); if (out[id].status === 'sent') sent++; }
     return { status: 200, body: { ok: true, map: out, sent: sent, tried: ids.length } };
   }
+  if (a === 'shiftOpen' || a === 'shiftClose' || a === 'shiftInfo') { const r = await shiftApi(deps, bid, a, body || {}); if (r) return r; }   // fix188-fiscal5
   if (a === 'ping') {
     const biz = (await getData(db.collection('businesses').doc(bid))) || {};
     const pname = String(biz.fiscalProvider || '');
@@ -304,4 +489,4 @@ async function api(deps, caller, body) {
   return { status: 400, body: { ok: false, code: 'bad_action' } };
 }
 
-module.exports = { processSale, processRefund, processEditRefund, processVersion, processCreditPay, onSaleCreated, onSaleWritten, onSaleEdited, onSaleDeleted, onLedgerCreated, isCreditPay, retryDoc, retryTick, api, backoff, pub, productsFromItems, LOCK_MS };
+module.exports = { ensureShift, openShiftNow, closeShiftNow, tally, shiftApi, SHIFT_MAX_MS, processSale, processRefund, processEditRefund, processVersion, processCreditPay, onSaleCreated, onSaleWritten, onSaleEdited, onSaleDeleted, onLedgerCreated, isCreditPay, retryDoc, retryTick, api, backoff, pub, productsFromItems, LOCK_MS };

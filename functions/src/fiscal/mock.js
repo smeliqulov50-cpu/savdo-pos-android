@@ -11,6 +11,14 @@ function create(opts) {
   const st = { seq: 0, receipts: {}, calls: [], shift: null, shiftSeq: 0, tries: 0 };
   const sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
   async function pre(kind) {
+    if (kind === 'open' || kind === 'close') {   /* fix188-fiscal5: smena — chek rejimlari (error/fail/failTimes) ta'sir qilmaydi; shiftMode bilan alohida */
+      st.calls.push(kind);
+      if (opts.delayMs) await sleep(opts.delayMs);
+      if (opts.mode === 'offline') throw new Error('ECONNREFUSED');
+      if (opts.shiftMode === 'error') return { ok: false, error: 'shift_rejected', retryable: false };
+      if (opts.shiftMode === 'fail') return { ok: false, error: 'operator_busy', retryable: true };
+      return null;
+    }
     st.calls.push(kind); st.tries++;
     if (opts.delayMs) await sleep(opts.delayMs);
     if (opts.mode === 'offline') throw new Error('ECONNREFUSED');
@@ -55,7 +63,7 @@ function create(opts) {
     closeShift: async function (info) {
       const e = await pre('close'); if (e) return e;
       const sid = st.shift && st.shift.id;
-      const z = { number: st.shiftSeq, sales: 0, refunds: 0, total: 0, cash: 0, card: 0, other: 0 };
+      const z = { number: st.shiftSeq || 0, sales: 0, refunds: 0, total: 0, cash: 0, card: 0, other: 0 };
       Object.keys(st.receipts).forEach(function (k) {
         const x = st.receipts[k]; if (sid && x.shift !== sid) return;
         if (x.rc.type === 'credit') { z.credits = (z.credits || 0) + 1; z.creditSum = (z.creditSum || 0) + x.rc.total; return; }   /* soliq hisobotiga tushmaydi */
