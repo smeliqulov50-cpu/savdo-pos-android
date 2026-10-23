@@ -219,6 +219,7 @@ async function handleUpdate(deps, upd) {
   lang = await __cmd.chatLang(deps, msg.chat.id, msg.from && msg.from.language_code);   /* fix144-tgcmd: /til bilan tanlangan til */
   if (msg.contact) return require('./shop').onContact(deps, msg, lang);   /* fix145-botshop: mijoz raqami */
   const m = /^\/start(?:@[A-Za-z0-9_]+)?(?:\s+([A-Za-z0-9_-]{4,64}))?$/.exec(text);
+  if (m && m[1] && /^paid_/.test(m[1])) return require('./pay').onReturn(deps, msg, m[1].slice(5), lang);   /* fix207-clickpay: Click'dan qaytish — holat serverdan */
   if (m && m[1] && /^l_/.test(m[1])) return require('./login').onStart(deps, msg, m[1].slice(2), lang);   /* fix206-tglogin: Telegram orqali kirish */
   if (m && m[1] && /^s_/.test(m[1])) return require('./shop').onStart(deps, msg, m[1].slice(2), lang);   /* fix145-botshop: do'kon havolasi */
   if (m && m[1] && /^c_/.test(m[1])) return require('./cust').linkByCode(deps, msg, m[1].slice(2), lang);   /* fix155-custbot: mijoz havolasi */
@@ -240,7 +241,7 @@ async function handleUpdate(deps, upd) {
     else if (bids.length) {
       const names = [];
       for (let i = 0; i < bids.length && i < 5; i++) names.push(await shopName(deps.db, bids[i]));
-      out = { reply: txt('linkedInfo', lang, { shop: names.join(', ') }) + (deps.payToken ? '\n' + require('./payTexts').txt('payHint', lang) : '') + '\n\n' + require('./cmdTexts').t('menu', lang), kb: __cmd.menuKb(deps, lang) };
+      out = { reply: txt('linkedInfo', lang, { shop: names.join(', ') }) + (require('./pay').payAvail(deps) ? '\n' + require('./payTexts').txt('payHint', lang) : '') + '\n\n' + require('./cmdTexts').t('menu', lang), kb: __cmd.menuKb(deps, lang) };
     } else if (m || !text) out = await require('./cust').custStart(deps, msg.chat.id, lang);   /* fix183-custeasy: /start — mijoz uchun 2 qadam */
     else out = (await require('./shop').fallbackPrompt(deps, msg, lang)) || (await require('./cust').custStart(deps, msg.chat.id, lang));   /* fix183-custeasy */
   }

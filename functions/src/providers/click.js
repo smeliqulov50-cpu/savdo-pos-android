@@ -19,6 +19,7 @@ const E = {
   CANCELLED:      { error: -9, note: 'Transaction cancelled' }
 };
 
+const PREPARE_GRACE_MS = 10 * 60 * 1000;   /* fix207-clickpay: sahifa ochiq qolgan bo'lsa — 10 daqiqa qo'shimcha */
 function md5(s) { return crypto.createHash('md5').update(s, 'utf8').digest('hex'); }
 function safeEqual(a, b) {
   const ba = Buffer.from(String(a).toLowerCase()); const bb = Buffer.from(String(b).toLowerCase());
@@ -76,6 +77,9 @@ async function handleClick(deps, params) {
       if (o.provider !== 'click') return { e: E.NO_ORDER };
       if (o.status === 'PAID') return { e: E.ALREADY_PAID };
       if (o.status === 'CANCELLED') return { e: E.CANCELLED };
+      /* fix207-clickpay: muddati o'tgan buyurtma (bot havolasi 30 daqiqa) — PUL YECHILISHIDAN OLDIN rad etiladi.
+         Complete'da muddat tekshirilmaydi: Prepare o'tgan to'lov har doim qabul qilinadi (pul yechilib, obuna qo'shilmay qolmasin). */
+      if (o.expMs && nowMs > o.expMs + PREPARE_GRACE_MS) return { e: E.CANCELLED };
       if (Math.abs(amount - o.amount) > 0.001) return { e: E.AMOUNT };
 
       // Qayta yuborilgan Prepare (bir xil click_trans_id) — o'sha prepare ID qaytariladi
@@ -120,4 +124,4 @@ async function handleClick(deps, params) {
   return reply(out.e, params, out.extra);
 }
 
-module.exports = { handleClick, signFor, md5, E };
+module.exports = { handleClick, signFor, md5, E, PREPARE_GRACE_MS };

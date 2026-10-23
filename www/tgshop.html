@@ -277,6 +277,8 @@ var I = {
  paidOk:["To'lov qabul qilindi! Obuna uzaytirildi.","Оплата принята! Подписка продлена.","Payment received! The subscription has been extended.","Төлем қабылданды! Жазылым ұзартылды.","Төлөм кабыл алынды! Жазылуу узартылды.","Пардохт қабул шуд! Обуна дароз карда шуд."],
  payFail:["To'lov o'tmadi. Qayta urinib ko'ring.","Оплата не прошла. Попробуйте ещё раз.","The payment did not go through. Please try again.","Төлем өтпеді. Қайталап көріңіз.","Төлөм өткөн жок. Кайра аракет кылыңыз.","Пардохт нагузашт. Боз кӯшиш кунед."],
  notLinked:["Bu Telegram hisobi hech bir do'konga ulanmagan. Ilovada Sozlamalar → Bildirishnomalar va ovoz → Telegram bot bo'limida «Telegram'ga ulash» tugmasini bosing.","Этот аккаунт Telegram не подключён ни к одному магазину. В приложении откройте Настройки → Уведомления и звук → Telegram-бот и нажмите «Подключить Telegram».","This Telegram account is not connected to any shop. In the app open Settings → Notifications & sound → Telegram bot and tap “Connect Telegram”.","Бұл Telegram аккаунты ешбір дүкенге қосылмаған. Қолданбада Баптаулар → Хабарландырулар және дыбыс → Telegram бот бөлімінде «Telegram-ға қосу» түймесін басыңыз.","Бул Telegram аккаунту эч бир дүкөнгө туташкан эмес. Колдонмодо Жөндөөлөр → Билдирмелер жана үн → Telegram бот бөлүмүндө «Telegram'га туташуу» баскычын басыңыз.","Ин ҳисоби Telegram ба ягон мағоза пайваст нест. Дар барнома Танзимот → Огоҳиномаҳо ва садо → Telegram-бот-ро кушоед ва «Пайваст ба Telegram»-ро пахш кунед."],
+ payRedirect:["Click sahifasi ochiladi — to'lovni o'sha yerda tasdiqlaysiz. Ochilmasa, pastdagi tugmani bosing. To'lov tasdiqlangach, botga xabar keladi.","Откроется страница Click — подтвердите оплату там. Если не открылась, нажмите кнопку ниже. После подтверждения в бот придёт сообщение.","The Click page opens — confirm the payment there. If it doesn't open, tap the button below. Once confirmed, the bot will message you.","Click беті ашылады — төлемді сонда растайсыз. Ашылмаса, төмендегі батырманы басыңыз. Расталған соң ботқа хабар келеді.","Click барагы ачылат — төлөмдү ошол жерде ырастайсыз. Ачылбаса, төмөнкү баскычты басыңыз. Ырасталгандан кийин ботко билдирүү келет.","Саҳифаи Click кушода мешавад — пардохтро дар он ҷо тасдиқ мекунед. Агар кушода нашавад, тугмаи поёнро пахш кунед. Пас аз тасдиқ ба бот хабар меояд."],
+ payClickBtn:["💳 Click sahifasini ochish","💳 Открыть страницу Click","💳 Open the Click page","💳 Click бетін ашу","💳 Click барагын ачуу","💳 Кушодани саҳифаи Click"],
  payOffMsg:["Bot orqali to'lov hali yoqilmagan.","Оплата через бота ещё не включена.","Payment through the bot is not enabled yet.","Бот арқылы төлем әлі қосылмаған.","Бот аркылуу төлөм азырынча күйгүзүлгөн эмес.","Пардохт тавассути бот ҳанӯз фаъол нест."],
  openCat:["🛍 Katalogni ochish","🛍 Открыть каталог","🛍 Open catalog","🛍 Каталогты ашу","🛍 Каталогду ачуу","🛍 Кушодани феҳрист"],
  shareLink:["📤 Havolani ulashish","📤 Поделиться ссылкой","📤 Share the link","📤 Сілтемемен бөлісу","📤 Шилтеме менен бөлүшүү","📤 Мубодилаи пайванд"],
@@ -415,7 +417,8 @@ function hubRender(){
     });
     h += '<div class="sec"><div style="display:flex;gap:8px;"><input id="h-code" maxlength="24" autocomplete="off" style="text-transform:uppercase;" placeholder="' + esc(t('codePh')) + '" value="' + esc(H.codeIn || '') + '"><button class="btn2" data-hcode="1" style="width:auto;flex-shrink:0;margin:0;">' + esc(t('codeApply')) + '</button></div>'
       + (H.codeMsg ? '<div style="margin-top:8px;font-size:13px;font-weight:700;color:' + (H.codeOk ? 'var(--ok)' : 'var(--danger)') + ';">' + esc(H.codeMsg) + '</div>' : '') + '</div>';   /* fix203-promo */
-    if(H.msg) h += '<div class=' + (H.msgOk ? 'banner' : 'err') + '" style="' + (H.msgOk ? 'border-left-color:var(--ok);' : '') + '">' + esc(H.msg) + '</div>';
+    if(H.msg) h += '<div class="' + (H.msgOk ? 'banner' : 'err') + '" style="' + (H.msgOk ? 'border-left-color:var(--ok);' : '') + '">' + esc(H.msg) + '</div>';   /* fix207-clickpay: class qo'shtirnog'i tuzatildi */
+    if(H.payLink) h += '<button class="addb" style="width:100%;height:48px;margin:8px 0 0;" data-hpaylink="1">' + esc(t('payClickBtn')) + '</button>';   /* fix207-clickpay */
   } else {
     if(sh.slug){
       h += '<div class="sec"><div style="font-weight:800;font-size:16px;">' + esc(sh.name) + '</div><div class="muted" style="margin-top:4px;">' + esc(t('catHint')) + '</div><div style="font-weight:700;word-break:break-all;margin:10px 0;color:var(--link);">' + esc(sh.link) + '</div>'
@@ -446,6 +449,8 @@ function hubPay(k){
   var sh = H.data.shops[H.shop]; H.busy = k; H.msg = ''; hubRender();
   var __pq = ((H.q && H.q[sh.h]) || []).find(function(p){ return p.k === k; });
   api('subPay', { h: sh.h, k: k, code: (H.code && !(__pq && __pq.codeError)) ? H.code : '' }).then(function(j){   /* fix203-promo */
+    H.payLink = '';
+    if(j.ok && j.redirect && /^https:\/\/my\.click\.uz\//.test(j.link || '')){ H.busy = ''; H.payLink = j.link; H.msg = t('payRedirect'); H.msgOk = true; haptic('ok'); hubRender(); hubOpenPay(); return; }   /* fix207-clickpay: Click'ning o'z sahifasi, tashqi brauzerda */
     if(!j.ok || !j.link){ H.busy = ''; H.msg = j.code === 'pay_off' ? t('payOffMsg') : j.code === 'too_many' ? t('e_many') : /^code-/.test(j.code || '') ? t('c_' + j.code) : errText(j); H.msgOk = false; haptic('err'); hubRender(); return; }
     var done = function(st){
       H.busy = '';
@@ -458,6 +463,12 @@ function hubPay(k){
     window.location.href = j.link;
   });
 }
+function hubOpenPay(){   /* fix207-clickpay: Telegram'ning openLink — tashqi brauzer (karta ma'lumotini faqat Click ko'radi) */
+  var u = H.payLink; if(!u) return;
+  try{ if(TG && TG.openLink){ TG.openLink(u); return; } }catch(e){}
+  window.open(u, '_blank');
+}
+try{ document.addEventListener('visibilitychange', function(){ if(document.visibilityState === 'visible' && H.payLink && H.data) hubLoad(true); }); }catch(e){}
 function hubBind(){
   var app = document.getElementById('app');
   app.onclick = function(e){
@@ -466,6 +477,7 @@ function hubBind(){
     if(b.id === 'b-retry'){ H.data = null; hubRender(); hubLoad(); return; }
     if((v = b.getAttribute('data-htab'))){ H.tab = v; H.msg = ''; H.anim = true; hubRender(); return; }
     if((v = b.getAttribute('data-hshop')) !== null){ H.shop = Number(v) || 0; H.msg = ''; H.code = ''; H.codeIn = ''; H.codeMsg = ''; H.q = {}; H.anim = true; hubRender(); return; }
+    if(b.hasAttribute('data-hpaylink')){ hubOpenPay(); return; }   /* fix207-clickpay */
     if((v = b.getAttribute('data-hpay'))){ hubPay(v); return; }
     if(b.hasAttribute('data-hcode')){ hubCode(); return; }   /* fix203-promo */
     if((v = b.getAttribute('data-hcat'))){ location.href = location.pathname + '?s=' + encodeURIComponent(v) + '&lang=' + LANG; return; }

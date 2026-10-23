@@ -710,7 +710,7 @@ async function handleSub(deps, u, action, body) {
       shops.push({ h: P.bidHash(bids[i]), name: s.name, exp: exp || 0, active: exp > now, slug: c.enabled && c.slug ? c.slug : '', link: c.enabled && c.slug ? startLink(deps, c.slug) : '', plans: qs.map(function (q) { return hubPlan(q, now); }) });
     }
     const plans = (await PL.activePlanList(db, now)).map(function (p) { const k = p.key; return { k: { monthly: 'm', sixmonth: 's', yearly: 'y' }[k] || k, key: k, months: p.months, price: p.price, best: !!p.best }; });   /* fix203-plans */
-    return okBody({ linked: shops.length > 0, payOn: !!deps.payToken, shops: shops, plans: plans, bot: deps.botName || '' });
+    return okBody({ linked: shops.length > 0, payOn: P.payAvail(deps), payMode: P.payMode(deps), shops: shops, plans: plans, bot: deps.botName || '' });
   }
   const h = str(body.h, 12), k = str(body.k, 1), code = str(body.code, 24);
   const bid = bids.find(function (b) { return P.bidHash(b) === h; });
@@ -720,13 +720,18 @@ async function handleSub(deps, u, action, body) {
     const bad = qs.length && qs.every(function (q) { return q.codeError; }) ? qs[0].codeError : null;
     return okBody({ plans: qs.map(function (q) { return hubPlan(q, now); }), codeError: bad });
   }
-  if (!deps.payToken) return errBody(409, 'pay_off');
+  const __mode = P.payMode(deps);   /* fix207-clickpay */
+  if (!__mode) return errBody(409, 'pay_off');
   const plan = P.SHORT[k] ? await PL.getPlanLive(db, P.SHORT[k], now) : null;   /* fix203-plans */
   if (!plan || !plan.active) return errBody(400, 'bad_plan');
-  const r = await P.orderFor(deps, bid, plan, u.id, u.id, code);
+  const r = await P.orderFor(deps, bid, plan, u.id, u.id, code, __mode === 'redirect' ? P.CLICK_PROV : undefined);
   if (r.codeError) return errBody(400, r.codeError);
   if (r.badPlan) return errBody(400, 'bad_plan');
   if (r.tooMany) return errBody(429, 'too_many');
+  if (__mode === 'redirect') {   /* fix207-clickpay: Click sahifasi — mini ilova uni tashqi brauzerda ochadi; chatga ham havola xabari */
+    try { await P.sendLink(deps, String(u.id), bid, plan, r.order, lang); } catch (e) {}
+    return okBody({ link: require('../providers/checkoutUrls').clickUrl({ serviceId: deps.click.serviceId, merchantId: deps.click.merchantId }, r.order), order: r.order.orderId, redirect: true });
+  }
   let link;
   try { link = await deps.tg('createInvoiceLink', await P.invoiceParams(deps, bid, plan, r.order, lang)); }
   catch (e) { return errBody(502, 'tg_error'); }

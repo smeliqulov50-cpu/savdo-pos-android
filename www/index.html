@@ -5488,7 +5488,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.82';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.83';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -19434,7 +19434,9 @@ function payPlanName(key){
   const m = {monthly: 'payPlanMonthly', sixmonth: 'payPlanSixMonth', yearly: 'payPlanYearly'};
   return m[key] ? tr(m[key]) : escapeHtml(String(key == null ? '' : key));
 }
-function payProviderLabel(id){
+function payProviderLabel(id, ch){
+  if(id === 'click_tg') return 'Click (Telegram)';   /* fix207-clickpay: bot to'lovlari */
+  if(id === 'click' && ch === 'tg') return 'Click (bot)';
   const p = PAY_PROVIDERS.find(function(x){ return x.id === id; });
   return p ? p.label : escapeHtml(String(id == null ? '' : id));
 }
@@ -19741,7 +19743,7 @@ function payHistoryTableHtml(rows, admin){
     return '<tr><td>' + escapeHtml(payDateStr(r.paidAtMs)) + '</td>'
       + (admin ? '<td>' + escapeHtml(String(r.businessName || r.ownerEmail || r.businessId || '')) + '</td>' : '')
       + '<td>' + payPlanName(r.plan) + '</td><td><strong>' + fmt(Number(r.amount) || 0) + '</strong></td>'
-      + '<td>' + payProviderLabel(r.provider) + '</td><td>' + escapeHtml(String(r.transactionId || '')) + '</td>'
+      + '<td>' + payProviderLabel(r.provider, r.channel) + '</td><td>' + escapeHtml(String(r.transactionId || '')) + '</td>'
       + (admin ? '<td>' + escapeHtml(String(r.userId || '')) + '</td>' : '') + '</tr>';
   }).join('');
   return '<div class="pay-scroll"><table class="pay-table"><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';

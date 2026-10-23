@@ -12,6 +12,22 @@ const { readExpiryMs } = require('../domain/subscription');
 const { applyPaidInTx } = require('../app/applyPayment');
 const { validChats } = require('./core');
 const { txt } = require('./payTexts');
+/* fix207-clickpay: Click'ning o'z sahifasiga yo'naltirish (karta ma'lumotini bot va ilova ko'rmaydi).
+   Tasdiq faqat serverda — Click Prepare/Complete (clickWebhook, imzo bilan). «To'ladim» tugmasi yoki return_url to'lov hisoblanmaydi. */
+const CFG = require('../config');
+const { clickUrl } = require('../providers/checkoutUrls');
+const CLICK_PROV = 'click';
+const CLICK_TTL_MS = 30 * 60 * 1000;
+function clickReady(deps) { return !!(deps && deps.click && deps.click.serviceId && deps.click.merchantId); }
+function payMode(deps) {
+  const want = CFG.TG_PAY_MODE === 'telegram' ? 'telegram' : 'redirect';
+  if (want === 'redirect' && clickReady(deps)) return 'redirect';
+  if (deps && deps.payToken) return 'telegram';
+  if (clickReady(deps)) return 'redirect';
+  return '';
+}
+function payAvail(deps) { return !!payMode(deps); }
+function linkFor(deps, order) { return clickUrl({ serviceId: deps.click.serviceId, merchantId: deps.click.merchantId }, order); }
 
 const PROVIDER = 'click_tg';
 const REUSE_MS = 30 * 60 * 1000;
@@ -38,7 +54,7 @@ async function linkedBids(deps, chatId) {
 }
 
 async function sendMenu(deps, chatId, lang) {
-  if (!deps.payToken) return { reply: txt('payOff', lang) };
+  if (!payAvail(deps)) return { reply: txt('payOff', lang) };   /* fix207-clickpay */
   const bids = await linkedBids(deps, chatId);
   if (!bids.length) return { reply: txt('payNotLinked', lang) };
   const SH = require('./shop');   /* fix146-tgsub: tariflar katalogi (mini ilova) tugmasi va pastki menyu */
@@ -59,38 +75,50 @@ async function sendMenu(deps, chatId, lang) {
 
 async function onCallback(deps, cq, lang) {
   const data = String((cq && cq.data) || '');
+  const pc = /^pc\|([A-Za-z0-9_-]{6,64})$/.exec(data);   /* fix207-clickpay: «To'lovni tekshirish» */
+  if (pc && cq.message && cq.message.chat) {
+    try { await deps.tg('answerCallbackQuery', { callback_query_id: cq.id, text: '' }); } catch (e) {}
+    return orderStatus(deps, String(cq.message.chat.id), pc[1], lang, cq.message);
+  }
   const m = /^p\|([0-9a-f]{12})\|([msy])$/.exec(data);
   if (!m || !cq.message || !cq.message.chat) return { ignored: true };
   const chatId = String(cq.message.chat.id);
   const answer = function (text) { return deps.tg('answerCallbackQuery', { callback_query_id: cq.id, text: text || '' }).catch(function () {}); };
-  if (!deps.payToken) { await answer(txt('payOffShort', lang)); return { off: true }; }
+  const mode = payMode(deps);   /* fix207-clickpay */
+  if (!mode) { await answer(txt('payOffShort', lang)); return { off: true }; }
   const bid = (await linkedBids(deps, chatId)).find(function (b) { return bidHash(b) === m[1]; });
   if (!bid) { await answer(txt('payNotLinkedShort', lang)); return { notLinked: true }; }
   const plan = SHORT[m[2]] ? await getPlanLive(deps.db, SHORT[m[2]], deps.nowMs()) : null;   /* fix203-plans */
   if (!plan || !plan.active) { await answer(txt('payBad', lang)); return { badPlan: true }; }
-  const r = await orderFor(deps, bid, plan, chatId, (cq.from && cq.from.id) || chatId);
+  const r = await orderFor(deps, bid, plan, chatId, (cq.from && cq.from.id) || chatId, '', mode === 'redirect' ? CLICK_PROV : PROVIDER);
   if (r.badPlan || r.codeError) { await answer(txt('payBad', lang)); return { badPlan: true }; }
   if (r.tooMany) { await answer(txt('payTooMany', lang)); return { tooMany: true }; }
+  if (mode === 'redirect') { await sendLink(deps, chatId, bid, plan, r.order, lang); await answer(''); return { link: r.order.orderId }; }   /* fix207-clickpay */
   await deps.tg('sendInvoice', Object.assign({ chat_id: chatId }, await invoiceParams(deps, bid, plan, r.order, lang)));
   await answer('');
   return { invoice: r.order.orderId };
 }
 /* fix146-tgsub: buyurtma (kutilayotgan bo'lsa — o'sha) va hisob maydonlari — chatdagi tugma ham, mini ilova ham shuni ishlatadi */
-async function orderFor(deps, bid, plan, chatId, fromId, code) {
+async function orderFor(deps, bid, plan, chatId, fromId, code, provider) {
   const now = deps.nowMs(), db = deps.db;
   chatId = String(chatId);
+  provider = provider === CLICK_PROV ? CLICK_PROV : PROVIDER;   /* fix207-clickpay: 'click' — Click sahifasi, aks holda Telegram Payments */
   const q = await PRICING.quote(db, bid, plan.key, code || '', now);   /* fix203-promo: yakuniy narx serverda */
   if (!q) return { badPlan: true };
   if (q.codeError) return { codeError: q.codeError };
   // yaqinda shu chat/tarif uchun yaratilgan kutilayotgan buyurtma bo'lsa — o'sha (spamdan himoya)
   const pend = await db.collection('paymentOrders').where('businessId', '==', bid).where('status', '==', 'PENDING').get();
   let order = null;
-  pend.docs.forEach(function (d) { const o = d.data(); if (o.provider === PROVIDER && o.plan === plan.key && o.chatId === chatId && PRICING.sameDeal(o, q) && now - o.createdAtMs < REUSE_MS) order = o;   /* fix203-plans */ });
-  const recent = pend.docs.map(function (d) { return d.data(); }).filter(function (o) { return o.provider === PROVIDER && now - o.createdAtMs < 3600 * 1000; });
+  pend.docs.forEach(function (d) { const o = d.data(); if (o.provider === provider && o.plan === plan.key && o.chatId === chatId && PRICING.sameDeal(o, q) && now - o.createdAtMs < REUSE_MS && (!o.expMs || o.expMs - now > 5 * 60 * 1000)) order = o;   /* fix203-plans */   /* fix207-clickpay: kamida 5 daqiqa qolgan havola */ });
+  const recent = pend.docs.map(function (d) { return d.data(); }).filter(function (o) { return (o.provider === PROVIDER || (o.provider === CLICK_PROV && o.channel === 'tg')) && now - o.createdAtMs < 3600 * 1000; });
   if (!order && recent.length >= 10) return { tooMany: true };
   if (!order) {
     order = { orderId: deps.genId(), businessId: bid, userId: 'tg:' + String(fromId || chatId), plan: plan.key, months: q.months, amount: q.price, baseAmount: q.base, promo: q.promo ? { id: q.promo.id, name: q.promo.name } : null, code: q.code ? { id: q.code.id, code: q.code.code } : null,
-      provider: PROVIDER, status: 'PENDING', createdAtMs: now, chatId: chatId, paymeTxId: null };
+      provider: provider, status: 'PENDING', createdAtMs: now, chatId: chatId, paymeTxId: null };
+    if (provider === CLICK_PROV) {   /* fix207-clickpay: 30 daqiqalik havola, to'lovdan keyin botga qaytish */
+      order.channel = 'tg'; order.expMs = now + CLICK_TTL_MS;
+      order.returnUrl = 'https://t.me/' + (deps.botName || 'savdo_pos_bot') + '?start=paid_' + order.orderId;
+    }
     await db.collection('paymentOrders').doc(order.orderId).set(order);
   }
   return { order: order };
@@ -191,4 +219,56 @@ async function subRemind(deps, now) {
   }
   return st;
 }
-module.exports = { subRemind, remStage, sendMenu, onCallback, onPreCheckout, onPaid, linkedBids, bidHash, orderFor, invoiceParams, shopOf, fmtDate, PROVIDER, SHORT };
+/* ---------- fix207-clickpay: Click sahifasi havolasi, holat, Click tasdig'idan keyingi xabar ---------- */
+async function sendLink(deps, chatId, bid, plan, order, lang) {
+  const s = await shopOf(deps.db, bid);
+  const mins = Math.max(1, Math.round(((order.expMs || deps.nowMs()) - deps.nowMs()) / 60000));
+  await deps.tg('sendMessage', { chat_id: chatId, parse_mode: 'HTML', disable_web_page_preview: true,
+    text: txt('payLinkMsg', lang, { shop: s.name, months: orderMonths(order) || plan.months, sum: fmtSum(order.amount), mins: mins }),
+    reply_markup: { inline_keyboard: [[{ text: txt('btnClickPay', lang), url: linkFor(deps, order) }], [{ text: txt('btnPayCheck', lang), callback_data: 'pc|' + order.orderId }]] } });
+}
+function retryKb(o, lang) { return { inline_keyboard: [[{ text: txt('btnNewLink', lang), callback_data: 'p|' + bidHash(o.businessId) + '|' + (SHORT_OF[o.plan] || 'm') }]] }; }
+/* «To'lovni tekshirish» va to'lovdan keyin qaytish (t.me/<bot>?start=paid_<id>): holat FAQAT serverdagi buyurtmadan */
+async function orderStatus(deps, chatId, orderId, lang, msgToEdit) {
+  const db = deps.db, now = deps.nowMs();
+  chatId = String(chatId);
+  const send = function (text, kb) { const p = { chat_id: chatId, parse_mode: 'HTML', text: text, disable_web_page_preview: true }; if (kb) p.reply_markup = kb; return deps.tg('sendMessage', p).catch(function () {}); };
+  const o = /^[A-Za-z0-9_-]{6,64}$/.test(String(orderId)) ? await getData(db.collection('paymentOrders').doc(String(orderId))) : null;
+  if (!o || String(o.chatId || '') !== chatId || (o.provider !== CLICK_PROV && o.provider !== PROVIDER)) { await send(txt('payBadLink', lang)); return { status: 'bad' }; }
+  const s = await shopOf(db, o.businessId);
+  if (o.status === 'PAID') { await send(txt('payDone', lang, { shop: s.name, date: fmtDate(readExpiryMs(s.biz)) })); return { status: 'paid' }; }
+  const dead = o.status === 'CANCELLED' ? 'cancelled' : ((o.expMs && now > o.expMs) || (!o.expMs && now - o.createdAtMs > ORDER_TTL_MS)) ? 'expired' : '';
+  if (dead) {
+    if (msgToEdit) { try { await deps.tg('editMessageReplyMarkup', { chat_id: chatId, message_id: msgToEdit.message_id, reply_markup: retryKb(o, lang) }); } catch (e) {} }   // eski xabardagi tugma «Yangi havola olish» ga aylanadi
+    await send(txt(dead === 'cancelled' ? 'payClickFail' : 'payLinkExpired', lang), retryKb(o, lang));
+    return { status: dead };
+  }
+  const kb = [];
+  if (o.provider === CLICK_PROV && clickReady(deps)) kb.push([{ text: txt('btnClickPay', lang), url: linkFor(deps, o) }]);
+  kb.push([{ text: txt('btnPayCheck', lang), callback_data: 'pc|' + o.orderId }]);
+  await send(txt('payWaiting', lang, { shop: s.name, sum: fmtSum(o.amount) }), { inline_keyboard: kb });
+  return { status: 'pending' };
+}
+async function onReturn(deps, msg, orderId, lang) { return orderStatus(deps, msg.chat.id, orderId, lang, null); }
+/* clickWebhook javobidan keyin: Complete muvaffaqiyatli — egasiga «To'lov qabul qilindi», Click bekor qilgan — «Qayta urinish».
+   Faqat bot orqali yaratilgan buyurtmalar (channel 'tg'). Takroriy Complete (Already paid) — xabar yuborilmaydi. */
+async function clickAfter(deps, params, out) {
+  if (!deps || !deps.tg || !deps.key || !params || !out) return null;
+  if (parseInt(params.action, 10) !== 1) return null;
+  const ok = out.error === 0, failed = out.error === -9 && parseInt(params.error, 10) < 0;
+  if (!ok && !failed) return null;
+  const orderId = String(params.merchant_trans_id || '');
+  if (!/^[A-Za-z0-9_-]{6,64}$/.test(orderId)) return null;
+  const o = await getData(deps.db.collection('paymentOrders').doc(orderId));
+  if (!o || o.channel !== 'tg' || !o.chatId) return null;
+  if (failed && !(o.cancelledAtMs && deps.nowMs() - o.cancelledAtMs < 2 * 60 * 1000)) return null;
+  let lang = 'uz'; try { lang = await require('./cmds').chatLang(deps, o.chatId, ''); } catch (e) {}
+  const s = await shopOf(deps.db, o.businessId);
+  if (ok) {
+    await deps.tg('sendMessage', { chat_id: o.chatId, parse_mode: 'HTML', text: txt('payDone', lang, { shop: s.name, date: fmtDate(readExpiryMs(s.biz)) }) }).catch(function () {});
+    return { notified: 'paid' };
+  }
+  await deps.tg('sendMessage', { chat_id: o.chatId, parse_mode: 'HTML', text: txt('payClickFail', lang), reply_markup: retryKb(o, lang) }).catch(function () {});
+  return { notified: 'failed' };
+}
+module.exports = { payMode, payAvail, clickReady, sendLink, orderStatus, onReturn, clickAfter, CLICK_PROV, CLICK_TTL_MS, subRemind, remStage, sendMenu, onCallback, onPreCheckout, onPaid, linkedBids, bidHash, orderFor, invoiceParams, shopOf, fmtDate, PROVIDER, SHORT };

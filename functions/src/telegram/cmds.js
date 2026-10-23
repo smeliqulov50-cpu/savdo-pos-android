@@ -38,7 +38,7 @@ async function chatLang(deps, chatId, fallbackCode) {
 function menuKb(deps, lang) {
   const b = function (k, cb) { return { text: C.t(k, lang), callback_data: 'c|' + cb }; };
   const rows = [[b('bToday', 'today'), b('bYday', 'yday')], [b('bDebts', 'debts'), b('bLow', 'low')]];
-  rows.push(deps.payToken ? [b('bPay', 'pay'), b('bLang', 'lang')] : [b('bLang', 'lang')]);
+  rows.push(require('./pay').payAvail(deps) ? [b('bPay', 'pay'), b('bLang', 'lang')] : [b('bLang', 'lang')]);   /* fix207-clickpay */
   rows.push([require('./shop').hubBtn(lang)]);   /* fix146-tgsub: obuna tariflari va o'z katalogi (mini ilova) */
   return { inline_keyboard: rows };
 }
@@ -53,7 +53,7 @@ async function send(deps, chatId, text, kb) {
 }
 function cmdList(deps, lang) {
   const n = C.names(lang);
-  const ks = ['today', 'yday', 'debts', 'low'].concat(deps.payToken ? ['pay'] : []).concat(['my', 'phone', 'lang', 'help', 'stop']);   /* fix158-custfull */   /* fix155-custbot */
+  const ks = ['today', 'yday', 'debts', 'low'].concat(require('./pay').payAvail(deps) ? ['pay'] : []).concat(['my', 'phone', 'lang', 'help', 'stop']);   /* fix158-custfull */   /* fix155-custbot */
   const D = { today: 'dToday', yday: 'dYday', debts: 'dDebts', low: 'dLow', pay: 'dPay', my: 'dMy', phone: 'dPhone', lang: 'dLang', help: 'dHelp', stop: 'dStop' };
   const E = { today: '📊', yday: '📅', debts: '👥', low: '📦', pay: '💳', my: '👤', phone: '📱', lang: '🌐', help: '❓', stop: '🔌' };   /* fix161-cmdicons */
   return ks.map(function (k) { return { command: n[k], description: E[k] + ' ' + C.T[D[k]][C.lg(lang)] }; });

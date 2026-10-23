@@ -289,7 +289,17 @@ const __TG_SECRET = (PUSH_ONLY && process.env.SAVDO_TG !== '1') ? null : defineS
 const __tgSecrets = __TG_SECRET ? [__TG_SECRET] : [];
 /* fix142-tgpay: Click provayder tokeni (Telegram Payments) — faqat Secret Manager'da. SAVDO_TG_PAY=1 bilan yuklanganda ulanadi. */
 const __TGPAY_SECRET = (__TG_SECRET && process.env.SAVDO_TG_PAY === '1') ? defineSecret('CLICK_TG_PROVIDER_TOKEN') : null;
-const __tgHookSecrets = __TGPAY_SECRET ? __tgSecrets.concat([__TGPAY_SECRET]) : __tgSecrets;
+/* fix207-clickpay: obuna to'lovi Click'ning o'z sahifasi orqali. Blok SAVDO_CLICK_REDIRECT=1 ni faqat 3 ta Click kaliti Secret Manager'da
+   bo'lsa qo'yadi; aks holda bot eski yo'lda (Telegram Payments) ishlayveradi. */
+const __CLICKR = !!__TG_SECRET && process.env.SAVDO_CLICK_REDIRECT === '1';
+const __CK_SID = __CLICKR ? (CLICK_SERVICE_ID || defineSecret('CLICK_SERVICE_ID')) : null;
+const __CK_MID = __CLICKR ? (CLICK_MERCHANT_ID || defineSecret('CLICK_MERCHANT_ID')) : null;
+const __CK_KEY = __CLICKR ? (CLICK_SECRET_KEY || defineSecret('CLICK_SECRET_KEY')) : null;
+function __clickCfg() {
+  if (!__CLICKR) return null;
+  try { const sid = String(__CK_SID.value() || '').trim(), mid = String(__CK_MID.value() || '').trim(); return sid && mid ? { serviceId: sid, merchantId: mid } : null; } catch (e) { return null; }
+}
+const __tgHookSecrets = (__TGPAY_SECRET ? __tgSecrets.concat([__TGPAY_SECRET]) : __tgSecrets).concat(__CLICKR ? [__CK_SID, __CK_MID] : []);   /* fix207-clickpay */
 function __tgPayToken() { try { const v = __TGPAY_SECRET ? __TGPAY_SECRET.value() : ''; return v ? String(v).trim() : ''; } catch (e) { return ''; } }
 function __tgToken() {
   try { const v = __TG_SECRET ? __TG_SECRET.value() : ''; if (v) return String(v).trim(); } catch (e) {}
@@ -307,7 +317,7 @@ async function __tgDeps() {
     try { const me = await __tgCache.tg('getMe', {}); __tgCache.botName = (me && me.username) || ''; }
     catch (e) { console.error('telegram getMe xatosi', e && e.message); }
   }
-  return Object.assign(base, { key: __tgCache.key, webKey: __tgCache.webKey, tg: __tgCache.tg, botName: __tgCache.botName, payToken: __tgPayToken(), genId: function () { return __fbAdmin.firestore().collection('paymentOrders').doc().id; } });   /* fix142-tgpay */
+  return Object.assign(base, { key: __tgCache.key, webKey: __tgCache.webKey, tg: __tgCache.tg, botName: __tgCache.botName, payToken: __tgPayToken(), click: __clickCfg(), genId: function () { return __fbAdmin.firestore().collection('paymentOrders').doc().id; } });   /* fix142-tgpay */
 }
 function __tgProjectId() {
   try { const c = JSON.parse(process.env.FIREBASE_CONFIG || '{}'); if (c.projectId) return c.projectId; } catch (e) {}
@@ -359,6 +369,26 @@ exports.telegramLogin = onRequest({ cors: true, secrets: __tgSecrets }, async fu
     res.status(500).json({ ok: false, code: 'internal' });
   }
 });
+
+/* fix207-clickpay: Click SHOP-API (Prepare/Complete) — bot obunasi uchun. To'liq rejimda (CLICK_ON) yuqoridagi clickWebhook ishlaydi;
+   Telegram rejimida (SAVDO_PUSH_ONLY=1 + SAVDO_TG=1 + SAVDO_CLICK_REDIRECT=1) — shu nusxa: xuddi o'sha tekshiruv (imzo, summa, Already paid),
+   qo'shimcha: Complete'dan keyin egasiga botda xabar. Javob Click'ga 4 soniyadan kechikmaydi. */
+if (!CLICK_ON && __CLICKR) {
+  exports.clickWebhook = onRequest({ secrets: [__CK_SID, __CK_KEY].concat(__tgSecrets) }, async function (req, res) {
+    let out;
+    try {
+      out = await handleClick({ db: admin.firestore(), serviceId: String(__CK_SID.value() || '').trim(), secretKey: String(__CK_KEY.value() || '').trim(), nowMs: nowMs }, req.body);
+    } catch (e) {
+      console.error('clickWebhook xatosi', e);
+      res.status(200).json({ error: -7, error_note: 'Failed to update user' }); return;
+    }
+    try {
+      const deps = await __tgDeps();
+      await Promise.race([require('./src/telegram/pay').clickAfter(deps, req.body || {}, out), new Promise(function (r) { setTimeout(r, 4000); })]);
+    } catch (e) { console.error('clickWebhook xabar', e && e.message); }
+    res.status(200).json(out);
+  });
+}
 
 /* Telegram serveri chaqiradi. Sirli sarlavha (X-Telegram-Bot-Api-Secret-Token) tokendan hisoblanadi — boshqa hech kim yubora olmaydi.
    GET ?setup=1 — webhook manzilini o'rnatadi (yuklashdan keyin bir marta; qayta chaqirish xavfsiz). */

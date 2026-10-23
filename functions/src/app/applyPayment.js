@@ -67,6 +67,7 @@ async function applyPaidInTx(tx, db, order, info) {
     promo: order.promo || null,
     code: order.code || null,
     provider: info.provider,
+    channel: order.channel || null,   /* fix207-clickpay: 'tg' — Telegram bot orqali (Click sahifasiga yo'naltirish) */
     transactionId: String(info.transactionId),
     plan: plan.key,
     months: months,
