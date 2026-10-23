@@ -261,8 +261,7 @@
   .pin-dot.filled{background:var(--gradient-brand);border-color:transparent;}
   .pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:320px;margin:0 auto;}
   .pin-key{padding:14px;border-radius:50%;aspect-ratio:1;border:1.5px solid var(--border);background:var(--surface-soft);font-size:18px;font-weight:800;color:var(--ink);transition:transform .1s, box-shadow .1s;box-shadow:0 2px 6px rgba(31,79,184,0.12);}
-  .pin-key:active{transform:scale(0.93);box-shadow:0 1px 2px rgba(31,79,184,0.15);background:var(--border);}
-  .pin-key:active{transform:scale(0.92);background:var(--surface-soft);}
+  .pin-key:active{transform:scale(0.92);box-shadow:0 1px 2px rgba(31,79,184,0.15);background:var(--surface-soft);}   /* fix202-back: ikki qoida bittaga (natija o'sha) */
   .login-screen{position:fixed;inset:0;background:var(--bg);z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding:calc(24px + max(env(safe-area-inset-top, 0px), var(--safe-area-inset-top, 0px))) 20px calc(24px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));overflow-y:auto;-webkit-overflow-scrolling:touch;}
   /* The backdrop above spans the FULL screen on purpose — on tablets much
      wider than a phone, constraining ITS width (the old approach: max-width
@@ -1000,6 +999,12 @@
   .co-foot #confirm-sale-btn{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;column-gap:4px;}
   .co-btn-sum{font-weight:800;white-space:nowrap;}
   body.money-keypad-open .co-foot{position:static;}
+  /* fix202-back: PIN ekrani — xabar uchun doimiy joy, noto'g'ri PIN'da nuqtalar silkinadi */
+  .login-screen .pin-msg{min-height:calc(2 * 1.35em);line-height:1.35;margin:4px 0 0;text-align:center;display:flex;align-items:center;justify-content:center;}
+  .login-screen .pin-pad.pin-locked{opacity:.35;pointer-events:none;}
+  .pin-dots.pin-shake{animation:pinShake .45s ease;}
+  .pin-dots.pin-shake .pin-dot{border-color:var(--danger);background:rgba(229,72,77,.2);}
+  @keyframes pinShake{0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(7px);}60%{transform:translateX(-5px);}80%{transform:translateX(3px);}}
 </style>
 </head>
 <body>
@@ -1701,6 +1706,7 @@ const T = {
   coCustomer:{uz:"Mijoz",ru:"Клиент",en:"Customer",kk:"Клиент",ky:"Кардар",tg:"Муштарӣ"},
   coChoose:{uz:"tanlash",ru:"выбрать",en:"choose",kk:"таңдау",ky:"тандоо",tg:"интихоб"},
   coCreditHint:{uz:"Qisman to'lash uchun {mix}ni tanlang",ru:"Для частичной оплаты выберите {mix}",en:"To pay part now, choose {mix}",kk:"Ішінара төлеу үшін {mix} таңдаңыз",ky:"Жарым-жартылай төлөө үчүн {mix} тандаңыз",tg:"Барои пардохти қисман {mix}-ро интихоб кунед"},   /* fix201-pay */
+  backExitHint:{uz:"Chiqish uchun yana bir marta bosing",ru:"Нажмите ещё раз, чтобы выйти",en:"Press back again to exit",kk:"Шығу үшін тағы бір рет басыңыз",ky:"Чыгуу үчүн дагы бир жолу басыңыз",tg:"Барои баромадан боз як бор пахш кунед"},   /* fix202-back */
   cxAdd:{uz:"Qo'shish",ru:"Добавить",en:"Add",kk:"Қосу",ky:"Кошуу",tg:"Илова"},
   cxDelivery:{uz:"Yetkazib berish",ru:"Доставка",en:"Delivery",kk:"Жеткізу",ky:"Жеткирүү",tg:"Расонидан"},
   cxBonus:{uz:"Bonus",ru:"Бонус",en:"Bonus",kk:"Бонус",ky:"Бонус",tg:"Бонус"},
@@ -4178,7 +4184,7 @@ function showToast(msg){ const t=document.getElementById('toast'); t.textContent
 // openModal() entirely, so wrapping only that one function would have
 // silently missed most of them. Watching the element itself means every
 // current and future way of showing a modal is covered automatically.
-history.pushState({appBase:true}, '', '');
+if(!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform() && window.Capacitor.getPlatform && window.Capacitor.getPlatform() === 'android')) history.pushState({appBase:true}, '', '');   /* fix202-back: Android'da tarix ishlatilmaydi */
 let modalOpenViaHistory = false;
 let closingModalViaPopstate = false;
 let selfInitiatedBack = false;
@@ -4187,6 +4193,7 @@ function initBackButtonHandling(){
   const modalRoot = document.getElementById('modal-root');
   if(!modalRoot) return;
   const observer = new MutationObserver(()=>{
+    if(__nb()) return;   /* fix202-back: Android'da tarixga yozilmaydi */
     const isOpen = !!modalRoot.innerHTML.trim();
     if(isOpen && !modalOpenViaHistory){
       modalOpenViaHistory = true;
@@ -4208,6 +4215,7 @@ function initBackButtonHandling(){
 }
 
 window.addEventListener('popstate', ()=>{
+  if(__nb()) return;   /* fix202-back: Android'da __onNativeBack boshqaradi */
   if(selfInitiatedBack){
     // This popstate was caused by OUR OWN history.back() call above
     // (consuming a modal that had already closed some other way) — not a
@@ -4219,6 +4227,7 @@ window.addEventListener('popstate', ()=>{
   if(window.__custHubOpen){ history.pushState({}, '', ''); __custHubBack(); return; } /* fix93 */
   if(modalOpenViaHistory){
     closingModalViaPopstate = true;
+    if(__stopScanners()) return;   /* fix202-back: kamera to'xtaydi, skaner qayta ochiladi */
     document.getElementById('modal-root').innerHTML = '';
     return;
   }
@@ -4271,6 +4280,52 @@ function openModal(html, opts){
 }
 function closeModal(){ document.getElementById('modal-root').innerHTML=''; try{ __dpClose(); }catch(e){} }   /* fix125-ds1a */
 initBackButtonHandling();
+/* fix202-back: Android ilovada orqaga tugmasini BITTA joy boshqaradi — @capacitor/app «backButton» hodisasi (MainActivity'dagi eski kod olib tashlandi).
+   Tartib: ochiq oyna -> ichki bo'lim (bir daraja yuqoriga) -> boshqa bo'lim -> «Sotish»; «Sotish»da hech narsa ochiq bo'lmasa:
+   1-bosish — «Chiqish uchun yana bir marta bosing», 2 soniya ichida 2-bosish — ilova fonga o'tadi (savat, smena, kirilgan xodim saqlanadi).
+   Veb va iPhone'da brauzer orqaga tugmasi avvalgidek (popstate). */
+function __nb(){ try{ return !!(window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform() && Capacitor.getPlatform && Capacitor.getPlatform() === 'android' && Capacitor.Plugins && Capacitor.Plugins.App); }catch(e){ return false; } }
+const __backStack = [];   /* yangi oyna: backPush('nom', ()=>{ yopish }) — orqaga tugmasi avval eng oxirgisini yopadi */
+function backPush(id, close){ backPop(id); __backStack.push({id: id, close: close}); }
+function backPop(id){ for(let i = __backStack.length - 1; i >= 0; i--) if(__backStack[i].id === id) __backStack.splice(i, 1); }
+function __stopScanners(){   /* oyna orqaga bilan yopilganda kamera ham to'xtasin (avval yonib qolardi, skaner tugmasi ishlamay qolardi) */
+  try{ if(typeof __fsc !== 'undefined' && __fsc){ __fscClose(); return true; } }catch(e){}
+  try{ if(typeof html5QrScanner !== 'undefined' && html5QrScanner) stopBarcodeScanner(); }catch(e){}
+  try{ if(window.__gftScanner){ window.__gftScanner.stop().catch(()=>{}); window.__gftScanner = null; } }catch(e){}
+  return false;
+}
+function __nativeBack(){
+  while(__backStack.length){ const e = __backStack.pop(); try{ if(e.close() !== false) return true; }catch(err){} }
+  if(document.getElementById('sm-layer')){ __closeStaffMenu(); return true; }
+  if(document.getElementById('dp-layer')){ __dpClose(); return true; }
+  try{ if(mkEl && mkEl.classList.contains('show')){ hideMoneyKeypad(true); return true; } }catch(e){}
+  if(window.__lossWarnOpen){ __closeLossWarn(); return true; }   /* fix106-loss */
+  if(window.__custHubOpen){ __custHubBack(); return true; }   /* fix93 */
+  const mr = document.getElementById('modal-root');
+  if(mr && mr.innerHTML.trim()){ if(!__stopScanners()) closeModal(); return true; }
+  if(window.__erPickOpen){ erClosePickerToEdit(); return true; }
+  if(document.getElementById('pay-root')){ payCloseScreen(); return true; }
+  if(!state.currentStaff) return false;   /* PIN / kirish ekrani — 2 marta bosib chiqish */
+  const bb = document.querySelector('#view-container .back-row button');   /* ichki sahifa: ekrandagi ← bilan bir xil — bir daraja yuqoriga */
+  if(bb && bb.offsetParent !== null){ bb.click(); return true; }
+  if(state.view === 'settings' && state.settingsCategory){ state.settingsCategory = null; renderAll(); return true; }
+  if(state.view === 'reports' && state.reportsCategory){ state.reportsCategory = null; renderAll(); return true; }
+  if(state.settings.restaurantMode && state.view === 'sale' && (state.activeTableId || state.takeawayMode)){ state.activeTableId = null; state.takeawayMode = false; renderAll(); return true; }
+  if(state.view === 'superadmin'){ window.__saUnlocked = false; state.view = 'settings'; renderAll(); return true; }   /* fix79 */
+  if(state.view !== 'sale'){ state.view = 'sale'; renderAll(); return true; }
+  return false;
+}
+let __backLast = 0;
+function __onNativeBack(){
+  let done = false;
+  try{ done = __nativeBack(); }catch(e){ done = false; }
+  if(done){ __backLast = 0; return; }
+  const now = Date.now();
+  if(__backLast && now - __backLast < 2000){ __backLast = 0; try{ Capacitor.Plugins.App.minimizeApp(); }catch(e){} return; }
+  __backLast = now;
+  try{ showToast(tr('backExitHint')); }catch(e){}
+}
+if(__nb()){ try{ Capacitor.Plugins.App.addListener('backButton', __onNativeBack); }catch(e){} }
 
 function confirmDialog(message, onYes, yesLabel){
   if(!yesLabel && message === tr('refundConfirm')) yesLabel = tr('refundSale');
@@ -4438,7 +4493,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.77';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.78';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6360,21 +6415,22 @@ function openSetNewPinModal(){
   });
 }
 
-function renderPinLogin(){
+function renderPinLogin(){   /* fix202-back: ekran bir marta chiziladi; raqam bosilganda faqat nuqtalar va xabar yangilanadi — klaviatura sakramaydi */
   const root = document.getElementById('login-root');
   let entered = '';
+  const gen = root.__pinGen = (root.__pinGen || 0) + 1;
+  let lockT = 0;
   function isLocked(){ return Date.now() < devicePinAttempt.lockUntil; }
-  function draw(err){
-    const locked = isLocked();
-    const lockSeconds = locked ? Math.ceil((devicePinAttempt.lockUntil - Date.now())/1000) : 0;
+  function alive(){ return root.__pinGen === gen && !!document.getElementById('pin-pad'); }
+  function lockText(){ return tr('pinLockedMessage').replace('{seconds}', Math.max(1, Math.ceil((devicePinAttempt.lockUntil - Date.now())/1000))); }
+  function build(){
     root.innerHTML = `<div class="login-screen">
       ${authLangRowHtml()}
       <div class="brand" style="font-size:26px;margin-bottom:4px;">Savdo Pos<span>.</span></div>
       <div class="subtle">${tr('enterPin')}</div>
-      <div class="pin-dots">${[0,1,2,3].map(i=>`<div class="pin-dot ${i<entered.length?'filled':''}"></div>`).join('')}</div>
-      ${err && !locked ? `<div class="error-text" style="text-align:center;">${err}</div>` : ''}
-      ${locked ? `<div class="error-text" style="text-align:center;">${tr('pinLockedMessage').replace('{seconds}', lockSeconds)}</div>` : ''}
-      <div class="pin-pad" style="margin-top:16px;${locked?'opacity:0.35;pointer-events:none;':''}">
+      <div class="pin-dots" id="pin-dots">${[0,1,2,3].map(()=>`<div class="pin-dot"></div>`).join('')}</div>
+      <div class="error-text pin-msg" id="pin-msg" role="status" aria-live="polite"></div>
+      <div class="pin-pad" id="pin-pad" style="margin-top:16px;">
         ${[1,2,3,4,5,6,7,8,9].map(n=>`<button class="pin-key" data-n="${n}">${n}</button>`).join('')}
         <div></div>
         <button class="pin-key" data-n="0">0</button>
@@ -6385,15 +6441,31 @@ function renderPinLogin(){
     bindAuthLangRow(()=>renderPinLogin());
     const forgotBtn = document.getElementById('forgot-pin-btn');
     if(forgotBtn) forgotBtn.addEventListener('click', openForgotPinModal);
-    if(locked){
-      // Re-render once a second so the countdown updates and the pad
-      // unlocks itself automatically the moment time is up.
-      setTimeout(()=>{ if(document.getElementById('login-root')) draw(); }, 1000);
-      return;
+    root.querySelectorAll('[data-n]').forEach(b=>b.addEventListener('click', ()=>onKey(b.dataset.n)));
+    root.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click', ()=>{ if(isLocked()) return; entered=entered.slice(0,-1); draw(); }));
+  }
+  function update(err, shake){
+    if(root.__pinGen !== gen) return;
+    if(!document.getElementById('pin-pad')) build();
+    const locked = isLocked();
+    root.querySelectorAll('#pin-dots .pin-dot').forEach((d, i)=>d.classList.toggle('filled', i < entered.length));
+    const m = document.getElementById('pin-msg'); if(m) m.textContent = locked ? lockText() : (err || '');
+    const pad = document.getElementById('pin-pad'); if(pad) pad.classList.toggle('pin-locked', locked);
+    if(shake){ const ds = document.getElementById('pin-dots'); if(ds){ ds.classList.remove('pin-shake'); void ds.offsetWidth; ds.classList.add('pin-shake'); clearTimeout(ds.__t); ds.__t = setTimeout(()=>ds.classList.remove('pin-shake'), 700); } }
+    if(locked && !lockT){
+      // Bloklash sanog'i: faqat o'z matni yangilanadi; vaqt tugasa klaviatura o'zi ochiladi
+      lockT = setInterval(()=>{
+        if(!alive()){ clearInterval(lockT); lockT = 0; return; }
+        if(!isLocked()){ clearInterval(lockT); lockT = 0; update(); return; }
+        const mm = document.getElementById('pin-msg'); if(mm) mm.textContent = lockText();
+      }, 1000);
     }
-    root.querySelectorAll('[data-n]').forEach(b=>b.addEventListener('click', async ()=>{
+  }
+  function draw(err){ update(err, !!err && err === tr('wrongPin')); }
+  async function onKey(n){
+      if(isLocked()) return;
       if(entered.length>=4) return;
-      entered += b.dataset.n;
+      entered += n;
       if(entered.length===4){
         const match = state.staff.find(s=>s.pin===entered);
         if(match){
@@ -6441,10 +6513,9 @@ function renderPinLogin(){
           draw(tr('wrongPin'));
         }
       } else draw();
-    }));
-    root.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click', ()=>{ entered=entered.slice(0,-1); draw(); }));
   }
-  draw();
+  build();   /* har chaqiruvda yangi ekran (til almashganda ham) — eski tugmalar eski holatga bog'lanib qolmasin */
+  update();
 }
 
 // Shift tracking (starting/ending cash count) is a CASH REGISTER concept —
@@ -18275,7 +18346,7 @@ async function __saPinModal(changeMode){
       }
       __saSetLock({});
       window.__saUnlocked = true; closeModal();
-      state.view = 'superadmin'; renderAll(); try{ history.pushState({}, '', ''); }catch(e){}
+      state.view = 'superadmin'; renderAll(); try{ if(!__nb()) history.pushState({}, '', ''); }catch(e){}   /* fix202-back */
     }catch(e){ err.textContent = tr('saNeedsInternet') + ' (' + ((e && e.code) || 'error') + ')'; btn.disabled = false; }
   });
 }

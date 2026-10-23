@@ -31,24 +31,7 @@ public class MainActivity extends BridgeActivity {
                 if (android.os.Build.VERSION.SDK_INT >= 29 && android.os.Build.VERSION.SDK_INT < 33) ws.setForceDark(android.webkit.WebSettings.FORCE_DARK_OFF);
             }
         } catch (Exception ignored) {}
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                if (bridge != null && bridge.getWebView().canGoBack()) {
-                    bridge.getWebView().goBack();
-                    return;
-                }
-                if (backPressedTime + 2000 > System.currentTimeMillis()) {
-                    if (backToast != null) backToast.cancel();
-                    setEnabled(false);
-                    getOnBackPressedDispatcher().onBackPressed();
-                    return;
-                } else {
-                    backToast = Toast.makeText(MainActivity.this, "Chiqish uchun yana bir marta bosing", Toast.LENGTH_SHORT);
-                    backToast.show();
-                }
-                backPressedTime = System.currentTimeMillis();
-            }
-        });
+        // fix202-back: orqaga tugmasini endi faqat ilova ichidagi kod boshqaradi (@capacitor/app "backButton").
+        // Eski kod bu yerda edi: 2-bosishda o'zini o'chirib, bosishni plaginga berardi — plagin esa hech narsa qilmasdi, ilova chiqmasdi.
     }
 }
