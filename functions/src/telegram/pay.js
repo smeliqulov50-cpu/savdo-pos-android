@@ -6,7 +6,8 @@
    Provayder tokeni faqat Secret Manager'da (CLICK_TG_PROVIDER_TOKEN). Yo'q bo'lsa — bot to'lovni taklif qilmaydi.
    Narx va muddat faqat serverdagi domain/plans dan; Telegram'dan kelgan summa tekshiriladi. */
 const crypto = require('crypto');
-const { getPlan, PLANS } = require('../domain/plans');
+const { getPlan, PLANS, getPlanLive, activePlanList, orderMonths } = require('../domain/plans');   /* fix203-plans */
+const PRICING = require('../app/pricing');   /* fix203-promo */
 const { readExpiryMs } = require('../domain/subscription');
 const { applyPaidInTx } = require('../app/applyPayment');
 const { validChats } = require('./core');
@@ -46,9 +47,12 @@ async function sendMenu(deps, chatId, lang) {
     const bid = bids[bi];
     const s = await shopOf(deps.db, bid);
     const exp = readExpiryMs(s.biz);
-    const kb = Object.keys(PLANS).map(function (k) { const p = PLANS[k]; return [{ text: txt('payPlanBtn_' + k, lang, { sum: fmtSum(p.price) }), callback_data: 'p|' + bidHash(bid) + '|' + SHORT_OF[k] }]; });
+    const qs = await PRICING.quoteAll(deps.db, bid, '', deps.nowMs());   /* fix203-promo: aksiya narxi bilan */
+    const kb = qs.map(function (q) { const k = q.key; const def = PLANS[k] && PLANS[k].months === q.months; return [{ text: (def ? txt('payPlanBtn_' + k, lang, { sum: fmtSum(q.price) }) : txt('payPlanBtnN', lang, { months: q.months, sum: fmtSum(q.price) })) + (q.promo ? ' 🔥' : ''), callback_data: 'p|' + bidHash(bid) + '|' + SHORT_OF[k] }]; });
+    const pq = qs.find(function (q) { return q.promo; });
+    const promoLine = pq ? '\n\n' + txt('payPromoLine', lang, { name: pq.promo.name, days: PRICING.daysLeft(pq.promo.endMs, deps.nowMs()), old: fmtSum(pq.base), sum: fmtSum(pq.price) }) : '';
     if (bi === bids.length - 1) kb.push([{ text: require('./shopTexts').t('btnPlans', lang), web_app: { url: SH.hubUrl() } }]);
-    await deps.tg('sendMessage', { chat_id: chatId, parse_mode: 'HTML', text: txt(exp > deps.nowMs() ? 'payMenu' : 'payMenuExpired', lang, { shop: s.name, date: fmtDate(exp) }), reply_markup: { inline_keyboard: kb } });
+    await deps.tg('sendMessage', { chat_id: chatId, parse_mode: 'HTML', text: txt(exp > deps.nowMs() ? 'payMenu' : 'payMenuExpired', lang, { shop: s.name, date: fmtDate(exp) }) + promoLine, reply_markup: { inline_keyboard: kb } });
   }
   return { menu: bids.length };
 }
@@ -62,25 +66,30 @@ async function onCallback(deps, cq, lang) {
   if (!deps.payToken) { await answer(txt('payOffShort', lang)); return { off: true }; }
   const bid = (await linkedBids(deps, chatId)).find(function (b) { return bidHash(b) === m[1]; });
   if (!bid) { await answer(txt('payNotLinkedShort', lang)); return { notLinked: true }; }
-  const plan = getPlan(SHORT[m[2]]);
+  const plan = SHORT[m[2]] ? await getPlanLive(deps.db, SHORT[m[2]], deps.nowMs()) : null;   /* fix203-plans */
+  if (!plan || !plan.active) { await answer(txt('payBad', lang)); return { badPlan: true }; }
   const r = await orderFor(deps, bid, plan, chatId, (cq.from && cq.from.id) || chatId);
+  if (r.badPlan || r.codeError) { await answer(txt('payBad', lang)); return { badPlan: true }; }
   if (r.tooMany) { await answer(txt('payTooMany', lang)); return { tooMany: true }; }
   await deps.tg('sendInvoice', Object.assign({ chat_id: chatId }, await invoiceParams(deps, bid, plan, r.order, lang)));
   await answer('');
   return { invoice: r.order.orderId };
 }
 /* fix146-tgsub: buyurtma (kutilayotgan bo'lsa — o'sha) va hisob maydonlari — chatdagi tugma ham, mini ilova ham shuni ishlatadi */
-async function orderFor(deps, bid, plan, chatId, fromId) {
+async function orderFor(deps, bid, plan, chatId, fromId, code) {
   const now = deps.nowMs(), db = deps.db;
   chatId = String(chatId);
+  const q = await PRICING.quote(db, bid, plan.key, code || '', now);   /* fix203-promo: yakuniy narx serverda */
+  if (!q) return { badPlan: true };
+  if (q.codeError) return { codeError: q.codeError };
   // yaqinda shu chat/tarif uchun yaratilgan kutilayotgan buyurtma bo'lsa — o'sha (spamdan himoya)
   const pend = await db.collection('paymentOrders').where('businessId', '==', bid).where('status', '==', 'PENDING').get();
   let order = null;
-  pend.docs.forEach(function (d) { const o = d.data(); if (o.provider === PROVIDER && o.plan === plan.key && o.chatId === chatId && now - o.createdAtMs < REUSE_MS) order = o; });
+  pend.docs.forEach(function (d) { const o = d.data(); if (o.provider === PROVIDER && o.plan === plan.key && o.chatId === chatId && PRICING.sameDeal(o, q) && now - o.createdAtMs < REUSE_MS) order = o;   /* fix203-plans */ });
   const recent = pend.docs.map(function (d) { return d.data(); }).filter(function (o) { return o.provider === PROVIDER && now - o.createdAtMs < 3600 * 1000; });
   if (!order && recent.length >= 10) return { tooMany: true };
   if (!order) {
-    order = { orderId: deps.genId(), businessId: bid, userId: 'tg:' + String(fromId || chatId), plan: plan.key, months: plan.months, amount: plan.price,
+    order = { orderId: deps.genId(), businessId: bid, userId: 'tg:' + String(fromId || chatId), plan: plan.key, months: q.months, amount: q.price, baseAmount: q.base, promo: q.promo ? { id: q.promo.id, name: q.promo.name } : null, code: q.code ? { id: q.code.id, code: q.code.code } : null,
       provider: PROVIDER, status: 'PENDING', createdAtMs: now, chatId: chatId, paymeTxId: null };
     await db.collection('paymentOrders').doc(order.orderId).set(order);
   }
@@ -90,11 +99,11 @@ async function invoiceParams(deps, bid, plan, order, lang) {
   const s = await shopOf(deps.db, bid);
   return {
     title: txt('payInvTitle_' + plan.key, lang).slice(0, 32),
-    description: txt('payInvDesc', lang, { shop: s.name, months: plan.months }).slice(0, 255),
+    description: txt('payInvDesc', lang, { shop: s.name, months: orderMonths(order) || plan.months }).slice(0, 255),
     payload: order.orderId,
     provider_token: deps.payToken,
     currency: 'UZS',
-    prices: [{ label: txt('payInvTitle_' + plan.key, lang).slice(0, 32), amount: plan.price * 100 }]
+    prices: [{ label: txt('payInvTitle_' + plan.key, lang).slice(0, 32), amount: Number(order.amount) * 100 }]   /* fix203-plans: buyurtma summasi */
   };
 }
 
@@ -109,7 +118,7 @@ async function onPreCheckout(deps, q, lang) {
   if (o.status === 'PAID') return no('payAlready');
   if (o.status !== 'PENDING' || deps.nowMs() - o.createdAtMs > ORDER_TTL_MS) return no('payExpired');
   const plan = getPlan(o.plan);
-  if (!plan || q.currency !== 'UZS' || Number(q.total_amount) !== plan.price * 100 || Number(o.amount) !== plan.price) return no('payBad');
+  if (!plan || q.currency !== 'UZS' || !(Number(o.amount) > 0) || Number(q.total_amount) !== Number(o.amount) * 100) return no('payBad');   /* fix203-plans: narx keyin o'zgarsa ham buyurtma summasi bilan */
   await deps.tg('answerPreCheckoutQuery', { pre_checkout_query_id: q.id, ok: true });
   return { ok: true, orderId: orderId };
 }
@@ -126,7 +135,7 @@ async function onPaid(deps, msg, lang) {
     const o = s && s.exists ? s.data() : null;
     if (!o || o.provider !== PROVIDER) return { bad: true };
     const plan = getPlan(o.plan);
-    if (!plan || sp.currency !== 'UZS' || Number(sp.total_amount) !== plan.price * 100) return { bad: true, mismatch: true };
+    if (!plan || sp.currency !== 'UZS' || !(Number(o.amount) > 0) || Number(sp.total_amount) !== Number(o.amount) * 100) return { bad: true, mismatch: true };   /* fix203-plans */
     if (o.status === 'PAID') return { already: true, bid: o.businessId };
     const res = await applyPaidInTx(tx, db, o, { provider: PROVIDER, transactionId: tid || orderId, nowMs: deps.nowMs() });
     tx.set(ref, { tgChargeId: String(sp.telegram_payment_charge_id || ''), providerChargeId: String(sp.provider_payment_charge_id || ''), chatId: chatId }, { merge: true });

@@ -64,7 +64,7 @@ exports.createPaymentOrder = onRequest(
       const db = admin.firestore();
       const order = await createOrder(
         { db: db, nowMs: nowMs, genId: genId, allowedReturnOrigins: allowedOrigins(), enabledProviders: ENABLED_PROVIDERS },
-        { uid: decoded.uid, plan: body.plan, provider: body.provider, returnUrl: body.returnUrl }
+        { uid: decoded.uid, plan: body.plan, provider: body.provider, returnUrl: body.returnUrl, promoCode: typeof body.promoCode === 'string' ? body.promoCode : '' }
       );
 
       const full = (await db.collection('paymentOrders').doc(order.orderId).get()).data();
@@ -179,6 +179,69 @@ exports.sharedDebts = onRequest({ cors: true }, async function (req, res) {
     res.status(out.status || 200).json(out.body);
   } catch (e) {
     console.error('sharedDebts xatosi', e);
+    res.status(500).json({ ok: false, code: 'internal' });
+  }
+});
+
+/* fix203-plans: Super admin API (tariflar; keyingi bosqichlar ham shu yerga). Faqat superadmin UID — Firebase ID token serverda tekshiriladi. Maxfiy qiymat yo'q. */
+const __PA = require('./src/admin/plansAdmin');
+exports.adminApi = onRequest({ cors: true }, async function (req, res) {
+  try {
+    if (req.method !== 'POST') { res.status(405).json({ ok: false, code: 'method-not-allowed' }); return; }
+    const m = /^Bearer\s+(.+)$/i.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    let decoded;
+    try { decoded = await __fbAdmin.auth().verifyIdToken(m[1]); }
+    catch (e) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    const db = __fbAdmin.firestore();
+    const out = await __PA.handleAdmin({ db: db, nowMs: nowMs, genId: function () { return db.collection('adminLog').doc().id; }, superUid: __SD_SUPER_UID, computeStats: __statsNow }, { uid: decoded.uid, email: decoded.email || '' }, req.body || {});
+    res.status(out.status || 200).json(out.body);
+  } catch (e) {
+    console.error('adminApi xatosi', e);
+    res.status(500).json({ ok: false, code: 'internal' });
+  }
+});
+
+/* fix203-dash: statistika (MRR, obunalar, ro'yxatdan o'tganlar, tushum) — 6 soatda bir marta yig'iladi, panel tayyor hujjatni o'qiydi */
+const __ST = require('./src/admin/stats');
+async function __authTimes(uids) {
+  const out = {};
+  for (let i = 0; i < uids.length; i += 100) {
+    const r = await __fbAdmin.auth().getUsers(uids.slice(i, i + 100).map(function (u) { return { uid: u }; }));
+    r.users.forEach(function (u) { const t = Date.parse(u.metadata && u.metadata.creationTime); if (isFinite(t)) out[u.uid] = t; });
+  }
+  return out;
+}
+function __statsNow(db, now) { return __ST.computeStats(db, now, { authTimes: __authTimes }); }
+exports.adminStatsTick = onSchedule({ schedule: 'every 6 hours', timeZone: 'Asia/Tashkent', timeoutSeconds: 300 }, async function () {
+  try { const db = __fbAdmin.firestore(); await db.collection('adminStats').doc('current').set(await __statsNow(db, nowMs())); }
+  catch (e) { console.error('adminStatsTick xatosi', e); }
+});
+/* fix203-promo: yangi biznes — sinov muddati paneldagi qiymatga (config/plans.trialDays), yaratilgan vaqt yoziladi */
+exports.businessCreated = onDocumentCreated('businesses/{bizId}', async function (event) {
+  try { const s = event.data; const r = await __PA.onBusinessCreated({ db: __fbAdmin.firestore(), nowMs: nowMs }, event.params.bizId, s && s.data ? s.data() : null); if (r && r.patched) console.log('businessCreated', event.params.bizId, JSON.stringify(r)); }
+  catch (e) { console.error('businessCreated xatosi', e); }
+});
+/* fix203-promo: ilova uchun narxlar (aksiya va promokod bilan) — faqat shu biznes egasi; summa baribir buyurtmada serverda qayta hisoblanadi */
+const __PRC = require('./src/app/pricing');
+exports.planQuote = onRequest({ cors: true }, async function (req, res) {
+  try {
+    if (req.method !== 'POST') { res.status(405).json({ ok: false, code: 'method-not-allowed' }); return; }
+    const m = /^Bearer\s+(.+)$/i.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    let decoded;
+    try { decoded = await __fbAdmin.auth().verifyIdToken(m[1]); }
+    catch (e) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    const db = __fbAdmin.firestore();
+    const st = await db.collection('staffAuth').doc(decoded.uid).get();
+    const bizId = st.exists ? String((st.data() || {}).businessId || '') : decoded.uid;
+    const body = req.body || {};
+    const code = typeof body.code === 'string' ? body.code.slice(0, 24) : '';
+    const qs = await __PRC.quoteAll(db, bizId, code, nowMs());
+    const now = nowMs();
+    res.status(200).json({ ok: true, plans: qs.map(function (q) { return { key: q.key, months: q.months, base: q.base, price: q.price, best: !!q.best, promo: q.promo ? { name: q.promo.name, days: __PRC.daysLeft(q.promo.endMs, now), endMs: q.promo.endMs } : null, code: q.code ? q.code.code : null, codeError: q.codeError || null, codeIgnored: q.codeIgnored || null }; }) });
+  } catch (e) {
+    console.error('planQuote xatosi', e);
     res.status(500).json({ ok: false, code: 'internal' });
   }
 });

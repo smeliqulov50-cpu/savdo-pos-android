@@ -530,7 +530,7 @@ async function handleWebApp(deps, body) {
   if (auth.expired) return errBody(401, 'expired');
   const u = auth.user, db = deps.db;
   const action = str(body.action, 20);
-  if (action === 'subInfo' || action === 'subPay') return handleSub(deps, u, action, body);   /* fix146-tgsub */
+  if (action === 'subInfo' || action === 'subPay' || action === 'subQuote') return handleSub(deps, u, action, body);   /* fix203-promo: subQuote — promokod */   /* fix146-tgsub */
   if (/^my[A-Z]/.test(action)) return require('./cust').handleMy(deps, u, action, body, S.LANGS.indexOf(body.lang) !== -1 ? body.lang : S.lg(String(u.lang || '').slice(0, 2)));   /* fix155-custbot */
   const shop = await resolveSlug(db, body.slug);
   if (!shop || !shop.cfg.enabled) return errBody(404, 'closed');
@@ -696,7 +696,7 @@ async function handleWebApp(deps, body) {
 
 /* ---------- fix146-tgsub: egasining mini ilovasi — obuna tariflari (Click, Telegram Payments) va o'z katalogi ---------- */
 async function handleSub(deps, u, action, body) {
-  const P = require('./pay'), PL = require('../domain/plans'), SB = require('../domain/subscription');
+  const P = require('./pay'), PL = require('../domain/plans'), SB = require('../domain/subscription'), PRC = require('../app/pricing');
   const now = deps.nowMs(), db = deps.db;
   const lang = S.LANGS.indexOf(body.lang) !== -1 ? body.lang : S.lg(String(u.lang || '').slice(0, 2));
   const bids = await P.linkedBids(deps, u.id);   // shu Telegram foydalanuvchisining shaxsiy chati ulangan (imzoli) do'konlar
@@ -706,23 +706,35 @@ async function handleSub(deps, u, action, body) {
       const s = await P.shopOf(db, bids[i]);
       const exp = SB.readExpiryMs(s.biz);
       const c = normCfg(await getData(db.collection('tgShop').doc(bids[i])));
-      shops.push({ h: P.bidHash(bids[i]), name: s.name, exp: exp || 0, active: exp > now, slug: c.enabled && c.slug ? c.slug : '', link: c.enabled && c.slug ? startLink(deps, c.slug) : '' });
+      const qs = await PRC.quoteAll(db, bids[i], '', now);   /* fix203-promo: shu do'kon uchun aksiya narxi */
+      shops.push({ h: P.bidHash(bids[i]), name: s.name, exp: exp || 0, active: exp > now, slug: c.enabled && c.slug ? c.slug : '', link: c.enabled && c.slug ? startLink(deps, c.slug) : '', plans: qs.map(function (q) { return hubPlan(q, now); }) });
     }
-    const plans = Object.keys(PL.PLANS).map(function (k) { const p = PL.PLANS[k]; return { k: { monthly: 'm', sixmonth: 's', yearly: 'y' }[k] || k, key: k, months: p.months, price: p.price }; });
+    const plans = (await PL.activePlanList(db, now)).map(function (p) { const k = p.key; return { k: { monthly: 'm', sixmonth: 's', yearly: 'y' }[k] || k, key: k, months: p.months, price: p.price, best: !!p.best }; });   /* fix203-plans */
     return okBody({ linked: shops.length > 0, payOn: !!deps.payToken, shops: shops, plans: plans, bot: deps.botName || '' });
   }
-  const h = str(body.h, 12), k = str(body.k, 1);
+  const h = str(body.h, 12), k = str(body.k, 1), code = str(body.code, 24);
   const bid = bids.find(function (b) { return P.bidHash(b) === h; });
   if (!bid) return errBody(403, 'not_linked');
+  if (action === 'subQuote') {   /* fix203-promo: promokodni tekshirish — narxlar shu kod bilan */
+    const qs = await PRC.quoteAll(db, bid, code, now);
+    const bad = qs.length && qs.every(function (q) { return q.codeError; }) ? qs[0].codeError : null;
+    return okBody({ plans: qs.map(function (q) { return hubPlan(q, now); }), codeError: bad });
+  }
   if (!deps.payToken) return errBody(409, 'pay_off');
-  const plan = P.SHORT[k] ? PL.getPlan(P.SHORT[k]) : null;
-  if (!plan) return errBody(400, 'bad_plan');
-  const r = await P.orderFor(deps, bid, plan, u.id, u.id);
+  const plan = P.SHORT[k] ? await PL.getPlanLive(db, P.SHORT[k], now) : null;   /* fix203-plans */
+  if (!plan || !plan.active) return errBody(400, 'bad_plan');
+  const r = await P.orderFor(deps, bid, plan, u.id, u.id, code);
+  if (r.codeError) return errBody(400, r.codeError);
+  if (r.badPlan) return errBody(400, 'bad_plan');
   if (r.tooMany) return errBody(429, 'too_many');
   let link;
   try { link = await deps.tg('createInvoiceLink', await P.invoiceParams(deps, bid, plan, r.order, lang)); }
   catch (e) { return errBody(502, 'tg_error'); }
   return okBody({ link: String(link || ''), order: r.order.orderId });
+}
+function hubPlan(q, now) {   /* fix203-promo: mini ilova uchun tarif: yakuniy narx, eski narx, aksiya qolgan kunlari */
+  return { k: { monthly: 'm', sixmonth: 's', yearly: 'y' }[q.key] || q.key, key: q.key, months: q.months, price: q.price, base: q.base, best: !!q.best,
+    promo: q.promo ? { name: q.promo.name, days: require('../app/pricing').daysLeft(q.promo.endMs, now) } : null, code: q.code ? q.code.code : null, codeError: q.codeError || null };
 }
 /* Egasi chatida pastki chap tugma — bot buyruqlari menyusi (/bugun, /kecha, /qarzlar, /obuna...). fix152-cmdmenu: egasi shuni so'radi;
    obuna va katalog — /obuna buyrug'i va xabar ostidagi tugmalarda. Xato bo'lsa jim o'tadi. */

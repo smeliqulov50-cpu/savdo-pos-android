@@ -999,6 +999,13 @@
   .co-foot #confirm-sale-btn{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;column-gap:4px;}
   .co-btn-sum{font-weight:800;white-space:nowrap;}
   body.money-keypad-open .co-foot{position:static;}
+  /* fix203-promo / fix203-dash */
+  .pay-old{color:var(--ink-faint);font-weight:600;font-size:.82em;margin-right:6px;text-decoration:line-through;}
+  .pay-promo{font-size:11.5px;font-weight:800;color:#c2410c;margin-top:2px;}
+  .pay-code{display:flex;gap:8px;margin:4px 0 12px;} .pay-code input{flex:1 1 auto;min-width:0;text-transform:uppercase;} .pay-code button{width:auto;flex-shrink:0;}
+  .sa-exp-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 0;border-top:1px solid var(--line);} .sa-exp-row > button{margin-left:auto;}
+  .pr-st{font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--surface-soft);color:var(--ink-soft);white-space:nowrap;}
+  .pr-st-on{background:#dcfce7;color:#166534;} .pr-st-plan{background:#dbeafe;color:#1e40af;} .pr-st-end{background:#f1f5f9;color:#64748b;} .pr-st-off{background:#fee2e2;color:#991b1b;}
   /* fix202-back: PIN ekrani — xabar uchun doimiy joy, noto'g'ri PIN'da nuqtalar silkinadi */
   .login-screen .pin-msg{min-height:calc(2 * 1.35em);line-height:1.35;margin:4px 0 0;text-align:center;display:flex;align-items:center;justify-content:center;}
   .login-screen .pin-pad.pin-locked{opacity:.35;pointer-events:none;}
@@ -1833,6 +1840,132 @@ const T = {
   saChangePin:{uz:"PIN'ni o'zgartirish",ru:"Сменить PIN",en:"Change PIN",kk:"PIN өзгерту",ky:"PIN өзгөртүү",tg:"Иваз кардани PIN"},
   saLockBtn:{uz:"Qulflash",ru:"Заблокировать",en:"Lock",kk:"Құлыптау",ky:"Кулпулоо",tg:"Қулф кардан"},
   saActionFailed:{uz:"Saqlanmadi",ru:"Не сохранено",en:"Not saved",kk:"Сақталмады",ky:"Сакталган жок",tg:"Захира нашуд"},
+  promoLeft:{uz:"Aksiya «{name}»: {n} kun qoldi",ru:"Акция «{name}»: осталось {n} дн.",en:"Sale «{name}»: {n} days left",kk:"«{name}» акциясы: {n} күн қалды",ky:"«{name}» акциясы: {n} күн калды",tg:"Аксияи «{name}»: {n} рӯз монд"},
+  promoCodeOn:{uz:"Promokod qo'llandi: {code}",ru:"Промокод применён: {code}",en:"Promo code applied: {code}",kk:"Промокод қолданылды: {code}",ky:"Промокод колдонулду: {code}",tg:"Промокод татбиқ шуд: {code}"},
+  promoCodePh:{uz:"Promokod (bo'lsa)",ru:"Промокод (если есть)",en:"Promo code (if any)",kk:"Промокод (бар болса)",ky:"Промокод (болсо)",tg:"Промокод (агар бошад)"},
+  promoApply:{uz:"Qo'llash",ru:"Применить",en:"Apply",kk:"Қолдану",ky:"Колдонуу",tg:"Татбиқ"},
+  promoBetter:{uz:"Aksiya narxi arzonroq — promokod qo'llanmadi",ru:"Цена по акции ниже — промокод не применён",en:"The sale price is lower — the code was not applied",kk:"Акция бағасы арзанырақ — промокод қолданылмады",ky:"Акция баасы арзаныраак — промокод колдонулган жок",tg:"Нархи аксия арзонтар аст — промокод татбиқ нашуд"},
+  promoErrInvalid:{uz:"Bunday promokod yo'q",ru:"Такого промокода нет",en:"No such promo code",kk:"Мұндай промокод жоқ",ky:"Мындай промокод жок",tg:"Чунин промокод нест"},
+  promoErrExpired:{uz:"Promokod muddati tugagan",ru:"Срок промокода истёк",en:"The promo code has expired",kk:"Промокод мерзімі өтті",ky:"Промокоддун мөөнөтү бүттү",tg:"Мӯҳлати промокод гузаштааст"},
+  promoErrNotStarted:{uz:"Promokod hali boshlanmagan",ru:"Промокод ещё не действует",en:"The promo code is not active yet",kk:"Промокод әлі басталмаған",ky:"Промокод али башталган жок",tg:"Промокод ҳанӯз оғоз нашудааст"},
+  promoErrPlan:{uz:"Bu promokod tanlangan tarifga tegishli emas",ru:"Промокод не действует для этого тарифа",en:"The code does not apply to this plan",kk:"Промокод бұл тарифке жарамайды",ky:"Промокод бул тарифке туура келбейт",tg:"Промокод барои ин тариф нест"},
+  promoErrLimit:{uz:"Promokod ishlatib bo'lingan",ru:"Промокод уже исчерпан",en:"The promo code has been used up",kk:"Промокод таусылды",ky:"Промокод түгөндү",tg:"Промокод тамом шудааст"},
+  promoErrShop:{uz:"Bu promokodni allaqachon ishlatgansiz",ru:"Вы уже использовали этот промокод",en:"You have already used this code",kk:"Бұл промокодты пайдаланып қойдыңыз",ky:"Бул промокодду колдонуп койгонсуз",tg:"Шумо ин промокодро аллакай истифода бурдаед"},
+  saDashTitle:{uz:"Bosh sahifa",ru:"Главная",en:"Overview",kk:"Басты бет",ky:"Башкы бет",tg:"Саҳифаи асосӣ"},
+  saDashLoading:{uz:"Statistika yuklanmoqda…",ru:"Загрузка статистики…",en:"Loading statistics…",kk:"Статистика жүктелуде…",ky:"Статистика жүктөлүүдө…",tg:"Омор бор мешавад…"},
+  saDashMrr:{uz:"Oylik takroriy daromad (MRR)",ru:"Ежемесячный доход (MRR)",en:"Monthly recurring revenue (MRR)",kk:"Айлық тұрақты табыс (MRR)",ky:"Айлык туруктуу киреше (MRR)",tg:"Даромади моҳонаи доимӣ (MRR)"},
+  saDashMrrPrev:{uz:"30 kun oldin",ru:"30 дней назад",en:"30 days ago",kk:"30 күн бұрын",ky:"30 күн мурун",tg:"30 рӯз пеш"},
+  saDashConv:{uz:"Sinovdan pullikka",ru:"Из пробного в платные",en:"Trial to paid",kk:"Сынақтан ақылыға",ky:"Сыноодон акылууга",tg:"Аз озмоишӣ ба пулакӣ"},
+  saDashChurn:{uz:"Bu oy ketganlar",ru:"Ушли в этом месяце",en:"Churned this month",kk:"Осы айда кеткендер",ky:"Ушул айда кеткендер",tg:"Дар ин моҳ рафтанд"},
+  saDashToday:{uz:"Bugun yangi",ru:"Новых сегодня",en:"New today",kk:"Бүгін жаңа",ky:"Бүгүн жаңы",tg:"Имрӯз нав"},
+  saDashWeek:{uz:"7 kunda",ru:"За 7 дней",en:"In 7 days",kk:"7 күнде",ky:"7 күндө",tg:"Дар 7 рӯз"},
+  saDashMonth:{uz:"Bu oy",ru:"В этом месяце",en:"This month",kk:"Осы айда",ky:"Ушул айда",tg:"Дар ин моҳ"},
+  saDashSignups30:{uz:"Ro'yxatdan o'tganlar (30 kun)",ru:"Регистрации (30 дней)",en:"Sign-ups (30 days)",kk:"Тіркелгендер (30 күн)",ky:"Катталгандар (30 күн)",tg:"Бақайдгирӣ (30 рӯз)"},
+  saDashRevenue:{uz:"Tushum (12 oy)",ru:"Выручка (12 мес.)",en:"Revenue (12 months)",kk:"Түсім (12 ай)",ky:"Киреше (12 ай)",tg:"Даромад (12 моҳ)"},
+  saDashRevLast:{uz:"Bu oy",ru:"В этом месяце",en:"This month",kk:"Осы айда",ky:"Ушул айда",tg:"Дар ин моҳ"},
+  saDashExp7:{uz:"7 kunda tugaydi",ru:"Истекают за 7 дней",en:"Ending within 7 days",kk:"7 күнде бітеді",ky:"7 күндө бүтөт",tg:"Дар 7 рӯз тамом мешавад"},
+  saDashExpNone:{uz:"7 kunda tugaydigan obuna yo'q",ru:"Нет подписок, истекающих за 7 дней",en:"No subscriptions ending within 7 days",kk:"7 күнде бітетін жазылым жоқ",ky:"7 күндө бүтүүчү жазылуу жок",tg:"Обунае нест, ки дар 7 рӯз тамом шавад"},
+  saDaysShort:{uz:"kun",ru:"дн.",en:"d",kk:"күн",ky:"күн",tg:"рӯз"},
+  saRemind:{uz:"Eslatma",ru:"Напомнить",en:"Remind",kk:"Еске салу",ky:"Эскертүү",tg:"Ёдрас"},
+  saRemindAll:{uz:"Hammasiga eslatma",ru:"Напомнить всем",en:"Remind all",kk:"Барлығына еске салу",ky:"Баарына эскертүү",tg:"Ба ҳама ёдрас"},
+  saRemindAllSure:{uz:"Yana bosing: {n} ta do'konga yuboriladi",ru:"Нажмите ещё раз: отправится {n} магазинам",en:"Tap again: sends to {n} shops",kk:"Қайта басыңыз: {n} дүкенге жіберіледі",ky:"Дагы басыңыз: {n} дүкөнгө жөнөтүлөт",tg:"Боз пахш кунед: ба {n} мағоза фиристода мешавад"},
+  saRemindSent:{uz:"Eslatma yuborildi: {n} ta do'kon (ilovada xabar va bildirishnoma)",ru:"Напоминание отправлено: {n} магазинов (сообщение и уведомление в приложении)",en:"Reminder sent to {n} shops (in-app message and notification)",kk:"Еске салу жіберілді: {n} дүкен",ky:"Эскертүү жөнөтүлдү: {n} дүкөн",tg:"Ёдрас фиристода шуд: {n} мағоза"},
+  prTitle:{uz:"Aksiyalar va promokodlar",ru:"Акции и промокоды",en:"Sales and promo codes",kk:"Акциялар мен промокодтар",ky:"Акциялар жана промокоддор",tg:"Аксияҳо ва промокодҳо"},
+  prTabPromos:{uz:"Aksiyalar",ru:"Акции",en:"Sales",kk:"Акциялар",ky:"Акциялар",tg:"Аксияҳо"},
+  prTabCodes:{uz:"Promokodlar",ru:"Промокоды",en:"Codes",kk:"Промокодтар",ky:"Промокоддор",tg:"Промокодҳо"},
+  prTabGift:{uz:"Sovg'a kunlari",ru:"Подарочные дни",en:"Gift days",kk:"Сыйлық күндер",ky:"Белек күндөр",tg:"Рӯзҳои тӯҳфа"},
+  prTabTrial:{uz:"Sinov muddati",ru:"Пробный период",en:"Trial period",kk:"Сынақ мерзімі",ky:"Сыноо мөөнөтү",tg:"Мӯҳлати озмоишӣ"},
+  prName:{uz:"Aksiya nomi (mijozga ko'rinadi)",ru:"Название акции (видно клиенту)",en:"Sale name (shown to customers)",kk:"Акция атауы (клиентке көрінеді)",ky:"Акциянын аталышы (кардарга көрүнөт)",tg:"Номи аксия (ба мизоҷ намоён)"},
+  prCode:{uz:"Kod (lotin harflari va raqamlar)",ru:"Код (латиница и цифры)",en:"Code (Latin letters and digits)",kk:"Код (латын әріптері мен сандар)",ky:"Код (латын тамгалары жана сандар)",tg:"Код (ҳарфҳои лотинӣ ва рақамҳо)"},
+  prPlans:{uz:"Qaysi tariflarga",ru:"Для каких тарифов",en:"Which plans",kk:"Қай тарифтерге",ky:"Кайсы тарифтерге",tg:"Барои кадом тарифҳо"},
+  prDiscount:{uz:"Chegirma turi",ru:"Тип скидки",en:"Discount type",kk:"Жеңілдік түрі",ky:"Арзандатуу түрү",tg:"Навъи тахфиф"},
+  prTypePercent:{uz:"Foiz (%)",ru:"Процент (%)",en:"Percent (%)",kk:"Пайыз (%)",ky:"Пайыз (%)",tg:"Фоиз (%)"},
+  prTypeAmount:{uz:"Summa (so'm)",ru:"Сумма (сум)",en:"Amount (UZS)",kk:"Сома (сум)",ky:"Сумма (сум)",tg:"Маблағ (сум)"},
+  prTypePrice:{uz:"Aniq yangi narx",ru:"Точная новая цена",en:"Exact new price",kk:"Нақты жаңа баға",ky:"Так жаңы баа",tg:"Нархи нави дақиқ"},
+  prValuePct:{uz:"Necha foiz (1–90)",ru:"Сколько процентов (1–90)",en:"Percent (1–90)",kk:"Неше пайыз (1–90)",ky:"Канча пайыз (1–90)",tg:"Чанд фоиз (1–90)"},
+  prValueSum:{uz:"Chegirma summasi",ru:"Сумма скидки",en:"Discount amount",kk:"Жеңілдік сомасы",ky:"Арзандатуу суммасы",tg:"Маблағи тахфиф"},
+  prStart:{uz:"Boshlanishi",ru:"Начало",en:"Starts",kk:"Басталуы",ky:"Башталышы",tg:"Оғоз"},
+  prEnd:{uz:"Tugashi",ru:"Окончание",en:"Ends",kk:"Аяқталуы",ky:"Бүтүшү",tg:"Анҷом"},
+  prTzNote:{uz:"Vaqt — Toshkent vaqti bo'yicha",ru:"Время — по Ташкенту",en:"Time is Tashkent time",kk:"Уақыт — Ташкент уақыты",ky:"Убакыт — Ташкент убактысы",tg:"Вақт — бо вақти Тошканд"},
+  prAudience:{uz:"Kimga",ru:"Для кого",en:"Who gets it",kk:"Кімге",ky:"Кимге",tg:"Барои кӣ"},
+  prAud_all:{uz:"Hammaga",ru:"Всем",en:"Everyone",kk:"Барлығына",ky:"Баарына",tg:"Ба ҳама"},
+  prAud_new:{uz:"Faqat yangi (hali to'lamagan)",ru:"Только новым (ещё не платили)",en:"New only (never paid)",kk:"Тек жаңаларға (әлі төлемеген)",ky:"Жаңыларга гана (али төлөй элек)",tg:"Танҳо навҳо (ҳанӯз напардохтаанд)"},
+  prAud_expired:{uz:"Faqat muddati tugaganlar",ru:"Только с истёкшей подпиской",en:"Expired only",kk:"Тек мерзімі біткендерге",ky:"Мөөнөтү бүткөндөргө гана",tg:"Танҳо мӯҳлаташ гузашта"},
+  prAud_selected:{uz:"Tanlangan do'konlar",ru:"Выбранные магазины",en:"Selected shops",kk:"Таңдалған дүкендер",ky:"Тандалган дүкөндөр",tg:"Мағозаҳои интихобшуда"},
+  prBizSearch:{uz:"Do'kon nomi, email yoki telefon",ru:"Название магазина, email или телефон",en:"Shop name, email or phone",kk:"Дүкен атауы, email немесе телефон",ky:"Дүкөн аталышы, email же телефон",tg:"Номи мағоза, email ё телефон"},
+  prLimit:{uz:"Necha marta ishlatiladi (0 — cheksiz)",ru:"Лимит использований (0 — без лимита)",en:"Usage limit (0 — unlimited)",kk:"Қолдану шегі (0 — шексіз)",ky:"Колдонуу чеги (0 — чексиз)",tg:"Ҳадди истифода (0 — бемаҳдуд)"},
+  prMaxUses:{uz:"Jami necha marta (0 — cheksiz)",ru:"Всего раз (0 — без лимита)",en:"Total uses (0 — unlimited)",kk:"Барлығы неше рет (0 — шексіз)",ky:"Бардыгы канча жолу (0 — чексиз)",tg:"Ҳамагӣ чанд бор (0 — бемаҳдуд)"},
+  prPerShop:{uz:"Bitta do'kon",ru:"На магазин",en:"Per shop",kk:"Бір дүкен",ky:"Бир дүкөн",tg:"Як мағоза"},
+  prWithPromo:{uz:"Aksiya bilan birga ishlaydi (aksiya narxidan yana chegirma)",ru:"Суммируется с акцией (скидка от цены по акции)",en:"Stacks with a sale (discount off the sale price)",kk:"Акциямен бірге (акция бағасынан тағы жеңілдік)",ky:"Акция менен бирге (акция баасынан дагы арзандатуу)",tg:"Бо аксия якҷоя (тахфиф аз нархи аксия)"},
+  prWithPromoShort:{uz:"aksiya bilan birga",ru:"вместе с акцией",en:"stacks with sale",kk:"акциямен бірге",ky:"акция менен бирге",tg:"бо аксия"},
+  prActive:{uz:"Yoqilgan",ru:"Включено",en:"Enabled",kk:"Қосулы",ky:"Күйгүзүлгөн",tg:"Фаъол"},
+  prStActive:{uz:"Ishlayapti",ru:"Действует",en:"Running",kk:"Жұмыс істеп тұр",ky:"Иштеп жатат",tg:"Амал мекунад"},
+  prStPlanned:{uz:"Rejada",ru:"Запланирована",en:"Scheduled",kk:"Жоспарда",ky:"Пландалган",tg:"Дар нақша"},
+  prStEnded:{uz:"Tugagan",ru:"Завершена",en:"Ended",kk:"Аяқталған",ky:"Бүткөн",tg:"Анҷом ёфт"},
+  prStOff:{uz:"O'chirilgan",ru:"Выключена",en:"Off",kk:"Өшірілген",ky:"Өчүрүлгөн",tg:"Хомӯш"},
+  prUsed:{uz:"Ishlatildi",ru:"Использовано",en:"Used",kk:"Қолданылды",ky:"Колдонулду",tg:"Истифода шуд"},
+  prNewPromo:{uz:"Yangi aksiya",ru:"Новая акция",en:"New sale",kk:"Жаңа акция",ky:"Жаңы акция",tg:"Аксияи нав"},
+  prNewCode:{uz:"Yangi promokod",ru:"Новый промокод",en:"New promo code",kk:"Жаңа промокод",ky:"Жаңы промокод",tg:"Промокоди нав"},
+  prNoPromos:{uz:"Hali aksiya yo'q",ru:"Акций пока нет",en:"No sales yet",kk:"Әзірге акция жоқ",ky:"Азырынча акция жок",tg:"Ҳоло аксия нест"},
+  prNoCodes:{uz:"Hali promokod yo'q",ru:"Промокодов пока нет",en:"No promo codes yet",kk:"Әзірге промокод жоқ",ky:"Азырынча промокод жок",tg:"Ҳоло промокод нест"},
+  prDisable:{uz:"O'chirish",ru:"Выключить",en:"Turn off",kk:"Өшіру",ky:"Өчүрүү",tg:"Хомӯш кардан"},
+  prEnable:{uz:"Yoqish",ru:"Включить",en:"Turn on",kk:"Қосу",ky:"Күйгүзүү",tg:"Фаъол кардан"},
+  prDelSure:{uz:"Yana bosing — o'chadi",ru:"Нажмите ещё раз — удалится",en:"Tap again to delete",kk:"Қайта басыңыз — жойылады",ky:"Дагы басыңыз — өчөт",tg:"Боз пахш кунед — нест мешавад"},
+  prErrPlans:{uz:"Kamida bitta tarifni tanlang",ru:"Выберите хотя бы один тариф",en:"Choose at least one plan",kk:"Кемінде бір тарифті таңдаңыз",ky:"Жок дегенде бир тарифти тандаңыз",tg:"Ақаллан як тарифро интихоб кунед"},
+  prErrPrice:{uz:"yangi narx 1 000 dan katta va hozirgi narxdan kichik bo'lsin",ru:"новая цена больше 1 000 и меньше текущей",en:"new price above 1 000 and below the current price",kk:"жаңа баға 1 000-нан жоғары және қазіргіден төмен",ky:"жаңы баа 1 000дөн жогору жана азыркыдан төмөн",tg:"нархи нав аз 1 000 зиёд ва аз ҳозира кам"},
+  prErrValue:{uz:"Chegirma qiymati noto'g'ri",ru:"Неверное значение скидки",en:"Invalid discount value",kk:"Жеңілдік мәні қате",ky:"Арзандатуу мааниси туура эмес",tg:"Қимати тахфиф нодуруст"},
+  prErrDates:{uz:"Tugash vaqti boshlanishdan keyin bo'lsin",ru:"Окончание должно быть позже начала",en:"The end must be after the start",kk:"Аяқталуы басталуынан кейін болсын",ky:"Бүтүшү башталышынан кийин болсун",tg:"Анҷом бояд баъди оғоз бошад"},
+  prErrName:{uz:"Nomini yozing",ru:"Укажите название",en:"Enter a name",kk:"Атауын жазыңыз",ky:"Аталышын жазыңыз",tg:"Номро нависед"},
+  prErrBiz:{uz:"Kamida bitta do'konni tanlang",ru:"Выберите хотя бы один магазин",en:"Choose at least one shop",kk:"Кемінде бір дүкенді таңдаңыз",ky:"Жок дегенде бир дүкөндү тандаңыз",tg:"Ақаллан як мағозаро интихоб кунед"},
+  prErrCode:{uz:"Kod 3–20 belgi: lotin harflari, raqamlar, «-»",ru:"Код 3–20 символов: латиница, цифры, «-»",en:"Code: 3–20 chars, Latin letters, digits, «-»",kk:"Код 3–20 таңба: латын әріптері, сандар, «-»",ky:"Код 3–20 белги: латын тамгалары, сандар, «-»",tg:"Код 3–20 аломат: ҳарфҳои лотинӣ, рақамҳо, «-»"},
+  prErrCodeDup:{uz:"Bunday kod allaqachon bor",ru:"Такой код уже есть",en:"This code already exists",kk:"Мұндай код бар",ky:"Мындай код бар",tg:"Чунин код аллакай ҳаст"},
+  prErrInvalid:{uz:"Saqlanmadi: ma'lumot noto'g'ri",ru:"Не сохранено: неверные данные",en:"Not saved: invalid data",kk:"Сақталмады: деректер қате",ky:"Сакталган жок: маалымат туура эмес",tg:"Сабт нашуд: маълумот нодуруст"},
+  prGiftWho:{uz:"Kimga",ru:"Кому",en:"To whom",kk:"Кімге",ky:"Кимге",tg:"Ба кӣ"},
+  prGiftList:{uz:"Tanlangan do'konlarga",ru:"Выбранным магазинам",en:"Selected shops",kk:"Таңдалған дүкендерге",ky:"Тандалган дүкөндөргө",tg:"Ба мағозаҳои интихобшуда"},
+  prGiftAll:{uz:"Hamma do'konlarga",ru:"Всем магазинам",en:"All shops",kk:"Барлық дүкендерге",ky:"Бардык дүкөндөргө",tg:"Ба ҳамаи мағозаҳо"},
+  prGiftDays:{uz:"Necha kun",ru:"Сколько дней",en:"Days",kk:"Неше күн",ky:"Канча күн",tg:"Чанд рӯз"},
+  prGiftReason:{uz:"Sabab (jurnalga yoziladi)",ru:"Причина (пишется в журнал)",en:"Reason (saved to the log)",kk:"Себеп (журналға жазылады)",ky:"Себеп (журналга жазылат)",tg:"Сабаб (ба журнал сабт мешавад)"},
+  prGiftGo:{uz:"Kun qo'shish",ru:"Добавить дни",en:"Add days",kk:"Күн қосу",ky:"Күн кошуу",tg:"Илова кардани рӯз"},
+  prGiftConfirm:{uz:"{n} ta do'konga {days} kun bepul qo'shiladi",ru:"{n} магазинам будет добавлено {days} дн. бесплатно",en:"{days} free days will be added to {n} shops",kk:"{n} дүкенге {days} күн тегін қосылады",ky:"{n} дүкөнгө {days} күн акысыз кошулат",tg:"Ба {n} мағоза {days} рӯз ройгон илова мешавад"},
+  prGiftTypeAll:{uz:"Tasdiqlash uchun HAMMAGA deb yozing",ru:"Для подтверждения напишите ВСЕМ",en:"Type ALL to confirm",kk:"Растау үшін БАРЛЫҒЫНА деп жазыңыз",ky:"Ырастоо үчүн БААРЫНА деп жазыңыз",tg:"Барои тасдиқ БА ҲАМА нависед"},
+  prGiftAllWord:{uz:"HAMMAGA",ru:"ВСЕМ",en:"ALL",kk:"БАРЛЫҒЫНА",ky:"БААРЫНА",tg:"БА ҲАМА"},
+  prGiftDone:{uz:"Kunlar qo'shildi: {n} ta do'kon",ru:"Дни добавлены: {n} магазинов",en:"Days added to {n} shops",kk:"Күндер қосылды: {n} дүкен",ky:"Күндөр кошулду: {n} дүкөн",tg:"Рӯзҳо илова шуданд: {n} мағоза"},
+  prErrDays:{uz:"Kunlar 1–365",ru:"Дни 1–365",en:"Days 1–365",kk:"Күн 1–365",ky:"Күн 1–365",tg:"Рӯз 1–365"},
+  prErrReason:{uz:"Sababni yozing",ru:"Укажите причину",en:"Enter a reason",kk:"Себебін жазыңыз",ky:"Себебин жазыңыз",tg:"Сабабро нависед"},
+  prTrialHint:{uz:"Yangi ro'yxatdan o'tgan do'konlarga beriladigan bepul muddat. Avval ro'yxatdan o'tganlarga ta'sir qilmaydi.",ru:"Бесплатный срок для новых магазинов. На уже зарегистрированных не влияет.",en:"Free period for newly registered shops. Existing shops are not affected.",kk:"Жаңа тіркелген дүкендерге берілетін тегін мерзім. Бұрынғыларға әсер етпейді.",ky:"Жаңы катталган дүкөндөргө берилүүчү акысыз мөөнөт. Мурункуларга таасир этпейт.",tg:"Мӯҳлати ройгон барои мағозаҳои нав. Ба пештараҳо таъсир намерасонад."},
+  prTrialDays:{uz:"Sinov muddati (kun, 3–60)",ru:"Пробный период (дней, 3–60)",en:"Trial (days, 3–60)",kk:"Сынақ мерзімі (күн, 3–60)",ky:"Сыноо мөөнөтү (күн, 3–60)",tg:"Мӯҳлати озмоишӣ (рӯз, 3–60)"},
+  prTrialNote:{uz:"Faqat yangi ro'yxatdan o'tadigan do'konlarga qo'llanadi.",ru:"Применяется только к новым магазинам.",en:"Applies only to newly registered shops.",kk:"Тек жаңа тіркелетін дүкендерге қолданылады.",ky:"Жаңы катталуучу дүкөндөргө гана колдонулат.",tg:"Танҳо ба мағозаҳои нав татбиқ мешавад."},
+  prErrTrial:{uz:"Sinov muddati 3–60 kun",ru:"Пробный период 3–60 дней",en:"Trial must be 3–60 days",kk:"Сынақ мерзімі 3–60 күн",ky:"Сыноо мөөнөтү 3–60 күн",tg:"Мӯҳлати озмоишӣ 3–60 рӯз"},
+  prLogPromos:{uz:"Aksiya/promokodlar saqlandi",ru:"Акции/промокоды сохранены",en:"Sales/codes saved",kk:"Акциялар/промокодтар сақталды",ky:"Акциялар/промокоддор сакталды",tg:"Аксияҳо/промокодҳо сабт шуданд"},
+  prLogRemoved:{uz:"olib tashlandi",ru:"удалено",en:"removed",kk:"алынды",ky:"алынды",tg:"нест карда шуд"},
+  prLogGift:{uz:"+{days} kun sovg'a, {n} ta do'kon",ru:"+{days} дн. в подарок, {n} магазинов",en:"+{days} gift days, {n} shops",kk:"+{days} күн сыйлық, {n} дүкен",ky:"+{days} күн белек, {n} дүкөн",tg:"+{days} рӯз тӯҳфа, {n} мағоза"},
+  saPlansTitle:{uz:"Tariflar",ru:"Тарифы",en:"Plans",kk:"Тарифтер",ky:"Тарифтер",tg:"Тарифҳо"},   /* fix203-plans */
+  saPlansHint:{uz:"Yangi narx faqat yangi to'lovlarga qo'llanadi. To'langan obunalar va ochiq to'lov havolalari o'zgarmaydi.",ru:"Новая цена действует только для новых оплат. Оплаченные подписки и уже открытые ссылки на оплату не меняются.",en:"A new price applies only to new payments. Paid subscriptions and payment links already opened are not affected.",kk:"Жаңа баға тек жаңа төлемдерге қолданылады. Төленген жазылымдар мен ашық төлем сілтемелері өзгермейді.",ky:"Жаңы баа жаңы төлөмдөргө гана колдонулат. Төлөнгөн жазылуулар жана ачык төлөм шилтемелери өзгөрбөйт.",tg:"Нархи нав танҳо ба пардохтҳои нав татбиқ мешавад. Обунаҳои пардохтшуда ва истинодҳои кушодаи пардохт тағйир намеёбанд."},
+  saPlanPrice:{uz:"Narx",ru:"Цена",en:"Price",kk:"Баға",ky:"Баа",tg:"Нарх"},
+  saPlanMonths:{uz:"Muddat (oy)",ru:"Срок (мес.)",en:"Term (months)",kk:"Мерзім (ай)",ky:"Мөөнөт (ай)",tg:"Мӯҳлат (моҳ)"},
+  saPlanActive:{uz:"Sotuvda",ru:"В продаже",en:"On sale",kk:"Сатылымда",ky:"Сатууда",tg:"Дар фурӯш"},
+  saPlanBest:{uz:"«Eng foydali» belgisi",ru:"Метка «Самый выгодный»",en:"«Best value» badge",kk:"«Ең тиімді» белгісі",ky:"«Эң пайдалуу» белгиси",tg:"Нишони «Аз ҳама фоиданок»"},
+  saPlanNames:{uz:"Nomi (6 tilda, bo'sh qolsa — standart)",ru:"Название (6 языков, пусто — стандартное)",en:"Name (6 languages, empty — default)",kk:"Атауы (6 тілде, бос болса — стандарт)",ky:"Аталышы (6 тилде, бош болсо — стандарт)",tg:"Ном (6 забон, холӣ — стандартӣ)"},
+  saPlanPerDay:{uz:"Kunlik",ru:"В день",en:"Per day",kk:"Күніне",ky:"Күнүнө",tg:"Дар як рӯз"},
+  saPlanPerMonth:{uz:"Oyiga",ru:"В месяц",en:"Per month",kk:"Айына",ky:"Айына",tg:"Дар як моҳ"},
+  saPlanSaving:{uz:"Oylikka nisbatan",ru:"К месячному",en:"Vs monthly",kk:"Айлыққа қарағанда",ky:"Айлыкка салыштырмалуу",tg:"Нисбат ба моҳона"},
+  saMo:{uz:"oy",ru:"мес.",en:"mo",kk:"ай",ky:"ай",tg:"моҳ"},
+  saPlanOn:{uz:"sotuvga qo'yildi",ru:"включён в продажу",en:"put on sale",kk:"сатылымға қосылды",ky:"сатууга коюлду",tg:"ба фурӯш гузошта шуд"},
+  saPlanOff:{uz:"sotuvdan olindi",ru:"снят с продажи",en:"taken off sale",kk:"сатылымнан алынды",ky:"сатуудан алынды",tg:"аз фурӯш гирифта шуд"},
+  saPlanNamesChanged:{uz:"nomi o'zgardi",ru:"изменено название",en:"name changed",kk:"атауы өзгерді",ky:"аталышы өзгөрдү",tg:"ном тағйир ёфт"},
+  saPlansConfirm:{uz:"Yangi to'lovlarga qo'llanadi, to'langan obunalarga ta'sir qilmaydi.",ru:"Применяется к новым оплатам, на оплаченные подписки не влияет.",en:"Applies to new payments; paid subscriptions are not affected.",kk:"Жаңа төлемдерге қолданылады, төленген жазылымдарға әсер етпейді.",ky:"Жаңы төлөмдөргө колдонулат, төлөнгөн жазылууларга таасир этпейт.",tg:"Ба пардохтҳои нав татбиқ мешавад, ба обунаҳои пардохтшуда таъсир намерасонад."},
+  saPlansNoChange:{uz:"O'zgarish yo'q",ru:"Изменений нет",en:"No changes",kk:"Өзгеріс жоқ",ky:"Өзгөрүү жок",tg:"Тағйирот нест"},
+  saPlansSaved:{uz:"Tariflar saqlandi",ru:"Тарифы сохранены",en:"Plans saved",kk:"Тарифтер сақталды",ky:"Тарифтер сакталды",tg:"Тарифҳо сабт шуданд"},
+  saPlansConflict:{uz:"Narxlar boshqa qurilmada o'zgartirilgan — yangi holat yuklandi, qaytadan tekshiring",ru:"Цены изменены на другом устройстве — загружено новое состояние, проверьте ещё раз",en:"Prices were changed on another device — reloaded, please check again",kk:"Бағалар басқа құрылғыда өзгертілген — жаңа күй жүктелді, қайта тексеріңіз",ky:"Баалар башка түзмөктө өзгөртүлгөн — жаңы абал жүктөлдү, кайра текшериңиз",tg:"Нархҳо дар дастгоҳи дигар тағйир дода шудаанд — ҳолати нав бор шуд, аз нав санҷед"},
+  saPlansHistory:{uz:"O'zgarishlar tarixi",ru:"История изменений",en:"Change history",kk:"Өзгерістер тарихы",ky:"Өзгөрүүлөр тарыхы",tg:"Таърихи тағйирот"},
+  saPlansNoHistory:{uz:"Hali o'zgarish yo'q",ru:"Изменений пока нет",en:"No changes yet",kk:"Әзірге өзгеріс жоқ",ky:"Азырынча өзгөрүү жок",tg:"Ҳоло тағйирот нест"},
+  saPlansDefault:{uz:"Hozir standart narxlar ishlayapti (paneldan hali saqlanmagan).",ru:"Сейчас действуют стандартные цены (из панели ещё не сохранялись).",en:"Default prices are in use (not saved from the panel yet).",kk:"Қазір стандарт бағалар жұмыс істеп тұр (панельден әлі сақталмаған).",ky:"Азыр стандарт баалар иштеп жатат (панелден али сакталган жок).",tg:"Ҳоло нархҳои стандартӣ амал мекунанд (аз панел ҳанӯз сабт нашудааст)."},
+  saPlansErrPrice:{uz:"narx kamida 1 000 bo'lsin, butun son",ru:"цена не меньше 1 000, целое число",en:"price must be at least 1 000, a whole number",kk:"баға кемінде 1 000, бүтін сан болсын",ky:"баа кеминде 1 000, бүтүн сан болсун",tg:"нарх на камтар аз 1 000, адади бутун"},
+  saPlansErrMonths:{uz:"muddat 1–36 oy",ru:"срок 1–36 мес.",en:"term 1–36 months",kk:"мерзім 1–36 ай",ky:"мөөнөт 1–36 ай",tg:"мӯҳлат 1–36 моҳ"},
+  saPlansErrActive:{uz:"Kamida bitta tarif sotuvda bo'lsin",ru:"Хотя бы один тариф должен быть в продаже",en:"At least one plan must be on sale",kk:"Кемінде бір тариф сатылымда болсын",ky:"Жок дегенде бир тариф сатууда болсун",tg:"Ақаллан як тариф бояд дар фурӯш бошад"},
+  saPlansServerOff:{uz:"Server hali yangilanmagan (adminApi yo'q). p118 blokini oxirigacha ishga tushiring.",ru:"Сервер ещё не обновлён (нет adminApi). Запустите блок p118 до конца.",en:"The server is not updated yet (no adminApi). Run block p118 to the end.",kk:"Сервер әлі жаңартылмаған (adminApi жоқ). p118 блогын соңына дейін іске қосыңыз.",ky:"Сервер али жаңыланган жок (adminApi жок). p118 блогун аягына чейин иштетиңиз.",tg:"Сервер ҳанӯз нав нашудааст (adminApi нест). Блоки p118-ро то охир иҷро кунед."},
+  saPlansOffline:{uz:"Internet yo'q — tariflarni faqat internet bilan o'zgartirish mumkin",ru:"Нет интернета — тарифы можно менять только онлайн",en:"No internet — plans can only be changed online",kk:"Интернет жоқ — тарифтерді тек интернетпен өзгертуге болады",ky:"Интернет жок — тарифтерди интернет менен гана өзгөртүүгө болот",tg:"Интернет нест — тарифҳоро танҳо бо интернет тағйир додан мумкин"},
+  saPlansForbidden:{uz:"Ruxsat yo'q: faqat super admin hisobi bilan",ru:"Нет доступа: только с аккаунтом суперадмина",en:"Not allowed: super admin account only",kk:"Рұқсат жоқ: тек супер әкімші аккаунтымен",ky:"Уруксат жок: супер админ аккаунту менен гана",tg:"Иҷозат нест: танҳо бо ҳисоби суперадмин"},
   saConfirmExtend:{uz:"Obunani {plan} ga uzaytirasizmi?",ru:"Продлить подписку на {plan}?",en:"Extend the subscription by {plan}?",kk:"Жазылымды {plan} ұзартасыз ба?",ky:"Жазылууну {plan} узартасызбы?",tg:"Обунаро ба {plan} дароз мекунед?"},
   payMethodLabel:{uz:"To'lov usuli",ru:"Способ оплаты",en:"Payment method",kk:"Төлем тәсілі",ky:"Төлөм ыкмасы",tg:"Тарзи пардохт"},
   debtPaymentsCash:{uz:"Qarz to'lovlari (naqd)",ru:"Погашение долгов (наличные)",en:"Debt payments (cash)",kk:"Қарыз төлемдері (қолма-қол)",ky:"Карыз төлөмдөрү (накта)",tg:"Пардохти қарз (нақд)"},
@@ -4493,7 +4626,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.78';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.79';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -4648,7 +4781,67 @@ const SUBSCRIPTION_PLANS = {
 };
 const TRIAL_DAYS = 15;
 /* fix196-planlang: obuna tariflari nomi 6 tilda; «Yangi nimalar» (v110) oynasi ham */
+/* fix203-plans: tariflar BITTA manbadan — Firestore config/plans (super admin paneldagi «Tariflar» bo'limidan o'zgartiriladi).
+   Internet bo'lmasa — oxirgi ma'lum narx (qurilma xotirasida); umuman bo'lmasa — zaxira (serverdagi bilan bir xil).
+   Bu faqat KO'RSATISH uchun: to'lov summasi doim SERVERDA hisoblanadi. */
+const PLAN_KEYS = ['monthly', 'sixmonth', 'yearly'];
+const PLANS_FALLBACK = {monthly: {months: 1, price: 70000}, sixmonth: {months: 6, price: 420000}, yearly: {months: 12, price: 840000}};
+const PLANS_CACHE_KEY = 'sp_plans_cfg_v1';
+let __plansCfg = null, __plansLoading = null;
+function __plansNorm(raw){
+  const isInt = (v, lo, hi)=>typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= hi;
+  const plans = {};
+  PLAN_KEYS.forEach((k, i)=>{ plans[k] = {key: k, months: PLANS_FALLBACK[k].months, price: PLANS_FALLBACK[k].price, active: true, order: i + 1, best: k === 'yearly', name: null}; });
+  const ok = !!(raw && typeof raw === 'object' && raw.plans && typeof raw.plans === 'object');
+  if(ok){
+    PLAN_KEYS.forEach(k=>{
+      const r = raw.plans[k]; if(!r || typeof r !== 'object') return;
+      const p = plans[k];
+      if(isInt(r.price, 1000, 100000000)) p.price = r.price;
+      if(isInt(r.months, 1, 36)) p.months = r.months;
+      if(typeof r.active === 'boolean') p.active = r.active;
+      if(isInt(r.order, 0, 99)) p.order = r.order;
+      if(typeof r.best === 'boolean') p.best = r.best;
+      if(r.name && typeof r.name === 'object'){ const n = {}; let any = false; ['uz','ru','en','kk','ky','tg'].forEach(l=>{ const v = typeof r.name[l] === 'string' ? r.name[l].trim() : ''; if(v && v.length <= 40){ n[l] = v; any = true; } }); p.name = any ? n : null; }
+    });
+    if(!PLAN_KEYS.some(k=>plans[k].active)) PLAN_KEYS.forEach(k=>{ plans[k].active = true; });
+  }
+  return {plans: plans, version: ok && isInt(raw.version, 0, 1e9) ? raw.version : 0, source: ok ? 'config' : 'default'};
+}
+function livePlansCfg(){
+  if(!__plansCfg){ let c = null; try{ c = JSON.parse(localStorage.getItem(PLANS_CACHE_KEY) || 'null'); }catch(e){ c = null; } __plansCfg = __plansNorm(c); }
+  return __plansCfg;
+}
+function livePlan(k){ return livePlansCfg().plans[k] || null; }
+function livePlanList(){ const ps = livePlansCfg().plans; return PLAN_KEYS.map(k=>ps[k]).filter(p=>p.active).sort((a, b)=>a.order - b.order || PLAN_KEYS.indexOf(a.key) - PLAN_KEYS.indexOf(b.key)); }
+function planDays(k){ const p = livePlan(k); return Math.max(1, Math.round((p ? p.months : 1) * 30.4375)); }
+function __addMonthsUtc(ms, months){   /* serverdagi bilan bir xil: kalendar oy, oy oxiri to'g'rilanadi (31-yanvar + 1 oy = 28/29-fevral) */
+  const d = new Date(ms); const day = d.getUTCDate();
+  d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() + months);
+  const last = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)).getUTCDate();
+  d.setUTCDate(Math.min(day, last)); return d.getTime();
+}
+function refreshPlans(){   /* true — narxlar o'zgardi */
+  if(__plansLoading) return __plansLoading;
+  __plansLoading = (async ()=>{
+    try{
+      if(typeof fbDb === 'undefined' || !fbDb) return false;
+      if(typeof navigator !== 'undefined' && navigator.onLine === false) return false;   /* oflayn — oxirgi ma'lum narx */
+      const s = await fbDb.collection('config').doc('plans').get();
+      const raw = s.exists ? s.data() : null;
+      const before = JSON.stringify(livePlansCfg());
+      __plansCfg = __plansNorm(raw);
+      try{ localStorage.setItem(PLANS_CACHE_KEY, JSON.stringify(raw)); }catch(e){}
+      return before !== JSON.stringify(__plansCfg);
+    }catch(e){ return false; }
+    finally{ setTimeout(()=>{ __plansLoading = null; }, 0); }
+  })();
+  return __plansLoading;
+}
+setTimeout(()=>{ try{ if(typeof fbUser !== 'undefined' && fbUser) refreshPlans(); }catch(e){} }, 6000);   /* faqat kirgan foydalanuvchi uchun (narx — to'lov va obuna ekranlarida) */
 function planLabelFor(planKey){
+  const lp = livePlan(planKey);
+  if(lp && lp.name && (lp.name[state.lang] || lp.name.uz)) return lp.name[state.lang] || lp.name.uz;
   const p = SUBSCRIPTION_PLANS[planKey];
   if(!p) return planKey;
   return p.label[state.lang] || p.label.uz;
@@ -14208,14 +14401,16 @@ function renderSubscriptionExpiredScreen(){
     </div>`;
     return;
   }
-  const planEntries = Object.entries(SUBSCRIPTION_PLANS);
+  const __sq = window.__sxQ || {};   /* fix203-promo: aksiya narxi (serverdan) */
+  const planEntries = livePlanList().map(lp=>[lp.key, {price: __sq[lp.key] ? __sq[lp.key].price : lp.price, base: __sq[lp.key] ? __sq[lp.key].base : lp.price, promo: __sq[lp.key] ? __sq[lp.key].promo : null, days: planDays(lp.key)}]);   /* fix203-plans: bitta manbadan (avval bu yerda 150 000 ko'rinardi) */
+  const __bestK = (livePlanList().find(lp=>lp.best) || {}).key;
   const plansHtml = planEntries.map(([key,p])=>{
     const perDay = Math.round(p.price / p.days);
-    const isBest = key === 'yearly';
+    const isBest = key === __bestK;
     return `
     <div class="card" style="${isBest?'border:2px solid var(--accent);':''}position:relative;">
       ${isBest ? `<span class="badge badge-clear" style="position:absolute;top:-10px;right:12px;">${tr('bestValueBadge')}</span>` : ''}
-      <div class="row"><strong>${planLabelFor(key)}</strong><strong style="color:var(--accent-dark);">${fmt(p.price)}</strong></div>
+      <div class="row"><strong>${planLabelFor(key)}</strong><strong style="color:var(--accent-dark);">${p.price < p.base ? `<s class="pay-old">${fmt(p.base)}</s>` : ''}${fmt(p.price)}</strong></div>${p.promo ? `<div class="pay-promo">🔥 ${escapeHtml(tr('promoLeft').replace('{name}', p.promo.name).replace('{n}', p.promo.days))}</div>` : ''}
       <div class="row"><span class="subtle">${tr('perDayLabel')}</span><span class="subtle">${fmt(perDay)}/${tr('dayShort')}</span></div>
       <button class="btn btn-outline btn-block" style="margin-top:8px;" data-select-plan="${key}">${tr('choosePlanBtn')}</button>
     </div>
@@ -14243,6 +14438,8 @@ function renderSubscriptionExpiredScreen(){
   const __sxO = document.getElementById('sx-other');
   if(__sxO) __sxO.addEventListener('click', function(){ __sx.showOld = true; __sxSync(); });
   __sxSync(); __sxPrepare();
+  refreshPlans().then(ch=>{ if(ch && document.getElementById('sx-bot')) renderSubscriptionExpiredScreen(); });   /* fix203-plans */
+  if(!window.__sxQ && fbUser && !isNativeApp()){ window.__pay = window.__pay || {plan: 'monthly', provider: 'click', busy: false, err: ''}; __payQuote('').then(m=>{ if(m){ window.__sxQ = m; if(Object.values(m).some(q=>q.promo) && document.getElementById('sx-bot')) renderSubscriptionExpiredScreen(); } }); }   /* fix203-promo */
   root.querySelectorAll('[data-select-plan]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       state.pendingPlanRequest = btn.dataset.selectPlan;
@@ -18367,7 +18564,10 @@ const PAY_ALLOWED_HOSTS = ['checkout.paycom.uz', 'my.click.uz'];
 const PAY_LAST_KEY = 'sp_pay_last_v1';
 
 function payFnUrl(name){ return 'https://' + PAY_FN_REGION + '-' + firebaseConfig.projectId + '.cloudfunctions.net/' + name; }
+function __payPlanKeys(){ return livePlanList().map(p=>p.key).filter(k=>PAY_PLANS[k]); }   /* fix203-plans */
+function __payPlan(k){ const b = PAY_PLANS[k] || PAY_PLANS.monthly; const l = livePlan(k); return Object.assign({}, b, l ? {months: l.months, price: l.price, vip: !!l.best} : {}); }
 function payPlanName(key){
+  { const lp = livePlan(key); if(lp && lp.name && (lp.name[state.lang] || lp.name.uz)) return escapeHtml(lp.name[state.lang] || lp.name.uz); }   /* fix203-plans: paneldagi nom */
   const m = {monthly: 'payPlanMonthly', sixmonth: 'payPlanSixMonth', yearly: 'payPlanYearly'};
   return m[key] ? tr(m[key]) : escapeHtml(String(key == null ? '' : key));
 }
@@ -18418,6 +18618,8 @@ function openPaymentScreen(){
   const P = window.__pay = window.__pay || {plan: 'monthly', provider: 'click', busy: false, err: ''};
   P.busy = false; P.err = '';
   payRenderScreen();
+  refreshPlans().then(ch=>{ if(ch && document.getElementById('pay-root')) payRenderScreen(); });   /* fix203-plans */
+  __payQuote(P.code || '').then(m=>{ if(m && window.__pay === P){ P.q = m; if(document.getElementById('pay-root')) payRenderScreen(); } });   /* fix203-promo: aksiya narxi */
 }
 function payCloseScreen(){
   const r = document.getElementById('pay-root');
@@ -18432,16 +18634,17 @@ function payRenderScreen(){
   const prev = root.querySelector('.login-screen');
   const scrollTop = prev ? prev.scrollTop : 0;
 
-  const plansHtml = Object.keys(PAY_PLANS).map(function(k){
-    const p = PAY_PLANS[k];
+  if(__payPlanKeys().indexOf(P.plan) === -1) P.plan = __payPlanKeys()[0] || 'monthly';   /* fix203-plans */
+  const plansHtml = __payPlanKeys().map(function(k){
+    const p = __payPlan(k);
     const sel = P.plan === k;
     return '<label class="pay-opt' + (sel ? ' sel' : '') + '" data-pay-plan-card="' + k + '">'
       + (p.vip ? '<span class="pay-vip">VIP</span>' : '')
       + '<input type="radio" name="pay-plan" value="' + k + '"' + (sel ? ' checked' : '') + '>'
       + '<span class="pay-dot"></span>'
       + '<span class="pay-body"><div class="pay-name">' + payPlanName(k) + '</div>'
-      + '<div class="pay-sub">' + fmt(Math.round(p.price / p.months)) + ' / ' + tr('payPerMonth') + '</div></span>'
-      + '<span class="pay-price">' + fmt(p.price) + '</span></label>';
+      + '<div class="pay-sub">' + fmt(Math.round(((window.__pay.q && window.__pay.q[k]) || p).price / p.months)) + ' / ' + tr('payPerMonth') + '</div>'
+      + __payPromoHtml(k) + '</span>' + __payPriceHtml(k) + '</label>';   /* fix203-promo */
   }).join('');
 
   const methodsHtml = PAY_PROVIDERS.map(function(m){
@@ -18465,7 +18668,9 @@ function payRenderScreen(){
     + plansHtml
     + '<h3 class="sub-title" style="margin-top:6px;">' + tr('payMethodTitle') + '</h3>'
     + '<div class="pay-methods">' + methodsHtml + '</div>'
-    + '<div class="pay-total"><span>' + tr('payTotalLabel') + '</span><span style="color:var(--accent-dark);" id="pay-total-amt">' + fmt(PAY_PLANS[P.plan].price) + '</span></div>'
+    + '<div class="pay-code"><input type="text" id="pay-code" maxlength="24" autocomplete="off" placeholder="' + escapeHtml(tr('promoCodePh')) + '" value="' + escapeHtml(P.codeInput || '') + '"><button type="button" class="btn btn-outline btn-sm" id="pay-code-btn">' + tr('promoApply') + '</button></div>'
+    + (P.codeMsg ? '<div class="' + (P.codeOk ? 'subtle' : 'error-text') + '" style="margin:-4px 0 10px;font-size:12.5px;">' + escapeHtml(P.codeMsg) + '</div>' : '')
+    + '<div class="pay-total"><span>' + tr('payTotalLabel') + '</span><span style="color:var(--accent-dark);" id="pay-total-amt">' + fmt(((P.q && P.q[P.plan]) || __payPlan(P.plan)).price) + '</span></div>'
     + '<div id="pay-error" class="error-text" style="margin-bottom:8px;">' + escapeHtml(P.err || '') + '</div>'
     + '<button type="button" class="btn btn-primary btn-pill btn-block" id="pay-cta"' + (P.busy ? ' disabled' : '') + '>'
     + (P.busy ? tr('payRedirecting') : tr('payCta')) + '</button>'
@@ -18477,7 +18682,7 @@ function payRenderScreen(){
   payBindLang(root);
   document.getElementById('pay-back-btn').addEventListener('click', payCloseScreen);
   root.querySelectorAll('input[name="pay-plan"]').forEach(function(inp){
-    inp.addEventListener('change', function(){ if(P.busy) return; if(PAY_PLANS[inp.value]){ P.plan = inp.value; P.err = ''; payRenderScreen(); } });
+    inp.addEventListener('change', function(){ if(P.busy) return; if(__payPlanKeys().indexOf(inp.value) !== -1){ P.plan = inp.value; P.err = ''; payRenderScreen(); } });
   });
   root.querySelectorAll('input[name="pay-method"]').forEach(function(inp){
     inp.addEventListener('change', function(){
@@ -18486,6 +18691,7 @@ function payRenderScreen(){
     });
   });
   document.getElementById('pay-cta').addEventListener('click', payStart);
+  { const cb = document.getElementById('pay-code-btn'); if(cb) cb.addEventListener('click', __payApplyCode); const ci = document.getElementById('pay-code'); if(ci) ci.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); __payApplyCode(); } }); }   /* fix203-promo */
 }
 
 /* Til tanlash (ilovadagi mavjud ko'rinishdan foydalanadi, lekin faqat shu oyna ichida ishlaydi) */
@@ -18510,7 +18716,47 @@ function payBindLang(root){
   root.onclick = function(){ dropdown.style.display = 'none'; };
 }
 
+/* fix203-promo: narxlar serverdan (aksiya va promokod bilan) — planQuote. Bu faqat ko'rsatish; buyurtma summasi baribir serverda hisoblanadi. */
+async function __payQuote(code){
+  const P = window.__pay; if(!P || !fbUser) return null;
+  try{
+    const token = await fbUser.getIdToken();
+    const resp = await fetch(payFnUrl('planQuote'), {method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}, body: JSON.stringify({code: code || ''})});
+    const d = await resp.json();
+    if(!d || !d.ok || !Array.isArray(d.plans)) return null;
+    const m = {}; d.plans.forEach(q=>{ m[q.key] = q; });
+    return m;
+  }catch(e){ return null; }
+}
+function __payPriceHtml(k){
+  const P = window.__pay || {}, q = P.q && P.q[k];
+  if(q && q.price < q.base) return '<span class="pay-price"><s class="pay-old">' + fmt(q.base) + '</s>' + fmt(q.price) + '</span>';
+  return '<span class="pay-price">' + fmt(__payPlan(k).price) + '</span>';
+}
+function __payPromoHtml(k){
+  const P = window.__pay || {}, q = P.q && P.q[k];
+  if(!q) return '';
+  if(q.codeError && P.code) return '<div class="pay-promo" style="color:var(--danger);">' + escapeHtml(__promoErrText(q.codeError)) + '</div>' + (q.promo ? '<div class="pay-promo">🔥 ' + escapeHtml(tr('promoLeft').replace('{name}', q.promo.name).replace('{n}', q.promo.days)) + '</div>' : '');
+  if(q.promo) return '<div class="pay-promo">🔥 ' + escapeHtml(tr('promoLeft').replace('{name}', q.promo.name).replace('{n}', q.promo.days)) + '</div>';
+  if(q.code) return '<div class="pay-promo" style="color:var(--teal);">✓ ' + escapeHtml(tr('promoCodeOn').replace('{code}', q.code)) + '</div>';
+  return '';
+}
+function __promoErrText(c){ return tr({'code-invalid': 'promoErrInvalid', 'code-expired': 'promoErrExpired', 'code-not-started': 'promoErrNotStarted', 'code-plan': 'promoErrPlan', 'code-limit': 'promoErrLimit', 'code-shop-limit': 'promoErrShop'}[c] || 'promoErrInvalid'); }
+async function __payApplyCode(){
+  const P = window.__pay; if(!P || P.busy) return;
+  const inp = document.getElementById('pay-code'); const code = inp ? inp.value.trim().toUpperCase().replace(/\s+/g, '') : '';
+  P.codeInput = code; P.codeMsg = ''; P.codeOk = false;
+  if(!code){ P.code = ''; P.q = await __payQuote(''); payRenderScreen(); return; }
+  const m = await __payQuote(code);
+  if(!m){ P.codeMsg = tr('payErrGeneric'); payRenderScreen(); return; }
+  const q = m[P.plan] || Object.values(m)[0];
+  if(q && q.codeError){ P.code = ''; P.codeMsg = __promoErrText(q.codeError); P.q = await __payQuote(''); }
+  else if(q && q.codeIgnored){ P.code = ''; P.codeMsg = tr('promoBetter'); P.q = m; }
+  else { P.code = code; P.q = m; P.codeOk = true; P.codeMsg = tr('promoCodeOn').replace('{code}', code); }
+  payRenderScreen();
+}
 function payErrText(code){
+  if(code && /^code-/.test(code)) return __promoErrText(code);   /* fix203-promo */
   if(code === 'only-owner-can-pay') return tr('payErrOwnerOnly');
   if(code === 'unauthenticated') return tr('payNeedLogin');
   return tr('payErrGeneric');
@@ -18534,7 +18780,7 @@ async function payStart(){
     const resp = await fetch(payFnUrl('createPaymentOrder'), {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
-      body: JSON.stringify({plan: P.plan, provider: P.provider, returnUrl: returnUrl, lang: state.lang})
+      body: JSON.stringify({plan: P.plan, provider: P.provider, returnUrl: returnUrl, lang: state.lang, promoCode: (P.code && !(P.q && P.q[P.plan] && P.q[P.plan].codeError)) ? P.code : ''})   /* fix203-promo: kod shu tarifga to'g'ri kelmasa yuborilmaydi */
     });
     let data = null;
     try{ data = await resp.json(); }catch(e){}
@@ -18665,6 +18911,346 @@ async function payBindSettings(){
 }
 
 /* ---------- Super Admin: barcha muvaffaqiyatli to'lovlar ---------- */
+/* fix203-plans: super admin — «Tariflar»: narx, muddat, faol/yo'q, «eng foydali», nomlar (6 tilda), o'zgarishlar tarixi.
+   Saqlash SERVERDA (adminApi): faqat superadmin; tekshiradi va jurnalga yozadi (kim, qachon, eski -> yangi). */
+async function __saApi(action, payload){
+  let user = null; try{ user = isSuperAdmin() ? fbUser : __saUser(); }catch(e){ user = null; }
+  if(!user) throw {code: 'forbidden'};
+  if(typeof navigator !== 'undefined' && navigator.onLine === false) throw {code: 'offline'};
+  let token; try{ token = await user.getIdToken(); }catch(e){ throw {code: 'auth'}; }
+  let resp;
+  try{ resp = await fetch(payFnUrl('adminApi'), {method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}, body: JSON.stringify(Object.assign({}, payload || {}, {action: action}))}); }
+  catch(e){ throw {code: 'net'}; }
+  let data = null; try{ data = await resp.json(); }catch(e){}
+  if(!data) throw {code: resp.status === 404 ? 'no_server' : 'srv_bad', status: resp.status};
+  if(!data.ok) throw Object.assign({}, data, {code: data.code || 'internal', status: resp.status});
+  return data;
+}
+function __sapErrText(e){
+  const c = (e && e.code) || '';
+  if(c === 'no_server') return tr('saPlansServerOff');
+  if(c === 'offline' || c === 'net') return tr('saPlansOffline');
+  if(c === 'forbidden' || c === 'auth' || (e && e.status === 403)) return tr('saPlansForbidden');
+  if(c === 'conflict') return tr('saPlansConflict');
+  return tr('saActionFailed') + ': ' + c;
+}
+function __sapCalcHtml(k, price, months, monthlyPerMonth){
+  if(!(price > 0) || !(months > 0)) return '';
+  const days = Math.max(1, Math.round(months * 30.4375));
+  const perMonth = Math.round(price / months);
+  let s = tr('saPlanPerDay') + ': <b>' + fmt(Math.round(price / days)) + '</b>';
+  if(months > 1){
+    s += ' · ' + tr('saPlanPerMonth') + ': <b>' + fmt(perMonth) + '</b>';
+    if(monthlyPerMonth > 0){ const sv = Math.round((1 - perMonth / monthlyPerMonth) * 100); s += ' · ' + tr('saPlanSaving') + ': <b style="color:' + (sv > 0 ? 'var(--teal)' : 'var(--danger)') + ';">' + (sv > 0 ? '−' : '+') + Math.abs(sv) + '%</b>'; }
+  }
+  return s;
+}
+function __sapDiff(before, after){
+  const out = [];
+  PLAN_KEYS.forEach(k=>{
+    const a = before[k] || {}, b = after[k] || {}, nm = planLabelFor(k);
+    if(a.price !== b.price) out.push(nm + ': ' + fmt(a.price) + ' → ' + fmt(b.price));
+    if(a.months !== b.months) out.push(nm + ': ' + a.months + ' ' + tr('saMo') + ' → ' + b.months + ' ' + tr('saMo'));
+    if(a.active !== b.active) out.push(nm + ': ' + (b.active ? tr('saPlanOn') : tr('saPlanOff')));
+    if(!!a.best !== !!b.best && b.best) out.push(nm + ': ' + tr('saPlanBest'));
+    if(JSON.stringify(a.name || null) !== JSON.stringify(b.name || null)) out.push(nm + ': ' + tr('saPlanNamesChanged'));
+  });
+  return out;
+}
+async function openSaPlans(){
+  openModal(`<div class="modal-title">${icI('tag')} ${tr('saPlansTitle')}</div>
+    <p class="subtle" style="margin:-4px 0 12px;font-size:12.5px;">${tr('saPlansHint')}</p>
+    <div id="sap-body"><div class="empty-state">…</div></div>`);
+  let data;
+  try{ data = await __saApi('plansGet'); }
+  catch(e){ const b = document.getElementById('sap-body'); if(b) b.innerHTML = `<div class="error-text">${escapeHtml(__sapErrText(e))}</div>`; return; }
+  __sapRender(data);
+}
+function __sapRender(data){
+  const body = document.getElementById('sap-body'); if(!body) return;
+  const cur = data.cfg.plans, LG = ['uz','ru','en','kk','ky','tg'];
+  const card = (k)=>{
+    const p = cur[k];
+    return `<div class="card sap-card" data-sap="${k}" style="padding:12px 14px;margin-bottom:10px;">
+      <div class="row" style="gap:8px;align-items:center;margin-bottom:8px;"><strong style="flex:1 1 8em;">${escapeHtml(planLabelFor(k))}</strong>
+        <label class="checkbox-row" style="margin:0;"><input type="checkbox" data-sap-active ${p.active ? 'checked' : ''}><span>${tr('saPlanActive')}</span></label></div>
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:8px;">
+        <div><label class="field-label">${tr('saPlanPrice')}</label><input type="text" inputmode="numeric" data-money data-sap-price value="${formatMoneyInputValue(p.price)}"></div>
+        <div><label class="field-label">${tr('saPlanMonths')}</label><input type="number" min="1" max="36" step="1" data-sap-months value="${p.months}"></div>
+      </div>
+      <div class="subtle" data-sap-calc style="font-size:12px;margin:6px 0 2px;min-height:1.3em;"></div>
+      <label class="checkbox-row" style="margin:6px 0 0;"><input type="radio" name="sap-best" data-sap-best ${p.best ? 'checked' : ''}><span>${tr('saPlanBest')}</span></label>
+      <details style="margin-top:6px;"><summary class="subtle" style="cursor:pointer;font-size:12.5px;font-weight:700;">${tr('saPlanNames')}</summary>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,10em),1fr));gap:6px;margin-top:6px;">${LG.map(l=>`<div><label class="field-label">${l.toUpperCase()}</label><input type="text" maxlength="40" data-sap-name="${l}" value="${escapeHtml((p.name && p.name[l]) || '')}" placeholder="${escapeHtml(planLabelFor(k))}"></div>`).join('')}</div></details>
+    </div>`;
+  };
+  const hist = (data.log || []).map(l=>{
+    const lines = __sapDiff(l.before || {}, l.after || {});
+    return `<div style="padding:8px 0;border-bottom:1px solid var(--line);font-size:12.5px;"><div class="subtle">${escapeHtml(fmtDateTime(new Date(l.atMs).toISOString()))} · ${escapeHtml(l.by || '')}</div>${lines.map(x=>`<div>${escapeHtml(x)}</div>`).join('')}</div>`;
+  }).join('');
+  body.innerHTML = (data.cfg.source === 'default' ? `<div class="card" style="padding:10px 12px;margin-bottom:10px;font-size:12.5px;">${tr('saPlansDefault')}</div>` : '')
+    + PLAN_KEYS.map(card).join('')
+    + `<div id="sap-err" class="error-text" style="margin:4px 0 8px;"></div>
+      <div id="sap-confirm"></div>
+      <button type="button" class="btn btn-primary btn-block" id="sap-save">${tr('save')}</button>
+      <h3 class="sub-title" style="margin-top:18px;">${tr('saPlansHistory')}</h3>
+      ${hist || `<div class="empty-state">${tr('saPlansNoHistory')}</div>`}`;
+  body.querySelectorAll('[data-money]').forEach(inp=>attachMoneyInputFormatting(inp));
+  const read = ()=>{
+    const out = {};
+    PLAN_KEYS.forEach((k, i)=>{
+      const c = body.querySelector('[data-sap="' + k + '"]');
+      const name = {}; c.querySelectorAll('[data-sap-name]').forEach(x=>{ const v = x.value.trim(); if(v) name[x.dataset.sapName] = v; });
+      out[k] = {price: parseMoneyInput(c.querySelector('[data-sap-price]').value) || 0, months: parseInt(c.querySelector('[data-sap-months]').value, 10) || 0,
+        active: c.querySelector('[data-sap-active]').checked, order: (cur[k] && cur[k].order) || (i + 1), best: c.querySelector('[data-sap-best]').checked, name: Object.keys(name).length ? name : null};
+    });
+    return out;
+  };
+  const calc = ()=>{
+    const v = read(); const m = v.monthly && v.monthly.months > 0 ? Math.round(v.monthly.price / v.monthly.months) : 0;
+    PLAN_KEYS.forEach(k=>{ const el = body.querySelector('[data-sap="' + k + '"] [data-sap-calc]'); if(el) el.innerHTML = __sapCalcHtml(k, v[k].price, v[k].months, k === 'monthly' ? 0 : m); });
+  };
+  body.querySelectorAll('input').forEach(x=>{ x.addEventListener('input', ()=>{ calc(); const cf = document.getElementById('sap-confirm'); if(cf) cf.innerHTML = ''; }); x.addEventListener('change', calc); });
+  calc();
+  document.getElementById('sap-save').addEventListener('click', ()=>{
+    const err = document.getElementById('sap-err'); err.textContent = '';
+    const v = read();
+    for(const k of PLAN_KEYS){
+      if(!(Number.isInteger(v[k].price) && v[k].price >= 1000 && v[k].price <= 100000000)){ err.textContent = planLabelFor(k) + ': ' + tr('saPlansErrPrice'); return; }
+      if(!(Number.isInteger(v[k].months) && v[k].months >= 1 && v[k].months <= 36)){ err.textContent = planLabelFor(k) + ': ' + tr('saPlansErrMonths'); return; }
+    }
+    if(!PLAN_KEYS.some(k=>v[k].active)){ err.textContent = tr('saPlansErrActive'); return; }
+    const lines = __sapDiff(cur, v);
+    if(!lines.length){ showToast(tr('saPlansNoChange')); return; }
+    const cf = document.getElementById('sap-confirm');
+    cf.innerHTML = `<div class="card" style="padding:12px 14px;margin:0 0 10px;border:1.5px solid var(--accent);">
+      ${lines.map(x=>`<div style="font-weight:800;">${escapeHtml(x)}</div>`).join('')}
+      <p class="subtle" style="margin:8px 0 10px;font-size:12.5px;">${tr('saPlansConfirm')}</p>
+      <div class="btn-row"><button type="button" class="btn btn-outline" id="sap-no">${tr('cancel')}</button><button type="button" class="btn btn-primary" id="sap-yes">${tr('confirm')}</button></div></div>`;
+    document.getElementById('sap-no').addEventListener('click', ()=>{ cf.innerHTML = ''; });
+    document.getElementById('sap-yes').addEventListener('click', async (e)=>{
+      const b = e.currentTarget; if(b.disabled) return; b.disabled = true;
+      try{
+        await __saApi('plansSet', {plans: v, version: data.cfg.version});
+        showToast(tr('saPlansSaved'));
+        try{ await refreshPlans(); }catch(_e){}
+        const d2 = await __saApi('plansGet'); __sapRender(d2);
+      }catch(ex){
+        b.disabled = false; err.textContent = __sapErrText(ex);
+        if(ex && ex.code === 'conflict'){ try{ const d3 = await __saApi('plansGet'); __sapRender(d3); const e2 = document.getElementById('sap-err'); if(e2) e2.textContent = tr('saPlansConflict'); }catch(_e){} }
+      }
+    });
+  });
+}
+/* fix203-dash: bosh sahifa — asosiy ko'rsatkichlar (serverda yig'ilgan adminStats/current dan, tez ochiladi) */
+function __saSvgBars(vals, w, h, color){
+  const max = Math.max(1, ...vals); const bw = w / vals.length;
+  return '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="' + h + '" preserveAspectRatio="none" aria-hidden="true">' + vals.map((v, i)=>{ const bh = Math.max(v ? 2 : 0, Math.round(v / max * (h - 2))); return '<rect x="' + (i * bw + bw * 0.15).toFixed(1) + '" y="' + (h - bh) + '" width="' + (bw * 0.7).toFixed(1) + '" height="' + bh + '" rx="1.5" fill="' + color + '"></rect>'; }).join('') + '</svg>';
+}
+async function renderSaDash(refresh){
+  const el = document.getElementById('sa-dash'); if(!el) return;
+  if(!el.innerHTML.trim()) el.innerHTML = '<div class="card" style="padding:12px 14px;margin-bottom:10px;"><div class="subtle">' + tr('saDashLoading') + '</div></div>';
+  let st;
+  try{ st = (await __saApi('statsGet', refresh ? {refresh: true} : {})).stats; }
+  catch(e){ el.innerHTML = '<div class="card" style="padding:10px 14px;margin-bottom:10px;"><div class="error-text">' + escapeHtml(__sapErrText(e)) + '</div></div>'; return; }
+  const pct = st.mrrChangePct == null ? '' : ' <span style="font-size:12px;font-weight:800;color:' + (st.mrrChangePct >= 0 ? 'var(--teal)' : 'var(--danger)') + ';">' + (st.mrrChangePct >= 0 ? '▲ ' : '▼ ') + Math.abs(st.mrrChangePct) + '%</span>';
+  const tile = (n, l, c)=>'<div class="sa-stat"><div class="sa-num"' + (c ? ' style="color:' + c + ';"' : '') + '>' + n + '</div><div class="sa-lbl">' + l + '</div></div>';
+  const rev = st.revenue12 || [];
+  const MN = (ym)=>{ const m = parseInt(ym.slice(5), 10); try{ return __dtL().m[m - 1] || String(m); }catch(e){ return String(m); } };   /* ilovaning o'z oy nomlari (6 tilda) */
+  const exp = st.expiring7 || [];
+  el.innerHTML = '<div class="card sa-dash" style="padding:12px 14px;margin-bottom:10px;">'
+    + '<div class="row" style="margin-bottom:8px;"><strong>' + tr('saDashTitle') + '</strong><button type="button" class="btn btn-ghost btn-sm" id="sa-dash-ref" style="width:auto;">↻ ' + escapeHtml(fmtDateTime(new Date(st.atMs).toISOString())) + '</button></div>'
+    + '<div class="sa-dash-mrr"><div class="subtle" style="font-size:11.5px;font-weight:700;">' + tr('saDashMrr') + '</div><div style="font-size:22px;font-weight:800;">' + fmt(st.mrr) + pct + '</div><div class="subtle" style="font-size:11.5px;">' + tr('saDashMrrPrev') + ': ' + fmt(st.mrrPrev) + '</div></div>'
+    + '<div class="sa-stats-grid" style="margin-top:10px;">' + tile(st.counts.paid, tr('saPaid'), '#0f9d8a') + tile(st.counts.trial, tr('saTrial'), '#2f6fed') + tile(st.counts.expired, tr('saExpired'), '#e5484d') + tile(st.conversion.pct == null ? '—' : st.conversion.pct + '%', tr('saDashConv')) + '</div>'
+    + '<div class="sa-stats-grid">' + tile(st.churnMonth, tr('saDashChurn'), '#d97706') + tile(st.signups.today, tr('saDashToday')) + tile(st.signups.week, tr('saDashWeek')) + tile(st.signups.month, tr('saDashMonth')) + '</div>'
+    + '<div class="subtle" style="font-size:11.5px;font-weight:700;margin:8px 0 2px;">' + tr('saDashSignups30') + '</div>' + __saSvgBars(st.signups.daily || [], 300, 36, '#2f6fed')
+    + '<div class="subtle" style="font-size:11.5px;font-weight:700;margin:10px 0 2px;">' + tr('saDashRevenue') + '</div>' + __saSvgBars(rev.map(r=>r.sum), 300, 60, '#0f9d8a')
+    + '<div style="display:grid;grid-template-columns:repeat(12,1fr);font-size:9.5px;color:var(--ink-faint);text-align:center;">' + rev.map(r=>'<span>' + escapeHtml(MN(r.ym)) + '</span>').join('') + '</div>'
+    + '<div class="subtle" style="font-size:11.5px;margin-top:2px;">' + tr('saDashRevLast') + ': <b>' + fmt(rev.length ? rev[rev.length - 1].sum : 0) + '</b></div>'
+    + '<div class="row" style="margin:12px 0 4px;"><strong style="font-size:13.5px;">' + tr('saDashExp7') + ' (' + (st.expiring7Count || 0) + ')</strong>' + (exp.length ? '<button type="button" class="btn btn-outline btn-sm" id="sa-rem-all" style="width:auto;">' + tr('saRemindAll') + '</button>' : '') + '</div>'
+    + (exp.length ? exp.map(x=>'<div class="sa-exp-row"><div style="min-width:0;flex:1 1 10em;"><div style="font-weight:800;">' + escapeHtml(x.name || x.id) + '</div><div class="subtle" style="font-size:11.5px;">' + escapeHtml(fmtDate(new Date(x.expMs).toISOString())) + ' · ' + Math.max(0, Math.ceil((x.expMs - Date.now()) / 86400000)) + ' ' + tr('saDaysShort') + (x.phone ? ' · ' + escapeHtml(x.phone) : '') + '</div></div><button type="button" class="btn btn-ghost btn-sm" data-sa-rem="' + escapeHtml(x.id) + '" style="width:auto;">' + tr('saRemind') + '</button></div>').join('') : '<div class="subtle" style="font-size:12.5px;">' + tr('saDashExpNone') + '</div>')
+    + '<div id="sa-rem-msg" class="subtle" style="font-size:12.5px;margin-top:6px;"></div>'
+    + '</div>';
+  document.getElementById('sa-dash-ref').addEventListener('click', ()=>renderSaDash(true));
+  const send = async (ids, btn)=>{
+    const msg = document.getElementById('sa-rem-msg'); if(btn) btn.disabled = true;
+    try{ const r = await __saApi('remind', {bizIds: ids}); if(msg) msg.textContent = tr('saRemindSent').replace('{n}', r.count); if(btn) btn.textContent = '✓'; }
+    catch(e){ if(msg) msg.textContent = __sapErrText(e); if(btn) btn.disabled = false; }
+  };
+  el.querySelectorAll('[data-sa-rem]').forEach(b=>b.addEventListener('click', ()=>send([b.dataset.saRem], b)));
+  const ra = document.getElementById('sa-rem-all');
+  if(ra) ra.addEventListener('click', ()=>{ if(ra.dataset.sure !== '1'){ ra.dataset.sure = '1'; ra.textContent = tr('saRemindAllSure').replace('{n}', exp.length); return; } send(exp.map(x=>x.id), ra); });
+}
+/* fix203-promo: super admin — aksiyalar, promokodlar, sovg'a kunlari, sinov muddati. Saqlash serverda (adminApi), jurnal bilan. Vaqt — Toshkent (UTC+5). */
+const __TZ5 = 5 * 3600000;
+function __tzIn(ms){ return ms ? new Date(ms + __TZ5).toISOString().slice(0, 16) : ''; }
+function __tzOut(v){ const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(String(v || '')); return m ? Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]) - __TZ5 : 0; }
+function __tzShow(ms){ const d = new Date(ms + __TZ5); return String(d.getUTCDate()).padStart(2, '0') + '.' + String(d.getUTCMonth() + 1).padStart(2, '0') + '.' + d.getUTCFullYear() + ' ' + String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0'); }
+function __prId(){ return 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function __prDiscText(x){ if(x.type === 'percent') return '−' + x.value + '%'; if(x.type === 'amount') return '−' + fmt(x.value); return PLAN_KEYS.filter(k=>x.prices && x.prices[k]).map(k=>planLabelFor(k) + ': ' + fmt(x.prices[k])).join(', '); }
+function __prState(x, now){ if(!x.active) return ['off', tr('prStOff')]; if(now < x.startMs) return ['plan', tr('prStPlanned')]; if(now >= x.endMs) return ['end', tr('prStEnded')]; return ['on', tr('prStActive')]; }
+async function __saBizList(){
+  if(window.__saBizCache && window.__saBizCache.length) return window.__saBizCache;
+  try{ const s = await saDb().collection('businesses').get(); window.__saBizCache = s.docs.map(d=>({id: d.id, d: d.data() || {}})); }catch(e){ window.__saBizCache = []; }
+  return window.__saBizCache;
+}
+function __saBizName(id){ const b = (window.__saBizCache || []).find(x=>x.id === id); return b ? (b.d.businessName || id) : id; }
+async function openSaPromos(tab){
+  openModal(`<div class="modal-title">${icI('tag')} ${tr('prTitle')}</div>
+    <div class="toggle-group" id="pr-tabs" style="margin-bottom:12px;">${[['promos', tr('prTabPromos')], ['codes', tr('prTabCodes')], ['gift', tr('prTabGift')], ['trial', tr('prTabTrial')]].map(([k, l])=>`<div class="toggle-opt" data-pr-tab="${k}">${l}</div>`).join('')}</div>
+    <div id="pr-body"><div class="empty-state">…</div></div>`);
+  let data;
+  try{ data = await __saApi('promosGet'); await __saBizList(); }
+  catch(e){ const b = document.getElementById('pr-body'); if(b) b.innerHTML = `<div class="error-text">${escapeHtml(__sapErrText(e))}</div>`; return; }
+  const S = window.__pr = {data: data, tab: tab || 'promos', edit: null};
+  document.querySelectorAll('#pr-tabs [data-pr-tab]').forEach(t=>t.addEventListener('click', ()=>{ S.tab = t.dataset.prTab; S.edit = null; __prRender(); }));
+  __prRender();
+}
+function __prSave(promos, codes, okMsg){
+  const S = window.__pr; const err = document.getElementById('pr-err');
+  return __saApi('promosSet', {promos: promos, codes: codes, version: S.data.cfg.version}).then(async ()=>{
+    showToast(okMsg || tr('saPlansSaved')); S.data = await __saApi('promosGet'); S.edit = null; __prRender();
+  }).catch(e=>{ if(err) err.textContent = (e && e.code && !/^(forbidden|offline|net|no_server|auth|conflict)$/.test(e.code)) ? tr('prErrInvalid') + ' (' + e.code + ')' : __sapErrText(e); });
+}
+function __prRender(){
+  const S = window.__pr, body = document.getElementById('pr-body'); if(!S || !body) return;
+  document.querySelectorAll('#pr-tabs [data-pr-tab]').forEach(t=>t.classList.toggle('active', t.dataset.prTab === S.tab));
+  const cfg = S.data.cfg, now = Date.now(), use = S.data.usage || {};
+  const logHtml = (S.data.log || []).slice(0, 15).map(l=>{
+    let t = '';
+    if(l.action === 'promos.set') t = tr('prLogPromos') + (l.summary ? ': ' + [].concat(l.summary.promos || [], l.summary.codes || []).join(', ') + (l.summary.removed && l.summary.removed.length ? ' · ' + tr('prLogRemoved') + ': ' + l.summary.removed.join(', ') : '') : '');
+    else if(l.action === 'gift.days') t = tr('prLogGift').replace('{days}', l.days).replace('{n}', l.count) + (l.reason ? ' — ' + l.reason : '');
+    else if(l.action === 'trial.set') t = tr('prTabTrial') + ': ' + l.before + ' → ' + l.after;
+    return `<div style="padding:6px 0;border-bottom:1px solid var(--line);font-size:12px;"><span class="subtle">${escapeHtml(fmtDateTime(new Date(l.atMs).toISOString()))} · ${escapeHtml(l.by || '')}</span><div>${escapeHtml(t)}</div></div>`;
+  }).join('');
+  const foot = `<div id="pr-err" class="error-text" style="margin:8px 0;"></div><h3 class="sub-title" style="margin-top:16px;">${tr('saPlansHistory')}</h3>${logHtml || `<div class="empty-state">${tr('saPlansNoHistory')}</div>`}`;
+  const planChecks = (sel, attr)=>PLAN_KEYS.map(k=>`<label class="checkbox-row" style="margin:0;"><input type="checkbox" ${attr}="${k}" ${sel.indexOf(k) !== -1 ? 'checked' : ''}><span>${escapeHtml(planLabelFor(k))}</span></label>`).join('');
+  if(S.tab === 'promos' || S.tab === 'codes'){
+    const isP = S.tab === 'promos', list = isP ? cfg.promos : cfg.codes;
+    if(S.edit){
+      const x = S.edit;
+      body.innerHTML = `<div class="card" style="padding:12px 14px;">
+        ${isP ? `<div class="field"><label class="field-label">${tr('prName')}</label><input type="text" id="pe-name" maxlength="60" value="${escapeHtml(x.name || '')}"></div>`
+              : `<div class="field"><label class="field-label">${tr('prCode')}</label><input type="text" id="pe-code" maxlength="20" value="${escapeHtml(x.code || '')}" style="text-transform:uppercase;"></div>`}
+        <div class="field"><label class="field-label">${tr('prPlans')}</label><div style="display:flex;flex-wrap:wrap;gap:4px 14px;">${planChecks(x.plans || PLAN_KEYS, 'data-pe-plan')}</div></div>
+        <div class="field"><label class="field-label">${tr('prDiscount')}</label><select id="pe-type"><option value="percent" ${x.type === 'percent' ? 'selected' : ''}>${tr('prTypePercent')}</option><option value="amount" ${x.type === 'amount' ? 'selected' : ''}>${tr('prTypeAmount')}</option>${isP ? `<option value="price" ${x.type === 'price' ? 'selected' : ''}>${tr('prTypePrice')}</option>` : ''}</select></div>
+        <div class="field" id="pe-val-f"><label class="field-label" id="pe-val-l"></label><input type="text" inputmode="numeric" id="pe-val" value="${x.value || ''}"></div>
+        <div class="field" id="pe-prices-f" style="display:none;">${PLAN_KEYS.map(k=>`<label class="field-label">${escapeHtml(planLabelFor(k))} (${fmt(livePlan(k).price)})</label><input type="text" inputmode="numeric" data-money data-pe-price="${k}" value="${x.prices && x.prices[k] ? formatMoneyInputValue(x.prices[k]) : ''}">`).join('')}</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,12em),1fr));gap:8px;">
+          <div><label class="field-label">${tr('prStart')}</label><input type="datetime-local" id="pe-start" value="${__tzIn(x.startMs)}"></div>
+          <div><label class="field-label">${tr('prEnd')}</label><input type="datetime-local" id="pe-end" value="${__tzIn(x.endMs)}"></div></div>
+        <p class="subtle" style="font-size:11.5px;margin:4px 0 8px;">${tr('prTzNote')}</p>
+        ${isP ? `<div class="field"><label class="field-label">${tr('prAudience')}</label><select id="pe-aud">${['all', 'new', 'expired', 'selected'].map(a=>`<option value="${a}" ${x.audience === a ? 'selected' : ''}>${tr('prAud_' + a)}</option>`).join('')}</select></div>
+          <div class="field" id="pe-biz-f" style="display:none;"><input type="text" id="pe-biz-q" placeholder="${escapeHtml(tr('prBizSearch'))}"><div id="pe-biz-res"></div><div id="pe-biz-sel" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;"></div></div>
+          <div class="field"><label class="field-label">${tr('prLimit')}</label><input type="number" min="0" id="pe-limit" value="${x.limit || 0}"></div>`
+        : `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div><label class="field-label">${tr('prMaxUses')}</label><input type="number" min="0" id="pe-max" value="${x.maxUses || 0}"></div><div><label class="field-label">${tr('prPerShop')}</label><input type="number" min="1" id="pe-shop" value="${x.perShop || 1}"></div></div>
+          <label class="checkbox-row"><input type="checkbox" id="pe-with" ${x.withPromo ? 'checked' : ''}><span>${tr('prWithPromo')}</span></label>`}
+        <label class="checkbox-row"><input type="checkbox" id="pe-active" ${x.active !== false ? 'checked' : ''}><span>${tr('prActive')}</span></label>
+        <div id="pr-err" class="error-text" style="margin:8px 0;"></div>
+        <div class="btn-row"><button type="button" class="btn btn-outline" id="pe-cancel">${tr('cancel')}</button><button type="button" class="btn btn-primary" id="pe-save">${tr('save')}</button></div></div>`;
+      body.querySelectorAll('[data-money]').forEach(inp=>attachMoneyInputFormatting(inp));
+      const sel = new Set(x.bizIds || []);
+      const drawSel = ()=>{ const e = document.getElementById('pe-biz-sel'); if(e) e.innerHTML = [...sel].map(id=>`<button type="button" class="fav-chip fav-chip-active" data-pe-unsel="${escapeHtml(id)}">${escapeHtml(__saBizName(id))} ×</button>`).join(''); body.querySelectorAll('[data-pe-unsel]').forEach(b=>b.addEventListener('click', ()=>{ sel.delete(b.dataset.peUnsel); drawSel(); })); };
+      const sync = ()=>{
+        const t = document.getElementById('pe-type').value;
+        document.getElementById('pe-val-f').style.display = t === 'price' ? 'none' : '';
+        document.getElementById('pe-prices-f').style.display = t === 'price' ? '' : 'none';
+        document.getElementById('pe-val-l').textContent = t === 'percent' ? tr('prValuePct') : tr('prValueSum');
+        const a = document.getElementById('pe-aud'); if(a) document.getElementById('pe-biz-f').style.display = a.value === 'selected' ? '' : 'none';
+      };
+      document.getElementById('pe-type').addEventListener('change', sync); { const a = document.getElementById('pe-aud'); if(a) a.addEventListener('change', sync); }
+      sync(); drawSel();
+      const bq = document.getElementById('pe-biz-q');
+      if(bq) bq.addEventListener('input', ()=>{ const q = bq.value.trim().toLowerCase(); const res = document.getElementById('pe-biz-res');
+        res.innerHTML = q.length < 2 ? '' : (window.__saBizCache || []).filter(b=>(String(b.d.businessName || '') + ' ' + String(b.d.ownerEmail || '') + ' ' + String(b.d.ownerPhone || '') + ' ' + b.id).toLowerCase().indexOf(q) !== -1).slice(0, 8).map(b=>`<div class="list-item" data-pe-sel="${escapeHtml(b.id)}" style="cursor:pointer;padding:8px 10px;margin:4px 0;"><div class="info"><div class="name">${escapeHtml(b.d.businessName || b.id)}</div><div class="meta">${escapeHtml(b.d.ownerEmail || b.d.ownerPhone || b.id)}</div></div></div>`).join('');
+        res.querySelectorAll('[data-pe-sel]').forEach(r=>r.addEventListener('click', ()=>{ sel.add(r.dataset.peSel); drawSel(); res.innerHTML = ''; bq.value = ''; })); });
+      document.getElementById('pe-cancel').addEventListener('click', ()=>{ S.edit = null; __prRender(); });
+      document.getElementById('pe-save').addEventListener('click', ()=>{
+        const err = document.getElementById('pr-err'); err.textContent = '';
+        const t = document.getElementById('pe-type').value;
+        const o = {id: x.id || __prId(), type: t, plans: PLAN_KEYS.filter(k=>{ const c = body.querySelector('[data-pe-plan="' + k + '"]'); return c && c.checked; }),
+          startMs: __tzOut(document.getElementById('pe-start').value), endMs: __tzOut(document.getElementById('pe-end').value), active: document.getElementById('pe-active').checked};
+        if(!o.plans.length){ err.textContent = tr('prErrPlans'); return; }
+        if(t === 'price'){ o.prices = {}; for(const k of o.plans){ const v = parseMoneyInput(body.querySelector('[data-pe-price="' + k + '"]').value) || 0; if(!(v >= 1000 && v < livePlan(k).price)){ err.textContent = planLabelFor(k) + ': ' + tr('prErrPrice'); return; } o.prices[k] = v; } }
+        else { o.value = parseMoneyInput(document.getElementById('pe-val').value) || 0; if(t === 'percent' ? !(o.value >= 1 && o.value <= 90) : !(o.value >= 100)){ err.textContent = tr('prErrValue'); return; } }
+        if(!o.startMs || !o.endMs || o.endMs <= o.startMs){ err.textContent = tr('prErrDates'); return; }
+        if(isP){
+          o.name = document.getElementById('pe-name').value.trim(); if(!o.name){ err.textContent = tr('prErrName'); return; }
+          o.audience = document.getElementById('pe-aud').value; o.limit = parseInt(document.getElementById('pe-limit').value, 10) || 0;
+          if(o.audience === 'selected'){ o.bizIds = [...sel]; if(!o.bizIds.length){ err.textContent = tr('prErrBiz'); return; } }
+        } else {
+          o.code = document.getElementById('pe-code').value.trim().toUpperCase().replace(/\s+/g, ''); if(!/^[A-Z0-9-]{3,20}$/.test(o.code)){ err.textContent = tr('prErrCode'); return; }
+          if(cfg.codes.some(c=>c.code === o.code && c.id !== o.id)){ err.textContent = tr('prErrCodeDup'); return; }
+          o.maxUses = parseInt(document.getElementById('pe-max').value, 10) || 0; o.perShop = Math.max(1, parseInt(document.getElementById('pe-shop').value, 10) || 1); o.withPromo = document.getElementById('pe-with').checked;
+        }
+        const arr = list.filter(y=>y.id !== o.id).concat([o]);
+        __prSave(isP ? arr : cfg.promos, isP ? cfg.codes : arr);
+      });
+      return;
+    }
+    body.innerHTML = `<button type="button" class="btn btn-outline btn-block btn-sm" id="pr-new" style="margin-bottom:10px;">＋ ${isP ? tr('prNewPromo') : tr('prNewCode')}</button>`
+      + (list.length ? list.slice().sort((a, b)=>b.startMs - a.startMs).map(x=>{ const st = __prState(x, now); const u = use[x.id] || 0;
+        return `<div class="card" style="padding:10px 12px;margin-bottom:8px;"><div class="row" style="gap:8px;"><strong style="flex:1 1 9em;">${escapeHtml(isP ? x.name : x.code)}</strong><span class="pr-st pr-st-${st[0]}">${st[1]}</span></div>
+          <div style="font-weight:800;margin:2px 0;">${escapeHtml(__prDiscText(x))}${!isP && x.withPromo ? ' · ' + tr('prWithPromoShort') : ''}</div>
+          <div class="subtle" style="font-size:12px;">${escapeHtml(__tzShow(x.startMs))} → ${escapeHtml(__tzShow(x.endMs))} · ${escapeHtml(x.plans.map(planLabelFor).join(', '))}</div>
+          <div class="subtle" style="font-size:12px;">${isP ? escapeHtml(tr('prAud_' + x.audience) + (x.audience === 'selected' ? ' (' + (x.bizIds || []).length + ')' : '')) + ' · ' : ''}${tr('prUsed')}: ${u}${(isP ? x.limit : x.maxUses) ? ' / ' + (isP ? x.limit : x.maxUses) : ''}${!isP ? ' · ' + tr('prPerShop') + ': ' + x.perShop : ''}</div>
+          <div class="btn-row" style="margin-top:6px;"><button type="button" class="btn btn-ghost btn-sm" data-pr-edit="${x.id}">${tr('edit')}</button><button type="button" class="btn btn-ghost btn-sm" data-pr-toggle="${x.id}">${x.active ? tr('prDisable') : tr('prEnable')}</button><button type="button" class="btn btn-ghost btn-sm" data-pr-del="${x.id}" style="color:var(--danger);">${tr('delete')}</button></div></div>`; }).join('')
+        : `<div class="empty-state">${isP ? tr('prNoPromos') : tr('prNoCodes')}</div>`) + foot;
+    document.getElementById('pr-new').addEventListener('click', ()=>{ const d = new Date(Date.now() + __TZ5); const s0 = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) - __TZ5; S.edit = isP ? {type: 'percent', value: 20, plans: PLAN_KEYS.slice(), startMs: s0, endMs: s0 + 7 * 86400000, audience: 'all', limit: 0, active: true} : {type: 'percent', value: 10, plans: PLAN_KEYS.slice(), startMs: s0, endMs: s0 + 30 * 86400000, maxUses: 0, perShop: 1, withPromo: false, active: true}; __prRender(); });
+    body.querySelectorAll('[data-pr-edit]').forEach(b=>b.addEventListener('click', ()=>{ S.edit = JSON.parse(JSON.stringify(list.find(x=>x.id === b.dataset.prEdit))); __prRender(); }));
+    body.querySelectorAll('[data-pr-toggle]').forEach(b=>b.addEventListener('click', ()=>{ const arr = list.map(x=>x.id === b.dataset.prToggle ? Object.assign({}, x, {active: !x.active}) : x); __prSave(isP ? arr : cfg.promos, isP ? cfg.codes : arr); }));
+    body.querySelectorAll('[data-pr-del]').forEach(b=>b.addEventListener('click', ()=>{ if(b.dataset.sure !== '1'){ b.dataset.sure = '1'; b.textContent = tr('prDelSure'); return; } const arr = list.filter(x=>x.id !== b.dataset.prDel); __prSave(isP ? arr : cfg.promos, isP ? cfg.codes : arr); }));
+    return;
+  }
+  if(S.tab === 'gift'){
+    const sel = new Set();
+    body.innerHTML = `<div class="card" style="padding:12px 14px;">
+      <div class="field"><label class="field-label">${tr('prGiftWho')}</label><select id="pg-target"><option value="list">${tr('prGiftList')}</option><option value="all">${tr('prGiftAll')}</option></select></div>
+      <div class="field" id="pg-biz-f"><input type="text" id="pg-biz-q" placeholder="${escapeHtml(tr('prBizSearch'))}"><div id="pg-biz-res"></div><div id="pg-biz-sel" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;"></div></div>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><div><label class="field-label">${tr('prGiftDays')}</label><input type="number" min="1" max="365" id="pg-days" value="7"></div><div><label class="field-label">${tr('prGiftReason')}</label><input type="text" id="pg-reason" maxlength="200"></div></div>
+      <div id="pr-err" class="error-text" style="margin:8px 0;"></div><div id="pg-confirm"></div>
+      <button type="button" class="btn btn-primary btn-block" id="pg-go">${tr('prGiftGo')}</button></div>` + foot;
+    const drawSel = ()=>{ const e = document.getElementById('pg-biz-sel'); e.innerHTML = [...sel].map(id=>`<button type="button" class="fav-chip fav-chip-active" data-pg-unsel="${escapeHtml(id)}">${escapeHtml(__saBizName(id))} ×</button>`).join(''); e.querySelectorAll('[data-pg-unsel]').forEach(b=>b.addEventListener('click', ()=>{ sel.delete(b.dataset.pgUnsel); drawSel(); })); };
+    document.getElementById('pg-target').addEventListener('change', ()=>{ document.getElementById('pg-biz-f').style.display = document.getElementById('pg-target').value === 'all' ? 'none' : ''; document.getElementById('pg-confirm').innerHTML = ''; });
+    const bq = document.getElementById('pg-biz-q');
+    bq.addEventListener('input', ()=>{ const q = bq.value.trim().toLowerCase(); const res = document.getElementById('pg-biz-res');
+      res.innerHTML = q.length < 2 ? '' : (window.__saBizCache || []).filter(b=>(String(b.d.businessName || '') + ' ' + String(b.d.ownerEmail || '') + ' ' + String(b.d.ownerPhone || '') + ' ' + b.id).toLowerCase().indexOf(q) !== -1).slice(0, 8).map(b=>`<div class="list-item" data-pg-sel="${escapeHtml(b.id)}" style="cursor:pointer;padding:8px 10px;margin:4px 0;"><div class="info"><div class="name">${escapeHtml(b.d.businessName || b.id)}</div><div class="meta">${escapeHtml(b.d.ownerEmail || b.d.ownerPhone || b.id)}</div></div></div>`).join('');
+      res.querySelectorAll('[data-pg-sel]').forEach(r=>r.addEventListener('click', ()=>{ sel.add(r.dataset.pgSel); drawSel(); res.innerHTML = ''; bq.value = ''; })); });
+    document.getElementById('pg-go').addEventListener('click', ()=>{
+      const err = document.getElementById('pr-err'); err.textContent = '';
+      const all = document.getElementById('pg-target').value === 'all', days = parseInt(document.getElementById('pg-days').value, 10) || 0, reason = document.getElementById('pg-reason').value.trim();
+      if(!(days >= 1 && days <= 365)){ err.textContent = tr('prErrDays'); return; }
+      if(reason.length < 3){ err.textContent = tr('prErrReason'); return; }
+      if(!all && !sel.size){ err.textContent = tr('prErrBiz'); return; }
+      const n = all ? (window.__saBizCache || []).length : sel.size;
+      const cf = document.getElementById('pg-confirm');
+      cf.innerHTML = `<div class="card" style="padding:12px 14px;margin:0 0 10px;border:1.5px solid var(--accent);"><div style="font-weight:800;">${escapeHtml(tr('prGiftConfirm').replace('{days}', days).replace('{n}', n))}</div><div class="subtle" style="font-size:12.5px;margin:4px 0 10px;">${escapeHtml(reason)}</div>
+        ${all ? `<input type="text" id="pg-sure" placeholder="${escapeHtml(tr('prGiftTypeAll'))}" style="margin-bottom:8px;">` : ''}<div class="btn-row"><button type="button" class="btn btn-outline" id="pg-no">${tr('cancel')}</button><button type="button" class="btn btn-primary" id="pg-yes">${tr('confirm')}</button></div></div>`;
+      document.getElementById('pg-no').addEventListener('click', ()=>{ cf.innerHTML = ''; });
+      document.getElementById('pg-yes').addEventListener('click', async (e)=>{
+        if(all && String((document.getElementById('pg-sure') || {}).value || '').trim().toUpperCase() !== tr('prGiftAllWord').toUpperCase()){ err.textContent = tr('prGiftTypeAll'); return; }
+        const b = e.currentTarget; b.disabled = true;
+        try{ const r = await __saApi('giftDays', {target: all ? 'all' : 'list', bizIds: all ? null : [...sel], days: days, reason: reason}); showToast(tr('prGiftDone').replace('{n}', r.count)); S.data = await __saApi('promosGet'); __prRender(); try{ renderSuperAdminList(); }catch(_e){} }
+        catch(ex){ b.disabled = false; err.textContent = __sapErrText(ex); }
+      });
+    });
+    return;
+  }
+  body.innerHTML = `<div class="card" style="padding:12px 14px;"><p class="subtle" style="font-size:12.5px;margin:0 0 8px;">${tr('prTrialHint')}</p>
+    <div class="field"><label class="field-label">${tr('prTrialDays')}</label><input type="number" min="3" max="60" id="pt-days" value="${S.data.trialDays || 15}"></div>
+    <div id="pr-err" class="error-text" style="margin:8px 0;"></div><div id="pt-confirm"></div><button type="button" class="btn btn-primary btn-block" id="pt-save">${tr('save')}</button></div>` + foot;
+  document.getElementById('pt-save').addEventListener('click', ()=>{
+    const err = document.getElementById('pr-err'); err.textContent = '';
+    const d = parseInt(document.getElementById('pt-days').value, 10) || 0;
+    if(!(d >= 3 && d <= 60)){ err.textContent = tr('prErrTrial'); return; }
+    if(d === (S.data.trialDays || 15)){ showToast(tr('saPlansNoChange')); return; }
+    const cf = document.getElementById('pt-confirm');
+    cf.innerHTML = `<div class="card" style="padding:12px 14px;margin:0 0 10px;border:1.5px solid var(--accent);"><div style="font-weight:800;">${escapeHtml(tr('prTabTrial') + ': ' + (S.data.trialDays || 15) + ' → ' + d + ' ' + tr('saDaysShort'))}</div><div class="subtle" style="font-size:12.5px;margin:4px 0 10px;">${tr('prTrialNote')}</div><div class="btn-row"><button type="button" class="btn btn-outline" id="pt-no">${tr('cancel')}</button><button type="button" class="btn btn-primary" id="pt-yes">${tr('confirm')}</button></div></div>`;
+    document.getElementById('pt-no').addEventListener('click', ()=>{ cf.innerHTML = ''; });
+    document.getElementById('pt-yes').addEventListener('click', async (e)=>{ const b = e.currentTarget; b.disabled = true;
+      try{ await __saApi('trialSet', {days: d}); showToast(tr('saPlansSaved')); S.data = await __saApi('promosGet'); __prRender(); }catch(ex){ b.disabled = false; err.textContent = __sapErrText(ex); } });
+  });
+}
 async function openSaPayments(){
   if(!(window.__saUnlocked || (typeof isSuperAdmin === 'function' && isSuperAdmin()))) return;
   payEnsureStyle();
@@ -18704,8 +19290,10 @@ function renderSuperAdmin(){
   const container = document.getElementById('view-container');
   container.innerHTML = `
     <div class="back-row"><button id="superadmin-back-btn">${ICONS.arrowLeft}</button><span class="t-title">★ ${tr('superAdminPanel')}</span></div>
+    <div id="sa-dash"></div>
     <div class="btn-row" style="margin-bottom:10px;"><button class="btn btn-outline btn-sm" id="sa-change-pin">${icI('key')} ${tr('saChangePin')}</button><button class="btn btn-ghost btn-sm" id="sa-lock">${icI('lock')} ${tr('saLockBtn')}</button></div>
     <div style="margin-bottom:10px;"><button type="button" class="btn btn-accent btn-block btn-sm" onclick="openSaPayments()">${icI('creditCard')} ${tr('payHistoryTitle')}</button></div>
+    <div style="margin-bottom:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,12em),1fr));gap:8px;"><button type="button" class="btn btn-outline btn-block btn-sm" id="sa-plans-btn" onclick="openSaPlans()">${icI('tag')} ${tr('saPlansTitle')}</button><button type="button" class="btn btn-outline btn-block btn-sm" id="sa-promos-btn" onclick="openSaPromos()">${icI('gift')} ${tr('prTitle')}</button></div>
     <div style="margin-bottom:10px;"><button type="button" class="btn btn-outline btn-block btn-sm" id="sa-sd-release">${icI('phone')} ${tr('sdSaRelease')}</button></div>
     <div class="search-bar">${ICONS.search}<input type="text" id="superadmin-search" placeholder="${tr('search')}"></div>
     <div id="sa-inbox" style="margin:10px 0;"></div>
@@ -18713,6 +19301,7 @@ function renderSuperAdmin(){
     <div id="superadmin-list"><div class="empty-state">…</div></div>
   `;
   renderSaInbox();
+  try{ renderSaDash(false); }catch(e){}   /* fix203-dash */
   { const _sdr = document.getElementById('sa-sd-release'); if(_sdr) _sdr.addEventListener('click', ()=>__sdSaReleaseModal()); }   /* fix114-debts */
   document.getElementById('superadmin-back-btn').addEventListener('click', ()=>{ window.__saUnlocked = false; state.view='settings'; state.settingsCategory=null; renderAll(); }); /* fix79 */
   { const _cp = document.getElementById('sa-change-pin'); if(_cp) _cp.addEventListener('click', ()=>__saPinModal(true)); const _lk = document.getElementById('sa-lock'); if(_lk) _lk.addEventListener('click', ()=>saLockPanel()); }
@@ -18741,6 +19330,7 @@ async function renderSuperAdminList(){
     const snap = await saDb().collection('businesses').get();
     const unreadIds = new Set((state.saInbox||[]).map(x=>x.bizId));
     let all = snap.docs.map(doc=>({id:doc.id, d:doc.data()||{}, unread: unreadIds.has(doc.id)}));
+    window.__saBizCache = all.map(x=>({id: x.id, d: x.d}));   /* fix203-promo: aksiya/sovg'a uchun do'kon tanlash */
     all.forEach(x=>{ x.st = saStatusOf(x.d); });
     const cnt = {all: all.length, paid: all.filter(x=>x.st.key==='paid'||x.st.key==='paidSoon').length, trial: all.filter(x=>x.st.key==='trial'||x.st.key==='trialSoon').length, expired: all.filter(x=>x.st.key==='expired').length, soon: all.filter(x=>x.st.key==='paidSoon'||x.st.key==='trialSoon').length};
     const f = state.saFilter || 'all';
@@ -18877,12 +19467,12 @@ async function renderSuperAdminList(){
       btn.addEventListener('click', ()=>confirmDialog(tr('saConfirmExtend').replace('{plan}', planLabelFor(btn.dataset.plan)), async ()=>{ try{ /* fix79 */
         const bizId = btn.dataset.extend;
         const plan = btn.dataset.plan;
-        const days = SUBSCRIPTION_PLANS[plan].days;
+        const months = (livePlan(plan) || PLANS_FALLBACK[plan] || {months: 1}).months;   /* fix203-plans: to'lov kabi kalendar oy */
         const bizRef = saDb().collection('businesses').doc(bizId);
         const snap2 = await bizRef.get();
         const cur = snap2.data() || {};
         const base = (cur.subscriptionExpiresAt && new Date(cur.subscriptionExpiresAt) > new Date()) ? new Date(cur.subscriptionExpiresAt) : new Date();
-        const newExpiry = new Date(base.getTime() + days*86400000);
+        const newExpiry = new Date(__addMonthsUtc(base.getTime(), months));
         await bizRef.set({subscriptionPlan:plan, subscriptionExpiresAt:newExpiry.toISOString(), subscriptionExpiresAtMs:newExpiry.getTime()}, {merge:true});
         showToast(tr('savedSuccess'));
         renderSuperAdminList();
