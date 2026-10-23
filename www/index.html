@@ -965,6 +965,41 @@
   .product-card.no-img:has(.cart-qty-badge) .product-name{padding-right:14px;}
   .tg-hd{flex-wrap:wrap;} .tg-ht{flex:1 1 9em;}
   .co-summary:not(.co-extras){flex-wrap:wrap;row-gap:2px;} .co-summary .co-val{flex:1 1 6em;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;}
+  /* fix201-pay: to'lov oynasi — bir xil radius va oraliq, qo'shimchalar qatorlari, Tasdiqlash doim pastda */
+  .co-v2 .toggle-group{border-radius:14px;margin-bottom:10px;}
+  .co-v2 .co-summary{border-radius:14px;margin:0 0 10px;}
+  .co-v2 .co-body.open{margin:-2px 0 12px;}
+  .co-v2 .co-cr-hint{margin:-4px 4px 10px;font-size:12.5px;color:var(--ink-soft);line-height:1.35;}
+  .co-v2 .co-link{display:inline;border:none;background:none;padding:0;margin:0;color:var(--accent-dark);font-weight:800;text-decoration:underline;font-size:inherit;cursor:pointer;width:auto;height:auto;min-height:0;box-shadow:none;}
+  .co-summary.co-extras.cx-v2{background:var(--surface-soft);border:1px solid var(--line);color:var(--ink-soft);animation:none;padding:11px 12px;}
+  .co-summary.co-extras.cx-v2 .cx-txt{color:var(--ink-soft) !important;font-weight:700 !important;}
+  .co-summary.co-extras.cx-v2 .cx-ics i{background:var(--surface) !important;width:24px;height:24px;border-radius:8px;}
+  .co-summary.co-extras.cx-v2 .cx-ics i svg{width:14px;height:14px;color:var(--ink-faint);}
+  .co-summary.co-extras.cx-v2 .co-act{background:transparent;color:var(--ink-faint) !important;}
+  .co-summary.co-extras.cx-v2.cx-has{background:var(--accent-bg);border-color:rgba(47,111,237,.35);}
+  .co-summary.co-extras.cx-v2.cx-has .cx-txt{color:var(--accent-dark) !important;font-weight:800 !important;}
+  .co-summary.co-extras.cx-v2.cx-has .cx-ics i svg{color:var(--accent-dark);}
+  .cx-item{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin:8px 0 0;overflow:hidden;}
+  .cx-item.on{border-color:rgba(47,111,237,.35);background:var(--accent-bg);}
+  .cx-line{display:flex;align-items:stretch;}
+  .cx-row{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:10px;padding:9px 12px;border:none;background:transparent;color:var(--ink);text-align:left;font-size:14px;font-weight:700;cursor:pointer;width:auto;min-height:46px;border-radius:0;box-shadow:none;}
+  .cx-ic{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--surface-soft);color:var(--ink-soft);flex-shrink:0;}
+  .cx-item.on .cx-ic{background:var(--surface);color:var(--accent-dark);}
+  .cx-ic svg{width:15px;height:15px;}
+  .cx-n{flex:1 1 auto;min-width:0;overflow-wrap:break-word;}
+  .cx-v{flex-shrink:0;white-space:nowrap;font-weight:800;color:var(--accent-dark);}
+  .cx-add{color:var(--ink-faint);font-weight:700;}
+  .cx-x{flex:0 0 44px;width:44px;border:none;border-left:1px solid rgba(47,111,237,.18);background:transparent;color:var(--ink-soft);font-size:20px;line-height:1;cursor:pointer;min-height:46px;padding:0;border-radius:0;box-shadow:none;}
+  .cx-cfg{padding:2px 12px 12px;}
+  .cx-chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,7.2em),1fr));gap:6px;margin:0 0 8px;}
+  .cx-chips .fav-chip{width:100%;min-width:0;padding:8px 6px;text-align:center;white-space:normal;overflow-wrap:anywhere;line-height:1.2;}
+  #co-extras-body #bonus-fields .field{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0 0;background:var(--surface);}
+  .co-foot{position:sticky;bottom:calc(-18px - max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));z-index:4;background:var(--surface);margin:12px 0 0;padding:10px 0 calc(18px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));box-shadow:0 -12px 14px -12px rgba(22,35,59,.22);}
+  .co-foot .error-text:empty{display:none;}
+  .co-foot .error-text:not(:empty){margin:0 0 8px;}
+  .co-foot #confirm-sale-btn{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;column-gap:4px;}
+  .co-btn-sum{font-weight:800;white-space:nowrap;}
+  body.money-keypad-open .co-foot{position:static;}
 </style>
 </head>
 <body>
@@ -1665,6 +1700,10 @@ const T = {
   heldCartCurrentAutoHeld:{uz:"Hozirgi savat ham kutishga qo'yildi",ru:"Текущая корзина тоже отложена",en:"Current cart was held too",kk:"Ағымдағы себет те кейінге қалдырылды",ky:"Учурдагы себет да кийинге калтырылды",tg:"Сабади ҷорӣ низ мавқуф гузошта шуд"},
   coCustomer:{uz:"Mijoz",ru:"Клиент",en:"Customer",kk:"Клиент",ky:"Кардар",tg:"Муштарӣ"},
   coChoose:{uz:"tanlash",ru:"выбрать",en:"choose",kk:"таңдау",ky:"тандоо",tg:"интихоб"},
+  coCreditHint:{uz:"Qisman to'lash uchun {mix}ni tanlang",ru:"Для частичной оплаты выберите {mix}",en:"To pay part now, choose {mix}",kk:"Ішінара төлеу үшін {mix} таңдаңыз",ky:"Жарым-жартылай төлөө үчүн {mix} тандаңыз",tg:"Барои пардохти қисман {mix}-ро интихоб кунед"},   /* fix201-pay */
+  cxAdd:{uz:"Qo'shish",ru:"Добавить",en:"Add",kk:"Қосу",ky:"Кошуу",tg:"Илова"},
+  cxDelivery:{uz:"Yetkazib berish",ru:"Доставка",en:"Delivery",kk:"Жеткізу",ky:"Жеткирүү",tg:"Расонидан"},
+  cxBonus:{uz:"Bonus",ru:"Бонус",en:"Bonus",kk:"Бонус",ky:"Бонус",tg:"Бонус"},
   coExtras:{uz:"Chegirma · xizmat haqi · yetkazib berish",ru:"Скидка · сервис · доставка",en:"Discount · service · delivery",kk:"Жеңілдік · сервис · жеткізу",ky:"Арзандатуу · сервис · жеткирүү",tg:"Тахфиф · хизмат · расонидан"},
   exitKeepShift:{uz:"Smenani yopmasdan chiqish",ru:"Выйти, не закрывая смену",en:"Exit without closing shift",kk:"Ауысымды жаппай шығу",ky:"Сменаны жаппай чыгуу",tg:"Баромадан бе пӯшидани смена"},
   exitKeepShiftHint:{uz:"Smena ochiq qoladi, qaytib kirganingizda davom etasiz.",ru:"Смена останется открытой, продолжите после входа.",en:"The shift stays open; continue when you log back in.",kk:"Ауысым ашық қалады, қайта кіргенде жалғастырасыз.",ky:"Смена ачык калат, кайра киргенде улантасыз.",tg:"Смена кушода мемонад, баъди ворид шудан идома медиҳед."},
@@ -4399,7 +4438,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.76';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.77';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -9013,7 +9052,7 @@ function openCheckoutModal(){
   const showOrderType = state.settings.restaurantMode;
 
   function bodyHtml(){
-    return `
+    return `<div class="co-v2">
       <div class="back-row" style="margin-bottom:14px;"><button id="checkout-back-btn">${ICONS.arrowLeft}</button><span class="t-title">${tr('checkout')}</span></div>
       <div class="toggle-group">
         <div class="toggle-opt ${paymentType==='cash'?'active':''}" data-pt="cash"><span class="pt-ic">${paymentTypeIcon('cash')}</span>${tr('cash')}</div>
@@ -9021,6 +9060,7 @@ function openCheckoutModal(){
         ${canSellOnCredit() ? `<div class="toggle-opt ${paymentType==='credit'?'active':''}" data-pt="credit"><span class="pt-ic">${paymentTypeIcon('credit')}</span>${tr('creditUi')}</div>` : ''}
         <div class="toggle-opt ${paymentType==='mixed'?'active':''}" data-pt="mixed"><span class="pt-ic">${icI('shuffle')}</span>${tr('mixPay')}</div>
       </div>
+      <p class="co-cr-hint" id="co-credit-hint" style="${paymentType==='credit'?'':'display:none;'}">${escapeHtml(tr('coCreditHint')).replace('{mix}', '<button type="button" class="co-link" data-go-mix="1">«' + escapeHtml(tr('mixPay')) + '»</button>')}</p>
       ${showOrderType ? `
       <div class="field">
         <label class="field-label">${tr('orderTypeSection')}</label>
@@ -9032,15 +9072,18 @@ function openCheckoutModal(){
       ` : ''}
       <button type="button" class="co-summary" id="co-customer-toggle"><span>${icI('user')} ${tr('coCustomer')}:</span><span class="co-val" id="co-customer-name"></span><span class="co-act" id="co-customer-act"></span></button>
       <div class="co-body" id="co-customer-body"></div>
-      <button type="button" class="co-summary co-extras" id="co-extras-toggle"><span class="cx-ics"><i style="background:#FEE2E2;">${ICONS.tag}</i><i style="background:#EDE9FE;">${ICONS.bell}</i><i style="background:#DBEAFE;">${ICONS.truck}</i></span><span class="co-val cx-txt">${tr('coExtras')}</span><span class="co-act" id="co-extras-act">&#9662;</span></button>
+      <button type="button" class="co-summary co-extras cx-v2" id="co-extras-toggle"><span class="cx-ics">${canApplyDiscount() ? `<i>${ICONS.tag}</i>` : ''}${cxScVisible ? `<i>${ICONS.bell}</i>` : ''}<i>${ICONS.truck}</i></span><span class="co-val cx-txt" id="cx-head-txt">${escapeHtml(cxHeadText())}</span><span class="co-act" id="co-extras-act">&#9662;</span></button>
       <div class="co-body" id="co-extras-body"><div id="credit-fields"></div><div id="charges-fields"></div><div id="bonus-fields"></div></div>
       ${__gftCoHtml()}
+      <div class="co-tot" id="co-totals">   <!-- fix201-pay: tartib — mahsulotlar, aksiya, chegirma, xizmat haqi, yetkazib berish, bonus, sertifikat; faqat 0 bo'lmaganlari -->
       <div class="row"><span class="subtle">${tr('subtotal')}</span><span>${fmt(cartSubtotal())}</span></div>${__pmRowsHtml(__pmCart())}
       ${canApplyDiscount() ? `<div class="row" id="discount-row" style="${discountAmount()>0?'':'display:none;'}"><span class="subtle">${tr('discountLabel')}</span><span id="discount-amount-display">-${fmt(discountAmount())}</span></div>` : ''}
+      <div class="row" id="sc-row" style="${serviceChargeAmount()>0?'':'display:none;'}"><span class="subtle">${tr('serviceCharge')}</span><span id="sc-amount-display">+${fmt(serviceChargeAmount())}</span></div>
+      <div class="row" id="df-row" style="${(Number(deliveryFee)||0)>0?'':'display:none;'}"><span class="subtle">${tr('deliveryFee')}</span><span id="df-amount-display">+${fmt(Number(deliveryFee)||0)}</span></div>
       <div class="row" id="bonus-row" style="${bonusAmount()>0?'':'display:none;'}"><span class="subtle">${tr('bonusUsedLabel')}</span><span id="bonus-amount-display">-${fmt(bonusAmount())}</span></div>
-      <div class="row"><span class="subtle">${tr('serviceCharge')}</span><span id="sc-amount-display">${fmt(serviceChargeAmount())}</span></div>
       <div class="row" id="gft-row" style="display:none;"><span class="subtle" data-gft-l></span><span id="gft-amount-display" style="color:var(--teal);font-weight:700;"></span></div>
       <div class="row" style="border-top:1px solid var(--border);padding-top:12px;margin:6px 0 14px;"><strong>${tr('grandTotal')}</strong><strong id="grand-total-display">${fmt(grandTotal())}</strong></div>
+      </div>
       <div id="cash-tender-block" style="${paymentType==='cash'?'':'display:none;'}margin:-6px 0 14px;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-soft);">
         <label class="field-label">${tr('cashTenderedLabel')}</label>
         <input type="text" inputmode="numeric" id="cf-tendered" placeholder="${fmt(grandTotal())}" value="${tenderedAmount?formatMoneyInputValue(tenderedAmount):''}">
@@ -9052,74 +9095,101 @@ function openCheckoutModal(){
         <div class="row"><span class="subtle" id="split-primary-label">${paymentTypeLabel(paymentType)}</span><span id="split-primary-display">${fmt(Math.max(0, grandTotal()-splitAmount))}</span></div>
         <div class="row"><span class="subtle" id="split-method-label">${splitMethod?paymentTypeLabel(splitMethod):''}</span><strong style="${splitMethod==='credit'?'color:var(--danger);':''}" id="split-amount-display">${fmt(splitAmount)}</strong></div>
       </div>
-      <div id="checkout-error" class="error-text"></div>
-      <button class="btn btn-primary" id="confirm-sale-btn">${tr('confirm')}</button>
+      <div class="co-foot"><div id="checkout-error" class="error-text"></div>
+      <button class="btn btn-primary" id="confirm-sale-btn"><span>${tr('confirm')}</span><span class="co-btn-sum" id="co-btn-total">${grandTotal() > 0 ? ' · ' + fmt(grandTotal()) : ''}</span></button></div>
+      </div>
     `;
   }
+  /* fix201-pay: chegirma, xizmat haqi, yetkazib berish — har biri bitta qator: chapda ikonka + nom, o'ngda qiymat yoki «Qo'shish».
+     Qator bosilsa — ostida sozlash ochiladi; yoqilganda qator rangli, o'ngda «×». Hisob-kitob o'zgaruvchilari avvalgidek. */
+  const cxScVisible = !!(state.settings.restaurantMode || state.settings.serviceChargeDefaultOn || serviceChargeOn);   /* do'konda xizmat haqi ishlatilmasa — ko'rinmaydi */
+  const cxOpen = {disc: false, sc: false, df: false};
+  function cxVal(k){
+    if(k === 'disc') return (discountOn && discountAmount() > 0) ? (discountType === 'percent' ? '−' + discountValue + '%' : '−' + fmt(discountAmount())) : '';
+    if(k === 'sc') return (serviceChargeOn && serviceChargePercent > 0) ? '+' + serviceChargePercent + '%' : '';
+    if(k === 'df') return (deliveryFeeOn && (Number(deliveryFee) || 0) > 0) ? '+' + fmt(Number(deliveryFee) || 0) : '';
+    return '';
+  }
+  function cxHeadText(){
+    const on = [];
+    if(canApplyDiscount() && discountOn && discountAmount() > 0) on.push(tr('discountLabel') + ' ' + (discountType === 'percent' ? discountValue + '%' : fmt(discountAmount())));
+    if(cxScVisible && serviceChargeOn && serviceChargePercent > 0) on.push(tr('serviceCharge') + ' ' + serviceChargePercent + '%');
+    if(deliveryFeeOn && (Number(deliveryFee) || 0) > 0) on.push(tr('cxDelivery') + ' ' + fmt(Number(deliveryFee) || 0));
+    if(bonusAmount() > 0) on.push(tr('cxBonus') + ' ' + fmt(bonusAmount()));
+    if(on.length) return on.join(' · ');
+    if(canApplyDiscount() && cxScVisible) return tr('coExtras');
+    return [canApplyDiscount() ? tr('discountLabel') : '', cxScVisible ? tr('serviceCharge') : '', tr('cxDelivery')].filter(Boolean).join(' · ');
+  }
+  function cxTotals(){
+    const sc = serviceChargeAmount(), df = Number(deliveryFee) || 0;
+    const scR = document.getElementById('sc-row'), dfR = document.getElementById('df-row');
+    if(scR) scR.style.display = sc > 0 ? '' : 'none';
+    if(dfR) dfR.style.display = df > 0 ? '' : 'none';
+    const scD = document.getElementById('sc-amount-display'); if(scD) scD.textContent = '+' + fmt(sc);
+    const dfD = document.getElementById('df-amount-display'); if(dfD) dfD.textContent = '+' + fmt(df);
+    const bt = document.getElementById('co-btn-total'); if(bt){ const g = grandTotal(); bt.textContent = g > 0 ? ' · ' + fmt(g) : ''; }
+  }
+  function cxSync(){
+    const h = document.getElementById('cx-head-txt'); if(h) h.textContent = cxHeadText();
+    const t = document.getElementById('co-extras-toggle');
+    if(t) t.classList.toggle('cx-has', (discountOn && discountAmount() > 0) || (cxScVisible && serviceChargeOn && serviceChargePercent > 0) || (deliveryFeeOn && (Number(deliveryFee) || 0) > 0) || bonusAmount() > 0);
+    ['disc', 'sc', 'df'].forEach(k=>{ const v = document.querySelector('#charges-fields [data-cx="' + k + '"] .cx-v'); if(v){ const x = cxVal(k); v.innerHTML = x ? escapeHtml(x) : '<span class="cx-add">' + escapeHtml(tr('cxAdd')) + '</span>'; } });
+    cxTotals();
+  }
+  function cxRow(k, id, ic, name, on, cfg){
+    const v = cxVal(k);
+    return `<div class="cx-item${on ? ' on' : ''}${on && cxOpen[k] ? ' open' : ''}" data-cx="${k}">
+        <div class="cx-line"><button type="button" class="cx-row" id="${id}"><span class="cx-ic">${ic}</span><span class="cx-n">${name}</span><span class="cx-v">${v ? escapeHtml(v) : '<span class="cx-add">' + escapeHtml(tr('cxAdd')) + '</span>'}</span></button>${on ? `<button type="button" class="cx-x" data-cx-x="${k}" aria-label="×">×</button>` : ''}</div>
+        ${on && cxOpen[k] ? `<div class="cx-cfg">${cfg}</div>` : ''}
+      </div>`;
+  }
   function chargesFieldsHtml(){
-    return `
-      ${canApplyDiscount() ? `
-      <div class="field">
-        <div class="row" style="margin-bottom:${discountOn?'10px':'0'};gap:10px;">
-          <span class="field-label" style="margin-bottom:0;flex-shrink:0;">${tr('discountLabel')}</span>
-          <button class="btn ${discountOn?'btn-accent':'btn-outline'} btn-sm" id="disc-toggle-btn" style="white-space:nowrap;width:auto;flex-shrink:0;">${discountOn ? tr('discountEnabledShort') : tr('addDiscountToggle')}</button>
-        </div>
-        ${discountOn ? `
+    return (canApplyDiscount() ? cxRow('disc', 'disc-toggle-btn', ICONS.tag, tr('discountLabel'), discountOn, `
           <div class="toggle-group" style="margin-bottom:8px;">
             <div class="toggle-opt ${discountType==='percent'?'active':''}" data-disc-type="percent">${tr('discountTypePercent')}</div>
             <div class="toggle-opt ${discountType==='amount'?'active':''}" data-disc-type="amount">${tr('discountTypeAmount')}</div>
           </div>
           ${discountType==='percent'
             ? `<input type="number" id="cf-discount-value" value="${discountValue||''}" placeholder="%">`
-            : `<input type="text" inputmode="numeric" id="cf-discount-value" value="${discountValue?formatMoneyInputValue(discountValue):''}" placeholder="${tr('customAmountLabel')}">`}
-        ` : ''}
-      </div>
-      ` : ''}
-      <div class="field">
-        <div class="row" style="margin-bottom:${serviceChargeOn?'10px':'0'};gap:10px;">
-          <span class="field-label" style="margin-bottom:0;flex-shrink:0;">${tr('serviceCharge')}</span>
-          <button class="btn ${serviceChargeOn?'btn-accent':'btn-outline'} btn-sm" id="sc-toggle-btn" style="white-space:nowrap;width:auto;flex-shrink:0;">${serviceChargeOn ? tr('chargeEnabledShort') : tr('addServiceChargeToggle')}</button>
-        </div>
-        ${serviceChargeOn ? `
-          <div class="fav-row" style="margin-bottom:8px;">
-            ${scPresetsInit.map(p=>`<button class="fav-chip ${!scCustomMode && serviceChargePercent===p?'fav-chip-active':''}" data-sc-preset="${p}">${p}%</button>`).join('')}
-            <button class="fav-chip ${scCustomMode?'fav-chip-active':''}" data-sc-preset="custom">${tr('customPercentLabel')}</button>
+            : `<input type="text" inputmode="numeric" id="cf-discount-value" value="${discountValue?formatMoneyInputValue(discountValue):''}" placeholder="${tr('customAmountLabel')}">`}`) : '')
+      + (cxScVisible ? cxRow('sc', 'sc-toggle-btn', ICONS.bell, tr('serviceCharge'), serviceChargeOn, `
+          <div class="cx-chips">
+            ${scPresetsInit.map(p=>`<button type="button" class="fav-chip ${!scCustomMode && serviceChargePercent===p?'fav-chip-active':''}" data-sc-preset="${p}">${p}%</button>`).join('')}
+            <button type="button" class="fav-chip ${scCustomMode?'fav-chip-active':''}" data-sc-preset="custom">${tr('customPercentLabel')}</button>
           </div>
-          ${scCustomMode ? `<input type="number" id="cf-service-charge-custom" value="${serviceChargePercent||''}" placeholder="%">` : ''}
-        ` : ''}
-      </div>
-      <div class="field">
-        <div class="row" style="margin-bottom:${deliveryFeeOn?'10px':'0'};gap:10px;">
-          <span class="field-label" style="margin-bottom:0;flex-shrink:0;">${tr('deliveryFee')}</span>
-          <button class="btn ${deliveryFeeOn?'btn-accent':'btn-outline'} btn-sm" id="df-toggle-btn" style="white-space:nowrap;width:auto;flex-shrink:0;">${deliveryFeeOn ? tr('chargeEnabledShort') : tr('addDeliveryFeeToggle')}</button>
-        </div>
-        ${deliveryFeeOn ? `
-          <div class="fav-row" style="margin-bottom:8px;">
-            ${dfPresetsInit.map(p=>`<button class="fav-chip ${!dfCustomMode && deliveryFee===p?'fav-chip-active':''}" data-df-preset="${p}">${fmt(p)}</button>`).join('')}
-            <button class="fav-chip ${dfCustomMode?'fav-chip-active':''}" data-df-preset="custom">${tr('customAmountLabel')}</button>
+          ${scCustomMode ? `<input type="number" id="cf-service-charge-custom" value="${serviceChargePercent||''}" placeholder="%">` : ''}`) : '')
+      + cxRow('df', 'df-toggle-btn', ICONS.truck, tr('deliveryFee'), deliveryFeeOn, `
+          <div class="cx-chips">
+            ${dfPresetsInit.map(p=>`<button type="button" class="fav-chip ${!dfCustomMode && deliveryFee===p?'fav-chip-active':''}" data-df-preset="${p}">${fmt(p)}</button>`).join('')}
+            <button type="button" class="fav-chip ${dfCustomMode?'fav-chip-active':''}" data-df-preset="custom">${tr('customAmountLabel')}</button>
           </div>
-          ${dfCustomMode ? `<input type="text" inputmode="numeric" id="cf-delivery-fee-custom" value="${deliveryFee?formatMoneyInputValue(deliveryFee):''}" placeholder="${tr('customAmountLabel')}">` : ''}
-        ` : ''}
-      </div>
-    `;
+          ${dfCustomMode ? `<input type="text" inputmode="numeric" id="cf-delivery-fee-custom" value="${deliveryFee?formatMoneyInputValue(deliveryFee):''}" placeholder="${tr('customAmountLabel')}">` : ''}`);
   }
   function bindChargesFieldEvents(){
-    const rerender = ()=>{
+    const rerender = (focusId)=>{
       document.getElementById('charges-fields').innerHTML = chargesFieldsHtml();
       bindChargesFieldEvents();
       refreshTotals();
+      if(focusId){ const f = document.getElementById(focusId); if(f) try{ f.focus(); }catch(_e){} }
     };
     const discToggle = document.getElementById('disc-toggle-btn');
     if(discToggle) discToggle.addEventListener('click', ()=>{
-      discountOn = !discountOn;
-      if(!discountOn) discountValue = 0;
-      rerender();
+      if(!discountOn){ discountOn = true; cxOpen.disc = true; rerender('cf-discount-value'); }
+      else { cxOpen.disc = !cxOpen.disc; rerender(cxOpen.disc ? 'cf-discount-value' : null); }
     });
+    document.querySelectorAll('#charges-fields [data-cx-x]').forEach(b=>b.addEventListener('click', ()=>{
+      const k = b.dataset.cxX;
+      if(k === 'disc'){ discountOn = false; discountValue = 0; }
+      else if(k === 'sc'){ serviceChargeOn = false; scCustomMode = false; serviceChargePercent = 0; state.settings.serviceChargeDefaultOn = false; saveSettings(); }
+      else if(k === 'df'){ deliveryFeeOn = false; dfCustomMode = false; deliveryFee = 0; state.settings.deliveryFeeDefaultOn = false; saveSettings(); }
+      cxOpen[k] = false;
+      rerender();
+    }));
     document.querySelectorAll('[data-disc-type]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         discountType = btn.dataset.discType;
         discountValue = 0;
-        rerender();
+        rerender('cf-discount-value');
       });
     });
     const discInput = document.getElementById('cf-discount-value');
@@ -9129,41 +9199,43 @@ function openCheckoutModal(){
     });
     const scToggle = document.getElementById('sc-toggle-btn');
     if(scToggle) scToggle.addEventListener('click', ()=>{
-      serviceChargeOn = !serviceChargeOn;
-      scCustomMode = false;
-      serviceChargePercent = serviceChargeOn ? (scPresetsInit[0]||0) : 0;
-      // Whatever the person picks HERE, at checkout, becomes the new
-      // default for every future sale — not just something they have to
-      // separately go set in Settings. Turning it off here means it
-      // stays off next time too, until they turn it on again (here or
-      // in Settings — both write to the same setting).
-      state.settings.serviceChargeDefaultOn = serviceChargeOn;
-      saveSettings();
+      if(!serviceChargeOn){
+        serviceChargeOn = true;
+        scCustomMode = false;
+        serviceChargePercent = scPresetsInit[0]||0;
+        // Kassada tanlangani keyingi sotuvlar uchun ham standart bo'ladi (sozlamadagi bilan bir joy)
+        state.settings.serviceChargeDefaultOn = true;
+        saveSettings();
+        cxOpen.sc = true;
+      } else cxOpen.sc = !cxOpen.sc;
       rerender();
     });
     document.querySelectorAll('[data-sc-preset]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         if(btn.dataset.scPreset==='custom'){ scCustomMode = true; }
         else { scCustomMode = false; serviceChargePercent = parseFloat(btn.dataset.scPreset); }
-        rerender();
+        rerender(scCustomMode ? 'cf-service-charge-custom' : null);
       });
     });
     const scCustomInput = document.getElementById('cf-service-charge-custom');
     if(scCustomInput) scCustomInput.addEventListener('input', (e)=>{ serviceChargePercent = parseFloat(e.target.value) || 0; refreshTotals(); });
     const dfToggle = document.getElementById('df-toggle-btn');
     if(dfToggle) dfToggle.addEventListener('click', ()=>{
-      deliveryFeeOn = !deliveryFeeOn;
-      dfCustomMode = false;
-      deliveryFee = deliveryFeeOn ? (dfPresetsInit[0]||0) : 0;
-      state.settings.deliveryFeeDefaultOn = deliveryFeeOn;
-      saveSettings();
+      if(!deliveryFeeOn){
+        deliveryFeeOn = true;
+        dfCustomMode = false;
+        deliveryFee = dfPresetsInit[0]||0;
+        state.settings.deliveryFeeDefaultOn = true;
+        saveSettings();
+        cxOpen.df = true;
+      } else cxOpen.df = !cxOpen.df;
       rerender();
     });
     document.querySelectorAll('[data-df-preset]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         if(btn.dataset.dfPreset==='custom'){ dfCustomMode = true; }
         else { dfCustomMode = false; deliveryFee = parseFloat(btn.dataset.dfPreset); }
-        rerender();
+        rerender(dfCustomMode ? 'cf-delivery-fee-custom' : null);
       });
     });
     const dfCustomInput = document.getElementById('cf-delivery-fee-custom');
@@ -9177,6 +9249,7 @@ function openCheckoutModal(){
     refreshTotals();
   }
   function creditFieldsHtml(){
+    return '';   /* fix201-pay: eski «Aralash to'lov (2 usulda)» qatori ko'rinmaydi — «Aralash» tab hamma holatni qiladi. Pastdagi kod va doCheckout'dagi eski yo'l (extras.splitMethod) joyida qoldi */
     if(paymentType === 'mixed') return '';   /* fix110-mixpay: aralashda eski 2 usulli bo'lish kerak emas */
     const isCredit = paymentType === 'credit';
     const custRequired = creditInvolved();
@@ -9252,10 +9325,11 @@ function openCheckoutModal(){
     const openC = false; /* fix93: mijoz tezkor oynada tanlanadi */
     body.classList.toggle('open', openC); tgl.classList.toggle('open', openC); tgl.classList.toggle('required', required && !cust && selectedCustomerId!=='__new__');
     document.getElementById('co-customer-act').innerHTML = cust ? icI('edit') : ('+' + icI('user') + ' ' + tr('coChoose'));
-    const openE = coExtrasOpen!=null ? coExtrasOpen : (discountOn || serviceChargeOn || deliveryFeeOn || bonusRedeemAmount>0 || splitOn);
+    const openE = coExtrasOpen!=null ? coExtrasOpen : splitOn;   /* fix201-pay: yopiq turadi — tanlanganlar sarlavhada ko'rinadi */
     document.getElementById('co-extras-body').classList.toggle('open', openE);
     document.getElementById('co-extras-toggle').classList.toggle('open', openE);
     document.getElementById('co-extras-act').innerHTML = openE ? '&#9652;' : '&#9662;';
+    try{ cxSync(); }catch(_e){}   /* fix201-pay */
   }
   function bindCheckoutSectionToggles(){
     const ct = document.getElementById('co-customer-toggle');
@@ -9267,7 +9341,7 @@ function openCheckoutModal(){
     try{ __gftCoSync(); }catch(_e){}   /* fix140-gift */
     updateChangeDue();
     updateCheckoutSummaries();
-    document.getElementById('sc-amount-display').textContent = fmt(serviceChargeAmount());
+    cxTotals();   /* fix201-pay: xizmat haqi va yetkazib berish qatorlari — faqat 0 bo'lmasa */
     document.getElementById('grand-total-display').textContent = fmt(grandTotal());
     const discRow = document.getElementById('discount-row');
     if(discRow){
@@ -9352,6 +9426,7 @@ function openCheckoutModal(){
         if(paymentType === 'mixed'){ splitOn = false; splitAmount = 0; }   /* fix110-mixpay */
         document.querySelectorAll('#modal-root [data-pt]').forEach(o=>o.classList.remove('active'));
         el.classList.add('active');
+        { const __h = document.getElementById('co-credit-hint'); if(__h) __h.style.display = paymentType==='credit' ? '' : 'none'; }   /* fix201-pay */
         document.getElementById('credit-fields').innerHTML = creditFieldsHtml();
         bindCreditFieldEvents();
         const tb = document.getElementById('cash-tender-block');
@@ -9362,6 +9437,7 @@ function openCheckoutModal(){
       });
     });
     bindTenderEvents();
+    document.querySelectorAll('#modal-root [data-go-mix]').forEach(b=>b.addEventListener('click', ()=>{ const t = document.querySelector('#modal-root [data-pt=mixed]'); if(t) t.click(); }));   /* fix201-pay: «Aralash» ga o'tish */
     document.querySelectorAll('#modal-root [data-ot]').forEach(el=>{
       el.addEventListener('click', ()=>{
         orderType = el.dataset.ot;
@@ -9661,7 +9737,15 @@ async function doCheckout(paymentType, getSelectedCustomerId, extras){
     const currentDebt = (existingCustomerForLimitCheck && existingCustomerForLimitCheck.debt) || 0;
     // Only the portion that's ACTUALLY credit counts against the limit —
     // whether that's the whole sale, or just a split slice of it.
-    if(limit > 0 && (currentDebt + creditAmountPreview) > limit){
+    let __crLim = creditAmountPreview;   /* fix201-pay: bonus ishlatilsa, qarz qismi shuncha kam — limit haqiqiy qarz bo'yicha tekshiriladi */
+    { const __lc = existingCustomerForLimitCheck;
+      const __bp = (state.settings.loyaltyEnabled && __lc && __lc.bonusBalance > 0) ? Math.max(0, Math.min(extras.bonusRedeemAmount || 0, __lc.bonusBalance, discountedSubtotalPreview)) : 0;
+      if(__bp > 0){
+        const __tp2 = rM(totalPreview - __bp);
+        if(__mixPrev){ const __m2 = __mixNormalize(extras.splitParts, __tp2); if(__m2) __crLim = __m2.credit; }
+        else if(paymentType === 'credit'){ __crLim = hasSplitPreview ? Math.max(0, __tp2 - Math.min(splitAmountPreview, __tp2)) : __tp2; }
+      } }
+    if(limit > 0 && (currentDebt + __crLim) > limit){
       errorEl.textContent = `${tr('creditLimitExceeded')}: ${fmt(limit)}`;
       if(createdNewCustomer){ state.customers = state.customers.filter(c=>c.id!==customerId); }
       return;
