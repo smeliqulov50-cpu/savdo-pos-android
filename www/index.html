@@ -849,7 +849,7 @@
   .md-act .btn{margin:0 !important;width:100%;} .md-act #pdf-creditors-btn{width:auto;padding-left:18px;padding-right:18px;}
   .pu-hint{margin:6px 0 0;font-size:12px;line-height:1.4;}
   .pu-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px 10px;margin:4px 2px 8px;font-size:13px;color:var(--ink);} .pu-head b{font-weight:800;} .pu-head span{color:var(--ink-soft);font-weight:700;}   /* fix199-layout: avval .pu-h */
-  .pu-dock{position:sticky;bottom:calc(64px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0 4px;box-shadow:0 -4px 16px rgba(22,35,59,0.08);}
+  .pu-dock{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:12px 0 4px;box-shadow:0 1px 2px rgba(22,35,59,.04),0 6px 18px rgba(22,35,59,.05);}   /* fix200-mark: avval sticky edi — ekran pastida suzib, to'lov turi va katakchalarni yopardi */
   .pu-dock .row{margin:0 0 8px !important;border-top:none !important;padding-top:0 !important;}
   .st-prog{background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:14px;padding:10px 12px;margin:0 0 10px;}
   .st-prog .t{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;font-weight:800;color:var(--ink);} .st-prog .t span{color:var(--ink-soft);}
@@ -1893,6 +1893,7 @@ const T = {
   scanBarcode:{uz:"Kamera bilan skanerlash",ru:"Сканировать камерой",en:"Scan with camera",kk:"Камерамен сканерлеу",ky:"Камера менен сканерлөө",tg:"Скан бо камера"},
   bcFastTitle:{uz:"Tez skanerlash",ru:"Быстрое сканирование",en:"Fast scanning",kk:"Жылдам сканерлеу",ky:"Тез сканерлөө",tg:"Скани тез"},
   bcFastHint:{uz:"Kodni ramkaga tuting — har bir skaner savatga qo'shiladi. Shtrix-kod ham, QR kod ham o'qiladi.",ru:"Наведите код в рамку — каждый скан добавляется в корзину. Читаются штрих-коды и QR-коды.",en:"Hold the code in the frame — every scan goes into the cart. Barcodes and QR codes both work.",kk:"Кодты жақтауға ұстаңыз — әр сканер себетке қосылады. Штрих-код та, QR код та оқылады.",ky:"Кодду алкакка кармаңыз — ар бир скан себетке кошулат. Штрих-код да, QR код да окулат.",tg:"Кодро дар чорчӯба нигоҳ доред — ҳар скан ба сабад илова мешавад. Штрих-код ва QR-код хонда мешаванд."},
+  bcMarkGtin:{uz:"«Asl belgisi» kodidan shtrix-kod olindi: {code}",ru:"Из кода «Асл белгиси» взят штрихкод: {code}",en:"Barcode taken from the «Asl belgisi» marking code: {code}",kk:"«Асл белгиси» кодынан штрихкод алынды: {code}",ky:"«Асл белгиси» кодунан штрих-код алынды: {code}",tg:"Аз коди «Асл белгиси» штрих-код гирифта шуд: {code}"},   /* fix200-mark */
   bcNotFound:{uz:"Topilmadi: {code}",ru:"Не найдено: {code}",en:"Not found: {code}",kk:"Табылмады: {code}",ky:"Табылган жок: {code}",tg:"Ёфт нашуд: {code}"},
   bcNewProduct:{uz:"Shu kod bilan yangi tovar qo'shish",ru:"Добавить новый товар с этим кодом",en:"Add a new product with this code",kk:"Осы кодпен жаңа тауар қосу",ky:"Ушул код менен жаңы товар кошуу",tg:"Бо ҳамин код моли нав илова кардан"},
   bcNotAdded:{uz:"qo'shilmadi",ru:"не добавлено",en:"not added",kk:"қосылмады",ky:"кошулган жок",tg:"илова нашуд"},
@@ -4398,7 +4399,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.75';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.76';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6098,10 +6099,11 @@ function openBarcodeScanner(onResult, onCancel){
       {facingMode:'environment'},
       {fps:20, videoConstraints: {facingMode: 'environment', width: {ideal: 1280}, height: {ideal: 720}}},
       (decodedText)=>{
-        const code = decodedText.trim();
+        const raw = decodedText.trim(), code = __bcProductCode(raw);   /* fix200-mark: «Asl belgisi» — tovarning shtrix-kodi olinadi */
         stopBarcodeScanner();
         closeModal();
-        onResult(code);
+        if(code !== raw) showToast(tr('bcMarkGtin').replace('{code}', code));
+        onResult(code, raw);
       },
       ()=>{}
     ).catch((err)=>{
@@ -12463,7 +12465,7 @@ function openProductForm(productId, draft){
     const price = parseMoneyInput(document.getElementById('pf-price').value);
     const unit = document.getElementById('pf-unit').value;
     const category = document.getElementById('pf-category').value.trim();
-    const barcode = document.getElementById('pf-barcode').value.trim();
+    const barcode = __bcProductCode(document.getElementById('pf-barcode').value.trim());   /* fix200-mark */
     const costPrice = parseMoneyInput(document.getElementById('pf-cost').value) || 0;
     const supplierName = document.getElementById('pf-supplier-name').value.trim();
     const supplierPhone = document.getElementById('pf-supplier-phone').value.trim();
@@ -12495,14 +12497,14 @@ function openProductForm(productId, draft){
       stock: parseFloat(row.querySelector('.pf-variant-stock').value) || 0,
       wholesalePrice: parseMoneyInput(row.querySelector('.pf-variant-wholesale').value) || 0,
       boxPrice: parseMoneyInput(row.querySelector('.pf-variant-boxprice').value) || 0,
-      barcode: row.querySelector('.pf-variant-barcode') ? __bcNorm(row.querySelector('.pf-variant-barcode').value) : ((matchedVariant && matchedVariant.barcode) || ''),   /* fix198-scan */
-      boxBarcode: row.querySelector('.pf-variant-boxbarcode') ? __bcNorm(row.querySelector('.pf-variant-boxbarcode').value) : ((matchedVariant && matchedVariant.boxBarcode) || '')
+      barcode: row.querySelector('.pf-variant-barcode') ? __bcProductCode(__bcNorm(row.querySelector('.pf-variant-barcode').value)) : ((matchedVariant && matchedVariant.barcode) || ''),   /* fix198-scan, fix200-mark */
+      boxBarcode: row.querySelector('.pf-variant-boxbarcode') ? __bcProductCode(__bcNorm(row.querySelector('.pf-variant-boxbarcode').value)) : ((matchedVariant && matchedVariant.boxBarcode) || '')
       };
     }).filter(v=>v.name);
     const errEl = document.getElementById('pf-error');
     if(!name){ errEl.textContent = tr('fillFields'); return; }
     const __boxBcEl = document.getElementById('pf-box-barcode');   /* fix198-scan: yangi kodlar takrorlanmasin */
-    const boxBarcode = __boxBcEl ? __bcNorm(__boxBcEl.value) : ((editing && editing.boxBarcode) || '');
+    const boxBarcode = __boxBcEl ? __bcProductCode(__bcNorm(__boxBcEl.value)) : ((editing && editing.boxBarcode) || '');   /* fix200-mark */
     {
       const oldCodes = new Set(editing ? [editing.barcode, editing.boxBarcode].concat((editing.variants || []).reduce((a, v)=>a.concat([v && v.barcode, v && v.boxBarcode]), [])).map(__bcNorm).filter(Boolean) : []);
       const mine = [barcode, boxBarcode].concat(variants.reduce((a, v)=>a.concat([v.barcode, v.boxBarcode]), [])).map(__bcNorm).filter(Boolean);
@@ -15801,6 +15803,19 @@ function erClosePickerToEdit(){
 /* fix198-scan: tez skaner (Korzinkadagidek) — kamera yopilmaydi, har skaner savatga; qo'l skaneri (USB/Bluetooth, klaviatura kabi);
    variant va blokning o'z shtrix-kodi; topilmasa — shu kod bilan yangi tovar. Telefonning tez o'qish rejimi (BarcodeDetector) bo'lsa — o'sha. */
 function __bcNorm(c){ return String(c == null ? '' : c).replace(/[\s\u0000-\u001f]/g, ''); }
+/* fix200-mark: «Asl belgisi» (raqamli markirovka, GS1 DataMatrix) — har bir qutining kodi alohida (seriya + kripto),
+   lekin boshida tovarning shtrix-kodi (GTIN) bor: 01 + 14 raqam + 21 seriya ... yoki sigaret qutisi: 14 raqam + 15 belgi (29 ta).
+   Kod tovarlar ichida to'g'ridan-to'g'ri topilmasa, GTIN bo'yicha qidiriladi. Oddiy shtrix-kodlarga tegmaydi. */
+function __bcGtin(c){
+  c = __bcNorm(c).replace(/^\](?:d2|Q3|C1|e0|d1|Q1)/, '');
+  if(c.length < 16) return '';
+  let m = c.match(/^\(01\)(\d{14})/) || c.match(/^01(\d{14})$/) || c.match(/^01(\d{14})(?:21|10|17|11|91|92|93|8005)/);
+  if(m) return m[1];
+  if(c.length === 29 && /^\d{14}/.test(c)) return c.slice(0, 14);
+  return '';
+}
+function __bcShort(g){ return (g && g.length === 14 && g.charAt(0) === '0') ? g.slice(1) : (g || ''); }   /* 0478... (14) -> EAN-13 */
+function __bcProductCode(code){ const g = __bcGtin(code); return g ? __bcShort(g) : code; }   /* tovarga yoziladigan kod: markirovka bo'lsa — GTIN */
 function __bcEq(a, b){
   a = __bcNorm(a); b = __bcNorm(b);
   if(!a || !b) return false;
@@ -15808,8 +15823,14 @@ function __bcEq(a, b){
   if(/^\d+$/.test(a) && /^\d+$/.test(b)) return a.replace(/^0+/, '') === b.replace(/^0+/, '');   /* UPC-A (12) va EAN-13 (0 bilan) bir xil */
   return a.toUpperCase() === b.toUpperCase();
 }
-function __bcFind(code){
+function __bcFind(code){   /* fix200-mark: avval kodning o'zi, topilmasa — «Asl belgisi» ichidagi GTIN */
   code = __bcNorm(code); if(!code) return null;
+  const h = __bcFind0(code); if(h) return h;
+  const g = __bcGtin(code); if(!g) return null;
+  const h2 = __bcFind0(g); if(h2) h2.mark = code;
+  return h2;
+}
+function __bcFind0(code){
   const list = visibleProducts();
   let p = list.find(x=>__bcEq(x.barcode, code)); if(p) return {p: p, v: null, box: false};
   p = list.find(x=>!(x.variants && x.variants.length) && __bcEq(x.boxBarcode, code)); if(p) return {p: p, v: null, box: true};
@@ -15864,7 +15885,7 @@ function __bcScanCfg(){
 function __bcHandle(code, fromScanner){
   code = __bcNorm(code);
   const hit = __bcFind(code);
-  if(!hit){ __bcBeep(false); return {notFound: true, code: code}; }
+  if(!hit){ __bcBeep(false); return {notFound: true, code: __bcProductCode(code)}; }   /* fix200-mark: markirovka bo'lsa — GTIN ko'rsatiladi va yangi tovarga shu yoziladi */
   const r = __bcAdd(hit);
   if(r.picker){
     if(fromScanner) __fscClose();
@@ -15948,6 +15969,17 @@ function openFastScanner(){
     }catch(err){ const e = document.getElementById('fsc-err'); if(e) e.textContent = tr('cameraError'); }
   }, 10);
 }
+/* fix200-mark: mahsulot oynasidagi kod maydoniga qo'l skaneri «Asl belgisi»ni yozsa — o'sha zahoti GTIN ga almashadi (ko'rinib turadi) */
+(function(){
+  if(window.__bcMarkOn) return; window.__bcMarkOn = 1;
+  document.addEventListener('change', function(e){
+    try{
+      const t = e.target; if(!t || !t.matches || !t.matches('#pf-barcode,#pf-box-barcode,.pf-variant-barcode,.pf-variant-boxbarcode')) return;
+      const v = t.value.trim(), c = __bcProductCode(__bcNorm(v));
+      if(c && c !== v && c !== __bcNorm(v)){ t.value = c; showToast(tr('bcMarkGtin').replace('{code}', c)); }
+    }catch(err){}
+  }, true);
+})();
 /* Qo'l skaneri: klaviatura kabi tez yozib Enter bosadi. Sotuv ekranida (maydon tanlanmagan bo'lsa) kod savatga tushadi. */
 (function(){
   if(window.__bcWedgeOn) return; window.__bcWedgeOn = 1;
