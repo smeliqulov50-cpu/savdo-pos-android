@@ -808,9 +808,9 @@
   .tool-row.tr-compact .tool-chip.tc-noic .tool-ic{display:none;}
   .tool-row.tr-compact .tool-chip.tc-sm > span:last-child{font-size:10.5px;letter-spacing:-.1px;}
   /* fix133-pur */
-  .pu-h{cursor:pointer;padding:10px 12px;margin-bottom:8px;}
-  .pu-h .t{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
-  .pu-h .t b{min-width:0;} .pu-h .t strong{white-space:nowrap;}
+  .pu-hist-card{cursor:pointer;padding:10px 12px;margin-bottom:8px;}   /* fix199-layout: avval .pu-h (851-qatordagi .pu-h bilan to'qnashardi) */
+  .pu-hist-card .t{display:flex;justify-content:space-between;gap:2px 10px;align-items:flex-start;flex-wrap:wrap;}
+  .pu-hist-card .t b{flex:1 1 9em;min-width:0;overflow-wrap:break-word;} .pu-hist-card .t strong{white-space:nowrap;margin-left:auto;}
   .pu-tag{display:inline-block;padding:1px 8px;border-radius:999px;background:#fff1e0;color:#9a4b00;font-size:11px;font-weight:800;margin-left:6px;}
   .pu-line{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--v4-line, #e6ebf3);font-size:13px;}
   .pu-line > span:first-child{min-width:0;flex:1;} .pu-line b{white-space:nowrap;}
@@ -848,7 +848,7 @@
   .md-act{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin:0 0 12px;}
   .md-act .btn{margin:0 !important;width:100%;} .md-act #pdf-creditors-btn{width:auto;padding-left:18px;padding-right:18px;}
   .pu-hint{margin:6px 0 0;font-size:12px;line-height:1.4;}
-  .pu-h{display:flex;justify-content:space-between;align-items:baseline;margin:4px 2px 8px;font-size:13px;color:var(--ink);} .pu-h b{font-weight:800;} .pu-h span{color:var(--ink-soft);font-weight:700;}
+  .pu-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px 10px;margin:4px 2px 8px;font-size:13px;color:var(--ink);} .pu-head b{font-weight:800;} .pu-head span{color:var(--ink-soft);font-weight:700;}   /* fix199-layout: avval .pu-h */
   .pu-dock{position:sticky;bottom:calc(64px + max(env(safe-area-inset-bottom, 0px), var(--safe-area-inset-bottom, 0px)));z-index:5;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0 4px;box-shadow:0 -4px 16px rgba(22,35,59,0.08);}
   .pu-dock .row{margin:0 0 8px !important;border-top:none !important;padding-top:0 !important;}
   .st-prog{background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:14px;padding:10px 12px;margin:0 0 10px;}
@@ -929,6 +929,42 @@
   .dp-foot{display:flex;gap:8px;margin-top:12px;}
   .dp-foot button{flex:1;min-height:44px;border-radius:12px;border:none;font:inherit;font-weight:700;font-size:14px;cursor:pointer;background:#eef2f9;color:var(--ink);}
   .dp-foot button.dp-ok{background:var(--accent);color:#fff;}
+  /* ===== fix199-layout: yozuvlar ustma-ust chiqmasin, kesilmasin — umumiy qoidalar (bitta bo'lim) ===== */
+  /* 1. Ikki bolali qator (yorliq + qiymat): yorliq chapda o'raladi, qiymat o'ngda bo'linmaydi; sig'masa qiymat keyingi qatorga tushadi */
+  .row:has(> :nth-child(2):last-child):not(:has(input, select, textarea, .qty-stepper, > .list-item, > .card)){flex-wrap:wrap;column-gap:10px;row-gap:2px;}
+  .row:has(> :nth-child(2):last-child):not(:has(input, select, textarea, .qty-stepper, > .list-item, > .card)) > :first-child:not(svg, img, button, .icon-btn){flex:1 1 7em !important;min-width:0 !important;overflow-wrap:break-word;}
+  .row:has(> :nth-child(2):last-child):not(:has(input, select, textarea, .qty-stepper, > .list-item, > .card)) > :last-child{margin-left:auto;max-width:100%;}
+  /* 2. Ro'yxat kartochkasi: nom chapda (o'raladi), o'ngdagi summa va tugmalar joy yetmasa keyingi qatorga o'tadi */
+  .list-item:not(.settings-menu-grid > .list-item){flex-wrap:wrap;row-gap:6px;}
+  .list-item:not(.settings-menu-grid > .list-item) > .info{flex:1 1 8em;}
+  .list-item:not(.settings-menu-grid > .list-item) > .info ~ :last-child{margin-left:auto;}
+  /* 3. Menyu katakchalari (sozlamalar, hisobotlar): tor ekranda yoki katta shriftda so'z harfma-harf bo'linmasin */
+  @media (max-width:699px){ .settings-menu-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,9.5em),1fr));} }
+  @media (max-width:420px){ .settings-menu-grid .list-item{padding-left:10px;gap:6px;} .settings-menu-grid .list-item .info{gap:6px !important;} .settings-menu-grid .list-item .info span:first-child{width:28px !important;height:28px !important;} }
+  .settings-menu-grid .list-item .name{word-break:normal;overflow-wrap:break-word;}
+  /* 4. Summalar kesilmaydi: ko'rsatkich kartochkalari, hisobot sarlavhasi, bosh sahifa (kerak bo'lsa valyuta keyingi qatorga o'tadi) */
+  .stat-value, .r3-kpi .stat-value, .r3-hero .h-v, .r4-home .v{white-space:normal !important;overflow:visible !important;text-overflow:clip !important;overflow-wrap:normal;line-height:1.2;}
+  .stat-label{overflow-wrap:break-word;}
+  .r3-dayh{flex-wrap:wrap;} .r3-dayh span{margin-left:auto;}
+  .r3-leg{flex-wrap:wrap;} .r3-leg .n{flex:1 1 7em;}
+  @media (max-width:520px){ .r4-share{flex-wrap:wrap;row-gap:3px;} .r4-share .n{flex:1 1 100%;white-space:normal;overflow:visible;} }
+  @media (min-width:900px){ body #side-cart .sc-total{flex-wrap:wrap;column-gap:8px;} body #side-cart .sc-total b{margin-left:auto;} }
+  /* 5. Tugmalar guruhi (to'lov turi, bo'limlar): uzun so'zlar sig'masa keyingi qatorga o'tadi, qirqilmaydi */
+  .toggle-group{flex-wrap:wrap;} .toggle-group > .toggle-opt{min-width:min-content;}
+  .mix-row{flex-wrap:wrap;} .mix-row > span:first-child{width:8em !important;} .mix-row > input{flex:1 1 6em !important;}
+  /* Pul oqimi jadvali (yorliq + naqd + karta): tor ekranda yorliq o'z qatorida, summalar ostida ustun bo'lib turadi */
+  .row.cf-r{flex-wrap:wrap;row-gap:2px;}
+  @media (max-width:560px){ .row.cf-r > :first-child{flex:1 1 100% !important;} .row.cf-r > :first-child:empty{display:none;} .row.cf-r > :not(:first-child){flex:1 1 auto;} }
+  /* Savat paneli (pastdagi): katta shriftda tugmalar keyingi qatorga o'tadi */
+  .cart-bar{flex-wrap:wrap;row-gap:6px;} .cart-bar .left{min-width:0;} .cart-bar > div:last-child{margin-left:auto;} .cart-bar button{flex-shrink:0;white-space:nowrap;}
+  @media (max-width:699px){ .inv-tiles{grid-template-columns:repeat(auto-fill,minmax(min(100%,9em),1fr));} }
+  /* 6. Mayda joylar */
+  .ch-name{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+  .dp-btn span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;}
+  .product-card .product-name{overflow-wrap:anywhere;}
+  .product-card.no-img:has(.cart-qty-badge) .product-name{padding-right:14px;}
+  .tg-hd{flex-wrap:wrap;} .tg-ht{flex:1 1 9em;}
+  .co-summary:not(.co-extras){flex-wrap:wrap;row-gap:2px;} .co-summary .co-val{flex:1 1 6em;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;}
 </style>
 </head>
 <body>
@@ -4362,7 +4398,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.74';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.75';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6041,7 +6077,7 @@ function openBarcodeScanner(onResult, onCancel){
       <div id="qr-error" class="error-text" style="margin-top:10px;"></div>
       <button class="btn btn-outline btn-block" style="margin-top:12px;" id="scan-cancel-btn">${tr('cancel')}</button>
     </div>
-  `, {center:true});
+  `, {center:true, noClose:true});   /* fix199-layout: o'z × tugmasi bor (kamerani to'xtatadi) — ikkinchi × kerak emas */
   function doCancel(){
     stopBarcodeScanner();
     closeModal();
@@ -15886,7 +15922,7 @@ function openFastScanner(){
       <div id="fsc-sum" class="fsc-sum"></div>
       <button class="btn btn-primary btn-block" style="margin-top:12px;" id="fsc-done" type="button">${tr('bcDone')}</button>
     </div>
-  `, {center: true});
+  `, {center: true, noClose: true});   /* fix199-layout: ikkinchi × yo'q */
   const S = __fsc = {sc: null, last: '', lastT: 0, busyT: 0, fitT: 0};
   __fscFit(); S.fitT = setInterval(()=>{ if(__fsc === S) __fscFit(); }, 300);
   try{ const AC = window.AudioContext || window.webkitAudioContext; if(AC && !window.__bcAC) window.__bcAC = new AC(); }catch(e){}
@@ -17352,10 +17388,10 @@ function renderReportsCategory(container, cat){
     const [cy, cm] = state.cfMonth.split('-').map(Number);
     const D = __cfCalc(state.cfMonth), W = __cfWhere();
     const monthName = appMonthName(new Date(cy, cm-1, 1));
-    const r2 = (l, a, b, opts)=>{ opts = opts || {}; const sg = opts.neg ? '−' : '+'; const c = opts.neg ? 'var(--danger)' : 'var(--teal)'; return `<div class="row" style="padding:7px 0;border-bottom:1px solid var(--line);gap:8px;${opts.bold?'font-weight:800;':''}"><span style="flex:1;min-width:0;${opts.bold?'':'font-size:13px;'}">${l}</span><span style="white-space:nowrap;text-align:right;min-width:92px;${opts.bold?'':'font-size:13px;'}color:${a?c:'var(--ink-faint)'};">${a ? sg + fmt(a) : '—'}</span><span style="white-space:nowrap;text-align:right;min-width:92px;${opts.bold?'':'font-size:13px;'}color:${b?c:'var(--ink-faint)'};">${b ? sg + fmt(b) : '—'}</span></div>`; };
-    const head = `<div class="row" style="padding:4px 0 6px;gap:8px;"><span style="flex:1;"></span><span class="subtle" style="min-width:92px;text-align:right;font-size:11.5px;font-weight:700;">${tr('cfCash')}</span><span class="subtle" style="min-width:92px;text-align:right;font-size:11.5px;font-weight:700;">${tr('cfBank')}</span></div>`;
+    const r2 = (l, a, b, opts)=>{ opts = opts || {}; const sg = opts.neg ? '−' : '+'; const c = opts.neg ? 'var(--danger)' : 'var(--teal)'; return `<div class="row cf-r" style="padding:7px 0;border-bottom:1px solid var(--line);gap:8px;${opts.bold?'font-weight:800;':''}"><span style="flex:1;min-width:0;${opts.bold?'':'font-size:13px;'}">${l}</span><span style="white-space:nowrap;text-align:right;min-width:92px;${opts.bold?'':'font-size:13px;'}color:${a?c:'var(--ink-faint)'};">${a ? sg + fmt(a) : '—'}</span><span style="white-space:nowrap;text-align:right;min-width:92px;${opts.bold?'':'font-size:13px;'}color:${b?c:'var(--ink-faint)'};">${b ? sg + fmt(b) : '—'}</span></div>`; };
+    const head = `<div class="row cf-r" style="padding:4px 0 6px;gap:8px;"><span style="flex:1;"></span><span class="subtle" style="min-width:92px;text-align:right;font-size:11.5px;font-weight:700;">${tr('cfCash')}</span><span class="subtle" style="min-width:92px;text-align:right;font-size:11.5px;font-weight:700;">${tr('cfBank')}</span></div>`;
     const netC = rM(D.inCash - D.outCash), netB = rM(D.inBank - D.outBank);
-    const netRow = (l, a, b)=>`<div class="row" style="padding:8px 0;gap:8px;font-weight:800;"><span style="flex:1;">${l}</span><span style="white-space:nowrap;text-align:right;min-width:92px;color:${a>=0?'var(--teal)':'var(--danger)'};">${a<0?'−':''}${fmt(Math.abs(a))}</span><span style="white-space:nowrap;text-align:right;min-width:92px;color:${b>=0?'var(--teal)':'var(--danger)'};">${b<0?'−':''}${fmt(Math.abs(b))}</span></div>`;
+    const netRow = (l, a, b)=>`<div class="row cf-r" style="padding:8px 0;gap:8px;font-weight:800;"><span style="flex:1;">${l}</span><span style="white-space:nowrap;text-align:right;min-width:92px;color:${a>=0?'var(--teal)':'var(--danger)'};">${a<0?'−':''}${fmt(Math.abs(a))}</span><span style="white-space:nowrap;text-align:right;min-width:92px;color:${b>=0?'var(--teal)':'var(--danger)'};">${b<0?'−':''}${fmt(Math.abs(b))}</span></div>`;
     const wrow = (l, v, sub)=>`<div class="row" style="padding:7px 0;border-bottom:1px solid var(--line);gap:10px;"><span style="flex:1;min-width:0;font-size:13px;">${l}${sub ? `<div class="subtle" style="font-size:11px;">${sub}</div>` : ''}</span><strong style="white-space:nowrap;">${fmt(v)}</strong></div>`;
     container.innerHTML = `
       ${reportsBackHeader(tr('cfReport'))}
@@ -17758,7 +17794,7 @@ function renderPurchase(){
       <div class="field"><label class="field-label">${tr('puSupplier')}</label><input type="text" id="pu-supplier" autocomplete="off" value="${escapeHtml(purchaseDraft.supplier)}"><div class="pu-sugg" id="pu-sugg"></div><datalist id="pu-supplier-list">${suppliers.map(n=>`<option value="${escapeHtml(n)}">`).join('')}</datalist></div>
       <div class="field"><label class="field-label">${tr('puNote')}</label><input type="text" id="pu-note" value="${escapeHtml(purchaseDraft.note)}"></div>
     </div>
-    <div class="pu-h"><b>${tr('puItemsH')}</b><span>${purchaseDraft.items.length ? escapeHtml(tr('puItemsCount').replace('{n}', purchaseDraft.items.length)) : ''}</span></div>
+    <div class="pu-head"><b>${tr('puItemsH')}</b><span>${purchaseDraft.items.length ? escapeHtml(tr('puItemsCount').replace('{n}', purchaseDraft.items.length)) : ''}</span></div>
     <div id="pu-items">${purchaseDraft.items.length ? purchaseDraft.items.map((it,i)=>`
       <div class="card" style="padding:10px 12px;margin-bottom:8px;">
         <div class="row" style="gap:8px;align-items:center;"><div style="flex:1;min-width:0;font-weight:800;">${escapeHtml(it.name)}</div><button class="icon-btn" data-pu-del="${i}" style="color:var(--danger);">${ICONS.trash}</button></div>
@@ -17878,7 +17914,7 @@ function renderWriteOff(){
         <div class="r3-chips" id="wo-reason" style="flex-wrap:wrap;">${WO_REASONS.map(([id, k])=>`<button type="button" class="r3-chip ${woDraft.reason === id ? 'on fav-chip-active' : ''}" data-wo-reason="${id}">${tr(k)}</button>`).join('')}</div></div>
       <div class="field"><label class="field-label">${tr('woNote')}</label><input type="text" id="wo-note" value="${escapeHtml(woDraft.note)}"></div>
     </div>
-    <div class="pu-h"><b>${tr('puItemsH')}</b><span>${woDraft.items.length ? escapeHtml(tr('puItemsCount').replace('{n}', woDraft.items.length)) : ''}</span></div>
+    <div class="pu-head"><b>${tr('puItemsH')}</b><span>${woDraft.items.length ? escapeHtml(tr('puItemsCount').replace('{n}', woDraft.items.length)) : ''}</span></div>
     <div id="wo-items">${woDraft.items.length ? woDraft.items.map((it, i)=>`
       <div class="card" style="padding:10px 12px;margin-bottom:8px;">
         <div class="row" style="gap:8px;align-items:center;"><div style="flex:1;min-width:0;font-weight:800;">${escapeHtml(it.name)}</div><span class="subtle" style="font-size:11.5px;white-space:nowrap;">${tr('stock')}: ${it.stock}</span><button class="icon-btn" data-wo-del="${i}" style="color:var(--danger);">${ICONS.trash}</button></div>
@@ -22399,7 +22435,7 @@ function __puHistDraw(){
   const q = __puH.q.trim().toLowerCase();
   const all = __puBranchList().filter(d=>!q || String(d.note || '').toLowerCase().indexOf(q) >= 0 || String(d.supplier || '').toLowerCase().indexOf(q) >= 0 || (d.items || []).some(it=>String(it.name || '').toLowerCase().indexOf(q) >= 0));
   const list = all.slice(0, __puH.lim);
-  box.innerHTML = list.length ? list.map(d=>{ const rs = __puRetSum(d); return `<div class="card pu-h" data-pu-open="${escapeHtml(d.id)}">
+  box.innerHTML = list.length ? list.map(d=>{ const rs = __puRetSum(d); return `<div class="card pu-hist-card" data-pu-open="${escapeHtml(d.id)}">
       <div class="t"><b>${escapeHtml(d.supplier || '—')}${rs ? `<span class="pu-tag">${escapeHtml(tr('puReturned'))}: ${escapeHtml(fmt(rs))}</span>` : ''}</b><strong>${fmt(d.total || 0)}</strong></div>
       ${d.note ? `<div style="font-size:12.5px;font-weight:700;margin-top:2px;">${escapeHtml(tr('puDoc'))}: ${escapeHtml(d.note)}</div>` : ''}
       <div class="subtle" style="font-size:11.5px;margin-top:2px;">${escapeHtml(fmtDateTime(d.date))} · ${escapeHtml(tr('puItemsCount').replace('{n}', (d.items || []).length))} · ${escapeHtml(__puPayLabel(d.payMode))}</div>
@@ -22816,7 +22852,7 @@ function __soEditor(c, o){
       ${o.status === 'partial' ? `<button class="btn btn-outline btn-block" id="so-finish">${escapeHtml(tr('soFinish'))}</button>` : ''}
       ${open ? `<button class="btn btn-outline btn-block" id="so-cancel" style="color:var(--danger);border-color:var(--danger);">${escapeHtml(tr('soCancel'))}</button>` : ''}
     </div>
-    ${linked.length ? `<h3 class="sub-title" style="margin-top:16px;">${escapeHtml(tr('soLinked'))}</h3>${linked.map(d=>`<div class="card pu-h" data-pu-open="${escapeHtml(d.id)}"><div class="t"><b>${escapeHtml(fmtDateTime(d.date))}</b><strong>${fmt(d.total || 0)}</strong></div><div class="subtle" style="font-size:11.5px;">${escapeHtml(tr('puItemsCount').replace('{n}', (d.items || []).length))} · ${escapeHtml(__puPayLabel(d.payMode))}</div></div>`).join('')}` : ''}
+    ${linked.length ? `<h3 class="sub-title" style="margin-top:16px;">${escapeHtml(tr('soLinked'))}</h3>${linked.map(d=>`<div class="card pu-hist-card" data-pu-open="${escapeHtml(d.id)}"><div class="t"><b>${escapeHtml(fmtDateTime(d.date))}</b><strong>${fmt(d.total || 0)}</strong></div><div class="subtle" style="font-size:11.5px;">${escapeHtml(tr('puItemsCount').replace('{n}', (d.items || []).length))} · ${escapeHtml(__puPayLabel(d.payMode))}</div></div>`).join('')}` : ''}
     ${draft ? `<div style="margin-top:22px;">${dangerZoneHtml(tr('soDelete'), '', 'so-del')}</div>` : ''}`;
   const rerender = ()=>renderSupply();
   document.getElementById('so-ed-back').addEventListener('click', ()=>{ state.__soEdit = null; renderSupply(); });
