@@ -702,6 +702,12 @@
   .cust-actions .btn{margin:0 !important;}
   .cust-actions .icon-round{width:46px;height:46px;border-radius:14px;flex-shrink:0;}
   #side-cart{display:none;}
+  @media (min-width:900px){   /* fix197-cartname: o'ng savatda nom to'liq — 1-qatorda nom va narx, 2-qatorda miqdor va jami */
+    body #side-cart .sc-line{flex-wrap:wrap;row-gap:6px;}
+    body #side-cart .sc-line .nm{flex:1 1 100%;}
+    body #side-cart .sc-line .nm b{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.3;}
+    body #side-cart .sc-line .sc-sum{margin-left:auto;}
+  }
   @media (min-width:900px){
     body.side-cart-on #view-container{padding-right:356px !important;}
     #side-cart{display:flex;flex-direction:column;position:absolute;right:12px;width:332px;background:#fff;border:1px solid var(--v4-line, #e6ebf3);border-radius:18px;box-shadow:0 6px 22px rgba(22,35,59,.08);z-index:20;overflow:hidden;}
@@ -4332,7 +4338,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.72';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.73';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -8548,7 +8554,7 @@ function renderCartModalContent(){
     else { basePrice = v ? v.price : p.price; }
     const edited = c.priceOverride!=null && c.priceOverride!==basePrice;
     const key = cartLineKey(c);
-    const label = c.saleMode==='box' ? `${escapeHtml(p.name)} (${escapeHtml(c.boxLabel||tr('boxDefaultLabel'))})` : (c.priceTier==='wholesale' ? `${escapeHtml(p.name)} (${tr('wholesaleModeShort')})` : (v ? `${escapeHtml(p.name)} — ${escapeHtml(v.name)}` : escapeHtml(p.name)));
+    const label = __cartLineLabelHtml(c, p, v, true);   /* fix197-cartname: variant nomi (Gazli / Gazsiz) blok va ulgurjida ham */
     return `<div class="row cart-line">
       <div style="flex:1;min-width:0;">
         <div style="font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px;">${label}${c.isTakeaway?`<span class="badge badge-clear" style="font-size:10px;">${icI('bag')} ${tr('orderTypeTakeaway')}</span>`:''}</div>
@@ -8680,7 +8686,7 @@ function openQtyKeypad(key){
   if(!c || !p) return;
   const v = getVariant(p, c.variantId);
   const maxStock = maxQtyForCartLine(c, p);
-  const label = c.saleMode==='box' ? `${escapeHtml(p.name)} (${escapeHtml(c.boxLabel||tr('boxDefaultLabel'))})` : (v ? `${escapeHtml(p.name)} — ${escapeHtml(v.name)}` : escapeHtml(p.name));
+  const label = __cartLineLabelHtml(c, p, v, false);   /* fix197-cartname */
   const stockUnitLabel = c.saleMode==='box' ? (c.boxLabel||tr('boxDefaultLabel')) : unitLabel(p.unit);
   let entered = String(c.qty);
   let freshQty = true;
@@ -8725,13 +8731,20 @@ function openQtyKeypad(key){
   draw();
 }
 
+/* fix197-cartname: savat qatori nomi — tovar, variant (Gazli / Gazsiz), blok yoki ulgurji belgisi; hammasi to'liq ko'rinadi */
+function __cartLineLabelHtml(c, p, v, withTier){
+  let s = escapeHtml(p.name) + (v && v.name ? ' — ' + escapeHtml(v.name) : '');
+  if(c.saleMode === 'box') s += ' (' + escapeHtml(c.boxLabel || tr('boxDefaultLabel')) + ')';
+  else if(withTier && c.priceTier === 'wholesale') s += ' (' + tr('wholesaleModeShort') + ')';
+  return s;
+}
 function openPriceEditModal(key){
   const c = activeCart().find(x=>cartLineKey(x)===key);
   if(!c){ try{ if(document.querySelector('#modal-root [data-act]')) renderCartModalContent(); }catch(e){} return; } /* fix98-taps */
   const p = state.products.find(pr=>pr.id===c.productId);
   if(!c || !p) return;
   const v = getVariant(p, c.variantId);
-  const label = c.saleMode==='box' ? `${escapeHtml(p.name)} (${escapeHtml(c.boxLabel||tr('boxDefaultLabel'))})` : (c.priceTier==='wholesale' ? `${escapeHtml(p.name)} (${tr('wholesaleModeShort')})` : (v ? `${escapeHtml(p.name)} — ${escapeHtml(v.name)}` : escapeHtml(p.name)));
+  const label = __cartLineLabelHtml(c, p, v, true);   /* fix197-cartname */
   openModal(`
     <div class="modal-title">${tr('editPrice')} — ${label}</div>
     <div class="field"><label class="field-label">${tr('customPrice')}</label><input type="text" inputmode="numeric" id="pe-price" value="${formatMoneyInputValue(cartItemPrice(c,p))}"></div>
