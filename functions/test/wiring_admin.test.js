@@ -27,3 +27,13 @@ test('adminApi: e\'lon qilingan, cors, maxfiy qiymat yo\'q; tokensiz/GET — rad
   const a = res(); await fns.adminApi({ method: 'GET', get: () => '' }, a); assert.equal(a.code, 405);
   const b = res(); await fns.adminApi({ method: 'POST', get: () => '', body: {} }, b); assert.equal(b.code, 401);
 });
+
+/* fix205-google: authGuard — maxfiy qiymatsiz, cors, POST va token majburiy */
+test('authGuard: e\'lon qilingan, cors, maxfiy qiymat yo\'q; tokensiz/GET — rad', async () => {
+  assert.equal(typeof fns.authGuard, 'function');
+  assert.equal(fns.authGuard.__opts.cors, true);
+  assert.ok(!fns.authGuard.__opts.secrets || fns.authGuard.__opts.secrets.length === 0);
+  const res = () => { const r = { code: 0, body: null, status(c) { r.code = c; return r; }, json(b) { r.body = b; return r; } }; return r; };
+  const a = res(); await fns.authGuard({ method: 'GET', get: () => '' }, a); assert.equal(a.code, 405);
+  const b = res(); await fns.authGuard({ method: 'POST', get: () => '', body: {} }, b); assert.equal(b.code, 401);
+});

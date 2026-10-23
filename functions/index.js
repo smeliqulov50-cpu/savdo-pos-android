@@ -246,6 +246,31 @@ exports.planQuote = onRequest({ cors: true }, async function (req, res) {
   }
 });
 
+/* fix205-google: Google (va keyin Telegram) bilan kirgandan keyin — do'kon ochilishidan oldin tekshiruv: ikkinchi akkaunt/bo'sh do'kon ochilmasin */
+const __AUTHG = require('./src/auth/guard');
+exports.authGuard = onRequest({ cors: true }, async function (req, res) {
+  try {
+    if (req.method !== 'POST') { res.status(405).json({ ok: false, code: 'method-not-allowed' }); return; }
+    const m = /^Bearer\s+(.+)$/i.exec(req.get('Authorization') || '');
+    if (!m) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    let decoded;
+    try { decoded = await __fbAdmin.auth().verifyIdToken(m[1]); }
+    catch (e) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; }
+    const A = __fbAdmin.auth();
+    const r = await __AUTHG.checkAccount({
+      db: __fbAdmin.firestore(), nowMs: nowMs,
+      getUserByEmail: async function (em) { try { const u = await A.getUserByEmail(em); return { uid: u.uid }; } catch (e) { return null; } },
+      getUser: async function (uid) { const u = await A.getUser(uid); return { uid: u.uid, creationMs: Date.parse((u.metadata && u.metadata.creationTime) || '') || 0, providers: (u.providerData || []).map(function (p) { return p.providerId; }) }; },
+      deleteUser: async function (uid) { await A.deleteUser(uid); }
+    }, decoded.uid, decoded.email || '');
+    if (r.status === 'error') { res.status(400).json({ ok: false, code: r.code }); return; }
+    res.status(200).json(Object.assign({ ok: true }, r));
+  } catch (e) {
+    console.error('authGuard xatosi', e);
+    res.status(500).json({ ok: false, code: 'internal' });
+  }
+});
+
 /* Server qo'yilishidan oldingi mijozlarni bir marta indeksga yozadi (keyin har soatda faqat 1 ta belgini o'qib chiqadi) */
 exports.sharedDebtBackfill = onSchedule({ schedule: 'every 60 minutes', timeZone: 'Asia/Tashkent', timeoutSeconds: 540 }, async function () {
   try {

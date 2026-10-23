@@ -999,6 +999,21 @@
   .co-foot #confirm-sale-btn{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;column-gap:4px;}
   .co-btn-sum{font-weight:800;white-space:nowrap;}
   body.money-keypad-open .co-foot{position:static;}
+  /* fix205-google */
+  .au-soc.busy{opacity:.6;pointer-events:none;}
+  .au-title-sm{font-size:22px;}
+  .au-acct{text-align:center;font-weight:800;color:var(--accent-dark);margin:-6px 0 12px;word-break:break-all;}
+  .au-gt-hint{text-align:center;margin:10px 0 0;line-height:1.4;}
+  .am-card{padding:4px 14px;}
+  .am-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);}
+  .am-row:last-child{border-bottom:none;}
+  .am-ic{width:36px;height:36px;border-radius:10px;background:var(--surface-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink-soft);}
+  .am-txt{flex:1 1 auto;min-width:0;}
+  .am-name{font-weight:800;font-size:14px;}
+  .am-sub{font-size:12px;color:var(--ink-faint);overflow-wrap:anywhere;}
+  .am-sub.on{color:var(--success);}
+  .am-act{width:auto;flex-shrink:0;}
+  .am-note{font-size:11.5px;margin:6px 2px 12px;}
   /* fix204-auth: yangi kirish ekrani */
   .au-screen{justify-content:flex-start !important;}
   .au-box{margin:auto 0;padding:8px 0 4px;display:flex;flex-direction:column;}
@@ -2133,6 +2148,37 @@ const T = {
   auErrCred:{uz:"Email yoki parol noto'g'ri",ru:"Неверный email или пароль",en:"Wrong email or password",kk:"Email немесе құпия сөз қате",ky:"Email же сырсөз туура эмес",tg:"Email ё парол нодуруст аст"},
   authError_network:{uz:"Internet aloqasi yo'q. Ulanishni tekshirib, qayta urinib ko'ring",ru:"Нет подключения к интернету. Проверьте связь и попробуйте снова",en:"No internet connection. Check it and try again",kk:"Интернет байланысы жоқ. Байланысты тексеріп, қайталап көріңіз",ky:"Интернет байланышы жок. Байланышты текшерип, кайра аракет кылыңыз",tg:"Пайвасти интернет нест. Пайвастро санҷида, аз нав кӯшиш кунед"},
   authError_too_many:{uz:"Juda ko'p urinish. Birozdan keyin qayta urinib ko'ring",ru:"Слишком много попыток. Попробуйте чуть позже",en:"Too many attempts. Please try again a little later",kk:"Тым көп әрекет. Сәл кейін қайталап көріңіз",ky:"Өтө көп аракет. Бир аздан кийин кайра аракет кылыңыз",tg:"Кӯшишҳо аз ҳад зиёд. Каме баъдтар аз нав кӯшиш кунед"},
+  auGoogleOff:{uz:"Google orqali kirish hali yoqilmagan. Email va parol bilan kiring",ru:"Вход через Google пока не включён. Войдите по email и паролю",en:"Google sign-in is not enabled yet. Use email and password",kk:"Google арқылы кіру әлі қосылмаған. Email және құпия сөзбен кіріңіз",ky:"Google аркылуу кирүү азырынча күйгүзүлгөн эмес. Email жана сырсөз менен кириңиз",tg:"Вуруд тавассути Google ҳоло фаъол нест. Бо email ва парол ворид шавед"},
+  auPopupBlocked:{uz:"Brauzer Google oynasini to'sdi. Qayta bosing",ru:"Браузер заблокировал окно Google. Нажмите ещё раз",en:"The browser blocked the Google window. Tap again",kk:"Браузер Google терезесін бөгеді. Қайта басыңыз",ky:"Браузер Google терезесин бөгөттөдү. Кайра басыңыз",tg:"Браузер равзанаи Google-ро баст. Боз пахш кунед"},
+  auGoogleNoAcc:{uz:"Telefonda Google hisobi topilmadi. Telefon sozlamalarida Google hisobini qo'shing yoki email bilan kiring",ru:"На телефоне не найден аккаунт Google. Добавьте его в настройках телефона или войдите по email",en:"No Google account found on this phone. Add one in the phone settings or use email",kk:"Телефонда Google аккаунты табылмады. Телефон баптауларында қосыңыз немесе email арқылы кіріңіз",ky:"Телефондо Google аккаунту табылган жок. Телефондун жөндөөлөрүнөн кошуңуз же email менен кириңиз",tg:"Дар телефон ҳисоби Google ёфт нашуд. Онро дар танзимоти телефон илова кунед ё бо email ворид шавед"},
+  auGoogleSetup:{uz:"Google orqali kirish bu ilova nusxasida hali sozlanmagan. Email va parol bilan kiring va bizga xabar bering",ru:"Вход через Google ещё не настроен для этой версии приложения. Войдите по email и сообщите нам",en:"Google sign-in is not set up for this app build yet. Use email and let us know",kk:"Google арқылы кіру бұл қолданба нұсқасында әлі бапталмаған. Email арқылы кіріп, бізге хабарлаңыз",ky:"Google аркылуу кирүү бул колдонмо нускасында али жөндөлгөн эмес. Email менен кирип, бизге кабарлаңыз",tg:"Вуруд тавассути Google барои ин нусхаи барнома ҳоло танзим нашудааст. Бо email ворид шавед ва ба мо хабар диҳед"},
+  auGuardErr:{uz:"Akkauntni tekshirib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring",ru:"Не удалось проверить аккаунт. Проверьте интернет и попробуйте снова",en:"Could not check the account. Check the internet and try again",kk:"Аккаунтты тексеру мүмкін болмады. Интернетті тексеріп, қайталап көріңіз",ky:"Аккаунтту текшерүү мүмкүн болбоду. Интернетти текшерип, кайра аракет кылыңыз",tg:"Ҳисобро санҷидан нашуд. Интернетро санҷида, аз нав кӯшиш кунед"},
+  auLinkTitle:{uz:"Google hisobini ulash",ru:"Привязка аккаунта Google",en:"Link your Google account",kk:"Google аккаунтын байланыстыру",ky:"Google аккаунтун байланыштыруу",tg:"Пайваст кардани ҳисоби Google"},
+  auLinkText:{uz:"Bu email bilan oldin parol orqali ro'yxatdan o'tgansiz — parolni kiriting, Google hisobingiz unga ulanadi. Do'koningiz va ma'lumotlaringiz joyida qoladi.",ru:"С этим email вы уже регистрировались по паролю — введите пароль, и аккаунт Google будет привязан к нему. Ваш магазин и данные сохранятся.",en:"You already registered with this email using a password — enter the password and your Google account will be linked to it. Your shop and data stay as they are.",kk:"Бұл email-мен бұрын құпия сөз арқылы тіркелгенсіз — құпия сөзді енгізіңіз, Google аккаунтыңыз оған байланысады. Дүкеніңіз бен деректеріңіз сақталады.",ky:"Бул email менен мурун сырсөз аркылуу катталгансыз — сырсөздү киргизиңиз, Google аккаунтуңуз ага байланышат. Дүкөнүңүз жана маалыматтарыңыз сакталат.",tg:"Бо ин email шумо аллакай бо парол сабти ном шудаед — паролро ворид кунед, ҳисоби Google ба он пайваст мешавад. Мағоза ва маълумоти шумо боқӣ мемонад."},
+  auLinkBtn:{uz:"Ulash va kirish",ru:"Привязать и войти",en:"Link and sign in",kk:"Байланыстырып кіру",ky:"Байланыштырып кирүү",tg:"Пайваст кардан ва ворид шудан"},
+  auLinkedOk:{uz:"Google hisobi ulandi. Endi Google orqali ham kira olasiz",ru:"Аккаунт Google привязан. Теперь можно входить и через Google",en:"Google account linked. You can now also sign in with Google",kk:"Google аккаунты байланысты. Енді Google арқылы да кіре аласыз",ky:"Google аккаунту байланышты. Эми Google аркылуу да кире аласыз",tg:"Ҳисоби Google пайваст шуд. Акнун тавассути Google низ ворид шуда метавонед"},
+  auLinkLater:{uz:"Kirdingiz. Google'ni Sozlamalar → Hisob va email bo'limida ulashingiz mumkin",ru:"Вы вошли. Google можно привязать в Настройки → Аккаунт и email",en:"You are signed in. You can link Google in Settings → Account & email",kk:"Кірдіңіз. Google-ды Баптаулар → Аккаунт және email бөлімінде байланыстыра аласыз",ky:"Кирдиңиз. Google'ду Жөндөөлөр → Аккаунт жана email бөлүмүндө байланыштырсаңыз болот",tg:"Шумо ворид шудед. Google-ро дар Танзимот → Ҳисоб ва почта пайваст кардан мумкин"},
+  auGTermsSub:{uz:"Bu Google hisobi bilan yangi do'kon ochiladi. Davom etish uchun shartlarni o'qing.",ru:"С этим аккаунтом Google будет создан новый магазин. Чтобы продолжить, ознакомьтесь с условиями.",en:"A new shop will be created with this Google account. Read the terms to continue.",kk:"Осы Google аккаунтымен жаңа дүкен ашылады. Жалғастыру үшін шарттармен танысыңыз.",ky:"Бул Google аккаунту менен жаңы дүкөн ачылат. Улантуу үчүн шарттарды окуңуз.",tg:"Бо ин ҳисоби Google мағозаи нав кушода мешавад. Барои идома шартҳоро хонед."},
+  auGTermsHint:{uz:"Boshqa email bilan do'koningiz bormi? «Bekor qilish» ni bosing, o'sha email va parol bilan kiring, keyin Google'ni Sozlamalar → Hisob va email bo'limida ulang.",ru:"Уже есть магазин с другим email? Нажмите «Отмена», войдите по тому email и паролю, затем привяжите Google в Настройки → Аккаунт и email.",en:"Already have a shop with another email? Tap Cancel, sign in with that email and password, then link Google in Settings → Account & email.",kk:"Басқа email-мен дүкеніңіз бар ма? «Бас тарту» басыңыз, сол email және құпия сөзбен кіріп, Google-ды Баптаулар → Аккаунт және email бөлімінде байланыстырыңыз.",ky:"Башка email менен дүкөнүңүз барбы? «Жокко чыгаруу» басыңыз, ошол email жана сырсөз менен кирип, Google'ду Жөндөөлөр → Аккаунт жана email бөлүмүндө байланыштырыңыз.",tg:"Бо email-и дигар мағоза доред? «Бекор кардан»-ро пахш кунед, бо ҳамон email ва парол ворид шавед, баъд Google-ро дар Танзимот → Ҳисоб ва почта пайваст кунед."},
+  auContinue:{uz:"Davom etish",ru:"Продолжить",en:"Continue",kk:"Жалғастыру",ky:"Улантуу",tg:"Идома додан"},
+  amTitle:{uz:"Kirish usullari",ru:"Способы входа",en:"Sign-in methods",kk:"Кіру тәсілдері",ky:"Кирүү ыкмалары",tg:"Усулҳои вуруд"},
+  amEmail:{uz:"Email va parol",ru:"Email и пароль",en:"Email and password",kk:"Email және құпия сөз",ky:"Email жана сырсөз",tg:"Email ва парол"},
+  amOn:{uz:"ulangan",ru:"подключено",en:"connected",kk:"қосылған",ky:"туташкан",tg:"пайваст"},
+  amOff:{uz:"ulanmagan",ru:"не подключено",en:"not connected",kk:"қосылмаған",ky:"туташкан эмес",tg:"пайваст нест"},
+  amUnlink:{uz:"Uzish",ru:"Отключить",en:"Disconnect",kk:"Ажырату",ky:"Ажыратуу",tg:"Ҷудо кардан"},
+  amUnlinkQ:{uz:"«{m}» kirish usuli uzilsinmi? Keyin u bilan kira olmaysiz.",ru:"Отключить способ входа «{m}»? Потом войти через него будет нельзя.",en:"Disconnect «{m}»? You won't be able to sign in with it afterwards.",kk:"«{m}» кіру тәсілін ажырату керек пе? Кейін ол арқылы кіре алмайсыз.",ky:"«{m}» кирүү ыкмасын ажыратасызбы? Андан кийин аны менен кире албайсыз.",tg:"Усули вуруди «{m}» ҷудо карда шавад? Баъд бо он ворид шуда наметавонед."},
+  amUnlinked:{uz:"Uzildi",ru:"Отключено",en:"Disconnected",kk:"Ажыратылды",ky:"Ажыратылды",tg:"Ҷудо шуд"},
+  amLink:{uz:"Ulash",ru:"Подключить",en:"Connect",kk:"Қосу",ky:"Туташтыруу",tg:"Пайваст кардан"},
+  amLinked:{uz:"Ulandi",ru:"Подключено",en:"Connected",kk:"Қосылды",ky:"Туташты",tg:"Пайваст шуд"},
+  amSetPw:{uz:"Parol o'rnatish",ru:"Задать пароль",en:"Set a password",kk:"Құпия сөз орнату",ky:"Сырсөз коюу",tg:"Гузоштани парол"},
+  amSetPwText:{uz:"Email: {email}. Shu email va yangi parol bilan ham kira olasiz.",ru:"Email: {email}. С этим email и новым паролем тоже можно будет войти.",en:"Email: {email}. You will also be able to sign in with this email and the new password.",kk:"Email: {email}. Осы email және жаңа құпия сөзбен де кіре аласыз.",ky:"Email: {email}. Ушул email жана жаңы сырсөз менен да кире аласыз.",tg:"Email: {email}. Бо ин email ва пароли нав низ ворид шуда метавонед."},
+  amNewPw:{uz:"Yangi parol",ru:"Новый пароль",en:"New password",kk:"Жаңа құпия сөз",ky:"Жаңы сырсөз",tg:"Пароли нав"},
+  amNewPw2:{uz:"Parolni takrorlang",ru:"Повторите пароль",en:"Repeat the password",kk:"Құпия сөзді қайталаңыз",ky:"Сырсөздү кайталаңыз",tg:"Паролро такрор кунед"},
+  amPwMismatch:{uz:"Parollar bir xil emas",ru:"Пароли не совпадают",en:"Passwords do not match",kk:"Құпия сөздер сәйкес емес",ky:"Сырсөздөр дал келбейт",tg:"Паролҳо мувофиқ нестанд"},
+  amPwSet:{uz:"Parol o'rnatildi",ru:"Пароль задан",en:"Password set",kk:"Құпия сөз орнатылды",ky:"Сырсөз коюлду",tg:"Парол гузошта шуд"},
+  amGoogleUsed:{uz:"Bu Google hisobi boshqa Savdo Pos akkauntiga ulangan",ru:"Этот аккаунт Google уже привязан к другому аккаунту Savdo Pos",en:"This Google account is already linked to another Savdo Pos account",kk:"Бұл Google аккаунты басқа Savdo Pos аккаунтына байланысқан",ky:"Бул Google аккаунту башка Savdo Pos аккаунтуна байланышкан",tg:"Ин ҳисоби Google аллакай ба ҳисоби дигари Savdo Pos пайваст аст"},
+  amRelogin:{uz:"Xavfsizlik uchun chiqib, qayta kiring va yana urinib ko'ring",ru:"В целях безопасности выйдите, войдите снова и повторите",en:"For security, sign out, sign in again and retry",kk:"Қауіпсіздік үшін шығып, қайта кіріп, қайталап көріңіз",ky:"Коопсуздук үчүн чыгып, кайра кирип, кайталап көрүңүз",tg:"Барои амният бароед, аз нав ворид шавед ва такрор кунед"},
+  amNote:{uz:"Kamida bitta kirish usuli doim qoladi: oxirgisini uzib bo'lmaydi.",ru:"Хотя бы один способ входа всегда остаётся: последний отключить нельзя.",en:"At least one sign-in method always stays: the last one cannot be disconnected.",kk:"Кемінде бір кіру тәсілі әрқашан қалады: соңғысын ажыратуға болмайды.",ky:"Жок дегенде бир кирүү ыкмасы ар дайым калат: акыркысын ажыратууга болбойт.",tg:"Ақаллан як усули вуруд ҳамеша мемонад: охиринашро ҷудо кардан мумкин нест."},
   authWelcome:{uz:"Savdo Pos'ga xush kelibsiz",ru:"Добро пожаловать в Savdo Pos",en:"Welcome to Savdo Pos",kk:"Savdo Pos-қа қош келдіңіз",ky:"Savdo Pos'ко кош келиңиз",tg:"Хуш омадед ба Savdo Pos"},
   authSubtitle:{uz:"Do'koningizni boshqarish uchun hisobingizga kiring",ru:"Войдите в аккаунт, чтобы управлять магазином",en:"Sign in to manage your shop",kk:"Дүкеніңізді басқару үшін аккаунтқа кіріңіз",ky:"Дүкөнүңүздү башкаруу үчүн аккаунтка кириңиз",tg:"Барои идораи мағозаатон ба ҳисоб ворид шавед"},
   authEmail:{uz:"Email",ru:"Email",en:"Email",kk:"Email",ky:"Email",tg:"Email"},
@@ -4566,13 +4612,356 @@ function renderAuthConnecting(){
 /* fix204-auth: yangi kirish ekrani (OLX uslubida): logotip, «Xush kelibsiz!», Google/Telegram tugmalari joyi, «yoki» chizig'i,
    «Kirish | Ro'yxatdan o'tish» tablari, xato — maydon ostida. Mantiq AVVALGIDEK: email+parol bilan kirish, ro'yxatdan o'tish
    (shartlarga rozilik bilan), parolni tiklash, til tanlash. Tab yoki til almashsa, kiritilgan email va parol saqlanadi. */
-const AUTH_SOCIAL = {google: false, telegram: false};   /* 2- va 3-bosqichda yoqiladi. O'chiq bo'lsa tugma ham, «yoki» chizig'i ham chiqmaydi */
+const AUTH_SOCIAL = {google: 'auto', telegram: false};   /* fix205-google: 'auto' — Google ishlay oladigan joyda (veb; Android — plagin bo'lsa) ko'rinadi */   /* 2- va 3-bosqichda yoqiladi. O'chiq bo'lsa tugma ham, «yoki» chizig'i ham chiqmaydi */
 function __auSocialHtml(){
   const b = [];
-  if(AUTH_SOCIAL.google) b.push('<button type="button" class="au-soc" id="auth-google-btn"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>' + tr('auGoogle') + '</span></button>');
+  if(AUTH_SOCIAL.google === true || (AUTH_SOCIAL.google === 'auto' && __auGoogleAvail())) b.push('<button type="button" class="au-soc" id="auth-google-btn"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>' + tr('auGoogle') + '</span></button>');
   if(AUTH_SOCIAL.telegram) b.push('<button type="button" class="au-soc" id="auth-telegram-btn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#29A9EB"/><path fill="#fff" d="M17.6 7.2 15.7 16.6c-.1.6-.5.8-1 .5l-2.9-2.1-1.4 1.3c-.2.2-.3.3-.6.3l.2-2.9 5.3-4.8c.2-.2 0-.3-.4-.1l-6.5 4.1-2.8-.9c-.6-.2-.6-.6.1-.9l11-4.2c.5-.2 1 .1.8.9z"/></svg><span>' + tr('auTelegram') + '</span></button>');
   if(!b.length) return '';
   return '<div class="au-socials">' + b.join('') + '</div><div class="au-or"><span>' + tr('auOr') + '</span></div>';
+}
+/* fix205-google: Google orqali kirish.
+   Veb va iPhone — Firebase oynasi (popup; brauzer to'ssa — redirect). Android ilova — telefonning o'z Google oynasi
+   (@capacitor-firebase/authentication, skipNativeAuth) → Google tokeni → shu Firebase'ga signInWithCredential.
+   Ikkinchi akkaunt va yangi bo'sh do'kon ochilmaydi:
+   (1) Firebase sozlamasi «bitta email — bitta akkaunt»;
+   (2) «account-exists-with-different-credential» bo'lsa — parol so'raladi va Google shu eski akkauntga ulanadi;
+   (3) do'kon ochilishidan OLDIN server (authGuard) tekshiradi: shu email bilan boshqa akkaunt/do'kon bo'lsa — yangi bo'sh akkaunt o'chiriladi
+       va (2) dagi oyna chiqadi. Haqiqatan yangi foydalanuvchi — shartlarga rozilikdan keyin odatdagi «yangi do'kon» oqimi. */
+function __auNativeGA(){
+  try{
+    if(typeof isNativeApp !== 'function' || !isNativeApp()) return null;
+    const C = window.Capacitor; const p = C && C.Plugins && C.Plugins.FirebaseAuthentication;
+    if(!p || typeof p.signInWithGoogle !== 'function') return null;
+    if(typeof C.isPluginAvailable === 'function' && !C.isPluginAvailable('FirebaseAuthentication')) return null;
+    return p;
+  }catch(e){ return null; }
+}
+function __auGoogleAvail(){
+  try{
+    if(typeof isNativeApp === 'function' && isNativeApp()) return !!__auNativeGA();
+    return !!(window.firebase && firebase.auth && firebase.auth.GoogleAuthProvider);
+  }catch(e){ return false; }
+}
+function __auGoogleProvider(){ const p = new firebase.auth.GoogleAuthProvider(); try{ p.setCustomParameters({prompt: 'select_account'}); }catch(e){} return p; }
+async function __auNativeCred(){
+  const N = __auNativeGA(); if(!N){ const e = new Error('no-plugin'); e.code = 'auth/operation-not-supported-in-this-environment'; throw e; }
+  const r = await N.signInWithGoogle({skipNativeAuth: true});
+  const c = r && r.credential;
+  if(!c || !c.idToken){ const e = new Error('no-id-token'); e.code = 'auth/no-id-token'; throw e; }
+  return firebase.auth.GoogleAuthProvider.credential(c.idToken, c.accessToken || null);
+}
+/* Qayta tasdiqlash (akkauntni o'chirish, email almashtirish): Android'da — telefonning Google oynasi, vebda — popup */
+async function __auReauthGoogle(user){
+  if(__auNativeGA()) return user.reauthenticateWithCredential(await __auNativeCred());
+  return user.reauthenticateWithPopup(__auGoogleProvider());
+}
+function __auIsCancel(e){
+  const c = String((e && e.code) || ''), m = String((e && e.message) || '');
+  if(/popup-closed-by-user|cancelled-popup-request|user-cancelled/.test(c)) return true;
+  return /cancel/i.test(m) && !/network/i.test(m);
+}
+function __auGoogleErrText(e){
+  const c = String((e && e.code) || ''), m = String((e && e.message) || '');
+  if(/operation-not-allowed/.test(c)) return tr('auGoogleOff');
+  if(/unauthorized-domain/.test(c)) return tr('authError_unauthorized_domain');
+  if(/popup-blocked/.test(c)) return tr('auPopupBlocked');
+  if(/network/.test(c) || /network|timeout|timed out/i.test(m)) return tr('authError_network');
+  if(/too-many-requests/.test(c)) return tr('authError_too_many');
+  if(/no credentials|nocredential|no available credential/i.test(m)) return tr('auGoogleNoAcc');
+  if(/developer_error|developer console|\[10\]|code 10|not set up/i.test(m)) return tr('auGoogleSetup');
+  return tr('authError_generic') + ' (' + (c || m || '?').slice(0, 60) + ')';
+}
+/* Kirishni «ushlab turish»: Google bilan kirgandan keyin tekshiruv tugamaguncha onAuthStateChanged do'konni ochmaydi */
+let __auHoldR = null;
+function __auHoldStart(){ if(window.__auHoldP) return; window.__auHoldP = new Promise(r=>{ __auHoldR = r; }); }
+function __auHoldEnd(ok){ const r = __auHoldR; __auHoldR = null; window.__auHoldP = null; if(r) r(!!ok); }
+function __auLs(k, v){ try{ if(v === undefined) return localStorage.getItem(k); if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); }catch(e){} return null; }
+async function __auGuard(user){
+  const token = await user.getIdToken();
+  const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const t = setTimeout(()=>{ try{ if(ctl) ctl.abort(); }catch(e){} }, 20000);
+  try{
+    const resp = await fetch(payFnUrl('authGuard'), {method: 'POST', headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token}, body: '{}', signal: ctl ? ctl.signal : undefined});
+    let d = null; try{ d = await resp.json(); }catch(e){}
+    if(!d || !d.ok){ const e = new Error('guard'); e.code = (d && d.code) || ('http-' + resp.status); throw e; }
+    return d;
+  }finally{ clearTimeout(t); }
+}
+function __auGenErr(msg){
+  if(!document.getElementById('auth-form')) renderAuthGate('login', {email: ''});
+  const g = document.getElementById('auth-error'); if(g){ g.style.color = ''; g.classList.remove('au-ok'); g.textContent = msg; }
+}
+async function __auAfterGoogle(uc, cred){
+  const user = (uc && uc.user) || fbAuth.currentUser;
+  if(!user){ __auLs('sp_au_chk', null); __auHoldEnd(false); return; }
+  window.__auLastCred = cred || (uc && uc.credential) || window.__auLastCred || null;
+  let g = null;
+  try{ g = await __auGuard(user); }catch(e){ g = {status: 'error', code: (e && e.code) || 'net'}; }
+  __auLs('sp_au_chk', null);
+  if(g.status === 'own' || g.status === 'staff'){ window.__auPending = null; __auHoldEnd(true); return; }
+  if(g.status === 'new'){
+    __auLs('sp_au_terms', user.uid);
+    window.__auPending = {mode: 'gterms', keep: {email: user.email || ''}};
+    renderAuthGate('gterms', window.__auPending.keep);
+    return;   // ushlab turish — foydalanuvchi shartlarga rozi bo'lguncha
+  }
+  if(g.status === 'conflict'){
+    if(!g.removed){ try{ await user.delete(); }catch(e){} }
+    window.__auPending = {mode: 'link', keep: {email: g.email || user.email || '', cred: window.__auLastCred}};
+    __auHoldEnd(false);
+    try{ await fbAuth.signOut(); }catch(e){}
+    renderAuthGate('link', window.__auPending.keep);
+    return;
+  }
+  // Tekshirib bo'lmadi — xavfsiz tomonga: do'kon ochilmaydi, akkaunt o'chirilmaydi
+  window.__auPending = null;
+  __auHoldEnd(false);
+  try{ await fbAuth.signOut(); }catch(e){}
+  __auGenErr(tr('auGuardErr') + ' (' + (g.code || '?') + ')');
+}
+function __auGoogleFail(e, cred){
+  const c = String((e && e.code) || '');
+  if(/account-exists-with-different-credential/.test(c)){
+    const email = (e && (e.email || (e.customData && e.customData.email))) || '';
+    let pc = (e && e.credential) || cred || null;
+    try{ if(!pc && firebase.auth.GoogleAuthProvider.credentialFromError) pc = firebase.auth.GoogleAuthProvider.credentialFromError(e); }catch(_e){}
+    window.__auPending = {mode: 'link', keep: {email: email, cred: pc}};
+    renderAuthGate('link', window.__auPending.keep);
+    return;
+  }
+  if(__auIsCancel(e)) return;
+  __auGenErr(__auGoogleErrText(e));
+}
+async function __auGoogleSignIn(btn){
+  if(window.__auGBusy) return;
+  window.__auGBusy = true;
+  __auClear();
+  if(btn){ btn.disabled = true; btn.classList.add('busy'); }
+  let cred = null, uc = null;
+  __auLs('sp_au_chk', '1');
+  __auHoldStart();
+  try{
+    if(__auNativeGA()){ cred = await __auNativeCred(); uc = await fbAuth.signInWithCredential(cred); }
+    else {
+      try{ uc = await fbAuth.signInWithPopup(__auGoogleProvider()); }
+      catch(e){
+        if(/popup-blocked|operation-not-supported-in-this-environment|web-storage-unsupported/.test(String(e && e.code))){
+          try{ sessionStorage.setItem('sp_au_redirect', '1'); }catch(_e){}
+          __auHoldEnd(false); window.__auGBusy = false;
+          await fbAuth.signInWithRedirect(__auGoogleProvider());
+          return;
+        }
+        throw e;
+      }
+    }
+  }catch(e){
+    __auHoldEnd(false); __auLs('sp_au_chk', null);
+    window.__auGBusy = false;
+    if(btn && btn.isConnected){ btn.disabled = false; btn.classList.remove('busy'); }
+    __auGoogleFail(e, cred);
+    return;
+  }
+  window.__auGBusy = false;
+  await __auAfterGoogle(uc, cred || (uc && uc.credential));
+}
+/* Veb: redirect bilan qaytganda — natija tekshiruvdan o'tmaguncha do'kon ochilmaydi */
+function __auRedirectInit(){
+  let pend = false; try{ pend = sessionStorage.getItem('sp_au_redirect') === '1'; }catch(e){}
+  if(!pend) return;
+  try{ sessionStorage.removeItem('sp_au_redirect'); }catch(e){}
+  __auHoldStart();
+  fbAuth.getRedirectResult().then(uc=>{
+    if(uc && uc.user) __auAfterGoogle(uc, uc.credential);
+    else { __auLs('sp_au_chk', null); __auHoldEnd(true); }
+  }).catch(e=>{ __auLs('sp_au_chk', null); __auHoldEnd(false); __auGoogleFail(e, null); });
+}
+/* onAuthStateChanged ichida, do'kon ochilishidan oldin chaqiriladi. true — davom etish mumkin */
+async function __auBeforeOpen(user){
+  if(!window.__auHoldP){
+    if(__auLs('sp_au_terms') === user.uid){   // shartlar oynasi yopilmay ilova o'chgan bo'lsa — yana so'raladi
+      __auHoldStart();
+      window.__auPending = {mode: 'gterms', keep: {email: user.email || ''}};
+      renderAuthGate('gterms', window.__auPending.keep);
+    } else if(__auLs('sp_au_chk') === '1'){
+      if((user.providerData || []).some(p=>p.providerId === 'google.com')){   // Google bilan kirish tekshiruvi tugamay ilova o'chgan bo'lsa — qayta tekshiriladi
+        __auHoldStart();
+        __auAfterGoogle(null, null);
+      } else __auLs('sp_au_chk', null);   // parol bilan kirish — tekshiruv kerak emas (oflayn kirish avvalgidek)
+    }
+  }
+  if(!window.__auHoldP) return true;
+  let ok = false;
+  try{ ok = await window.__auHoldP; }catch(e){ ok = false; }
+  return !!(ok && fbAuth.currentUser && fbAuth.currentUser.uid === user.uid);
+}
+/* Maxsus oynalar: «Google hisobini ulash» (parol bilan) va yangi Google foydalanuvchi uchun shartlar */
+function __auRenderSpecial(mode, keep){
+  const root = document.getElementById('auth-root'); if(!root) return;
+  keep = keep || {};
+  const head = (title, sub)=>`<div class="au-head"><img class="au-logo" src="icon-192.png" alt="" width="56" height="56"><div class="brand au-brand">Savdo Pos<span>.</span></div><h1 class="au-title au-title-sm">${title}</h1><p class="au-sub">${sub}</p></div>`;
+  if(mode === 'link'){
+    const em = String(keep.email || '');
+    root.innerHTML = `<div class="login-screen au-screen" data-au-mode="link">${authLangRowHtml()}<div class="au-box">
+      ${head(tr('auLinkTitle'), tr('auLinkText'))}
+      <form id="auth-link-form" class="au-form" novalidate>
+        <div class="field au-field"><label class="field-label" for="auth-email">${tr('authEmail')}</label>
+          <div class="au-inp"><input type="email" id="auth-email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" value="${escapeHtml(em)}" ${em ? 'readonly' : ''}></div>
+          <div class="au-err" id="auth-email-err" role="alert"></div></div>
+        <div class="field au-field"><label class="field-label" for="auth-password">${tr('authPassword')}</label>
+          <div class="au-inp"><input type="password" id="auth-password" autocomplete="current-password"></div>
+          <div class="au-err" id="auth-password-err" role="alert"></div></div>
+        <div class="au-forgot"><button type="button" class="au-link" id="auth-forgot-btn">${tr('authForgotPassword')}</button></div>
+        <div id="auth-error" class="error-text au-gen" role="alert"></div>
+        <button type="submit" class="btn btn-primary btn-pill btn-block" id="auth-submit-btn">${tr('auLinkBtn')}</button>
+      </form>
+      <button type="button" class="au-link au-switch" id="auth-link-cancel">${tr('cancel')}</button>
+    </div></div>`;
+    __auKbFix();
+    bindAuthLangRow(()=>renderAuthGate('link', keep));
+    const emailEl = document.getElementById('auth-email'), passEl = document.getElementById('auth-password'), btn = document.getElementById('auth-submit-btn');
+    passEl.addEventListener('input', ()=>__auSetErr('auth-password-err', ''));
+    document.getElementById('auth-link-cancel').addEventListener('click', ()=>{ window.__auPending = null; renderAuthGate('login', {email: emailEl.value}); });
+    document.getElementById('auth-forgot-btn').addEventListener('click', async (ev)=>{
+      const b = ev.currentTarget; __auClear();
+      const email = emailEl.value.trim(); if(!email){ __auSetErr('auth-email-err', tr('auEnterEmail')); return; }
+      b.disabled = true;
+      try{ await fbAuth.sendPasswordResetEmail(email); const g = document.getElementById('auth-error'); if(g){ g.classList.add('au-ok'); g.style.color = 'var(--success)'; g.textContent = tr('authResetSent'); } }
+      catch(e){ __auShowErr(e); }
+      if(b.isConnected) b.disabled = false;
+    });
+    let busy = false;
+    document.getElementById('auth-link-form').addEventListener('submit', async (ev)=>{
+      ev.preventDefault(); if(busy) return; __auClear();
+      const email = emailEl.value.trim(), pw = passEl.value;
+      if(!email){ __auSetErr('auth-email-err', tr('auEnterEmail')); emailEl.focus(); return; }
+      if(!pw){ __auSetErr('auth-password-err', tr('auEnterPassword')); passEl.focus(); return; }
+      busy = true; btn.disabled = true; btn.textContent = tr('auBusy');
+      __auHoldStart();
+      try{
+        const uc = await fbAuth.signInWithEmailAndPassword(email, pw);
+        let linked = false;
+        if(keep.cred){
+          try{ await uc.user.linkWithCredential(keep.cred); linked = true; }
+          catch(e){ if(/provider-already-linked/.test(String(e && e.code))) linked = true; }
+        }
+        window.__auPending = null; __auLs('sp_au_chk', null);
+        __auHoldEnd(true);
+        setTimeout(()=>{ try{ showToast(linked ? tr('auLinkedOk') : tr('auLinkLater')); }catch(e){} }, 900);
+      }catch(e){
+        __auHoldEnd(false);
+        __auShowErr(e);
+        busy = false; if(btn.isConnected){ btn.disabled = false; btn.textContent = tr('auLinkBtn'); }
+      }
+    });
+    return;
+  }
+  // gterms — yangi Google foydalanuvchi: ro'yxatdan o'tishdagi kabi shartlarga rozilik
+  root.innerHTML = `<div class="login-screen au-screen" data-au-mode="gterms">${authLangRowHtml()}<div class="au-box">
+    ${head(tr('auTitle'), tr('auGTermsSub'))}
+    ${keep.email ? `<div class="au-acct">${escapeHtml(keep.email)}</div>` : ''}
+    <div class="card" style="max-height:200px;overflow-y:auto;margin-bottom:12px;">
+      <p class="subtle" style="margin:0;font-size:12px;line-height:1.6;white-space:pre-line;">${tr('termsText')}</p>
+    </div>
+    <p class="subtle" style="margin:0 0 12px;font-size:12px;text-align:center;">
+      <a href="privacy-policy.html" style="color:var(--accent-dark);">${tr('privacyPolicyLink')}</a>
+      &nbsp;·&nbsp;
+      <a href="terms-of-service.html?lang=${state.lang}" style="color:var(--accent-dark);">${tr('termsOfServiceLink')}</a>
+    </p>
+    <div class="au-field au-terms"><div class="checkbox-row" style="margin-bottom:0;"><input type="checkbox" id="auth-terms-check"><label for="auth-terms-check" style="font-size:13px;">${tr('termsAgree')}</label></div>
+      <div class="au-err" id="auth-terms-err" role="alert"></div></div>
+    <button type="button" class="btn btn-primary btn-pill btn-block" id="auth-gterms-ok">${tr('auContinue')}</button>
+    <p class="au-hint au-gt-hint">${tr('auGTermsHint')}</p>
+    <button type="button" class="au-link au-switch" id="auth-gterms-cancel">${tr('cancel')}</button>
+  </div></div>`;
+  bindAuthLangRow(()=>renderAuthGate('gterms', keep));
+  const tc = document.getElementById('auth-terms-check');
+  tc.addEventListener('change', ()=>__auSetErr('auth-terms-err', ''));
+  document.getElementById('auth-gterms-ok').addEventListener('click', ()=>{
+    if(!tc.checked){ __auSetErr('auth-terms-err', tr('termsRequired')); return; }
+    __auLs('sp_au_terms', null); window.__auPending = null;
+    __auHoldEnd(true);
+  });
+  document.getElementById('auth-gterms-cancel').addEventListener('click', async (ev)=>{
+    ev.currentTarget.disabled = true;
+    const u = fbAuth.currentUser;
+    __auLs('sp_au_terms', null); __auLs('sp_au_chk', null); window.__auPending = null;
+    __auHoldEnd(false);
+    try{ if(u) await u.delete(); }catch(e){}
+    try{ await fbAuth.signOut(); }catch(e){}
+    renderAuthGate('login', {email: ''});
+  });
+}
+/* Sozlamalar → Hisob: kirish usullari (Email, Google) — ko'rish, ulash, uzish (kamida bittasi qoladi) */
+function __acctMethodsRender(){
+  const box = document.getElementById('acct-methods'); if(!box || !fbUser) return;
+  const pd = fbUser.providerData || [];
+  const pv = pd.map(p=>p.providerId);
+  const g = pd.find(p=>p.providerId === 'google.com');
+  const hasPw = pv.indexOf('password') !== -1, hasG = !!g, n = pv.length;
+  const mailIc = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>';
+  const gIc = '<svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+  const act = (id, label, cls)=>`<button type="button" class="btn ${cls || 'btn-outline'} btn-sm am-act" id="${id}">${label}</button>`;
+  box.innerHTML = `<h3 class="sub-title">${tr('amTitle')}</h3><div class="card am-card">
+    <div class="am-row" data-am="password"><span class="am-ic">${mailIc}</span><div class="am-txt"><div class="am-name">${tr('amEmail')}</div><div class="am-sub ${hasPw ? 'on' : ''}">${hasPw ? escapeHtml(fbUser.email || '') + ' · ' + tr('amOn') : tr('amOff')}</div></div>
+      ${hasPw ? (n > 1 ? act('am-unlink-password', tr('amUnlink'), 'btn-ghost') : '') : (fbUser.email ? act('am-set-pw', tr('amSetPw')) : '')}</div>
+    <div class="am-row" data-am="google"><span class="am-ic">${gIc}</span><div class="am-txt"><div class="am-name">Google</div><div class="am-sub ${hasG ? 'on' : ''}">${hasG ? escapeHtml(g.email || '') + ' · ' + tr('amOn') : tr('amOff')}</div></div>
+      ${hasG ? (n > 1 ? act('am-unlink-google', tr('amUnlink'), 'btn-ghost') : '') : (__auGoogleAvail() ? act('am-link-google', tr('amLink')) : '')}</div>
+  </div><p class="subtle am-note">${tr('amNote')}</p><div id="am-err" class="error-text" style="margin:-4px 0 10px;"></div>`;
+  const err = (m)=>{ const e = document.getElementById('am-err'); if(e) e.textContent = m || ''; };
+  const after = async (msg)=>{ try{ await fbUser.reload(); fbUser = fbAuth.currentUser || fbUser; }catch(e){} __acctMethodsRender(); if(msg) showToast(msg); };
+  const failText = (e)=>{
+    const c = String((e && e.code) || '');
+    if(/credential-already-in-use|email-already-in-use|account-exists/.test(c)) return tr('amGoogleUsed');
+    if(/requires-recent-login/.test(c)) return tr('amRelogin');
+    if(/weak-password/.test(c)) return tr('authError_weak_password');
+    return __auGoogleErrText(e);
+  };
+  const unlink = (pid, name)=>{
+    const b = document.getElementById('am-unlink-' + (pid === 'password' ? 'password' : 'google')); if(!b) return;
+    b.addEventListener('click', ()=>confirmDialog(escapeHtml(tr('amUnlinkQ').replace('{m}', name)), async ()=>{
+      err('');
+      if((fbUser.providerData || []).length < 2){ err(tr('amNote')); return; }
+      try{ await fbUser.unlink(pid); await after(tr('amUnlinked')); }catch(e){ err(failText(e)); }
+    }, tr('amUnlink')));
+  };
+  unlink('password', tr('amEmail')); unlink('google.com', 'Google');
+  const lg = document.getElementById('am-link-google');
+  if(lg) lg.addEventListener('click', async ()=>{
+    err(''); lg.disabled = true;
+    try{
+      if(__auNativeGA()) await fbUser.linkWithCredential(await __auNativeCred());
+      else await fbUser.linkWithPopup(__auGoogleProvider());
+      await after(tr('amLinked'));
+    }catch(e){ if(lg.isConnected) lg.disabled = false; if(!__auIsCancel(e)) err(failText(e)); }
+  });
+  const sp = document.getElementById('am-set-pw');
+  if(sp) sp.addEventListener('click', ()=>{
+    openModal(`<div class="modal-title">${tr('amSetPw')}</div>
+      <p class="subtle" style="margin:0 0 12px;font-size:12.5px;">${escapeHtml(tr('amSetPwText').replace('{email}', fbUser.email || ''))}</p>
+      <div class="field"><label class="field-label">${tr('amNewPw')}</label><input type="password" id="am-pw1" autocomplete="new-password"></div>
+      <div class="field"><label class="field-label">${tr('amNewPw2')}</label><input type="password" id="am-pw2" autocomplete="new-password"></div>
+      <div id="am-pw-err" class="error-text" style="margin-bottom:8px;"></div>
+      <button class="btn btn-primary btn-block" id="am-pw-go">${tr('save')}</button>`, {center: true});
+    const go = document.getElementById('am-pw-go');
+    go.addEventListener('click', async ()=>{
+      const e1 = document.getElementById('am-pw-err'); e1.textContent = '';
+      const p1 = document.getElementById('am-pw1').value, p2 = document.getElementById('am-pw2').value;
+      if(!p1){ e1.textContent = tr('auEnterPassword'); return; }
+      if(p1 !== p2){ e1.textContent = tr('amPwMismatch'); return; }
+      go.disabled = true;
+      const cred = ()=>firebase.auth.EmailAuthProvider.credential(fbUser.email, p1);
+      try{
+        try{ await fbUser.linkWithCredential(cred()); }
+        catch(e){
+          if(!/requires-recent-login/.test(String(e && e.code))) throw e;
+          await __auReauthGoogle(fbUser);   // xavfsizlik: Google bilan qayta tasdiqlab, yana urinamiz
+          await fbUser.linkWithCredential(cred());
+        }
+        closeModal(); await after(tr('amPwSet'));
+      }catch(e){ go.disabled = false; if(!__auIsCancel(e)) e1.textContent = failText(e); }
+    });
+  });
 }
 function __auVals(){
   const e = document.getElementById('auth-email'), p = document.getElementById('auth-password');
@@ -4604,6 +4993,8 @@ function __auKbFix(){   /* klaviatura ochilganda faol maydon ko'rinib tursin (ek
   document.addEventListener('focusin', (e)=>{ if(e.target && e.target.closest && e.target.closest('.au-screen')) setTimeout(vis, 320); });
 }
 function renderAuthGate(mode, keep){
+  if(window.__auPending && !keep && mode !== 'signup'){ mode = window.__auPending.mode; keep = window.__auPending.keep; }   /* fix205-google: ulash/shartlar oynasi chiqish paytida yo'qolmasin */
+  if(mode === 'link' || mode === 'gterms'){ __auRenderSpecial(mode, keep || {}); return; }
   mode = mode === 'signup' ? 'signup' : 'login';
   const root = document.getElementById('auth-root');
   if(!root) return;
@@ -4662,6 +5053,7 @@ function renderAuthGate(mode, keep){
   passEl.addEventListener('input', ()=>__auSetErr('auth-password-err', ''));
   const termsEl = document.getElementById('auth-terms-check');
   if(termsEl) termsEl.addEventListener('change', ()=>__auSetErr('auth-terms-err', ''));
+  { const gb = document.getElementById('auth-google-btn'); if(gb) gb.addEventListener('click', ()=>__auGoogleSignIn(gb)); }   /* fix205-google */
   let busy = false;
   const submitBtn = document.getElementById('auth-submit-btn');
   const setBusy = (on)=>{ busy = on; if(!submitBtn.isConnected) return; submitBtn.disabled = on; submitBtn.textContent = on ? tr('auBusy') : (login ? tr('authLogin') : tr('authSignup')); };
@@ -4748,7 +5140,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.80';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.81';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -20098,7 +20490,7 @@ function renderSettingsBranches(container){
 function openDeleteAccountModal(){
   if(!fbUser || !fbDb){ showToast(tr('delAccFailed')); return; }
   if((state.businessId || fbUser.uid) !== fbUser.uid || !isAdmin()){ showToast(tr('delAccOwnerOnly')); return; }
-  const isGoogle = (fbUser.providerData||[]).some(p=>p.providerId==='google.com');
+  const isGoogle = (fbUser.providerData||[]).some(p=>p.providerId==='google.com') && !(fbUser.providerData||[]).some(p=>p.providerId==='password');   /* fix205-google */
   openModal(`<div class="modal-title" style="color:#c62828;">${tr('delAccTitle')}</div>
     <p class="subtle" style="font-size:12.5px;margin:0 0 12px;">${tr('delAccHint')}</p>
     <div class="field"><label class="field-label">${tr('delAccType')}</label><input type="text" id="da-confirm" autocapitalize="characters" autocomplete="off"></div>
@@ -20125,7 +20517,7 @@ async function deleteMyAccountAndData(password){
     const cred = firebase.auth.EmailAuthProvider.credential(fbUser.email, password);
     await fbUser.reauthenticateWithCredential(cred);
   } else {
-    try{ await fbUser.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider()); }catch(e){}
+    try{ await __auReauthGoogle(fbUser); }catch(e){}   /* fix205-google */
   }
   try{ stopLiveListeners(); }catch(e){}
   try{ pendingSyncQueue.length = 0; }catch(e){}
@@ -20163,7 +20555,7 @@ function renderSettingsAccount(container){
     return;
   }
   const providers = (fbUser && fbUser.providerData) ? fbUser.providerData.map(p=>p.providerId) : [];
-  const isGoogleAccount = providers.includes('google.com');
+  const isGoogleAccount = providers.includes('google.com') && !providers.includes('password');   /* fix205-google: parol bo'lsa — parol so'raladi (Android'da ham ishlaydi) */
   container.innerHTML = `
     ${settingsBackHeader(tr('accountSection'))}
     <div class="card">
@@ -20173,10 +20565,12 @@ function renderSettingsAccount(container){
       </div>
       <button class="btn btn-outline btn-block" id="open-change-email-btn">${tr('changeEmailBtn')}</button>
     </div>
+    <div id="acct-methods"></div>
     <button class="btn btn-outline btn-block" id="account-page-signout-btn" style="margin-top:4px;">${ICONS.logout} ${tr('authLogout')}</button>
     <div style="margin-top:28px;">${dangerZoneHtml(tr('delAccTitle'), tr('delAccHint'), 'open-delete-account-btn')}</div>
   `;   /* fix131-set: email → Chiqish → Xavfli amallar */
   bindSettingsBack(container);
+  try{ __acctMethodsRender(); }catch(e){}   /* fix205-google: kirish usullari */
   document.getElementById('account-page-signout-btn').addEventListener('click', ()=>confirmDialog(tr('authLogout')+'?', ()=>{ fbAuth.signOut(); }, tr('authLogout')));
   document.getElementById('open-delete-account-btn').addEventListener('click', openDeleteAccountModal);
   document.getElementById('open-change-email-btn').addEventListener('click', ()=>{
@@ -20202,8 +20596,7 @@ function renderSettingsAccount(container){
         // popup) rather than relying on however old the current session
         // happens to be.
         if(isGoogleAccount){
-          const provider = new firebase.auth.GoogleAuthProvider();
-          await fbUser.reauthenticateWithPopup(provider);
+          await __auReauthGoogle(fbUser);   /* fix205-google: Android'da telefonning Google oynasi */
         } else {
           const password = document.getElementById('ce-password').value;
           const credential = firebase.auth.EmailAuthProvider.credential(fbUser.email, password);
@@ -27450,11 +27843,13 @@ document.addEventListener('DOMContentLoaded', ()=>enhanceInputs(document));
       }
     }, 8000);
     let syncRetryTimer = null;
+    try{ __auRedirectInit(); }catch(e){}   /* fix205-google */
     fbAuth.onAuthStateChanged(async (user)=>{
       clearTimeout(authFallbackTimer);
       authCallbackFired = true;
       fbUser = user;
       if(user){
+        if(!(await __auBeforeOpen(user))) return;   /* fix205-google: Google bilan kirishda tekshiruv va shartlarga rozilikdan oldin do'kon ochilmaydi */
         // Figure out which business this device belongs to, the first
         // time anyone signs in on it. If this Firebase account has a
         // /staffAuth record, they're a STAFF member — their own uid is

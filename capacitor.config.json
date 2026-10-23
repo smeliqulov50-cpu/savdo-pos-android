@@ -1,5 +1,13 @@
 {
   "appId": "savdo.pos.smm",
   "appName": "Savdo Pos",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "FirebaseAuthentication": {
+      "skipNativeAuth": true,
+      "providers": [
+        "google.com"
+      ]
+    }
+  }
 }

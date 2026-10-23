@@ -53,9 +53,10 @@ LAYOUT = """()=>{
 with sync_playwright() as p:
     br = p.chromium.launch(args=["--no-sandbox"])
     ctx, pg, errs = boot(br, 412, 915)
+    pg.evaluate("()=>{ AUTH_SOCIAL.google = false; AUTH_SOCIAL.telegram = false; }")   # fix205: Google odatda 'auto' (vebda ko'rinadi) — bu yerda o'chiq holat tekshiriladi
     pg.evaluate(OPEN, ['uz', 'login'])
     ok("kirish ekrani: «Xush kelibsiz!», 2 ta tab («Kirish» faol)", txt(pg, '.au-title') == 'Xush kelibsiz!' and pg.locator('.au-tab').count() == 2 and txt(pg, '.au-tab.on') == 'Kirish')
-    ok("Google/Telegram hali yoqilmagan — tugmalar ham, «yoki» chizig'i ham yo'q (bo'sh joy qolmaydi)", pg.locator('.au-soc').count() == 0 and pg.locator('.au-or').count() == 0)
+    ok("Google/Telegram o'chiq bo'lsa — tugmalar ham, «yoki» chizig'i ham yo'q (bo'sh joy qolmaydi)", pg.locator('.au-soc').count() == 0 and pg.locator('.au-or').count() == 0)
     ok("parol maydonida ko'z belgisi", pg.locator('#auth-password ~ .eye-toggle, .au-inp .eye-toggle').count() == 1)
     pg.fill('#auth-password', 'abc'); pg.click('.au-inp .eye-toggle')
     ok("ko'z belgisi parolni ko'rsatadi", pg.evaluate("()=>document.getElementById('auth-password').type") == 'text')
