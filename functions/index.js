@@ -332,6 +332,34 @@ exports.telegramApi = onRequest({ cors: true, secrets: __tgSecrets }, async func
   }
 });
 
+/* fix206-tglogin: Telegram orqali kirish (ilova). Kirishda ID token yo'q; ulash/holat/uzishda — ID token majburiy.
+   Kirish kaliti (custom token) faqat bot orqali raqam tasdiqlangandan keyin, so'rovni ochgan qurilmaga (poll siri) bir marta beriladi. */
+const __TGL = require('./src/telegram/login');
+exports.telegramLogin = onRequest({ cors: true, secrets: __tgSecrets }, async function (req, res) {
+  try {
+    if (req.method !== 'POST') { res.status(405).json({ ok: false, code: 'method-not-allowed' }); return; }
+    const A = __fbAdmin.auth();
+    let uid = null;
+    const m = /^Bearer\s+(.+)$/i.exec(req.get('Authorization') || '');
+    if (m) { try { uid = (await A.verifyIdToken(m[1])).uid; } catch (e) { res.status(401).json({ ok: false, code: 'unauthenticated' }); return; } }
+    const ip = String(req.get('x-forwarded-for') || req.ip || '').split(',')[0].trim();
+    const base = await __tgDeps();
+    if (!base.key) { res.status(503).json({ ok: false, code: 'no-bot' }); return; }
+    const deps = Object.assign({}, base, {
+      createToken: function (u) { return A.createCustomToken(u); },
+      createUser: async function (name) { const u = await A.createUser({ displayName: String(name || 'Telegram').slice(0, 64) }); return u.uid; },
+      userExists: async function (u) { try { await A.getUser(u); return true; } catch (e) { if (e && e.code === 'auth/user-not-found') return false; throw e; } },
+      userProviders: async function (u) { const x = await A.getUser(u); return (x.providerData || []).map(function (p) { return p.providerId; }); },
+      deleteUser: function (u) { return A.deleteUser(u); }
+    });
+    const out = await __TGL.handle(deps, req.body || {}, { uid: uid, ip: ip });
+    res.status(out.status || 200).json(out.body);
+  } catch (e) {
+    console.error('telegramLogin xatosi', e && e.message);
+    res.status(500).json({ ok: false, code: 'internal' });
+  }
+});
+
 /* Telegram serveri chaqiradi. Sirli sarlavha (X-Telegram-Bot-Api-Secret-Token) tokendan hisoblanadi — boshqa hech kim yubora olmaydi.
    GET ?setup=1 — webhook manzilini o'rnatadi (yuklashdan keyin bir marta; qayta chaqirish xavfsiz). */
 exports.telegramWebhook = onRequest({ secrets: __tgHookSecrets }, async function (req, res) {

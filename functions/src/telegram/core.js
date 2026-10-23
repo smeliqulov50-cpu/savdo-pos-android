@@ -194,6 +194,7 @@ async function handleUpdate(deps, upd) {
   if (upd.callback_query) {
     const cq = upd.callback_query; if (!cq.message || !cq.message.chat || cq.message.chat.type !== 'private') return { ignored: true };
     const cl = await __cmd.chatLang(deps, cq.message.chat.id, cq.from && cq.from.language_code);
+    if (/^lg:/.test(String(cq.data || ''))) { const rl = await require('./login').onCallback(deps, cq, cl); if (rl) return rl; }   /* fix206-tglogin: Telegram orqali kirish */
     if (/^bo:/.test(String(cq.data || ''))) { const r0 = await require('./shop').onCallback(deps, cq, cl); if (r0) return r0; }   /* fix145-botshop */
     if (/^cu:/.test(String(cq.data || ''))) { const r1 = await require('./cust').onCallback(deps, cq, cl); if (r1) return r1; }   /* fix155-custbot */
     const r = await __cmd.onCallback(deps, cq, cl);
@@ -218,6 +219,7 @@ async function handleUpdate(deps, upd) {
   lang = await __cmd.chatLang(deps, msg.chat.id, msg.from && msg.from.language_code);   /* fix144-tgcmd: /til bilan tanlangan til */
   if (msg.contact) return require('./shop').onContact(deps, msg, lang);   /* fix145-botshop: mijoz raqami */
   const m = /^\/start(?:@[A-Za-z0-9_]+)?(?:\s+([A-Za-z0-9_-]{4,64}))?$/.exec(text);
+  if (m && m[1] && /^l_/.test(m[1])) return require('./login').onStart(deps, msg, m[1].slice(2), lang);   /* fix206-tglogin: Telegram orqali kirish */
   if (m && m[1] && /^s_/.test(m[1])) return require('./shop').onStart(deps, msg, m[1].slice(2), lang);   /* fix145-botshop: do'kon havolasi */
   if (m && m[1] && /^c_/.test(m[1])) return require('./cust').linkByCode(deps, msg, m[1].slice(2), lang);   /* fix155-custbot: mijoz havolasi */
   if (m && m[1] && /^w_/.test(m[1])) return require('./webshop').linkTg(deps, msg, m[1].slice(2), lang);   /* fix156-webtg: sayt buyurtmasi Telegram'ga */

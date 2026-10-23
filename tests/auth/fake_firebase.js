@@ -40,14 +40,16 @@
   function view(u){
     if(!u) return null;
     if(u.__v) { u.__v.providerData = pdata(u); u.__v.email = u.email; return u.__v; }
-    const v = {uid: u.uid, email: u.email, providerData: pdata(u), metadata: {creationTime: new Date(u.created).toUTCString()},
+    const v = {uid: u.uid, email: u.email || null, displayName: u.displayName || null, providerData: pdata(u), metadata: {creationTime: new Date(u.created).toUTCString()},
       getIdToken: async()=>'tok-' + u.uid,
       reload: async()=>{ v.providerData = pdata(u); v.email = u.email; },
       delete: async()=>{ A.calls.push(['delete', u.uid]); delete A.users[u.uid]; if(A.currentUser && A.currentUser.uid === u.uid) await setUser(null); },
       linkWithCredential: async(c)=>{ A.calls.push(['link', u.uid, c.providerId]);
         if(c.providerId === 'google.com'){ const other = Object.values(A.users).find(x=>x.gSub === c.sub && x.uid !== u.uid); if(other) throw err('auth/credential-already-in-use');
           if(u.providers.indexOf('google.com') !== -1) throw err('auth/provider-already-linked'); u.providers.push('google.com'); u.gSub = c.sub; u.gEmail = c.email; }
-        else if(c.providerId === 'password'){ if(u.providers.indexOf('password') !== -1) throw err('auth/provider-already-linked'); u.providers.push('password'); u.pw = c.pw; }
+        else if(c.providerId === 'password'){ if(u.providers.indexOf('password') !== -1) throw err('auth/provider-already-linked');
+          if(c.email && Object.values(A.users).some(x=>x.uid !== u.uid && String(x.email || '').toLowerCase() === String(c.email).toLowerCase())) throw err('auth/email-already-in-use');
+          u.providers.push('password'); u.pw = c.pw; if(!u.email && c.email){ u.email = c.email; v.email = c.email; } }
         v.providerData = pdata(u); return {user: v}; },
       linkWithPopup: async()=>{ const g = W.__G; if(!g) throw err('auth/popup-closed-by-user'); return v.linkWithCredential(gcred(g)); },
       unlink: async(pid)=>{ A.calls.push(['unlink', u.uid, pid]); u.providers = u.providers.filter(p=>p !== pid); if(pid === 'google.com'){ u.gSub = null; } v.providerData = pdata(u); return v; },
@@ -83,6 +85,7 @@
     async signInWithRedirect(){ A.calls.push(['redirect']); },
     async getRedirectResult(){ return {user: null}; },
     async signInWithCredential(c){ A.calls.push(['signInCred', c.providerId, c.idToken]); return googleSignIn(c); },
+    async signInWithCustomToken(t){ A.calls.push(['custom', t]); const u = A.users[String(t).replace(/^ct-/, '')]; if(!u) throw err('auth/invalid-custom-token'); await setUser(u); return {user: view(u), additionalUserInfo: {isNewUser: false}}; },
     async signOut(){ A.calls.push(['signOut']); await setUser(null); },
     async sendPasswordResetEmail(e){ A.calls.push(['reset', e]); },
     setPersistence: async()=>{}, useDeviceLanguage(){}, languageCode: null
@@ -126,5 +129,54 @@
     let removed = false;
     if(Date.now() - me.created < 30 * 60000 && me.providers.length && me.providers.every(p=>p === 'google.com')){ delete A.users[tok]; removed = true; }
     return out({status: 'conflict', email: em, removed: removed});
+  };
+  // ---------- telegramLogin (server mantig'i — functions/src/telegram/login.js ning soddalashtirilgan nusxasi; botdagi tasdiq — __tglConfirm/__tglDeny) ----------
+  const TS = W.__TS = {reqs: {}, last: null, map: {}, rev: {}, names: {}, calls: [], off: false, seq: 0};
+  function setMap(tgId, uid, name){ const old = TS.rev[uid]; if(old && old !== tgId) delete TS.map[old]; TS.map[tgId] = uid; TS.rev[uid] = tgId; TS.names[uid] = name; }
+  function unMap(uid){ const t = TS.rev[uid]; if(t){ delete TS.map[t]; delete TS.rev[uid]; delete TS.names[uid]; } }
+  W.__tglConfirm = function(tgId, name){ const q = TS.reqs[TS.last]; if(q && q.status === 'pending'){ q.status = 'confirmed'; q.tgId = String(tgId); q.name = name || 'Ali Valiyev'; } };
+  W.__tglDeny = function(){ const q = TS.reqs[TS.last]; if(q && q.status === 'pending') q.status = 'denied'; };
+  W.__tglMap = setMap;
+  function tgl(b, uid){
+    TS.calls.push(b.action);
+    if(TS.off) return [503, {ok: false, code: 'no-bot'}];
+    const okr = (o)=>[200, Object.assign({ok: true}, o)], e = (s, c)=>[s, {ok: false, code: c}];
+    const a = b.action;
+    if(a === 'start'){
+      const mode = b.mode || 'login';
+      if(mode !== 'login'){ if(!uid) return e(401, 'unauthenticated'); if(DB.docs['staffAuth/' + uid]) return e(403, 'staff'); if(mode === 'verify' && !TS.rev[uid]) return e(409, 'not-linked'); }
+      const n = ++TS.seq, rid = 'rid' + n + 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa', poll = 'poll' + n + 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
+      TS.reqs[rid] = {mode: mode, poll: poll, status: 'pending', linkUid: mode === 'login' ? null : uid}; TS.last = rid;
+      return okr({rid: rid, poll: poll, num: 47, url: 'https://t.me/savdo_pos_bot?start=l_' + rid, expMs: Date.now() + 300000});
+    }
+    if(a === 'status'){ if(!uid) return e(401, 'unauthenticated'); return okr({linked: !!TS.rev[uid], name: TS.names[uid] || ''}); }
+    if(a === 'unlink'){ if(!uid) return e(401, 'unauthenticated'); if(!TS.rev[uid]) return okr({linked: false}); if(!(A.users[uid].providers || []).length) return e(409, 'last-method'); unMap(uid); return okr({linked: false}); }
+    if(a === 'forget'){ if(!uid) return e(401, 'unauthenticated'); unMap(uid); if(!(A.users[uid].providers || []).length && !DB.docs['businesses/' + uid]){ delete A.users[uid]; return okr({deleted: true}); } return okr({deleted: false}); }
+    const q = TS.reqs[b.rid];
+    if(!q) return e(404, 'not-found'); if(q.poll !== b.poll) return e(403, 'forbidden');
+    if(a === 'poll'){
+      if(q.status === 'pending' || q.status === 'denied') return okr({status: q.status});
+      if(q.status !== 'confirmed') return okr({status: 'used'});
+      q.status = 'used';
+      if(q.mode === 'verify') return okr({status: TS.map[q.tgId] === q.linkUid ? 'verified' : 'mismatch'});
+      if(q.mode === 'link'){ if(TS.map[q.tgId] && TS.map[q.tgId] !== q.linkUid) return okr({status: 'tg-used'}); setMap(q.tgId, q.linkUid, q.name); return okr({status: 'linked', name: q.name}); }
+      const mu = TS.map[q.tgId];
+      if(mu && A.users[mu]) return okr({status: 'ok', token: 'ct-' + mu});
+      q.status = 'choose'; q.ticket = 'ticket' + TS.seq + 'cccccccccccccccccccccccccccccccc'; return okr({status: 'choose', ticket: q.ticket, name: q.name});
+    }
+    if(q.status !== 'choose' || q.ticket !== b.ticket) return okr({status: 'used'});
+    if(a === 'new'){ q.status = 'used'; const u = newUser({email: null, providers: [], displayName: q.name}); setMap(q.tgId, u.uid, q.name); return okr({status: 'ok', token: 'ct-' + u.uid}); }
+    if(a === 'link'){ if(!uid) return e(401, 'unauthenticated'); if(DB.docs['staffAuth/' + uid]) return e(403, 'staff'); q.status = 'used';
+      if(TS.map[q.tgId] && TS.map[q.tgId] !== uid) return okr({status: 'tg-used'}); setMap(q.tgId, uid, q.name); return okr({status: 'linked', name: q.name}); }
+    return e(400, 'bad-action');
+  }
+  const prevFetch = W.fetch;
+  W.fetch = async function(url, opts){
+    if(String(url).indexOf('/telegramLogin') === -1) return prevFetch(url, opts);
+    const tok = String(((opts || {}).headers || {}).Authorization || '').replace(/^Bearer tok-/, '');
+    const uid = tok && A.users[tok] ? tok : null;
+    let b = {}; try{ b = JSON.parse((opts || {}).body || '{}'); }catch(_e){}
+    const r = tgl(b, uid);
+    return new Response(JSON.stringify(r[1]), {status: r[0], headers: {'Content-Type': 'application/json'}});
   };
 })();

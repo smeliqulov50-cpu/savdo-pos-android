@@ -37,3 +37,13 @@ test('authGuard: e\'lon qilingan, cors, maxfiy qiymat yo\'q; tokensiz/GET — ra
   const a = res(); await fns.authGuard({ method: 'GET', get: () => '' }, a); assert.equal(a.code, 405);
   const b = res(); await fns.authGuard({ method: 'POST', get: () => '', body: {} }, b); assert.equal(b.code, 401);
 });
+
+/* fix206-tglogin: telegramLogin — cors, POST; bot tokeni yo'q bo'lsa 503; buzuq ID token — 401 */
+test('telegramLogin: e\'lon qilingan, cors; GET/tokensiz bot/buzuq token — rad', async () => {
+  assert.equal(typeof fns.telegramLogin, 'function');
+  assert.equal(fns.telegramLogin.__opts.cors, true);
+  const res = () => { const r = { code: 0, body: null, status(c) { r.code = c; return r; }, json(b) { r.body = b; return r; } }; return r; };
+  const a = res(); await fns.telegramLogin({ method: 'GET', get: () => '' }, a); assert.equal(a.code, 405);
+  const b = res(); await fns.telegramLogin({ method: 'POST', get: () => '', body: { action: 'start' } }, b); assert.equal(b.code, 503);
+  const c = res(); await fns.telegramLogin({ method: 'POST', get: (h) => h === 'Authorization' ? 'Bearer bad' : '', body: { action: 'status' } }, c); assert.equal(c.code, 401);
+});

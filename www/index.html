@@ -999,6 +999,20 @@
   .co-foot #confirm-sale-btn{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;column-gap:4px;}
   .co-btn-sum{font-weight:800;white-space:nowrap;}
   body.money-keypad-open .co-foot{position:static;}
+  /* fix206-tglogin */
+  .tgl-steps{margin:0 0 12px;padding-left:20px;font-size:13px;color:var(--ink-soft);line-height:1.5;}
+  .tgl-num{font-size:56px;font-weight:900;letter-spacing:4px;text-align:center;color:var(--ink);background:var(--surface-soft);border-radius:18px;padding:8px 0;margin:0 auto 14px;max-width:200px;font-variant-numeric:tabular-nums;}
+  .tgl-open{display:flex !important;align-items:center;justify-content:center;gap:10px;text-decoration:none;background:#229ED9 !important;border-color:#229ED9 !important;color:#fff !important;}
+  .tgl-open svg circle{fill:#fff;} .tgl-open svg path{fill:#229ED9;}
+  .tgl-left{display:flex;align-items:center;justify-content:center;gap:6px;text-align:center;font-size:12.5px;color:var(--ink-faint);margin:10px 0 0;font-variant-numeric:tabular-nums;}
+  .tgl-dot{width:8px;height:8px;border-radius:50%;background:#229ED9;animation:tglPulse 1.4s ease-in-out infinite;}
+  @keyframes tglPulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+  @media (prefers-reduced-motion:reduce){.tgl-dot{animation:none;}}
+  .tgl-dead .tgl-num{opacity:.35;text-decoration:line-through;}
+  .tgl-dead + .btn{margin-top:4px;}
+  .tgl-hint{text-align:center;margin:10px 0 12px;line-height:1.4;}
+  .tgl-acct{display:flex;align-items:center;justify-content:center;gap:8px;}
+  #fp-tg{display:flex;align-items:center;justify-content:center;gap:8px;}
   /* fix205-google */
   .au-soc.busy{opacity:.6;pointer-events:none;}
   .au-title-sm{font-size:22px;}
@@ -2141,6 +2155,37 @@ const T = {
   auTelegram:{uz:"Telegram orqali davom etish",ru:"Продолжить через Telegram",en:"Continue with Telegram",kk:"Telegram арқылы жалғастыру",ky:"Telegram аркылуу улантуу",tg:"Идома тавассути Telegram"},
   auTabLogin:{uz:"Kirish",ru:"Вход",en:"Log in",kk:"Кіру",ky:"Кирүү",tg:"Вуруд"},
   auTabSignup:{uz:"Ro'yxatdan o'tish",ru:"Регистрация",en:"Sign up",kk:"Тіркелу",ky:"Катталуу",tg:"Бақайдгирӣ"},
+  tglTitle:{uz:"Telegram orqali kirish",ru:"Вход через Telegram",en:"Sign in with Telegram",kk:"Telegram арқылы кіру",ky:"Telegram аркылуу кирүү",tg:"Вуруд тавассути Telegram"},
+  tglSub:{uz:"Botda shu ekrandagi raqamni bosing — shu bilan kirasiz",ru:"Нажмите в боте число с этого экрана — и вы войдёте",en:"Tap the number from this screen in the bot to sign in",kk:"Ботта осы экрандағы санды басыңыз — сөйтіп кіресіз",ky:"Ботто ушул экрандагы санды басыңыз — ошентип киресиз",tg:"Дар бот рақами ҳамин экранро пахш кунед — ва ворид мешавед"},
+  tglStep1:{uz:"«Telegram'ni ochish» ni bosing, botda «Start» ni bosing",ru:"Нажмите «Открыть Telegram», в боте нажмите «Start»",en:"Tap «Open Telegram», then «Start» in the bot",kk:"«Telegram-ды ашу» басыңыз, ботта «Start» басыңыз",ky:"«Telegram'ды ачуу» басыңыз, боттон «Start» басыңыз",tg:"«Кушодани Telegram»-ро пахш кунед, дар бот «Start»-ро пахш кунед"},
+  tglStep2:{uz:"Botda shu raqamni tanlang:",ru:"Выберите в боте это число:",en:"Choose this number in the bot:",kk:"Ботта осы санды таңдаңыз:",ky:"Боттон ушул санды тандаңыз:",tg:"Дар бот ҳамин рақамро интихоб кунед:"},
+  tglOpen:{uz:"Telegram'ni ochish",ru:"Открыть Telegram",en:"Open Telegram",kk:"Telegram-ды ашу",ky:"Telegram'ды ачуу",tg:"Кушодани Telegram"},
+  tglWaiting:{uz:"Tasdiq kutilmoqda",ru:"Ожидаем подтверждение",en:"Waiting for confirmation",kk:"Растау күтілуде",ky:"Ырастоо күтүлүүдө",tg:"Интизори тасдиқ"},
+  tglExpired:{uz:"Vaqt tugadi yoki havola ishlatilgan. Qaytadan urinib ko'ring",ru:"Время вышло или ссылка уже использована. Попробуйте снова",en:"Time is up or the link was already used. Try again",kk:"Уақыт бітті немесе сілтеме қолданылған. Қайталап көріңіз",ky:"Убакыт бүттү же шилтеме колдонулган. Кайра аракет кылыңыз",tg:"Вақт тамом шуд ё пайванд истифода шудааст. Аз нав кӯшиш кунед"},
+  tglDenied:{uz:"So'rov bekor qilindi: botda noto'g'ri raqam yoki «Bu men emasman» bosildi",ru:"Запрос отменён: в боте нажато неверное число или «Это не я»",en:"Request cancelled: a wrong number or «It's not me» was tapped in the bot",kk:"Сұрау тоқтатылды: ботта қате сан немесе «Бұл мен емеспін» басылды",ky:"Суроо жокко чыгарылды: боттон туура эмес сан же «Бул мен эмесмин» басылды",tg:"Дархост бекор шуд: дар бот рақами нодуруст ё «Ин ман нестам» пахш шуд"},
+  tglRetry:{uz:"Qaytadan urinish",ru:"Попробовать снова",en:"Try again",kk:"Қайталау",ky:"Кайра аракет кылуу",tg:"Аз нав кӯшиш кардан"},
+  tglBack:{uz:"Orqaga",ru:"Назад",en:"Back",kk:"Артқа",ky:"Артка",tg:"Ба қафо"},
+  tglChooseTitle:{uz:"Telegram tasdiqlandi",ru:"Telegram подтверждён",en:"Telegram confirmed",kk:"Telegram расталды",ky:"Telegram ырасталды",tg:"Telegram тасдиқ шуд"},
+  tglChooseSub:{uz:"Bu Telegram hali hech qaysi Savdo Pos akkauntiga ulanmagan. Nima qilamiz?",ru:"Этот Telegram ещё не привязан ни к одному аккаунту Savdo Pos. Что сделать?",en:"This Telegram isn't linked to any Savdo Pos account yet. What next?",kk:"Бұл Telegram әлі ешбір Savdo Pos аккаунтына байланыспаған. Не істейміз?",ky:"Бул Telegram азырынча эч бир Savdo Pos аккаунтуна байланышкан эмес. Эмне кылабыз?",tg:"Ин Telegram ҳоло ба ягон ҳисоби Savdo Pos пайваст нест. Чӣ кор кунем?"},
+  tglLinkExisting:{uz:"Mavjud akkauntimga ulash",ru:"Привязать к моему аккаунту",en:"Link to my existing account",kk:"Бар аккаунтыма байланыстыру",ky:"Бар аккаунтума байланыштыруу",tg:"Пайваст ба ҳисоби мавҷудаам"},
+  tglChooseHint:{uz:"Do'koningiz email bilan ochilganmi? Unda ulang — ma'lumotlaringiz o'z joyida qoladi, ikkinchi bo'sh do'kon ochilmaydi.",ru:"Магазин уже открыт по email? Тогда привяжите — данные останутся на месте, второй пустой магазин не появится.",en:"Already have a shop with email? Link it — your data stays, and no second empty shop is created.",kk:"Дүкеніңіз email арқылы ашылған ба? Онда байланыстырыңыз — деректеріңіз сақталады, екінші бос дүкен ашылмайды.",ky:"Дүкөнүңүз email менен ачылганбы? Анда байланыштырыңыз — маалыматыңыз сакталат, экинчи бош дүкөн ачылбайт.",tg:"Мағозаи шумо бо email кушода шудааст? Пас пайваст кунед — маълумоти шумо дар ҷояш мемонад, мағозаи дуюми холӣ кушода намешавад."},
+  tglNewShop:{uz:"Yangi do'kon ochish",ru:"Открыть новый магазин",en:"Open a new shop",kk:"Жаңа дүкен ашу",ky:"Жаңы дүкөн ачуу",tg:"Кушодани мағозаи нав"},
+  tglLinkText:{uz:"Email va parolingizni kiriting — kirasiz va Telegram shu akkauntga ulanadi.",ru:"Введите email и пароль — вы войдёте, и Telegram привяжется к этому аккаунту.",en:"Enter your email and password — you'll sign in and Telegram will be linked to this account.",kk:"Email мен құпия сөзді енгізіңіз — кіресіз және Telegram осы аккаунтқа байланысады.",ky:"Email жана сырсөздү киргизиңиз — киресиз жана Telegram ушул аккаунтка байланышат.",tg:"Email ва пароли худро ворид кунед — ворид мешавед ва Telegram ба ҳамин ҳисоб пайваст мешавад."},
+  tglLinkBtn:{uz:"Kirish va ulash",ru:"Войти и привязать",en:"Sign in and link",kk:"Кіру және байланыстыру",ky:"Кирүү жана байланыштыруу",tg:"Ворид шудан ва пайваст кардан"},
+  tglLinkedOk:{uz:"Telegram akkauntingizga ulandi. Endi Telegram orqali ham kira olasiz",ru:"Telegram привязан к аккаунту. Теперь можно входить и через Telegram",en:"Telegram is linked. You can now sign in with Telegram too",kk:"Telegram аккаунтқа байланысты. Енді Telegram арқылы да кіре аласыз",ky:"Telegram аккаунтка байланышты. Эми Telegram аркылуу да кире аласыз",tg:"Telegram ба ҳисоб пайваст шуд. Акнун тавассути Telegram ҳам ворид шуда метавонед"},
+  tglLinkLater:{uz:"Kirdingiz. Telegram'ni Sozlamalar → Hisob bo'limida ulashingiz mumkin",ru:"Вы вошли. Telegram можно привязать в Настройки → Аккаунт",en:"Signed in. You can link Telegram in Settings → Account",kk:"Кірдіңіз. Telegram-ды Баптаулар → Аккаунт бөлімінде байланыстыруға болады",ky:"Кирдиңиз. Telegram'ды Жөндөөлөр → Аккаунт бөлүмүндө байланыштыра аласыз",tg:"Ворид шудед. Telegram-ро дар Танзимот → Ҳисоб пайваст кардан мумкин"},
+  tglUsed:{uz:"Bu Telegram boshqa Savdo Pos akkauntiga ulangan",ru:"Этот Telegram уже привязан к другому аккаунту Savdo Pos",en:"This Telegram is already linked to another Savdo Pos account",kk:"Бұл Telegram басқа Savdo Pos аккаунтына байланысқан",ky:"Бул Telegram башка Savdo Pos аккаунтуна байланышкан",tg:"Ин Telegram ба ҳисоби дигари Savdo Pos пайваст аст"},
+  tglStaff:{uz:"Xodim akkauntiga Telegram ulab bo'lmaydi",ru:"К аккаунту сотрудника Telegram привязать нельзя",en:"Telegram can't be linked to a staff account",kk:"Қызметкер аккаунтына Telegram байланыстыруға болмайды",ky:"Кызматкердин аккаунтуна Telegram байланыштырууга болбойт",tg:"Ба ҳисоби корманд Telegram-ро пайваст кардан мумкин нест"},
+  tglOff:{uz:"Telegram orqali kirish hozir ishlamayapti. Email bilan kiring",ru:"Вход через Telegram сейчас недоступен. Войдите по email",en:"Telegram sign-in is unavailable right now. Use email",kk:"Telegram арқылы кіру қазір қолжетімсіз. Email арқылы кіріңіз",ky:"Telegram аркылуу кирүү азыр иштебей жатат. Email менен кириңиз",tg:"Вуруд тавассути Telegram ҳоло дастрас нест. Бо email ворид шавед"},
+  tglMismatch:{uz:"Boshqa Telegram akkaunti tasdiqladi. Akkauntga ulangan Telegram'dan tasdiqlang",ru:"Подтвердил другой аккаунт Telegram. Подтвердите из Telegram, привязанного к аккаунту",en:"A different Telegram account confirmed. Confirm from the Telegram linked to this account",kk:"Басқа Telegram аккаунты растады. Аккаунтқа байланысқан Telegram-нан растаңыз",ky:"Башка Telegram аккаунту ырастады. Аккаунтка байланышкан Telegram'дан ырастаңыз",tg:"Ҳисоби дигари Telegram тасдиқ кард. Аз Telegram-и ба ҳисоб пайвастшуда тасдиқ кунед"},
+  tglNotLinked:{uz:"Bu akkauntga Telegram ulanmagan",ru:"К этому аккаунту Telegram не привязан",en:"No Telegram is linked to this account",kk:"Бұл аккаунтқа Telegram байланыспаған",ky:"Бул аккаунтка Telegram байланышкан эмес",tg:"Ба ин ҳисоб Telegram пайваст нест"},
+  tglLinkTitle:{uz:"Telegram'ni ulash",ru:"Привязать Telegram",en:"Link Telegram",kk:"Telegram-ды байланыстыру",ky:"Telegram'ды байланыштыруу",tg:"Пайваст кардани Telegram"},
+  tglVerify:{uz:"Telegram bilan tasdiqlash",ru:"Подтвердить через Telegram",en:"Confirm with Telegram",kk:"Telegram арқылы растау",ky:"Telegram аркылуу ырастоо",tg:"Тасдиқ тавассути Telegram"},
+  tglGoogleVerify:{uz:"Google bilan tasdiqlash",ru:"Подтвердить через Google",en:"Confirm with Google",kk:"Google арқылы растау",ky:"Google аркылуу ырастоо",tg:"Тасдиқ тавассути Google"},
+  tglPinHint:{uz:"PIN-kodni tiklash uchun do'kon egasi ekaningizni tasdiqlang.",ru:"Чтобы сбросить PIN-код, подтвердите, что вы владелец магазина.",en:"To reset the PIN, confirm that you own this shop.",kk:"PIN-кодты қалпына келтіру үшін дүкен иесі екеніңізді растаңыз.",ky:"PIN-кодду калыбына келтирүү үчүн дүкөндүн ээси экениңизди ырастаңыз.",tg:"Барои барқарор кардани PIN-код тасдиқ кунед, ки соҳиби мағоза ҳастед."},
+  tglTermsSub:{uz:"Bu Telegram bilan yangi do'kon ochiladi. Davom etish uchun shartlarni o'qing.",ru:"С этим Telegram будет создан новый магазин. Прочитайте условия, чтобы продолжить.",en:"A new shop will be created with this Telegram. Read the terms to continue.",kk:"Осы Telegram арқылы жаңа дүкен ашылады. Жалғастыру үшін шарттарды оқыңыз.",ky:"Ушул Telegram менен жаңы дүкөн ачылат. Улантуу үчүн шарттарды окуңуз.",tg:"Бо ин Telegram мағозаи нав кушода мешавад. Барои идома шартҳоро хонед."},
+  tglTermsHint:{uz:"Email bilan ochilgan do'koningiz bormi? «Bekor qilish» ni bosing, email va parol bilan kiring, keyin Telegram'ni Sozlamalar → Hisob bo'limida ulang.",ru:"Уже есть магазин с email? Нажмите «Отмена», войдите по email и паролю, затем привяжите Telegram в Настройки → Аккаунт.",en:"Already have a shop with email? Tap «Cancel», sign in with email and password, then link Telegram in Settings → Account.",kk:"Email арқылы ашылған дүкеніңіз бар ма? «Бас тарту» басыңыз, email мен құпия сөзбен кіріп, Telegram-ды Баптаулар → Аккаунт бөлімінде байланыстырыңыз.",ky:"Email менен ачылган дүкөнүңүз барбы? «Жокко чыгаруу» басыңыз, email жана сырсөз менен кирип, Telegram'ды Жөндөөлөр → Аккаунт бөлүмүндө байланыштырыңыз.",tg:"Мағозаи бо email кушодашуда доред? «Бекор кардан»-ро пахш кунед, бо email ва парол ворид шавед, баъд Telegram-ро дар Танзимот → Ҳисоб пайваст кунед."},
+  amAddEmail:{uz:"Email va parol qo'shish",ru:"Добавить email и пароль",en:"Add email and password",kk:"Email мен құпия сөз қосу",ky:"Email жана сырсөз кошуу",tg:"Илова кардани email ва парол"},
   auBusy:{uz:"Kuting…",ru:"Подождите…",en:"Please wait…",kk:"Күте тұрыңыз…",ky:"Күтө туруңуз…",tg:"Интизор шавед…"},
   auEnterEmail:{uz:"Emailni kiriting",ru:"Введите email",en:"Enter your email",kk:"Email енгізіңіз",ky:"Email киргизиңиз",tg:"Email-ро ворид кунед"},
   auEnterPassword:{uz:"Parolni kiriting",ru:"Введите пароль",en:"Enter your password",kk:"Құпия сөзді енгізіңіз",ky:"Сырсөздү киргизиңиз",tg:"Паролро ворид кунед"},
@@ -4612,7 +4657,7 @@ function renderAuthConnecting(){
 /* fix204-auth: yangi kirish ekrani (OLX uslubida): logotip, «Xush kelibsiz!», Google/Telegram tugmalari joyi, «yoki» chizig'i,
    «Kirish | Ro'yxatdan o'tish» tablari, xato — maydon ostida. Mantiq AVVALGIDEK: email+parol bilan kirish, ro'yxatdan o'tish
    (shartlarga rozilik bilan), parolni tiklash, til tanlash. Tab yoki til almashsa, kiritilgan email va parol saqlanadi. */
-const AUTH_SOCIAL = {google: 'auto', telegram: false};   /* fix205-google: 'auto' — Google ishlay oladigan joyda (veb; Android — plagin bo'lsa) ko'rinadi */   /* 2- va 3-bosqichda yoqiladi. O'chiq bo'lsa tugma ham, «yoki» chizig'i ham chiqmaydi */
+const AUTH_SOCIAL = {google: 'auto', telegram: 'auto'};   /* fix206-tglogin: Telegram — server orqali, hamma joyda */   /* fix205-google: 'auto' — Google ishlay oladigan joyda (veb; Android — plagin bo'lsa) ko'rinadi */   /* 2- va 3-bosqichda yoqiladi. O'chiq bo'lsa tugma ham, «yoki» chizig'i ham chiqmaydi */
 function __auSocialHtml(){
   const b = [];
   if(AUTH_SOCIAL.google === true || (AUTH_SOCIAL.google === 'auto' && __auGoogleAvail())) b.push('<button type="button" class="au-soc" id="auth-google-btn"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>' + tr('auGoogle') + '</span></button>');
@@ -4702,7 +4747,7 @@ async function __auAfterGoogle(uc, cred){
   if(g.status === 'own' || g.status === 'staff'){ window.__auPending = null; __auHoldEnd(true); return; }
   if(g.status === 'new'){
     __auLs('sp_au_terms', user.uid);
-    window.__auPending = {mode: 'gterms', keep: {email: user.email || ''}};
+    window.__auPending = {mode: 'gterms', keep: {email: user.email || '', tg: __tglIsTgUser(user), name: user.displayName || ''}};   /* fix206-tglogin */
     renderAuthGate('gterms', window.__auPending.keep);
     return;   // ushlab turish — foydalanuvchi shartlarga rozi bo'lguncha
   }
@@ -4781,10 +4826,10 @@ async function __auBeforeOpen(user){
   if(!window.__auHoldP){
     if(__auLs('sp_au_terms') === user.uid){   // shartlar oynasi yopilmay ilova o'chgan bo'lsa — yana so'raladi
       __auHoldStart();
-      window.__auPending = {mode: 'gterms', keep: {email: user.email || ''}};
+      window.__auPending = {mode: 'gterms', keep: {email: user.email || '', tg: __tglIsTgUser(user), name: user.displayName || ''}};   /* fix206-tglogin */
       renderAuthGate('gterms', window.__auPending.keep);
     } else if(__auLs('sp_au_chk') === '1'){
-      if((user.providerData || []).some(p=>p.providerId === 'google.com')){   // Google bilan kirish tekshiruvi tugamay ilova o'chgan bo'lsa — qayta tekshiriladi
+      if((user.providerData || []).some(p=>p.providerId === 'google.com') || __tglIsTgUser(user)){   /* fix206-tglogin: Telegram bilan kirish ham */   // Google bilan kirish tekshiruvi tugamay ilova o'chgan bo'lsa — qayta tekshiriladi
         __auHoldStart();
         __auAfterGoogle(null, null);
       } else __auLs('sp_au_chk', null);   // parol bilan kirish — tekshiruv kerak emas (oflayn kirish avvalgidek)
@@ -4858,8 +4903,8 @@ function __auRenderSpecial(mode, keep){
   }
   // gterms — yangi Google foydalanuvchi: ro'yxatdan o'tishdagi kabi shartlarga rozilik
   root.innerHTML = `<div class="login-screen au-screen" data-au-mode="gterms">${authLangRowHtml()}<div class="au-box">
-    ${head(tr('auTitle'), tr('auGTermsSub'))}
-    ${keep.email ? `<div class="au-acct">${escapeHtml(keep.email)}</div>` : ''}
+    ${head(tr('auTitle'), tr(keep.tg ? 'tglTermsSub' : 'auGTermsSub'))}
+    ${(keep.email || keep.name) ? `<div class="au-acct">${escapeHtml(keep.email || keep.name)}</div>` : ''}
     <div class="card" style="max-height:200px;overflow-y:auto;margin-bottom:12px;">
       <p class="subtle" style="margin:0;font-size:12px;line-height:1.6;white-space:pre-line;">${tr('termsText')}</p>
     </div>
@@ -4871,7 +4916,7 @@ function __auRenderSpecial(mode, keep){
     <div class="au-field au-terms"><div class="checkbox-row" style="margin-bottom:0;"><input type="checkbox" id="auth-terms-check"><label for="auth-terms-check" style="font-size:13px;">${tr('termsAgree')}</label></div>
       <div class="au-err" id="auth-terms-err" role="alert"></div></div>
     <button type="button" class="btn btn-primary btn-pill btn-block" id="auth-gterms-ok">${tr('auContinue')}</button>
-    <p class="au-hint au-gt-hint">${tr('auGTermsHint')}</p>
+    <p class="au-hint au-gt-hint">${tr(keep.tg ? 'tglTermsHint' : 'auGTermsHint')}</p>
     <button type="button" class="au-link au-switch" id="auth-gterms-cancel">${tr('cancel')}</button>
   </div></div>`;
   bindAuthLangRow(()=>renderAuthGate('gterms', keep));
@@ -4898,15 +4943,17 @@ function __acctMethodsRender(){
   const pd = fbUser.providerData || [];
   const pv = pd.map(p=>p.providerId);
   const g = pd.find(p=>p.providerId === 'google.com');
-  const hasPw = pv.indexOf('password') !== -1, hasG = !!g, n = pv.length;
+  const tgS = __tglStatus();   /* fix206-tglogin */
+  const hasPw = pv.indexOf('password') !== -1, hasG = !!g, n = pv.length + (tgS.linked ? 1 : 0);
   const mailIc = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>';
   const gIc = '<svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
   const act = (id, label, cls)=>`<button type="button" class="btn ${cls || 'btn-outline'} btn-sm am-act" id="${id}">${label}</button>`;
   box.innerHTML = `<h3 class="sub-title">${tr('amTitle')}</h3><div class="card am-card">
     <div class="am-row" data-am="password"><span class="am-ic">${mailIc}</span><div class="am-txt"><div class="am-name">${tr('amEmail')}</div><div class="am-sub ${hasPw ? 'on' : ''}">${hasPw ? escapeHtml(fbUser.email || '') + ' · ' + tr('amOn') : tr('amOff')}</div></div>
-      ${hasPw ? (n > 1 ? act('am-unlink-password', tr('amUnlink'), 'btn-ghost') : '') : (fbUser.email ? act('am-set-pw', tr('amSetPw')) : '')}</div>
+      ${hasPw ? (n > 1 ? act('am-unlink-password', tr('amUnlink'), 'btn-ghost') : '') : (fbUser.email ? act('am-set-pw', tr('amSetPw')) : act('am-add-email', tr('amLink')))}</div>
     <div class="am-row" data-am="google"><span class="am-ic">${gIc}</span><div class="am-txt"><div class="am-name">Google</div><div class="am-sub ${hasG ? 'on' : ''}">${hasG ? escapeHtml(g.email || '') + ' · ' + tr('amOn') : tr('amOff')}</div></div>
       ${hasG ? (n > 1 ? act('am-unlink-google', tr('amUnlink'), 'btn-ghost') : '') : (__auGoogleAvail() ? act('am-link-google', tr('amLink')) : '')}</div>
+    ${__tglRowHtml(tgS, n, act)}
   </div><p class="subtle am-note">${tr('amNote')}</p><div id="am-err" class="error-text" style="margin:-4px 0 10px;"></div>`;
   const err = (m)=>{ const e = document.getElementById('am-err'); if(e) e.textContent = m || ''; };
   const after = async (msg)=>{ try{ await fbUser.reload(); fbUser = fbAuth.currentUser || fbUser; }catch(e){} __acctMethodsRender(); if(msg) showToast(msg); };
@@ -4921,7 +4968,7 @@ function __acctMethodsRender(){
     const b = document.getElementById('am-unlink-' + (pid === 'password' ? 'password' : 'google')); if(!b) return;
     b.addEventListener('click', ()=>confirmDialog(escapeHtml(tr('amUnlinkQ').replace('{m}', name)), async ()=>{
       err('');
-      if((fbUser.providerData || []).length < 2){ err(tr('amNote')); return; }
+      if((fbUser.providerData || []).length + (__tglStatus().linked ? 1 : 0) < 2){ err(tr('amNote')); return; }   /* fix206-tglogin */
       try{ await fbUser.unlink(pid); await after(tr('amUnlinked')); }catch(e){ err(failText(e)); }
     }, tr('amUnlink')));
   };
@@ -4962,6 +5009,305 @@ function __acctMethodsRender(){
       }catch(e){ go.disabled = false; if(!__auIsCancel(e)) e1.textContent = failText(e); }
     });
   });
+  try{ __tglBindAcct(err, after, failText); }catch(e){}   /* fix206-tglogin */
+}
+/* fix206-tglogin: Telegram orqali kirish.
+   Ilova so'rov ochadi (server: telegramLogin) → ekranda 2 xonali raqam va «Telegram'ni ochish» havolasi (t.me/<bot>?start=l_…).
+   Botda 4 ta raqamdan to'g'risi bosiladi (noto'g'ri raqam yoki «Bu men emasman» — so'rov yonadi). Ilova har 2 soniyada so'raydi.
+   Tasdiqlansa: Telegram ulangan akkaunt bo'lsa — o'sha akkauntga kirish (bir martalik kalit); ulanmagan bo'lsa — tanlov:
+   «Mavjud akkauntimga ulash» (email+parol) yoki «Yangi do'kon ochish» (shartlarga rozilik oynasi bilan).
+   Kirish kaliti, so'rov siri va chipta qurilmada saqlanmaydi (faqat xotirada). Botga ulangan do'konga avtomatik kirilmaydi. */
+const __TGL = {run: null, busy: false, st: null};
+const __TGL_IC = '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#29A9EB"/><path fill="#fff" d="M17.6 7.2 15.7 16.6c-.1.6-.5.8-1 .5l-2.9-2.1-1.4 1.3c-.2.2-.3.3-.6.3l.2-2.9 5.3-4.8c.2-.2 0-.3-.4-.1l-6.5 4.1-2.8-.9c-.6-.2-.6-.6.1-.9l11-4.2c.5-.2 1 .1.8.9z"/></svg>';
+function __tglIsTgUser(u){ return !!u && !((u.providerData || []).length); }
+async function __tglCall(body, auth){
+  if(typeof navigator !== 'undefined' && navigator.onLine === false){ const e = new Error('offline'); e.code = 'offline'; throw e; }
+  const h = {'Content-Type': 'application/json'};
+  if(auth){
+    const u = fbAuth.currentUser || fbUser; if(!u){ const e = new Error('login'); e.code = 'login'; throw e; }
+    try{ h.Authorization = 'Bearer ' + await u.getIdToken(); }catch(e){ const x = new Error('net'); x.code = 'net'; throw x; }
+  }
+  const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  const t = setTimeout(()=>{ try{ if(ctl) ctl.abort(); }catch(e){} }, 20000);
+  try{
+    let resp;
+    try{ resp = await fetch(payFnUrl('telegramLogin'), {method: 'POST', headers: h, body: JSON.stringify(body || {}), signal: ctl ? ctl.signal : undefined}); }
+    catch(e){ const x = new Error('net'); x.code = 'net'; throw x; }
+    let d = null; try{ d = await resp.json(); }catch(e){}
+    if(!d || !d.ok){ const e = new Error('tgl'); e.code = (d && d.code) || ('http-' + resp.status); throw e; }
+    return d;
+  }finally{ clearTimeout(t); }
+}
+function __tglErrText(e){
+  const c = String((e && e.code) || '');
+  if(c === 'too-many') return tr('authError_too_many');
+  if(c === 'offline' || c === 'net') return tr('authError_network');
+  if(c === 'no-bot' || c === 'http-404') return tr('tglOff');
+  if(c === 'staff') return tr('tglStaff');
+  if(c === 'tg-used') return tr('tglUsed');
+  if(c === 'expired' || c === 'used') return tr('tglExpired');
+  if(c === 'denied') return tr('tglDenied');
+  if(c === 'mismatch') return tr('tglMismatch');
+  if(c === 'not-linked') return tr('tglNotLinked');
+  return tr('authError_generic') + ' (' + (c || '?').slice(0, 40) + ')';
+}
+function __tglFmt(ms){ const s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+function __tglStop(){
+  const r = __TGL.run; __TGL.run = null;
+  if(!r) return;
+  r.dead = true; clearTimeout(r.timer); clearInterval(r.ui);
+  try{ document.removeEventListener('visibilitychange', r.vis); }catch(e){}
+}
+/* So'rov holatini kuzatish: har 2 soniyada (ilovaga qaytilganda — darhol). alive() — ekran/oyna hali ochiqmi */
+function __tglLoop(s, alive, onEnd){
+  __tglStop();
+  const r = {s: s, dl: Date.now() + 5 * 60000, timer: null, ui: null, dead: false, busy: false};
+  __TGL.run = r;
+  const end = (d)=>{ __tglStop(); try{ onEnd(d); }catch(e){} };
+  const step = async ()=>{
+    if(r.dead || r.busy) return;
+    clearTimeout(r.timer);
+    if(!alive()){ __tglStop(); return; }
+    if(Date.now() > r.dl + 5000){ end({status: 'expired'}); return; }
+    r.busy = true;
+    let d = null;
+    try{ d = await __tglCall({action: 'poll', rid: s.rid, poll: s.poll}); }
+    catch(e){ const c = String((e && e.code) || ''); if(/^(forbidden|not-found|bad-request)$/.test(c)){ r.busy = false; end({status: 'error', code: c}); return; } }
+    r.busy = false;
+    if(r.dead) return;
+    if(!alive()){ __tglStop(); return; }
+    if(d && d.status && d.status !== 'pending'){ end(d); return; }
+    r.timer = setTimeout(step, 2000);
+  };
+  r.vis = ()=>{ if(document.visibilityState === 'visible') step(); };
+  document.addEventListener('visibilitychange', r.vis);
+  r.ui = setInterval(()=>{ if(!alive()){ __tglStop(); return; } const el = document.getElementById('tgl-left'); if(el) el.textContent = __tglFmt(r.dl - Date.now()); }, 1000);
+  r.timer = setTimeout(step, 2000);
+  return r;
+}
+function __tglWaitHtml(s, dead){
+  return `<div class="tgl-wait${dead ? ' tgl-dead' : ''}" data-tgl="wait">
+    <ol class="tgl-steps"><li>${tr('tglStep1')}</li><li>${tr('tglStep2')}</li></ol>
+    <div class="tgl-num" id="tgl-num">${escapeHtml(String(s.num))}</div>
+    ${dead ? '' : `<a id="tgl-open" class="btn btn-primary btn-pill btn-block tgl-open" href="${escapeHtml(s.url)}" target="_blank" rel="noopener">${__TGL_IC}<span>${tr('tglOpen')}</span></a>
+    <p class="tgl-left"><span class="tgl-dot"></span><span>${tr('tglWaiting')}</span><span>·</span><span id="tgl-left">${__tglFmt((__TGL.run && __TGL.run.s === s ? __TGL.run.dl : Date.now() + 5 * 60000) - Date.now())}</span></p>`}
+    <div id="tgl-err" class="error-text au-gen" role="alert">${dead ? escapeHtml(__tglErrText({code: dead})) : ''}</div>
+  </div>`;
+}
+function __tglHead(title, sub){ return `<div class="au-head"><img class="au-logo" src="icon-192.png" alt="" width="56" height="56"><div class="brand au-brand">Savdo Pos<span>.</span></div><h1 class="au-title au-title-sm">${title}</h1><p class="au-sub">${sub}</p></div>`; }
+function __tglAuthAlive(){ return !!(window.__auPending && window.__auPending.mode === 'tgwait'); }
+/* Kirish ekrani: «Telegram orqali davom etish» */
+async function __tglSignInStart(btn){
+  if(__TGL.busy) return;
+  __TGL.busy = true; __auClear();
+  if(btn){ btn.disabled = true; btn.classList.add('busy'); }
+  let s = null;
+  try{ s = await __tglCall({action: 'start', mode: 'login', lang: state.lang}); }
+  catch(e){
+    __TGL.busy = false;
+    if(btn && btn.isConnected){ btn.disabled = false; btn.classList.remove('busy'); }
+    __auGenErr(__tglErrText(e)); return;
+  }
+  __TGL.busy = false;
+  window.__auPending = {mode: 'tgwait', keep: {s: s}};
+  __tglLoop(s, __tglAuthAlive, __tglLoginEnd);
+  renderAuthGate('tgwait', window.__auPending.keep);
+}
+async function __tglLoginEnd(d){
+  const keep = (window.__auPending && window.__auPending.keep) || {};
+  if(d.status === 'ok' && d.token){ await __tglTokenSignIn(d.token); return; }
+  if(d.status === 'choose' && d.ticket){
+    window.__auPending = {mode: 'tgchoose', keep: {s: keep.s, ticket: d.ticket, name: d.name || ''}};
+    renderAuthGate('tgchoose', window.__auPending.keep); return;
+  }
+  if(!keep.s){ window.__auPending = null; __auGenErr(__tglErrText({code: d.status === 'error' ? d.code : d.status})); return; }
+  window.__auPending = {mode: 'tgwait', keep: {s: keep.s, dead: d.status === 'error' ? (d.code || 'error') : d.status}};
+  renderAuthGate('tgwait', window.__auPending.keep);
+}
+/* Bir martalik kalit bilan kirish → do'kon ochilishidan oldin odatdagi tekshiruv (authGuard; yangi bo'lsa — shartlar oynasi) */
+async function __tglTokenSignIn(token){
+  __auLs('sp_au_chk', '1');
+  __auHoldStart();
+  let uc = null;
+  try{ uc = await fbAuth.signInWithCustomToken(token); }
+  catch(e){ __auHoldEnd(false); __auLs('sp_au_chk', null); window.__auPending = null; __auGenErr(__auGoogleErrText(e)); return; }
+  window.__auPending = null;
+  await __auAfterGoogle(uc, null);
+}
+function __tglRender(mode, keep){
+  const root = document.getElementById('auth-root'); if(!root) return;
+  keep = keep || {};
+  if(mode === 'tgwait'){
+    root.innerHTML = `<div class="login-screen au-screen" data-au-mode="tgwait">${authLangRowHtml()}<div class="au-box">
+      ${__tglHead(tr('tglTitle'), tr('tglSub'))}
+      ${keep.s ? __tglWaitHtml(keep.s, keep.dead) : ''}
+      ${keep.dead ? `<button type="button" class="btn btn-primary btn-pill btn-block" id="tgl-retry">${tr('tglRetry')}</button>` : ''}
+      <button type="button" class="au-link au-switch" id="tgl-cancel">${tr('cancel')}</button>
+    </div></div>`;
+    bindAuthLangRow(()=>renderAuthGate('tgwait', keep));
+    const rb = document.getElementById('tgl-retry');
+    if(rb) rb.addEventListener('click', ()=>{ window.__auPending = null; renderAuthGate('login', {email: ''}); __tglSignInStart(null); });
+  } else {
+    const linkForm = keep.sub === 'link';
+    root.innerHTML = `<div class="login-screen au-screen" data-au-mode="tgchoose">${authLangRowHtml()}<div class="au-box">
+      ${__tglHead(tr('tglChooseTitle'), linkForm ? tr('tglLinkText') : tr('tglChooseSub'))}
+      ${keep.name ? `<div class="au-acct tgl-acct">${__TGL_IC}<span>${escapeHtml(keep.name)}</span></div>` : ''}
+      ${linkForm ? `<form id="tgl-link-form" class="au-form" novalidate>
+        <div class="field au-field"><label class="field-label" for="auth-email">${tr('authEmail')}</label>
+          <div class="au-inp"><input type="email" id="auth-email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="you@example.com"></div>
+          <div class="au-err" id="auth-email-err" role="alert"></div></div>
+        <div class="field au-field"><label class="field-label" for="auth-password">${tr('authPassword')}</label>
+          <div class="au-inp"><input type="password" id="auth-password" autocomplete="current-password"></div>
+          <div class="au-err" id="auth-password-err" role="alert"></div></div>
+        <div class="au-forgot"><button type="button" class="au-link" id="auth-forgot-btn">${tr('authForgotPassword')}</button></div>
+        <div id="auth-error" class="error-text au-gen" role="alert"></div>
+        <button type="submit" class="btn btn-primary btn-pill btn-block" id="auth-submit-btn">${tr('tglLinkBtn')}</button>
+      </form>` : `<button type="button" class="btn btn-primary btn-pill btn-block" id="tgl-pick-link">${tr('tglLinkExisting')}</button>
+      <p class="au-hint tgl-hint">${tr('tglChooseHint')}</p>
+      <button type="button" class="btn btn-outline btn-pill btn-block" id="tgl-pick-new">${tr('tglNewShop')}</button>
+      <div id="auth-error" class="error-text au-gen" role="alert"></div>`}
+      <button type="button" class="au-link au-switch" id="tgl-cancel">${linkForm ? tr('tglBack') : tr('cancel')}</button>
+    </div></div>`;
+    bindAuthLangRow(()=>renderAuthGate('tgchoose', keep));
+    if(linkForm) __tglBindLinkForm(keep);
+    else {
+      document.getElementById('tgl-pick-link').addEventListener('click', ()=>{ keep.sub = 'link'; renderAuthGate('tgchoose', keep); });
+      const nb = document.getElementById('tgl-pick-new');
+      nb.addEventListener('click', async ()=>{
+        if(nb.disabled) return; nb.disabled = true; __auClear();
+        let d = null;
+        try{ d = await __tglCall({action: 'new', rid: keep.s.rid, poll: keep.s.poll, ticket: keep.ticket}); }
+        catch(e){ if(nb.isConnected) nb.disabled = false; __auGenErr(__tglErrText(e)); return; }
+        if(d.status === 'ok' && d.token){ await __tglTokenSignIn(d.token); return; }
+        window.__auPending = null; __auGenErr(__tglErrText({code: d.status}));
+      });
+    }
+  }
+  const cb = document.getElementById('tgl-cancel');
+  if(cb) cb.addEventListener('click', ()=>{
+    if(mode === 'tgchoose' && keep.sub === 'link'){ keep.sub = ''; renderAuthGate('tgchoose', keep); return; }
+    __tglStop(); window.__auPending = null; renderAuthGate('login', {email: ''});
+  });
+}
+function __tglBindLinkForm(keep){
+  __auKbFix();
+  const emailEl = document.getElementById('auth-email'), passEl = document.getElementById('auth-password'), btn = document.getElementById('auth-submit-btn');
+  emailEl.addEventListener('input', ()=>__auSetErr('auth-email-err', ''));
+  passEl.addEventListener('input', ()=>__auSetErr('auth-password-err', ''));
+  document.getElementById('auth-forgot-btn').addEventListener('click', async (ev)=>{
+    const b = ev.currentTarget; __auClear();
+    const email = emailEl.value.trim(); if(!email){ __auSetErr('auth-email-err', tr('auEnterEmail')); return; }
+    b.disabled = true;
+    try{ await fbAuth.sendPasswordResetEmail(email); const g = document.getElementById('auth-error'); if(g){ g.classList.add('au-ok'); g.style.color = 'var(--success)'; g.textContent = tr('authResetSent'); } }
+    catch(e){ __auShowErr(e); }
+    if(b.isConnected) b.disabled = false;
+  });
+  let busy = false;
+  document.getElementById('tgl-link-form').addEventListener('submit', async (ev)=>{
+    ev.preventDefault(); if(busy) return; __auClear();
+    const email = emailEl.value.trim(), pw = passEl.value;
+    if(!email){ __auSetErr('auth-email-err', tr('auEnterEmail')); emailEl.focus(); return; }
+    if(!pw){ __auSetErr('auth-password-err', tr('auEnterPassword')); passEl.focus(); return; }
+    busy = true; btn.disabled = true; btn.textContent = tr('auBusy');
+    __auHoldStart();
+    try{ await fbAuth.signInWithEmailAndPassword(email, pw); }
+    catch(e){
+      __auHoldEnd(false); __auShowErr(e);
+      busy = false; if(btn.isConnected){ btn.disabled = false; btn.textContent = tr('tglLinkBtn'); }
+      return;
+    }
+    let msg = tr('tglLinkLater');
+    try{
+      const d = await __tglCall({action: 'link', rid: keep.s.rid, poll: keep.s.poll, ticket: keep.ticket}, true);
+      msg = d.status === 'linked' ? tr('tglLinkedOk') : (d.status === 'tg-used' ? tr('tglUsed') : tr('tglLinkLater'));
+    }catch(e){ msg = String(e && e.code) === 'staff' ? tr('tglStaff') : tr('tglLinkLater'); }
+    window.__auPending = null; __auLs('sp_au_chk', null); __TGL.st = null;
+    __auHoldEnd(true);
+    setTimeout(()=>{ try{ showToast(msg); }catch(e){} }, 900);
+  });
+}
+/* Sozlamalar → Hisob: Telegram holati (serverdan, sahifa ochilganda bir marta) */
+function __tglStatus(){
+  const uid = fbUser && fbUser.uid;
+  if(!uid) return {linked: false};
+  if(__TGL.st && __TGL.st.uid === uid) return __TGL.st;
+  const st = __TGL.st = {uid: uid, loading: true};
+  const done = (v)=>{ if(__TGL.st !== st) return; __TGL.st = Object.assign({uid: uid}, v); if(document.getElementById('acct-methods')){ try{ __acctMethodsRender(); }catch(e){} } };
+  __tglCall({action: 'status'}, true).then(d=>done({linked: !!d.linked, name: d.name || ''})).catch(()=>done({linked: false, err: true}));
+  return st;
+}
+function __tglRowHtml(st, n, act){
+  const on = !!st.linked;
+  const a = st.loading ? '' : (on ? (n > 1 ? act('am-unlink-telegram', tr('amUnlink'), 'btn-ghost') : '') : act('am-link-telegram', tr('amLink')));
+  return `<div class="am-row" data-am="telegram"><span class="am-ic">${__TGL_IC}</span><div class="am-txt"><div class="am-name">Telegram</div><div class="am-sub ${on ? 'on' : ''}">${on ? escapeHtml(st.name || '') + ' · ' + tr('amOn') : (st.loading ? '…' : tr('amOff'))}</div></div>${a}</div>`;
+}
+/* Oyna ichida tasdiqlash: 'link' — Telegram'ni shu akkauntga ulash; 'verify' — egalikni tasdiqlash (PIN'ni tiklash) */
+async function __tglModal(mode, onOk){
+  openModal(`<div class="modal-title">${tr(mode === 'verify' ? 'tglVerify' : 'tglLinkTitle')}</div><div id="tgl-modal-body"><p class="subtle" style="text-align:center;">${tr('auBusy')}</p></div>`, {center: true});
+  let s = null;
+  try{ s = await __tglCall({action: 'start', mode: mode, lang: state.lang}, true); }
+  catch(e){ const b = document.getElementById('tgl-modal-body'); if(b) b.innerHTML = `<div class="error-text">${escapeHtml(__tglErrText(e))}</div>`; return; }
+  const body = document.getElementById('tgl-modal-body'); if(!body) return;
+  const alive = ()=>{ const b = document.getElementById('tgl-modal-body'); return !!(b && b.dataset.rid === s.rid); };
+  body.dataset.rid = s.rid;
+  __tglLoop(s, alive, (d)=>{
+    if(!alive()) return;
+    if(d.status === 'linked' || d.status === 'verified'){ closeModal(); onOk(d); return; }
+    const b = document.getElementById('tgl-modal-body'); if(b) b.innerHTML = __tglWaitHtml(s, d.status === 'error' ? (d.code || 'error') : d.status);
+  });
+  body.innerHTML = __tglWaitHtml(s, '');
+}
+function __tglBindAcct(err, after, failText){
+  const lt = document.getElementById('am-link-telegram');
+  if(lt) lt.addEventListener('click', ()=>{ err(''); __tglModal('link', (d)=>{ __TGL.st = {uid: fbUser.uid, linked: true, name: d.name || ''}; after(tr('tglLinkedOk')); }); });
+  const ut = document.getElementById('am-unlink-telegram');
+  if(ut) ut.addEventListener('click', ()=>confirmDialog(escapeHtml(tr('amUnlinkQ').replace('{m}', 'Telegram')), async ()=>{
+    err('');
+    try{ await __tglCall({action: 'unlink'}, true); __TGL.st = {uid: fbUser.uid, linked: false}; await after(tr('amUnlinked')); }
+    catch(e){ err(String(e && e.code) === 'last-method' ? tr('amNote') : __tglErrText(e)); }
+  }, tr('amUnlink')));
+  const ae = document.getElementById('am-add-email');   // faqat Telegram bilan ochilgan akkauntga email va parol qo'shish
+  if(ae) ae.addEventListener('click', ()=>{
+    openModal(`<div class="modal-title">${tr('amAddEmail')}</div>
+      <div class="field"><label class="field-label">${tr('authEmail')}</label><input type="email" id="am-em" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false"></div>
+      <div class="field"><label class="field-label">${tr('amNewPw')}</label><input type="password" id="am-pw1" autocomplete="new-password"></div>
+      <div class="field"><label class="field-label">${tr('amNewPw2')}</label><input type="password" id="am-pw2" autocomplete="new-password"></div>
+      <div id="am-pw-err" class="error-text" style="margin-bottom:8px;"></div>
+      <button class="btn btn-primary btn-block" id="am-pw-go">${tr('save')}</button>`, {center: true});
+    const go = document.getElementById('am-pw-go');
+    go.addEventListener('click', async ()=>{
+      const e1 = document.getElementById('am-pw-err'); e1.textContent = '';
+      const em = document.getElementById('am-em').value.trim(), p1 = document.getElementById('am-pw1').value, p2 = document.getElementById('am-pw2').value;
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ e1.textContent = tr('changeEmailInvalid'); return; }
+      if(!p1){ e1.textContent = tr('auEnterPassword'); return; }
+      if(p1 !== p2){ e1.textContent = tr('amPwMismatch'); return; }
+      go.disabled = true;
+      try{ await fbUser.linkWithCredential(firebase.auth.EmailAuthProvider.credential(em, p1)); closeModal(); await after(tr('amPwSet')); }
+      catch(e){ go.disabled = false; const c = String((e && e.code) || ''); e1.textContent = /email-already-in-use|credential-already-in-use/.test(c) ? tr('changeEmailInUse') : (/invalid-email/.test(c) ? tr('changeEmailInvalid') : failText(e)); }
+    });
+  });
+}
+/* PIN'ni unutganda: parolsiz akkaunt (Google / Telegram) — egalik Google yoki Telegram bilan tasdiqlanadi */
+function __tglForgotPin(){
+  const pv = (fbUser.providerData || []).map(p=>p.providerId);
+  const hasG = pv.indexOf('google.com') !== -1;
+  openModal(`<div class="modal-title">${tr('forgotPinLink')}</div>
+    <p class="subtle" style="margin:0 0 14px;">${tr('tglPinHint')}</p>
+    ${hasG ? `<button class="btn btn-outline btn-block" id="fp-google" style="margin-bottom:10px;">${tr('tglGoogleVerify')}</button>` : ''}
+    <button class="btn btn-outline btn-block" id="fp-tg" ${hasG ? 'hidden' : ''}>${__TGL_IC} ${tr('tglVerify')}</button>
+    <div id="fp-error" class="error-text" style="margin-top:8px;"></div>`, {center: true});
+  const er = (m)=>{ const e = document.getElementById('fp-error'); if(e) e.textContent = m || ''; };
+  const gb = document.getElementById('fp-google');
+  if(gb) gb.addEventListener('click', async ()=>{
+    er(''); gb.disabled = true;
+    try{ await __auReauthGoogle(fbUser); openSetNewPinModal(); }
+    catch(e){ if(gb.isConnected) gb.disabled = false; if(!__auIsCancel(e)) er(__auGoogleErrText(e)); }
+  });
+  const tb = document.getElementById('fp-tg');
+  tb.addEventListener('click', ()=>{ __tglModal('verify', ()=>openSetNewPinModal()); });
+  if(hasG){   // Google akkauntga Telegram ham ulangan bo'lsa — ikkinchi tugma
+    __tglCall({action: 'status'}, true).then(d=>{ const b = document.getElementById('fp-tg'); if(b && d.linked) b.hidden = false; }).catch(()=>{});
+  }
 }
 function __auVals(){
   const e = document.getElementById('auth-email'), p = document.getElementById('auth-password');
@@ -4995,6 +5341,7 @@ function __auKbFix(){   /* klaviatura ochilganda faol maydon ko'rinib tursin (ek
 function renderAuthGate(mode, keep){
   if(window.__auPending && !keep && mode !== 'signup'){ mode = window.__auPending.mode; keep = window.__auPending.keep; }   /* fix205-google: ulash/shartlar oynasi chiqish paytida yo'qolmasin */
   if(mode === 'link' || mode === 'gterms'){ __auRenderSpecial(mode, keep || {}); return; }
+  if(mode === 'tgwait' || mode === 'tgchoose'){ __tglRender(mode, keep || {}); return; }   /* fix206-tglogin */
   mode = mode === 'signup' ? 'signup' : 'login';
   const root = document.getElementById('auth-root');
   if(!root) return;
@@ -5054,6 +5401,7 @@ function renderAuthGate(mode, keep){
   const termsEl = document.getElementById('auth-terms-check');
   if(termsEl) termsEl.addEventListener('change', ()=>__auSetErr('auth-terms-err', ''));
   { const gb = document.getElementById('auth-google-btn'); if(gb) gb.addEventListener('click', ()=>__auGoogleSignIn(gb)); }   /* fix205-google */
+  { const tb = document.getElementById('auth-telegram-btn'); if(tb) tb.addEventListener('click', ()=>__tglSignInStart(tb)); }   /* fix206-tglogin */
   let busy = false;
   const submitBtn = document.getElementById('auth-submit-btn');
   const setBusy = (on)=>{ busy = on; if(!submitBtn.isConnected) return; submitBtn.disabled = on; submitBtn.textContent = on ? tr('auBusy') : (login ? tr('authLogin') : tr('authSignup')); };
@@ -5140,7 +5488,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.81';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.82';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6726,7 +7074,7 @@ async function loadCloudData(){
           ['subscriptionExpiresAtMs','maxStaff','maxDevices'].forEach(k=>{ if(cloudSettings[k] !== undefined) subscriptionPatch[k] = cloudSettings[k]; });
           state.settings = Object.assign(defaultSettingsObj(), state.settings, subscriptionPatch);
         }
-        if(bizData.ownerEmail !== fbUser.email){
+        if((bizData.ownerEmail || '') !== (fbUser.email || '')){   /* fix206-tglogin */
           businessDocRef().set({ownerEmail: fbUser.email || ''}, {merge:true}).catch(()=>{});
         }
         const catalogSnap = await catalogDocRef().get();
@@ -7054,6 +7402,7 @@ const devicePinAttempt = {fails: 0, lockUntil: 0};
 // device right now) is what lets them set a new one themselves, without
 // needing outside support.
 function openForgotPinModal(){
+  if(fbUser && !(fbUser.providerData || []).some(p=>p.providerId === 'password')){ __tglForgotPin(); return; }   /* fix206-tglogin: parolsiz akkaunt — Google/Telegram bilan tasdiqlash */
   const email = fbUser ? fbUser.email : '';
   openModal(`
     <div class="modal-title">${tr('forgotPinLink')}</div>
@@ -20490,7 +20839,7 @@ function renderSettingsBranches(container){
 function openDeleteAccountModal(){
   if(!fbUser || !fbDb){ showToast(tr('delAccFailed')); return; }
   if((state.businessId || fbUser.uid) !== fbUser.uid || !isAdmin()){ showToast(tr('delAccOwnerOnly')); return; }
-  const isGoogle = (fbUser.providerData||[]).some(p=>p.providerId==='google.com') && !(fbUser.providerData||[]).some(p=>p.providerId==='password');   /* fix205-google */
+  const isGoogle = !(fbUser.providerData||[]).some(p=>p.providerId==='password');   /* fix205-google */   /* fix206-tglogin: parolsiz (Google yoki Telegram) — parol so'ralmaydi */
   openModal(`<div class="modal-title" style="color:#c62828;">${tr('delAccTitle')}</div>
     <p class="subtle" style="font-size:12.5px;margin:0 0 12px;">${tr('delAccHint')}</p>
     <div class="field"><label class="field-label">${tr('delAccType')}</label><input type="text" id="da-confirm" autocapitalize="characters" autocomplete="off"></div>
@@ -20517,7 +20866,7 @@ async function deleteMyAccountAndData(password){
     const cred = firebase.auth.EmailAuthProvider.credential(fbUser.email, password);
     await fbUser.reauthenticateWithCredential(cred);
   } else {
-    try{ await __auReauthGoogle(fbUser); }catch(e){}   /* fix205-google */
+    try{ if((fbUser.providerData||[]).some(p=>p.providerId==='google.com')) await __auReauthGoogle(fbUser); }catch(e){}   /* fix205-google */   /* fix206-tglogin: faqat Google bo'lsa */
   }
   try{ stopLiveListeners(); }catch(e){}
   try{ pendingSyncQueue.length = 0; }catch(e){}
@@ -20533,8 +20882,9 @@ async function deleteMyAccountAndData(password){
   try{ await __tgApi('boWipe', {}); }catch(e){}   /* fix145-botshop: bot do'koni va buyurtmalari ham o'chadi */
   try{ const cfg = onlineShopCfg(); if(cfg && cfg.slug) await fbDb.collection('publicShops').doc(cfg.slug).delete(); }catch(e){}
   await biz.delete();
-  let authDeleted = false;
-  try{ await fbUser.delete(); authDeleted = true; }catch(e){ authDeleted = false; }
+  let __tgGone = false; try{ const __f = await __tglCall({action: 'forget'}, true); __tgGone = !!(__f && __f.deleted); }catch(e){}   /* fix206-tglogin: Telegram ulanishi ham o'chadi */
+  let authDeleted = __tgGone;
+  if(!__tgGone){ try{ await fbUser.delete(); authDeleted = true; }catch(e){ authDeleted = false; } }
   try{ localStorage.clear(); }catch(e){}
   try{ indexedDB.deleteDatabase('sardor_pos_db'); }catch(e){}
   try{ await fbAuth.signOut(); }catch(e){}
@@ -20563,17 +20913,19 @@ function renderSettingsAccount(container){
         <label class="field-label">${tr('currentEmailLabel')}</label>
         <input type="email" value="${escapeHtml(fbUser ? fbUser.email||'' : '')}" disabled>
       </div>
-      <button class="btn btn-outline btn-block" id="open-change-email-btn">${tr('changeEmailBtn')}</button>
+      ${fbUser && fbUser.email ? `<button class="btn btn-outline btn-block" id="open-change-email-btn">${tr('changeEmailBtn')}</button>` : ''}
     </div>
     <div id="acct-methods"></div>
     <button class="btn btn-outline btn-block" id="account-page-signout-btn" style="margin-top:4px;">${ICONS.logout} ${tr('authLogout')}</button>
     <div style="margin-top:28px;">${dangerZoneHtml(tr('delAccTitle'), tr('delAccHint'), 'open-delete-account-btn')}</div>
   `;   /* fix131-set: email → Chiqish → Xavfli amallar */
   bindSettingsBack(container);
+  __TGL.st = null;   /* fix206-tglogin: Telegram holati qayta so'raladi */
   try{ __acctMethodsRender(); }catch(e){}   /* fix205-google: kirish usullari */
   document.getElementById('account-page-signout-btn').addEventListener('click', ()=>confirmDialog(tr('authLogout')+'?', ()=>{ fbAuth.signOut(); }, tr('authLogout')));
   document.getElementById('open-delete-account-btn').addEventListener('click', openDeleteAccountModal);
-  document.getElementById('open-change-email-btn').addEventListener('click', ()=>{
+  const __ceBtn = document.getElementById('open-change-email-btn');   /* fix206-tglogin: emailsiz (Telegram) akkauntda tugma yo'q */
+  if(__ceBtn) __ceBtn.addEventListener('click', ()=>{
     openModal(`
       <div class="modal-title">${tr('changeEmailBtn')}</div>
       ${isGoogleAccount ? `<p class="subtle" style="margin:0 0 12px;">${tr('changeEmailGoogleHint')}</p>` : ''}
@@ -26249,7 +26601,7 @@ function renderSettingsSupport(container){
     ${paySettingsHtml()}
     ${fbUser ? `
       <div class="card">
-        <p class="subtle" style="margin:0 0 10px;">${fbUser.email}</p>
+        <p class="subtle" style="margin:0 0 10px;">${escapeHtml(fbUser.email || fbUser.displayName || '')}</p>
         <p class="subtle" style="margin:0 0 10px;">${tr('passwordSafetyNote')}</p>
         <button class="btn btn-danger btn-block" id="account-signout-btn">${tr('authLogout')}</button>
       </div>

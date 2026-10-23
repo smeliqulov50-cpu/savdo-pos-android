@@ -50,7 +50,7 @@ with sync_playwright() as p:
     # 1) veb: Google tugmasi chiqadi
     ctx, pg, errs = boot(br)
     ok("veb: «Google orqali davom etish» tugmasi va «yoki» chizig'i bor", pg.locator('#auth-google-btn').count() == 1 and txt(pg, '.au-or') == 'yoki')
-    ok("Telegram tugmasi hali yo'q (3-bosqich)", pg.locator('#auth-telegram-btn').count() == 0)
+    ok("Telegram tugmasi ham bor (fix206)", pg.locator('#auth-telegram-btn').count() == 1)
     # bekor qilinsa — jim
     pg.evaluate(SEED, {'users': [OWNER_G], 'docs': DOCS, 'g': None}); pg.click('#auth-google-btn'); pg.wait_for_timeout(400)
     ok("Google oynasi yopilsa — xato chiqmaydi, ekran o'zgarmaydi", txt(pg, '#auth-error') in ('', None) and pg.locator('#auth-form').count() == 1 and pg.evaluate(BIZ) == ['businesses/ownerA1', 'businesses/ownerB2'])
@@ -130,7 +130,7 @@ with sync_playwright() as p:
     ok("email+parol bilan kirish — avvalgidek, server tekshiruvi chaqirilmaydi (oflayn kirish ham avvalgidek)", opened(pg) and pg.evaluate("()=>fbUser.uid") == 'ownerA1' and pg.evaluate("()=>window.__GUARD.calls") == 0)
     # Sozlamalar → Hisob: kirish usullari
     pg.evaluate("()=>{ document.getElementById('login-root').innerHTML = ''; renderSettingsAccount(document.getElementById('view-container')); }"); pg.wait_for_timeout(400)
-    ok("Hisob: «Kirish usullari» — Email ulangan, Google «Ulash», «Uzish» yo'q (yagona usul)", pg.locator('#acct-methods .am-row').count() == 2 and 'ulangan' in txt(pg, '[data-am="password"] .am-sub') and pg.locator('#am-link-google').count() == 1 and pg.locator('#am-unlink-password').count() == 0, txt(pg, '#acct-methods'))
+    ok("Hisob: «Kirish usullari» — Email ulangan, Google «Ulash», Telegram qatori (fix206), «Uzish» yo'q (yagona usul)", pg.locator('#acct-methods .am-row').count() == 3 and 'ulangan' in txt(pg, '[data-am="password"] .am-sub') and pg.locator('#am-link-google').count() == 1 and pg.locator('#am-unlink-password').count() == 0, txt(pg, '#acct-methods'))
     pg.evaluate("()=>{ window.__G = {sub: 'g-ali', email: 'ali@gmail.com'}; }"); pg.click('#am-link-google'); pg.wait_for_timeout(600)
     ok("Google ulandi — ikkala usulda «Uzish» chiqdi", 'ulangan' in (txt(pg, '[data-am="google"] .am-sub') or '') and pg.locator('#am-unlink-google').count() == 1 and pg.locator('#am-unlink-password').count() == 1)
     pg.click('#am-unlink-google'); pg.wait_for_timeout(200); pg.click('.modal-overlay .btn-danger, .modal-overlay .btn-primary, #confirm-yes', timeout=3000); pg.wait_for_timeout(500)
@@ -170,7 +170,7 @@ with sync_playwright() as p:
     ok("Android: foydalanuvchi Google oynasini yopsa — jim, xato yo'q", txt(pg, '#auth-error') in ('', None) and pg.locator('#auth-form').count() == 1)
     ctx.close()
     ctx, pg, errs = boot(br, NATIVE_NOPLUGIN)
-    ok("Android (plagin yo'q — eski APK): Google tugmasi ko'rinmaydi, «yoki» ham yo'q", pg.locator('#auth-google-btn').count() == 0 and pg.locator('.au-or').count() == 0)
+    ok("Android (plagin yo'q — eski APK): Google tugmasi ko'rinmaydi, Telegram tugmasi bor (fix206)", pg.locator('#auth-google-btn').count() == 0 and pg.locator('#auth-telegram-btn').count() == 1)
     ctx.close()
     br.close()
 print("JAMI: %d OK, %d XATO" % (R["ok"], R["bad"]))
