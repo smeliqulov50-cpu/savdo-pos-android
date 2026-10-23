@@ -702,6 +702,16 @@
   .cust-actions .btn{margin:0 !important;}
   .cust-actions .icon-round{width:46px;height:46px;border-radius:14px;flex-shrink:0;}
   #side-cart{display:none;}
+  .fsc-wrap{position:relative;border-radius:14px;overflow:hidden;background:#000;min-height:180px;border:3px solid transparent;transition:border-color .15s;}   /* fix198-scan */
+  .fsc-wrap #fsc-reader, .fsc-wrap #qr-reader{position:absolute !important;left:0;top:0;width:720px;transform-origin:0 0;}   /* ichki o'lcham katta — kod aniq o'qiladi, ekranda kichraytirib ko'rsatiladi */
+  .fsc-wrap video{display:block;}
+  .fsc-wrap.fsc-ok{border-color:#16a34a;} .fsc-wrap.fsc-bad{border-color:#dc2626;}
+  .fsc-aim{position:absolute;left:8%;right:8%;top:50%;height:42%;transform:translateY(-50%);border:2px solid rgba(255,255,255,.85);border-radius:10px;box-shadow:0 0 0 2000px rgba(0,0,0,.18);pointer-events:none;}
+  .fsc-aim::after{content:'';position:absolute;left:6%;right:6%;top:50%;height:2px;background:rgba(239,68,68,.85);}
+  .fsc-last{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--surface-soft, #f3f6fb);font-size:14px;min-height:20px;}
+  .fsc-last:empty{display:none;} .fsc-last.ok{background:#e9f8ef;} .fsc-last.bad{background:#fdecec;color:#b42318;}
+  .fsc-last .fsc-nm{font-weight:700;overflow-wrap:anywhere;} .fsc-last .fsc-pr{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .fsc-sum{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;font-size:13px;color:var(--ink-soft);} .fsc-sum b{font-size:18px;color:var(--ink);}
   @media (min-width:900px){   /* fix197-cartname: o'ng savatda nom to'liq — 1-qatorda nom va narx, 2-qatorda miqdor va jami */
     body #side-cart .sc-line{flex-wrap:wrap;row-gap:6px;}
     body #side-cart .sc-line .nm{flex:1 1 100%;}
@@ -1845,6 +1855,20 @@ const T = {
   cloudSyncNote:{uz:"Eslatma: bu hisob shu qurilmada saqlanadi. Bir nechta telefon/planshetda bir xil ma'lumotni ko'rish (onlayn sinxronlash) uchun alohida server kerak bo'ladi — bu haqda alohida gaplashamiz.",ru:"Примечание: этот аккаунт хранится на этом устройстве. Для синхронизации между несколькими телефонами/планшетами понадобится отдельный сервер — обсудим отдельно.",en:"Note: this account is stored on this device. Syncing the same data across multiple phones/tablets would need a separate server — let's discuss that separately.",kk:"Ескертпе: бұл аккаунт осы құрылғыда сақталады. Бірнеше телефон/планшетте бірдей деректерді көру (онлайн синхрондау) үшін бөлек сервер қажет — бұл туралы бөлек сөйлесеміз.",ky:"Эскертүү: бул аккаунт ушул түзмөктө сакталат. Бир нече телефон/планшетте бирдей маалыматты көрүү (онлайн синхрондоо) үчүн өзүнчө сервер керек болот — бул тууралуу өзүнчө сүйлөшөбүз.",tg:"Қайд: ин ҳисоб дар ҳамин дастгоҳ нигоҳ дошта мешавад. Барои дидани як маълумот дар якчанд телефон/планшет (синхронизатсияи онлайн) сервери алоҳида лозим аст — дар бораи ин алоҳида сӯҳбат мекунем."},
   barcode:{uz:"Shtrix-kod",ru:"Штрих-код",en:"Barcode",kk:"Штрих-код",ky:"Штрих-код",tg:"Штрих-код"},
   scanBarcode:{uz:"Kamera bilan skanerlash",ru:"Сканировать камерой",en:"Scan with camera",kk:"Камерамен сканерлеу",ky:"Камера менен сканерлөө",tg:"Скан бо камера"},
+  bcFastTitle:{uz:"Tez skanerlash",ru:"Быстрое сканирование",en:"Fast scanning",kk:"Жылдам сканерлеу",ky:"Тез сканерлөө",tg:"Скани тез"},
+  bcFastHint:{uz:"Kodni ramkaga tuting — har bir skaner savatga qo'shiladi. Shtrix-kod ham, QR kod ham o'qiladi.",ru:"Наведите код в рамку — каждый скан добавляется в корзину. Читаются штрих-коды и QR-коды.",en:"Hold the code in the frame — every scan goes into the cart. Barcodes and QR codes both work.",kk:"Кодты жақтауға ұстаңыз — әр сканер себетке қосылады. Штрих-код та, QR код та оқылады.",ky:"Кодду алкакка кармаңыз — ар бир скан себетке кошулат. Штрих-код да, QR код да окулат.",tg:"Кодро дар чорчӯба нигоҳ доред — ҳар скан ба сабад илова мешавад. Штрих-код ва QR-код хонда мешаванд."},
+  bcNotFound:{uz:"Topilmadi: {code}",ru:"Не найдено: {code}",en:"Not found: {code}",kk:"Табылмады: {code}",ky:"Табылган жок: {code}",tg:"Ёфт нашуд: {code}"},
+  bcNewProduct:{uz:"Shu kod bilan yangi tovar qo'shish",ru:"Добавить новый товар с этим кодом",en:"Add a new product with this code",kk:"Осы кодпен жаңа тауар қосу",ky:"Ушул код менен жаңы товар кошуу",tg:"Бо ҳамин код моли нав илова кардан"},
+  bcNotAdded:{uz:"qo'shilmadi",ru:"не добавлено",en:"not added",kk:"қосылмады",ky:"кошулган жок",tg:"илова нашуд"},
+  bcNoBoxPrice:{uz:"Blok narxi kiritilmagan",ru:"Цена блока не указана",en:"No box price set",kk:"Блок бағасы енгізілмеген",ky:"Блок баасы киргизилген эмес",tg:"Нархи блок ворид нашудааст"},
+  bcDone:{uz:"Tayyor",ru:"Готово",en:"Done",kk:"Дайын",ky:"Даяр",tg:"Тайёр"},
+  bcInCart:{uz:"Savatda: {n} qator",ru:"В корзине: {n} строк",en:"In cart: {n} lines",kk:"Себетте: {n} жол",ky:"Себетте: {n} сап",tg:"Дар сабад: {n} сатр"},
+  pfBoxBarcode:{uz:"Blok shtrix-kodi (ixtiyoriy)",ru:"Штрих-код блока (необязательно)",en:"Box barcode (optional)",kk:"Блок штрих-коды (міндетті емес)",ky:"Блоктун штрих-коду (милдеттүү эмес)",tg:"Штрих-коди блок (ихтиёрӣ)"},
+  pfVarBarcode:{uz:"Shtrix-kod",ru:"Штрих-код",en:"Barcode",kk:"Штрих-код",ky:"Штрих-код",tg:"Штрих-код"},
+  pfVarBoxBarcode:{uz:"Blok kodi",ru:"Код блока",en:"Box code",kk:"Блок коды",ky:"Блок коду",tg:"Коди блок"},
+  pfBarcodeTaken:{uz:"Bu shtrix-kod boshqa tovarda bor: {name}",ru:"Этот штрих-код уже у другого товара: {name}",en:"This barcode already belongs to: {name}",kk:"Бұл штрих-код басқа тауарда бар: {name}",ky:"Бул штрих-код башка товардо бар: {name}",tg:"Ин штрих-код аллакай дар моли дигар аст: {name}"},
+  pfBarcodeDup:{uz:"Bitta shtrix-kod ikki joyga yozilgan: {code}",ru:"Один штрих-код указан дважды: {code}",en:"The same barcode is entered twice: {code}",kk:"Бір штрих-код екі рет жазылған: {code}",ky:"Бир штрих-код эки жолу жазылган: {code}",tg:"Як штрих-код ду бор навишта шудааст: {code}"},
+  pfVarNameFirst:{uz:"Avval variant nomini yozing",ru:"Сначала введите название варианта",en:"Enter the variant name first",kk:"Алдымен нұсқа атын жазыңыз",ky:"Адегенде вариант атын жазыңыз",tg:"Аввал номи вариантро нависед"},
   scanToFind:{uz:"Mahsulotni skanerlash",ru:"Сканировать товар",en:"Scan product",kk:"Тауарды сканерлеу",ky:"Товарды сканерлөө",tg:"Скан кардани мол"},
   scanHint:{uz:"Shtrix-kodni kamera oldiga tuting",ru:"Наведите камеру на штрих-код",en:"Point the camera at the barcode",kk:"Штрих-кодты камераға тұтыңыз",ky:"Штрих-кодду камерага коюңуз",tg:"Штрих-кодро пеши камера гиред"},
   cameraError:{uz:"Kameraga ruxsat berilmadi yoki mavjud emas",ru:"Нет доступа к камере",en:"Camera access denied or unavailable",kk:"Камераға рұқсат жоқ немесе жоқ",ky:"Камерага уруксат жок же жок",tg:"Камера дастрас нест ё иҷозат дода нашудааст"},
@@ -4338,7 +4362,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.73';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.74';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -6013,7 +6037,7 @@ function openBarcodeScanner(onResult, onCancel){
       <button id="scan-close-x" style="position:absolute;top:-4px;right:-4px;background:var(--surface-soft);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;color:var(--ink);z-index:5;">×</button>
       <div class="modal-title">${tr('scanToFind')}</div>
       <p class="subtle" style="margin-bottom:10px;">${tr('scanHint')}</p>
-      <div id="qr-reader" style="width:100%;border-radius:12px;overflow:hidden;"></div>
+      <div id="qr-reader-wrap" class="fsc-wrap"><div id="qr-reader"></div><div class="fsc-aim"></div></div>   <!-- fix198-scan -->
       <div id="qr-error" class="error-text" style="margin-top:10px;"></div>
       <button class="btn btn-outline btn-block" style="margin-top:12px;" id="scan-cancel-btn">${tr('cancel')}</button>
     </div>
@@ -6031,10 +6055,12 @@ function openBarcodeScanner(onResult, onCancel){
       if(errEl) errEl.textContent = tr('scannerLibFailed');
       return;
     }
-    html5QrScanner = new Html5Qrcode('qr-reader');
+    if(window.__qrFitT) clearInterval(window.__qrFitT);
+    __fscFit('qr-reader-wrap', 'qr-reader'); window.__qrFitT = setInterval(()=>{ if(!document.getElementById('qr-reader')){ clearInterval(window.__qrFitT); window.__qrFitT = 0; return; } __fscFit('qr-reader-wrap', 'qr-reader'); }, 300);
+    html5QrScanner = new Html5Qrcode('qr-reader', __bcScanCfg());   /* fix198-scan: tez o'qish rejimi, butun kadr (kichik ramka shtrix-kodni xiralashtirardi) */
     html5QrScanner.start(
       {facingMode:'environment'},
-      {fps:10, qrbox:{width:240,height:140}},
+      {fps:20, videoConstraints: {facingMode: 'environment', width: {ideal: 1280}, height: {ideal: 720}}},
       (decodedText)=>{
         const code = decodedText.trim();
         stopBarcodeScanner();
@@ -6049,6 +6075,7 @@ function openBarcodeScanner(onResult, onCancel){
   }, 10);
 }
 function stopBarcodeScanner(){
+  if(window.__qrFitT){ clearInterval(window.__qrFitT); window.__qrFitT = 0; }   /* fix198-scan */
   if(html5QrScanner){
     html5QrScanner.stop().then(()=>html5QrScanner.clear()).catch(()=>{});
     html5QrScanner = null;
@@ -6927,13 +6954,17 @@ function renderSale(){
   document.getElementById('search-input').addEventListener('input', (e)=>{ state.search=e.target.value; renderProductGrid(); });
   const heldBtn = document.getElementById('held-carts-btn');
   if(heldBtn) heldBtn.addEventListener('click', openHeldCartsModal);
-  document.getElementById('open-scan-btn').addEventListener('click', ()=>{
-    openBarcodeScanner((code)=>{
-      const product = visibleProducts().find(p=>p.barcode && p.barcode===code);
-      if(!product){ showToast(tr('productNotFound')); return; }
-      addToCart(product.id);
-      showToast(product.name);
-    });
+  document.getElementById('open-scan-btn').addEventListener('click', ()=>openFastScanner());   /* fix198-scan: uzluksiz tez skaner */
+  document.getElementById('search-input').addEventListener('keydown', (e)=>{   /* fix198-scan: qidiruvga skanerlangan yoki yozilgan kod + Enter — savatga */
+    if(e.key !== 'Enter') return;
+    const inp = e.target, code = __bcNorm(inp.value);
+    if(!code || !__bcFind(code)) return;
+    e.preventDefault();
+    const res = __bcHandle(code, false);
+    inp.value = ''; state.search = ''; renderProductGrid();
+    if(res.ok){ const t = __bcLineText(res); showToast(t.name.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'") + ' × ' + t.qty); }
+    else if(res.err) showToast(res.err);
+    if(!res.picker){ try{ inp.focus(); }catch(_e){} }
   });
   const catRow = document.getElementById('category-row');
   if(catRow) catRow.querySelectorAll('[data-cat]').forEach(btn=>{
@@ -7012,8 +7043,9 @@ function productCardHtml(p){
 function renderProductGrid(){
   const grid = document.getElementById('product-grid');
   if(!grid) return;
+  const __bq = __bcNorm(state.search);   /* fix198-scan: qidiruv shtrix-kod bo'yicha ham (3+ belgi) */
   const filtered = visibleProducts().filter(p =>
-    p.name.toLowerCase().includes(state.search.toLowerCase()) &&
+    (p.name.toLowerCase().includes(state.search.toLowerCase()) || (__bq.length >= 3 && [p.barcode, p.boxBarcode].concat((p.variants || []).reduce((a, v)=>a.concat([v && v.barcode, v && v.boxBarcode]), [])).some(c=>c && (__bcNorm(c).indexOf(__bq) !== -1 || __bcEq(c, __bq))))) &&
     (!state.activeCategory || p.category === state.activeCategory)
   ).sort((a,b)=>a.name.localeCompare(b.name));
   // A branch-newly-created-with-no-products-yet looks IDENTICAL to a
@@ -12223,6 +12255,7 @@ function openProductForm(productId, draft){
       <div class="field"><label class="field-label">${tr('boxPriceLabel')}</label><input type="text" inputmode="numeric" id="pf-box-price" value="${d.boxPrice?formatMoneyInputValue(d.boxPrice):''}"></div>
       <p class="subtle" id="pf-box-price-compare" style="margin:-6px 0 12px;"></p>
       <div class="field" style="margin-bottom:0;"><label class="field-label">${tr('boxLabelLabel')}</label><input type="text" id="pf-box-label" value="${escapeHtml(d.boxLabel||'')}" placeholder="${tr('boxDefaultLabel')}"></div>
+      <div class="field" style="margin:12px 0 0;"><label class="field-label">${tr('pfBoxBarcode')}</label><div style="display:flex;gap:8px;"><input type="text" id="pf-box-barcode" value="${escapeHtml(d.boxBarcode||'')}" style="flex:1;" autocomplete="off"><button class="btn btn-outline btn-sm" id="pf-box-scan-btn" type="button">${ICONS.barcode}</button></div></div>   <!-- fix198-scan -->
     </div>
     ` : ''}
     <div id="pf-error" class="error-text"></div>
@@ -12292,6 +12325,10 @@ function openProductForm(productId, draft){
     });
   });
 
+  { const __bsb = document.getElementById('pf-box-scan-btn'); if(__bsb) __bsb.addEventListener('click', ()=>{   /* fix198-scan */
+    const snap = readFormSnapshot();
+    openBarcodeScanner((code)=>{ snap.boxBarcode = code; openProductForm(productId, snap); }, ()=>{ openProductForm(productId, snap); });
+  }); }
   const variantsListEl = document.getElementById('pf-variants-list');
   function addVariantRow(variant){
     variant = variant || {name:'', price:'', stock:'', wholesalePrice:'', boxPrice:''};
@@ -12309,8 +12346,20 @@ function openProductForm(productId, draft){
         <div style="flex:1;"><input type="text" inputmode="numeric" class="pf-variant-wholesale" placeholder="${tr('variantWholesalePrice')}" value="${variant.wholesalePrice?formatMoneyInputValue(variant.wholesalePrice):''}"></div>
         <div style="flex:1;"><input type="text" inputmode="numeric" class="pf-variant-boxprice" placeholder="${tr('variantBoxPrice')}" value="${variant.boxPrice?formatMoneyInputValue(variant.boxPrice):''}"></div>
       </div>
+      <div style="display:flex;gap:6px;margin-top:6px;align-items:center;">   <!-- fix198-scan: variantning o'z shtrix-kodi va blok kodi -->
+        <div style="flex:1;"><input type="text" class="pf-variant-barcode" placeholder="${tr('pfVarBarcode')}" value="${escapeHtml(variant.barcode||'')}" autocomplete="off"></div>
+        <div style="flex:1;${state.settings.restaurantMode?'display:none;':''}"><input type="text" class="pf-variant-boxbarcode" placeholder="${tr('pfVarBoxBarcode')}" value="${escapeHtml(variant.boxBarcode||'')}" autocomplete="off"></div>
+        <button type="button" class="btn btn-outline btn-sm pf-variant-scan" title="${tr('scanBarcode')}">${ICONS.barcode}</button>
+      </div>
     `;
     row.querySelector('.pf-remove-variant').addEventListener('click', ()=>row.remove());
+    row.querySelector('.pf-variant-scan').addEventListener('click', ()=>{   /* fix198-scan */
+      const named = Array.from(variantsListEl.querySelectorAll('.field')).filter(r=>r.querySelector('.pf-variant-name').value.trim());
+      const idx = named.indexOf(row);
+      if(idx < 0){ const er = document.getElementById('pf-error'); if(er) er.textContent = tr('pfVarNameFirst'); try{ row.querySelector('.pf-variant-name').focus(); }catch(e){} return; }
+      const snap = readFormSnapshot();
+      openBarcodeScanner((code)=>{ if(snap.variants[idx]) snap.variants[idx].barcode = code; openProductForm(productId, snap); }, ()=>{ openProductForm(productId, snap); });
+    });
     attachMoneyInputFormatting(row.querySelector('.pf-variant-price'));
     attachMoneyInputFormatting(row.querySelector('.pf-variant-wholesale'));
     attachMoneyInputFormatting(row.querySelector('.pf-variant-boxprice'));
@@ -12335,9 +12384,19 @@ function openProductForm(productId, draft){
       price: parseMoneyInput(row.querySelector('.pf-variant-price').value) || 0,
       stock: parseFloat(row.querySelector('.pf-variant-stock').value) || 0,
       wholesalePrice: parseMoneyInput(row.querySelector('.pf-variant-wholesale').value) || 0,
-      boxPrice: parseMoneyInput(row.querySelector('.pf-variant-boxprice').value) || 0
+      boxPrice: parseMoneyInput(row.querySelector('.pf-variant-boxprice').value) || 0,
+      barcode: row.querySelector('.pf-variant-barcode') ? __bcNorm(row.querySelector('.pf-variant-barcode').value) : '',   /* fix198-scan */
+      boxBarcode: row.querySelector('.pf-variant-boxbarcode') ? __bcNorm(row.querySelector('.pf-variant-boxbarcode').value) : ''
     })).filter(v=>v.name);
+    const __wsEl = (id)=>document.getElementById(id);   /* fix198-scan: skanerdan qaytganda ulgurji va blok maydonlari yo'qolmasin */
     return {
+      wholesalePrice: __wsEl('pf-wholesale-price') ? (parseMoneyInput(__wsEl('pf-wholesale-price').value) || 0) : d.wholesalePrice,
+      unitsPerBox: __wsEl('pf-units-per-box') ? (parseFloat(__wsEl('pf-units-per-box').value) || 0) : d.unitsPerBox,
+      boxPrice: __wsEl('pf-box-price') ? (parseMoneyInput(__wsEl('pf-box-price').value) || 0) : d.boxPrice,
+      boxLabel: __wsEl('pf-box-label') ? __wsEl('pf-box-label').value : d.boxLabel,
+      boxBarcode: __wsEl('pf-box-barcode') ? __bcNorm(__wsEl('pf-box-barcode').value) : d.boxBarcode,
+      kitchenPrint: __wsEl('pf-kitchen-print') ? __wsEl('pf-kitchen-print').checked : d.kitchenPrint,
+      kitchenStationId: __wsEl('pf-kitchen-station') ? __wsEl('pf-kitchen-station').value : d.kitchenStationId,
       name: document.getElementById('pf-name').value,
       barcode: document.getElementById('pf-barcode').value,
       price: document.getElementById('pf-price').value,
@@ -12399,11 +12458,25 @@ function openProductForm(productId, draft){
       price: parseMoneyInput(row.querySelector('.pf-variant-price').value) || 0,
       stock: parseFloat(row.querySelector('.pf-variant-stock').value) || 0,
       wholesalePrice: parseMoneyInput(row.querySelector('.pf-variant-wholesale').value) || 0,
-      boxPrice: parseMoneyInput(row.querySelector('.pf-variant-boxprice').value) || 0
+      boxPrice: parseMoneyInput(row.querySelector('.pf-variant-boxprice').value) || 0,
+      barcode: row.querySelector('.pf-variant-barcode') ? __bcNorm(row.querySelector('.pf-variant-barcode').value) : ((matchedVariant && matchedVariant.barcode) || ''),   /* fix198-scan */
+      boxBarcode: row.querySelector('.pf-variant-boxbarcode') ? __bcNorm(row.querySelector('.pf-variant-boxbarcode').value) : ((matchedVariant && matchedVariant.boxBarcode) || '')
       };
     }).filter(v=>v.name);
     const errEl = document.getElementById('pf-error');
     if(!name){ errEl.textContent = tr('fillFields'); return; }
+    const __boxBcEl = document.getElementById('pf-box-barcode');   /* fix198-scan: yangi kodlar takrorlanmasin */
+    const boxBarcode = __boxBcEl ? __bcNorm(__boxBcEl.value) : ((editing && editing.boxBarcode) || '');
+    {
+      const oldCodes = new Set(editing ? [editing.barcode, editing.boxBarcode].concat((editing.variants || []).reduce((a, v)=>a.concat([v && v.barcode, v && v.boxBarcode]), [])).map(__bcNorm).filter(Boolean) : []);
+      const mine = [barcode, boxBarcode].concat(variants.reduce((a, v)=>a.concat([v.barcode, v.boxBarcode]), [])).map(__bcNorm).filter(Boolean);
+      for(let i = 0; i < mine.length; i++){
+        if(mine.indexOf(mine[i]) !== i && !oldCodes.has(mine[i])){ errEl.textContent = tr('pfBarcodeDup').replace('{code}', mine[i]); return; }
+        if(oldCodes.has(mine[i])) continue;
+        const other = visibleProducts().find(op=>op !== editing && ([op.barcode, op.boxBarcode].concat((op.variants || []).reduce((a, v)=>a.concat([v && v.barcode, v && v.boxBarcode]), [])).some(c=>__bcEq(c, mine[i]))));
+        if(other){ errEl.textContent = tr('pfBarcodeTaken').replace('{name}', other.name); return; }
+      }
+    }
     let stock, finalExpiryDate = expiryDate, batches;
     if(editing && editing.variants && editing.variants.length){
       stock = editing.variants.reduce((s,v)=>s+(v.stock||0),0);
@@ -12437,7 +12510,7 @@ function openProductForm(productId, draft){
     // typed in by mistake; NaN (empty) always fails `< 0`, so it passes
     // through untouched, exactly as intended.
     if(variants.length===0 && stock < 0){ errEl.textContent = tr('fillFields'); return; }
-    const data = {name, price: price||0, stock: stock||0, unit, category, image:currentImage, barcode, costPrice, supplierName, supplierPhone, expiryDate: finalExpiryDate, showInCatalog, quickAccess, kitchenPrint, kitchenStationId, wholesalePrice, unitsPerBox, boxPrice, boxLabel, variants};
+    const data = {name, price: price||0, stock: stock||0, unit, category, image:currentImage, barcode, costPrice, supplierName, supplierPhone, expiryDate: finalExpiryDate, showInCatalog, quickAccess, kitchenPrint, kitchenStationId, wholesalePrice, unitsPerBox, boxPrice, boxLabel, variants, boxBarcode};   /* fix198-scan: boxBarcode */
     if(batches) data.batches = batches;
     { /* fix182-fiscal1 */
       const __ik = document.getElementById('pf-ikpu'), __vt = document.getElementById('pf-vat');
@@ -15689,6 +15762,188 @@ function erClosePickerToEdit(){
 }
 
 /* "Mahsulot qo'shish" — asosiy sotuv oynasi ko'rinishidagi to'liq ekran */
+/* fix198-scan: tez skaner (Korzinkadagidek) — kamera yopilmaydi, har skaner savatga; qo'l skaneri (USB/Bluetooth, klaviatura kabi);
+   variant va blokning o'z shtrix-kodi; topilmasa — shu kod bilan yangi tovar. Telefonning tez o'qish rejimi (BarcodeDetector) bo'lsa — o'sha. */
+function __bcNorm(c){ return String(c == null ? '' : c).replace(/[\s\u0000-\u001f]/g, ''); }
+function __bcEq(a, b){
+  a = __bcNorm(a); b = __bcNorm(b);
+  if(!a || !b) return false;
+  if(a === b) return true;
+  if(/^\d+$/.test(a) && /^\d+$/.test(b)) return a.replace(/^0+/, '') === b.replace(/^0+/, '');   /* UPC-A (12) va EAN-13 (0 bilan) bir xil */
+  return a.toUpperCase() === b.toUpperCase();
+}
+function __bcFind(code){
+  code = __bcNorm(code); if(!code) return null;
+  const list = visibleProducts();
+  let p = list.find(x=>__bcEq(x.barcode, code)); if(p) return {p: p, v: null, box: false};
+  p = list.find(x=>!(x.variants && x.variants.length) && __bcEq(x.boxBarcode, code)); if(p) return {p: p, v: null, box: true};
+  for(const x of list){
+    for(const v of (x.variants || [])){
+      if(!v) continue;
+      if(__bcEq(v.barcode, code)) return {p: x, v: v, box: false};
+      if(__bcEq(v.boxBarcode, code)) return {p: x, v: v, box: true};
+    }
+  }
+  return null;
+}
+function __bcCartSig(){ try{ return JSON.stringify(activeCart().map(c=>[c.productId, c.variantId || '', c.saleMode || '', c.priceTier || '', c.qty])); }catch(e){ return ''; } }
+/* {ok, line} — qo'shildi; {picker} — tanlov oynasi kerak; {err} — sabab */
+function __bcAdd(hit){
+  const p = hit.p, v = hit.v, before = __bcCartSig();
+  if(v){
+    if(hit.box){ if(!(p.unitsPerBox > 0 && v.boxPrice > 0)) return {err: tr('bcNoBoxPrice')}; addVariantBoxToCart(p.id, v.id, false); }
+    else addVariantToCart(p.id, v.id, false, state.saleMode === 'wholesale');
+  } else if(hit.box){
+    if(!(p.unitsPerBox > 0 && p.boxPrice > 0)) return {err: tr('bcNoBoxPrice')};
+    addBoxToCart(p.id);
+  } else {
+    const needsPicker = (p.variants && p.variants.length) || (state.saleMode === 'wholesale' && p.wholesalePrice > 0 && p.unitsPerBox > 0 && p.boxPrice > 0);
+    if(needsPicker) return {picker: true};
+    addToCart(p.id);
+  }
+  if(__bcCartSig() === before) return {err: tr('bcNotAdded')};
+  const line = activeCart().find(c=>c.productId === p.id && (c.variantId || null) === (v ? v.id : null) && (hit.box ? c.saleMode === 'box' : c.saleMode !== 'box'));
+  return {ok: true, line: line};
+}
+function __bcBeep(okSound){
+  try{ if(navigator.vibrate) navigator.vibrate(okSound ? 40 : [60, 60, 60]); }catch(e){}
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+    const ctx = window.__bcAC || (window.__bcAC = new AC());
+    if(ctx.state === 'suspended') ctx.resume();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.value = okSound ? 1760 : 300; o.type = 'square'; g.gain.value = 0.06;
+    o.connect(g); g.connect(ctx.destination); o.start(); o.stop(ctx.currentTime + (okSound ? 0.08 : 0.25));
+  }catch(e){}
+}
+function __bcScanCfg(){
+  const cfg = {verbose: false, experimentalFeatures: {useBarCodeDetectorIfSupported: true}};
+  try{
+    const F = window.Html5QrcodeSupportedFormats;
+    if(F) cfg.formatsToSupport = ['QR_CODE', 'EAN_13', 'EAN_8', 'UPC_A', 'UPC_E', 'CODE_128', 'CODE_39', 'CODE_93', 'ITF', 'CODABAR', 'DATA_MATRIX'].map(k=>F[k]).filter(x=>x !== undefined);
+  }catch(e){}
+  return cfg;
+}
+/* Kod skanerlandi (kamera yoki qo'l skaneri): savatga qo'shadi; natija — {ok|picker|notFound|err} */
+function __bcHandle(code, fromScanner){
+  code = __bcNorm(code);
+  const hit = __bcFind(code);
+  if(!hit){ __bcBeep(false); return {notFound: true, code: code}; }
+  const r = __bcAdd(hit);
+  if(r.picker){
+    if(fromScanner) __fscClose();
+    addToCart(hit.p.id);
+    return {picker: true, hit: hit};
+  }
+  if(r.err){ __bcBeep(false); return {err: r.err, hit: hit}; }
+  __bcBeep(true);
+  return {ok: true, hit: hit, line: r.line};
+}
+function __bcLineText(res){
+  const h = res.hit, c = res.line;
+  const name = c ? __cartLineLabelHtml(c, h.p, h.v, true) : escapeHtml(h.p.name + (h.v ? ' — ' + h.v.name : ''));
+  return {name: name, price: c ? fmt(cartItemPrice(c, h.p)) : '', qty: c ? c.qty : 0};
+}
+let __fsc = null;
+function __fscFit(wid, rid){
+  const wrap = document.getElementById(wid || 'fsc-reader-wrap'), rd = document.getElementById(rid || 'fsc-reader'); if(!wrap || !rd) return;
+  const k = (wrap.clientWidth || 300) / 720; rd.style.transform = 'scale(' + k + ')';
+  const h = Math.round(rd.offsetHeight * k); if(h > 60) wrap.style.height = Math.min(h, Math.round(window.innerHeight * 0.5)) + 'px';
+}
+function __fscClose(){
+  const s = __fsc; __fsc = null;
+  if(s && s.fitT) clearInterval(s.fitT);
+  if(s && s.sc){ try{ s.sc.stop().then(()=>{ try{ s.sc.clear(); }catch(e){} }).catch(()=>{}); }catch(e){} }
+  if(s) closeModal();
+  try{ renderProductGrid(); renderCartBar(); }catch(e){}
+}
+function __fscSum(){
+  const el = document.getElementById('fsc-sum'); if(!el) return;
+  el.innerHTML = '<span>' + escapeHtml(tr('bcInCart').replace('{n}', activeCart().length)) + '</span><b>' + escapeHtml(fmt(cartTotal())) + '</b>';
+}
+function __fscShow(res){
+  const el = document.getElementById('fsc-last'); if(!el) return;
+  const box = document.getElementById('fsc-reader-wrap');
+  if(box){ box.classList.remove('fsc-ok', 'fsc-bad'); void box.offsetWidth; box.classList.add(res.ok ? 'fsc-ok' : 'fsc-bad'); }
+  if(res.ok){ const t = __bcLineText(res); el.className = 'fsc-last ok'; el.innerHTML = '<div class="fsc-nm">✓ ' + t.name + '</div><div class="fsc-pr">' + escapeHtml(t.price) + ' × ' + t.qty + '</div>'; }
+  else if(res.notFound){
+    const canAdd = isAdmin() || hasPerm('products');
+    el.className = 'fsc-last bad'; el.innerHTML = '<div class="fsc-nm">' + escapeHtml(tr('bcNotFound').replace('{code}', res.code)) + '</div>' + (canAdd ? '<button type="button" class="btn btn-outline btn-sm" id="fsc-new" style="margin-top:6px;">＋ ' + escapeHtml(tr('bcNewProduct')) + '</button>' : '');
+    const nb = document.getElementById('fsc-new'); if(nb) nb.addEventListener('click', ()=>{ __fscClose(); openProductForm(null, {barcode: res.code}); });
+  } else if(res.err){ el.className = 'fsc-last bad'; el.innerHTML = '<div class="fsc-nm">' + escapeHtml(res.hit.p.name + (res.hit.v ? ' — ' + res.hit.v.name : '')) + ': ' + escapeHtml(res.err) + '</div>'; }
+  __fscSum();
+}
+function openFastScanner(){
+  if(__fsc) return;
+  openModal(`
+    <div style="position:relative;">
+      <button id="fsc-x" type="button" style="position:absolute;top:-4px;right:-4px;background:var(--surface-soft);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;font-weight:700;color:var(--ink);z-index:5;">×</button>
+      <div class="modal-title">${tr('bcFastTitle')}</div>
+      <p class="subtle" style="margin:0 0 10px;font-size:12.5px;">${tr('bcFastHint')}</p>
+      <div id="fsc-reader-wrap" class="fsc-wrap"><div id="fsc-reader"></div><div class="fsc-aim"></div></div>
+      <div id="fsc-err" class="error-text" style="margin-top:8px;"></div>
+      <div id="fsc-last" class="fsc-last"></div>
+      <div id="fsc-sum" class="fsc-sum"></div>
+      <button class="btn btn-primary btn-block" style="margin-top:12px;" id="fsc-done" type="button">${tr('bcDone')}</button>
+    </div>
+  `, {center: true});
+  const S = __fsc = {sc: null, last: '', lastT: 0, busyT: 0, fitT: 0};
+  __fscFit(); S.fitT = setInterval(()=>{ if(__fsc === S) __fscFit(); }, 300);
+  try{ const AC = window.AudioContext || window.webkitAudioContext; if(AC && !window.__bcAC) window.__bcAC = new AC(); }catch(e){}
+  document.getElementById('fsc-done').addEventListener('click', __fscClose);
+  document.getElementById('fsc-x').addEventListener('click', __fscClose);
+  __fscSum();
+  waitForQrLib((ready)=>{
+    if(__fsc !== S) return;
+    if(!ready){ const e = document.getElementById('fsc-err'); if(e) e.textContent = tr('scannerLibFailed'); return; }
+    try{
+      S.sc = new Html5Qrcode('fsc-reader', __bcScanCfg());
+      S.sc.start({facingMode: 'environment'},
+        {fps: 20, disableFlip: true, videoConstraints: {facingMode: 'environment', width: {ideal: 1280}, height: {ideal: 720}}},   /* butun kadr, yuqori sifat: kichik shtrix-kod ham o'qiladi (ramka faqat ko'rsatma) */
+        (txt)=>{
+          if(__fsc !== S) return;
+          const code = __bcNorm(txt), now = Date.now();
+          if(!code || now < S.busyT) return;
+          if(code === S.last && now - S.lastT < 1600){ S.lastT = now; return; }   /* o'sha kod ramkada turibdi — qayta qo'shilmaydi */
+          S.last = code; S.lastT = now; S.busyT = now + 350;
+          const res = __bcHandle(code, true);
+          if(__fsc === S) __fscShow(res);
+        }, ()=>{}).catch((err)=>{ const e = document.getElementById('fsc-err'); if(e) e.textContent = tr('cameraError') + (err && err.name ? ' (' + err.name + ')' : ''); });
+    }catch(err){ const e = document.getElementById('fsc-err'); if(e) e.textContent = tr('cameraError'); }
+  }, 10);
+}
+/* Qo'l skaneri: klaviatura kabi tez yozib Enter bosadi. Sotuv ekranida (maydon tanlanmagan bo'lsa) kod savatga tushadi. */
+(function(){
+  if(window.__bcWedgeOn) return; window.__bcWedgeOn = 1;
+  let buf = '', lastT = 0, firstT = 0;
+  document.addEventListener('keydown', function(e){
+    try{
+      if(state.view !== 'sale' || !document.getElementById('search-input')) { buf = ''; return; }
+      const ae = document.activeElement, tag = ae && ae.tagName;
+      if(tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (ae && ae.isContentEditable)){ buf = ''; return; }
+      const mr = document.getElementById('modal-root');
+      if(mr && mr.innerHTML.trim() && !__fsc){ buf = ''; return; }
+      if(e.ctrlKey || e.altKey || e.metaKey) return;
+      const now = Date.now();
+      if(e.key === 'Enter'){
+        const code = buf, fast = buf.length >= 4 && (lastT - firstT) <= buf.length * 60;
+        buf = '';
+        if(!fast) return;
+        e.preventDefault();
+        const res = __bcHandle(code, !!__fsc);
+        if(__fsc) __fscShow(res);
+        else if(res.ok){ const t = __bcLineText(res); showToast(t.name.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'") + ' × ' + t.qty); }
+        else if(res.notFound) showToast(tr('bcNotFound').replace('{code}', res.code));
+        else if(res.err) showToast(res.err);
+        return;
+      }
+      if(e.key && e.key.length === 1){
+        if(!buf || now - lastT > 80){ buf = ''; firstT = now; }
+        buf += e.key; lastT = now;
+      }
+    }catch(err){ buf = ''; }
+  }, true);
+})();
 function openErProductPicker(restoreScroll){
   var d = editReceiptDraft;
   if(!d){ closeModal(); return; }
@@ -15743,7 +15998,7 @@ function openErProductPicker(restoreScroll){
   });
   document.getElementById('er-pick-scan').addEventListener('click', function(){
     openBarcodeScanner(function(code){
-      var product = visibleProducts().find(function(p){ return p.barcode && p.barcode === code; });
+      var __h = __bcFind(code), product = __h ? __h.p : null;   /* fix198-scan: variant va blok kodi ham topiladi */
       if(!product){ showToast(tr('productNotFound')); return; }
       erTapProduct(product.id);
       showToast(product.name);
