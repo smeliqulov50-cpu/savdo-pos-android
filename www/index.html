@@ -999,6 +999,38 @@
   .co-foot #confirm-sale-btn{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;column-gap:4px;}
   .co-btn-sum{font-weight:800;white-space:nowrap;}
   body.money-keypad-open .co-foot{position:static;}
+  /* fix204-auth: yangi kirish ekrani */
+  .au-screen{justify-content:flex-start !important;}
+  .au-box{margin:auto 0;padding:8px 0 4px;display:flex;flex-direction:column;}
+  @media (min-width:700px){ .login-screen > .au-box{max-width:420px;} }
+  .au-head{text-align:center;margin-bottom:18px;}
+  .au-logo{width:56px;height:56px;border-radius:16px;box-shadow:0 8px 20px rgba(47,111,237,.25);display:block;margin:0 auto 10px;}
+  .login-screen .au-brand{font-size:17px !important;margin:0 0 8px !important;display:inline-block;max-width:100%;}
+  .au-title{font-size:26px;font-weight:800;letter-spacing:-.4px;color:var(--ink);margin:0 0 4px;line-height:1.2;}
+  .au-sub{margin:0;color:var(--ink-soft);font-size:14px;line-height:1.4;}
+  .au-socials{display:flex;flex-direction:column;gap:10px;}
+  .au-soc{display:flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:8px 14px;border-radius:14px;border:1.5px solid var(--border);background:var(--surface);color:var(--ink);font-weight:700;font-size:15px;cursor:pointer;width:100%;}
+  .au-soc:active{transform:scale(.98);}
+  .au-or{display:flex;align-items:center;gap:12px;margin:18px 0 4px;color:var(--ink-faint);font-size:13px;font-weight:600;}
+  .au-or::before,.au-or::after{content:"";flex:1;height:1px;background:var(--border);}
+  .au-tabs{display:flex;border-bottom:1.5px solid var(--border);margin:6px 0 16px;}
+  .au-tab{flex:1;background:none;border:none;padding:12px 4px 10px;font-size:15px;font-weight:700;color:var(--ink-faint);position:relative;cursor:pointer;min-height:46px;line-height:1.2;}
+  .au-tab.on{color:var(--ink);}
+  .au-tab.on::after{content:"";position:absolute;left:0;right:0;bottom:-1.5px;height:3px;border-radius:3px 3px 0 0;background:var(--accent);}
+  .au-field{margin-bottom:12px;}
+  .au-inp{position:relative;}
+  .au-inp input{width:100%;min-height:48px;font-size:16px;}
+  .au-field.has-err .au-inp input{border-color:var(--danger) !important;}
+  .au-err{color:var(--danger);font-size:12.5px;font-weight:600;margin-top:5px;line-height:1.35;}
+  .au-err:empty{display:none;}
+  .au-hint{color:var(--ink-faint);font-size:12px;margin-top:5px;}
+  .au-forgot{display:flex;justify-content:flex-end;margin:-6px 0 10px;}
+  .au-link{background:none;border:none;color:var(--accent-dark);font-weight:700;font-size:13.5px;padding:8px 2px;cursor:pointer;min-height:40px;}
+  .au-gen{margin:0 0 10px;font-size:13px;line-height:1.4;}
+  .au-gen:empty{display:none;}
+  .au-switch{display:block;margin:8px auto 0;text-align:center;}
+  #auth-submit-btn[disabled]{opacity:.7;}
+  @media (max-height:560px){ .au-logo{display:none;} .au-title{font-size:21px;} .au-head{margin-bottom:10px;} .au-tabs{margin-bottom:10px;} }
   /* fix203-promo / fix203-dash */
   .pay-old{color:var(--ink-faint);font-weight:600;font-size:.82em;margin-right:6px;text-decoration:line-through;}
   .pay-promo{font-size:11.5px;font-weight:800;color:#c2410c;margin-top:2px;}
@@ -2087,6 +2119,20 @@ const T = {
   scanToFind:{uz:"Mahsulotni skanerlash",ru:"Сканировать товар",en:"Scan product",kk:"Тауарды сканерлеу",ky:"Товарды сканерлөө",tg:"Скан кардани мол"},
   scanHint:{uz:"Shtrix-kodni kamera oldiga tuting",ru:"Наведите камеру на штрих-код",en:"Point the camera at the barcode",kk:"Штрих-кодты камераға тұтыңыз",ky:"Штрих-кодду камерага коюңуз",tg:"Штрих-кодро пеши камера гиред"},
   cameraError:{uz:"Kameraga ruxsat berilmadi yoki mavjud emas",ru:"Нет доступа к камере",en:"Camera access denied or unavailable",kk:"Камераға рұқсат жоқ немесе жоқ",ky:"Камерага уруксат жок же жок",tg:"Камера дастрас нест ё иҷозат дода нашудааст"},
+  auTitle:{uz:"Xush kelibsiz!",ru:"Добро пожаловать!",en:"Welcome!",kk:"Қош келдіңіз!",ky:"Кош келиңиз!",tg:"Хуш омадед!"},
+  auSubSignup:{uz:"Do'koningiz uchun yangi hisob oching",ru:"Создайте аккаунт для вашего магазина",en:"Create an account for your shop",kk:"Дүкеніңіз үшін жаңа аккаунт ашыңыз",ky:"Дүкөнүңүз үчүн жаңы аккаунт ачыңыз",tg:"Барои мағозаатон ҳисоби нав кушоед"},
+  auOr:{uz:"yoki",ru:"или",en:"or",kk:"немесе",ky:"же",tg:"ё"},
+  auGoogle:{uz:"Google orqali davom etish",ru:"Продолжить через Google",en:"Continue with Google",kk:"Google арқылы жалғастыру",ky:"Google аркылуу улантуу",tg:"Идома тавассути Google"},
+  auTelegram:{uz:"Telegram orqali davom etish",ru:"Продолжить через Telegram",en:"Continue with Telegram",kk:"Telegram арқылы жалғастыру",ky:"Telegram аркылуу улантуу",tg:"Идома тавассути Telegram"},
+  auTabLogin:{uz:"Kirish",ru:"Вход",en:"Log in",kk:"Кіру",ky:"Кирүү",tg:"Вуруд"},
+  auTabSignup:{uz:"Ro'yxatdan o'tish",ru:"Регистрация",en:"Sign up",kk:"Тіркелу",ky:"Катталуу",tg:"Бақайдгирӣ"},
+  auBusy:{uz:"Kuting…",ru:"Подождите…",en:"Please wait…",kk:"Күте тұрыңыз…",ky:"Күтө туруңуз…",tg:"Интизор шавед…"},
+  auEnterEmail:{uz:"Emailni kiriting",ru:"Введите email",en:"Enter your email",kk:"Email енгізіңіз",ky:"Email киргизиңиз",tg:"Email-ро ворид кунед"},
+  auEnterPassword:{uz:"Parolni kiriting",ru:"Введите пароль",en:"Enter your password",kk:"Құпия сөзді енгізіңіз",ky:"Сырсөздү киргизиңиз",tg:"Паролро ворид кунед"},
+  auPassHint:{uz:"Kamida 6 ta belgi",ru:"Минимум 6 символов",en:"At least 6 characters",kk:"Кемінде 6 таңба",ky:"Кеминде 6 белги",tg:"Ақаллан 6 аломат"},
+  auErrCred:{uz:"Email yoki parol noto'g'ri",ru:"Неверный email или пароль",en:"Wrong email or password",kk:"Email немесе құпия сөз қате",ky:"Email же сырсөз туура эмес",tg:"Email ё парол нодуруст аст"},
+  authError_network:{uz:"Internet aloqasi yo'q. Ulanishni tekshirib, qayta urinib ko'ring",ru:"Нет подключения к интернету. Проверьте связь и попробуйте снова",en:"No internet connection. Check it and try again",kk:"Интернет байланысы жоқ. Байланысты тексеріп, қайталап көріңіз",ky:"Интернет байланышы жок. Байланышты текшерип, кайра аракет кылыңыз",tg:"Пайвасти интернет нест. Пайвастро санҷида, аз нав кӯшиш кунед"},
+  authError_too_many:{uz:"Juda ko'p urinish. Birozdan keyin qayta urinib ko'ring",ru:"Слишком много попыток. Попробуйте чуть позже",en:"Too many attempts. Please try again a little later",kk:"Тым көп әрекет. Сәл кейін қайталап көріңіз",ky:"Өтө көп аракет. Бир аздан кийин кайра аракет кылыңыз",tg:"Кӯшишҳо аз ҳад зиёд. Каме баъдтар аз нав кӯшиш кунед"},
   authWelcome:{uz:"Savdo Pos'ga xush kelibsiz",ru:"Добро пожаловать в Savdo Pos",en:"Welcome to Savdo Pos",kk:"Savdo Pos-қа қош келдіңіз",ky:"Savdo Pos'ко кош келиңиз",tg:"Хуш омадед ба Savdo Pos"},
   authSubtitle:{uz:"Do'koningizni boshqarish uchun hisobingizga kiring",ru:"Войдите в аккаунт, чтобы управлять магазином",en:"Sign in to manage your shop",kk:"Дүкеніңізді басқару үшін аккаунтқа кіріңіз",ky:"Дүкөнүңүздү башкаруу үчүн аккаунтка кириңиз",tg:"Барои идораи мағозаатон ба ҳисоб ворид шавед"},
   authEmail:{uz:"Email",ru:"Email",en:"Email",kk:"Email",ky:"Email",tg:"Email"},
@@ -4517,71 +4563,145 @@ function renderAuthConnecting(){
   const r = document.getElementById('auth-conn-retry'); if(r) r.addEventListener('click', ()=>{ try{ location.reload(); }catch(e){} });
   const o = document.getElementById('auth-conn-other'); if(o) o.addEventListener('click', ()=>renderAuthGate('login'));
 }
-function renderAuthGate(mode){
-  mode = mode || 'login';
+/* fix204-auth: yangi kirish ekrani (OLX uslubida): logotip, «Xush kelibsiz!», Google/Telegram tugmalari joyi, «yoki» chizig'i,
+   «Kirish | Ro'yxatdan o'tish» tablari, xato — maydon ostida. Mantiq AVVALGIDEK: email+parol bilan kirish, ro'yxatdan o'tish
+   (shartlarga rozilik bilan), parolni tiklash, til tanlash. Tab yoki til almashsa, kiritilgan email va parol saqlanadi. */
+const AUTH_SOCIAL = {google: false, telegram: false};   /* 2- va 3-bosqichda yoqiladi. O'chiq bo'lsa tugma ham, «yoki» chizig'i ham chiqmaydi */
+function __auSocialHtml(){
+  const b = [];
+  if(AUTH_SOCIAL.google) b.push('<button type="button" class="au-soc" id="auth-google-btn"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>' + tr('auGoogle') + '</span></button>');
+  if(AUTH_SOCIAL.telegram) b.push('<button type="button" class="au-soc" id="auth-telegram-btn"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#29A9EB"/><path fill="#fff" d="M17.6 7.2 15.7 16.6c-.1.6-.5.8-1 .5l-2.9-2.1-1.4 1.3c-.2.2-.3.3-.6.3l.2-2.9 5.3-4.8c.2-.2 0-.3-.4-.1l-6.5 4.1-2.8-.9c-.6-.2-.6-.6.1-.9l11-4.2c.5-.2 1 .1.8.9z"/></svg><span>' + tr('auTelegram') + '</span></button>');
+  if(!b.length) return '';
+  return '<div class="au-socials">' + b.join('') + '</div><div class="au-or"><span>' + tr('auOr') + '</span></div>';
+}
+function __auVals(){
+  const e = document.getElementById('auth-email'), p = document.getElementById('auth-password');
+  return {email: e ? e.value : '', password: p ? p.value : ''};
+}
+function __auSetErr(id, msg){
+  const el = document.getElementById(id); if(!el) return;
+  el.textContent = msg || '';
+  const f = el.closest('.au-field'); if(f) f.classList.toggle('has-err', !!msg);
+}
+function __auClear(){
+  ['auth-email-err', 'auth-password-err', 'auth-terms-err'].forEach(i=>__auSetErr(i, ''));
+  const g = document.getElementById('auth-error'); if(g){ g.textContent = ''; g.style.color = ''; g.classList.remove('au-ok'); }
+}
+/* Firebase xatosi — tegishli maydon ostida (matn mapAuthError'dan, 6 tilda) */
+function __auShowErr(e){
+  const c = (e && e.code) || '';
+  if(/invalid-email|user-not-found|email-already-in-use|missing-email/.test(c)){ __auSetErr('auth-email-err', /missing-email/.test(c) ? tr('auEnterEmail') : mapAuthError(e)); return 'auth-email'; }
+  if(/invalid-credential|invalid-login-credentials/.test(c)){ __auSetErr('auth-password-err', tr('auErrCred')); return 'auth-password'; }
+  if(/wrong-password|weak-password|missing-password/.test(c)){ __auSetErr('auth-password-err', /missing-password/.test(c) ? tr('auEnterPassword') : mapAuthError(e)); return 'auth-password'; }
+  const g = document.getElementById('auth-error'); if(g) g.textContent = mapAuthError(e);
+  return null;
+}
+function __auKbFix(){   /* klaviatura ochilganda faol maydon ko'rinib tursin (ekran kichrayadi — maydonni o'rtaga suramiz) */
+  if(window.__auKbBound) return; window.__auKbBound = true;
+  const vis = ()=>{ const a = document.activeElement; if(a && a.closest && a.closest('.au-screen') && /^(INPUT|TEXTAREA)$/.test(a.tagName)){ try{ a.scrollIntoView({block: 'center', behavior: 'smooth'}); }catch(e){ try{ a.scrollIntoView(); }catch(_e){} } } };
+  window.addEventListener('resize', ()=>setTimeout(vis, 60));
+  try{ if(window.visualViewport) window.visualViewport.addEventListener('resize', ()=>setTimeout(vis, 60)); }catch(e){}
+  document.addEventListener('focusin', (e)=>{ if(e.target && e.target.closest && e.target.closest('.au-screen')) setTimeout(vis, 320); });
+}
+function renderAuthGate(mode, keep){
+  mode = mode === 'signup' ? 'signup' : 'login';
   const root = document.getElementById('auth-root');
-  root.innerHTML = `<div class="login-screen">
+  if(!root) return;
+  const login = mode === 'login';
+  root.innerHTML = `<div class="login-screen au-screen">
     ${authLangRowHtml()}
-    <div class="brand" style="font-size:26px;margin-bottom:4px;">Savdo Pos<span>.</span></div>
-    <div class="subtle" style="margin-bottom:4px;">${tr('authWelcome')}</div>
-    <div class="subtle" style="margin-bottom:20px;">${tr('authSubtitle')}</div>
-    <div class="field"><label class="field-label">${tr('authEmail')}</label><input type="email" id="auth-email" placeholder="you@example.com"></div>
-    <div class="field"><label class="field-label">${tr('authPassword')}</label><input type="password" id="auth-password"></div>
-    ${mode==='signup' ? `
-      <div class="card" style="max-height:200px;overflow-y:auto;margin-bottom:12px;">
-        <p class="subtle" style="margin:0;font-size:12px;line-height:1.6;white-space:pre-line;">${tr('termsText')}</p>
+    <div class="au-box">
+      <div class="au-head">
+        <img class="au-logo" src="icon-192.png" alt="" width="56" height="56">
+        <div class="brand au-brand">Savdo Pos<span>.</span></div>
+        <h1 class="au-title">${tr('auTitle')}</h1>
+        <p class="au-sub">${login ? tr('authSubtitle') : tr('auSubSignup')}</p>
       </div>
-      <p class="subtle" style="margin:0 0 12px;font-size:12px;text-align:center;">
-        <a href="privacy-policy.html" style="color:var(--accent-dark);">${tr('privacyPolicyLink')}</a>
-        &nbsp;·&nbsp;
-        <a href="terms-of-service.html?lang=${state.lang}" data-fix="fix116-terms" style="color:var(--accent-dark);">${tr('termsOfServiceLink')}</a>
-      </p>
-      <div class="checkbox-row" style="margin-bottom:14px;"><input type="checkbox" id="auth-terms-check"><span style="font-size:13px;">${tr('termsAgree')}</span></div>
-    ` : ''}
-    <div id="auth-error" class="error-text" style="margin-bottom:10px;"></div>
-    <button class="btn btn-primary btn-pill btn-block" id="auth-submit-btn" style="margin-bottom:12px;">${mode==='login'?tr('authLogin'):tr('authSignup')}</button>
-    <button class="btn btn-ghost" id="auth-toggle-btn" style="margin-bottom:8px;">${mode==='login'?tr('authNoAccount'):tr('authHaveAccount')}</button>
-    ${mode==='login' ? `<button class="btn btn-ghost btn-sm" id="auth-forgot-btn">${tr('authForgotPassword')}</button>` : ''}
+      ${__auSocialHtml()}
+      <div class="au-tabs" role="tablist">
+        <button type="button" role="tab" class="au-tab${login ? ' on' : ''}" data-au-tab="login" aria-selected="${login}">${tr('auTabLogin')}</button>
+        <button type="button" role="tab" class="au-tab${login ? '' : ' on'}" data-au-tab="signup" aria-selected="${!login}">${tr('auTabSignup')}</button>
+      </div>
+      <form id="auth-form" class="au-form" novalidate>
+        <div class="field au-field"><label class="field-label" for="auth-email">${tr('authEmail')}</label>
+          <div class="au-inp"><input type="email" id="auth-email" name="email" autocomplete="username" inputmode="email" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="you@example.com"></div>
+          <div class="au-err" id="auth-email-err" role="alert"></div></div>
+        <div class="field au-field"><label class="field-label" for="auth-password">${tr('authPassword')}</label>
+          <div class="au-inp"><input type="password" id="auth-password" name="password" autocomplete="${login ? 'current-password' : 'new-password'}"></div>
+          <div class="au-err" id="auth-password-err" role="alert"></div>
+          ${login ? '' : `<div class="au-hint">${tr('auPassHint')}</div>`}</div>
+        ${login ? `<div class="au-forgot"><button type="button" class="au-link" id="auth-forgot-btn">${tr('authForgotPassword')}</button></div>` : `
+          <div class="card" style="max-height:200px;overflow-y:auto;margin-bottom:12px;">
+            <p class="subtle" style="margin:0;font-size:12px;line-height:1.6;white-space:pre-line;">${tr('termsText')}</p>
+          </div>
+          <p class="subtle" style="margin:0 0 12px;font-size:12px;text-align:center;">
+            <a href="privacy-policy.html" style="color:var(--accent-dark);">${tr('privacyPolicyLink')}</a>
+            &nbsp;·&nbsp;
+            <a href="terms-of-service.html?lang=${state.lang}" data-fix="fix116-terms" style="color:var(--accent-dark);">${tr('termsOfServiceLink')}</a>
+          </p>
+          <div class="au-field au-terms"><div class="checkbox-row" style="margin-bottom:0;"><input type="checkbox" id="auth-terms-check"><label for="auth-terms-check" style="font-size:13px;">${tr('termsAgree')}</label></div>
+          <div class="au-err" id="auth-terms-err" role="alert"></div></div>`}
+        <div id="auth-error" class="error-text au-gen" role="alert"></div>
+        <button type="submit" class="btn btn-primary btn-pill btn-block" id="auth-submit-btn">${login ? tr('authLogin') : tr('authSignup')}</button>
+      </form>
+      <button type="button" class="au-link au-switch" id="auth-toggle-btn">${login ? tr('authNoAccount') : tr('authHaveAccount')}</button>
+    </div>
   </div>`;
-  bindAuthLangRow(()=>{
-    // Re-render the WHOLE gate so every label updates, but keep whatever
-    // mode (login vs signup) and whatever the person already typed —
-    // switching language mid-signup shouldn't throw that away.
-    const emailVal = document.getElementById('auth-email').value;
-    const passwordVal = document.getElementById('auth-password').value;
-    renderAuthGate(mode);
-    document.getElementById('auth-email').value = emailVal;
-    document.getElementById('auth-password').value = passwordVal;
-  });
-  document.getElementById('auth-toggle-btn').addEventListener('click', ()=>renderAuthGate(mode==='login'?'signup':'login'));
+  if(keep){
+    const e = document.getElementById('auth-email'), p = document.getElementById('auth-password');
+    if(e && keep.email) e.value = keep.email; if(p && keep.password) p.value = keep.password;
+  }
+  __auKbFix();
+  // Til almashsa — butun ekran qayta chiziladi, rejim va kiritilganlar saqlanadi
+  bindAuthLangRow(()=>renderAuthGate(mode, __auVals()));
+  root.querySelectorAll('[data-au-tab]').forEach(b=>b.addEventListener('click', ()=>{ if(b.dataset.auTab !== mode) renderAuthGate(b.dataset.auTab, __auVals()); }));
+  document.getElementById('auth-toggle-btn').addEventListener('click', ()=>renderAuthGate(login ? 'signup' : 'login', __auVals()));
+  const emailEl = document.getElementById('auth-email'), passEl = document.getElementById('auth-password');
+  emailEl.addEventListener('keydown', (ev)=>{ if(ev.key === 'Enter'){ ev.preventDefault(); passEl.focus(); } });
+  emailEl.addEventListener('input', ()=>__auSetErr('auth-email-err', ''));
+  passEl.addEventListener('input', ()=>__auSetErr('auth-password-err', ''));
+  const termsEl = document.getElementById('auth-terms-check');
+  if(termsEl) termsEl.addEventListener('change', ()=>__auSetErr('auth-terms-err', ''));
+  let busy = false;
+  const submitBtn = document.getElementById('auth-submit-btn');
+  const setBusy = (on)=>{ busy = on; if(!submitBtn.isConnected) return; submitBtn.disabled = on; submitBtn.textContent = on ? tr('auBusy') : (login ? tr('authLogin') : tr('authSignup')); };
   const forgotBtn = document.getElementById('auth-forgot-btn');
   if(forgotBtn) forgotBtn.addEventListener('click', async ()=>{
-    const email = document.getElementById('auth-email').value.trim();
-    const errEl = document.getElementById('auth-error');
-    if(!email){ errEl.textContent = tr('authError_invalid_email'); return; }
+    if(busy) return;
+    __auClear();
+    const email = emailEl.value.trim();
+    if(!email){ __auSetErr('auth-email-err', tr('auEnterEmail')); emailEl.focus(); return; }
+    forgotBtn.disabled = true;
     try{
       await fbAuth.sendPasswordResetEmail(email);
-      errEl.style.color = 'var(--success)';
-      errEl.textContent = tr('authResetSent');
-    }catch(e){ errEl.style.color=''; errEl.textContent = mapAuthError(e); }
+      const g = document.getElementById('auth-error');
+      if(g){ g.classList.add('au-ok'); g.style.color = 'var(--success)'; g.textContent = tr('authResetSent'); }
+    }catch(e){ __auShowErr(e); }
+    if(forgotBtn.isConnected) forgotBtn.disabled = false;
   });
-  document.getElementById('auth-submit-btn').addEventListener('click', async ()=>{
-    const email = document.getElementById('auth-email').value.trim();
-    const password = document.getElementById('auth-password').value;
-    const errEl = document.getElementById('auth-error');
-    errEl.style.color = '';
-    errEl.textContent = '';
-    if(!email || !password){ errEl.textContent = tr('fillFields'); return; }
-    if(mode==='signup'){
-      const termsCheck = document.getElementById('auth-terms-check');
-      if(!termsCheck.checked){ errEl.textContent = tr('termsRequired'); return; }
-    }
+  document.getElementById('auth-form').addEventListener('submit', async (ev)=>{
+    ev.preventDefault();
+    if(busy) return;
+    __auClear();
+    const email = emailEl.value.trim();
+    const password = passEl.value;
+    let first = null;
+    if(!email){ __auSetErr('auth-email-err', tr('auEnterEmail')); first = first || emailEl; }
+    if(!password){ __auSetErr('auth-password-err', tr('auEnterPassword')); first = first || passEl; }
+    if(first){ first.focus(); return; }
+    if(!login && !termsEl.checked){ __auSetErr('auth-terms-err', tr('termsRequired')); return; }
+    setBusy(true);
     try{
-      if(mode==='login') await fbAuth.signInWithEmailAndPassword(email, password);
+      if(login) await fbAuth.signInWithEmailAndPassword(email, password);
       else await fbAuth.createUserWithEmailAndPassword(email, password);
-    }catch(e){ errEl.textContent = mapAuthError(e); }
+    }catch(e){
+      const f = __auShowErr(e);
+      if(f){ const el = document.getElementById(f); if(el) try{ el.focus(); }catch(_e){} }
+    }
+    setBusy(false);
   });
 }
+
 function mapAuthError(e){
   const code = (e && e.code) || '';
   if(code.includes('invalid-email')) return tr('authError_invalid_email');
@@ -4590,6 +4710,8 @@ function mapAuthError(e){
   if(code.includes('email-already-in-use')) return tr('authError_email_in_use');
   if(code.includes('weak-password')) return tr('authError_weak_password');
   if(code.includes('unauthorized-domain')) return tr('authError_unauthorized_domain');
+  if(code.includes('network-request-failed')) return tr('authError_network');   /* fix204-auth */
+  if(code.includes('too-many-requests')) return tr('authError_too_many');
   return tr('authError_generic');
 }
 
@@ -4626,7 +4748,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.79';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.80';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],

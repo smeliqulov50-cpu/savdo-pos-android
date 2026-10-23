@@ -11,3 +11,7 @@ fix*.py
 fix*.py
 play-release/
 diag67.txt
+node_modules
+android/keystore.properties
+*.jks
+*.keystore
