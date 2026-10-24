@@ -1089,30 +1089,49 @@ window.addEventListener("unhandledrejection", function(e) {
   var msg = "Promise xatosi";
   if (reason && reason.message) { msg = reason.message; }
   else if (reason) { msg = String(reason); }
-  showFatalError(msg);
+  /* fix208-errui: sahifadan chiqib ketilgandan keyin tugagan fon ishi (element yo'q) — foydalanuvchiga ko'rsatilmaydi, faqat jurnalga yoziladi */
+  showFatalError(msg, /^Cannot (read|set) properties of null/.test(String(msg)));
 });
-function showFatalError(msg) {
+var __FE_T = {"uz": ["Kichik nosozlik yuz berdi. Ish davom etmoqda, ma'lumotlaringiz saqlanadi.", "Batafsil", "Yopish"], "ru": ["Произошёл небольшой сбой. Работа продолжается, данные сохранены.", "Подробнее", "Закрыть"], "en": ["A small glitch happened. You can keep working — your data is safe.", "Details", "Close"], "kk": ["Кішкене ақау болды. Жұмыс жалғасуда, деректеріңіз сақталған.", "Толығырақ", "Жабу"], "ky": ["Кичине ката кетти. Иш уланууда, маалыматыңыз сакталган.", "Толугураак", "Жабуу"], "tg": ["Хатои хурд рух дод. Кор идома дорад, маълумоти шумо нигоҳ дошта шудааст.", "Муфассал", "Пӯшидан"]};
+function showFatalError(msg, quiet) {
   /* fix132-fs: Firestore kutubxonasining ichki xatosi — ilova xatosi emas; qizil oyna o'rniga o'zini tiklash */
   if (/FIRESTORE \([0-9.]+\) INTERNAL ASSERTION FAILED|AsyncQueue is already failed/i.test(String(msg || ""))) {
     window.__fsBroken = String(msg);
     try { if (typeof window.__fsRecover === "function") window.__fsRecover(String(msg)); } catch (e) {}
     return;
   }
+  /* fix208-errui: xato endi ekranni to'sadigan qizil oyna emas — pastda kichik, tushunarli xabar (6 tilda).
+     Texnik matn «Batafsil» ichida (skrinshot uchun), 8 soniyada o'zi yopiladi. Xato Firestore'ga avvalgidek yoziladi (__logAppError). */
+  if (quiet) return;
+  var T = __FE_T[(function(){ try { return localStorage.getItem("sardor_lang") || "uz"; } catch (e) { return "uz"; } })()] || __FE_T.uz;
   var box = document.getElementById("fatal-error-box");
   if (!box) {
     box = document.createElement("div");
     box.id = "fatal-error-box";
-    box.setAttribute("style", "position:fixed;top:0;left:0;right:0;background:#ffe4e4;color:#7a0000;padding:14px;font-family:monospace;font-size:13px;z-index:2147483647;border-bottom:3px solid #7a0000;max-height:60vh;overflow:auto;white-space:pre-wrap;word-break:break-word;");
-    var title = document.createElement("div");
-    title.setAttribute("style", "font-weight:bold;margin-bottom:8px;");
-    title.textContent = "ILOVADA XATO YUZ BERDI (bu rasmni yuboring):";
-    box.appendChild(title);
+    box.setAttribute("role", "status");
+    box.setAttribute("style", "position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom, 0px));max-width:460px;margin:0 auto;background:var(--surface,#fff);color:var(--ink,#16283F);border-radius:14px;border-left:4px solid #f59e0b;box-shadow:0 10px 30px rgba(15,23,42,.18);padding:12px 12px 12px 14px;font:500 14px/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;z-index:2147483647;");
+    var row = document.createElement("div");
+    row.setAttribute("style", "display:flex;align-items:flex-start;gap:10px;");
+    var ic = document.createElement("span"); ic.textContent = "⚠️"; ic.setAttribute("style", "flex-shrink:0;font-size:18px;line-height:1.2;");
+    var tx = document.createElement("div"); tx.id = "fatal-error-text"; tx.setAttribute("style", "flex:1 1 auto;min-width:0;"); tx.textContent = T[0];
+    var x = document.createElement("button"); x.type = "button"; x.setAttribute("aria-label", T[2]); x.textContent = "✕";
+    x.setAttribute("style", "flex-shrink:0;border:none;background:transparent;color:inherit;opacity:.6;font-size:16px;padding:0 4px;cursor:pointer;");
+    x.onclick = function () { try { clearTimeout(window.__feT); } catch (e) {} if (box.parentNode) box.parentNode.removeChild(box); };
+    row.appendChild(ic); row.appendChild(tx); row.appendChild(x); box.appendChild(row);
+    var more = document.createElement("button"); more.type = "button"; more.textContent = T[1];
+    more.setAttribute("style", "margin:6px 0 0 28px;border:none;background:transparent;color:var(--accent-dark,#1d4ed8);font:600 12.5px system-ui,sans-serif;padding:0;cursor:pointer;");
+    var det = document.createElement("div"); det.id = "fatal-error-details";
+    det.setAttribute("style", "display:none;margin:8px 0 0 28px;padding:8px;border-radius:8px;background:rgba(127,127,127,.12);font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;max-height:30vh;overflow:auto;");
+    more.onclick = function () { det.style.display = det.style.display === "none" ? "block" : "none"; try { clearTimeout(window.__feT); } catch (e) {} };
+    box.appendChild(more); box.appendChild(det);
     document.body.appendChild(box);
   }
-  var line = document.createElement("div");
-  line.setAttribute("style", "margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #d99;");
-  line.textContent = msg;
-  box.appendChild(line);
+  var d = document.getElementById("fatal-error-details");
+  if (d && d.textContent.indexOf(String(msg).replace(/ \(qator: .*\)$/, "")) === -1 && d.childNodes.length < 5) {
+    var line = document.createElement("div"); line.textContent = msg; d.appendChild(line);
+  }
+  try { clearTimeout(window.__feT); } catch (e) {}
+  window.__feT = setTimeout(function () { var b = document.getElementById("fatal-error-box"); var dd = document.getElementById("fatal-error-details"); if (b && !(dd && dd.style.display === "block") && b.parentNode) b.parentNode.removeChild(b); }, 8000);
 }
 </script>
 <div id="app">
@@ -5488,7 +5507,7 @@ function defaultSettingsObj(){
 }
 
 const APP_VERSION = 110;
-const APP_VERSION_NAME = '1.0.83';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
+const APP_VERSION_NAME = '1.0.84';   /* fix115-version: android/app/build.gradle'dagi versionName — har yig'ishda update-cache-version.js yangilaydi */
 const CHANGELOG = [
   {version:110,
    uz:["Super admin (★) tugmasi yuqoridagi headerdan olib tashlandi va Sozlamalar menyusiga ko'chirildi \u2014 hali ham faqat super adminga ko'rinadi. Sozlamalar menyusi mantiqiy guruhlarga bo'lindi (Umumiy, Biznes, Xodimlar, Chek/printer, Cheklovlar, Boshqa) \u2014 hech qanday panel olib tashlanmadi, faqat tartibga solindi"],
@@ -15656,7 +15675,7 @@ function openImportExportModal(){
     let rows;
     try{ rows = await ieReadFileRows(f); }catch(err){ showToast(tr('ieXlsxFailed')); return; }
     const plan = ieBuildPlan(rows);
-    const box = document.getElementById('ie-preview');
+    const box = document.getElementById('ie-preview'); if(!box) return;   /* fix208-errui: oyna yopilgan */
     if(!plan.items.length){ box.innerHTML = `<p class="error-text">${tr('ieNoRows')}</p>`; return; }
     const news = plan.items.filter(i=>!i.existing).length, ups = plan.items.length - news;
     box.innerHTML = `<div class="card" style="padding:10px 12px;">
@@ -19917,7 +19936,8 @@ async function renderSaDash(refresh){
   if(!el.innerHTML.trim()) el.innerHTML = '<div class="card" style="padding:12px 14px;margin-bottom:10px;"><div class="subtle">' + tr('saDashLoading') + '</div></div>';
   let st;
   try{ st = (await __saApi('statsGet', refresh ? {refresh: true} : {})).stats; }
-  catch(e){ el.innerHTML = '<div class="card" style="padding:10px 14px;margin-bottom:10px;"><div class="error-text">' + escapeHtml(__sapErrText(e)) + '</div></div>'; return; }
+  catch(e){ if(!el.isConnected) return; el.innerHTML = '<div class="card" style="padding:10px 14px;margin-bottom:10px;"><div class="error-text">' + escapeHtml(__sapErrText(e)) + '</div></div>'; return; }
+  if(!el.isConnected) return;   /* fix208-errui: panel yopilgan bo'lsa (Orqaga) — hech narsa qilinmaydi */
   const pct = st.mrrChangePct == null ? '' : ' <span style="font-size:12px;font-weight:800;color:' + (st.mrrChangePct >= 0 ? 'var(--teal)' : 'var(--danger)') + ';">' + (st.mrrChangePct >= 0 ? '▲ ' : '▼ ') + Math.abs(st.mrrChangePct) + '%</span>';
   const tile = (n, l, c)=>'<div class="sa-stat"><div class="sa-num"' + (c ? ' style="color:' + c + ';"' : '') + '>' + n + '</div><div class="sa-lbl">' + l + '</div></div>';
   const rev = st.revenue12 || [];
@@ -19936,7 +19956,7 @@ async function renderSaDash(refresh){
     + (exp.length ? exp.map(x=>'<div class="sa-exp-row"><div style="min-width:0;flex:1 1 10em;"><div style="font-weight:800;">' + escapeHtml(x.name || x.id) + '</div><div class="subtle" style="font-size:11.5px;">' + escapeHtml(fmtDate(new Date(x.expMs).toISOString())) + ' · ' + Math.max(0, Math.ceil((x.expMs - Date.now()) / 86400000)) + ' ' + tr('saDaysShort') + (x.phone ? ' · ' + escapeHtml(x.phone) : '') + '</div></div><button type="button" class="btn btn-ghost btn-sm" data-sa-rem="' + escapeHtml(x.id) + '" style="width:auto;">' + tr('saRemind') + '</button></div>').join('') : '<div class="subtle" style="font-size:12.5px;">' + tr('saDashExpNone') + '</div>')
     + '<div id="sa-rem-msg" class="subtle" style="font-size:12.5px;margin-top:6px;"></div>'
     + '</div>';
-  document.getElementById('sa-dash-ref').addEventListener('click', ()=>renderSaDash(true));
+  { const __rf = el.querySelector('#sa-dash-ref'); if(__rf) __rf.addEventListener('click', ()=>renderSaDash(true)); }   /* fix208-errui */
   const send = async (ids, btn)=>{
     const msg = document.getElementById('sa-rem-msg'); if(btn) btn.disabled = true;
     try{ const r = await __saApi('remind', {bizIds: ids}); if(msg) msg.textContent = tr('saRemindSent').replace('{n}', r.count); if(btn) btn.textContent = '✓'; }
@@ -21287,6 +21307,7 @@ async function renderSettingsAgentMap(container){
   bindSettingsBack(container);
   try{
     const snap = await agentLocationsCol().get();
+    if(!document.getElementById('agent-map')) return;   /* fix208-errui: bo'limdan chiqib ketilgan */
     const points = snap.docs.map(d=>d.data()).filter(p=>p.lat && p.lng);
     if(!points.length){
       document.getElementById('agent-map').outerHTML = `<div class="empty-state">${tr('noAgentLocations')}</div>`;
@@ -21314,7 +21335,7 @@ async function renderSettingsAgentMap(container){
         </div>`;
       }).join('');
   }catch(e){
-    document.getElementById('agent-map').outerHTML = `<div class="empty-state">${tr('noAgentLocations')}</div>`;
+    const __am = document.getElementById('agent-map'); if(__am) __am.outerHTML = `<div class="empty-state">${tr('noAgentLocations')}</div>`;   /* fix208-errui */
   }
 }
 
