@@ -243,6 +243,29 @@ async function handleAppApi(deps, caller, uid, action, body) {
 }
 
 /* ---------- xabarlar: chek, to'lov, eslatma ---------- */
+/* fix209-custdebt: xabardagi «jami qarz» — AMALDAN KEYINGI qarz.
+   Ilova (yangi versiya) yozuvning o'ziga debtAfter qo'yadi — shu ishlatiladi (kutilmaydi).
+   Eski ilova versiyasi: mijoz hujjatidagi qarz kutilgan qiymatga (oldingi ± summa) yetishini 3 soniyagacha kutamiz;
+   yetmasa yoki boshqacha o'zgarsa — qarz qatori yozilmaydi (noto'g'ri raqam ko'rsatilmaydi). */
+const DEBT_WAIT_MS = 3000, DEBT_STEP_MS = 500;
+function waitMs(deps, ms) { return deps.sleep ? deps.sleep(ms) : new Promise(function (r) { setTimeout(r, ms); }); }
+function hasDebtAfter(rec) { return !!rec && rec.debtAfter !== undefined && rec.debtAfter !== null && rec.debtAfter !== '' && isFinite(Number(rec.debtAfter)); }
+async function debtAfterOp(deps, bid, cid, rec, delta) {
+  if (hasDebtAfter(rec)) return Math.max(0, num(rec.debtAfter));
+  const c0 = await custDoc(deps.db, bid, cid);
+  if (!c0) return null;
+  const d0 = num(c0.debt), want = Math.max(0, Math.round((d0 + delta) * 100) / 100);
+  for (let waited = 0; waited < DEBT_WAIT_MS; waited += DEBT_STEP_MS) {
+    await waitMs(deps, DEBT_STEP_MS);
+    const c = await custDoc(deps.db, bid, cid); if (!c) return null;
+    const d = num(c.debt);
+    if (Math.abs(d - want) < 0.01) return d;
+    if (Math.abs(d - d0) >= 0.01) return null;   // boshqacha o'zgardi (ketma-ket amallar) — xavfsiz tomonga: ko'rsatilmaydi
+  }
+  return null;
+}
+function dropDebtLine(text) { return text.split('\n').filter(function (ln) { return ln.indexOf('\u0000DEBT\u0000') === -1; }).join('\n'); }
+
 async function linkFor(db, bid, cid) { const l = cid ? await getData(db.collection('tgCustLink').doc(linkId(bid, String(cid)))) : null; return l && l.uid && l.notify !== false ? l : null; }
 async function langOf(db, uid) { const c = await getData(db.collection('tgCust').doc(String(uid))); return S.lg(c && c.lang); }
 function itemsText(items, cur, l) {
@@ -264,7 +287,7 @@ async function onSale(deps, bid, sale) {
   let pay = kind === 'mixed' ? C.txt('payMixed', l) : kind === 'card' ? C.txt('payCard', l) : kind === 'credit' ? '' : C.txt('payCash', l);
   if (credit > 0) pay = (pay ? pay + '\n' : '') + C.txt('payCredit', l, { sum: M.money(l, s.cur, credit) });
   let debt = '';
-  if (credit > 0) { const c = await custDoc(db, bid, sale.customerId); if (c) debt = C.txt('debtNow', l, { debt: M.money(l, s.cur, num(c.debt)) }); }
+  if (credit > 0) { const da = await debtAfterOp(deps, bid, sale.customerId, sale, credit); if (da !== null) debt = C.txt('debtNow', l, { debt: M.money(l, s.cur, da) }); }   /* fix209-custdebt */
   const text = C.txt('receipt', l, { no: esc(sale.receiptNumber || ''), shop: esc(s.name), date: fmtDT(t, s.tz), items: itemsText(sale.items, s.cur, l), total: M.money(l, s.cur, num(sale.total)), pay: pay, debt: debt });
   const kb = credit > 0 ? { inline_keyboard: [[{ text: C.txt('btnOk', l), callback_data: 'cu:ok:' + bid + ':' + str(sale.id, 40) }, { text: C.txt('btnQ', l), callback_data: 'cu:q:' + bid + ':' + str(sale.id, 40) }]] } : null;
   const sent = await send(deps, link.uid, text, kb);
@@ -281,8 +304,9 @@ async function onLedger(deps, bid, entry) {
   if (!link) return { skipped: 'not_linked' };
   const t = Date.parse(entry.date); if (!isFinite(t) || t < deps.nowMs() - 12 * HOUR) return { skipped: 'old' };
   const s = await shopOf(db, bid), l = await langOf(db, link.uid);
-  const c = await custDoc(db, bid, entry.customerId); const debt = c ? num(c.debt) : 0;
-  const text = C.txt('paid', l, { shop: esc(s.name), date: fmtDT(t, s.tz), sum: M.money(l, s.cur, num(entry.amount)), note: entry.note ? ' · ' + esc(str(entry.note, 80)) : '', debt: M.money(l, s.cur, debt), thanks: debt <= 0 ? C.txt('paidAll', l) : '' });
+  const debt = await debtAfterOp(deps, bid, entry.customerId, entry, -num(entry.amount));   /* fix209-custdebt: amaldan keyingi qarz */
+  let text = C.txt('paid', l, { shop: esc(s.name), date: fmtDT(t, s.tz), sum: M.money(l, s.cur, num(entry.amount)), note: entry.note ? ' · ' + esc(str(entry.note, 80)) : '', debt: debt === null ? '\u0000DEBT\u0000' : M.money(l, s.cur, debt), thanks: debt !== null && debt <= 0 ? C.txt('paidAll', l) : '' });
+  if (debt === null) text = dropDebtLine(text);
   return { sent: await send(deps, link.uid, text) };
 }
 /* fix158-custfull: ilovada mijoz kartasidan qo'lda qarz yozilganda (sotuvsiz) */
@@ -294,8 +318,9 @@ async function onManualDebt(deps, bid, entry) {
   if (!link) return { skipped: 'not_linked' };
   const t = Date.parse(entry.date); if (!isFinite(t) || t < deps.nowMs() - 12 * HOUR) return { skipped: 'old' };
   const s = await shopOf(db, bid), l = await langOf(db, link.uid);
-  const c = await custDoc(db, bid, entry.customerId); const debt = c ? num(c.debt) : 0;
-  const text = C.txt('debtAdded', l, { shop: esc(s.name), date: fmtDT(t, s.tz), sum: M.money(l, s.cur, num(entry.amount)), note: entry.note ? ' · ' + esc(str(entry.note, 80)) : '', debt: M.money(l, s.cur, debt) });
+  const debt = await debtAfterOp(deps, bid, entry.customerId, entry, num(entry.amount));   /* fix209-custdebt: amaldan keyingi qarz */
+  let text = C.txt('debtAdded', l, { shop: esc(s.name), date: fmtDT(t, s.tz), sum: M.money(l, s.cur, num(entry.amount)), note: entry.note ? ' · ' + esc(str(entry.note, 80)) : '', debt: debt === null ? '\u0000DEBT\u0000' : M.money(l, s.cur, debt) });
+  if (debt === null) text = dropDebtLine(text);
   return { sent: await send(deps, link.uid, text, { inline_keyboard: [[myBtn(l)]] }), manualDebt: true };
 }
 async function remindOne(deps, bid, cid, opt) {
@@ -416,16 +441,60 @@ async function sendMy(deps, chatId, lang) {
 }
 
 /* fix183-custeasy: mijoz uchun doimiy pastki klaviatura va «/» menyusi */
+/* fix209-custkb: pastki klaviatura tugmalari ODDIY MATN. Telegram klaviatura (reply) tugmasidan ochilgan mini ilovaga initData bermaydi —
+   shu sabab «Buyurtma berish» / «Mening sahifam» ishlamasdi. Endi bosilganda bot xabar ichidagi (inline) tugma yuboradi — u initData beradi. */
+const KB_V = 2;
 function custKb(deps, cust, l) {
-  const rows = [[{ text: C.txt('btnMy', l), web_app: { url: myUrl() } }]];
-  if (cust && cust.lastShop) { try { rows.push([{ text: C.txt('kbShop', l), web_app: { url: require('./shop').shopUrl(cust.lastShop) } }]); } catch (e) {} }
+  const rows = [[{ text: C.txt('btnMy', l) }]];
+  if (cust && (cust.lastShop || (cust.shops && Object.keys(cust.shops).length))) rows.push([{ text: C.txt('kbShop', l) }]);
   rows.push([{ text: C.txt('kbHelp', l) }, { text: C.txt('kbLang', l) }]);
   return { keyboard: rows, resize_keyboard: true, is_persistent: true };
 }
 function kbKind(text) {
   const t = String(text || '').trim(); if (!t) return null;
-  for (const l of LANGS) { if (C.txt('kbHelp', l) === t) return 'help'; if (C.txt('kbLang', l) === t) return 'lang'; }
+  for (const l of LANGS) { if (C.txt('kbHelp', l) === t) return 'help'; if (C.txt('kbLang', l) === t) return 'lang'; if (C.txt('btnMy', l) === t) return 'my'; if (C.txt('kbShop', l) === t) return 'shop'; }
   return null;
+}
+/* Buyurtma berish mumkin bo'lgan do'konlar: oxirgi ochilgani, mijoz bog'langanlari, yaqinda buyurtma berganlari (bot orqali sotuv yoqilganlari) */
+async function shopChoices(deps, cust, pref) {
+  const db = deps.db, out = [], seen = {};
+  const add = async function (bid) {
+    if (!bid || seen[bid] || out.length >= 8) return; seen[bid] = 1;
+    const cfg = await getData(db.collection('tgShop').doc(bid));
+    if (!cfg || !cfg.enabled || !cfg.slug) return;
+    const b = await getData(db.collection('businesses').doc(bid));
+    out.push({ bid: bid, slug: String(cfg.slug), name: str((b && (b.businessName || (b.settings && b.settings.businessName))) || cfg.slug, 40) });
+  };
+  if (pref) { await add(await bidOfSlug(db, pref)); if (out.length) return out; }
+  if (cust.lastShop) await add(await bidOfSlug(db, cust.lastShop));
+  const ids = Object.keys(cust.shops || {}).concat(recentBids(cust));
+  for (let i = 0; i < ids.length; i++) await add(ids[i]);
+  return out;
+}
+async function sendShops(deps, chatId, lang, pref) {
+  const cust = (await getData(deps.db.collection('tgCust').doc(String(chatId)))) || {};
+  const l = S.lg(cust.lang || lang);
+  const list = await shopChoices(deps, cust, pref || '');
+  const SH = require('./shop');
+  if (!list.length) { await send(deps, chatId, C.txt('shopNone', l), custKb(deps, cust, l)); return { shops: 0 }; }
+  if (list.length === 1) await send(deps, chatId, C.txt('shopOne', l, { shop: esc(list[0].name) }), { inline_keyboard: [[{ text: C.txt('kbShop', l), web_app: { url: SH.shopUrl(list[0].slug) } }]] });
+  else await send(deps, chatId, C.txt('shopPick', l), { inline_keyboard: list.map(function (x) { return [{ text: '🛒 ' + x.name, web_app: { url: SH.shopUrl(x.slug) } }]; }) });
+  return { shops: list.length };
+}
+/* Eski (web_app) klaviatura tugmasidan ochilgan sahifa initData'siz — sahifa Telegram.WebApp.sendData bilan botga signal yuboradi:
+   bot to'g'ri (inline) tugmani yuboradi va klaviaturani yangisiga almashtiradi (bir marta). */
+async function onWebAppData(deps, msg, lang) {
+  const chatId = String(msg.chat.id);
+  let d = {}; try { d = JSON.parse(String((msg.web_app_data && msg.web_app_data.data) || '').slice(0, 300)) || {}; } catch (e) { d = {}; }
+  const ref = deps.db.collection('tgCust').doc(chatId);
+  const cust = (await getData(ref)) || {};
+  const l = S.lg(cust.lang || lang);
+  const r = d.v === 'my' ? await sendMy(deps, chatId, l) : await sendShops(deps, chatId, l, typeof d.s === 'string' && /^[a-z0-9-]{2,40}$/i.test(d.s) ? d.s : '');
+  if (cust.kbV !== KB_V && !(await isOwnerChat(deps, chatId))) {
+    await send(deps, chatId, C.txt('kbUpdated', l), custKb(deps, cust, l));
+    await ref.set({ kbV: KB_V }, { merge: true });
+  }
+  return Object.assign({ webAppData: d.v === 'my' ? 'my' : 'shop' }, r || {});
 }
 async function isOwnerChat(deps, chatId) {
   try { const ch = await getData(deps.db.collection('tgChats').doc(String(chatId))); return !!(ch && Array.isArray(ch.bids) && ch.bids.length); } catch (e) { return false; }
@@ -456,4 +525,4 @@ async function custHelp(deps, chatId, lang) {
   await send(deps, chatId, C.txt('custHelp', l), custKb(deps, cust, l));
   return { custHelp: true };
 }
-module.exports = { custKb, kbKind, custStart, custHelp, custCommands, custCmdList, isOwnerChat, askPhone, phoneKb, shopsByPhone, autoLink, intlKey, linkByCode, matchByPhone, handleMy, handleAppApi, onSale, onLedger, remindOne, remindTick, onCallback, onText, sendMy, myBtn, myUrl, phoneKey, linkId, creditOf, payKind, LINK_TTL_MS };
+module.exports = { sendShops, shopChoices, onWebAppData, KB_V, debtAfterOp, custKb, kbKind, custStart, custHelp, custCommands, custCmdList, isOwnerChat, askPhone, phoneKb, shopsByPhone, autoLink, intlKey, linkByCode, matchByPhone, handleMy, handleAppApi, onSale, onLedger, remindOne, remindTick, onCallback, onText, sendMy, myBtn, myUrl, phoneKey, linkId, creditOf, payKind, LINK_TTL_MS };

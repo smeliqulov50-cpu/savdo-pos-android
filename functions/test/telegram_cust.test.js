@@ -107,7 +107,7 @@ test('chek botga: naqd — oddiy; nasiya — qarz va "to\'g\'ri / savolim bor"; 
   const s = mk();
   s.db.store['tgCustLink/' + BID + '_c1'] = { uid: String(CUST), bid: BID, cid: 'c1', at: 1, by: 'code', notify: true };
   s.db.store['tgCust/' + CUST] = { shops: { [BID]: { cid: 'c1', at: 1 } }, lang: 'uz' };
-  const sale = { id: 's9', receiptNumber: 'A-200', date: new Date(NOW - 60000).toISOString(), total: 94000, paymentType: 'credit', customerId: 'c1', splitPayments: [{ method: 'cash', amount: 50000 }, { method: 'credit', amount: 44000 }], items: [{ name: 'Cola <1L>', qty: 2, price: 12000, unit: 'dona' }, { name: 'Shakar', qty: 5, price: 14000, unit: 'kg' }] };
+  const sale = { id: 's9', debtAfter: 120000, receiptNumber: 'A-200', date: new Date(NOW - 60000).toISOString(), total: 94000, paymentType: 'credit', customerId: 'c1', splitPayments: [{ method: 'cash', amount: 50000 }, { method: 'credit', amount: 44000 }], items: [{ name: 'Cola <1L>', qty: 2, price: 12000, unit: 'dona' }, { name: 'Shakar', qty: 5, price: 14000, unit: 'kg' }] };
   const r = await CU.onSale(s.deps, BID, sale);
   assert.equal(r.sent, true); assert.equal(r.credit, 44000);
   const m = to(s.tg, CUST).pop();
@@ -137,11 +137,11 @@ test('to\'lov tasdig\'i: summa, qoldiq; to\'liq yopilsa — rahmat; oddiy "sale"
   const s = mk();
   s.db.store['tgCustLink/' + BID + '_c1'] = { uid: String(CUST), bid: BID, cid: 'c1', at: 1, by: 'code', notify: true };
   s.db.store['tgCust/' + CUST] = { shops: { [BID]: { cid: 'c1', at: 1 } }, lang: 'ru' };
-  let r = await CU.onLedger(s.deps, BID, { id: 'l9', customerId: 'c1', type: 'payment', method: 'cash', amount: 20000, date: new Date(NOW - 1000).toISOString(), note: 'qisman' });
+  let r = await CU.onLedger(s.deps, BID, { id: 'l9', debtAfter: 120000, customerId: 'c1', type: 'payment', method: 'cash', amount: 20000, date: new Date(NOW - 1000).toISOString(), note: 'qisman' });
   assert.equal(r.sent, true);
   let m = to(s.tg, CUST).pop(); assert.ok(/Оплата принята/.test(m.text) && /20 000/.test(m.text) && /120 000/.test(m.text) && /qisman/.test(m.text) && !/🎉/.test(m.text), m.text);
   s.db.store['businesses/' + BID + '/customers/c1'].debt = 0;
-  await CU.onLedger(s.deps, BID, { id: 'l10', customerId: 'c1', type: 'payment', method: 'card', amount: 120000, date: new Date(NOW).toISOString() });
+  await CU.onLedger(s.deps, BID, { id: 'l10', debtAfter: 0, customerId: 'c1', type: 'payment', method: 'card', amount: 120000, date: new Date(NOW).toISOString() });
   assert.ok(/🎉/.test(to(s.tg, CUST).pop().text));
   assert.equal((await CU.onLedger(s.deps, BID, { id: 'l11', customerId: 'c1', type: 'sale', amount: 5000, saleId: 'sX', date: new Date(NOW).toISOString() })).skipped, 'not_payment');   /* fix158: sotuvga bog'liq yozuv — chek alohida keladi */
 });
@@ -252,7 +252,7 @@ test('fix158: /raqam — kontakt tugmasi (uz/ru); raqam yuborilgach klaviatura o
   r = await core.handleUpdate(s.deps, { message: { message_id: 3, chat: { id: CUST, type: 'private' }, from: { id: CUST }, text: '/mening' } });
   assert.equal(r.askPhone, true); m = to(s.tg, CUST).pop(); assert.match(m.text, /ulanmagansiz/); assert.ok(m.reply_markup.keyboard);
   await core.handleUpdate(s.deps, { message: { message_id: 4, chat: { id: CUST, type: 'private' }, from: { id: CUST }, contact: { user_id: CUST, phone_number: '+998935556677' } } });
-  m = to(s.tg, CUST).find(x => /saqlandi/.test(x.text)); assert.ok(m.reply_markup.keyboard && /Mening sahifam/.test(m.reply_markup.keyboard[0][0].text) && m.reply_markup.keyboard[0][0].web_app);   /* fix183-custeasy: doimiy klaviatura */
+  m = to(s.tg, CUST).find(x => /saqlandi/.test(x.text)); assert.ok(m.reply_markup.keyboard && /Mening sahifam/.test(m.reply_markup.keyboard[0][0].text) && !m.reply_markup.keyboard[0][0].web_app);   /* fix183-custeasy: doimiy klaviatura */   /* fix209-custkb: oddiy matn tugmasi */
   assert.equal(s.db.store['tgPhone/935556677'].uid, String(CUST));
   const s2 = mk(); s2.db.store['tgCust/' + CUST] = { phone: '+998900000001', phoneOk: true };
   r = await CU.sendMy(s2.deps, CUST, 'uz'); assert.equal(r.my, false); assert.match(to(s2.tg, CUST).pop().text, /topilmadi/);
@@ -261,7 +261,7 @@ test('fix158: qo\'lda yozilgan qarz (sotuvsiz "sale" yozuvi) ulangan mijozga kel
   const s = mk();
   s.db.store['tgCust/' + CUST] = { lang: 'uz', shops: { [BID]: { cid: 'c1', at: 1 } } };
   s.db.store['tgCustLink/' + BID + '_c1'] = { uid: String(CUST), bid: BID, cid: 'c1', at: 1, by: 'code', notify: true };
-  const e = { id: 'l20', customerId: 'c1', type: 'sale', amount: 50000, note: 'Osh', date: new Date(NOW).toISOString() };
+  const e = { id: 'l20', debtAfter: 120000, customerId: 'c1', type: 'sale', amount: 50000, note: 'Osh', date: new Date(NOW).toISOString() };
   const r = await CU.onLedger(s.deps, BID, e);
   assert.ok(r.sent && r.manualDebt, JSON.stringify(r));
   const m = to(s.tg, CUST).pop();
@@ -290,7 +290,7 @@ test('fix183: raqam yuborilgach doimiy klaviatura (Mening sahifam, Buyurtma, Yor
   s.db.store['tgCust/' + CUST] = { lastShop: 'salqin' };
   await core.handleUpdate(s.deps, { message: { message_id: 4, chat: { id: CUST, type: 'private' }, from: { id: CUST }, contact: { user_id: CUST, phone_number: '+998935556677' } } });
   let m = to(s.tg, CUST).find(x => /saqlandi/.test(x.text)); const kb = m.reply_markup.keyboard;
-  assert.ok(kb[0][0].web_app.url.endsWith('?v=my')); assert.match(kb[1][0].text, /Buyurtma/); assert.ok(/s=salqin/.test(kb[1][0].web_app.url)); assert.equal(kb[2][0].text, '❓ Yordam'); assert.equal(kb[2][1].text, '🌐 Til');
+  assert.equal(kb[0][0].text, '👤 Mening sahifam'); assert.ok(!kb[0][0].web_app); assert.match(kb[1][0].text, /Buyurtma/); assert.ok(!kb[1][0].web_app);   /* fix209-custkb: oddiy matn — bosilganda inline tugma */ assert.equal(kb[2][0].text, '❓ Yordam'); assert.equal(kb[2][1].text, '🌐 Til');
   let r = await core.handleUpdate(s.deps, msg(CUST, '❓ Yordam')); assert.ok(r.custHelp); m = to(s.tg, CUST).pop(); assert.match(m.text, /Qanday ishlaydi/); assert.ok(m.reply_markup.keyboard);
   r = await core.handleUpdate(s.deps, msg(CUST, '/yordam')); assert.ok(r.custHelp);
   r = await core.handleUpdate(s.deps, msg(CUST, '🌐 Til')); assert.ok(r.langMenu);

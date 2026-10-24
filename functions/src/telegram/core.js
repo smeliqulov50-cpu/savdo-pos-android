@@ -218,6 +218,7 @@ async function handleUpdate(deps, upd) {
   }
   lang = await __cmd.chatLang(deps, msg.chat.id, msg.from && msg.from.language_code);   /* fix144-tgcmd: /til bilan tanlangan til */
   if (msg.contact) return require('./shop').onContact(deps, msg, lang);   /* fix145-botshop: mijoz raqami */
+  if (msg.web_app_data) return require('./cust').onWebAppData(deps, msg, lang);   /* fix209-custkb: eski klaviaturadan ochilgan sahifa signali */
   const m = /^\/start(?:@[A-Za-z0-9_]+)?(?:\s+([A-Za-z0-9_-]{4,64}))?$/.exec(text);
   if (m && m[1] && /^paid_/.test(m[1])) return require('./pay').onReturn(deps, msg, m[1].slice(5), lang);   /* fix207-clickpay: Click'dan qaytish — holat serverdan */
   if (m && m[1] && /^l_/.test(m[1])) return require('./login').onStart(deps, msg, m[1].slice(2), lang);   /* fix206-tglogin: Telegram orqali kirish */
@@ -228,6 +229,7 @@ async function handleUpdate(deps, upd) {
   const kind = __cmd.parse(text) || require('./cust').kbKind(text);   /* fix183-custeasy: «❓ Yordam» / «🌐 Til» tugmalari */
   let out;
   if (m && m[1]) { out = await tryLink(deps, msg, m[1], lang); if (out && out.linked) { out.kb = __cmd.menuKb(deps, lang); await require('./shop').ownerMenu(deps, msg.chat.id, lang); } }   /* fix146-tgsub: pastki menyuda "Do'konim" */
+  else if (kind === 'shop') return require('./cust').sendShops(deps, msg.chat.id, lang, '');   /* fix209-custkb: «🛒 Buyurtma berish» */
   else if (kind) return __cmd.run(deps, msg.chat.id, kind, lang);   /* fix144-tgcmd (/obuna ham shu yerda) */
   else if (/^\/stop(?:@[A-Za-z0-9_]+)?$/.test(text)) {
     const n = await unbindChatEverywhere(deps, msg.chat.id);

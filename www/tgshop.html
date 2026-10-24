@@ -160,6 +160,9 @@ document.documentElement.lang = LANG;
 
 var I = {
  loading:["Yuklanmoqda…","Загрузка…","Loading…","Жүктелуде…","Жүктөлүүдө…","Бор мешавад…"],
+ noInitTitle:["Iltimos, botdagi tugma orqali oching","Пожалуйста, откройте через кнопку в боте","Please open it with the button in the bot","Боттағы батырма арқылы ашыңыз","Боттогу баскыч аркылуу ачыңыз","Лутфан, тавассути тугмаи бот кушоед"],
+ noInitHint:["«Davom etish» ni bosing — bot sizga to'g'ri tugmani yuboradi va pastdagi tugmalarni yangilaydi.","Нажмите «Продолжить» — бот пришлёт правильную кнопку и обновит кнопки внизу.","Tap «Continue» — the bot will send the right button and update the buttons below.","«Жалғастыру» басыңыз — бот дұрыс батырманы жібереді және төмендегі батырмаларды жаңартады.","«Улантуу» басыңыз — бот туура баскычты жиберет жана төмөнкү баскычтарды жаңыртат.","«Идома»-ро пахш кунед — бот тугмаи дурустро мефиристад ва тугмаҳои поёнро нав мекунад."],
+ noInitBtn:["Davom etish","Продолжить","Continue","Жалғастыру","Улантуу","Идома"],
  outside:["Bu sahifa Telegram ichida ochiladi","Эта страница открывается в Telegram","This page opens inside Telegram","Бұл бет Telegram ішінде ашылады","Бул барак Telegram ичинде ачылат","Ин саҳифа дар дохили Telegram кушода мешавад"],
  outsideHint:["Do'kon botiga kiring va «Buyurtma berish» tugmasini bosing.","Откройте бот магазина и нажмите «Сделать заказ».","Open the shop's bot and tap “Order now”.","Дүкен ботына кіріп, «Тапсырыс беру» түймесін басыңыз.","Дүкөндүн ботуна кирип, «Буйрутма берүү» баскычын басыңыз.","Ба боти мағоза дароед ва «Фармоиш додан»-ро пахш кунед."],
  retry:["Qayta urinish","Повторить","Try again","Қайталау","Кайталоо","Аз нав"],
@@ -707,6 +710,15 @@ function renderOrders(){
   return h + S.orders.map(function(o){ return orderCard(o, true); }).join('');
 }
 function renderOutside(){
+  /* fix209-custkb: Telegram ichida, lekin initData yo'q (eski pastki klaviatura tugmasidan ochilgan) — tushunarli xabar va «Davom etish»:
+     sahifa botga signal yuboradi (sendData), bot to'g'ri (inline) tugmani yuboradi va klaviaturani yangilaydi. */
+  try{
+    if(TG && TG.platform && TG.platform !== 'unknown' && typeof TG.sendData === 'function'){
+      document.getElementById('app').innerHTML = '<div class="done"><div class="ic" style="color:var(--btn);background:var(--soft)">🛍</div><h2>' + esc(t('noInitTitle')) + '</h2><div class="muted" style="font-size:14px;">' + esc(t('noInitHint')) + '</div><button class="btn2" id="b-noinit" style="max-width:260px;margin-top:16px;">' + esc(t('noInitBtn')) + '</button></div>';
+      document.getElementById('b-noinit').onclick = function(){ try{ TG.sendData(JSON.stringify({ v: MY ? 'my' : (HUB ? 'me' : 'shop'), s: SLUG || '' })); }catch(e){} };
+      return;
+    }
+  }catch(e){}
   document.getElementById('app').innerHTML = '<div class="done"><div class="ic" style="color:var(--btn);background:var(--soft)">🛍</div><h2>' + esc(t('outside')) + '</h2><div class="muted" style="font-size:14px;">' + esc(t('outsideHint')) + '</div></div>';
 }
 function render(){
